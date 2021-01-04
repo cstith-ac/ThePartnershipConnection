@@ -17,6 +17,8 @@ import { HomeComponent } from './components/home/home.component';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
+import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
+import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { AuthService } from '../app/services/auth.service';
     RegisterComponent,
     DashboardComponent,
     ProfileComponent,
-    HomeComponent
+    HomeComponent,
+    CustomeraccesslistComponent,
+    CustomercaredashboardinfoComponent
   ],
   imports: [
     BrowserModule,

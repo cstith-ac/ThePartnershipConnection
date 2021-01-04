@@ -28,6 +28,8 @@ namespace WebAPI.Models
         public virtual DbSet<TpcdataLink> TpcdataLink { get; set; }
         public virtual DbSet<UserAccessLookup> UserAccessLookup { get; set; }
 
+        public virtual DbSet<CustomerCareDashboardInfo> GetCustomerCareDashboardInfos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -212,6 +214,11 @@ namespace WebAPI.Models
                 entity.Property(e => e.ProgramName).HasMaxLength(200);
 
                 entity.Property(e => e.UserCode).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<CustomerCareDashboardInfo>(entity =>
+            {
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);
