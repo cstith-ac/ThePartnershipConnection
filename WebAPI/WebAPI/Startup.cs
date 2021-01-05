@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using WebAPI.Infrastructure.ApplicationUserClaims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using WebAPI.Repository;
 
 namespace WebAPI
 {
@@ -38,6 +39,10 @@ namespace WebAPI
             //Inject AppSettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration.GetConnectionString("TPC_DevDatabase"));
+            //}, ServiceLifetime.Transient);
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TPC_DevDatabase"));
@@ -60,11 +65,13 @@ namespace WebAPI
                 options.SignIn.RequireConfirmedPhoneNumber = false; 
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddCors();
 
+            services.AddTransient<TPC_DevContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ICallSummaryAddRepository, CallSummaryAddRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
             //JWT Authentication

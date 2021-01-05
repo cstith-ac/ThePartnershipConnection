@@ -19,6 +19,17 @@ import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
 import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
 import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
+import { CustomersysteminfoComponent } from './components/customersysteminfo/customersysteminfo.component';
+import { CcassistantSystemsComponent } from './components/ccassistant-systems/ccassistant-systems.component';
+import { PartnercontactlistComponent } from './components/partnercontactlist/partnercontactlist.component';
+import { PartnerinformationComponent } from './components/partnerinformation/partnerinformation.component';
+import { SitetosystemlistComponent } from './components/sitetosystemlist/sitetosystemlist.component';
+import { CustomertositelistComponent } from './components/customertositelist/customertositelist.component';
+import { CallsummaryclasslistComponent } from './components/callsummaryclasslist/callsummaryclasslist.component';
+import { CallsummaryproblemsComponent } from './components/callsummaryproblems/callsummaryproblems.component';
+import { CallsummaryresolutionsComponent } from './components/callsummaryresolutions/callsummaryresolutions.component';
+import { CallsummarynextstepsComponent } from './components/callsummarynextsteps/callsummarynextsteps.component';
+import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +41,18 @@ import { CustomercaredashboardinfoComponent } from './components/customercaredas
     ProfileComponent,
     HomeComponent,
     CustomeraccesslistComponent,
-    CustomercaredashboardinfoComponent
+    CustomercaredashboardinfoComponent,
+    CustomersysteminfoComponent,
+    CcassistantSystemsComponent,
+    PartnercontactlistComponent,
+    PartnerinformationComponent,
+    SitetosystemlistComponent,
+    CustomertositelistComponent,
+    CallsummaryclasslistComponent,
+    CallsummaryproblemsComponent,
+    CallsummaryresolutionsComponent,
+    CallsummarynextstepsComponent,
+    CallsummaryaddComponent
   ],
   imports: [
     BrowserModule,

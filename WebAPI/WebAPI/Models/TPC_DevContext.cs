@@ -29,6 +29,17 @@ namespace WebAPI.Models
         public virtual DbSet<UserAccessLookup> UserAccessLookup { get; set; }
 
         public virtual DbSet<CustomerCareDashboardInfo> GetCustomerCareDashboardInfos { get; set; }
+        public virtual DbSet<SiteToSystemList> GetSiteToSystemLists { get; set; }
+        public virtual DbSet<CustomerToSiteList> GetCustomerToSiteLists { get; set; }
+        public DbSet<CustomerSystemInfo> GetCustomerSystemInfos { get; set; }
+        public virtual DbSet<CCAssistant_Systems> GetCCAssistant_Systems { get; set; }
+        public virtual DbSet<PartnerContactList> GetPartnerContactLists { get; set; }
+        public virtual DbSet<PartnerInformation> GetPartnerInformations { get; set; }
+        public virtual DbSet<CallSummaryResolutions> GetCallSummaryResolutions { get; set; }
+        public virtual DbSet<CallSummaryClassList> GetCallSummaryClassLists { get; set; }
+        public virtual DbSet<CallSummaryProblems> GetCallSummaryProblems { get; set; }
+        public virtual DbSet<CallSummaryNextSteps> GetCallSummaryNextSteps { get; set; }
+        public virtual DbSet<CallSummaryAdd> GetCallSummaryAddResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -218,6 +229,62 @@ namespace WebAPI.Models
 
             modelBuilder.Entity<CustomerCareDashboardInfo>(entity =>
             {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<SiteToSystemList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerToSiteList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSystemInfo>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CCAssistant_Systems>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerContactList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerInformation>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryResolutions>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryClassList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryProblems>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryNextSteps>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryAdd>(entity =>
+            {
+                //entity.HasIndex(e => e.TicketNumber);
                 entity.HasNoKey();
             });
 
