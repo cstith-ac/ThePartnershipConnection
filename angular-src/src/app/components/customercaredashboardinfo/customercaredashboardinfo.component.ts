@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
+import { DashboardInfo } from 'src/app/models/dashboardinfo';
 
 @Component({
   selector: 'app-customercaredashboardinfo',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class CustomercaredashboardinfoComponent implements OnInit {
   user:any=Object;
+  dashboardinfo: DashboardInfo[];
 
   constructor(
     private routeService: RouteService,
@@ -18,7 +20,12 @@ export class CustomercaredashboardinfoComponent implements OnInit {
   ngOnInit() {
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
+        this.dashboardinfo = res;
+        
+      },
+      err => {
+        console.log(err);
       }
     )
   }

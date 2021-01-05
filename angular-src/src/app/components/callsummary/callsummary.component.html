@@ -1,0 +1,193 @@
+<!-- <p>callsummary works!</p> -->
+<div class="clearfix">
+    <button class="btn btn-primary call-summary-btn float-right" id="showCallSummaryModal">
+        Call Summary
+    </button>
+
+    <div class="modal fade" id="callSummaryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="maxWidth-900">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="snackbar-container"></div>
+                            <h2 class="modal-title" id="exampleModalLabel" style="padding-left: 1.5rem;color:#1220EF;font-weight:700;">Call Summary</h2>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body" id="callSummary">
+                            <div class="row mt-2 mb-2">
+                                <div class="col-md-12">
+                                   #<span id="callSummaryCustomerNumber"></span>&nbsp;&nbsp;&nbsp;
+                                    <span id="callSummaryCustomerName"></span>
+                                </div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <form id="callSummaryForm">
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div id="siteSelect" class="">
+                                                <div class="btn-group" id="callTypeDropdown">
+                                                    <label class="d-block" style="color: #1220EF;font-weight:700;">Site</label>
+                                                    <div class="dropdown">
+                                                        <select name="site" class="form-control form-control-lg" id="callSummarySiteSelect">
+                                                            <option value="0" disabled hidden>Select a Site</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*<div class="btn-group" id="callTypeDropdown">
+                                                <label class="d-block" style="color: #1220EF;font-weight:700;">Site</label>
+                                                <div class="dropdown">
+                                                    <select name="site" class="form-control form-control-lg" id="callSummarySiteSelect">
+                                                        <option value="0" disabled hidden>Select a Site</option>
+                                                    </select>
+                                                </div>
+                                            </div>*@
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="btn-group" id="callTypeDropdown">
+                                                <label class="d-block" style="color: #1220EF;font-weight:700;">System</label>
+                                                <div class="dropdown">
+                                                    <select name="system" class="form-control form-control-lg" id="callSummarySystemSelect">
+                                                        <option value="" disabled id="systemID">Select a System</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-3">
+                                            <div class="btn-group" id="callTypeDropdown">
+                                                <label class="d-block" style="color: #1220EF;font-weight:700;">Call Type</label>
+                                                <div class="dropdown">
+                                                    <select name="callType" class="form-control form-control-lg" id="callSummaryClassListSelect">
+                                                        <option value="" disabled>-Select Call Type-</option>
+                                                    </select>
+                                                </div>
+                                            </div>                   
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="btn-group" id="callTypeDropdown">
+                                                <label class="d-block" style="color: #1220EF;font-weight:700;">Problem</label>
+                                                <div class="dropdown">
+                                                    <select name="problem" class="form-control form-control-lg" id="callSummaryProblems">
+                                                        <option value="" disabled id="problemID">-Select a Problem-</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="btn-group" id="callTypeDropdown">
+                                                <div id="resolution" class="resolutionSelect">
+                                                    <label class="d-block" style="color: #1220EF;font-weight:700;">Resolution</label>
+                                                    <div class="dropdown">
+                                                        <select name="resolution" class="form-control form-control-lg" id="callSummaryResolutions">
+                                                            <option value="" disabled id="resolutionID">-Select a Resolution-</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                @*<label class="d-block" style="color: #1220EF;font-weight:700;">Resolution</label>
+                                                <div class="dropdown">
+                                                    <select name="resolution" class="form-control form-control-lg" id="callSummaryResolutions">
+                                                        <option value="" disabled id="resolutionID">-Select a Resolution-</option>
+                                                    </select>
+                                                </div>*@
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="btn-group" id="callTypeDropdown">
+                                                <div id="nextStep">
+                                                    <label class="d-block" style="color: #1220EF;font-weight:700;">Next Step</label>
+                                                    <div class="dropdown">
+                                                        <select name="nextStep" class="form-control form-control-lg" id="callSummaryNextSteps">
+                                                            <option value="" disabled id="nextStepID">-Select a Next Step-</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                @*<label class="d-block" style="color: #1220EF;font-weight:700;">Next Step</label>
+                                                <div class="dropdown">
+                                                    <select name="nextStep" class="form-control form-control-lg" id="callSummaryNextSteps">
+                                                        <option value="" disabled id="nextStepID">-Select a Next Step-</option>
+                                                    </select>
+                                                </div>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Was the issue resolved?</label>
+                                                <input type="checkbox" name="resolved" id="isIssueResolved" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Customer On Call</label>
+                                                <input type="text" id="customerOnCallInput" name="customerOnCall" placeholder="Customer On Call" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Customer Call Back Phone</label>
+                                                <input type="tel" id="customerCallBackPhoneInput" name="customerCallBackPhone" placeholder="Customer Call Back Phone" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <div id="custCommentsTextArea">
+                                                <label>Customer Comments</label>
+                                                <textarea class="form-control" id="customerCommentsInput" name="customerComments"></textarea>
+                                            </div>
+                                            @*<label>Customer Comments</label>
+                                            <textarea class="form-control" id="customerCommentsInput" name="customerComments"></textarea>*@
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <div id="resNotesTextArea">
+                                                <label>Resolution Notes</label>
+                                                <textarea class="form-control" id="resolutionNotesInput" name="techNotes"></textarea>
+                                            </div>
+                                            @*<label>Resolution Notes</label>
+                                            <textarea class="form-control" id="resolutionNotesInput" name="techNotes"></textarea>*@
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
+                                            @*<input type="submit" class="btn btn-primary float-right save-btn" value="Submit" id="callSummaryAdd" />*@
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- Result -->
+                                <div id="ticketNumberResult" class="pt-4">
+                                    <h5>Ticket Number</h5>
+                                    <p id="ticket-number"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="hideCallSummaryModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

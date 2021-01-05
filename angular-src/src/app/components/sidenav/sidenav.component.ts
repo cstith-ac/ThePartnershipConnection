@@ -11,6 +11,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class SidenavComponent implements OnInit {
   user:any=Object;
+  
   constructor(
     public authService: AuthService,
     private router: Router,

@@ -1,1 +1,99 @@
-<p>customercaredashboardinfo works!</p>
+<!-- <p style="font-weight: bold;">customercaredashboardinfo works!</p> -->
+<!-- <ul *ngFor="let com of dashboardinfo">
+    <li>#{{ com.customerNumber }}</li>
+    <li>#{{ com.customerName }}</li>
+</ul> -->
+<!-- <div *ngFor="let item of dashboardinfo">
+    <h3>#{{ item.customerNumber }}</h3>
+    <p>{{ item.customerName }}</p>
+    <p>${{ item.totalRMR }}</p>
+    <p>{{ item.guaranteeStatus }}</p>
+    <p>{{ item.specialFlag }}</p>
+    <p>{{ item.emailAddress }}</p>
+    <p>{{ item.servicedBy }}</p>
+    <p>{{ item.lastVisitInfo }}</p>
+    <p>{{ item.ticketsLastSixMonths }}</p>
+    <p>{{ item.criticalMessage }}</p>
+    <p>{{ item.lastNote }}</p>
+    <p>{{ item.partnerKeyWords }}</p>
+    <p>{{ item.billFrequency }}</p>
+    <p>{{ item.nextCycleOn }}</p>
+    <p>{{ item.hasSeparateSiteAddress }}</p>
+    <p>{{ item.alternateServiceCompanyActive }}</p>
+    <p>{{ item.autoPaymentMessage }}</p>
+</div> -->
+<div *ngFor="let item of dashboardinfo">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-11">
+                <button class="btn btn-success">Refresh</button>
+                <p id="partnerKeyWords" class="afa-text-red text-center font-italic" style="display:inline;margin-left:42%;position:absolute;margin-top:-1rem;">{{ item.partnerKeyWords }}</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+    <div class="card-header" id="afa-card-header" style="padding-left: 15px;">
+        <div class="row">
+            <div class="col-sm-2">
+                <h3 style="font-size:1.3rem;font-weight:700">
+                    #<span id="customerNumber">{{ item.customerNumber }}</span>
+                </h3>
+            </div>
+            <div class="col-sm-4">
+                <span id="customerName" style="font-size:1.3rem;font-weight:700">{{ item.customerName }}</span>
+            </div>
+            <div class="col-sm-1">
+                <h2 class="special-flag-text" id="specialFlag">{{ item.specialFlag }}</h2>
+            </div>
+            <div class="col-sm-5">
+                <p id="partnerKeyWords" class="afa-text-red">{{ item.partnerKeyWords }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-body padding-left15 padding-right0 padding-top0 padding-bottom0">
+        <div class="currentCustomerInvoiceRating-bg note-padding">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="customer-rating" id="customerRatingBg">
+                        <span id="customerRating"></span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <h3 class="rmr-text">$<span id="totalRMR">{{ item.totalRMR }}</span>/Month</h3>
+                    <p id="billFrequency" class="mb-0">{{ item.billFrequency }}</p>
+                    <p id="nextCycleOn"></p>
+                </div>
+                <div class="col-sm-3">
+                    <h3 id="guaranteeStatus" class="guarantee-status-text">{{ item.guaranteeStatus }}</h3>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-primary boc-btn float-right" id="showBOCModal">
+                        BOC?
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">Invoices received via email <span id="emailAddress">{{ item.emailAddress }}</span> </li>
+                        <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;"> <span id="autoPaymentMessage">{{ item.autoPaymentMessage }}</span> </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <span id="hasSeparateSiteAddress" class="float-right">{{ item.hasSeparateSiteAddress }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="serviceInfo-bg note-padding">
+            <h2>Service Info</h2>
+            <ul class="padding-left0 mb-0">
+                <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">Serviced by: <span id="servicedBy">{{ item.servicedBy }}</span> <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span></li>
+                <!-- Service Ticket - Last Service Visit -->
+                <li class="list-group-item padding-left0" style="padding-top:8px;padding-bottom:8px;">
+                    <a class="text-blue mx-auto mb-0" id="showTicketInfoModal"> <i class="ni ni-fat-add" id="add-icon-blue"></i> </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>
+                </li>
+                <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">The customer has had <span id="ticketsLastSixMonths">{{ item.ticketsLastSixMonths }}</span> service tickets in the last 6 months</li>
+            </ul>
+        </div>
+    </div>
+</div>

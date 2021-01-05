@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
+import { CustomerAccessList } from 'src/app/models/customeraccesslist';
 
 @Component({
   selector: 'app-customeraccesslist',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class CustomeraccesslistComponent implements OnInit {
   user:any=Object;
+  accesslist: CustomerAccessList[]
 
   constructor(
     private routeService: RouteService,

@@ -1,0 +1,165 @@
+<!-- <p>systeminfo works!</p> -->
+<!--exec dbo.CCAssistant_Systems-->
+<div class="card shadow systemInfo-bg system-info-border">
+    <div class="card-header border-0 systemInfo-bg">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="mb-0">System Info</h3>
+            </div>
+        </div>
+    </div>
+    <div id="alarm_Account"></div>
+    <div class="table-responsive">
+        <table class="table align-items-center table-borderless">
+            <thead class="systemInfo-bg">
+                <tr>
+                    <!-- @*<th scope="col" id="fontSize-75rem" style="margin-bottom:0">Customer System ID</th>*@ -->
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Account</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">C/S</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Site Address</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Contract Date</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Expires</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Maint</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">RMR</th>
+                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
+                </tr>
+            </thead>
+            <tbody id="systemInfo" *ngFor="let item of assistantsystems">
+                <tr class="system-info-collection"></tr>
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' ">{{ item.alarm_Account }}</td>
+                <td>{{ item.alarm_Company_Code }}</td>
+                <td>{{ item.system_Code }}</td>
+                <td>{{ item.siteAddress }}</td>
+                <td>{{ item.contract_Start_Date }}</td>
+                <td>{{ item.contractExpiration }}</td>
+                <td>{{ item.contractExpirationMessage }}</td>
+                <td>{{ item.warranty }}</td>
+                <td>{{ item.rmrAmount }}</td>
+                <td>{{ item.featureMessage }}</td>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="accountInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card" id="afa-card-border0">
+                    <div class="card-body padding-top0 padding-right0 padding-bottom0 padding-left0" id="accountInfoContent">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p>
+                                    #<span id="systemInfoCustomerNumber" style="margin-right:5%"></span>&nbsp;&nbsp;
+                                    <span id="systemInfoCustomerName" style="margin-right:5%"></span>&nbsp;&nbsp;
+                                    <span class="customer-rating" id="systemInfoCustomerRatingBg"><span id="systemInfoCustomerRating"></span></span>&nbsp;&nbsp;
+                                </p>
+                                <p>
+                                    Account #<span id="alarmAccount" style="margin-right:1rem"></span>&nbsp;&nbsp;
+                                    <span id="featureMessage" class="special-flag-text"></span>
+                                </p>
+                                <p>
+                                    <span class="afa-text-dark-blue">
+                                        Monitored by <span id="monitoredBy"></span>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span id="addressLine"></span>
+                                </p>
+                                <p>
+                                    <span class="font-weight-400">
+                                        Contract Started on <span id="originalContractDate"></span> for <span id="originalContractMonths"></span> months
+                                    </span>
+                                </p>
+                                <p>
+                                    <span id="contractStatus" class="font-weight-400"></span>
+                                </p>
+                                <p>
+                                    Serviced by <span id="serviceCompany"></span>
+                                </p>
+                                <p>
+                                    <i class="ni ni-fat-add" id="add-icon-blue"></i>
+                                    <span id="lastServiceTicketOn"></span>
+                                </p>
+                            </div>
+                            <div class="col-md-4 system-info-aside">
+                                <p class="afa-text-blue text-right">
+                                    <span id="systemType"></span>
+                                </p>
+                                <p class="afa-text-blue text-right">
+                                    <span>Maintenance - <span id="maintenance"></span></span>
+                                </p>
+                                <p class="afa-text-blue text-right">
+                                    $<span id="rmrValue"></span>/Month RMR
+                                </p>
+                                <p class="afa-text-blue text-right">
+                                    <span id="systemInfoBillFrequency"></span>
+                                </p>
+                                <p class="afa-text-blue text-right">
+                                    <span id="systemInfoNextCycleOn"></span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 marginTopBottom-1rem">
+                                <div class="afa-bg-panel-type system-notes-border system-notes-padding">
+                                    <p>Panel Type - <span id="panelType"></span></p>
+                                    <p>
+                                        <span class="afa-text-dark-blue">Cell Model - </span>
+                                        <span id="cellModel"></span>
+                                    </p>
+                                    <p>
+                                        <span class="afa-text-dark-blue">Carrier - </span>
+                                        <span id="cellCarrier"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 marginTopBottom-1rem">
+                                <div class="afa-bg-tan system-notes-border system-notes-padding">
+                                    <h3 class="afa-text-blue">System Notes</h3>
+                                    <p id="systemNotes"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item info-tab info-tab-bg">
+                                            <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information from <span id="centralStationMonitoredBy"></span></a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content info-tab-bg" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                            <ul class="list-unstyled tab-list-padding">
+                                                <li>No connection to Central Station at this time.</li>
+                                                <!-- @*<li>Password - LuckyFin</li>
+                    <li>System Status - Active</li>
+                    <li>Last Signal Date - 8/2/2020 18:42</li>
+                    <li>Zone List <i class="ni ni-fat-add" id="add-icon-blue"></i> </li>*@ -->
+                                            </ul>
+                                        </div>
+                                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                                        </div>
+                                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<!-- <p>suggestedtopics works!</p> -->
+<div class="card shadow suggestedTopics-bg">
+    <div class="card-header bg-transparent">
+        <div class="row align-items-center">
+            <div class="col">
+                <h4 class="text-uppercase ls-1 mb-1 suggestedTopics-header-text black-text">Suggested Topics</h4>
+            </div>
+        </div>
+    </div>
+    <div>
+        <ul *ngFor="let topic of suggestedtopics" id="suggestedTopics" class="list-group list-unstyled">
+            <li>{{ topic.prompt0 }}</li>
+            <li>{{ topic.prompt1 }}</li>
+            <li>{{ topic.prompt2 }}</li>
+            <li>{{ topic.prompt3 }}</li>
+            <li>{{ topic.prompt4 }}</li>
+            <li>{{ topic.prompt5 }}</li>
+            <li>{{ topic.prompt6 }}</li>
+            <li>{{ topic.prompt7 }}</li>
+            <li>{{ topic.prompt8 }}</li>
+            <li>{{ topic.prompt9 }}</li>
+        </ul>
+    </div>
+</div>

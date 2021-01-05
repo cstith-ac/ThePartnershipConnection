@@ -31,6 +31,96 @@ export class RouteService {
     return this.http.get<any>('https://localhost:44314/api/CustomerCareDashboardInfo', httpOptions);
   }
 
+  getSiteToSystemList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/SiteToSystemList', httpOptions);
+  }
+
+  getCustomerToSiteList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CustomerToSiteList', httpOptions);
+  }
+
+  getCustomerSystemInfo(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>(`https://localhost:44314/api/CustomerSystemInfo/{id}`, httpOptions);
+  }
+
+  getCCAssistant_Systems(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CCAssistant_Systems', httpOptions);
+  }
+
+  getPartnerInformation(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/PartnerInformation', httpOptions);
+  }
+
+  getPartnerContactList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/PartnerContactList', httpOptions);
+  }
+
+  getCallSummaryClassList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CallSummaryClassList', httpOptions);
+  }
+
+  getCallSummaryProblems(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CallSummaryProblems', httpOptions);
+  }
+
+  getCallSummaryNextSteps(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CallSummaryNextSteps', httpOptions);
+  }
+
+  postCallSummaryAdd(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      console.log(httpOptions)
+    return this.http.post<any>('https://localhost:44314/api/CallSummaryNextSteps', httpOptions);
+  }
+
   loadToken() {
     const token = localStorage.getItem('token');
     this.authToken = token;

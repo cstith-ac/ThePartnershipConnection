@@ -30,6 +30,11 @@ import { CallsummaryproblemsComponent } from './components/callsummaryproblems/c
 import { CallsummaryresolutionsComponent } from './components/callsummaryresolutions/callsummaryresolutions.component';
 import { CallsummarynextstepsComponent } from './components/callsummarynextsteps/callsummarynextsteps.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
+import { RouteService } from './services/route.service';
+import { CallsummaryComponent } from './components/callsummary/callsummary.component';
+import { SuggestedtopicsComponent } from './components/suggestedtopics/suggestedtopics.component';
+import { CriticalmessageComponent } from './components/criticalmessage/criticalmessage.component';
+import { SysteminfoComponent } from './components/systeminfo/systeminfo.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +57,11 @@ import { CallsummaryaddComponent } from './components/callsummaryadd/callsummary
     CallsummaryproblemsComponent,
     CallsummaryresolutionsComponent,
     CallsummarynextstepsComponent,
-    CallsummaryaddComponent
+    CallsummaryaddComponent,
+    CallsummaryComponent,
+    SuggestedtopicsComponent,
+    CriticalmessageComponent,
+    SysteminfoComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +77,7 @@ import { CallsummaryaddComponent } from './components/callsummaryadd/callsummary
       }
     })
   ],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, RouteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
