@@ -8,6 +8,28 @@
         </div>
     </div>
     <div>
+        <!-- <form *ngFor="let topic of suggestedtopics">
+            <input type="checkbox">
+            <label>{{ topic.prompt0 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt1 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt2 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt3 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt4 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt5 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt6 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt7 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt8 }}</label>
+            <input type="checkbox">
+            <label>{{ topic.prompt9 }}</label>
+        </form> -->
         <ul *ngFor="let topic of suggestedtopics" id="suggestedTopics" class="list-group list-unstyled">
             <li>{{ topic.prompt0 }}</li>
             <li>{{ topic.prompt1 }}</li>

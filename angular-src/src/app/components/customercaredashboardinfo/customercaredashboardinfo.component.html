@@ -26,7 +26,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-11">
-                <button class="btn btn-success">Refresh</button>
+                <button class="btn btn-success mt-4 mb-4">Refresh</button>
                 <p id="partnerKeyWords" class="afa-text-red text-center font-italic" style="display:inline;margin-left:42%;position:absolute;margin-top:-1rem;">{{ item.partnerKeyWords }}</p>
             </div>
             <div class="col-md-1"></div>
@@ -54,8 +54,8 @@
         <div class="currentCustomerInvoiceRating-bg note-padding">
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="customer-rating" id="customerRatingBg">
-                        <span id="customerRating"></span>
+                    <div class="customer-rating" id="customerRatingBg" [ngStyle]="{'background-color': '#AFF1EE'}">
+                        <span id="customerRating" [ngStyle]="{'color': '#000'}"></span>
                     </div>
                 </div>
                 <div class="col-sm-3">

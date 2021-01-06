@@ -17,7 +17,7 @@ export class SysteminfoComponent implements OnInit {
   ngOnInit() {
     this.routeService.getCCAssistant_Systems().subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
         this.assistantsystems = res;
       }
     )

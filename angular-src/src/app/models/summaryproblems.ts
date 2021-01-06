@@ -1,5 +1,5 @@
 export class SummaryProblems {
-    problemId: number;
-    problemCode: string;
+    problem_Id: number;
+    problem_Code: string;
     description: string;
 }

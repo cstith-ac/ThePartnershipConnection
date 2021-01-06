@@ -1,5 +1,5 @@
 export class SiteList {
     customerSiteId: number;
-    address1: string;
+    address_1: string;
     city: string;
 }

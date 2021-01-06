@@ -43,7 +43,7 @@ export class AuthService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
     //return this.http.get<any>('https://localhost:44314/api/UserProfile', {headers:headers});
   }

@@ -23,12 +23,19 @@
                     <div class="card">
                         <div class="card-body" id="callSummary">
                             <div class="row mt-2 mb-2">
-                                <div class="col-md-12">
-                                   #<span id="callSummaryCustomerNumber"></span>&nbsp;&nbsp;&nbsp;
-                                    <span id="callSummaryCustomerName"></span>
+                                <div class="col-md-12" *ngFor="let item of custNameNumb">
+                                   #<span id="callSummaryCustomerNumber">{{ item.customerNumber }}</span>
+                                   &nbsp;&nbsp;&nbsp;
+                                    <span id="callSummaryCustomerName">{{ item.customerName }}</span>
                                 </div>
                             </div>
                             <div class="row mt-2 mb-2">
+                                <form>
+                                    <div class="form-group">
+                                        <label></label>
+                                    </div>
+                                </form>
+
                                 <form id="callSummaryForm">
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-6">
@@ -42,14 +49,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @*<div class="btn-group" id="callTypeDropdown">
-                                                <label class="d-block" style="color: #1220EF;font-weight:700;">Site</label>
-                                                <div class="dropdown">
-                                                    <select name="site" class="form-control form-control-lg" id="callSummarySiteSelect">
-                                                        <option value="0" disabled hidden>Select a Site</option>
-                                                    </select>
-                                                </div>
-                                            </div>*@
                                         </div>
 
                                         <div class="col-md-6">
@@ -96,12 +95,6 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                @*<label class="d-block" style="color: #1220EF;font-weight:700;">Resolution</label>
-                                                <div class="dropdown">
-                                                    <select name="resolution" class="form-control form-control-lg" id="callSummaryResolutions">
-                                                        <option value="" disabled id="resolutionID">-Select a Resolution-</option>
-                                                    </select>
-                                                </div>*@
                                             </div>
 
                                         </div>
@@ -115,12 +108,6 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                @*<label class="d-block" style="color: #1220EF;font-weight:700;">Next Step</label>
-                                                <div class="dropdown">
-                                                    <select name="nextStep" class="form-control form-control-lg" id="callSummaryNextSteps">
-                                                        <option value="" disabled id="nextStepID">-Select a Next Step-</option>
-                                                    </select>
-                                                </div>*@
                                             </div>
                                         </div>
                                     </div>
@@ -154,8 +141,6 @@
                                                 <label>Customer Comments</label>
                                                 <textarea class="form-control" id="customerCommentsInput" name="customerComments"></textarea>
                                             </div>
-                                            @*<label>Customer Comments</label>
-                                            <textarea class="form-control" id="customerCommentsInput" name="customerComments"></textarea>*@
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
@@ -164,14 +149,11 @@
                                                 <label>Resolution Notes</label>
                                                 <textarea class="form-control" id="resolutionNotesInput" name="techNotes"></textarea>
                                             </div>
-                                            @*<label>Resolution Notes</label>
-                                            <textarea class="form-control" id="resolutionNotesInput" name="techNotes"></textarea>*@
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-12">
                                             <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
-                                            @*<input type="submit" class="btn btn-primary float-right save-btn" value="Submit" id="callSummaryAdd" />*@
                                         </div>
                                     </div>
                                 </form>

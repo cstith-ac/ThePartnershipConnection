@@ -18,7 +18,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CustomerAccessList', httpOptions);
   }
 
@@ -27,7 +27,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CustomerCareDashboardInfo', httpOptions);
   }
 
@@ -36,7 +36,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/SiteToSystemList', httpOptions);
   }
 
@@ -45,7 +45,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CustomerToSiteList', httpOptions);
   }
 
@@ -54,7 +54,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>(`https://localhost:44314/api/CustomerSystemInfo/{id}`, httpOptions);
   }
 
@@ -63,7 +63,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CCAssistant_Systems', httpOptions);
   }
 
@@ -72,7 +72,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/PartnerInformation', httpOptions);
   }
 
@@ -81,7 +81,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/PartnerContactList', httpOptions);
   }
 
@@ -90,7 +90,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CallSummaryClassList', httpOptions);
   }
 
@@ -99,8 +99,17 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CallSummaryProblems', httpOptions);
+  }
+
+  getCallSummaryResolutions(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+      //console.log(httpOptions)
+    return this.http.get<any>('https://localhost:44314/api/CallSummaryResolutions', httpOptions); 
   }
 
   getCallSummaryNextSteps(): Observable<any> {
@@ -108,17 +117,17 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
+      //console.log(httpOptions)
     return this.http.get<any>('https://localhost:44314/api/CallSummaryNextSteps', httpOptions);
   }
 
   postCallSummaryAdd(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer '+this.authToken }) 
       };
-      console.log(httpOptions)
-    return this.http.post<any>('https://localhost:44314/api/CallSummaryNextSteps', httpOptions);
+      //console.log(httpOptions)
+    return this.http.post<any>('https://localhost:44314/api/CallSummaryAdd', httpOptions);
   }
 
   loadToken() {

@@ -1,5 +1,5 @@
 export class SystemList {
-    customerSystemId: number;
-    alarmAccount: string;
+    customerSystemID: number;
+    alarm_Account: string;
     systemType: string;
 }

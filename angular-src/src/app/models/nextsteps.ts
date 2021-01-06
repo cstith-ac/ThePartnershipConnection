@@ -1,4 +1,4 @@
 export class NextSteps {
-    employeeId: number;
+    employeeID: number;
     employeeName: string;
 }

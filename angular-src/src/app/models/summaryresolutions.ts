@@ -1,5 +1,5 @@
 export class SummaryResolutions {
-    resolutionId: number;
-    resolutionCode: string;
+    resolution_Id: number;
+    resolution_Code: string;
     description: string;
 }

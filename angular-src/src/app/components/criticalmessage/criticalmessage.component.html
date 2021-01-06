@@ -1,7 +1,7 @@
 <!-- <p>criticalmessage works!</p> -->
 <div class="critical-message-container">
 
-    <div class="tabs margin-top3" id="padding0" *ngFor="let item of dashboardinfo">
+    <div class="tabs margin-top3" id="padding0">
         <div class="tab-button-outer">
             <ul id="tab-button">
                 <li class="menu"><a href="#tab01">Critical Message</a></li>
@@ -9,12 +9,14 @@
             </ul>
         </div>
 
-        <div id="tab01" class="tab-contents critical-message-tab-content">
-            <p id="criticalMessage">{{ item.criticalMessage }}</p>
-        </div>
-        <div id="tab02" class="tab-contents critical-message-tab-content">
-            <p id="lastNote">{{ item.lastNote }}</p>
-        </div>
+        <span *ngFor="let item of dashboardinfo">
+            <div id="tab01" class="tab-contents critical-message-tab-content">
+                <p id="criticalMessage">{{ item.criticalMessage }}</p>
+            </div>
+            <div id="tab02" class="tab-contents critical-message-tab-content">
+                <p id="lastNote">{{ item.lastNote }}</p>
+            </div>
+        </span>
         <!-- <div id="tab01" class="tab-contents critical-message-tab-content">
             <p id="criticalMessage">{{}}</p>
         </div>

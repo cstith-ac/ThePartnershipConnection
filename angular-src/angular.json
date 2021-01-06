@@ -24,12 +24,14 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/assets/img/tpc_logo.jpg"
             ],
             "styles": [
               "src/styles.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/css/argon.css",
+              "src/assets/css/nucleo.css",
               "src/assets/css/site.css"
             ],
             "scripts": [

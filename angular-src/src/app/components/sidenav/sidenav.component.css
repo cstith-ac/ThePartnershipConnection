@@ -22,6 +22,7 @@ body {
   
   #page-content-wrapper {
     min-width: 100vw;
+    background: linear-gradient(87deg, #ffffff 0, #eeeeee 100%) !important;
   }
   
   #wrapper.toggled #sidebar-wrapper {
@@ -29,7 +30,7 @@ body {
   }
 
   .list-group-item.active {
-    color: #fd0000;
+    color: #000;
   }
 
   .logo {
