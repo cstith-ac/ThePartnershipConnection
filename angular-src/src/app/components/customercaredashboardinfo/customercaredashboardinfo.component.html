@@ -67,7 +67,7 @@
                     <h3 id="guaranteeStatus" class="guarantee-status-text">{{ item.guaranteeStatus }}</h3>
                 </div>
                 <div class="col-sm-3">
-                    <button class="btn btn-primary boc-btn float-right" id="showBOCModal">
+                    <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
                         BOC?
                     </button>
                 </div>
@@ -90,10 +90,86 @@
                 <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">Serviced by: <span id="servicedBy">{{ item.servicedBy }}</span> <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span></li>
                 <!-- Service Ticket - Last Service Visit -->
                 <li class="list-group-item padding-left0" style="padding-top:8px;padding-bottom:8px;">
-                    <a class="text-blue mx-auto mb-0" id="showTicketInfoModal"> <i class="ni ni-fat-add" id="add-icon-blue"></i> </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>
+                    <a class="text-blue mx-auto mb-0" id="showTicketInfoModal" (click)="showTicketInfoModal()"> <i class="ni ni-fat-add" id="add-icon-blue"></i> </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>
                 </li>
                 <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">The customer has had <span id="ticketsLastSixMonths">{{ item.ticketsLastSixMonths }}</span> service tickets in the last 6 months</li>
             </ul>
+        </div>
+    </div>
+</div>
+<!--Ticket info modal-->
+<div class="modal fade" id="ticketInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-3">
+                    <h2 class="modal-title" id="exampleModalLabel">Ticket #274028</h2>
+                </div>
+                <div class="col-md-3">
+                    <p class="font-weight-normal">4/16/2020</p>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="float-right">Alarm Account #8098779 Fire</h2>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card border-0">
+                    <div class="card-body p-0" id="ticketInfoContent">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="list-style-type-none padding-left0">
+                                    <p>Address: <span>215 N. Pioneer Ave. Woodland, CA 95776</span></p>
+                                    <p>Problem Code: <span>9-SVC-TNI-Fire-Maint</span></p>
+                                    <p>Resolution: <span>Bill Appr - Warranty</span></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p>blank</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="afa-bg-tan note-padding">
+                                    <p>INV#CFC17691 4/7/2020 Tech completed semi-annual fire alarm system test and inspection.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--BOC modal-->
+<div class="modal fade" id="bocModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <p>Header TBD</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body" id="bocContent">
+                        <div class="row">
+                            <p>Coming Soon -> show the customer’s balance of contract info</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

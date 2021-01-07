@@ -4,16 +4,16 @@
     <div class="tabs margin-top3" id="padding0">
         <div class="tab-button-outer">
             <ul id="tab-button">
-                <li class="menu"><a href="#tab01">Critical Message</a></li>
-                <li class="menu"><a href="#tab02">Last Note</a></li>
+                <li class="menu" (click)="toggleShow()"><a href="#tab01">Critical Message</a></li>
+                <li class="menu" (click)="toggleShow()"><a href="#tab02">Last Note</a></li>
             </ul>
         </div>
 
         <span *ngFor="let item of dashboardinfo">
-            <div id="tab01" class="tab-contents critical-message-tab-content">
+            <div *ngIf="isShown" id="tab01" class="tab-contents critical-message-tab-content">
                 <p id="criticalMessage">{{ item.criticalMessage }}</p>
             </div>
-            <div id="tab02" class="tab-contents critical-message-tab-content">
+            <div *ngIf="!isShown" id="tab02" class="tab-contents critical-message-tab-content">
                 <p id="lastNote">{{ item.lastNote }}</p>
             </div>
         </span>

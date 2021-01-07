@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
+declare var $: any;
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -47,6 +48,10 @@ export class SidenavComponent implements OnInit {
     });
     this.router.navigate(['/login']);
     return false;
+  }
+
+  showPartnerWindowModal() {
+    $("#partnerWindowModal").modal("show");
   }
 
 }

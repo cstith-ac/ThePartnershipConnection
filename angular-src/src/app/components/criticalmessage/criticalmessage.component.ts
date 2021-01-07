@@ -12,6 +12,7 @@ import { DashboardInfo } from 'src/app/models/dashboardinfo';
 })
 export class CriticalmessageComponent implements OnInit {
   dashboardinfo: DashboardInfo[];
+  isShown: boolean = false;
   
   constructor(
     private routeService: RouteService,
@@ -62,6 +63,10 @@ export class CriticalmessageComponent implements OnInit {
         $(target).show();
       });
     });
+  }
+
+  toggleShow() {
+    this.isShown = ! this.isShown;
   }
 
 }
