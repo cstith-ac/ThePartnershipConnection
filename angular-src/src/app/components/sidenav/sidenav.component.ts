@@ -4,6 +4,10 @@ declare var $: any;
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { RouteService } from '../../services/route.service';
+import { PInformation } from 'src/app/models/pinformation';
+import { ContactList } from 'src/app/models/contactlist';
+import { DashboardInfo } from 'src/app/models/dashboardinfo';
 
 @Component({
   selector: 'app-sidenav',
@@ -12,8 +16,12 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class SidenavComponent implements OnInit {
   user:any=Object;
-  
+  partnerInformation: PInformation[];
+  contactList: ContactList[];
+  dashboardinfo: DashboardInfo[];
+
   constructor(
+    public routeService: RouteService,
     public authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService) { }
@@ -31,6 +39,26 @@ export class SidenavComponent implements OnInit {
       },
       err => {
         console.log(err);
+      }
+    )
+
+    this.routeService.getPartnerInformation().subscribe(
+      res => {
+        //console.log(res);
+        this.partnerInformation = res;
+      }
+    )
+
+    this.routeService.getPartnerContactList().subscribe(
+      res => {
+        //console.log(res);
+        this.contactList = res;
+      }
+    )
+
+    this.routeService.getCustomerCareDashboardInfo().subscribe(
+      res => {
+        this.dashboardinfo = res;
       }
     )
 

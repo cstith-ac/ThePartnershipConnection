@@ -60,6 +60,10 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     )
   }
 
+  refreshDashboard() {
+    window.location.reload();
+  }
+
   showBOCModal() {
     $("#bocModal").modal("show");
   }

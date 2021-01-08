@@ -26,9 +26,9 @@
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
                 </tr>
             </thead>
-            <tbody id="systemInfo" *ngFor="let item of assistantsystems">
+            <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>
-                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' ">{{ item.alarm_Account }}</td>
+                <td  class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' ">{{ item.alarm_Account }}</td>
                 <td>{{ item.alarm_Company_Code }}</td>
                 <td>{{ item.system_Code }}</td>
                 <td>{{ item.siteAddress }}</td>
@@ -48,14 +48,43 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="card" id="afa-card-border0">
-                    <div class="card-body padding-top0 padding-right0 padding-bottom0 padding-left0" id="accountInfoContent">
+                    <div class="card-body padding-top0 padding-right0 padding-bottom0 padding-left0" id="accountInfoContent" *ngFor="let info of customerSystemInfo">
                         <div class="row">
                             <div class="col-md-8">
                                 <p>
-                                    #<span id="systemInfoCustomerNumber" style="margin-right:5%"></span>&nbsp;&nbsp;
-                                    <span id="systemInfoCustomerName" style="margin-right:5%"></span>&nbsp;&nbsp;
-                                    <span class="customer-rating" id="systemInfoCustomerRatingBg"><span id="systemInfoCustomerRating"></span></span>&nbsp;&nbsp;
+                                    #<span id="systemInfoCustomerNumber" style="margin-right:5%">{{ info.customerNumber }}</span>&nbsp;&nbsp;
+                                    <span id="systemInfoCustomerName" style="margin-right:5%">{{ info.customerName }}</span>&nbsp;&nbsp;
+                                    <!-- <span class="customer-rating" id="systemInfoCustomerRatingBg"><span id="systemInfoCustomerRating"></span></span>&nbsp;&nbsp; -->
                                 </p>
+
+                                <div *ngIf="info.customerRatingValue === 0; else elseBlock">
+                                    <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ info.customerRating }}</span>
+                                    </div>
+                                </div>
+            
+                                <div *ngIf="info.customerRatingValue === 1;">
+                                    <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ info.customerRating }}</span>
+                                    </div>
+                                </div>
+            
+                                <div *ngIf="info.customerRatingValue === 2;">
+                                    <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ info.customerRating }}</span>
+                                    </div>
+                                </div>
+            
+                                <div *ngIf="info.customerRatingValue === 3;">
+                                    <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ info.customerRating }}</span>
+                                    </div>
+                                </div>
+            
+                                <ng-template #elseBlock>
+                                    There was an error. Please contact an administrator
+                                </ng-template>
+
                                 <p>
                                     Account #<span id="alarmAccount" style="margin-right:1rem"></span>&nbsp;&nbsp;
                                     <span id="featureMessage" class="special-flag-text"></span>

@@ -22,5 +22,5 @@ export class SystemInfo {
     contractStatus: string;
     billFrequency: string;
     nextCycleOn: string;
-    alternateServiceCompanyActive: string;
+    alternateServiceCompanyActive: number;
 }

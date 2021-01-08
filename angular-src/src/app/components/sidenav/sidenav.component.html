@@ -37,7 +37,9 @@
         <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-          <a class="mx-auto mb-0 black-text" id="showPartnerWindowModal" (click)="showPartnerWindowModal()" *ngIf="authService.loggedIn()"><i class="ni ni-fat-add" id="add-icon-blue"></i><span>Partner 1091, Direct Alarm</span></a>
+          <a class="mx-auto mb-0 black-text" id="showPartnerWindowModal" (click)="showPartnerWindowModal()" *ngIf="authService.loggedIn()">
+            <i class="ni ni-fat-add" id="add-icon-blue"></i>
+            <span *ngFor="let item of dashboardinfo">{{ item.partnerName }}</span></a>
 
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <!-- <li class="nav-item active">
@@ -52,8 +54,8 @@
                 <!-- {{ user.email }} -->
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item list-group-item list-group-item-action" [routerLink]="['/profile']" routerLinkActive="active" *ngIf="authService.loggedIn()">Profile</a>
-                <a (click)="onLogoutClick()" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Logout</a>
+                <a class="dropdown-item list-group-item list-group-item-action" [routerLink]="['/profile']" routerLinkActive="active" *ngIf="authService.loggedIn()"> <i class="ni ni-single-02"></i> My Profile</a>
+                <a (click)="onLogoutClick()" class="dropdown-item list-group-item list-group-item-action" *ngIf="authService.loggedIn()"> <i class="ni ni-user-run"></i> Logout</a>
                 <!-- <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a> -->
@@ -84,33 +86,33 @@
             <div class="modal-body">
                 <div class="card" id="afa-card">
                     <div class="card-body" id="partnerWindow">
-                        <div class="row">
+                        <div class="row" *ngFor="let item of partnerInformation">
                             <div class="col-md-5">
                                 <div>
-                                    <h2 class="lead font-weight900 mt-0" id="partnerCode"></h2>
+                                    <h2 class="lead font-weight900 mt-0" id="partnerCode">{{ item.partnerCode }}</h2>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="address1"></span>
+                                    <span id="address1">{{ item.address1 }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="address2"></span>
+                                    <span id="address2">{{ item.address2 }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="city"></span>, <span id="state"></span>&nbsp;<span id="zipCode"></span>
+                                    <span id="city">{{ item.city }}</span>, <span id="state">{{ item.state }}</span>&nbsp;<span id="zipCode">{{ item.zipCode }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="phone1"></span>
+                                    <span id="phone1">{{ item.phone1 }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="phone2"></span>
+                                    <span id="phone2">{{ item.phone2 }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
-                                    <span id="eMail" class="blue-text"></span>
+                                    <span id="eMail" class="blue-text">{{ item.eMail }}</span>
                                 </div>
                             </div>
                             <div class="col-md-7">
                                 <div class="afa-bg-tan note-padding">
-                                    <span id="customerCareNote"></span>
+                                    <span id="customerCareNote">{{ item.customerCareNote }}</span>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +127,12 @@
                                     <tr></tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="contacts"></tr>
+                                    <tr id="contacts" *ngFor="let item of contactList">
+                                      <td>{{ item.title }}</td>
+                                      <td>{{ item.contact_Name }}</td>
+                                      <td>{{ item.phone }}</td>
+                                      <td> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

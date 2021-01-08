@@ -30,7 +30,11 @@ namespace WebAPI.Controllers
             {
                 user.FirstName,
                 user.LastName,
-                user.Email
+                user.Email,
+                user.PhoneNumber,
+                user.AltEmail,
+                user.CellPhoneNumber1,
+                user.AfauserLink
             };
         }
     }

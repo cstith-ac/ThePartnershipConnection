@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { UserProfile } from 'src/app/models/userprofile';
 
 @Component({
   selector: 'app-profile',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   //user:any= Object;
   user:any=Object;
+  userProfile: UserProfile[];
 
   constructor(
     private authService: AuthService,
@@ -28,6 +30,7 @@ export class ProfileComponent implements OnInit {
       res => {
         //console.log(res)
         this.user = res;
+        this.userProfile = res;
         //console.log(this.user)
       },
       err => {

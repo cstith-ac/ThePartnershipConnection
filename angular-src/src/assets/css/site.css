@@ -179,6 +179,7 @@ body {
     margin-bottom: 25px;
     background: linear-gradient(87deg, #ffffff 0, #eeeeee 100%) !important;
     color: rgba(0,0,0,1) !important;
+    overflow-x: hidden; /* Remove white space that was appearing on right side of page due to Twitter Bootstrap bug*/
 }
 
 p {
@@ -561,6 +562,12 @@ p {
     border: 1px solid #000;
     padding: 1rem 1rem;
     display: inline-table
+}
+
+.system-info-collectionItem {
+    color: #1919AF;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* Critical Message Styles

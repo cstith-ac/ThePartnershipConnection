@@ -26,7 +26,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-11">
-                <button class="btn btn-success mt-4 mb-4">Refresh</button>
+                <button class="btn btn-success mt-4 mb-4" (click)="refreshDashboard()">Refresh</button>
                 <p id="partnerKeyWords" class="afa-text-red text-center font-italic" style="display:inline;margin-left:42%;position:absolute;margin-top:-1rem;">{{ item.partnerKeyWords }}</p>
             </div>
             <div class="col-md-1"></div>
@@ -54,9 +54,41 @@
         <div class="currentCustomerInvoiceRating-bg note-padding">
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="customer-rating" id="customerRatingBg" [ngStyle]="{'background-color': '#AFF1EE'}">
-                        <span id="customerRating" [ngStyle]="{'color': '#000'}"></span>
+                    <!--conditionally render customer rating-->
+                    <div *ngIf="item.customerRatingValue === 0; else elseBlock">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                        </div>
                     </div>
+
+                    <div *ngIf="item.customerRatingValue === 1;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                            <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="item.customerRatingValue === 2;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                            <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="item.customerRatingValue === 3;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                            <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                        </div>
+                    </div>
+
+                    <ng-template #elseBlock>
+                        There was an error. Please contact an administrator
+                    </ng-template>
+                    
+                    <!-- <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </div> -->
+                    <!-- <div class="customer-rating" #customerRatingBg>
+                        <span id="customerRating" #customerRating></span>
+                    </div> -->
                 </div>
                 <div class="col-sm-3">
                     <h3 class="rmr-text">$<span id="totalRMR">{{ item.totalRMR }}</span>/Month</h3>
@@ -80,7 +112,15 @@
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <span id="hasSeparateSiteAddress" class="float-right">{{ item.hasSeparateSiteAddress }}</span>
+                    <!-- <div *ngIf="expression">
+                        <span id="hasSeparateSiteAddress" class="float-right" [ngClass]="'bill-to-address-btn'">{{ item.hasSeparateSiteAddress }}</span>
+                    </div> -->
+                    <div *ngIf="item.hasSeparateSiteAddress === 'Separate Bill-to and Site Address';">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'bill-to-address-btn'">
+                            {{ item.hasSeparateSiteAddress }}
+                        </div>
+                    </div>
+                    <!-- <span id="hasSeparateSiteAddress" class="float-right" [ngClass]="'bill-to-address-btn'">{{ item.hasSeparateSiteAddress }}</span> -->
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 export class ContactList {
     title: string;
-    contactName: string;
+    contact_Name: string;
     phone: string;
-    email: string;
-    contactId: number;
+    e_Mail: string;
+    contactID: number;
 }
