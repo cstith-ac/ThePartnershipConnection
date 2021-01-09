@@ -48,6 +48,13 @@ export class AuthService {
     //return this.http.get<any>('https://localhost:44314/api/UserProfile', {headers:headers});
   }
 
+  updateUserProfile(user): Observable<any> {
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
+      };
+    return this.http.put<any>('https://localhost:44314/api/ApplicationUser/UserProfile', user, httpOptions);
+  }
+
   // getProfile(){
   //   let headers = new HttpHeaders();
   //   this.loadToken();
