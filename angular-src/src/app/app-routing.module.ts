@@ -19,10 +19,12 @@ import { LoginComponent } from './components/login/login.component';
 import { PartnercontactlistComponent } from './components/partnercontactlist/partnercontactlist.component';
 import { PartnerinformationComponent } from './components/partnerinformation/partnerinformation.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { RecentcustomersComponent } from './components/recentcustomers/recentcustomers.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SitetosystemlistComponent } from './components/sitetosystemlist/sitetosystemlist.component';
 import { SuggestedtopicsComponent } from './components/suggestedtopics/suggestedtopics.component';
 import { SysteminfoComponent } from './components/systeminfo/systeminfo.component';
+import { SysteminfodetailComponent } from './components/systeminfodetail/systeminfodetail.component';
 
 const routes: Routes = [
   {
@@ -130,6 +132,16 @@ const routes: Routes = [
   {
     path: 'system-info',
     component: SysteminfoComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'system-info/:id',
+    component: SysteminfodetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'recent-customers',
+    component: RecentcustomersComponent,
     canActivate: [AuthGuard]
   }
 ];

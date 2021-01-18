@@ -28,7 +28,7 @@
             </thead>
             <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>
-                <td  class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' ">{{ item.alarm_Account }}</td>
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)">{{ item.alarm_Account }}</td>
                 <td>{{ item.alarm_Company_Code }}</td>
                 <td>{{ item.system_Code }}</td>
                 <td>{{ item.siteAddress }}</td>
@@ -39,11 +39,24 @@
                 <td>{{ item.rmrAmount }}</td>
                 <td>{{ item.featureMessage }}</td>
             </tbody>
+            <!-- <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
+                <tr class="system-info-collection"></tr>
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " [routerLink]="['/system-info/{{customer_System_Id}}']" >{{ item.alarm_Account }}</td>
+                <td>{{ item.alarm_Company_Code }}</td>
+                <td>{{ item.system_Code }}</td>
+                <td>{{ item.siteAddress }}</td>
+                <td>{{ item.contract_Start_Date }}</td>
+                <td>{{ item.contractExpiration }}</td>
+                <td>{{ item.contractExpirationMessage }}</td>
+                <td>{{ item.warranty }}</td>
+                <td>{{ item.rmrAmount }}</td>
+                <td>{{ item.featureMessage }}</td>
+            </tbody> -->
         </table>
     </div>
 </div>
 
-<div class="modal fade" id="accountInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="accountInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
             <div class="modal-body">
@@ -52,9 +65,8 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <p>
-                                    #<span id="systemInfoCustomerNumber" style="margin-right:5%">{{ info.customerNumber }}</span>&nbsp;&nbsp;
+                                    #<span #systemInfoCustomerNumber id="systemInfoCustomerNumber" style="margin-right:5%">{{ info.customerNumber }}</span>&nbsp;&nbsp;
                                     <span id="systemInfoCustomerName" style="margin-right:5%">{{ info.customerName }}</span>&nbsp;&nbsp;
-                                    <!-- <span class="customer-rating" id="systemInfoCustomerRatingBg"><span id="systemInfoCustomerRating"></span></span>&nbsp;&nbsp; -->
                                 </p>
 
                                 <div *ngIf="info.customerRatingValue === 0; else elseBlock">
@@ -167,10 +179,6 @@
                                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                             <ul class="list-unstyled tab-list-padding">
                                                 <li>No connection to Central Station at this time.</li>
-                                                <!-- @*<li>Password - LuckyFin</li>
-                    <li>System Status - Active</li>
-                    <li>Last Signal Date - 8/2/2020 18:42</li>
-                    <li>Zone List <i class="ni ni-fat-add" id="add-icon-blue"></i> </li>*@ -->
                                             </ul>
                                         </div>
                                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -191,4 +199,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

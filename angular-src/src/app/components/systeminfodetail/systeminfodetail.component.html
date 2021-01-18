@@ -1,0 +1,146 @@
+<!-- <div *ngFor="let item of systemInfo">
+    {{item.addressLine}}
+</div> -->
+<!-- <div>
+    <p>{{ systemInfo.customerNumber }}</p>
+    <p>{{ systemInfo.customerName }}</p>
+    <p>{{ systemInfo.addressLine }}</p>
+</div> -->
+
+<div class="container">
+    <div class="card" id="afa-card-border0">
+        <div class="card-body" id="accountInfoContent">
+            <div class="row">
+                <div class="col-md-8">
+                    <p>
+                        #<span #systemInfoCustomerNumber id="systemInfoCustomerNumber" style="margin-right:5%">{{ systemInfo.customerNumber }}</span>&nbsp;&nbsp;
+                        <span id="systemInfoCustomerName" style="margin-right:5%">{{ systemInfo.customerName }}</span>&nbsp;&nbsp;
+                    </p>
+    
+                    <div *ngIf="systemInfo.customerRatingValue === 0; else elseBlock">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span id="customerRating" [ngClass]="'ratingValueText0'">{{ systemInfo.customerRating }}</span>
+                        </div>
+                    </div>
+    
+                    <div *ngIf="systemInfo.customerRatingValue === 1;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                            <span id="customerRating" [ngClass]="'ratingValueText1'">{{ systemInfo.customerRating }}</span>
+                        </div>
+                    </div>
+    
+                    <div *ngIf="systemInfo.customerRatingValue === 2;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                            <span id="customerRating" [ngClass]="'ratingValueText2'">{{ systemInfo.customerRating }}</span>
+                        </div>
+                    </div>
+    
+                    <div *ngIf="systemInfo.customerRatingValue === 3;">
+                        <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                            <span id="customerRating" [ngClass]="'ratingValueText3'">{{ systemInfo.customerRating }}</span>
+                        </div>
+                    </div>
+    
+                    <ng-template #elseBlock>
+                        There was an error. Please contact an administrator
+                    </ng-template>
+    
+                    <p>
+                        Account #<span id="alarmAccount" style="margin-right:1rem">{{systemInfo.alarmAccount}}</span>&nbsp;&nbsp;
+                        <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span>
+                    </p>
+                    <p>
+                        <span class="afa-text-dark-blue">
+                            Monitored by <span id="monitoredBy">{{systemInfo.monitoredBy}}</span>
+                        </span>
+                    </p>
+                    <p>
+                        <span id="addressLine">{{systemInfo.addressLine}}</span>
+                    </p>
+                    <p>
+                        <span class="font-weight-400">
+                            Contract Started on <span id="originalContractDate">{{systemInfo.originalContractDate}}</span> for <span id="originalContractMonths">{{systemInfo.originalContractMonths}}</span> months
+                        </span>
+                    </p>
+                    <p>
+                        <span id="contractStatus" class="font-weight-400">{{systemInfo.contractStatus}}</span>
+                    </p>
+                    <p>
+                        Serviced by <span id="serviceCompany">{{systemInfo.serviceCompany}}</span>
+                    </p>
+                    <p>
+                        <i class="ni ni-fat-add" id="add-icon-blue"></i>
+                        <span id="lastServiceTicketOn">{{systemInfo.lastServiceTicketOn}}</span>
+                    </p>
+                </div>
+                <div class="col-md-4 system-info-aside">
+                    <p class="afa-text-blue text-right">
+                        <span id="systemType">{{systemInfo.systemType}}</span>
+                    </p>
+                    <p class="afa-text-blue text-right">
+                        <span>Maintenance - <span id="maintenance">{{systemInfo.maintenance}}</span></span>
+                    </p>
+                    <p class="afa-text-blue text-right">
+                        $<span id="rmrValue">{{systemInfo.rmrValue}}</span>/Month RMR
+                    </p>
+                    <p class="afa-text-blue text-right">
+                        <span id="systemInfoBillFrequency">{{systemInfo.billFrequency}}</span>
+                    </p>
+                    <p class="afa-text-blue text-right">
+                        <span id="systemInfoNextCycleOn">{{systemInfo.nextCycleOn}}</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12 marginTopBottom-1rem">
+                    <div class="afa-bg-panel-type system-notes-border system-notes-padding">
+                        <p>Panel Type - <span id="panelType"></span></p>
+                        <p>
+                            <span class="afa-text-dark-blue">Cell Model - </span>
+                            <span id="cellModel">{{systemInfo.cellModel}}</span>
+                        </p>
+                        <p>
+                            <span class="afa-text-dark-blue">Carrier - </span>
+                            <span id="cellCarrier">{{systemInfo.cellCarrier}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 marginTopBottom-1rem">
+                    <div class="afa-bg-tan system-notes-border system-notes-padding">
+                        <h3 class="afa-text-blue">System Notes</h3>
+                        <p id="systemNotes">{{systemInfo.systemNotes}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item info-tab info-tab-bg">
+                                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information from <span id="centralStationMonitoredBy"></span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content info-tab-bg" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <ul class="list-unstyled tab-list-padding">
+                                    <li>No connection to Central Station at this time.</li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-large" >Back</button>

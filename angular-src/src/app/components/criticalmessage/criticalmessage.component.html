@@ -11,10 +11,18 @@
 
         <span *ngFor="let item of dashboardinfo">
             <div *ngIf="isShown" id="tab01" class="tab-contents critical-message-tab-content">
-                <p id="criticalMessage">{{ item.criticalMessage }}</p>
+                <!-- <p id="criticalMessage">
+                    {{ item.criticalMessage }}
+                </p> -->
+                <pre id="criticalMessage">
+                    {{ item.criticalMessage }}
+                </pre>
             </div>
             <div *ngIf="!isShown" id="tab02" class="tab-contents critical-message-tab-content">
-                <p id="lastNote">{{ item.lastNote }}</p>
+                <!-- <p id="lastNote">{{ item.lastNote }}</p> -->
+                <pre id="lastNote">
+                    {{ item.lastNote }}
+                </pre>
             </div>
         </span>
         <!-- <div id="tab01" class="tab-contents critical-message-tab-content">

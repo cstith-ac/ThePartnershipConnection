@@ -36,6 +36,7 @@ export class SidenavComponent implements OnInit {
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
+        console.log(JSON.parse(localStorage.getItem('user')))
       },
       err => {
         console.log(err);
@@ -44,7 +45,7 @@ export class SidenavComponent implements OnInit {
 
     this.routeService.getPartnerInformation().subscribe(
       res => {
-        //console.log(res);
+        console.log(res);
         this.partnerInformation = res;
       }
     )
@@ -64,8 +65,12 @@ export class SidenavComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    //console.log('update user')
+  }
+
   onLogoutClick() {
-    //this.authService.logout();
+    this.authService.logout();
     //implementing this workaround until the JS in the auth service is fixed
     localStorage.removeItem('token');
     localStorage.removeItem('user');

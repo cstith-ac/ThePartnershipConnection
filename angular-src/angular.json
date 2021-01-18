@@ -25,7 +25,8 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets/img/tpc_logo.jpg"
+              "src/assets/img/tpc_logo.jpg",
+              "src/web.config"
             ],
             "styles": [
               "src/styles.css",

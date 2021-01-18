@@ -61,7 +61,10 @@ namespace WebAPI.Controllers
                     EMail = s.EMail,
                     PartnerID = s.PartnerID,
                     CustomerCareNote = s.CustomerCareNote
-                }).ToList();
+                    //CustomerCareNote = s.CustomerCareNote.Replace("\r\n", "<br />").Replace("\n", "<br />")
+                    //CustomerCareNote = s.CustomerCareNote.Replace("\","\&#8203;")
+                    //CustomerCareNote = s.CustomerCareNote.Replace("\r\n", "<br />")
+            }).ToList();
                 return Lst;
             }
         }

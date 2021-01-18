@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { fromEventPattern } from 'rxjs';
 import { AssistantSystems } from 'src/app/models/assistantsystems';
 import { SystemInfo } from 'src/app/models/systeminfo';
 import { RouteService } from '../../services/route.service';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -9,69 +11,60 @@ declare var $: any;
   templateUrl: './systeminfo.component.html',
   styleUrls: ['./systeminfo.component.css']
 })
-export class SysteminfoComponent implements OnInit, AfterViewInit {
-  @ViewChild('systemInfo') systemInfo: ElementRef;
+export class SysteminfoComponent implements OnInit {
+  // @ViewChild('systemInfo') systemInfo: ElementRef;
+  // @ViewChild('systemInfoCustomerNumber') systemInfoCustomerNumber: ElementRef;
+
+  id:number;
 
   assistantsystems: AssistantSystems[];
-  customerSystemInfo: SystemInfo[];
+  customerSystemInfo: SystemInfo;
 
   constructor(
-    private routeService: RouteService
+    private routeService: RouteService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.routeService.getCCAssistant_Systems().subscribe(
       res => {
-        //console.log(res);
         this.assistantsystems = res;
+        console.log(this.assistantsystems);
+        // let customerSystemID = this.assistantsystems.find(x => x.customer_System_Id === x.customer_System_Id).customer_System_Id;
+        // console.log(customerSystemID)
 
-        // const table = document.getElementById("systemInfo");
-        // console.log(table)
+        // fetch('https://localhost:44314/api/CustomerSystemInfo/'+customerSystemID)
+        // .then(res => {
+        //   res.json()
+        //   .then(data => {
+        //     console.log(data.addressLine)
+        //   })
+        // })
       }
     )
 
-    this.routeService.getCustomerSystemInfo().subscribe(
+    this.routeService.getCustomerSystemInfo(this.id).subscribe(
       res => {
-        this.customerSystemInfo = res;
+        console.log(res)
+        //this.customerSystemInfo = res;
       }
     )
+
+    // $(".system-info-collectionItem").on('click', function() {
+    //   var id = $(this).data('id');
+    //   console.log(id)
+    // })
   }
 
-  ngAfterViewInit() {
-    console.log('afterinit');
-    setTimeout(() => {
-      //console.log(this.systemInfo.nativeElement);
-      let table = this.systemInfo.nativeElement;
-      let rows = table.getElementsByTagName("tr");
-      //console.log(rows);
-      // for(let i = 0; i < rows.length; i++) {
-      //   let currentRow = table.rows[i];
-      //   //console.log(currentRow);
-      //   let firstCol = table.rows[i].cells[0];
-      //   console.log(firstCol);
-        
-      //   let createClickHandler = function(row) {
-      //     return function() {
-      //       let cell = row.getElementsByTagName("td")[1];
-      //       let customerSystemId = row.getElementsByTagName("td")[0];
-      //       let id = customerSystemId.innerHTML;
-      //       $("#accountInfoModal").modal("show");
-      //     };
-      //     currentRow.onclick = createClickHandler(currentRow);
-      //   }
-      // }
-      // function showSystemInfo() {
-      //   //e.preventDefault();
-      //   console.log("show");
-      // }
-      // showSystemInfo();
-    }, 1000)
-    //console.log(this.systemInfo.nativeElement);
+  routeToSystem(id) {
+    this.router.navigate(["system-info/", id])
   }
 
-  showSystemInfo() {
-    //e.preventDefault();
-    $("#accountInfoModal").modal("show");
+  showaccountInfoModal(customer_System_Id:number) {
+    this.router.navigate(['system-info/'+ customer_System_Id])
+    //$("#accountInfoModal").modal("show");
+    //console.log(this.systemInfoCustomerNumber.nativeElement);
+   //this.routeService.getCustomerSystemInfo
   }
 
 }

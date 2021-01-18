@@ -51,6 +51,21 @@ namespace WebAPI
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //New Cors policy
+            services.AddCors(
+                options => options.AddPolicy("AllowCors",
+                    builder =>
+                    {
+                        builder
+                            //.AllowAnyOrigin() // This is not secure and will need to be refactored
+                                              //.WithOrigins("https://localhost:44390/")
+                                              //.AllowCredentials()
+                            .WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+                            .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    })
+            );
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Password settings.
@@ -67,7 +82,8 @@ namespace WebAPI
 
             services.AddControllers().AddNewtonsoftJson();
 
-            services.AddCors();
+            //OLD Cors Policy
+            //services.AddCors();
 
             services.AddTransient<TPC_DevContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -115,11 +131,13 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
-                builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-            );
+            app.UseCors("AllowCors");
+
+            //app.UseCors(builder =>
+            //    builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+            //    .AllowAnyHeader()
+            //    .AllowAnyMethod()
+            //);
 
             app.UseHttpsRedirection();
 

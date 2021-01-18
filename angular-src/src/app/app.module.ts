@@ -35,6 +35,8 @@ import { CallsummaryComponent } from './components/callsummary/callsummary.compo
 import { SuggestedtopicsComponent } from './components/suggestedtopics/suggestedtopics.component';
 import { CriticalmessageComponent } from './components/criticalmessage/criticalmessage.component';
 import { SysteminfoComponent } from './components/systeminfo/systeminfo.component';
+import { SysteminfodetailComponent } from './components/systeminfodetail/systeminfodetail.component';
+import { RecentcustomersComponent } from './components/recentcustomers/recentcustomers.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { SysteminfoComponent } from './components/systeminfo/systeminfo.componen
     CallsummaryComponent,
     SuggestedtopicsComponent,
     CriticalmessageComponent,
-    SysteminfoComponent
+    SysteminfoComponent,
+    SysteminfodetailComponent,
+    RecentcustomersComponent
   ],
   imports: [
     BrowserModule,

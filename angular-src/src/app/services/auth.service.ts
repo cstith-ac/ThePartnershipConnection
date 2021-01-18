@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class AuthService {
   authToken: any;
   user: any;
   res: any;
+
+  baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) { }
 
@@ -23,15 +26,18 @@ export class AuthService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }) 
       };
-    return this.http.post<any>('https://localhost:44314/api/ApplicationUser/Register', user, httpOptions);
+    //return this.http.post<any>('https://localhost:44314/api/ApplicationUser/Register', user, httpOptions);
+    // return this.http.post<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/Register', user, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Register', user, httpOptions);
   }
 
   authenticateUser(user): Observable<any> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }) 
       };
-      //console.log(user)
-    return this.http.post<any>('https://localhost:44314/api/ApplicationUser/Login', user, httpOptions);
+    //return this.http.post<any>('https://localhost:44314/api/ApplicationUser/Login', user, httpOptions);
+    // return this.http.post<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/Login',user, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions);
   }
 
   getProfile(): Observable<any> {
@@ -43,16 +49,18 @@ export class AuthService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      //console.log(httpOptions)
-    return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
-    //return this.http.get<any>('https://localhost:44314/api/UserProfile', {headers:headers});
+    //return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
+    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/UserProfile', httpOptions);
+    return this.http.get<any>(this.baseUrl + '/api/UserProfile', httpOptions);
   }
 
   updateUserProfile(user): Observable<any> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
       };
-    return this.http.put<any>('https://localhost:44314/api/ApplicationUser/UserProfile', user, httpOptions);
+    //return this.http.put<any>('https://localhost:44314/api/ApplicationUser/UserProfile', user, httpOptions);
+    // return this.http.put<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/UserProfile', user, httpOptions);
+    return this.http.put<any>(this.baseUrl + '/api/ApplicationUser/UserProfile', user, httpOptions);
   }
 
   // getProfile(){
@@ -67,6 +75,7 @@ export class AuthService {
   storeUserData(res, token) {
     localStorage.setItem('token', res.token);
     localStorage.setItem('user',  JSON.stringify(res));
+    localStorage.setItem('foo', 'bar');
     this.authToken = token;
     this.user = res;
     debugger;
