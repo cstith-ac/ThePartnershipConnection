@@ -30,13 +30,187 @@
                                 </div>
                             </div>
                             <div class="row mt-2 mb-2">
-                                <!-- <form>
-                                    <div class="form-group">
-                                        <label></label>
+                                <form [formGroup]="callSummaryAddForm" (ngSubmit)="onSubmit(callSummaryAddForm)">
+                                    <div class="row mt-2 mb-2">
+                                        <!-- <div *ngIf="expression"></div> -->
+                                        <div class="col-md-6">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">Site</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="site" class="form-control form-control-lg" id="callSummarySiteSelect">
+                                                        <option *ngFor="let site of site" value={{site}} [ngValue]="site">{{ site.address_1 }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">System</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="SystemID" class="form-control form-control-lg" id="callSummarySystemSelect">
+                                                        <option *ngFor="let system of siteToSystemList" value="{{ system.customerSystemID }}" [ngValue]="system.customerSystemID">{{ system.systemType }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </form> -->
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-3">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">Call Type</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="callSummaryClassList" class="form-control form-control-lg" id="callSummaryClassListSelect">
+                                                        <option *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" [ngValue]="type.problem_Class_id">{{ type.problem_Class_description }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">Problems</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="ProblemID" class="form-control form-control-lg" id="callSummaryProblems">
+                                                        <option *ngFor="let problem of callSummaryProblems" value="{{ problem.problem_Id }}" [ngValue]="problem.problem_Id">{{ problem.description }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">Resolution</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="ResolutionID" class="form-control form-control-lg" id="callSummaryResolutions">
+                                                        <option *ngFor="let resolution of callSummaryResolutions" value="{{ resolution.resolution_Id }}" [ngValue]="resolution.resolution_Id">{{ resolution.description }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                                <label class="d-block call-summary-select">Next Step</label>
+                                                <div class="dropdown">
+                                                    <select formControlName="CallSummaryNextSteps" class="form-control form-control-lg" id="callSummaryNextSteps">
+                                                        <option *ngFor="let nextStep of callSummaryNextSteps" value="{{ nextStep.employeeID }}" [ngValue]="nextStep.employeeID">{{ nextStep.employeeName }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="row mt-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group btn-group">
+                                                <label>Was the issue resolved?</label>
+                                                <input type="checkbox" formControlName="isIssueResolved" class="ml-1 mt-1">
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Customer On Call</label>
+                                                <input type="text" [(ngModel)]="customerOnCall" formControlName="CustomerOnCall" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Customer Call Back Phone</label>
+                                                <input type="tel" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-group" id="custCommentsTextArea">
+                                                <label>Customer Comments</label>
+                                                <textarea formControlName="CustomerComments" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-group" id="resNotesTextArea">
+                                                <label>Resolution Notes</label>
+                                                <textarea formControlName="TechNotes" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group btn-group">
+                                        <label class="d-block">Site</label>
+                                        <div class="dropdown">
+                                            <select formControlName="site">
+                                                <option *ngFor="let site of site" value={{site}} [ngValue]="site">{{ site.address_1 }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group btn-group" id="callTypeDropdown">
+                                        <label class="d-block">System</label>
+                                        <div class="dropdown">
+                                            <select formControlName="siteToSystemList">
+                                                <option *ngFor="let system of siteToSystemList" value="{{ system.customerSystemID }}" [ngValue]="system.customerSystemID">{{ system.systemType }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group btn-group">
+                                        <label class="d-block">Call Type</label>
+                                        <div class="dropdown">
+                                            <select formControlName="callSummaryClassList">
+                                                <option *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" [ngValue]="type.problem_Class_id">{{ type.problem_Class_description }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
 
-                                <form id="callSummaryForm">
+                                    <!-- <div class="form-group btn-group">
+                                        <label class="d-block">Problem</label>
+                                        <div class="dropdown">
+                                            <select formControlName="callSummaryProblems">
+                                                <option *ngFor="let problem of callSummaryProblems" value="{{ problem.problem_Id }}" [ngValue]="problem.problem_Id">{{ problem.description }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group btn-group">
+                                        <label class="d-block">Resolution</label>
+                                        <div class="dropdown">
+                                            <select formControlName="callSummaryResolutions">
+                                                <option *ngFor="let resolution of callSummaryResolutions" value="{{ resolution.resolution_Id }}" [ngValue]="resolution.resolution_Id">{{ resolution.description }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group btn-group">
+                                        <label class="d-block">Next Step</label>
+                                        <div class="dropdown">
+                                            <select formControlName="callSummaryNextSteps">
+                                                <option *ngFor="let nextStep of callSummaryNextSteps" value="{{ nextStep.employeeID }}" [ngValue]="nextStep.employeeID">{{ nextStep.employeeName }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="form-group btn-group">
+                                        <label>Was the issue resolved?</label>
+                                        <input type="checkbox" formControlName="isIssueResolved">
+                                    </div> -->
+                                    <!-- <div class="form-group">
+                                        <label>Customer On Call</label>
+                                        <input type="text" [(ngModel)]="customerOnCall" formControlName="customerOnCall" class="form-control">
+                                    </div> -->
+                                    <!-- <div class="form-group">
+                                        <label>Customer Call Back Phone</label>
+                                        <input type="tel" [(ngModel)]="customerCallBackPhone" formControlName="customerCallBackPhone" class="form-control">
+                                    </div> -->
+                                    <!-- <div class="form-group">
+                                        <label>Customer Comments</label>
+                                        <textarea formControlName="customerComments" cols="30" rows="10"></textarea>
+                                    </div> -->
+                                    <!-- <div class="form-group">
+                                        <label>Resolution Notes</label>
+                                        <textarea formControlName="resolutionNotes" cols="30" rows="10"></textarea>
+                                    </div> -->
+                                </form>
+
+                                <!-- <form id="callSummaryForm">
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-6">
                                             <div id="siteSelect" class="">
@@ -159,7 +333,7 @@
                                             <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
                                         </div>
                                     </div>
-                                </form>
+                                </form> -->
                                 <!-- Result -->
                                 <div id="ticketNumberResult" class="pt-4">
                                     <h5>Ticket Number</h5>

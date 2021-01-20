@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
+//import 'rxjs/add/operator/map';
 import { AuthGuard } from '../app/guards/auth.guard';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +18,7 @@ import { HomeComponent } from './components/home/home.component';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
+//import { UserService } from './services/user.service';
 import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
 import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
 import { CustomersysteminfoComponent } from './components/customersysteminfo/customersysteminfo.component';
@@ -37,6 +39,8 @@ import { CriticalmessageComponent } from './components/criticalmessage/criticalm
 import { SysteminfoComponent } from './components/systeminfo/systeminfo.component';
 import { SysteminfodetailComponent } from './components/systeminfodetail/systeminfodetail.component';
 import { RecentcustomersComponent } from './components/recentcustomers/recentcustomers.component';
+import { CurrentuserComponent } from './components/currentuser/currentuser.component';
+import { PartnerwindowComponent } from './components/partnerwindow/partnerwindow.component';
 
 @NgModule({
   declarations: [
@@ -65,12 +69,15 @@ import { RecentcustomersComponent } from './components/recentcustomers/recentcus
     CriticalmessageComponent,
     SysteminfoComponent,
     SysteminfodetailComponent,
-    RecentcustomersComponent
+    RecentcustomersComponent,
+    CurrentuserComponent,
+    PartnerwindowComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     FlashMessagesModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({

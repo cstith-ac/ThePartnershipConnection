@@ -29,7 +29,7 @@ export class SysteminfoComponent implements OnInit {
     this.routeService.getCCAssistant_Systems().subscribe(
       res => {
         this.assistantsystems = res;
-        console.log(this.assistantsystems);
+        //console.log(this.assistantsystems);
         // let customerSystemID = this.assistantsystems.find(x => x.customer_System_Id === x.customer_System_Id).customer_System_Id;
         // console.log(customerSystemID)
 

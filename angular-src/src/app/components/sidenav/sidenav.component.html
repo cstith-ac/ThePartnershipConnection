@@ -39,7 +39,10 @@
 
           <a class="mx-auto mb-0 black-text" id="showPartnerWindowModal" (click)="showPartnerWindowModal()" *ngIf="authService.loggedIn()">
             <i class="ni ni-fat-add" id="add-icon-blue"></i>
-            <span *ngFor="let item of dashboardinfo">{{ item.partnerName }}</span></a>
+            <!-- <span *ngFor="let item of dashboardinfo">{{ item.partnerName }}</span> -->
+            <app-partnerwindow></app-partnerwindow>
+          </a>
+          
 
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <!-- <li class="nav-item active">
@@ -50,8 +53,10 @@
             </li> -->
             <li class="nav-item dropdown" *ngIf="authService.loggedIn()">
               <a class="nav-link dropdown-toggle afa-text-black-50" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <app-currentuser></app-currentuser>
                 <!-- CurrentUser@AlarmFundingAssociates.com -->
-                {{ user.email }}
+                <!-- {{ user.email }} -->
+                <!-- {{ currentUser$ | async }} -->
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item list-group-item list-group-item-action" [routerLink]="['/profile']" routerLinkActive="active" *ngIf="authService.loggedIn()"> <i class="ni ni-single-02"></i> My Profile</a>

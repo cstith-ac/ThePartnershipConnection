@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
+import { SummaryAdd } from '../models/summaryadd';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class RouteService {
   authToken: any;
   user: any;
   res: any;
+
+  data: SummaryAdd[] = [];
 
   baseUrl = environment.baseUrl;
 
@@ -94,7 +97,7 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
       };
-      console.log('getting all systems from the server')
+      //console.log('getting all systems from the server')
     //return this.http.get<any>('https://localhost:44314/api/CCAssistant_Systems', httpOptions);
     // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CCAssistant_Systems', httpOptions);
     return this.http.get<any>(this.baseUrl + '/api/CCAssistant_Systems', httpOptions);
@@ -166,15 +169,15 @@ export class RouteService {
     return this.http.get<any>(this.baseUrl + '/api/CallSummaryNextSteps', httpOptions);
   }
 
-  postCallSummaryAdd(): Observable<any> {
+  postCallSummaryAdd(summaryAdd: SummaryAdd): Observable<SummaryAdd> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    //console.log(httpOptions)
     //return this.http.post<any>('https://localhost:44314/api/CallSummaryAdd', httpOptions);
     // return this.http.post<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CallSummaryAdd', httpOptions);
-    return this.http.post<any>(this.baseUrl + '/api/CallSummaryAdd', httpOptions);
+    return this.http.post<SummaryAdd>(this.baseUrl + '/api/CallSummaryAdd',summaryAdd, httpOptions);
   }
 
   loadToken() {

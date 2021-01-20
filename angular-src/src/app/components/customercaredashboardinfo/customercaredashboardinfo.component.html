@@ -127,7 +127,13 @@
         <div class="serviceInfo-bg note-padding">
             <h2>Service Info</h2>
             <ul class="padding-left0 mb-0">
-                <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">Serviced by: <span id="servicedBy">{{ item.servicedBy }}</span> <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span></li>
+                <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">
+                    Serviced by: <span id="servicedBy">{{ item.servicedBy }}</span> 
+                    <span *ngIf="item.alternateServiceCompanyActive === 1">
+                        <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span>
+                    </span>
+                    <!-- <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span> -->
+                </li>
                 <!-- Service Ticket - Last Service Visit -->
                 <li class="list-group-item padding-left0" style="padding-top:8px;padding-bottom:8px;">
                     <a class="text-blue mx-auto mb-0" id="showTicketInfoModal" (click)="showTicketInfoModal()"> <i class="ni ni-fat-add" id="add-icon-blue"></i> </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>

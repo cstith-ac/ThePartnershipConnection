@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClassList } from 'src/app/models/classlist';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
@@ -8,6 +9,7 @@ import { SummaryProblems } from 'src/app/models/summaryproblems';
 import { SummaryResolutions } from 'src/app/models/summaryresolutions';
 import { SystemList } from 'src/app/models/systemlist';
 import { RouteService } from '../../services/route.service';
+import { AuthService } from '../../services/auth.service';
 declare var $: any;
 
 @Component({
@@ -16,7 +18,9 @@ declare var $: any;
   styleUrls: ['./callsummary.component.css']
 })
 export class CallsummaryComponent implements OnInit {
+  callSummaryAddForm: FormGroup;
   user:any=Object;
+  sedonaUser: '';
 
   custNameNumb: DashboardInfo[];
   site: SiteList[];
@@ -25,12 +29,56 @@ export class CallsummaryComponent implements OnInit {
   callSummaryProblems: SummaryProblems[];
   callSummaryResolutions: SummaryResolutions[];
   callSummaryNextSteps: NextSteps[];
+  customerOnCall: '';
+  customerCallBackPhone: '';
+  customerComments: '';
+  resolutionNotes: '';
 
   constructor(
-    public routeService: RouteService
+    public fb: FormBuilder,
+    public routeService: RouteService,
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
+    this.callSummaryAddForm = this.fb.group({
+      // site: [''],
+      // siteToSystemList: [''],
+      // callSummaryClassList: [''],
+      // callSummaryProblems: [''],
+      // callSummaryResolutions: [''],
+      // callSummaryNextSteps: [''],
+      // customerOnCall: [''],
+      // customerCallBackPhone: [''],
+      // customerComments: [''],
+      // resolutionNotes: ['']
+      SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
+      site: '',
+      SystemID: '',
+      callSummaryClassList: '',
+      ProblemID: '',
+      ResolutionID: '',
+      CallSummaryNextSteps: '',
+      CustomerComments: '',
+      TechNotes: '',
+      //resolutionNotes: '',
+      CustomerOnCall: '',
+      CustomerCallBackPhone: ''
+    })
+
+    this.authService.getProfile().subscribe(
+      res => {
+        this.user = res;
+        //console.log(JSON.parse(localStorage.getItem('user')))
+        this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink;
+        console.log(this.sedonaUser)
+        //console.log(JSON.parse(localStorage.getItem('user')).afauserLink)
+      },
+      err => {
+        console.log(err);
+      }
+    )
+
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
         this.custNameNumb = res;
@@ -40,19 +88,19 @@ export class CallsummaryComponent implements OnInit {
     this.routeService.getCustomerToSiteList().subscribe(
       res => {
         this.site = res;
-        let customerSiteID = "";
+        // let customerSiteID = "";
 
-        this.site.forEach((c, index, array) => {
-          if (array.length <=1 ) {
-            //console.log(array)
-            document.getElementById("siteSelect").classList.add("siteSelect");
-          } else if (array.length > 1) {
-            //console.log(array)
-            document.getElementById("siteSelect").style.backgroundColor = "transparent";
-          };
+        // this.site.forEach((c, index, array) => {
+        //   if (array.length <=1 ) {
+        //     //console.log(array)
+        //     document.getElementById("siteSelect").classList.add("siteSelect");
+        //   } else if (array.length > 1) {
+        //     //console.log(array)
+        //     document.getElementById("siteSelect").style.backgroundColor = "transparent";
+        //   };
 
-          customerSiteID += `<option>${c.address_1}</option>`;
-        })
+        //   customerSiteID += `<option>${c.address_1}</option>`;
+        // })
       }
     )
 
@@ -60,15 +108,15 @@ export class CallsummaryComponent implements OnInit {
       res => {
         //console.log(res)
         this.siteToSystemList = res;
-        let customerSystemID = "";
-        let alarm_Account = "";
-        let systemType = "";
+        // let customerSystemID = "";
+        // let alarm_Account = "";
+        // let systemType = "";
 
-        this.siteToSystemList.forEach((s) => {
-           systemType += `<option value="${s.customerSystemID}">${s.systemType}</option>`;
-        });
+        // this.siteToSystemList.forEach((s) => {
+        //    systemType += `<option value="${s.customerSystemID}">${s.systemType}</option>`;
+        // });
 
-        document.getElementById("callSummarySystemSelect").innerHTML = systemType;
+        // document.getElementById("callSummarySystemSelect").innerHTML = systemType;
       }
     )
 
@@ -76,63 +124,63 @@ export class CallsummaryComponent implements OnInit {
       res => {
         //console.log(res)
         this.callSummaryClassList = res;
-        let problem_Class_id = "";
-        let problem_Class_Code = "";
-        let problem_Class_description = "";
+        // let problem_Class_id = "";
+        // let problem_Class_Code = "";
+        // let problem_Class_description = "";
 
-        this.callSummaryClassList.forEach((c) => {
-          problem_Class_id += `<option>${c.problem_Class_id}</option>`;
-          problem_Class_description += `<option>${c.problem_Class_description}</option>`;
-        });
+        // this.callSummaryClassList.forEach((c) => {
+        //   problem_Class_id += `<option>${c.problem_Class_id}</option>`;
+        //   problem_Class_description += `<option>${c.problem_Class_description}</option>`;
+        // });
 
-        document.getElementById("callSummaryClassListSelect").innerHTML = problem_Class_description;
+        // document.getElementById("callSummaryClassListSelect").innerHTML = problem_Class_description;
       }
     )
 
     this.routeService.getCallSummaryProblems().subscribe(
       res => {
         this.callSummaryProblems = res;
-        let problem_Id = "";
-        let problem_Code = "";
-        let description = "";
+        // let problem_Id = "";
+        // let problem_Code = "";
+        // let description = "";
 
-        this.callSummaryProblems.forEach((c) => {
-          problem_Id += `<option>${c.problem_Id}</option>`;
-          description += `<option value="${c.problem_Id}">${c.description}</option>`;
-        });
+        // this.callSummaryProblems.forEach((c) => {
+        //   problem_Id += `<option>${c.problem_Id}</option>`;
+        //   description += `<option value="${c.problem_Id}">${c.description}</option>`;
+        // });
 
-        document.getElementById("callSummaryProblems").innerHTML = description;
+        // document.getElementById("callSummaryProblems").innerHTML = description;
       }
     )
 
     this.routeService.getCallSummaryResolutions().subscribe(
       res => {
         this.callSummaryResolutions = res;
-        let resolution_Id = "";
-        let resolution_Code = "";
-        let description = "";
+        // let resolution_Id = "";
+        // let resolution_Code = "";
+        // let description = "";
 
-        this.callSummaryResolutions.forEach((c) => {
-          resolution_Id += `<option>${c.resolution_Id}</option>`;
-          description += `<option value="${c.resolution_Id}">${c.description}</option>`;
-        });
+        // this.callSummaryResolutions.forEach((c) => {
+        //   resolution_Id += `<option>${c.resolution_Id}</option>`;
+        //   description += `<option value="${c.resolution_Id}">${c.description}</option>`;
+        // });
 
-        document.getElementById("callSummaryResolutions").innerHTML = description;
+        // document.getElementById("callSummaryResolutions").innerHTML = description;
       }
     )
 
     this.routeService.getCallSummaryNextSteps().subscribe(
       res => {
         this.callSummaryNextSteps = res;
-        let employeeID = "";
-        let employeeName = "";
+        // let employeeID = "";
+        // let employeeName = "";
 
-        this.callSummaryNextSteps.forEach((c) => {
-          employeeID += `<option>${c.employeeID}</option>`;
-          employeeName += `<option value="${c.employeeID}">${c.employeeName}</option>`;
-        });
+        // this.callSummaryNextSteps.forEach((c) => {
+        //   employeeID += `<option>${c.employeeID}</option>`;
+        //   employeeName += `<option value="${c.employeeID}">${c.employeeName}</option>`;
+        // });
 
-        document.getElementById("callSummaryNextSteps").innerHTML = employeeName;
+        // document.getElementById("callSummaryNextSteps").innerHTML = employeeName;
       }
     )
 
@@ -219,27 +267,27 @@ export class CallsummaryComponent implements OnInit {
     //end submit ticket
 
     //Get snackbar container from the DOM
-    const snackbarContainer = document.getElementById("snackbar-container");
+    //const snackbarContainer = document.getElementById("snackbar-container");
 
     //Load the snackbar
-    function snackbar(type,msg,time) {
-      const para = document.createElement("p");
-      para.classList.add("snackbar");
-      para.innerHTML = `${msg} <span>&times;</span>`;
+    // function snackbar(type,msg,time) {
+    //   const para = document.createElement("p");
+    //   para.classList.add("snackbar");
+    //   para.innerHTML = `${msg} <span>&times;</span>`;
 
-      if (type === "success") {
-        //para.classList.add("success");
-        para.classList.add("alert");
-        para.classList.add("alert-success");
-      }
+    //   if (type === "success") {
+    //     //para.classList.add("success");
+    //     para.classList.add("alert");
+    //     para.classList.add("alert-success");
+    //   }
 
-      snackbarContainer.appendChild(para);
-      para.classList.add("fadeout");
+    //   snackbarContainer.appendChild(para);
+    //   para.classList.add("fadeout");
 
-      setTimeout(() => {
-        snackbarContainer.removeChild(para);
-      }, time);
-    };
+    //   setTimeout(() => {
+    //     snackbarContainer.removeChild(para);
+    //   }, time);
+    // };
 
     $("#showCallSummaryModal").click(function (e) {
       e.preventDefault();
@@ -277,6 +325,29 @@ export class CallsummaryComponent implements OnInit {
         })
       })
     }
+  }
+
+  onSubmit(form: FormGroup) {
+    //console.log('Valid?', form.valid); // true or false
+    console.log('SedonaUser', this.sedonaUser);
+    console.log('SystemID', form.value.SystemID);
+    //console.log('callSummaryClassList', form.value.callSummaryClassList);//not required
+    console.log('ProblemID', form.value.ProblemID);
+    console.log('ResolutionID', form.value.ResolutionID);
+    console.log('NextStepID', form.value.CallSummaryNextSteps);
+    console.log('CustomerOnCall', form.value.CustomerOnCall);
+    console.log('CustomerCallBackPhone', form.value.CustomerCallBackPhone);
+    console.log('CustomerComments', form.value.CustomerComments);
+    console.log('TechNotes', form.value.TechNotes);
+
+    this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
+      .subscribe(
+        result => {
+          console.log('success: ', result)
+          alert("Ticket number: " + result + " was created.")
+        },
+        error => console.log('error: ', error)
+      );
   }
 
   onCallSummaryAddSubmit() {

@@ -8,6 +8,7 @@ import { RouteService } from '../../services/route.service';
 import { PInformation } from 'src/app/models/pinformation';
 import { ContactList } from 'src/app/models/contactlist';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -20,13 +21,19 @@ export class SidenavComponent implements OnInit {
   contactList: ContactList[];
   dashboardinfo: DashboardInfo[];
 
+  currentUser$ = this.currentUserService.data$;
+
   constructor(
+    private currentUserService: UserService,
     public routeService: RouteService,
     public authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
+
+    this.currentUserService.getCurrentUser();
+    //console.log(this.currentUserService.getCurrentUser());
     
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
@@ -36,7 +43,7 @@ export class SidenavComponent implements OnInit {
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        console.log(JSON.parse(localStorage.getItem('user')))
+        //console.log(JSON.parse(localStorage.getItem('user')))
       },
       err => {
         console.log(err);
@@ -45,7 +52,7 @@ export class SidenavComponent implements OnInit {
 
     this.routeService.getPartnerInformation().subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
         this.partnerInformation = res;
       }
     )
