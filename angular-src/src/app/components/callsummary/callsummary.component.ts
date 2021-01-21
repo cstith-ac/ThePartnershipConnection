@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClassList } from 'src/app/models/classlist';
@@ -18,6 +18,8 @@ declare var $: any;
   styleUrls: ['./callsummary.component.css']
 })
 export class CallsummaryComponent implements OnInit {
+  @ViewChild("ticketNumber") divView: ElementRef;
+
   callSummaryAddForm: FormGroup;
   user:any=Object;
   sedonaUser: '';
@@ -42,16 +44,6 @@ export class CallsummaryComponent implements OnInit {
 
   ngOnInit() {
     this.callSummaryAddForm = this.fb.group({
-      // site: [''],
-      // siteToSystemList: [''],
-      // callSummaryClassList: [''],
-      // callSummaryProblems: [''],
-      // callSummaryResolutions: [''],
-      // callSummaryNextSteps: [''],
-      // customerOnCall: [''],
-      // customerCallBackPhone: [''],
-      // customerComments: [''],
-      // resolutionNotes: ['']
       SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
       site: '',
       SystemID: '',
@@ -61,7 +53,6 @@ export class CallsummaryComponent implements OnInit {
       CallSummaryNextSteps: '',
       CustomerComments: '',
       TechNotes: '',
-      //resolutionNotes: '',
       CustomerOnCall: '',
       CustomerCallBackPhone: ''
     })
@@ -327,6 +318,10 @@ export class CallsummaryComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    console.log(this.divView)
+  }
+
   onSubmit(form: FormGroup) {
     //console.log('Valid?', form.valid); // true or false
     console.log('SedonaUser', this.sedonaUser);
@@ -343,8 +338,9 @@ export class CallsummaryComponent implements OnInit {
     this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
       .subscribe(
         result => {
-          console.log('success: ', result)
-          alert("Ticket number: " + result + " was created.")
+          // console.log('success: ', result)
+          // alert("Ticket number: " + result + " was created.")
+          this.divView.nativeElement.innerHTML = result;
         },
         error => console.log('error: ', error)
       );

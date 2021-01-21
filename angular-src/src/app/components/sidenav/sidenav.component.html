@@ -90,13 +90,13 @@
             </div>
             <div class="modal-body">
                 <div class="card" id="afa-card">
-                    <div class="card-body" id="partnerWindow">
-                        <div class="row" *ngFor="let item of partnerInformation">
+                    <div class="card-body" id="partnerWindow" *ngFor="let item of partnerInformation">
+                        <div class="row">
                             <div class="col-md-5">
                                 <div>
                                     <h2 class="lead font-weight900 mt-0" id="partnerCode">{{ item.partnerCode }}</h2>
                                 </div>
-                                <div class="marginTopBottom-1rem">
+                                <!-- <div class="marginTopBottom-1rem">
                                     <span id="address1">{{ item.address1 }}</span>
                                 </div>
                                 <div class="marginTopBottom-1rem">
@@ -110,22 +110,60 @@
                                 </div>
                                 <div class="marginTopBottom-1rem">
                                     <span id="phone2">{{ item.phone2 }}</span>
-                                </div>
+                                </div> -->
                                 <div class="marginTopBottom-1rem">
                                     <span id="eMail" class="blue-text">{{ item.eMail }}</span>
                                 </div>
                             </div>
                             <div class="col-md-7">
-                                <div class="afa-bg-tan note-padding">
+                              <div class="marginTopBottom-1rem text-right mr-2">
+                                <span id="address1">{{ item.address1 }}</span>
+                            </div>
+                            <div class="marginTopBottom-1rem text-right mr-2">
+                                <span id="address2">{{ item.address2 }}</span>
+                            </div>
+                            <div class="marginTopBottom-1rem text-right mr-2">
+                                <span id="city">{{ item.city }}</span>, <span id="state">{{ item.state }}</span>&nbsp;<span id="zipCode">{{ item.zipCode }}</span>
+                            </div>
+                            <div class="marginTopBottom-1rem text-right mr-2">
+                                <span id="phone1">{{ item.phone1 }}</span>
+                            </div>
+                            <div class="marginTopBottom-1rem text-right mr-2">
+                                <span id="phone2">{{ item.phone2 }}</span>
+                            </div>
+                                <!-- <div class="afa-bg-tan note-padding">
                                     <span id="customerCareNote" style="width:100px;word-wrap:break-word;">
-                                      <pre>{{ item.customerCareNote }}</pre></span>
-                                </div>
+                                      <pre>{{ item.customerCareNote }}</pre>
+                                    </span>
+                                </div> -->
                             </div>
                         </div>
-                        
+                        <div>
+                          <h2 class="dark-blue-text">Primary Contacts</h2>
+                        </div>
+                        <div class="row table-responsive">
+                          <table class="table table-borderless">
+                              <thead>
+                                  <tr></tr>
+                              </thead>
+                              <tbody>
+                                  <tr id="contacts" *ngFor="let item of contactList">
+                                    <td [style.padding-left]="'15px'">{{ item.title }}</td>
+                                    <td>{{ item.contact_Name }}</td>
+                                    <td>{{ item.phone }}</td>
+                                    <td class="text-right pr-0"> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                        <div class="afa-bg-tan note-padding">
+                          <span>
+                            <pre>{{ item.customerCareNote }}</pre>
+                          </span>
+                        </div>
 
                         <div class="card-header border-0 padding-left0">
-                            <h2 class="dark-blue-text">Contacts</h2>
+                            <h2 class="dark-blue-text">Additional Contacts</h2>
                         </div>
                         <div class="row table-responsive">
                             <table class="table table-borderless">
@@ -134,10 +172,10 @@
                                 </thead>
                                 <tbody>
                                     <tr id="contacts" *ngFor="let item of contactList">
-                                      <td>{{ item.title }}</td>
+                                      <td [style.padding-left]="'15px'">{{ item.title }}</td>
                                       <td>{{ item.contact_Name }}</td>
                                       <td>{{ item.phone }}</td>
-                                      <td> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
+                                      <td class="text-right pr-0"> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
                                     </tr>
                                 </tbody>
                             </table>

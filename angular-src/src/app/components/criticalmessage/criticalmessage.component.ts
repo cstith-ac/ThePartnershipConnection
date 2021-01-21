@@ -13,6 +13,7 @@ import { DashboardInfo } from 'src/app/models/dashboardinfo';
 export class CriticalmessageComponent implements OnInit {
   dashboardinfo: DashboardInfo[];
   isShown: boolean = false;
+  activeTab: string = "tab-1"
   
   constructor(
     private routeService: RouteService,
@@ -65,8 +66,9 @@ export class CriticalmessageComponent implements OnInit {
     });
   }
 
-  toggleShow() {
-    this.isShown = ! this.isShown;
+  toggleShow(newTab: string): void {
+    //this.isShown = !this.isShown;
+    this.activeTab = newTab;
   }
 
 }

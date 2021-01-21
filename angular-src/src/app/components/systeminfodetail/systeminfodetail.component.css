@@ -29,3 +29,11 @@
 .ratingValueBg3 {
     background-color: #40D835;
 }
+pre {
+    font-family: 'Open Sans';
+    white-space: pre-line;
+    font-size: inherit;
+    overflow-y: scroll;
+    /* height: 110px; */
+    height: 15vh;
+}

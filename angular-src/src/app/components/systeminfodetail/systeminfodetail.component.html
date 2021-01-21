@@ -7,9 +7,12 @@
     <p>{{ systemInfo.addressLine }}</p>
 </div> -->
 
-<div class="container">
+<div class="">
     <div class="card" id="afa-card-border0">
-        <a class="btn btn-primary btn-lg mt-5" routerLink="/dashboard">Back to Dashboard</a>
+        <!-- <a class="btn btn-primary btn-lg mt-5" routerLink="/dashboard">Back to Dashboard</a> -->
+        <a routerlink="/dashboard" ng-reflect-router-link="/dashboard" href="/dashboard">
+            <button class="btn btn-primary mt-5 ml-4">Return to Customer View</button>
+        </a>
         <div class="card-body" id="accountInfoContent">
             <div class="row">
                 <div class="col-md-8">
@@ -18,25 +21,25 @@
                         <span id="systemInfoCustomerName" style="margin-right:5%">{{ systemInfo.customerName }}</span>&nbsp;&nbsp;
                     </p>
     
-                    <div *ngIf="systemInfo.customerRatingValue === 0; else elseBlock">
+                    <div class="col-sm-3 pl-0" *ngIf="systemInfo.customerRatingValue === 0; else elseBlock">
                         <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
                             <span id="customerRating" [ngClass]="'ratingValueText0'">{{ systemInfo.customerRating }}</span>
                         </div>
                     </div>
     
-                    <div *ngIf="systemInfo.customerRatingValue === 1;">
+                    <div class="col-sm-3 pl-0" *ngIf="systemInfo.customerRatingValue === 1;">
                         <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
                             <span id="customerRating" [ngClass]="'ratingValueText1'">{{ systemInfo.customerRating }}</span>
                         </div>
                     </div>
     
-                    <div *ngIf="systemInfo.customerRatingValue === 2;">
+                    <div class="col-sm-3 pl-0" *ngIf="systemInfo.customerRatingValue === 2;">
                         <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
                             <span id="customerRating" [ngClass]="'ratingValueText2'">{{ systemInfo.customerRating }}</span>
                         </div>
                     </div>
     
-                    <div *ngIf="systemInfo.customerRatingValue === 3;">
+                    <div class="col-sm-3 pl-0" *ngIf="systemInfo.customerRatingValue === 3;">
                         <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
                             <span id="customerRating" [ngClass]="'ratingValueText3'">{{ systemInfo.customerRating }}</span>
                         </div>
@@ -112,7 +115,10 @@
                 <div class="col-md-12 marginTopBottom-1rem">
                     <div class="afa-bg-tan system-notes-border system-notes-padding">
                         <h3 class="afa-text-blue">System Notes</h3>
-                        <p id="systemNotes">{{systemInfo.systemNotes}}</p>
+                        <!-- <p id="systemNotes">{{systemInfo.systemNotes}}</p> -->
+                        <pre id="systemNotes">
+                            {{systemInfo.systemNotes}}
+                        </pre>
                     </div>
                 </div>
             </div>

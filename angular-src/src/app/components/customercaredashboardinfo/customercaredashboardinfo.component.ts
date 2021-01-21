@@ -34,9 +34,9 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     window.location.reload();
   }
 
-  showBOCModal() {
-    $("#bocModal").modal("show");
-  }
+  // showBOCModal() {
+  //   $("#bocModal").modal("show");
+  // }
 
   showTicketInfoModal() {
     $("#ticketInfoModal").modal("show");

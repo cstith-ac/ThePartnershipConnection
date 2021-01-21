@@ -1,10 +1,14 @@
-<!-- <p>systeminfo works!</p> -->
 <!--exec dbo.CCAssistant_Systems-->
 <div class="card shadow systemInfo-bg system-info-border">
-    <div class="card-header border-0 systemInfo-bg">
+    <div class="card-header border-0 systemInfo-bg pb-1">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="mb-0">System Info</h3>
+                <div class="row">
+                    <h3 class="mb-0">Central Station/System Info</h3>
+                    <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
+                        BOC?
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -28,10 +32,10 @@
             </thead>
             <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>
-                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)">{{ item.alarm_Account }}</td>
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)">{{ item.alarm_Account }} <br> <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span></td>
                 <td>{{ item.alarm_Company_Code }}</td>
                 <td>{{ item.system_Code }}</td>
-                <td>{{ item.siteAddress }}</td>
+                <!-- <td>{{ item.siteAddress }}</td> -->
                 <td>{{ item.contract_Start_Date }}</td>
                 <td>{{ item.contractExpiration }}</td>
                 <td>{{ item.contractExpirationMessage }}</td>

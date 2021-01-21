@@ -56,4 +56,6 @@ body {
     font-family: 'Open Sans';
     white-space: pre-line;
     font-size: inherit;
+    overflow-y: scroll;
+    height: 50vh;
   }

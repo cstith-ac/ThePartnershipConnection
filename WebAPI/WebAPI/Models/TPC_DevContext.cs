@@ -34,6 +34,7 @@ namespace WebAPI.Models
         public DbSet<CustomerSystemInfo> GetCustomerSystemInfos { get; set; }
         public virtual DbSet<CCAssistant_Systems> GetCCAssistant_Systems { get; set; }
         public virtual DbSet<PartnerContactList> GetPartnerContactLists { get; set; }
+        public virtual DbSet<PartnerContactListAdditional> GetPartnerContactListAdditionals { get; set; }
         public virtual DbSet<PartnerInformation> GetPartnerInformations { get; set; }
         public virtual DbSet<CallSummaryResolutions> GetCallSummaryResolutions { get; set; }
         public virtual DbSet<CallSummaryClassList> GetCallSummaryClassLists { get; set; }
@@ -253,6 +254,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<PartnerContactList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerContactListAdditional>(entity =>
             {
                 entity.HasNoKey();
             });

@@ -67,4 +67,8 @@ export class SysteminfoComponent implements OnInit {
    //this.routeService.getCustomerSystemInfo
   }
 
+  showBOCModal() {
+    $("#bocModal").modal("show");
+  }
+
 }
