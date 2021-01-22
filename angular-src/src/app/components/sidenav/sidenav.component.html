@@ -90,8 +90,8 @@
             </div>
             <div class="modal-body">
                 <div class="card" id="afa-card">
-                    <div class="card-body" id="partnerWindow" *ngFor="let item of partnerInformation">
-                        <div class="row">
+                    <div class="card-body" id="partnerWindow">
+                        <div class="row" *ngFor="let item of partnerInformation">
                             <div class="col-md-5">
                                 <div>
                                     <h2 class="lead font-weight900 mt-0" id="partnerCode">{{ item.partnerCode }}</h2>
@@ -156,7 +156,12 @@
                               </tbody>
                           </table>
                       </div>
-                        <div class="afa-bg-tan note-padding">
+                      <div class="row">
+                          <div class="col-md-12 pt-1 pb-4">
+                              <small class="dark-blue-text" [style.fontWeight]="'600'">Additional contact listed after notes</small>
+                          </div>
+                      </div>
+                        <div class="afa-bg-tan note-padding" *ngFor="let item of partnerInformation">
                           <span>
                             <pre>{{ item.customerCareNote }}</pre>
                           </span>
@@ -171,11 +176,11 @@
                                     <tr></tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="contacts" *ngFor="let item of contactList">
-                                      <td [style.padding-left]="'15px'">{{ item.title }}</td>
-                                      <td>{{ item.contact_Name }}</td>
-                                      <td>{{ item.phone }}</td>
-                                      <td class="text-right pr-0"> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
+                                    <tr id="contacts" *ngFor="let c of contactListAdditional">
+                                      <td [style.padding-left]="'15px'">{{ c.title }}</td>
+                                      <td>{{ c.contact_Name }}</td>
+                                      <td>{{ c.phone }}</td>
+                                      <td class="text-right pr-0"> <a href="mailto:{{ c.e_Mail }}">{{ c.e_Mail }}</a></td>
                                     </tr>
                                 </tbody>
                             </table>

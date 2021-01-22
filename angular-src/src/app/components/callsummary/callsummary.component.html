@@ -47,7 +47,7 @@
                                                 <label class="d-block call-summary-select">System</label>
                                                 <div class="dropdown">
                                                     <select formControlName="SystemID" class="form-control form-control-lg" id="callSummarySystemSelect">
-                                                        <option *ngFor="let system of siteToSystemList" value="{{ system.customerSystemID }}" [ngValue]="system.customerSystemID">{{ system.systemType }}</option>
+                                                        <option *ngFor="let system of siteToSystemList" value="{{ system.customerSystemID }}" [ngValue]="system.customerSystemID">{{system.alarm_Account}} - {{ system.systemType }}</option>
                                                     </select>
                                                 </div>
                                             </div>

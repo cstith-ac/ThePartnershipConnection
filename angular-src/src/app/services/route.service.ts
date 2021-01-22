@@ -125,6 +125,14 @@ export class RouteService {
     return this.http.get<any>(this.baseUrl + '/api/PartnerContactList', httpOptions);
   }
 
+  getPartnerContactListAdditional(): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken })
+    };
+    return this.http.get<any>(this.baseUrl + '/api/PartnerContactListAdditional', httpOptions);
+  }
+
   getCallSummaryClassList(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
