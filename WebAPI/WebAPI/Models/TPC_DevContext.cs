@@ -36,6 +36,7 @@ namespace WebAPI.Models
         public virtual DbSet<PartnerContactList> GetPartnerContactLists { get; set; }
         public virtual DbSet<PartnerContactListAdditional> GetPartnerContactListAdditionals { get; set; }
         public virtual DbSet<PartnerInformation> GetPartnerInformations { get; set; }
+        public virtual DbSet<PartnerInformationNew> GetPartnerInformationNews { get; set; }
         public virtual DbSet<CallSummaryResolutions> GetCallSummaryResolutions { get; set; }
         public virtual DbSet<CallSummaryClassList> GetCallSummaryClassLists { get; set; }
         public virtual DbSet<CallSummaryProblems> GetCallSummaryProblems { get; set; }
@@ -264,6 +265,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<PartnerInformation>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerInformationNew>(entity =>
             {
                 entity.HasNoKey();
             });

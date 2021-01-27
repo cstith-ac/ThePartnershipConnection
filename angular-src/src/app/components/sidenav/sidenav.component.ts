@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { RouteService } from '../../services/route.service';
 import { PInformation } from 'src/app/models/pinformation';
+import { PInformationNew } from 'src/app/models/pinformationnew';
 import { ContactList } from 'src/app/models/contactlist';
 import { ContactListAdditional } from 'src/app/models/contactlistadditional';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
@@ -19,9 +20,12 @@ import { UserService } from 'src/app/services/user.service';
 export class SidenavComponent implements OnInit {
   user:any=Object;
   partnerInformation: PInformation[];
+  partnerInformationNew: PInformationNew[];
   contactList: ContactList[];
   contactListAdditional: ContactListAdditional[];
   dashboardinfo: DashboardInfo[];
+
+  activeTab: string = "tab-1"
 
   currentUser$ = this.currentUserService.data$;
 
@@ -120,6 +124,13 @@ export class SidenavComponent implements OnInit {
       }
     )
 
+    this.routeService.getPartnerInformationNew().subscribe(
+      res => {
+        //console.log(res);
+        this.partnerInformationNew = res;
+      }
+    )
+
     this.routeService.getPartnerContactList().subscribe(
       res => {
         //console.log(res);
@@ -140,6 +151,11 @@ export class SidenavComponent implements OnInit {
       }
     )
 
+  }
+
+  toggleShow(newTab: string): void {
+    //this.isShown = !this.isShown;
+    this.activeTab = newTab;
   }
 
 }

@@ -60,6 +60,10 @@ body {
     height: 50vh;
   }
 
+  .tabs {
+    max-width: 100%;
+  }
+
   .table td {
     padding: 1rem 0 0 1rem;
   }
