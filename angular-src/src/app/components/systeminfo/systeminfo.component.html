@@ -21,18 +21,20 @@
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Account</th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">C/S</th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
-                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Site Address</th>
+                    <!-- <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Site Address</th> -->
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Contract Date</th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Expires</th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Maint</th>
                     <th scope="col" id="fontSize-75rem" style="margin-bottom:0">RMR</th>
-                    <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th>
+                    <!-- <th scope="col" id="fontSize-75rem" style="margin-bottom:0"></th> -->
                 </tr>
             </thead>
             <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>
-                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)">{{ item.alarm_Account }} <br> <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span></td>
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)">{{ item.alarm_Account }} <br> 
+                    <span *ngIf="item?.featureMessage?.length > 0" [style.color]="'red'" [style.fontWeight]="'900'" class="pr-2">{{ item.featureMessage }}</span>
+                    <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span></td>
                 <td>{{ item.alarm_Company_Code }}</td>
                 <td>{{ item.system_Code }}</td>
                 <!-- <td>{{ item.siteAddress }}</td> -->
@@ -41,7 +43,7 @@
                 <td>{{ item.contractExpirationMessage }}</td>
                 <td>{{ item.warranty }}</td>
                 <td>{{ item.rmrAmount }}</td>
-                <td>{{ item.featureMessage }}</td>
+                <!-- <td>{{ item.featureMessage }}</td> -->
             </tbody>
             <!-- <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>

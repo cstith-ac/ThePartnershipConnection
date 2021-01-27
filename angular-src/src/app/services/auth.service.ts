@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment';
+import { UserProfile } from 'src/app/models/userprofile';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,10 @@ export class AuthService {
   authToken: any;
   user: any;
   res: any;
+
+  data: UserProfile[] = [];
+
+  formData: UserProfile = new UserProfile();
 
   baseUrl = environment.baseUrl;
 
@@ -54,13 +59,14 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + '/api/UserProfile', httpOptions);
   }
 
-  updateUserProfile(user): Observable<any> {
+  updateUserProfile(user: UserProfile): Observable<UserProfile> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
       };
     //return this.http.put<any>('https://localhost:44314/api/ApplicationUser/UserProfile', user, httpOptions);
     // return this.http.put<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/UserProfile', user, httpOptions);
-    return this.http.put<any>(this.baseUrl + '/api/ApplicationUser/UserProfile', user, httpOptions);
+    // return this.http.put<UserProfile>(this.baseUrl + '/api/ApplicationUser/UserProfile', user, httpOptions);
+    return this.http.put<UserProfile>(`${this.baseUrl}/api/UserProfile/${user.id}`, user, httpOptions);
   }
 
   // getProfile(){

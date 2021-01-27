@@ -19,6 +19,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PartnercontactlistComponent } from './components/partnercontactlist/partnercontactlist.component';
 import { PartnerinformationComponent } from './components/partnerinformation/partnerinformation.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileeditComponent } from './components/profileedit/profileedit.component';
 import { RecentcustomersComponent } from './components/recentcustomers/recentcustomers.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SitetosystemlistComponent } from './components/sitetosystemlist/sitetosystemlist.component';
@@ -47,6 +48,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile-edit/:id',
+    component: ProfileeditComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClassList } from 'src/app/models/classlist';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
@@ -10,6 +11,7 @@ import { SummaryResolutions } from 'src/app/models/summaryresolutions';
 import { SystemList } from 'src/app/models/systemlist';
 import { RouteService } from '../../services/route.service';
 import { AuthService } from '../../services/auth.service';
+import { Observable } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -19,8 +21,11 @@ declare var $: any;
 })
 export class CallsummaryComponent implements OnInit {
   @ViewChild("ticketNumber") divView: ElementRef;
+  
+  authToken: any;
 
   callSummaryAddForm: FormGroup;
+  submitted = false;
   user:any=Object;
   sedonaUser: '';
 
@@ -36,25 +41,39 @@ export class CallsummaryComponent implements OnInit {
   customerComments: '';
   resolutionNotes: '';
 
+  selectedValue: number;
+
   constructor(
     public fb: FormBuilder,
     public routeService: RouteService,
-    public authService: AuthService
+    public authService: AuthService,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
     this.callSummaryAddForm = this.fb.group({
+      // SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
+      // site: '',
+      // SystemID: '',
+      // callSummaryClassList: '',
+      // ProblemID: '',
+      // ResolutionID: '',
+      // CallSummaryNextSteps: '',
+      // CustomerComments: '',
+      // TechNotes: '',
+      // CustomerOnCall: '',
+      // CustomerCallBackPhone: ''
       SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
       site: '',
-      SystemID: '',
-      callSummaryClassList: '',
-      ProblemID: '',
-      ResolutionID: '',
-      CallSummaryNextSteps: '',
-      CustomerComments: '',
-      TechNotes: '',
-      CustomerOnCall: '',
-      CustomerCallBackPhone: ''
+      SystemID: ["", Validators.required],
+      callSummaryClassList: ["", Validators.required],
+      ProblemID: ["", Validators.required],
+      ResolutionID: ["", Validators.required],
+      CallSummaryNextSteps: ["", Validators.required],
+      CustomerComments: ["", Validators.required],
+      TechNotes: ["", Validators.required],
+      CustomerOnCall: ["", Validators.required],
+      CustomerCallBackPhone: ["", Validators.required]
     })
 
     this.authService.getProfile().subscribe(
@@ -62,7 +81,7 @@ export class CallsummaryComponent implements OnInit {
         this.user = res;
         //console.log(JSON.parse(localStorage.getItem('user')))
         this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink;
-        console.log(this.sedonaUser)
+        //console.log(this.sedonaUser)
         //console.log(JSON.parse(localStorage.getItem('user')).afauserLink)
       },
       err => {
@@ -79,68 +98,26 @@ export class CallsummaryComponent implements OnInit {
     this.routeService.getCustomerToSiteList().subscribe(
       res => {
         this.site = res;
-        // let customerSiteID = "";
-
-        // this.site.forEach((c, index, array) => {
-        //   if (array.length <=1 ) {
-        //     //console.log(array)
-        //     document.getElementById("siteSelect").classList.add("siteSelect");
-        //   } else if (array.length > 1) {
-        //     //console.log(array)
-        //     document.getElementById("siteSelect").style.backgroundColor = "transparent";
-        //   };
-
-        //   customerSiteID += `<option>${c.address_1}</option>`;
-        // })
       }
     )
 
-    this.routeService.getSiteToSystemList().subscribe(
-      res => {
-        //console.log(res)
-        this.siteToSystemList = res;
-        // let customerSystemID = "";
-        // let alarm_Account = "";
-        // let systemType = "";
-
-        // this.siteToSystemList.forEach((s) => {
-        //    systemType += `<option value="${s.customerSystemID}">${s.systemType}</option>`;
-        // });
-
-        // document.getElementById("callSummarySystemSelect").innerHTML = systemType;
-      }
-    )
+    // this.routeService.getSiteToSystemList(id).subscribe(
+    //   res => {
+    //     //console.log(res)
+    //     this.siteToSystemList = res;
+    //   }
+    // )
 
     this.routeService.getCallSummaryClassList().subscribe(
       res => {
         //console.log(res)
         this.callSummaryClassList = res;
-        // let problem_Class_id = "";
-        // let problem_Class_Code = "";
-        // let problem_Class_description = "";
-
-        // this.callSummaryClassList.forEach((c) => {
-        //   problem_Class_id += `<option>${c.problem_Class_id}</option>`;
-        //   problem_Class_description += `<option>${c.problem_Class_description}</option>`;
-        // });
-
-        // document.getElementById("callSummaryClassListSelect").innerHTML = problem_Class_description;
       }
     )
 
     this.routeService.getCallSummaryProblems().subscribe(
       res => {
         this.callSummaryProblems = res;
-        // let problem_Id = "";
-        // let problem_Code = "";
-        // let description = "";
-
-        // this.callSummaryProblems.forEach((c) => {
-        //   problem_Id += `<option>${c.problem_Id}</option>`;
-        //   description += `<option value="${c.problem_Id}">${c.description}</option>`;
-        // });
-
-        // document.getElementById("callSummaryProblems").innerHTML = description;
       }
     )
 
@@ -174,111 +151,6 @@ export class CallsummaryComponent implements OnInit {
         // document.getElementById("callSummaryNextSteps").innerHTML = employeeName;
       }
     )
-
-    //start submit ticket
-
-      // Set up event listeners
-      // document.getElementById("callSummaryAdd").addEventListener('click', function (e) {
-        
-      //   let system = form.elements["system"];
-      //   let callType = form.elements["callType"];
-      //   let problem = form.elements["problem"];
-      //   let resolution = form.elements["resolution"];
-      //   let nextStep = form.elements["nextStep"];
-      //   let customerOnCall = form.elements["customerOnCall"];
-      //   let customerCallBackPhone = form.elements["customerCallBackPhone"];
-      //   let customerComments = form.elements["customerComments"];
-      //   let techNotes = form.elements["techNotes"];
-
-      //   let systemValue = system.value; //@SystemID
-      //   let problemValue = problem.value; //@ProblemID
-      //   let resolutionValue = resolution.value; //@ResolutionID
-      //   let nextStepValue = nextStep.value; //@NextStepID
-      //   let customerOnCallValue = customerOnCall.value; //@CustomerOnCall
-      //   let customerCallBackPhoneValue = customerCallBackPhone.value; //@CustomerCallBackPhone
-      //   let customerCommentsValue = customerComments.value; //@CustomerComments
-      //   let techNotesValue = techNotes.value; //@TechNotes
-
-      //   let ticketNumber = document.getElementById("ticket-number");
-
-      //   // Check for empty values
-      //   //if (customerOnCallValue = "") {
-      //   //  alert("PLease enter something")
-      //   //} else {
-
-      //   //}
-
-      //   let _data = {
-      //     //SedonaUser: sedonaUser,
-      //     SystemID: systemValue,
-      //     ProblemID: problemValue,
-      //     ResolutionID: resolutionValue,
-      //     NextStepID: nextStepValue,
-      //     CustomerOnCall: customerOnCallValue,
-      //     CustomerCallBackPhone: customerCallBackPhoneValue,
-      //     CustomerComments: customerCommentsValue,
-      //     TechNotes: techNotesValue
-      //   }
-
-      //   //console.log(sedonaUser); //typeof is a string. The @SedonaUser is required.
-      //   //console.log(system.value); //typeof is a string. The @SystemID is required. Requires an integer
-      //   console.log(systemValue);
-      //   console.log(problemValue);
-      //   console.log(resolutionValue);
-      //   console.log(nextStepValue);
-      //   console.log(customerOnCallValue);
-      //   console.log(customerCallBackPhoneValue);
-      //   console.log(customerCommentsValue);
-      //   console.log(techNotesValue);
-
-      //   //if (!techNotesValue == null) {
-      //   //  console.log("this field is required")
-      //   //}
-
-      //   fetch("https://localhost:44390/api/CallSummaryAdd", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-type": "application/json; charset=UTF-8",
-      //       "Accept": "application/json"
-      //     },
-      //     body: JSON.stringify(_data)
-      //   })
-      //   .then(response => response.json())
-      //   //.then(json => console.log(json))
-      //     .then(data => {
-      //       //alert("Ticket number " + data + " was created");
-      //       ticketNumber.innerHTML = data;
-      //       ticketNumber.className += 'ticketNumberNotification ml-0';
-      //       snackbar("success", `<small style="font-weight:300">Ticket number: </small><b style='font-size:1.6rem'> ${data}</b><small style="font-weight:300">Added</small>`,3000);
-      //     })
-      //   .catch(err => console.log(err));
-
-      //   e.preventDefault();
-      // });
-    //end submit ticket
-
-    //Get snackbar container from the DOM
-    //const snackbarContainer = document.getElementById("snackbar-container");
-
-    //Load the snackbar
-    // function snackbar(type,msg,time) {
-    //   const para = document.createElement("p");
-    //   para.classList.add("snackbar");
-    //   para.innerHTML = `${msg} <span>&times;</span>`;
-
-    //   if (type === "success") {
-    //     //para.classList.add("success");
-    //     para.classList.add("alert");
-    //     para.classList.add("alert-success");
-    //   }
-
-    //   snackbarContainer.appendChild(para);
-    //   para.classList.add("fadeout");
-
-    //   setTimeout(() => {
-    //     snackbarContainer.removeChild(para);
-    //   }, time);
-    // };
 
     $("#showCallSummaryModal").click(function (e) {
       e.preventDefault();
@@ -318,8 +190,100 @@ export class CallsummaryComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    console.log(this.divView)
+  // ngAfterViewInit() {
+  //   console.log(this.divView)
+  // }
+
+  selectCustToSite(val: any) {
+   this.changeSystem(val)
+  }
+
+  changeSystem(val: any) {
+    let id = val;
+    //console.log(id);
+    //append id to get getCustomerToSiteList
+    this.routeService.getSiteToSystemList(id).subscribe(
+      res => {
+        console.log(res);
+        this.siteToSystemList = [].concat(res);
+      }
+    )
+  }
+
+  loadToken() {
+    const token = localStorage.getItem('token');
+    this.authToken = token;
+  }
+
+  //Get the Problem_class_id of call type / class list
+  showProblemsBasedOnClassSelect(val: any) {
+    this.customFunction(val);
+  }
+
+  //Change the Problems dropdown based on the selection of Call Type 
+  customFunction(val: any) {
+    if(val === 5) {
+      console.log("The id selected is: " + val);
+      //execute CallSummaryProblems with a parameter of Other if this is selected
+      //exec dbo.CallSummaryProblems O
+      this.routeService.getCallSummaryProblemsO().subscribe(
+        res => {
+          //console.log(res);
+          this.callSummaryProblems = res;
+        }
+      )
+      //then change options in Problems dropdown
+    }
+    if(val === 1) {
+      console.log("The id selected is: " + val);
+       //execute CallSummaryProblems with a parameter of S if this is selected
+       //exec dbo.CallSummaryProblems S
+       this.routeService.getCallSummaryProblemsS().subscribe(
+         res => {
+           //console.log(res);
+           this.callSummaryProblems = res;
+         }
+       )
+       //then change options in Problems dropdown
+    }
+    if(val === 2) {
+      console.log("The id selected is: " + val);
+       //execute CallSummaryProblems with a parameter of CC 
+       //exec dbo.CallSummaryProblems CC -- this is called and displayed as a default dropdown value for Problems
+       this.routeService.getCallSummaryProblems().subscribe(
+         res => {
+          this.callSummaryProblems = res;
+         }
+       )
+    }
+    if(val === 3) {
+      console.log("The id selected is: " + val);
+       //execute CallSummaryProblems with a parameter of Incentives if this is selected
+       //exec dbo.CallSummaryProblems IC
+       this.routeService.getCallSummaryProblemsIC().subscribe(
+         res => {
+           //console.log(res);
+           this.callSummaryProblems = res;
+         }
+       )
+       //then change options in Problems dropdown
+    }
+    if(val === 4) {
+      console.log("The id selected is: " + val);
+       //execute CallSummaryProblems with a parameter of Invoicing if this is selected
+       //exec dbo.CallSummaryProblems IV
+       this.routeService.getCallSummaryProblemsIV().subscribe(
+         res => {
+           //console.log(res);
+           this.callSummaryProblems = res;
+         }
+       )
+       //then change options in Problems dropdown
+    }
+  }
+
+  get f() {
+    return this.callSummaryAddForm.controls;
   }
 
   onSubmit(form: FormGroup) {
@@ -335,15 +299,31 @@ export class CallsummaryComponent implements OnInit {
     console.log('CustomerComments', form.value.CustomerComments);
     console.log('TechNotes', form.value.TechNotes);
 
+    this.submitted = true;
+
+    if(this.callSummaryAddForm.invalid) {
+      return;
+    }
+
+    // alert(
+    //   "SUCCESS!! :-)\n\n" + JSON.stringify(this.callSummaryAddForm.value, null, 4)
+    // )
+
     this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
       .subscribe(
         result => {
+          this.resetForm(form);
           // console.log('success: ', result)
           // alert("Ticket number: " + result + " was created.")
           this.divView.nativeElement.innerHTML = result;
         },
         error => console.log('error: ', error)
       );
+  }
+
+  resetForm(form: FormGroup) {
+    this.submitted = false;
+    form.reset();
   }
 
   onCallSummaryAddSubmit() {

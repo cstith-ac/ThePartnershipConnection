@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CallSummaryProblemsController : ControllerBase
+    public class CallSummaryProblemsSController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public CallSummaryProblemsController(
+        public CallSummaryProblemsSController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
 
                 var callSummaryClassList = await db.GetCallSummaryClassLists.FromSqlRaw("EXECUTE [dbo].[CallSummaryClassList]").ToListAsync();
 
-                var callClass = new SqlParameter("@CallClass", callSummaryClassList[0].Problem_Class_Code);
+                var callClass = new SqlParameter("@CallClass", callSummaryClassList[4].Problem_Class_Code);
 
                 var result = await db.GetCallSummaryProblems.FromSqlRaw("EXECUTE [dbo].[CallSummaryProblems] @CallClass", callClass).ToListAsync();
 

@@ -2,3 +2,8 @@
     color: #1220EF;
     font-weight:700;
 }
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched{
+	border-color: #dc3545;
+}

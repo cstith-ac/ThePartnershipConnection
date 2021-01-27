@@ -1,0 +1,36 @@
+<form [formGroup]="updateProfileForm" (ngSubmit)="onSubmit(updateProfileForm)">
+    <input type="hidden" name="id" [value]="user.id" />
+    <div class="form-group">
+        <label>UserName</label>
+        <input type="text" class="form-control form-control-alternative" formControlName="userName" />
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" class="form-control form-control-alternative" formControlName="email" />
+    </div>
+    <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control form-control-alternative" formControlName="firstName" />
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control form-control-alternative" formControlName="lastName" />
+    </div>
+    <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" class="form-control form-control-alternative" formControlName="phoneNumber" />
+    </div>
+    <div class="form-group">
+        <label>Cell Phone Number</label>
+        <input type="tel" class="form-control form-control-alternative" formControlName="cellPhoneNumber1" />
+    </div>
+    <div class="form-group">
+        <label>Alternate Email Address</label>
+        <input type="email" class="form-control form-control-alternative" formControlName="altEmail" />
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-sm btn-primary ml-5"><i class="fa fa-pencil pr-2"></i>Save</button>
+        </div>
+    </div>
+</form>

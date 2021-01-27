@@ -41,6 +41,7 @@ import { SysteminfodetailComponent } from './components/systeminfodetail/systemi
 import { RecentcustomersComponent } from './components/recentcustomers/recentcustomers.component';
 import { CurrentuserComponent } from './components/currentuser/currentuser.component';
 import { PartnerwindowComponent } from './components/partnerwindow/partnerwindow.component';
+import { ProfileeditComponent } from './components/profileedit/profileedit.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { PartnerwindowComponent } from './components/partnerwindow/partnerwindow
     SysteminfodetailComponent,
     RecentcustomersComponent,
     CurrentuserComponent,
-    PartnerwindowComponent
+    PartnerwindowComponent,
+    ProfileeditComponent
   ],
   imports: [
     BrowserModule,

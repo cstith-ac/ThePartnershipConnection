@@ -21,7 +21,7 @@ export class CurrentuserComponent implements OnInit {
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        console.log(JSON.parse(localStorage.getItem('user')))
+        //console.log(JSON.parse(localStorage.getItem('user')))
         //console.log(JSON.parse(localStorage.getItem('user')).afauserLink)
       },
       err => {

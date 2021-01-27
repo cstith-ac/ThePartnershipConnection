@@ -1,98 +1,129 @@
-<!-- <div class="container" *ngIf="user">
-    <h2 class="page-header">{{ user.email }}</h2>
-    <ul class="list-group">
-        <li class="list-group-item">First Name: {{ user.firstName }}</li>
-        <li class="list-group-item">Last Name: {{ user.lastName }}</li>
-        <li class="list-group-item">Email: {{ user.email }}</li>
-    </ul>
-</div> -->
-<!-- <div class="container">
-    <h2 class="page-header">{{ user.email }}</h2>
-    <ul class="list-group">
-        <li class="list-group-item">First Name: {{ user.firstName }}</li>
-        <li class="list-group-item">Last Name: {{ user.lastName }}</li>
-        <li class="list-group-item">Email: {{ user.email }}</li>
-    </ul>
-</div> -->
-
 <div class="row">
     <div class="col-xl-12">
         <div class="card bg-secondary shadow">
             <div class="card-header bg-white border-0">
                 <div class="row align-items-center">
                     <div class="col-8">
-                        <h3 class="mb-0">My account</h3>
+                        <h3 class="mb-0">{{ user.firstName }}'s profile information</h3>
                     </div>
                     <div class="col-4 text-right">
-                        <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                        <a href="#!" class="btn btn-sm btn-primary">View my settings</a>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <form asp-controller="Home" asp-action="Profile" method="POST">
-                    <h6 class="heading-small text-muted mb-4">User information</h6>
-                    <div class="pl-lg-4">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <span>error.ErrorMessage</span>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-control-label" for="input-name">User Name/Primary Email</label>
-                                <input asp-for="Email" type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.email }}" />
-                                <span asp-validation-for="Email" class="invalid-feedback" style="display: block"></span>
-                                <!-- <p>{{ user.email }}</p> -->
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="input-name">First Name</label>
-                                <input asp-for="FirstName" type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.firstName }}" />
-                                <span asp-validation-for="FirstName" class="invalid-feedback" style="display: block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="input-name">Last Name</label>
-                                <input asp-for="LastName" type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.lastName }}" />
-                                <span asp-validation-for="LastName" class="invalid-feedback" style="display: block"></span>
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Details</p>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control form-control-alternative" placeholder="{{ user.email }}" readonly />
                         </div>
-                        <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-name">First Name</label>
+                            <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.firstName }}" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-name">Last Name</label>
+                            <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.lastName }}" readonly />
+                        </div>
+                        <div class="form-group">
                             <label class="form-control-label" for="input-phone">Phone Number</label>
-                            <input asp-for="PhoneNumber" type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.phoneNumber }}" />
-                            <span asp-validation-for="PhoneNumber" class="invalid-feedback" style="display: block"></span>
+                            <input type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.phoneNumber }}" readonly />
                         </div>
-                        <div class="col-lg-12">
+                        <div class="form-group">
                             <label class="form-control-label" for="input-phone">Cell Phone Number</label>
-                            <input asp-for="CellPhoneNumber1" type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.cellPhoneNumber1 }}" />
-                            <span asp-validation-for="CellPhoneNumber1" class="invalid-feedback" style="display: block"></span>
+                            <input type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.cellPhoneNumber1 }}" readonly />
                         </div>
-                        <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-control-label" for="input-email">Alternate Email Address</label>
+                            <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.altEmail }}" readonly />
+                        </div>
+                        <a class="btn btn-sm btn-primary ml-5" (click)="editUser(user.id)"> <i class="fa fa-pencil pr-2"></i>Update Profile</a>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <p>Edit</p>
+                        <form [formGroup]="updateProfileForm" (ngSubmit)="onSubmit(updateProfileForm)">
+                            <input type="hidden" name="id" [value]="user.id" />
                             <div class="form-group">
-                                <label class="form-control-label" for="input-email">Alternate Email Address</label>
-                                <input asp-for="AltEmail" type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.altEmail }}" />
-                                <span asp-validation-for="AltEmail" class="invalid-feedback" style="display: block"></span>
+                                <label>Email</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="email" />
+                            </div>
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="firstName" />
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="lastName" />
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control form-control-alternative" formControlName="phoneNumber" />
+                            </div>
+                            <div class="form-group">
+                                <label>Cell Phone Number</label>
+                                <input type="tel" class="form-control form-control-alternative" formControlName="cellPhoneNumber1" />
+                            </div>
+                            <div class="form-group">
+                                <label>Alternate Email Address</label>
+                                <input type="email" class="form-control form-control-alternative" formControlName="altEmail" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-sm btn-primary ml-5"><i class="fa fa-pencil pr-2"></i>Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div> -->
+                </div>
+                
+                <!-- <form asp-action="Profile" method="POST">
+                    <h6 class="heading-small text-muted mb-4">{{ user.firstName }}'s information</h6>
+                    <div class="pl-lg-4">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-name">User Name/Primary Email</label>
+                                    <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.email }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-name">First Name</label>
+                                    <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.firstName }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-name">Last Name</label>
+                                    <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.lastName }}" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <label class="form-control-label" for="input-phone">Phone Number</label>
+                                <input type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.phoneNumber }}" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label class="form-control-label" for="input-phone">Cell Phone Number</label>
+                                <input type="tel" id="input-phone" class="form-control form-control-alternative" placeholder="{{ user.cellPhoneNumber1 }}" />
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-email">Alternate Email Address</label>
+                                    <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.altEmail }}" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="afauserlink">UserCode / AfauserLink</label>
+                                    <input type="text" id="afauserlink" class="form-control form-control-alternative" readonly placeholder="{{ user.afauserLink }}" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 text-center">
+                                <button class="btn btn-success mt-4 mb-4" type="submit">Save</button>
                             </div>
                         </div>
-
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-control-label" for="afauserlink">UserCode/AfauserLink</label>
-                                <input asp-for="AfauserLink" type="text" id="afauserlink" class="form-control form-control-alternative" readonly placeholder="{{ user.afauserLink }}" />
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12 text-center">
-                            <button class="btn btn-success mt-4 mb-4" type="submit">Save</button>
-                        </div>
                     </div>
-                    </div>
-                </form>
+                </form> -->
             </div>
         </div>
     </div>

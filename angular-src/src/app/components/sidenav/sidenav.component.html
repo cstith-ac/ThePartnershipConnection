@@ -11,11 +11,11 @@
       <div class="list-group list-group-flush">
         <a [routerLink]="['/login']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Login</a>
         <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Register</a>
-        <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Dashboard</a>
+        <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a>
         <!-- <a [routerLink]="['/customer-access-list']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Access List</a>
         <a [routerLink]="['/customer-care-dashboard-info']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care Dashboard Info</a> -->
         <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Recent Customers</a>
-        <a [routerLink]="['/customer-care-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a>
+        <!-- <a [routerLink]="['/customer-care-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a> -->
         <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Service View</a>
         <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Collections View</a>
         <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Admin</a>
@@ -82,13 +82,13 @@
   <div class="modal fade" id="partnerWindowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header pb-0">
                 <h2 class="modal-title" id="exampleModalLabel"></h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <div class="card" id="afa-card">
                     <div class="card-body" id="partnerWindow">
                         <div class="row" *ngFor="let item of partnerInformation">
@@ -139,7 +139,7 @@
                             </div>
                         </div>
                         <div>
-                          <h2 class="dark-blue-text">Primary Contacts</h2>
+                          <h2 class="dark-blue-text mb-0">Primary Contacts</h2>
                         </div>
                         <div class="row table-responsive">
                           <table class="table table-borderless">
@@ -158,17 +158,18 @@
                       </div>
                       <div class="row">
                           <div class="col-md-12 pt-1 pb-4">
-                              <small class="dark-blue-text" [style.fontWeight]="'600'">Additional contact listed after notes</small>
+                              <small class="dark-blue-text" [style.fontWeight]="'600'">Additional contacts listed after notes</small>
                           </div>
                       </div>
+                      <!--start tabs form customerCareNote-->
                         <div class="afa-bg-tan note-padding" *ngFor="let item of partnerInformation">
                           <span>
                             <pre>{{ item.customerCareNote }}</pre>
                           </span>
                         </div>
-
-                        <div class="card-header border-0 padding-left0">
-                            <h2 class="dark-blue-text">Additional Contacts</h2>
+                        <!--end tabs form customerCareNote-->
+                        <div class="card-header border-0 padding-left0 pb-0">
+                            <h2 class="dark-blue-text mb-0">Additional Contacts</h2>
                         </div>
                         <div class="row table-responsive">
                             <table class="table table-borderless">

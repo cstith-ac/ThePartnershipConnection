@@ -33,34 +33,47 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<Object> GetSiteToSystemList()
+        public SiteToSystemList GetSiteToSystemListByID(int id)
         {
-            var sites = new List<SiteToSystemList>();
-
-            await using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                var user = await _userManager.FindByIdAsync(userId);
-                var c = user.AfauserLink;
-                var getUserCode = await db.CustomerAccessList.FromSqlRaw("select * from dbo.CustomerAccessList where usercode = '" + c + "' and SlotNumber = 0").ToListAsync();
-                var customerID = new SqlParameter("@CustomerId", getUserCode[0].CustomerId);
-                var getCustomerSiteID = await db.GetCustomerToSiteLists.FromSqlRaw("EXECUTE [dbo].[CustomerToSiteList] @CustomerID", customerID).ToListAsync();
-                var customerSiteID = new SqlParameter("@CustomerSiteID", getCustomerSiteID[0].CustomerSiteID);
-                var result = await db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID", customerSiteID).ToListAsync();
-
-                List<SiteToSystemList> Lst = result.Select(s => new SiteToSystemList
-                {
-                    CustomerSystemID = s.CustomerSystemID,
-                    Alarm_Account = s.Alarm_Account,
-                    SystemType = s.SystemType
-                }).ToList();
-
-                return Lst;
-            }
+            return db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
         }
+        //public async Task<Object> GetSiteToSystemList()
+        //{
+        //    var sites = new List<SiteToSystemList>();
+
+        //    await using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+
+        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
+        //        var user = await _userManager.FindByIdAsync(userId);
+        //        var c = user.AfauserLink;
+        //        var getUserCode = await db.CustomerAccessList.FromSqlRaw("select * from dbo.CustomerAccessList where usercode = '" + c + "' and SlotNumber = 0").ToListAsync();
+        //        var customerID = new SqlParameter("@CustomerId", getUserCode[0].CustomerId);
+        //        var getCustomerSiteID = await db.GetCustomerToSiteLists.FromSqlRaw("EXECUTE [dbo].[CustomerToSiteList] @CustomerID", customerID).ToListAsync();
+        //        //var customerSiteID = 0;
+        //        //foreach (var item in getCustomerSiteID)
+        //        //{
+        //        //    // work with item here
+        //        //    for (int i = 0; i < item.CustomerSiteID; i++)
+        //        //    {
+        //        //        customerSiteID = item.CustomerSiteID;
+        //        //    }
+        //        //}
+        //        var customerSiteID = new SqlParameter("@CustomerSiteID", getCustomerSiteID[0].CustomerSiteID);
+        //        var result = await db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID", customerSiteID).ToListAsync();
+
+        //        List<SiteToSystemList> Lst = result.Select(s => new SiteToSystemList
+        //        {
+        //            CustomerSystemID = s.CustomerSystemID,
+        //            Alarm_Account = s.Alarm_Account,
+        //            SystemType = s.SystemType
+        //        }).ToList();
+
+        //        return Lst;
+        //    }
+        //}
     }
 }
