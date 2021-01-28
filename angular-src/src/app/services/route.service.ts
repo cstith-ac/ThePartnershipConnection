@@ -31,6 +31,14 @@ export class RouteService {
     return this.http.get<any>(this.baseUrl + '/api/CustomerAccessList', httpOptions);
   }
 
+  getCustomerAccessList10(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+      };
+    return this.http.get<any>(this.baseUrl + '/api/CustomerAccessList10', httpOptions);
+  }
+
   getCustomerCareDashboardInfo(): Observable<any> {
     this.loadToken();
     let httpOptions = { 

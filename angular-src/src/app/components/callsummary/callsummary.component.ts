@@ -42,6 +42,7 @@ export class CallsummaryComponent implements OnInit {
   resolutionNotes: '';
 
   selectedValue: number;
+  selectedCallType: number;
 
   constructor(
     public fb: FormBuilder,
@@ -204,7 +205,7 @@ export class CallsummaryComponent implements OnInit {
     //append id to get getCustomerToSiteList
     this.routeService.getSiteToSystemList(id).subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
         this.siteToSystemList = [].concat(res);
       }
     )
@@ -218,6 +219,7 @@ export class CallsummaryComponent implements OnInit {
   //Get the Problem_class_id of call type / class list
   showProblemsBasedOnClassSelect(val: any) {
     this.customFunction(val);
+    //console.log(val)
   }
 
   //Change the Problems dropdown based on the selection of Call Type 
@@ -228,7 +230,7 @@ export class CallsummaryComponent implements OnInit {
       //exec dbo.CallSummaryProblems O
       this.routeService.getCallSummaryProblemsO().subscribe(
         res => {
-          //console.log(res);
+          console.log(res);
           this.callSummaryProblems = res;
         }
       )

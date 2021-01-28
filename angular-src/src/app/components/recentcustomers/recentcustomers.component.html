@@ -1,1 +1,42 @@
-<p>recentcustomers works!</p>
+<!-- <div>
+    <ul *ngFor="let item of customeraccesslist">
+        <li>{{ item.userCode }}</li>
+        <li>{{ item.customerId }}</li>
+        <li>{{ item.customerName }}</li>
+        <li>{{ item.customerNumber }}</li>
+        <li>{{ item.timeStamp }}</li>
+    </ul>
+</div> -->
+<div class="card shadow">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row">
+                    <h3 [style.color]="'blue'" [style.fontWeight]="'900'">Recently Accessed Customers</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-items-center table-borderless">
+            <thead>
+                <tr>
+                    <th>Customer Number</th>
+                    <th>Customer Name</th>
+                    <th>UserCode</th>
+                    <th>Customer ID</th>
+                    <th>Time Stamp</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let item of customeraccesslist">
+                <td>{{ item.customerNumber }}</td>
+                <td>{{ item.customerName }}</td>
+                <td>{{ item.userCode }}</td>
+                <td>{{ item.customerId }}</td>
+                <td>{{ item.timeStamp }}</td>
+                <td>Customer Rating + Customer Rating Value</td>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CustomerAccessList } from 'src/app/models/customeraccesslist';
+import { RouteService } from '../../services/route.service';
 
 @Component({
   selector: 'app-recentcustomers',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recentcustomers.component.css']
 })
 export class RecentcustomersComponent implements OnInit {
+  customeraccesslist: CustomerAccessList[];
 
-  constructor() { }
+  constructor(
+    public routeService: RouteService
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.routeService.getCustomerAccessList10().subscribe(
+      res => {
+        this.customeraccesslist = res;
+      }
+    )
   }
 
 }

@@ -59,19 +59,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="col-md-6">
-                                            <div class="form-group btn-group" id="callTypeDropdown">
-                                                <label class="d-block call-summary-select">Site</label>
-                                                <div class="dropdown">
-                                                    <select formControlName="site" class="form-control form-control-lg" id="callSummarySiteSelect" [ngClass]="{ 'is-invalid': submitted && f.site.errors }">
-                                                        <option *ngFor="let site of site" value={{site}} [ngValue]="site">{{ site.address_1 }}</option>
-                                                    </select>
-                                                    <div *ngIf="submitted && f.site.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.site.errors.required">Site is required</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-6">
                                             <div class="form-group btn-group" id="callTypeDropdown">
                                                 <label class="d-block call-summary-select">System</label>
@@ -94,7 +81,7 @@
                                             <div class="form-group btn-group" id="callTypeDropdown">
                                                 <label class="d-block call-summary-select">Call Type</label>
                                                 <div class="dropdown">
-                                                    <select formControlName="callSummaryClassList" class="form-control form-control-lg" id="callSummaryClassListSelect" [ngClass]="{ 'is-invalid': submitted && f.callSummaryClassList.errors }" [(ngModel)]="selectedValue" (ngModelChange)="showProblemsBasedOnClassSelect($event)">
+                                                    <select formControlName="callSummaryClassList" class="form-control form-control-lg" id="callSummaryClassListSelect" [ngClass]="{ 'is-invalid': submitted && f.callSummaryClassList.errors }" [(ngModel)]="selectedCallType" (ngModelChange)="showProblemsBasedOnClassSelect($event)">
                                                         <option *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" [ngValue]="type.problem_Class_id">{{ type.problem_Class_description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.callSummaryClassList.errors" class="invalid-feedback">
