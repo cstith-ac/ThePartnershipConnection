@@ -2,3 +2,20 @@
     padding-top: 0;
     padding-bottom: 0;
 }
+
+/**********************************************
+New Layout CSS (see dashboard.component.html)
+**********************************************/
+.card .table th {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.card .table td, .card .table th {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+th:first-child {
+    padding-left: 1.5rem;
+}

@@ -1,8 +1,84 @@
-pre {
+/* pre {
     font-family: 'Open Sans';
     white-space: pre-line;
     font-size: inherit;
     overflow-y: scroll;
-    /* height: 110px; */
     height: 18vh;
+} */
+
+/**********************************************
+Begin New Layout CSS (see dashboard.component.html)
+**********************************************/
+/* pre {
+    font-family: 'Open Sans';
+    white-space: pre-line;
+    font-size: inherit;
+    overflow-y: scroll;
+    max-width: 100%;
+    height: calc(62vh - 16px);
+} */
+
+@media (min-width:641px)  { 
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+    pre {
+        font-family: 'Open Sans';
+        white-space: pre-line;
+        font-size: inherit;
+        overflow-y: scroll;
+        max-width: 100%;
+        height: calc(52vh - 16px);
+    }
 }
+
+@media (min-width:961px)  { 
+    /* tablet, landscape iPad, lo-res laptops ands desktops */ 
+    pre {
+        font-family: 'Open Sans';
+        white-space: pre-line;
+        font-size: inherit;
+        overflow-y: scroll;
+        max-width: 100%;
+        height: calc(42vh - 16px);
+    }
+}
+@media (min-width:1025px) { 
+    /* big landscape tablets, laptops, and desktops */ 
+    pre {
+        font-family: 'Open Sans';
+        white-space: pre-line;
+        font-size: inherit;
+        overflow-y: scroll;
+        max-width: 100%;
+        height: calc(42vh - 16px);
+    }
+}
+
+
+/* Desktops and laptops ----------- */
+@media only screen  and (min-width : 1224px) {
+    /* Styles */
+    pre {
+        font-family: 'Open Sans';
+        white-space: pre-line;
+        font-size: inherit;
+        overflow-y: scroll;
+        max-width: 100%;
+        height: calc(56vh - 16px);
+    }
+    }
+    
+    /* Large screens ----------- */
+    @media only screen  and (min-width : 1824px) {
+    /* Styles */
+    pre {
+        font-family: 'Open Sans';
+        white-space: pre-line;
+        font-size: inherit;
+        overflow-y: scroll;
+        max-width: 100%;
+        height: calc(40vh - 16px);
+    }
+    }
+/**********************************************
+End New Layout CSS (see dashboard.component.html)
+**********************************************/
