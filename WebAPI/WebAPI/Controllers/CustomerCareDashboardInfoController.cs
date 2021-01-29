@@ -99,5 +99,11 @@ namespace WebAPI.Controllers
                 return Lst;
             }
         }
+
+        [HttpGet("{id}")]
+        public CustomerCareDashboardInfo GetCustomerCareDashboardInfoByID(int id)
+        {
+            return db.GetCustomerCareDashboardInfos.FromSqlRaw("EXEC dbo.CustomerCareDashboardInfo @CustomerID={0}", id).ToListAsync().Result.FirstOrDefault();
+        }
     }
 }

@@ -1,27 +1,3 @@
-<!-- <p style="font-weight: bold;">customercaredashboardinfo works!</p> -->
-<!-- <ul *ngFor="let com of dashboardinfo">
-    <li>#{{ com.customerNumber }}</li>
-    <li>#{{ com.customerName }}</li>
-</ul> -->
-<!-- <div *ngFor="let item of dashboardinfo">
-    <h3>#{{ item.customerNumber }}</h3>
-    <p>{{ item.customerName }}</p>
-    <p>${{ item.totalRMR }}</p>
-    <p>{{ item.guaranteeStatus }}</p>
-    <p>{{ item.specialFlag }}</p>
-    <p>{{ item.emailAddress }}</p>
-    <p>{{ item.servicedBy }}</p>
-    <p>{{ item.lastVisitInfo }}</p>
-    <p>{{ item.ticketsLastSixMonths }}</p>
-    <p>{{ item.criticalMessage }}</p>
-    <p>{{ item.lastNote }}</p>
-    <p>{{ item.partnerKeyWords }}</p>
-    <p>{{ item.billFrequency }}</p>
-    <p>{{ item.nextCycleOn }}</p>
-    <p>{{ item.hasSeparateSiteAddress }}</p>
-    <p>{{ item.alternateServiceCompanyActive }}</p>
-    <p>{{ item.autoPaymentMessage }}</p>
-</div> -->
 <div *ngFor="let item of dashboardinfo">
     <div class="col-md-12">
         <div class="row">
@@ -107,7 +83,20 @@
             <div class="row">
                 <div class="col-md-8">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">Invoices received via email <span id="emailAddress">{{ item.emailAddress }}</span> </li>
+                        <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">
+                            Invoices
+                            <span *ngIf="item.invoicesArePrinted === 1;" > are printed </span>
+                            <span *ngIf="item.invoicesAreEmail === 1;">received via email {{ item.invoicesAreEmail }}</span> 
+                            <span id="emailAddress">- {{ item.emailAddress }}</span> 
+                            <span *ngIf="item.noEmail === 1">No email on file</span>
+                        </li>
+
+                        <!-- notActive is a reference to else -->
+                        <!-- <p *ngIf="displayElement; else showThis">Magic element!</p>
+                        <ng-template #showThis>      
+                            Another magic element!
+                        </ng-template> -->
+
                         <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;"> <span id="autoPaymentMessage">{{ item.autoPaymentMessage }}</span> </li>
                     </ul>
                 </div>
@@ -125,7 +114,7 @@
             </div>
         </div>
         <div class="serviceInfo-bg note-padding">
-            <h2>Service Info</h2>
+            <h2 class="pl-2">Service Info</h2>
             <ul class="padding-left0 mb-0">
                 <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">
                     Serviced by: <span id="servicedBy">{{ item.servicedBy }}</span> 

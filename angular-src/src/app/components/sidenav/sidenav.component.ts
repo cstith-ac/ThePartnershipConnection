@@ -46,10 +46,10 @@ export class SidenavComponent implements OnInit {
       $("#wrapper").toggleClass("toggled");
     });
 
-    // Critical Message Tabs
+    // Customer Care x Service Notes Tabs
     $(function () {
-      var $tabButtonItem = $('#tab-button li'),
-          $tabSelect = $('#tab-select'),
+      var $tabButtonItem = $('#tab-button-partner li'),
+          $tabSelect = $('#tab-select-partner'),
           $tabContents = $('.tab-contents'),
           activeClass = 'is-active';
 
@@ -78,43 +78,6 @@ export class SidenavComponent implements OnInit {
         $(target).show();
       });
     });
-
-    // this.authService.getProfile().subscribe(
-    //   res => {
-    //     this.user = res;
-    //     //console.log(JSON.parse(localStorage.getItem('user')))
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // )
-
-    // this.routeService.getPartnerInformation().subscribe(
-    //   res => {
-    //     //console.log(res);
-    //     this.partnerInformation = res;
-    //   }
-    // )
-
-    // this.routeService.getPartnerContactList().subscribe(
-    //   res => {
-    //     //console.log(res);
-    //     this.contactList = res;
-    //   }
-    // )
-
-    // this.routeService.getPartnerContactListAdditional().subscribe(
-    //   res => {
-    //     //console.log(res);
-    //     this.contactListAdditional = res;
-    //   }
-    // )
-
-    // this.routeService.getCustomerCareDashboardInfo().subscribe(
-    //   res => {
-    //     this.dashboardinfo = res;
-    //   }
-    // )
 
   }
 

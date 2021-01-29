@@ -413,6 +413,42 @@ p {
 
 }
 
+/*partner window tabs*/
+#tab-button-partner {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#tab-button-partner li {
+   display: table-cell;
+   width: 20%;
+}
+
+#tab-button-partner li a {
+    display: block;
+    padding: .5em;
+    background: #eee;
+    border: 1px solid #ddd;
+    text-align: center;
+    color: #000;
+    text-decoration: none;
+}
+
+#tab-button-partner li:not(:first-child) a {
+    border-left: none;
+}
+
+#tab-button-partner li a:hover,
+#tab-button-partner .is-active a {
+   border-bottom-color: transparent;
+   background: #fff;
+
+}
+
 .tab-contents {
    padding: .5em 1em 1em;
    border: 1px solid #ddd;
@@ -585,12 +621,34 @@ p {
     text-decoration: none;
 }
 
+/*Partner window*/
+#tab-button-partner li a {
+    display: block;
+    padding: .5em;
+    background: #eee;
+    border: 1px solid #ddd;
+    text-align: center;
+    color: #000;
+    text-decoration: none;
+}
+
 #tab-button li a::before {
     /*content: "You are now viewing ";*/
     content: "Switch to ";
 }
 
+/*Partner window*/
+#tab-button-partner li a::before {
+    /*content: "You are now viewing ";*/
+    content: "Switch to ";
+}
+
 #tab-button li:not(:first-child) a {
+    border-left: none;
+}
+
+/*Partner window*/
+#tab-button-partner li:not(:first-child) a {
     border-left: none;
 }
 
@@ -600,19 +658,25 @@ p {
    /* background: yellow;*/
 }
 
+/*Partner window*/
+#tab-button-partner li a:hover,
+#tab-button-partner .is-active a {
+    border-bottom-color: transparent;
+   /* background: yellow;*/
+}
+
 #tab-button li a:hover,
 #tab-button .is-active a::before {
     /*content: "Switch to ";*/
     content: " ";
 }
-/*.critical-message-tab {
-    padding: 5px;
-    flex: auto;
-}
 
-.critical-message-tab-bg {
-    border: 1px solid #707070;
-}*/
+/*Partner window*/
+#tab-button-partner li a:hover,
+#tab-button-partner .is-active a::before {
+    /*content: "Switch to ";*/
+    content: " ";
+}
 
 .critical-message-tab-content {
     background-color: #F9F9A7;

@@ -13,6 +13,8 @@ export class CustomercaredashboardinfoComponent implements OnInit {
   user:any=Object;
   dashboardinfo: DashboardInfo[];
 
+  displayElement = false;
+
   constructor(
     private routeService: RouteService,
     private router: Router

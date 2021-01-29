@@ -11,10 +11,10 @@
       <div class="list-group list-group-flush">
         <a [routerLink]="['/login']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Login</a>
         <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Register</a>
+        <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Recent Customers</a>
         <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a>
         <!-- <a [routerLink]="['/customer-access-list']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Access List</a>
         <a [routerLink]="['/customer-care-dashboard-info']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care Dashboard Info</a> -->
-        <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Recent Customers</a>
         <!-- <a [routerLink]="['/customer-care-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a> -->
         <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Service View</a>
         <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Collections View</a>
@@ -152,7 +152,7 @@
                           </table>
                       </div>
                       <div class="row">
-                          <div class="col-md-12 pt-1 pb-4">
+                          <div class="col-md-12 pt-1 pb-4 pt-3">
                               <small class="dark-blue-text" [style.fontWeight]="'600'">Additional contacts listed after notes</small>
                           </div>
                       </div>
@@ -167,7 +167,7 @@
 
                           <div class="tabs margin-top3" id="padding0">
                               <div class="tab-button-outer">
-                                  <ul id="tab-button">
+                                  <ul id="tab-button-partner">
                                       <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Customer Care Note</a></li>
                                       <li class="menu" (click)="toggleShow('tab-2')"><a href="#tab02">Service Note</a></li>
                                   </ul>
