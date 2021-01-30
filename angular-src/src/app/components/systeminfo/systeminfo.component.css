@@ -19,3 +19,7 @@ New Layout CSS (see dashboard.component.html)
 .table.align-items-center td, .table.align-items-center th {
     vertical-align: initial;
 }
+
+.table td {
+    padding: 1rem 0 0;
+}

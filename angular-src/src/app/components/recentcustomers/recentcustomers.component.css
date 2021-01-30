@@ -1,0 +1,37 @@
+.ratingValueText0 {
+    color: #000;
+    font-weight: 600 !important;
+}
+.ratingValueBg0 {
+    background-color: #AFF1EE;
+}
+
+.ratingValueText1 {
+    color: #D8D1D2;
+    font-weight: 600 !important;
+}
+.ratingValueBg1 {
+    background-color: #D8354B;
+}
+
+.ratingValueText2 {
+    color: #E6E991 !important;
+    font-weight: 600 !important;
+}
+.ratingValueBg2 {
+    background-color: #3580D8;
+}
+
+.ratingValueText3 {
+    color: #FE0E3F;
+    font-weight: 600 !important;
+}
+.ratingValueBg3 {
+    background-color: #40D835;
+}
+.customer-rating {
+    padding: 0;
+}
+.list-group-item {
+    border: 1px solid #e9ecef00;
+}
