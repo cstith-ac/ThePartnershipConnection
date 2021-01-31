@@ -274,12 +274,12 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <ul class="list-group" *ngFor="let item of customeraccesslist">
                 <li class="list-group-item">{{ item.customerNumber }} &nbsp;&nbsp;&nbsp; {{ item.customerName }}</li>
             </ul>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             <ul class="list-group" *ngFor="let item of dashboardInfo">
                 <li class="list-group-item">
                     <span *ngIf="item.customerRatingValue === 0; else elseBlock">
@@ -293,7 +293,7 @@
                         </span>
                     </span>
                     <span *ngIf="item.customerRatingValue === 2; else elseBlock">
-                        <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'" [style.padding]="'10px'">
                             <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
                         </span>
                     </span>
@@ -320,7 +320,7 @@
                             </span>
                         </span>
                         <span *ngIf="item.customerRatingValue === 2; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -338,7 +338,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo2">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -366,7 +366,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo3">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -394,7 +394,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo4">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -422,7 +422,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo5">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -450,7 +450,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo6">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -478,7 +478,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo7">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -511,7 +511,7 @@
                             </span>
                         </span>
                         <span *ngIf="item.customerRatingValue === 1; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -534,7 +534,7 @@
                 <li class="list-group-item">
                     <span *ngFor="let item of dashboardInfo9">
                         <span *ngIf="item.customerRatingValue === 0; else elseBlock">
-                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'" [style.padding]="'10px'">
                                 <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
                             </span>
                         </span>
@@ -562,7 +562,7 @@
             </ul>
 
             <!--start-->
-            <span *ngFor="let item of dashboardInfo">
+            <!-- <span *ngFor="let item of dashboardInfo">
                 <span *ngIf="item.customerRatingValue === 0; else elseBlock">
                     <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
                         <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
@@ -584,9 +584,7 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo1">
@@ -611,9 +609,7 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo2">
@@ -638,9 +634,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo3">
@@ -665,9 +661,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo4">
@@ -692,9 +688,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo5">
@@ -719,9 +715,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo6">
@@ -746,9 +742,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo7">
@@ -773,9 +769,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo8">
@@ -800,9 +796,9 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
             <br>
             <span *ngFor="let item of dashboardInfo9">
@@ -827,11 +823,11 @@
                     </div>
                 </span>
                 <ng-template #elseBlock>
-                    <!-- There was an error. Please contact an administrator -->
+                    
                 </ng-template>
-                <!-- {{item.customerName}} - {{ item.customerRating }} - {{ item.customerRatingValue }} -->
+                
             </span>
-            <br>
+            <br> -->
         </div>
     </div>
 

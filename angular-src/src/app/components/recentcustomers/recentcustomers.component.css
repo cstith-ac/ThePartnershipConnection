@@ -34,4 +34,5 @@
 }
 .list-group-item {
     border: 1px solid #e9ecef00;
+    padding: 2rem 1rem;
 }

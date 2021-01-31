@@ -72,7 +72,8 @@ export class SysteminfoComponent implements OnInit {
   }
 
   showContractNotesModal() {
-    console.log('show')
+    $("#contractNotesModal").modal("show");
+    //console.log('load')
   }
 
 }
