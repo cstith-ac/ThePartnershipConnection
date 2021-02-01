@@ -30,7 +30,7 @@ export class DashboardInfo4 {
     lastVisitInfo: string;
     servicedBy: string;
     invoicesArePrinted: number;
-    invoicesAreEmail: number;
+    invoicesAreEmailed: number;
     ph1: string;
     ph2: string;
     ph3: string;

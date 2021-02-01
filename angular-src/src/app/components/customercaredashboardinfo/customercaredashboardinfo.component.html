@@ -85,8 +85,11 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">
                             Invoices
-                            <span *ngIf="item.invoicesArePrinted === 1;" > are printed </span>
-                            <span *ngIf="item.invoicesAreEmail === 1;">received via email {{ item.invoicesAreEmail }}</span> 
+                            <span *ngIf="item.invoicesArePrinted === 1;"> are printed </span>
+                            <span *ngIf="item.invoicesArePrinted === 0;"> are not printed</span>
+                        
+                            <span *ngIf="item.invoicesAreEmailed === 1;"> received via email {{ item.invoicesAreEmailed }}</span> 
+                            <span *ngIf="item.invoicesAreEmailed === 0;"> are not received via email</span>
                             <span id="emailAddress">- {{ item.emailAddress }}</span> 
                             <span *ngIf="item.noEmail === 1">No email on file</span>
                         </li>

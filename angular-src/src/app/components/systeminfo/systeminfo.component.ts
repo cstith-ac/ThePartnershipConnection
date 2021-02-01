@@ -71,6 +71,11 @@ export class SysteminfoComponent implements OnInit {
     $("#bocModal").modal("show");
   }
 
+  openDetails() {
+    console.log("loadDetails")
+    this.router.navigate(['contract-details'])
+  }
+
   showContractNotesModal() {
     $("#contractNotesModal").modal("show");
     //console.log('load')
