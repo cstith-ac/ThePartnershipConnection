@@ -23,6 +23,7 @@ export class CallsummaryComponent implements OnInit {
   @ViewChild("ticketNumber") divView: ElementRef;
   
   authToken: any;
+  show: boolean = false;
 
   callSummaryAddForm: FormGroup;
   submitted = false;
@@ -38,6 +39,7 @@ export class CallsummaryComponent implements OnInit {
   callSummaryNextSteps: NextSteps[];
   customerOnCall: '';
   customerCallBackPhone: '';
+  //phoneNumber = "^(\+\d{1,3}[- ]?)?\d{10}$";
   customerComments: '';
   resolutionNotes: '';
 
@@ -74,7 +76,7 @@ export class CallsummaryComponent implements OnInit {
       CustomerComments: ["", Validators.required],
       TechNotes: ["", Validators.required],
       CustomerOnCall: ["", Validators.required],
-      CustomerCallBackPhone: ["", Validators.required]
+      CustomerCallBackPhone: ["", [Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]]
     })
 
     this.authService.getProfile().subscribe(
@@ -125,31 +127,12 @@ export class CallsummaryComponent implements OnInit {
     this.routeService.getCallSummaryResolutions().subscribe(
       res => {
         this.callSummaryResolutions = res;
-        // let resolution_Id = "";
-        // let resolution_Code = "";
-        // let description = "";
-
-        // this.callSummaryResolutions.forEach((c) => {
-        //   resolution_Id += `<option>${c.resolution_Id}</option>`;
-        //   description += `<option value="${c.resolution_Id}">${c.description}</option>`;
-        // });
-
-        // document.getElementById("callSummaryResolutions").innerHTML = description;
       }
     )
 
     this.routeService.getCallSummaryNextSteps().subscribe(
       res => {
         this.callSummaryNextSteps = res;
-        // let employeeID = "";
-        // let employeeName = "";
-
-        // this.callSummaryNextSteps.forEach((c) => {
-        //   employeeID += `<option>${c.employeeID}</option>`;
-        //   employeeName += `<option value="${c.employeeID}">${c.employeeName}</option>`;
-        // });
-
-        // document.getElementById("callSummaryNextSteps").innerHTML = employeeName;
       }
     )
 
@@ -194,6 +177,14 @@ export class CallsummaryComponent implements OnInit {
   // ngAfterViewInit() {
   //   console.log(this.divView)
   // }
+
+  isIssueResolved(event){
+    if(event.target.checked) {
+      this.show = true;
+    } else {
+      this.show = false;
+    }
+  }
 
   selectCustToSite(val: any) {
    this.changeSystem(val)
@@ -303,9 +294,9 @@ export class CallsummaryComponent implements OnInit {
 
     this.submitted = true;
 
-    if(this.callSummaryAddForm.invalid) {
-      return;
-    }
+    // if(this.callSummaryAddForm.invalid) {
+    //   return;
+    // }
 
     // alert(
     //   "SUCCESS!! :-)\n\n" + JSON.stringify(this.callSummaryAddForm.value, null, 4)
@@ -315,7 +306,7 @@ export class CallsummaryComponent implements OnInit {
       .subscribe(
         result => {
           this.resetForm(form);
-          // console.log('success: ', result)
+          console.log('success: ', result)
           // alert("Ticket number: " + result + " was created.")
           this.divView.nativeElement.innerHTML = result;
         },
@@ -328,36 +319,34 @@ export class CallsummaryComponent implements OnInit {
     form.reset();
   }
 
-  onCallSummaryAddSubmit() {
-    
-  }
+  
 
-  isIssueResolved() {
-    //Get the checkbox
-    let checkBox = document.getElementById("isIssueResolved") as HTMLInputElement;
-    //Get the Resolution select
-    let resolution = document.getElementById("resolution");
-    //Get the Next Step select
-    let nextStep = document.getElementById("nextStep");
-    //Get Customer Comments text area
-    let customerComments = document.getElementById("custCommentsTextArea");
-    //Get Resolution Notes text area
-    let resolutionNotes = document.getElementById("resNotesTextArea");
+  // isIssueResolved() {
+  //   //Get the checkbox
+  //   let checkBox = document.getElementById("isIssueResolved") as HTMLInputElement;
+  //   //Get the Resolution select
+  //   let resolution = document.getElementById("resolution");
+  //   //Get the Next Step select
+  //   let nextStep = document.getElementById("nextStep");
+  //   //Get Customer Comments text area
+  //   let customerComments = document.getElementById("custCommentsTextArea");
+  //   //Get Resolution Notes text area
+  //   let resolutionNotes = document.getElementById("resNotesTextArea");
 
-    //If the checkbox is checked, display the Resolution select. Otherwise, display Next Step select
-    if (checkBox.checked == true) {
-      //yes, the issue was resolved
-      resolution.style.display = "block";
-      nextStep.style.display = "none";
-      //customerComments.style.display = "none";
-      //resolutionNotes.style.display = "block";
-    } else {
-      //no, the issue was not resolved
-      resolution.style.display = "none";
-      nextStep.style.display = "block";
-      //customerComments.style.display = "block";
-      //resolutionNotes.style.display = "none";
-    }
-  }
+  //   //If the checkbox is checked, display the Resolution select. Otherwise, display Next Step select
+  //   if (checkBox.checked == true) {
+  //     //yes, the issue was resolved
+  //     resolution.style.display = "block";
+  //     nextStep.style.display = "none";
+  //     //customerComments.style.display = "none";
+  //     //resolutionNotes.style.display = "block";
+  //   } else {
+  //     //no, the issue was not resolved
+  //     resolution.style.display = "none";
+  //     nextStep.style.display = "block";
+  //     //customerComments.style.display = "block";
+  //     //resolutionNotes.style.display = "none";
+  //   }
+  // }
 
 }

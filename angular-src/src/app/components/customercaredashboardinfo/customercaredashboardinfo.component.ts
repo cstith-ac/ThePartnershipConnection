@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
+import { ServiceTicketInfo } from 'src/app/models/serviceticketinfo';
+import { ServiceTicketNotes } from 'src/app/models/serviceticketnotes';
 declare var $: any;
 
 @Component({
@@ -12,6 +14,10 @@ declare var $: any;
 export class CustomercaredashboardinfoComponent implements OnInit {
   user:any=Object;
   dashboardinfo: DashboardInfo[];
+  serviceTicketInfo: ServiceTicketInfo[];
+  serviceTicketNotes: ServiceTicketNotes[];
+
+  lastServiceTicketId;
 
   displayElement = false;
 
@@ -25,6 +31,8 @@ export class CustomercaredashboardinfoComponent implements OnInit {
       res => {
         //console.log(res);
         this.dashboardinfo = res;
+        this.lastServiceTicketId = this.dashboardinfo.map(x => x.lastServiceTicketID);
+        console.log(this.lastServiceTicketId);
       },
       err => {
         console.log(err);
@@ -36,12 +44,30 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     window.location.reload();
   }
 
-  // showBOCModal() {
-  //   $("#bocModal").modal("show");
+  // getDimensionsByFilter(id) {
+  //   return this.dashboardinfo.filter(x => x.lastServiceTicketId === this.lastServiceTicketId);
   // }
 
   showTicketInfoModal() {
     $("#ticketInfoModal").modal("show");
+    this.routeService.getServiceTicketInfoById(this.lastServiceTicketId).subscribe(
+      res => {
+        //console.log(res);
+        this.serviceTicketInfo = [].concat(res);
+        //console.log(this.serviceTicketInfo);
+      }
+    )
+  }
+
+  openServiceTicketNotesModal() {
+    console.log("open service ticket notes")
+    $("#serviceTicketNotesModal").modal("show");
+    this.routeService.getServiceTicketNoteById(this.lastServiceTicketId).subscribe(
+      res => {
+        console.log(res);
+        this.serviceTicketNotes = [].concat(res);
+      }
+    )
   }
 
 }

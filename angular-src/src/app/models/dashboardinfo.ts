@@ -26,7 +26,7 @@ export class DashboardInfo {
     prompt8: string;
     prompt9: string;
     dashboardStyle: number;
-    lastServiceTicketId: number;
+    lastServiceTicketID: number;
     lastVisitInfo: string;
     servicedBy: string;
     invoicesArePrinted: number;

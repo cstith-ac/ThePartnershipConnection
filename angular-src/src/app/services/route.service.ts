@@ -59,6 +59,26 @@ export class RouteService {
     )
   }
 
+  getServiceTicketInfoById(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+    return this.http.get<any>(`${this.baseUrl}/api/ServiceTicketInfo/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  getServiceTicketNoteById(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      };
+    return this.http.get<any>(`${this.baseUrl}/api/ServiceTicketNotes/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   getSiteToSystemList(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 

@@ -54,7 +54,7 @@
                                                         <option *ngFor="let site of site" value="{{ site.customerSiteID }}" [ngValue]="site.customerSiteID">{{ site.address_1 }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.site.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.site.errors.required">Site is required</div>
+                                                        <div *ngIf="f.site.errors.required">A site selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,7 +70,7 @@
                                                         </option>
                                                     </select>
                                                     <div *ngIf="submitted && f.SystemID.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.SystemID.errors.required">SystemID is required</div>
+                                                        <div *ngIf="f.SystemID.errors.required">A system selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -85,7 +85,7 @@
                                                         <option *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" [ngValue]="type.problem_Class_id">{{ type.problem_Class_description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.callSummaryClassList.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.callSummaryClassList.errors.required">callSummaryClassList is required</div>
+                                                        <div *ngIf="f.callSummaryClassList.errors.required">A call type selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,84 +98,85 @@
                                                         <option *ngFor="let problem of callSummaryProblems" value="{{ problem.problem_Id }}" [ngValue]="problem.problem_Id">{{ problem.description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.ProblemID.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.ProblemID.errors.required">ProblemID is required</div>
+                                                        <div *ngIf="f.ProblemID.errors.required">A problem selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                            <div class="form-group btn-group" id="callTypeDropdown" *ngIf="show">
                                                 <label class="d-block call-summary-select">Resolution</label>
                                                 <div class="dropdown">
                                                     <select formControlName="ResolutionID" class="form-control form-control-lg" id="callSummaryResolutions" [ngClass]="{ 'is-invalid': submitted && f.ResolutionID.errors }">
                                                         <option *ngFor="let resolution of callSummaryResolutions" value="{{ resolution.resolution_Id }}" [ngValue]="resolution.resolution_Id">{{ resolution.description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.ResolutionID.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.ResolutionID.errors.required">ResolutionID is required</div>
+                                                        <div *ngIf="f.ResolutionID.errors.required">A resolution selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="form-group btn-group" id="callTypeDropdown">
+                                            <div class="form-group btn-group" id="callTypeDropdown" *ngIf="!show"> 
                                                 <label class="d-block call-summary-select">Next Step</label>
                                                 <div class="dropdown">
                                                     <select formControlName="CallSummaryNextSteps" class="form-control form-control-lg" id="callSummaryNextSteps" [ngClass]="{ 'is-invalid': submitted && f.CallSummaryNextSteps.errors }">
                                                         <option *ngFor="let nextStep of callSummaryNextSteps" value="{{ nextStep.employeeID }}" [ngValue]="nextStep.employeeID">{{ nextStep.employeeName }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.CallSummaryNextSteps.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.CallSummaryNextSteps.errors.required">CallSummaryNextSteps is required</div>
+                                                        <div *ngIf="f.CallSummaryNextSteps.errors.required">A next step selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="row mt-2 mb-2">
+                                    <div class="row mt-2 mb-2">
                                         <div class="col-md-6">
                                             <div class="form-group btn-group">
                                                 <label>Was the issue resolved?</label>
-                                                <input type="checkbox" formControlName="isIssueResolved" class="ml-1 mt-1">
+                                                <input type="checkbox" class="ml-1 mt-1" (change)="isIssueResolved($event)">
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Customer On Call</label>
                                                 <input type="text" [(ngModel)]="customerOnCall" formControlName="CustomerOnCall" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerOnCall.errors }">
                                                 <div *ngIf="submitted && f.CustomerOnCall.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.CustomerOnCall.errors.required">CustomerOnCall is required</div>
+                                                    <div *ngIf="f.CustomerOnCall.errors.required">Customer On Call is required</div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Customer Call Back Phone</label>
-                                                <input type="tel" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }">
+                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 x123">
                                                 <div *ngIf="submitted && f.CustomerCallBackPhone.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.CustomerCallBackPhone.errors.required">CustomerCallBackPhone is required</div>
+                                                    <div *ngIf="f.CustomerCallBackPhone.errors.required">A customer call back phone # is required</div>
+                                                    <div *ngIf="f.CustomerCallBackPhone.errors.minlength">Minimum 10 characters are required</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-12">
-                                            <div class="form-group" id="custCommentsTextArea">
+                                            <div class="form-group" id="custCommentsTextArea" *ngIf="!show">
                                                 <label>Customer Comments</label>
                                                 <textarea formControlName="CustomerComments" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerComments.errors }"></textarea>
                                                 <div *ngIf="submitted && f.CustomerComments.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.CustomerComments.errors.required">CustomerComments is required</div>
+                                                    <div *ngIf="f.CustomerComments.errors.required">Customer Comments are required</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-12">
-                                            <div class="form-group" id="resNotesTextArea">
+                                            <div class="form-group" id="resNotesTextArea" *ngIf="show">
                                                 <label>Resolution Notes</label>
                                                 <textarea formControlName="TechNotes" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.TechNotes.errors }"></textarea>
                                                 <div *ngIf="submitted && f.TechNotes.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.TechNotes.errors.required">TechNotes is required</div>
+                                                    <div *ngIf="f.TechNotes.errors.required">Tech Notes are required</div>
                                                 </div>
                                             </div>
                                         </div>

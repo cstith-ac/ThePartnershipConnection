@@ -84,14 +84,24 @@
                 <div class="col-md-8">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">
-                            Invoices
-                            <span *ngIf="item.invoicesArePrinted === 1;"> are printed </span>
+                            
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 0) && (item.emailAddress == '')">Invoices are printed. No email address on file.</span>
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">Invoices are printed. Email address on file, @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 1) && (item.emailAddress == '')">Invoices are printed and also sent via mail. <mark>No email address on file!</mark></span>
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are printed and also sent via email to @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (!item.emailAddress)">Invoices are sent via mail. <mark>No email address on file!</mark></span>
+                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are sent via email to @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">No invoice delivery method chosen. Email address on file is @{{item.emailAddress}}</span>
+
+                            
+
+                            <!-- <span *ngIf="item.invoicesArePrinted === 1;"> are printed. No email address on file. </span>
                             <span *ngIf="item.invoicesArePrinted === 0;"> are not printed</span>
                         
                             <span *ngIf="item.invoicesAreEmailed === 1;"> received via email {{ item.invoicesAreEmailed }}</span> 
-                            <span *ngIf="item.invoicesAreEmailed === 0;"> are not received via email</span>
+                            <span *ngIf="item.invoicesAreEmailed === 0;"></span>
                             <span id="emailAddress">- {{ item.emailAddress }}</span> 
-                            <span *ngIf="item.noEmail === 1">No email on file</span>
+                            <span *ngIf="item.noEmail === 1">No email on file</span> -->
                         </li>
 
                         <!-- notActive is a reference to else -->
@@ -138,43 +148,86 @@
 <!--Ticket info modal-->
 <div class="modal fade" id="ticketInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content" *ngFor="let item of serviceTicketInfo">
+            <div class="modal-header pb-0 pl-2">
                 <div class="col-md-3">
-                    <h2 class="modal-title" id="exampleModalLabel">Ticket #274028</h2>
+                    <h2 class="modal-title" id="exampleModalLabel">Ticket #{{ item.ticket_Number }}</h2>
                 </div>
                 <div class="col-md-3">
-                    <p class="font-weight-normal">4/16/2020</p>
+                    <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
                 </div>
-                <div class="col-md-6">
-                    <h2 class="float-right">Alarm Account #8098779 Fire</h2>
+                <div class="col-md-3">
+                    <h2 class="modal-title">By: {{ item.entered_By }}</h2>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="modal-title">Ticket Status: {{ item.ticketStatus }}</h2>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <div class="card border-0">
                     <div class="card-body p-0" id="ticketInfoContent">
                         <div class="row">
+                            <div class="col-md-12">
+                                <p>Service performed by</p>    
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <p>{{ item.system_Code }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>{{ item.ticket_Number }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>{{ item.system_Code }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>{{ item.systemStatus }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="list-style-type-none padding-left0">
-                                    <p>Address: <span>215 N. Pioneer Ave. Woodland, CA 95776</span></p>
-                                    <p>Problem Code: <span>9-SVC-TNI-Fire-Maint</span></p>
-                                    <p>Resolution: <span>Bill Appr - Warranty</span></p>
+                                    <p>Address: {{ item.addressLine }}</p>
+                                    <p>Problem Code: {{ item.problem_Code }}</p>
+                                    <p>Paid by AFA: ${{ item.afaPayment }}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <p>blank</p>
+                                <div class="list-style-type-none padding-left0">
+                                    <p>Resolution: {{ item.resolution_Code }}</p>
+                                    <p>Paid by Customer: {{ item.customerPayment }}</p>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <h3>Customer Comments</h3>
                                 <div class="afa-bg-tan note-padding">
-                                    <p>INV#CFC17691 4/7/2020 Tech completed semi-annual fire alarm system test and inspection.</p>
+                                    <p>{{ item.customerComments }}</p>
+                                    <!-- <p *ngIf="item.customerComments = null">There's nothing to display</p> -->
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12 pt-3 pb-3">
+                                <button class="btn btn-primary boc-btn ml-0" (click)="openServiceTicketNotesModal()">
+                                    Notes
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Last Service Note</h3>
+                                <div class="afa-bg-tan note-padding">
+                                    <p>{{ item.lastTicketNote }}</p>
+                                    <!-- <p *ngIf="item.lastTicketNote = null">There's nothing to display</p> -->
+                                </div>
+                            </div>
+                        </div>
+                    <!-- <p>coming soon</p> -->
                     </div>
                 </div>
             </div>
@@ -207,6 +260,55 @@
             </div>
             <div class="modal-footer">
                 <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Service Ticket Notes -->
+<div class="modal fade" id="serviceTicketNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <p>Ticket Note</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Enter Date</th>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Entered By</th>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of serviceTicketNotes">
+                                    
+                                    <td>{{ item.enterDate }}</td>
+                                    <td>{{ item.enteredBy }}</td>
+                                    <td>{{ item.notes }}</td>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- <div class="row" *ngFor="let item of serviceTicketNotes">
+                            <p>{{ item.enterDate }}</p>
+                            <p>{{ item.enteredBy }}</p>
+                            <p>{{ item.notes }}</p>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideServiceTicketNotesModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

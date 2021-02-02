@@ -52,7 +52,7 @@ export class AuthService {
     // })
     // console.log(headers)
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*','Authorization':'Bearer '+this.authToken }) 
       };
     //return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
     // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/UserProfile', httpOptions);

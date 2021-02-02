@@ -13,12 +13,12 @@ namespace WebAPI.Models
         public string SedonaUser { get; set; }
         public int SystemID { get; set; }
         public int ProblemID { get; set; }
-        public int ResolutionID { get; set; }
+        public int? ResolutionID { get; set; }
         public int NextStepID { get; set; }
-        [Required]
+        
         [StringLength(1000)]
         public string CustomerComments { get; set; }
-        [Required]
+
         [StringLength(1000)]
         public string TechNotes { get; set; }
         [Required]

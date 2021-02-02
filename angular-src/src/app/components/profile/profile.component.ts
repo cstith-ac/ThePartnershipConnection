@@ -10,7 +10,6 @@ import { UserProfile } from 'src/app/models/userprofile';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  //user:any= Object;
   user:any=Object;
   userProfile: UserProfile[];
   updateProfileForm: FormGroup;
@@ -40,10 +39,8 @@ export class ProfileComponent implements OnInit {
 
     this.authService.getProfile().subscribe(
       res => {
-        //console.log(res)
         this.user = res;
         this.userProfile = res;
-        //console.log(this.user)
       },
       err => {
         console.log(err);
@@ -62,14 +59,6 @@ export class ProfileComponent implements OnInit {
     console.log('Phone number: ', form.value.phoneNumber)
     console.log('Cell: ', form.value.cellPhoneNumber1)
     console.log('Alt email: ', form.value.altEmail)
-
-    // this.authService.updateUserProfile(this.updateProfileForm.value)
-    //   .subscribe(
-    //     result => {
-    //       console.log('success: ', result)
-    //     },
-    //     error => console.log('error: ', error)
-    //   )
   }
 
   editUser(id:number) {
