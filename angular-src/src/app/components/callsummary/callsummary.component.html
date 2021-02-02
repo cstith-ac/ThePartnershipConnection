@@ -151,7 +151,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Customer Call Back Phone</label>
-                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 x123">
+                                                <!-- <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 ext" mask="(000) 000 0000 000"> -->
+                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" mask="(000) 000-0000 x000">
                                                 <div *ngIf="submitted && f.CustomerCallBackPhone.errors" class="invalid-feedback">
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.required">A customer call back phone # is required</div>
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.minlength">Minimum 10 characters are required</div>

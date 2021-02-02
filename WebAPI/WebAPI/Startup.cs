@@ -57,10 +57,10 @@ namespace WebAPI
                     builder =>
                     {
                         builder
-                            .AllowAnyOrigin() // This is not secure and will need to be refactored
+                            //.AllowAnyOrigin() // This is not secure and will need to be refactored
                                               //.WithOrigins("https://localhost:44390/")
                                               //.AllowCredentials()
-                            //.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+                            .WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     })

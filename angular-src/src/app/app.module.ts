@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { AuthGuard } from '../app/guards/auth.guard';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -83,6 +84,7 @@ import { CustomerratingbuttonComponent } from './components/customerratingbutton
     FormsModule,
     ReactiveFormsModule,
     FlashMessagesModule.forRoot(),
+    NgxMaskModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({
       config: {
