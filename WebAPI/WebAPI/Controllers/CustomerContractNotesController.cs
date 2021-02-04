@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PartnerInformationNewController : ControllerBase
+    public class CustomerContractNotesController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public PartnerInformationNewController(
+        public CustomerContractNotesController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -35,9 +35,9 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<Object> GetPartnerInformationNews()
+        public async Task<Object> GetCustomerContractNotes()
         {
-            var customers = new List<PartnerInformationNew>();
+            var customers = new List<CustomerContractNotes>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -47,24 +47,25 @@ namespace WebAPI.Controllers
                 var c = user.AfauserLink;
                 var getUserCode = await db.CustomerAccessList.FromSqlRaw("select * from dbo.CustomerAccessList where usercode = '" + c + "' and SlotNumber = 0").ToListAsync();
                 var customerID = new SqlParameter("@CustomerId", getUserCode[0].CustomerId);
-                var result = await db.GetPartnerInformationNews.FromSqlRaw("EXECUTE [dbo].[PartnerInformationNew] @CustomerID", customerID).ToListAsync();
-                List<PartnerInformationNew> Lst = result.Select(s => new PartnerInformationNew
+                var result = await db.GetCustomerContractNotes.FromSqlRaw("EXECUTE [dbo].[CustomerContractNotes] @CustomerID", customerID).ToListAsync();
+                List<CustomerContractNotes> Lst = result.Select(s => new CustomerContractNotes
                 {
-                    PartnerCode = s.PartnerCode,
-                    Address1 = s.Address1,
-                    Address2 = s.Address2,
-                    City = s.City,
-                    State = s.State,
-                    ZipCode = s.ZipCode,
-                    Phone1 = s.Phone1,
-                    Phone2 = s.Phone2,
-                    EMail = s.EMail,
-                    PartnerID = s.PartnerID,
-                    CustomerCareNote = s.CustomerCareNote,
-                    ServiceNote = s.ServiceNote
+                    Customer_Notes_Id = s.Customer_Notes_Id,
+                    BusinessName = s.BusinessName,
+                    SiteStatus = s.SiteStatus,
+                    Site_Number = s.Site_Number,
+                    Address_1 = s.Address_1,
+                    Notes = s.Notes,
+                    NotePreview = s.NotePreview
                 }).ToList();
                 return Lst;
             }
+        }
+
+        [HttpGet("{id}")]
+        public CustomerContractNotes GetCustomerContractNotesByID(int id)
+        {
+            return db.GetCustomerContractNotes.FromSqlRaw("EXEC dbo.CustomerContractNotes @CustomerId={0}", id).ToListAsync().Result.FirstOrDefault();
         }
     }
 }

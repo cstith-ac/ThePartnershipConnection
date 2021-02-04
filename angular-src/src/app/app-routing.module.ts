@@ -11,6 +11,7 @@ import { CcassistantSystemsComponent } from './components/ccassistant-systems/cc
 import { CriticalmessageComponent } from './components/criticalmessage/criticalmessage.component';
 import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
 import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
+import { CustomernotesdetailComponent } from './components/customernotesdetail/customernotesdetail.component';
 import { CustomersysteminfoComponent } from './components/customersysteminfo/customersysteminfo.component';
 import { CustomertositelistComponent } from './components/customertositelist/customertositelist.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -148,6 +149,11 @@ const routes: Routes = [
   {
     path: 'recent-customers',
     component: RecentcustomersComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'customer-note/:id',
+    component: CustomernotesdetailComponent,
     canActivate: [AuthGuard]
   }
 ];

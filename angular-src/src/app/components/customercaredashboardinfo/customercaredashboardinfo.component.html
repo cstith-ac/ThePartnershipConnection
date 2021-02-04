@@ -93,8 +93,6 @@
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are sent via email to @{{item.emailAddress}}</span>
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">No invoice delivery method chosen. Email address on file is @{{item.emailAddress}}</span>
 
-                            
-
                             <!-- <span *ngIf="item.invoicesArePrinted === 1;"> are printed. No email address on file. </span>
                             <span *ngIf="item.invoicesArePrinted === 0;"> are not printed</span>
                         
@@ -145,7 +143,7 @@
         </div>
     </div>
 </div>
-<!--Ticket info modal-->
+<!-- Ticket Info Modal -->
 <div class="modal fade" id="ticketInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content" *ngFor="let item of serviceTicketInfo">
@@ -171,7 +169,7 @@
                     <div class="card-body p-0" id="ticketInfoContent">
                         <div class="row">
                             <div class="col-md-12">
-                                <p>Service performed by</p>    
+                                <p>Service performed by {{ item.service_Company_Code }}</p>    
                             </div>
                             
                             <div class="col-md-3">
@@ -237,7 +235,7 @@
         </div>
     </div>
 </div>
-<!--BOC modal-->
+<!-- Balance Of Contract Modal. Content availablity TBD -->
 <div class="modal fade" id="bocModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
@@ -264,7 +262,7 @@
         </div>
     </div>
 </div>
-<!-- Service Ticket Notes -->
+<!-- Service Ticket Notes Modal -->
 <div class="modal fade" id="serviceTicketNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">

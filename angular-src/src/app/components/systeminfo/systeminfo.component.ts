@@ -2,8 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { fromEventPattern } from 'rxjs';
 import { AssistantSystems } from 'src/app/models/assistantsystems';
 import { SystemInfo } from 'src/app/models/systeminfo';
+import { CustomerContractNotes } from 'src/app/models/customercontractnotes'; 
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
+import { CustomerContractInfo } from 'src/app/models/customercontractinfo';
 declare var $: any;
 
 @Component({
@@ -16,9 +18,14 @@ export class SysteminfoComponent implements OnInit {
   // @ViewChild('systemInfoCustomerNumber') systemInfoCustomerNumber: ElementRef;
 
   id:number;
+  note;
 
   assistantsystems: AssistantSystems[];
   customerSystemInfo: SystemInfo;
+  contractNotes: CustomerContractNotes[];
+  customerContractInfo: CustomerContractInfo[];
+
+  public show:boolean = false;
 
   constructor(
     private routeService: RouteService,
@@ -29,17 +36,6 @@ export class SysteminfoComponent implements OnInit {
     this.routeService.getCCAssistant_Systems().subscribe(
       res => {
         this.assistantsystems = res;
-        //console.log(this.assistantsystems);
-        // let customerSystemID = this.assistantsystems.find(x => x.customer_System_Id === x.customer_System_Id).customer_System_Id;
-        // console.log(customerSystemID)
-
-        // fetch('https://localhost:44314/api/CustomerSystemInfo/'+customerSystemID)
-        // .then(res => {
-        //   res.json()
-        //   .then(data => {
-        //     console.log(data.addressLine)
-        //   })
-        // })
       }
     )
 
@@ -50,10 +46,11 @@ export class SysteminfoComponent implements OnInit {
       }
     )
 
-    // $(".system-info-collectionItem").on('click', function() {
-    //   var id = $(this).data('id');
-    //   console.log(id)
-    // })
+    this.routeService.getCustomerContractNotesById(this.id).subscribe(
+      res => {
+        console.log(res);
+      }
+    )
   }
 
   routeToSystem(id) {
@@ -62,23 +59,41 @@ export class SysteminfoComponent implements OnInit {
 
   showaccountInfoModal(customer_System_Id:number) {
     this.router.navigate(['system-info/'+ customer_System_Id])
-    //$("#accountInfoModal").modal("show");
-    //console.log(this.systemInfoCustomerNumber.nativeElement);
-   //this.routeService.getCustomerSystemInfo
   }
 
   showBOCModal() {
     $("#bocModal").modal("show");
   }
 
-  openDetails() {
-    console.log("loadDetails")
-    this.router.navigate(['contract-details'])
+  showContractNotes(customer_Notes_Id: number) {
+    this.router.navigate(['customer-note/' + customer_Notes_Id])
   }
 
   showContractNotesModal() {
     $("#contractNotesModal").modal("show");
-    //console.log('load')
+    $(".modal-open").css("overflow","scroll")
+    this.routeService.getCustomerContractNotes().subscribe(
+      res => {
+        this.contractNotes = res;
+        // let note = this.contractNotes.map(x => x.notes);
+        // let x = note.shift();
+        // this.note = x;
+      }
+    )
   }
+
+  // showTemp(customer_Notes_Id: number) {
+  //   this.routeService.getCustomerContractNotes().subscribe(
+  //     res => {
+  //       this.note = this.contractNotes.map(x => x.customer_Notes_Id);
+  //       console.log(this.note);
+  //     }
+  //   )
+  // }
+
+  // showHide(event) {
+  //   console.log(event.target);
+  //   this.show = !this.show;
+  // }
 
 }

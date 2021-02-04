@@ -23,3 +23,12 @@ New Layout CSS (see dashboard.component.html)
 .table td {
     padding: 1rem 0 0;
 }
+
+pre {
+    font-family: 'Open Sans';
+    white-space: pre-line;
+    font-size: inherit;
+    overflow-y: scroll;
+    /* max-width: 100%;
+    height: calc(52vh - 16px); */
+}

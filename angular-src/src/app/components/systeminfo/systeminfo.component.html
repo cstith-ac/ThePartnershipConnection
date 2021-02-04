@@ -49,13 +49,26 @@
         <div class="row align-items-center">
             <div class="col">
                 <div class="row">
-                    <h3 class="mb-0" [style.padding-left]="'1rem'">Central Station/System Info</h3>
+                    <div class="col-md-4 pl-0">
+                        <h3 class="mb-0" [style.padding-left]="'1rem'">Central Station/System Info</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
+                            BOC?
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary boc-btn float-right" [style.margin-left]="'5rem'" id="showContractNotesModal" (click)="showContractNotesModal()">
+                            Contract Notes
+                        </button>
+                    </div>
+                    <!-- <h3 class="mb-0" [style.padding-left]="'1rem'">Central Station/System Info</h3>
                     <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
                         BOC?
                     </button>
                     <button class="btn btn-primary boc-btn float-right" [style.margin-left]="'5rem'" id="showContractNotesModal" (click)="showContractNotesModal()">
                         Contract Notes
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -93,6 +106,7 @@
 </div>
 <!-- end new layout -->
 
+<!-- Customer Contract Notes Modal -->
 <div class="modal fade" id="contractNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
@@ -106,34 +120,46 @@
                 <div class="card" id="afa-card">
                     <div class="card-body">
                         <div class="row">
-                        <div class="col-md-12">
-
-                        <div>
-                        <h2 class="lead font-weight900 mt-0"> Contract Notes </h2>
+                            <div class="col-md-12">
+                                <h2 class="lead font-weight900 mt-0"> Contract Notes </h2>
+                                <div class="row table-responsive">
+                                    <div class="col-md-12">
+                                        <table class="table table-borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th>Business Name</th>
+                                                    <th>Site Status</th>
+                                                    <th>Site Number</th>
+                                                    <th>Address</th>
+                                                    <th>Note Preview</th>
+                                                    <!-- <th>Note</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody 
+                                              *ngFor="let item of contractNotes">
+                                                <tr>
+                                                  <td>{{ item.businessName }}</td>
+                                                  <td>{{ item.siteStatus || 'N/A' }}</td>
+                                                  <td>{{ item.site_Number || 'N/A' }}</td>
+                                                  <td>{{ item.address_1 || 'N/A' }}</td>
+                                                  <td class="system-info-collectionItem" data-id=" ' + {{item.customer_Notes_Id}} +' " (click)="showContractNotes(item.customer_Notes_Id)">{{ item.notePreview }}</td>
+                                                  <!-- <td>{{ item.notes }}</td> -->
+                                                  <!-- <td (click)="showHide($event)">
+                                                      <button class="btn btn-primary">click</button>
+                                                      <ng-container *ngIf="show">
+                                                          {{ item.notes }}
+                                                          {{ note }}
+                                                      </ng-container>
+                                                  </td> -->
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            <div>
                         </div>
                         </div>
-                        <p>coming soon</p>
-                        <!-- <div class="row table-responsive">
-                          <table class="table table-borderless">
-                              <thead>
-                                  <tr>
-                                      <th>Business Name</th>
-                                      <th>Site Status</th>
-                                      <th>Site Number</th>
-                                      <th>Address</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                    <td>Taylor residence</td>
-                                    <td>Active</td>
-                                    <td>1</td>
-                                    <td> 122 Main Street</td>
-                                    <td><button (click)="openDetails()">Click to detail</button> </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                      </div> -->
+                        
                     </div>
                 </div>
             </div>
@@ -142,3 +168,42 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Notes Modal -->
+<div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+               
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body" *ngFor="let item of contractNotes">
+                        <!-- <pre>{{ item.notes }}</pre> -->
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-borderless">
+                                <thead>
+                                    <tr>          
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>
+                                        <pre>{{ item.notes }}</pre>
+                                    </td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideServiceTicketNotesModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

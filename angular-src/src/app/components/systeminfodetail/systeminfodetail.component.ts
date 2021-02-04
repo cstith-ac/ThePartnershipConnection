@@ -11,6 +11,7 @@ import { RouteService } from '../../services/route.service';
 export class SysteminfodetailComponent implements OnInit {
   id;
   systemInfo: any={};
+  
   constructor(
     private route: ActivatedRoute,
     private routeService: RouteService) { 

@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PartnerInformationNewController : ControllerBase
+    public class CustomerContractInfoController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public PartnerInformationNewController(
+        public CustomerContractInfoController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -35,9 +35,9 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<Object> GetPartnerInformationNews()
+        public async Task<Object> GetCustomerContractInfos()
         {
-            var customers = new List<PartnerInformationNew>();
+            var customers = new List<CustomerContractInfo>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -47,21 +47,12 @@ namespace WebAPI.Controllers
                 var c = user.AfauserLink;
                 var getUserCode = await db.CustomerAccessList.FromSqlRaw("select * from dbo.CustomerAccessList where usercode = '" + c + "' and SlotNumber = 0").ToListAsync();
                 var customerID = new SqlParameter("@CustomerId", getUserCode[0].CustomerId);
-                var result = await db.GetPartnerInformationNews.FromSqlRaw("EXECUTE [dbo].[PartnerInformationNew] @CustomerID", customerID).ToListAsync();
-                List<PartnerInformationNew> Lst = result.Select(s => new PartnerInformationNew
+                var result = await db.GetCustomerContractInfos.FromSqlRaw("EXECUTE [dbo].[CustomerContractInfo] @CustomerID", customerID).ToListAsync();
+                List<CustomerContractInfo> Lst = result.Select(s => new CustomerContractInfo
                 {
-                    PartnerCode = s.PartnerCode,
-                    Address1 = s.Address1,
-                    Address2 = s.Address2,
-                    City = s.City,
-                    State = s.State,
-                    ZipCode = s.ZipCode,
-                    Phone1 = s.Phone1,
-                    Phone2 = s.Phone2,
-                    EMail = s.EMail,
-                    PartnerID = s.PartnerID,
-                    CustomerCareNote = s.CustomerCareNote,
-                    ServiceNote = s.ServiceNote
+                    SiteName = s.SiteName,
+                    Address = s.Address,
+                    Notes = s.Notes
                 }).ToList();
                 return Lst;
             }

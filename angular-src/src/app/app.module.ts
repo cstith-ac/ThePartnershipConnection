@@ -44,6 +44,7 @@ import { CurrentuserComponent } from './components/currentuser/currentuser.compo
 import { PartnerwindowComponent } from './components/partnerwindow/partnerwindow.component';
 import { ProfileeditComponent } from './components/profileedit/profileedit.component';
 import { CustomerratingbuttonComponent } from './components/customerratingbutton/customerratingbutton.component';
+import { CustomernotesdetailComponent } from './components/customernotesdetail/customernotesdetail.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { CustomerratingbuttonComponent } from './components/customerratingbutton
     CurrentuserComponent,
     PartnerwindowComponent,
     ProfileeditComponent,
-    CustomerratingbuttonComponent
+    CustomerratingbuttonComponent,
+    CustomernotesdetailComponent
   ],
   imports: [
     BrowserModule,

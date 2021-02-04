@@ -229,11 +229,40 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
       };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/CallSummaryNextSteps', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CallSummaryNextSteps', httpOptions);
     return this.http.get<any>(this.baseUrl + '/api/CallSummaryNextSteps', httpOptions);
   }
+
+  getCustomerContractInfo(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerContractInfo`, httpOptions);
+  }
+
+  getCustomerContractNotes(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerContractNotes`, httpOptions);
+  }
+
+  getCustomerContractNotesById(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+      };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerContractNotes/`+ id, httpOptions);
+  }
+
+  // getCustomerContractNotesById(id: number): Observable<any> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+  //     };
+  //   return this.http.get<any>(`${this.baseUrl}/api/CustomerContractNotes/`+ id, httpOptions);
+  // }
 
   postCallSummaryAdd(summaryAdd: SummaryAdd): Observable<SummaryAdd> {
     this.loadToken();

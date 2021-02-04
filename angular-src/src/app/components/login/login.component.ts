@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     //This works but isn't using authService
     this.authService.authenticateUser(user).subscribe(
       (res:any) => {
-        console.log(res)
+        //console.log(res)
         localStorage.setItem('token', res.token);
         localStorage.setItem('user',  JSON.stringify(res));
         this.flashMessage.show('You are now logged in', {
