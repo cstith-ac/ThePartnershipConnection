@@ -23,7 +23,7 @@ export class CallsummaryComponent implements OnInit {
   @ViewChild("ticketNumber") divView: ElementRef;
   
   authToken: any;
-  show: boolean = false;
+  show: boolean = true;
 
   callSummaryAddForm: FormGroup;
   submitted = false;
@@ -39,7 +39,6 @@ export class CallsummaryComponent implements OnInit {
   callSummaryNextSteps: NextSteps[];
   customerOnCall: '';
   customerCallBackPhone: '';
-  //phoneNumber = "^(\+\d{1,3}[- ]?)?\d{10}$";
   customerComments: '';
   resolutionNotes: '';
 
@@ -55,17 +54,6 @@ export class CallsummaryComponent implements OnInit {
 
   ngOnInit() {
     this.callSummaryAddForm = this.fb.group({
-      // SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
-      // site: '',
-      // SystemID: '',
-      // callSummaryClassList: '',
-      // ProblemID: '',
-      // ResolutionID: '',
-      // CallSummaryNextSteps: '',
-      // CustomerComments: '',
-      // TechNotes: '',
-      // CustomerOnCall: '',
-      // CustomerCallBackPhone: ''
       SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
       site: '',
       SystemID: ["", Validators.required],
@@ -103,13 +91,6 @@ export class CallsummaryComponent implements OnInit {
         this.site = res;
       }
     )
-
-    // this.routeService.getSiteToSystemList(id).subscribe(
-    //   res => {
-    //     //console.log(res)
-    //     this.siteToSystemList = res;
-    //   }
-    // )
 
     this.routeService.getCallSummaryClassList().subscribe(
       res => {
@@ -174,10 +155,6 @@ export class CallsummaryComponent implements OnInit {
     }
   }
 
-  // ngAfterViewInit() {
-  //   console.log(this.divView)
-  // }
-
   isIssueResolved(event){
     if(event.target.checked) {
       this.show = true;
@@ -192,11 +169,9 @@ export class CallsummaryComponent implements OnInit {
 
   changeSystem(val: any) {
     let id = val;
-    //console.log(id);
     //append id to get getCustomerToSiteList
     this.routeService.getSiteToSystemList(id).subscribe(
       res => {
-        //console.log(res);
         this.siteToSystemList = [].concat(res);
       }
     )
@@ -280,7 +255,7 @@ export class CallsummaryComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    //console.log('Valid?', form.valid); // true or false
+    console.log('Valid?', form.valid); // true or false
     console.log('SedonaUser', this.sedonaUser);
     console.log('SystemID', form.value.SystemID);
     //console.log('callSummaryClassList', form.value.callSummaryClassList);//not required
@@ -314,39 +289,13 @@ export class CallsummaryComponent implements OnInit {
       );
   }
 
+  formReset() {
+    this.callSummaryAddForm.reset();
+  }
+
   resetForm(form: FormGroup) {
     this.submitted = false;
     form.reset();
   }
-
-  
-
-  // isIssueResolved() {
-  //   //Get the checkbox
-  //   let checkBox = document.getElementById("isIssueResolved") as HTMLInputElement;
-  //   //Get the Resolution select
-  //   let resolution = document.getElementById("resolution");
-  //   //Get the Next Step select
-  //   let nextStep = document.getElementById("nextStep");
-  //   //Get Customer Comments text area
-  //   let customerComments = document.getElementById("custCommentsTextArea");
-  //   //Get Resolution Notes text area
-  //   let resolutionNotes = document.getElementById("resNotesTextArea");
-
-  //   //If the checkbox is checked, display the Resolution select. Otherwise, display Next Step select
-  //   if (checkBox.checked == true) {
-  //     //yes, the issue was resolved
-  //     resolution.style.display = "block";
-  //     nextStep.style.display = "none";
-  //     //customerComments.style.display = "none";
-  //     //resolutionNotes.style.display = "block";
-  //   } else {
-  //     //no, the issue was not resolved
-  //     resolution.style.display = "none";
-  //     nextStep.style.display = "block";
-  //     //customerComments.style.display = "block";
-  //     //resolutionNotes.style.display = "none";
-  //   }
-  // }
 
 }

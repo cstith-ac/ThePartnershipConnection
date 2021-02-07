@@ -43,7 +43,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
+    };
     return this.http.get<any>(this.baseUrl + '/api/CustomerCareDashboardInfo', httpOptions).pipe(
       catchError(this.errorHandler)
     )
@@ -59,11 +59,21 @@ export class RouteService {
     )
   }
 
+  getServiceTicketInfo2ById(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/ServiceTicketInfo2/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   getServiceTicketInfoById(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
+    };
     return this.http.get<any>(`${this.baseUrl}/api/ServiceTicketInfo/` + id, httpOptions).pipe(
       catchError(this.errorHandler)
     )
@@ -255,14 +265,6 @@ export class RouteService {
       };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerContractNotes/`+ id, httpOptions);
   }
-
-  // getCustomerContractNotesById(id: number): Observable<any> {
-  //   this.loadToken();
-  //   let httpOptions = { 
-  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
-  //     };
-  //   return this.http.get<any>(`${this.baseUrl}/api/CustomerContractNotes/`+ id, httpOptions);
-  // }
 
   postCallSummaryAdd(summaryAdd: SummaryAdd): Observable<SummaryAdd> {
     this.loadToken();

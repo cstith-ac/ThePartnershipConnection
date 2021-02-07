@@ -134,7 +134,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group btn-group">
                                                 <label>Was the issue resolved?</label>
-                                                <input type="checkbox" class="ml-1 mt-1" (change)="isIssueResolved($event)">
+                                                <input checked type="checkbox" class="ml-1 mt-1" (change)="isIssueResolved($event)">
                                             </div>
                                         </div>
                                     </div>
@@ -183,16 +183,25 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
-                                        <div class="col-md-12">
+                                        <!-- <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
+                                        </div> -->
+                                        <div class="col-md-6">
+                                            <h5>Ticket Number</h5>
+                                            <p class="text-danger" id="ticket-number" #ticketNumber></p>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
                                             <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
                                         </div>
                                     </div>
                                 </form>
+                                <button type="submit" class="btn float-right save-btn bg-danger text-white call-summary-reset" (click)="formReset()">Reset</button>
                                 <!-- Result -->
-                                <div id="ticketNumberResult" class="pt-4">
+                                <!-- <div id="ticketNumberResult" class="pt-4">
                                     <h5>Ticket Number</h5>
                                     <p id="ticket-number" #ticketNumber></p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

@@ -74,10 +74,8 @@ export class SysteminfoComponent implements OnInit {
     $(".modal-open").css("overflow","scroll")
     this.routeService.getCustomerContractNotes().subscribe(
       res => {
+        //console.log(res)
         this.contractNotes = res;
-        // let note = this.contractNotes.map(x => x.notes);
-        // let x = note.shift();
-        // this.note = x;
       }
     )
   }

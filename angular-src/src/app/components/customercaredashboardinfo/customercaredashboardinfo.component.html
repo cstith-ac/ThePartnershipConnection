@@ -143,21 +143,22 @@
         </div>
     </div>
 </div>
-<!-- Ticket Info Modal -->
+<!-- Service Info/Ticket Info Modal -->
 <div class="modal fade" id="ticketInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
-        <div class="modal-content" *ngFor="let item of serviceTicketInfo">
+        <div class="modal-content" *ngFor="let item of serviceTicketInfo2">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-3">
                     <h2 class="modal-title" id="exampleModalLabel">Ticket #{{ item.ticket_Number }}</h2>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
-                </div>
-                <div class="col-md-3">
+                </div> -->
+                <div class="col-md-5">
+                    <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
                     <h2 class="modal-title">By: {{ item.entered_By }}</h2>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <h2 class="modal-title">Ticket Status: {{ item.ticketStatus }}</h2>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -167,12 +168,18 @@
             <div class="modal-body pt-0">
                 <div class="card border-0">
                     <div class="card-body p-0" id="ticketInfoContent">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>Service performed by {{ item.service_Company_Code }}</p>    
-                            </div>
-                            
+                        <div class="row  pt-3">
                             <div class="col-md-3">
+                                <p>System: {{ item.alarmAccount }}</p>
+                            </div>
+                            <div class="col-md-5">
+                                <p>{{ item.system_Code }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p>System Status: {{ item.systemStatus }}</p>
+                            </div>
+                            <!-- <p>Service performed by {{ item.service_Company_Code }}</p>     -->        
+                            <!-- <div class="col-md-3">
                                 <p>{{ item.system_Code }}</p>
                             </div>
                             <div class="col-md-3">
@@ -183,12 +190,14 @@
                             </div>
                             <div class="col-md-3">
                                 <p>{{ item.systemStatus }}</p>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="list-style-type-none padding-left0">
                                     <p>Address: {{ item.addressLine }}</p>
+                                    <p>Requested by: {{ item.requested_By }}</p>
+                                    <p>Service performed by: {{ item.service_Company_Code }}</p>
                                     <p>Problem Code: {{ item.problem_Code }}</p>
                                     <p>Paid by AFA: ${{ item.afaPayment }}</p>
                                 </div>
@@ -225,7 +234,6 @@
                                 </div>
                             </div>
                         </div>
-                    <!-- <p>coming soon</p> -->
                     </div>
                 </div>
             </div>

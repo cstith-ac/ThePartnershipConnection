@@ -64,7 +64,8 @@
                         Serviced by <span id="serviceCompany">{{systemInfo.serviceCompany}}</span>
                     </p>
                     <p>
-                        <i class="ni ni-fat-add" id="add-icon-blue"></i>
+                        <!-- Last service ticket -->
+                        <a class="text-blue mx-auto mb-0" id="showLastServiceTicketModal" (click)="showLastServiceTicketModal()"><i class="ni ni-fat-add" id="add-icon-blue"></i></a>
                         <span id="lastServiceTicketOn">{{systemInfo.lastServiceTicketOn}}</span>
                     </p>
                 </div>
@@ -143,4 +144,182 @@
    
 </div>
 
-<!-- <button class="btn btn-large" >Back</button> -->
+<!-- Modal -->
+<div class="modal fade" id="lastServiceTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <!-- <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-3">
+                    <h2 class="modal-title" id="exampleModalLabel">content</h2>
+                </div>
+                
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card border-0">
+                    <div class="card-body p-0" id="ticketInfoContent">
+                        <div class="row  pt-3">
+                            <p>content</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="list-style-type-none padding-left0">
+                                    <p>content</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="list-style-type-none padding-left0">
+                                    <p>content</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Customer Comments</h3>
+                                <div class="afa-bg-tan note-padding">
+                                    <p>contnetn</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 pt-3 pb-3">
+                                <button class="btn btn-primary boc-btn ml-0" >
+                                    Notes
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Last Service Note</h3>
+                                <div class="afa-bg-tan note-padding">
+                                    <p>content</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div> -->
+        <div class="modal-content" *ngFor="let item of serviceTicketInfo2">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-3">
+                    <h2 class="modal-title" id="exampleModalLabel">Ticket #{{ item.ticket_Number }}</h2>
+                </div>
+                <div class="col-md-5">
+                    <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
+                    <h2 class="modal-title">By: {{ item.entered_By }}</h2>
+                </div>
+                <div class="col-md-4">
+                    <h2 class="modal-title">Ticket Status: {{ item.ticketStatus }}</h2>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card border-0">
+                    <div class="card-body p-0" id="ticketInfoContent">
+                        <div class="row  pt-3">
+                            <div class="col-md-3">
+                                <p>System: {{ item.alarmAccount }}</p>
+                            </div>
+                            <div class="col-md-5">
+                                <p>{{ item.system_Code }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p>System Status: {{ item.systemStatus }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="list-style-type-none padding-left0">
+                                    <p>Address: {{ item.addressLine }}</p>
+                                    <p>Requested by: {{ item.requested_By }}</p>
+                                    <p>Service performed by: {{ item.service_Company_Code }}</p>
+                                    <p>Problem Code: {{ item.problem_Code }}</p>
+                                    <p>Paid by AFA: ${{ item.afaPayment }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="list-style-type-none padding-left0">
+                                    <p>Resolution: {{ item.resolution_Code }}</p>
+                                    <p>Paid by Customer: {{ item.customerPayment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Customer Comments</h3>
+                                <div class="afa-bg-tan note-padding">
+                                    <p>{{ item.customerComments }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 pt-3 pb-3">
+                                <button class="btn btn-primary boc-btn ml-0" (click)="openServiceTicketNotesModal()">
+                                    Notes
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Last Service Note</h3>
+                                <div class="afa-bg-tan note-padding">
+                                    <p>{{ item.lastTicketNote }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Service Ticket Notes Modal -->
+<div class="modal fade" id="lastServiceTicketNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <p>Ticket Note</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Enter Date</th>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Entered By</th>
+                                        <th scope="col" id="fontSize-75rem" style="margin-bottom:0">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let item of serviceTicketNotes">
+                                    <td>{{ item.enterDate }}</td>
+                                    <td>{{ item.enteredBy }}</td>
+                                    <td>{{ item.notes }}</td>      
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideServiceTicketNotesModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
