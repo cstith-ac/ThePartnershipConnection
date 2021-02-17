@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpClientModule } from '@angular/common/http';
@@ -7,6 +8,8 @@ import { JwtModule } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { AuthGuard } from '../app/guards/auth.guard';
 import { NgxMaskModule } from 'ngx-mask';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { PhonePipe } from './_helpers/phone.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -78,13 +81,16 @@ import { CustomernotesdetailComponent } from './components/customernotesdetail/c
     PartnerwindowComponent,
     ProfileeditComponent,
     CustomerratingbuttonComponent,
-    CustomernotesdetailComponent
+    CustomernotesdetailComponent,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxSpinnerModule,
     FlashMessagesModule.forRoot(),
     NgxMaskModule.forRoot(),
     HttpClientModule,

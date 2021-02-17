@@ -1,4 +1,71 @@
-<form [formGroup]="updateProfileForm" (ngSubmit)="onSubmit(updateProfileForm)">
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card-header bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h3 class="mb-0">Edit {{ user.firstName }}'s profile information</h3>
+                    </div>
+                    <div class="col-4 text-right">
+                        <!-- <a href="#!" class="btn btn-sm btn-primary" disabled>Edit my settings</a> -->
+                        <button class="btn btn-primary boc-btn ml-0" disabled>
+                            <i class="fa fa-pencil pr-2"></i>Edit my settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <a routerlink="/profile" ng-reflect-router-link="/profile" href="/profile">
+                <button class="btn btn-primary mt-5 ml-4">Return to My Profile</button>
+            </a>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Edit</p>
+                    </div>
+                    <div class="col-md-12">
+                        <form [formGroup]="updateProfileForm" (ngSubmit)="onSubmit(updateProfileForm)">
+                            <input type="hidden" name="id" [value]="user.id" />
+                            <div class="form-group">
+                                <label>UserName</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="userName" />
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="email" />
+                            </div>
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="firstName" />
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control form-control-alternative" formControlName="lastName" />
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control form-control-alternative" formControlName="phoneNumber" />
+                            </div>
+                            <div class="form-group">
+                                <label>Cell Phone Number</label>
+                                <input type="tel" class="form-control form-control-alternative" formControlName="cellPhoneNumber1" />
+                            </div>
+                            <div class="form-group">
+                                <label>Alternate Email Address</label>
+                                <input type="email" class="form-control form-control-alternative" formControlName="altEmail" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary boc-btn ml-0"><i class="fa fa-pencil pr-2"></i>Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <form [formGroup]="updateProfileForm" (ngSubmit)="onSubmit(updateProfileForm)">
     <input type="hidden" name="id" [value]="user.id" />
     <div class="form-group">
         <label>UserName</label>
@@ -33,4 +100,4 @@
             <button type="submit" class="btn btn-sm btn-primary ml-5"><i class="fa fa-pencil pr-2"></i>Save</button>
         </div>
     </div>
-</form>
+</form> -->

@@ -99,7 +99,7 @@
                 <td>{{ item.contractExpiration }}</td>
                 <td>{{ item.contractExpirationMessage }}</td>
                 <td>{{ item.warranty }}</td>
-                <td>${{ item.rmrAmount }}</td>
+                <td>{{ item.rmrAmount | currency }}</td>
             </tbody>
         </table>
     </div>

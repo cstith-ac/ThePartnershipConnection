@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe } from '@angular/core';
 import { RouteService } from '../../services/route.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
 import { ServiceTicketInfo } from 'src/app/models/serviceticketinfo';
@@ -25,16 +26,22 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
   constructor(
     private routeService: RouteService,
+    private spinnerService: NgxSpinnerService,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.spinnerService.show();
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 2000)
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
         //console.log(res);
         this.dashboardinfo = res;
         this.lastServiceTicketId = this.dashboardinfo.map(x => x.lastServiceTicketID);
-        console.log(this.lastServiceTicketId);
+        //console.log(this.lastServiceTicketId);
+        //this.spinnerService.hide();
       },
       err => {
         console.log(err);
@@ -68,11 +75,11 @@ export class CustomercaredashboardinfoComponent implements OnInit {
   }
 
   openServiceTicketNotesModal() {
-    console.log("open service ticket notes")
+    //console.log("open service ticket notes")
     $("#serviceTicketNotesModal").modal("show");
     this.routeService.getServiceTicketNoteById(this.lastServiceTicketId).subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
         this.serviceTicketNotes = [].concat(res);
       }
     )

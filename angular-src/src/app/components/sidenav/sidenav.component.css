@@ -1,6 +1,10 @@
 body {
     overflow-x: hidden;
   }
+
+  .list-group-item {
+    border: 0px solid #e9ecef;
+  }
   
   #sidebar-wrapper {
     min-height: 100vh;
@@ -36,21 +40,6 @@ body {
   .logo {
     color: black;
   }
-  
-  @media (min-width: 768px) {
-    #sidebar-wrapper {
-      margin-left: 0;
-    }
-  
-    #page-content-wrapper {
-      min-width: 0;
-      width: 100%;
-    }
-  
-    #wrapper.toggled #sidebar-wrapper {
-      margin-left: -15rem;
-    }
-  }
 
   pre {
     font-family: 'Open Sans';
@@ -66,4 +55,19 @@ body {
 
   .table td {
     padding: 1rem 0 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    #sidebar-wrapper {
+      margin-left: 0;
+    }
+  
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100%;
+    }
+  
+    #wrapper.toggled #sidebar-wrapper {
+      margin-left: -15rem;
+    }
   }

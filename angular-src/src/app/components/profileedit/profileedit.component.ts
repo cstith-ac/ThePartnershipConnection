@@ -65,7 +65,9 @@ export class ProfileeditComponent implements OnInit {
     this.authService.updateUserProfile(this.updateProfileForm.value)
       .subscribe(
         result => {
+          confirm('Click OK to confirm form submission')
           console.log('success: ', result)
+          this.router.navigate(['profile'])
         },
         error => console.log('error: ', error)
       )

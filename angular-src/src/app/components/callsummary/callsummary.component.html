@@ -31,7 +31,8 @@
                             <div class="row mt-2 mb-2">
                                 <form [formGroup]="callSummaryAddForm" (ngSubmit)="onSubmit(callSummaryAddForm)">
                                     <div class="row mt-2 mb-2">
-                                        <!-- <div *ngIf="site?.length > 1"> This currently breaks the system selection because an ID cannot be fetched to append to the call
+                                        <!-- This currently breaks the system selection because an ID cannot be fetched to append to the call -->
+                                        <!-- <div *ngIf="site?.length > 1"> 
                                             <div class="col-md-6">
                                                 <div class="form-group btn-group" id="callTypeDropdown">
                                                     <label class="d-block call-summary-select">Site</label>

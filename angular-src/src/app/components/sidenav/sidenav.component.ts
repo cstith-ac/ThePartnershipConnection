@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //import * as $ from 'jquery';
 declare var $: any;
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -31,6 +32,7 @@ export class SidenavComponent implements OnInit {
 
   constructor(
     private currentUserService: UserService,
+    private spinnerService: NgxSpinnerService,
     public routeService: RouteService,
     public authService: AuthService,
     private router: Router,
@@ -39,7 +41,7 @@ export class SidenavComponent implements OnInit {
   ngOnInit() {
 
     this.currentUserService.getCurrentUser();
-    //console.log(this.currentUserService.getCurrentUser());
+    //console.log(this.currentUser$);
     
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
@@ -101,7 +103,10 @@ export class SidenavComponent implements OnInit {
 
   showPartnerWindowModal() {
     $("#partnerWindowModal").modal("show");
-    //console.log('load')
+    this.spinnerService.show();
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 2000)
 
     this.authService.getProfile().subscribe(
       res => {

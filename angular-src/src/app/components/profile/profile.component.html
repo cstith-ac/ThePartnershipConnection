@@ -7,7 +7,10 @@
                         <h3 class="mb-0">{{ user.firstName }}'s profile information</h3>
                     </div>
                     <div class="col-4 text-right">
-                        <a href="#!" class="btn btn-sm btn-primary">View my settings</a>
+                        <!-- <a href="#!" class="btn btn-sm btn-primary">View my settings</a> -->
+                        <button class="btn btn-primary boc-btn ml-0" disabled>
+                            <i class="fa fa-eye pr-2"></i>View my settings
+                        </button>
                     </div>
                 </div>
             </div>
@@ -39,7 +42,10 @@
                             <label class="form-control-label" for="input-email">Alternate Email Address</label>
                             <input type="text" id="input-name" class="form-control form-control-alternative" placeholder="{{ user.altEmail }}" readonly />
                         </div>
-                        <a class="btn btn-sm btn-primary ml-5" (click)="editUser(user.id)"> <i class="fa fa-pencil pr-2"></i>Update Profile</a>
+                        <!-- <a class="btn btn-sm btn-primary ml-5" (click)="editUser(user.id)"> <i class="fa fa-pencil pr-2"></i>Update Profile</a> -->
+                        <button class="btn btn-primary boc-btn ml-0" (click)="editUser(user.id)">
+                            <i class="fa fa-pencil pr-2"></i>Update Profile
+                        </button>
                     </div>
                     <!-- <div class="col-md-6">
                         <p>Edit</p>

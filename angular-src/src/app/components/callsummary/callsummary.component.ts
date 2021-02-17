@@ -172,7 +172,31 @@ export class CallsummaryComponent implements OnInit {
     //append id to get getCustomerToSiteList
     this.routeService.getSiteToSystemList(id).subscribe(
       res => {
-        this.siteToSystemList = [].concat(res);
+        //if dbo.SiteToSystemList returns a null value, insert 1 as default value
+        if(res === null) {
+          console.log(res)
+          fetch(`http://localhost:63052/api/SiteToSystemList/1`)
+            .then(res => {
+              console.log(res)
+            })
+          //no hard-coded values!
+          // this.routeService.getSiteToSystemList(1).subscribe(
+          //   res => {
+          //     console.log(res)
+          //     this.siteToSystemList = [].concat(res);
+
+          //     //this is reseting the variable id to 1
+          //     //this will not work!
+          //   }
+          // )
+          this.siteToSystemList = [].concat(res);
+          //this.siteToSystemList.map(x => x.customerSystemID = 1)
+        } else {
+          console.log(res)
+          this.siteToSystemList = [].concat(res);
+        }
+
+        //this.siteToSystemList = [].concat(res);
       }
     )
   }
@@ -255,7 +279,7 @@ export class CallsummaryComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    console.log('Valid?', form.valid); // true or false
+    //console.log('Valid?', form.valid); // true or false
     console.log('SedonaUser', this.sedonaUser);
     console.log('SystemID', form.value.SystemID);
     //console.log('callSummaryClassList', form.value.callSummaryClassList);//not required
@@ -269,28 +293,26 @@ export class CallsummaryComponent implements OnInit {
 
     this.submitted = true;
 
-    // if(this.callSummaryAddForm.invalid) {
-    //   return;
+    console.log(this.callSummaryAddForm.value);
+    // if(form.value.SystemID === null) {
+    //   this.siteToSystemList = 1
     // }
-
-    // alert(
-    //   "SUCCESS!! :-)\n\n" + JSON.stringify(this.callSummaryAddForm.value, null, 4)
-    // )
 
     this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
       .subscribe(
         result => {
+          confirm('Click ok to confirm form submission')
           this.resetForm(form);
-          console.log('success: ', result)
-          // alert("Ticket number: " + result + " was created.")
           this.divView.nativeElement.innerHTML = result;
         },
         error => console.log('error: ', error)
       );
   }
 
+  // Clear the ticket number from the UI 
   formReset() {
     this.callSummaryAddForm.reset();
+    this.divView.nativeElement.innerHTML = '';
   }
 
   resetForm(form: FormGroup) {

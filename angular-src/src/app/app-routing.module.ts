@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../app/guards/auth.guard';
+import { PreventloggedinaccessGuard } from '../app/guards/preventloggedinaccess.guard';
 import { CallsummaryComponent } from './components/callsummary/callsummary.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
 import { CallsummaryclasslistComponent } from './components/callsummaryclasslist/callsummaryclasslist.component';
@@ -39,7 +40,8 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [AuthGuard, PreventloggedinaccessGuard]
   },
   {
     path: 'dashboard',

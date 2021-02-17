@@ -1,0 +1,4 @@
+#suggestedTopics.list-group-item.prompt.checkbox + input[type=checkbox]:checked {
+    text-decoration: line-through;
+    color:red;
+}

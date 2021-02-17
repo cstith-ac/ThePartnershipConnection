@@ -39,11 +39,20 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       err => {
+        // alert(err)
         if(err.status === 400) {
           this.flashMessage.show('You entered the incorrect username or password', {
             cssClass: 'alert-danger',
             timeout: 5000
           });
+        }
+
+        if(err.status === 500) {
+          // this.flashMessage.show('There has been an error', {
+          //   cssClass: 'alert-danger',
+          //   timeout: 5000
+          // });
+          alert(err)
         }
       }
     )

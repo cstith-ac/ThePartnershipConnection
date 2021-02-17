@@ -273,46 +273,605 @@
         </div>
     </div>
 
+    <div class="card-body">
+        
+    </div>
     <div class="row">
         <div class="col-md-3">
             <ul class="list-group" *ngFor="let item of customeraccesslist">
-                <li class="list-group-item">{{ item.customerNumber }} &nbsp;&nbsp;&nbsp; {{ item.customerName }}</li>
+                <li class="list-group-item">
+                    <span>{{ item.customerNumber }} &nbsp;&nbsp;&nbsp; {{ item.customerName }}</span>
+                </li>
             </ul>
         </div>
-        <!-- <div class="col-md-9">
-            <ul class="list-group" *ngFor="let item of dashboardInfo">
+        <div class="col-md-9">
+            <ul class="list-group">
                 <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
-                </li>
-                <li class="list-group-item">
-                    <button class="btn btn-primary">Value</button>
+                    <span *ngFor="let item of dashboardInfo">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                    
+                        </ng-template>
+                    </span>
                 </li>
             </ul>
-        </div> -->
+            <!-- <span *ngFor="let item of dashboardInfo">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+            
+                </ng-template>
+            </span> -->
+            <!-- <br> -->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo1">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+        
+                        </ng-template>
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo2">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+        
+                        </ng-template>
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo3">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+        
+                        </ng-template>
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo4">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                        </ng-template>
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo5">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                            
+                        </ng-template>
+        
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo6">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                        
+                        </ng-template>
+        
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo7">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                            
+                        </ng-template>
+                    
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo8">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+        
+                        </ng-template>
+                        
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span *ngFor="let item of dashboardInfo9">
+                        <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                                <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                                <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                                <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                            <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                                <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                            </span>
+                        </span>
+                        <ng-template #elseBlock>
+                        </ng-template>
+                    </span>
+                </li>
+            </ul>
+            <!-- <span *ngFor="let item of dashboardInfo1">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+
+                </ng-template>
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo2">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+
+                </ng-template>
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo3">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+
+                </ng-template>
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo4">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+                </ng-template>
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo5">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+                    
+                </ng-template>
+
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo6">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+                
+                </ng-template>
+
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo7">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+                    
+                </ng-template>
+            
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo8">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+
+                </ng-template>
+                
+            </span> -->
+            <br>
+            <!-- <span *ngFor="let item of dashboardInfo9">
+                <span *ngIf="item.customerRatingValue === 0; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
+                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 1; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg1'">
+                        <span id="customerRating" [ngClass]="'ratingValueText1'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 2; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg2'">
+                        <span id="customerRating" [ngClass]="'ratingValueText2'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <span *ngIf="item.customerRatingValue === 3; else elseBlock">
+                    <span class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg3'">
+                        <span id="customerRating" [ngClass]="'ratingValueText3'">{{ item.customerRating }}</span>
+                    </span>
+                </span>
+                <ng-template #elseBlock>
+                </ng-template>
+            </span> -->
+            <br>
+            <!-- <ul class="list-group" *ngFor="let item of dashboardInfo">
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+                <li class="list-group-item">
+                    <button class="btn btn-primary">Value</button>
+                </li>
+            </ul> -->
+        </div>
     </div>
 
     <!-- <div class="table-responsive">

@@ -36,7 +36,9 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
       };
-    return this.http.get<any>(this.baseUrl + '/api/CustomerAccessList10', httpOptions);
+    return this.http.get<any>(this.baseUrl + '/api/CustomerAccessList10', httpOptions).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   getCustomerCareDashboardInfo(): Observable<any> {
@@ -290,6 +292,7 @@ export class RouteService {
     } else {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      //alert('Please contact an administrator')
     }
     console.log(errorMessage);
     return throwError(errorMessage);

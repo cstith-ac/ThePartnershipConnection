@@ -77,7 +77,7 @@
                         <span>Maintenance - <span id="maintenance">{{systemInfo.maintenance}}</span></span>
                     </p>
                     <p class="afa-text-blue text-right">
-                        $<span id="rmrValue">{{systemInfo.rmrValue}}</span>/Month RMR
+                        <span id="rmrValue">{{systemInfo.rmrValue | currency}}</span>/Month RMR
                     </p>
                     <p class="afa-text-blue text-right">
                         <span id="systemInfoBillFrequency">{{systemInfo.billFrequency}}</span>
@@ -208,11 +208,11 @@
                     <h2 class="modal-title" id="exampleModalLabel">Ticket #{{ item.ticket_Number }}</h2>
                 </div>
                 <div class="col-md-5">
-                    <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
-                    <h2 class="modal-title">By: {{ item.entered_By }}</h2>
+                    <p class="modal-title">Created On: {{ item.creationDate }}</p>
+                    <p class="modal-title">By: {{ item.entered_By }}</p>
                 </div>
                 <div class="col-md-4">
-                    <h2 class="modal-title">Ticket Status: {{ item.ticketStatus }}</h2>
+                    <p class="modal-title">Ticket Status: {{ item.ticketStatus }}</p>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -236,13 +236,13 @@
                             <div class="col-md-6">
                                 <div class="list-style-type-none padding-left0">
                                     <p>Address: {{ item.addressLine }}</p>
-                                    <p>Requested by: {{ item.requested_By }}</p>
+                                    <p>Requested by: {{ item.requested_By }} <span class="pl-3">{{ item.requested_By_Phone | phone }}</span> </p>
                                     <p>Service performed by: {{ item.service_Company_Code }}</p>
                                     <p>Problem Code: {{ item.problem_Code }}</p>
-                                    <p>Paid by AFA: ${{ item.afaPayment }}</p>
+                                    <p>Paid by AFA: {{ item.afaPayment | currency }}</p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" [style.display]="'flex'" [style.margin-top]="'auto'">
                                 <div class="list-style-type-none padding-left0">
                                     <p>Resolution: {{ item.resolution_Code }}</p>
                                     <p>Paid by Customer: {{ item.customerPayment }}</p>
@@ -259,7 +259,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 pt-3 pb-3">
-                                <button class="btn btn-primary boc-btn ml-0" (click)="openServiceTicketNotesModal()">
+                                <button class="btn btn-primary boc-btn ml-0 mb-0" (click)="openServiceTicketNotesModal()">
                                     Notes
                                 </button>
                             </div>

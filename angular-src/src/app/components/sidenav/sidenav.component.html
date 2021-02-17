@@ -5,12 +5,12 @@
       <div class="sidebar-heading">
         <div class="col-xs-6" id="afa-brand-padding-right">
           <img src="../../../assets/img/tpc_logo.jpg" id="afa-brand-logo">
-      </div>
-          <a [routerLink]="['/']" class="logo">The Partnership Connection</a>
+        </div>
+          <a [routerLink]="['#']" class="logo">The Partnership Connection</a>
       </div>
       <div class="list-group list-group-flush">
         <a [routerLink]="['/login']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Login</a>
-        <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Register</a>
+        <!-- <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Register</a> -->
         <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Recent Customers</a>
         <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Care View</a>
         <!-- <a [routerLink]="['/customer-access-list']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Customer Access List</a>
@@ -19,6 +19,12 @@
         <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Service View</a>
         <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Collections View</a>
         <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Admin</a>
+        <!-- <hr>
+        <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Register</a> -->
+      </div>
+      <hr>
+      <div class="list-group list-group-flush">
+        <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn()">Register</a>
       </div>
       <!-- <button class="btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button> -->
       <!-- <button class="btn-danger my-2 my-sm-0">Logout</button> -->
@@ -28,7 +34,7 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
   
-      <nav class="navbar navbar-expand-lg border-bottom">
+      <nav class="navbar navbar-expand-lg">
         <button class="btn btn-primary" id="menu-toggle">&#x2630;</button>
   
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
