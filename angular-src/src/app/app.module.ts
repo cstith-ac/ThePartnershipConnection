@@ -10,6 +10,7 @@ import { AuthGuard } from '../app/guards/auth.guard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PhonePipe } from './_helpers/phone.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +49,11 @@ import { PartnerwindowComponent } from './components/partnerwindow/partnerwindow
 import { ProfileeditComponent } from './components/profileedit/profileedit.component';
 import { CustomerratingbuttonComponent } from './components/customerratingbutton/customerratingbutton.component';
 import { CustomernotesdetailComponent } from './components/customernotesdetail/customernotesdetail.component';
+import { PartnerdashboardComponent } from './components/partnerdashboard/partnerdashboard.component';
+import { Customer3glistingComponent } from './components/customer3glisting/customer3glisting.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ServiceviewComponent } from './components/serviceview/serviceview.component';
+import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +88,12 @@ import { CustomernotesdetailComponent } from './components/customernotesdetail/c
     ProfileeditComponent,
     CustomerratingbuttonComponent,
     CustomernotesdetailComponent,
-    PhonePipe
+    PhonePipe,
+    PartnerdashboardComponent,
+    Customer3glistingComponent,
+    ForbiddenComponent,
+    ServiceviewComponent,
+    CollectionsviewComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +104,7 @@ import { CustomernotesdetailComponent } from './components/customernotesdetail/c
     NgxSpinnerModule,
     FlashMessagesModule.forRoot(),
     NgxMaskModule.forRoot(),
+    NgxPaginationModule,
     HttpClientModule,
     JwtModule.forRoot({
       config: {

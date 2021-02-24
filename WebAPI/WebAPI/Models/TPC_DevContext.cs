@@ -47,6 +47,7 @@ namespace WebAPI.Models
         public virtual DbSet<ServiceTicketNotes> GetServiceTicketNotes { get; set; }
         public virtual DbSet<CustomerContractNotes> GetCustomerContractNotes { get; set; }
         public virtual DbSet<CustomerContractInfo> GetCustomerContractInfos { get; set; }
+        public virtual DbSet<Customer3GListing> GetCustomer3GListings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -326,6 +327,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<CustomerContractInfo>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Customer3GListing>(entity =>
             {
                 entity.HasNoKey();
             });

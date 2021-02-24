@@ -31,6 +31,7 @@
     "libphonenumber-js": "^1.9.10",
     "ng-flash-messages": "^0.3.0",
     "ngx-mask": "^11.1.4",
+    "ngx-pagination": "^5.0.0",
     "ngx-spinner": "^10.0.1",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",

@@ -39,9 +39,7 @@ export class AuthService {
   registerUser(user): Observable<any> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }) 
-      };
-    //return this.http.post<any>('https://localhost:44314/api/ApplicationUser/Register', user, httpOptions);
-    // return this.http.post<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/Register', user, httpOptions);
+    };
     return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Register', user, httpOptions);
   }
 
@@ -62,7 +60,7 @@ export class AuthService {
     // console.log(headers)
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*','Authorization':'Bearer '+this.authToken }) 
-      };
+    };
     //return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
     // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/UserProfile', httpOptions);
     return this.http.get<any>(this.baseUrl + '/api/UserProfile', httpOptions);
@@ -114,7 +112,7 @@ export class AuthService {
     const user: any = JSON.parse(localStorage.getItem('user'));
     //console.log(user.username)
 
-    if(user.username === 'cstith@alarmfundingassociates.com') {
+    if(user.afaRole === 19) {
       console.log('this user IS a superadmin and is allowed to registered a user')
       return true;
     } else {
@@ -125,6 +123,35 @@ export class AuthService {
         cssClass: 'alert-danger',
         timeout: 3000
       });
+      return false;
+    }
+  }
+
+  isEmployee() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
+    if(user.afaRole === 9 || user.afaRole == 19) {
+      console.log('this is an employee');
+      return true;
+    } else {
+      console.log('this is NOT an employee')
+      return false;
+    }
+  }
+
+  isPartner() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+    if(user.afaRole === 5) {
+      console.log('this is a partner')
+      return true;
+    } else {
+      console.log('this is not a partner')
+      // this.flashMessage.show('You are not a partner', 
+      // {
+      //   cssClass: 'alert-danger',
+      //   timeout: 3000
+      // });
       return false;
     }
   }

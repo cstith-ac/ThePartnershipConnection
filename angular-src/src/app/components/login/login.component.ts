@@ -29,14 +29,29 @@ export class LoginComponent implements OnInit {
     //This works but isn't using authService
     this.authService.authenticateUser(user).subscribe(
       (res:any) => {
-        //console.log(res)
+        //console.log(res.afaRole)
         localStorage.setItem('token', res.token);
         localStorage.setItem('user',  JSON.stringify(res));
         this.flashMessage.show('You are now logged in', {
           cssClass: 'alert-success',
           timeout: 5000
         });
-        this.router.navigate(['/dashboard']);
+        if(res.afaRole === 5) {
+          console.log(res.afaRole)
+          this.router.navigate(['/partner-dashboard'])
+        } else if (res.afaRole === 19) {
+          this.router.navigate(['/dashboard'])
+        } else if (res.afaRole === 9) {
+          this.router.navigate(['/dashboard'])
+        }
+        // if(this.authService.isPartner()) {
+        //   //current hard-coded username: aprilm@palmettosecuritysystems.com
+        //   //current hard-coded partner password: partner123
+        //   this.router.navigate(['/partner-dashboard'])
+        // } else {
+        //   this.router.navigate(['/dashboard']);
+        // }
+        //this.router.navigate(['/dashboard']);
       },
       err => {
         // alert(err)

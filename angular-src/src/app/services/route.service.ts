@@ -51,15 +51,35 @@ export class RouteService {
     )
   }
 
+  getCustomer3GListing(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(this.baseUrl + '/api/Customer3GListing', httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   getCustomerCareDashboardInfoById(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
+    };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerCareDashboardInfo/` + id, httpOptions).pipe(
       catchError(this.errorHandler)
     )
   }
+
+  // getCustomer3GListing(id:string): Observable<any> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+  //   };
+  //   return this.http.get<any>(`${this.baseUrl}/api/Customer3GListing/` + id, httpOptions).pipe(
+  //     catchError(this.errorHandler)
+  //   )
+  // }
 
   getServiceTicketInfo2ById(id: number): Observable<any> {
     this.loadToken();

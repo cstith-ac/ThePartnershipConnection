@@ -26,6 +26,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/img/tpc_logo.jpg",
+              "src/assets/img/forbidden_stop_sign_clipart.jpg",
+              "src/assets/img/403_stop.png",
               "src/web.config"
             ],
             "styles": [

@@ -35,6 +35,14 @@ namespace WebAPI.Infrastructure.ApplicationUserClaims
                     new Claim("AfauserLink", user.AfauserLink)
                 });
             }
+
+            if (!string.IsNullOrEmpty(user.AFARole.ToString()))
+            {
+                ((ClaimsIdentity)principal.Identity).AddClaims(new[]
+                {
+                    new Claim("AFARole", user.AFARole.ToString())
+                });
+            }
             // You can add more properties that you want to expose on the User object below
 
             return principal;

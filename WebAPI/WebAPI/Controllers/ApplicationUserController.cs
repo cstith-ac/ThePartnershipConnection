@@ -67,6 +67,7 @@ namespace WebAPI.Controllers
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("UserID", user.Id.ToString()),
+                        new Claim("AFARole", user.AFARole.ToString()),
                         new Claim("AfauserLink", user.AfauserLink)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
@@ -84,6 +85,7 @@ namespace WebAPI.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     AfauserLink = user.AfauserLink,
+                    AFARole = user.AFARole,
                     Token = token
                 }); //these will return in a JSON object after successful login
             }

@@ -22,5 +22,5 @@ export class UserProfile {
     createdBy: string;
     creationDate: Date;
     afaemployee: number;
-    afarole: number;
+    afaRole: number;
 }

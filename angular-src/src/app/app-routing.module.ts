@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../app/guards/auth.guard';
-import { PreventloggedinaccessGuard } from '../app/guards/preventloggedinaccess.guard';
+import { RegistrationGuard } from '../app/guards/registration.guard';
+import { PartnerGuard } from '../app/guards/partner.guard';
+import { EmployeeGuard } from '../app/guards/employee.guard';
+
 import { CallsummaryComponent } from './components/callsummary/callsummary.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
 import { CallsummaryclasslistComponent } from './components/callsummaryclasslist/callsummaryclasslist.component';
@@ -19,6 +22,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PartnercontactlistComponent } from './components/partnercontactlist/partnercontactlist.component';
+import { PartnerdashboardComponent } from './components/partnerdashboard/partnerdashboard.component';
 import { PartnerinformationComponent } from './components/partnerinformation/partnerinformation.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileeditComponent } from './components/profileedit/profileedit.component';
@@ -28,6 +32,11 @@ import { SitetosystemlistComponent } from './components/sitetosystemlist/sitetos
 import { SuggestedtopicsComponent } from './components/suggestedtopics/suggestedtopics.component';
 import { SysteminfoComponent } from './components/systeminfo/systeminfo.component';
 import { SysteminfodetailComponent } from './components/systeminfodetail/systeminfodetail.component';
+import { Customer3glistingComponent } from './components/customer3glisting/customer3glisting.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ServiceviewComponent } from './components/serviceview/serviceview.component';
+import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
+//import { Customer3GListing } from './models/customer3glisting';
 
 const routes: Routes = [
   {
@@ -41,12 +50,17 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-    canActivate: [AuthGuard, PreventloggedinaccessGuard]
+    canActivate: [AuthGuard, RegistrationGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, EmployeeGuard]
+  },
+  {
+    path: 'partner-dashboard',
+    component: PartnerdashboardComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'profile',
@@ -151,12 +165,31 @@ const routes: Routes = [
   {
     path: 'recent-customers',
     component: RecentcustomersComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, EmployeeGuard]
   },
   {
     path: 'customer-note/:id',
     component: CustomernotesdetailComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'customer-3g-listing',
+    component: Customer3glistingComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'service-view',
+    component: ServiceviewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'collections-view',
+    component: CollectionsviewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent
   }
 ];
 
