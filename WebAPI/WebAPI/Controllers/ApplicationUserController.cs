@@ -39,7 +39,10 @@ namespace WebAPI.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                UserName = model.UserName
+                UserName = model.UserName,
+                AfauserLink = model.AfauserLink,
+                AfaRole = model.AfaRole,
+                AfaEmployee = model.AfaEmployee
             };
 
             try
@@ -67,7 +70,7 @@ namespace WebAPI.Controllers
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("UserID", user.Id.ToString()),
-                        new Claim("AFARole", user.AFARole.ToString()),
+                        new Claim("AfaRole", user.AfaRole.ToString()),
                         new Claim("AfauserLink", user.AfauserLink)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
@@ -85,7 +88,8 @@ namespace WebAPI.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     AfauserLink = user.AfauserLink,
-                    AFARole = user.AFARole,
+                    AfaRole = user.AfaRole,
+                    AfaEmployee = user.AfaEmployee,
                     Token = token
                 }); //these will return in a JSON object after successful login
             }

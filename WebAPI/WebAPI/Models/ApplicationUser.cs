@@ -41,9 +41,9 @@ namespace WebAPI.Models
 
         public DateTime CreationDate { get; set; }
 
-        public int AFAEmployee { get; set; }
+        public int AfaEmployee { get; set; }
 
-        public int AFARole { get; set; }
+        public int AfaRole { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]

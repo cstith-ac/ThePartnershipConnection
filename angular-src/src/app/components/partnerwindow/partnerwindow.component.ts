@@ -28,7 +28,14 @@ export class PartnerwindowComponent implements OnInit {
     if(this.authService.isPartner()) {
       setTimeout(() => {
         console.log(this.elementRef.nativeElement)
-        this.elementRef.nativeElement.style.display='none';
+        this.elementRef.nativeElement.style.display = 'none';
+      }, 1)
+    }
+
+    if(this.authService.isTestUser()) {
+      setTimeout(() => {
+        console.log(this.elementRef.nativeElement)
+        this.elementRef.nativeElement.style.display = 'none';
       }, 1)
     }
   }

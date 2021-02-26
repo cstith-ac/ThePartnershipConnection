@@ -17,20 +17,21 @@ export class CurrentuserComponent implements OnInit {
     private currentUserService: UserService) { }
 
   ngOnInit() {
-
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        //console.log(JSON.parse(localStorage.getItem('user')))
-        //console.log(JSON.parse(localStorage.getItem('user')).afauserLink)
       },
       err => {
         console.log(err);
       }
     )
-
-    // this.currentUserService.getCurrentUser();
-    // console.log(this.currentUserService.getCurrentUser());
   }
 
+  ngOnDestroy() {
+    console.log('destroyed')
+    //when the dashboard is removed, change the navlist
+    if(localStorage.getItem('token') === null) {
+      console.log('remove navlist')
+    }
+  }
 }

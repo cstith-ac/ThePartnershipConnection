@@ -1,0 +1,32 @@
+<!-- <ul *ngFor="let list of userRoleNav; let i = index">
+    <li>{{ list.partnerView }}</li>
+    <li>{{ list.recentCustomers }}</li>
+    <li>{{ list.customerCareView }}</li>
+    <li>{{ list.serviceView }}</li>
+    <li>{{ list.collectionsView }}</li>
+    <li>{{ list.admin }}</li>
+    <li>{{ list.register }}</li>
+</ul> -->
+<div *ngFor="let list of userRoleNav; let i = index">
+    <span>
+        <a href="#">{{list.partnerView}}</a>
+    </span>
+    <span>
+        <a href="#">{{list.recentCustomers}}</a>
+    </span>
+    <span>
+        <a href="#">{{list.customerCareView}}</a>
+    </span>
+    <span>
+        <a href="#">{{list.serviceView}}</a>
+    </span>
+    <span>
+        <a href="#">{{list.collectionsView}}</a>
+    </span>
+    <span>
+        <a href="#">{{list.admin}}</a>
+    </span>
+    <span>
+        <a href="">{{ list.register }}</a>
+    </span>
+</div>

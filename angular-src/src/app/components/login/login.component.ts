@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   password: String;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService) { }
 
@@ -37,12 +37,17 @@ export class LoginComponent implements OnInit {
           timeout: 5000
         });
         if(res.afaRole === 5) {
-          console.log(res.afaRole)
+          //console.log(res.afaRole)
           this.router.navigate(['/partner-dashboard'])
-        } else if (res.afaRole === 19) {
+        } else if (res.afaRole === 19 || res.afaRole === 14) {
           this.router.navigate(['/dashboard'])
+          //push the navlist to the sidenav component
+          //get the navlist component
         } else if (res.afaRole === 9) {
           this.router.navigate(['/dashboard'])
+        } else if (res.username === 'testuser@alarmfundingassociates.com') {
+          this.router.navigate(['/forbidden'])
+          //Jim wants this to go to an Under Construction page and not a 403 Access Denied Page
         }
         // if(this.authService.isPartner()) {
         //   //current hard-coded username: aprilm@palmettosecuritysystems.com

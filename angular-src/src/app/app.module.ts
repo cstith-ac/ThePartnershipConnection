@@ -7,10 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { AuthGuard } from '../app/guards/auth.guard';
+import { AdminGuard } from '../app/guards/admin.guard';
+import { EmployeeGuard } from '../app/guards/employee.guard';
+import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { PhonePipe } from './_helpers/phone.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { PhonePipe } from './_helpers/phone.pipe';
+
+import { ValidateService } from '../app/services/validate.service';
+import { AuthService } from '../app/services/auth.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,8 +27,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomeComponent } from './components/home/home.component';
 
-import { ValidateService } from '../app/services/validate.service';
-import { AuthService } from '../app/services/auth.service';
 //import { UserService } from './services/user.service';
 import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
 import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
@@ -54,6 +58,9 @@ import { Customer3glistingComponent } from './components/customer3glisting/custo
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ServiceviewComponent } from './components/serviceview/serviceview.component';
 import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavlistComponent } from './components/navlist/navlist.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +100,9 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
     Customer3glistingComponent,
     ForbiddenComponent,
     ServiceviewComponent,
-    CollectionsviewComponent
+    CollectionsviewComponent,
+    NavlistComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -112,9 +121,10 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
           return localStorage.getItem('token')
         }
       }
-    })
+    }),
+    NgbModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, RouteService],
+  providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

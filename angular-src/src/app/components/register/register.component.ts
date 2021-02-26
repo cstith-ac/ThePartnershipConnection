@@ -20,6 +20,45 @@ export class RegisterComponent implements OnInit {
   lastName: String;
   username: String;
   email: String;
+  afauserLink: String;
+  // afaRoles: [19,14,9,5,1];
+  afaRole = [
+    {
+      id: 19,
+      userTier: "Super Admin",
+      availablePermissions: ["Manage Admin"]
+    },
+    {
+      id: 14,
+      userTier: "Admin",
+      availablePermissions: ["Manage Employee", "Shadow Employee"]
+    },
+    {
+      id: 9,
+      userTier: "Employee",
+      availablePermissions: ["Manage Partner","Customer Care View", "Service View", "Collections View"]
+    },
+    {
+      id: 5,
+      userTier: "Partner",
+      availablePermissions: ["Manage Customer User", "Manage Partner (same base)", "Update Partner Contact Info", "View Aging (Base)", "View Cancels (Base)", "View Service Tickets (Base)", "Create Service Tickets (Base)", "View Incentives (Base)", "Create Incentives (Base)", "View 3G List (Base)"]
+    },
+    {
+      id: 1,
+      userTier: "Customer",
+      availablePermissions: ["Manage Customer User (same customer)", "View Invoice (account)", "View Service Tickets (account)", "Create Service Tickets (account)", "Pay Invoice (account)", "Update Contact Info (Account)"]
+    }
+  ];
+  afaEmployee = [
+    {
+      id: 1,
+      isAFAEmployee: "yes"
+    },
+    {
+      id: 2,
+      isAFAEmployee: "no"
+    }
+  ]
   password: String;
 
   constructor(
@@ -37,6 +76,9 @@ export class RegisterComponent implements OnInit {
         lastName: ["", Validators.required],
         username: ["", [Validators.required, Validators.email]],
         email: ["", [Validators.required, Validators.email]],
+        afauserLink: ["", Validators.required],
+        afaRole: ["", Validators.required],
+        afaEmployee: ["", Validators.required],
         password: ["", [Validators.required, Validators.minLength(6)]],
         confirmPassword: ["", Validators.required]
       },
@@ -64,6 +106,9 @@ export class RegisterComponent implements OnInit {
           lastName: this.lastName,
           email: this.email,
           username: this.username,
+          afauserLink: this.afauserLink,
+          afaRole: this.afaRole,
+          afaEmployee: this.afaEmployee,
           password: this.password
     }
 
@@ -72,7 +117,8 @@ export class RegisterComponent implements OnInit {
     this.authService.registerUser(this.registerForm.value).subscribe(data => {
         if(data.succeeded) {
           this.flashMessage.show('You are now registered and can log in', {cssClass:'alert-success', timeout: 3000});
-          this.router.navigate(['/login']);
+          this.onReset();
+          //this.router.navigate(['/login']);
         } else {
           this.flashMessage.show('Something went wrong', {cssClass:'alert-danger', timeout: 3000});
           this.router.navigate(['/register']);
@@ -89,45 +135,5 @@ export class RegisterComponent implements OnInit {
     this.submitted = false;
     this.registerForm.reset();
   }
-
-  // onRegisterSubmit() {
-  //   const user = {
-  //     //name: this.name,
-  //     firstName: this.firstName,
-  //     lastName: this.lastName,
-  //     email: this.email,
-  //     username: this.username,
-  //     password: this.password
-  //   }
-
-  //   //Required fields
-  //   if(!this.validateService.validateRegister(user)) {
-  //     this.flashMessage.show('Please fill in all fields', {cssClass:'alert-danger', timeout: 3000});
-  //     return false;
-  //   }
-
-  //   //Validate email
-  //   if(!this.validateService.validateEmail(user.email)) {
-  //     this.flashMessage.show('Please use a valid email', {cssClass:'alert-danger', timeout: 3000});
-  //     return false;
-  //   }
-
-  //   //Validate username
-  //   if(!this.validateService.validateEmail(user.username)) {
-  //     this.flashMessage.show('Please use a valid email for your username', {cssClass:'alert-danger', timeout: 3000});
-  //     return false;
-  //   }
-
-    //Register User
-    // this.authService.registerUser(user).subscribe(data => {
-    //   if(data.succeeded) {
-    //     this.flashMessage.show('You are now registered and can log in', {cssClass:'alert-success', timeout: 3000});
-    //     this.router.navigate(['/login']);
-    //   } else {
-    //     this.flashMessage.show('Something went wrong', {cssClass:'alert-danger', timeout: 3000});
-    //     this.router.navigate(['/register']);
-    //   }
-    // })
-  //}
 
 }

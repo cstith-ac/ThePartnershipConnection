@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 //import * as $ from 'jquery';
 declare var $: any;
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -19,6 +19,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent implements OnInit {
+  @ViewChild("userDropdown") userDropdown: ElementRef;
+
+  @Input() message: string;
+
   user:any=Object;
   partnerInformation: PInformation[];
   partnerInformationNew: PInformationNew[];
@@ -36,6 +40,7 @@ export class SidenavComponent implements OnInit {
     public routeService: RouteService,
     public authService: AuthService,
     private router: Router,
+    private elementRef: ElementRef,
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
@@ -80,6 +85,13 @@ export class SidenavComponent implements OnInit {
         $(target).show();
       });
     });
+
+    // if(this.authService.isTestUser()) {
+    //   setTimeout(() => {
+    //     console.log(this.elementRef.nativeElement)
+    //     $('.testUserHide').hide()
+    //   }, 1)
+    // }
 
   }
 

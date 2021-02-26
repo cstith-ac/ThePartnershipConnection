@@ -4,21 +4,24 @@
             <div class="card-header bg-white border-0">
                 <div class="row align-items-center">
                     <div class="col-md-12">
-                        <h3>Partner Dashboard</h3>
+                        <h3>Admin/SuperAdmin Dashboard</h3>
                     </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3>Directions</h3>
+                        <ul>
+                            <li>An admin or super admin can access this dashboard.</li>
+                        </ul>
+                        <!-- <h3>Directions</h3>
                         <ul class="list-group">
                           <li class="list-group-item">Click on the table</li>
                           <li class="list-group-item">Use your left arrow key to scroll left <i class="fas fa-arrow-left"></i></li>
                           <li class="list-group-item">Use your right arrow key to scroll right <i class="fas fa-arrow-right"></i></li>
                           <li class="list-group-item">Use your up arrow key to scroll up <i class="fas fa-arrow-up"></i></li>
                           <li class="list-group-item">Use your down arrow key to scroll down <i class="fas fa-arrow-down"></i></li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
                 
@@ -32,11 +35,11 @@
                       </div>
                       <div>
                         <div class="p-2 bd-highlight">
-                          <select (change)="onTableSizeChange($event)" class="custom-select">
+                          <!-- <select (change)="onTableSizeChange($event)" class="custom-select">
                             <option *ngFor="let size of tableSizes" [ngValue]="size">
                               {{ size }}
                             </option>
-                          </select>
+                          </select> -->
                         </div>
                       </div>
                       <div>
@@ -51,7 +54,8 @@
                       <table class="table">
                           <thead>
                             <tr>
-                              <th scope="col">Alarm Account</th>
+                                <th scope="col">Name</th>
+                              <!-- <th scope="col">Alarm Account</th>
                               <th scope="col">Customer Number</th>
                               <th scope="col">Customer Name</th>
                               <th scope="col">Customer Type</th>
@@ -75,11 +79,12 @@
                               <th scope="col">Offer 4</th>
                               <th scope="col">RMR at Customer</th>
                               <th scope="col">RMR at Site</th>
-                              <th scope="col">RMR at System</th>
+                              <th scope="col">RMR at System</th> -->
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of customer3glisting | paginate : {
+                              <tr>John Doe</tr>
+                            <!-- <tr *ngFor="let item of customer3glisting | paginate : {
                                       itemsPerPage: tableSize,
                                       currentPage: page,
                                       totalItems: count
@@ -110,17 +115,17 @@
                               <td>{{ item.rmrAtCustomer }}</td>
                               <td>{{ item.rmrAtSite }}</td>
                               <td>{{ item.rmrAtSystem }}</td>
-                            </tr>
+                            </tr> -->
                           </tbody>
                         </table>
                       
-                        <div class="d-flex justify-content-center">
+                        <!-- <div class="d-flex justify-content-center">
                           <pagination-controls  
                             previousLabel="Prev" 
                             nextLabel="Next" 
                             (pageChange)="onTableDataChange($event)">
                           </pagination-controls>
-                        </div>
+                        </div> -->
                     </div>
                   </div>
               </div>
@@ -129,6 +134,3 @@
     </div>
 </div>
 
-<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
-    <p style="color: white">Please Wait...</p>  
-</ngx-spinner>

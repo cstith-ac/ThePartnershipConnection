@@ -4,6 +4,7 @@ import { AuthGuard } from '../app/guards/auth.guard';
 import { RegistrationGuard } from '../app/guards/registration.guard';
 import { PartnerGuard } from '../app/guards/partner.guard';
 import { EmployeeGuard } from '../app/guards/employee.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 import { CallsummaryComponent } from './components/callsummary/callsummary.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
@@ -36,7 +37,7 @@ import { Customer3glistingComponent } from './components/customer3glisting/custo
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ServiceviewComponent } from './components/serviceview/serviceview.component';
 import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
-//import { Customer3GListing } from './models/customer3glisting';
+import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -190,6 +191,12 @@ const routes: Routes = [
   {
     path: 'forbidden',
     component: ForbiddenComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    // canDeactivate: [UnsavedchangesGuard]
   }
 ];
 

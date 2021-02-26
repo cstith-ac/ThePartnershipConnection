@@ -36,11 +36,19 @@ namespace WebAPI.Infrastructure.ApplicationUserClaims
                 });
             }
 
-            if (!string.IsNullOrEmpty(user.AFARole.ToString()))
+            if (!string.IsNullOrEmpty(user.AfaRole.ToString()))
             {
                 ((ClaimsIdentity)principal.Identity).AddClaims(new[]
                 {
-                    new Claim("AFARole", user.AFARole.ToString())
+                    new Claim("AfaRole", user.AfaRole.ToString())
+                });
+            }
+
+            if (!string.IsNullOrEmpty(user.AfaEmployee.ToString()))
+            {
+                ((ClaimsIdentity)principal.Identity).AddClaims(new[]
+                {
+                    new Claim("AfaEmployee", user.AfaEmployee.ToString())
                 });
             }
             // You can add more properties that you want to expose on the User object below

@@ -1,5 +1,6 @@
-import { Component, OnInit, Pipe } from '@angular/core';
+import { Component, OnInit, Pipe, ViewChild } from '@angular/core';
 import { RouteService } from '../../services/route.service';
+import { AuthService } from '../../services/auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
@@ -24,8 +25,16 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
   displayElement = false;
 
+  view = {
+    columnA: '3G to LTE upgrade options',
+    columnB: 'Expected cost to customer requirements',
+    dateRangeText:'date RangeText 🔥🔥',
+    data : 'data ⚡'
+  }
+
   constructor(
     private routeService: RouteService,
+    private authService: AuthService,
     private spinnerService: NgxSpinnerService,
     private router: Router
   ) { }
@@ -37,7 +46,6 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     }, 2000)
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
-        //console.log(res);
         this.dashboardinfo = res;
         this.lastServiceTicketId = this.dashboardinfo.map(x => x.lastServiceTicketID);
         //console.log(this.lastServiceTicketId);
@@ -49,37 +57,30 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     )
   }
 
+  // ngOnDestroy() {
+  //   console.log('destroyed')
+  //   if(localStorage.getItem('token') === null) {
+  //     console.log('remove navlist')
+  //   }
+  // }
+
   refreshDashboard() {
     window.location.reload();
   }
-
-  // getDimensionsByFilter(id) {
-  //   return this.dashboardinfo.filter(x => x.lastServiceTicketId === this.lastServiceTicketId);
-  // }
 
   showTicketInfoModal() {
     $("#ticketInfoModal").modal("show");
     this.routeService.getServiceTicketInfo2ById(this.lastServiceTicketId).subscribe(
       res => {
-        //console.log(res);
         this.serviceTicketInfo2 = [].concat(res);
       }
     )
-    // this.routeService.getServiceTicketInfoById(this.lastServiceTicketId).subscribe(
-    //   res => {
-    //     //console.log(res);
-    //     this.serviceTicketInfo = [].concat(res);
-    //     //console.log(this.serviceTicketInfo);
-    //   }
-    // )
   }
 
   openServiceTicketNotesModal() {
-    //console.log("open service ticket notes")
     $("#serviceTicketNotesModal").modal("show");
     this.routeService.getServiceTicketNoteById(this.lastServiceTicketId).subscribe(
       res => {
-        //console.log(res);
         this.serviceTicketNotes = [].concat(res);
       }
     )

@@ -59,12 +59,6 @@
                         <!-- There was an error. Please contact an administrator -->
                     </ng-template>
                     
-                    <!-- <div class="customer-rating" id="customerRatingBg" [ngClass]="'ratingValueBg0'">
-                        <span id="customerRating" [ngClass]="'ratingValueText0'">{{ item.customerRating }}</span>
-                    </div> -->
-                    <!-- <div class="customer-rating" #customerRatingBg>
-                        <span id="customerRating" #customerRating></span>
-                    </div> -->
                 </div>
                 <div class="col-sm-3">
                     <h3 class="rmr-text">$<span id="totalRMR">{{ item.totalRMR }}</span>/Month</h3>
@@ -73,6 +67,23 @@
                 </div>
                 <div class="col-sm-3">
                     <h3 id="guaranteeStatus" class="guarantee-status-text">{{ item.guaranteeStatus }}</h3>
+                    <!-- <h3 id="guaranteeStatus" class="guarantee-status-text" [ngbTooltip]="htmlContent">{{ item.guaranteeStatus }}</h3>
+                    <ng-template #htmlContent>
+                        <h4 [style.color]="'#fd5338'" >
+                            {{ view.columnA }}
+                        </h4>
+                        <span [style.display]="'block'">Lowest Cost Upgrade with Basic Interactive-Alula BAT Connect​ ​</span>
+                        <span [style.display]="'block'">(like for like) Existing manufacturer cell upgrade to LTE </span>
+                        <span [style.display]="'block'">Alula BAT Connect  with Slim-Line Touchpad</span>
+                        <span [style.display]="'block'">Qolsys Interactive​ complete system upgrade</span>
+                        <h4 [style.color]="'#fd5338'">
+                            {{ view.columnB }}
+                        </h4>
+                        <span [style.display]="'block'">$99 customer payment and/or an RMR increase of a minimum of $5.00 a month RMR. </span>
+                        <span [style.display]="'block'">$99 customer payment and/or an RMR increase of a minimum of $5.00 a month RMR. </span>
+                        <span [style.display]="'block'">$199-to-$399 customer payment and an RMR increase of $10.00 to $15.00 a month RMR.</span>
+                        <span [style.display]="'block'">This option will justify a substantial upfront payment and increase in RMR to cover installation costs & new services.</span>
+                      </ng-template> -->
                 </div>
                 <div class="col-sm-3">
                     <!-- <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">

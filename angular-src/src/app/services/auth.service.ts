@@ -30,12 +30,6 @@ export class AuthService {
     private flashMessage: FlashMessagesService
     ) { }
 
-  // registerUser(user) {
-  //   let headers = new Headers();
-  //   headers.append('Content-Type','application/json');
-  //   return this.http.post('http://localhost:3000/users/register', user, {headers: headers})
-  //     .map(res => res.json());
-  // }
   registerUser(user): Observable<any> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }) 
@@ -54,15 +48,9 @@ export class AuthService {
 
   getProfile(): Observable<any> {
     this.loadToken();
-    // let headers = new HttpHeaders({
-    //   'Content-Type': 'application/json','Authorization':this.authToken
-    // })
-    // console.log(headers)
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*','Authorization':'Bearer '+this.authToken }) 
     };
-    //return this.http.get<any>('https://localhost:44314/api/UserProfile', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/UserProfile', httpOptions);
     return this.http.get<any>(this.baseUrl + '/api/UserProfile', httpOptions);
   }
 
@@ -70,19 +58,8 @@ export class AuthService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
       };
-    //return this.http.put<any>('https://localhost:44314/api/ApplicationUser/UserProfile', user, httpOptions);
-    // return this.http.put<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/ApplicationUser/UserProfile', user, httpOptions);
-    // return this.http.put<UserProfile>(this.baseUrl + '/api/ApplicationUser/UserProfile', user, httpOptions);
     return this.http.put<UserProfile>(`${this.baseUrl}/api/UserProfile/${user.id}`, user, httpOptions);
   }
-
-  // getProfile(){
-  //   let headers = new HttpHeaders();
-  //   this.loadToken();
-  //   headers.append('Authorization', this.authToken);
-  //   headers.append('Content-Type', 'application/json');
-  //   return this.http.get('https://localhost:44314/api/UserProfile',{headers: headers});
-  // }
 
   //not working. token and user are set from login component
   storeUserData(res, token) {
@@ -113,11 +90,8 @@ export class AuthService {
     //console.log(user.username)
 
     if(user.afaRole === 19) {
-      console.log('this user IS a superadmin and is allowed to registered a user')
       return true;
     } else {
-      console.log('this user IS NOT a superadmin and is allowed to registered a user')
-      //alert('You do not have authorization to register a user')
       this.flashMessage.show('You do not have authorization to register a user', 
       {
         cssClass: 'alert-danger',
@@ -127,31 +101,60 @@ export class AuthService {
     }
   }
 
-  isEmployee() {
+  isSuperAdmin() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
-    if(user.afaRole === 9 || user.afaRole == 19) {
-      console.log('this is an employee');
+    //Super Admin = 19
+    if(user.afaRole == 19) {
       return true;
     } else {
-      console.log('this is NOT an employee')
+      return false;
+    }
+  }
+
+  isAdmin() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    //Admin = 14
+    if(user.afaRole === 14) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isAdminOrSuperAdmin() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    //Admin = 14, Super Admin = 19
+    if(user.afaRole === 14 || user.afaRole === 19) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isEmployee() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    //Employee = 9, Super Admin = 19, Admin = 14
+    if(user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14) {
+      return true;
+    } else {
       return false;
     }
   }
 
   isPartner() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    console.log(user)
     if(user.afaRole === 5) {
-      console.log('this is a partner')
       return true;
     } else {
-      console.log('this is not a partner')
-      // this.flashMessage.show('You are not a partner', 
-      // {
-      //   cssClass: 'alert-danger',
-      //   timeout: 3000
-      // });
+      return false;
+    }
+  }
+
+  isTestUser() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    if(user.username === 'testuser@alarmfundingassociates.com') {
+      return true;
+    } else {
       return false;
     }
   }

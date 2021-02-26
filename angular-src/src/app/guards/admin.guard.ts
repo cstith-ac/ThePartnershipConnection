@@ -6,11 +6,11 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RegistrationGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      if(this.authService.isAuthorizedToRegister())
+      if(this.authService.isAdminOrSuperAdmin())
       return true;
       else
       this.router.navigate(['/forbidden']);

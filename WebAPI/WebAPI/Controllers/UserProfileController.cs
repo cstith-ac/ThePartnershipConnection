@@ -42,7 +42,9 @@ namespace WebAPI.Controllers
                 user.PhoneNumber,
                 user.AltEmail,
                 user.CellPhoneNumber1,
-                user.AfauserLink
+                user.AfauserLink,
+                user.AfaEmployee,
+                user.AfaRole
             };
         }
 

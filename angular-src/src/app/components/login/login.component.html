@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" *ngIf="!authService.loggedIn(); else showAlreadyLoggedIn">
         <div class="col-lg-5 col-md-7">
             <div class="card bg-secondary shadow border-0 mt-5">
                 <div class="card-body px-lg-5 py-lg-5">
@@ -35,28 +35,7 @@
             </div>
         </div>
     </div>
-    <!-- <div class="flashMessage">
-        <flash-messages></flash-messages>
-    </div>
-    <h2 class="page-header">Customer Care Dashboard</h2>
-    <form (submit)="onLoginSubmit()">
-        <div class="form-group">
-            <div class="input-group input-group-alternative">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                </div>
-                <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Email">
-            </div>
-            
-        </div>
-        <div class="form-group">
-            <div class="input-group input-group-alternative">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                </div>
-                <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Password">
-            </div>
-        </div>
-        <input type="submit" value="Sign in" class="btn btn-primary">
-    </form> -->
+    <ng-template #showAlreadyLoggedIn>
+        <p>You are already logged in</p>
+    </ng-template>
 </div>

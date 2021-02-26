@@ -46,6 +46,11 @@ export class ProfileComponent implements OnInit {
         console.log(err);
       }
     )
+
+    // if(this.authService.isTestUser) {
+    //   this.router.navigate(['/forbidden'])
+    //   debugger
+    // }
   }
 
   get f() {
@@ -63,6 +68,10 @@ export class ProfileComponent implements OnInit {
 
   editUser(id:number) {
     this.router.navigate(['profile-edit/'+ id])
+  }
+
+  openSettingsModal() {
+    console.log('open settings modal')
   }
 
 }
