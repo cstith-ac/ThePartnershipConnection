@@ -1,9 +1,20 @@
-<div class="jumbotron text-center  ml-5 mr-5 mt-3">
+<!-- <div class="jumbotron text-center  ml-5 mr-5 mt-3">
     <h1>The Partnership Connection</h1>
-    <!-- <div *ngIf="authService.loggedIn()">
-        <a [routerLink]="['/login']" routerLinkActive="router-link-active"  class="btn btn-primary">Login</a>
-    </div> -->
     <div *ngIf="authService.loggedIn()">
         You are already logged in
+    </div>
+</div> -->
+<div class="home-container">
+    <div class="text-center">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <header class="masthead mb-auto"></header>
+            <main role="main" class="inner cover">
+                <h1 class="cover-heading">The Partnership Connection</h1>
+                <p class="lead" *ngIf="authService.loggedIn()">You are already logged in.</p>
+                <p class="lead">
+                  <a [routerLink]="['/login']" class="btn btn-lg btn-secondary">Log In</a>
+                </p>
+              </main>
+        </div>
     </div>
 </div>

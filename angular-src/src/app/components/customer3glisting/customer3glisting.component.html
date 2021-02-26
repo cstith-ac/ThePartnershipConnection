@@ -11,14 +11,22 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3>Directions</h3>
-                        <ul class="list-group">
-                          <li class="list-group-item">Click on the table</li>
-                          <li class="list-group-item">Use your left arrow key to scroll left <i class="fas fa-arrow-left"></i></li>
-                          <li class="list-group-item">Use your right arrow key to scroll right <i class="fas fa-arrow-right"></i></li>
-                          <li class="list-group-item">Use your up arrow key to scroll up <i class="fas fa-arrow-up"></i></li>
-                          <li class="list-group-item">Use your down arrow key to scroll down <i class="fas fa-arrow-down"></i></li>
-                        </ul>
+
+                        <label class="switch">
+                          <input type="checkbox" (click)="toggleShow()">
+                          <span class="slider round"></span>
+                        </label>
+                        <!-- <h3 (click)="toggleShow()"><i class="ni ni-ui-04 pr-2 align-middle"></i>Toggle Directions Show/Hide</h3> -->
+              
+                        <div *ngIf="isShown" class="row container-fluid"  id="divshow" >
+                          <ul class="list-group">
+                            <li class="list-group-item">Click on the table</li>
+                            <li class="list-group-item">Use your left arrow key to scroll left <i class="fas fa-arrow-left"></i></li>
+                            <li class="list-group-item">Use your right arrow key to scroll right <i class="fas fa-arrow-right"></i></li>
+                            <li class="list-group-item">Use your up arrow key to scroll up <i class="fas fa-arrow-up"></i></li>
+                            <li class="list-group-item">Use your down arrow key to scroll down <i class="fas fa-arrow-down"></i></li>
+                          </ul>
+                        </div>
                     </div>
                 </div>
                 
@@ -39,10 +47,11 @@
                           </select>
                         </div>
                       </div>
-                      <div>
-                        <div class="p-2 bd-highlight">
+                      <div class="mt-2">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <!-- <div class="p-2 bd-highlight">
                           <input type="text" placeholder="Search">
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     

@@ -61,6 +61,7 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { AdminComponent } from './components/admin/admin.component';
     ServiceviewComponent,
     CollectionsviewComponent,
     NavlistComponent,
-    AdminComponent
+    AdminComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class Customer3glistingComponent implements OnInit {
   customer3glisting: Customer3GListing[];
 
+  isShown: boolean = true ; // show by default
+
   page = 1;
   count = 0;
   tableSize = 5;
@@ -54,5 +56,11 @@ export class Customer3glistingComponent implements OnInit {
     //this.load3GList();
     this.spinnerService.hide();
   }
+
+  toggleShow() {
+
+    this.isShown = !this.isShown;
+    
+    }
 
 }

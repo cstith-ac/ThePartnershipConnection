@@ -38,6 +38,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ServiceviewComponent } from './components/serviceview/serviceview.component';
 import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 
 const routes: Routes = [
   {
@@ -197,6 +198,10 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard, AdminGuard],
     // canDeactivate: [UnsavedchangesGuard]
+  },
+  {
+    path: '**',
+    component: PagenotfoundComponent //404 Not Found -> PageNotFound
   }
 ];
 

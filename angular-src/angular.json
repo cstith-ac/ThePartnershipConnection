@@ -26,8 +26,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/img/tpc_logo.jpg",
+              "src/assets/img/alarmConnections_Logo.png",
               "src/assets/img/forbidden_stop_sign_clipart.jpg",
               "src/assets/img/403_stop.png",
+              "src/assets/img/iconfinder_7-Computer-Sad_2672789.png",
+              "src/assets/img/iconfinder_7-Computer-Sad_2672789.svg",
+              "src/assets/img/sad404.svg",
               "src/web.config"
             ],
             "styles": [
