@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-customer3glisting',
@@ -17,6 +18,8 @@ export class Customer3glistingComponent implements OnInit {
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
+
+  fileName = 'customer3glisting.xlsx';
 
   constructor(
     private spinnerService: NgxSpinnerService,
@@ -58,9 +61,18 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   toggleShow() {
-
     this.isShown = !this.isShown;
-    
-    }
+  }
 
+  exportExcel() {
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+ 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ 
+    /* save to file */  
+    XLSX.writeFile(wb, this.fileName);
+  }
 }
