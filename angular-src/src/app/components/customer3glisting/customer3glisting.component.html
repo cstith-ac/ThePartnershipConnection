@@ -48,11 +48,10 @@
                         </div>
                       </div>
                       <div class="mt-2">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control" placeholder="Search by Zip Code" [(ngModel)]="zipCodeFilter.zipCode">
                       </div>
                     </div>
                     
-                      
                     <div class="table-responsive">
                       <table class="table" id="excel-table">
                           <thead>
@@ -85,12 +84,18 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of customer3glisting | paginate : {
+                            <!-- <tr *ngFor="let item of customer3glisting | paginate : {
                                       itemsPerPage: tableSize,
                                       currentPage: page,
                                       totalItems: count
-                                    };
-                              ">
+                                    } | filter: 'zipCode':'29081';
+                              "> -->
+                              <tr *ngFor="let item of customer3glisting | paginate : {
+                                itemsPerPage: tableSize,
+                                currentPage: page,
+                                totalItems: count
+                              } | filterBy: zipCodeFilter;
+                        ">
                               <th scope="row">{{item.alarm_Account}}</th>
                               <td>{{ item.customer_Number }}</td>
                               <td>{{ item.customer_Name }}</td>

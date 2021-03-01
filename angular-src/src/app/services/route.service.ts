@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
@@ -58,6 +58,13 @@ export class RouteService {
     };
     return this.http.get<any>(this.baseUrl + '/api/Customer3GListing', httpOptions).pipe(
       catchError(this.errorHandler)
+      // map((data: any[]) => {
+      //   data.map(
+      //     (item:any) => {
+      //       console.log(item)
+      //     }
+      //   )
+      // })
     )
   }
 

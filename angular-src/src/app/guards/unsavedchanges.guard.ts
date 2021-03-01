@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CallsummaryComponent } from '../components/callsummary/callsummary.component';
+import { HostListener } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'

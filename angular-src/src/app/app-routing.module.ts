@@ -5,6 +5,7 @@ import { RegistrationGuard } from '../app/guards/registration.guard';
 import { PartnerGuard } from '../app/guards/partner.guard';
 import { EmployeeGuard } from '../app/guards/employee.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
 
 import { CallsummaryComponent } from './components/callsummary/callsummary.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
@@ -177,7 +178,8 @@ const routes: Routes = [
   {
     path: 'customer-3g-listing',
     component: Customer3glistingComponent,
-    canActivate: [AuthGuard, PartnerGuard]
+    canActivate: [AuthGuard, PartnerGuard],
+    //canDeactivate: [UnsavedchangesGuard]
   },
   {
     path: 'service-view',

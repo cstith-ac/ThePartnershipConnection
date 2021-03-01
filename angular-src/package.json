@@ -32,6 +32,7 @@
     "jquery-ui-dist": "^1.12.1",
     "libphonenumber-js": "^1.9.10",
     "ng-flash-messages": "^0.3.0",
+    "ngx-filter-pipe": "^2.1.2",
     "ngx-mask": "^11.1.4",
     "ngx-pagination": "^5.0.0",
     "ngx-spinner": "^10.0.1",

@@ -14,7 +14,9 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 import { PhonePipe } from './_helpers/phone.pipe';
+import { SortPipe } from './_helpers/sort.pipe';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
@@ -28,7 +30,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomeComponent } from './components/home/home.component';
 
-//import { UserService } from './services/user.service';
 import { CustomeraccesslistComponent } from './components/customeraccesslist/customeraccesslist.component';
 import { CustomercaredashboardinfoComponent } from './components/customercaredashboardinfo/customercaredashboardinfo.component';
 import { CustomersysteminfoComponent } from './components/customersysteminfo/customersysteminfo.component';
@@ -96,7 +97,6 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
     ProfileeditComponent,
     CustomerratingbuttonComponent,
     CustomernotesdetailComponent,
-    PhonePipe,
     PartnerdashboardComponent,
     Customer3glistingComponent,
     ForbiddenComponent,
@@ -104,9 +104,12 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
     CollectionsviewComponent,
     NavlistComponent,
     AdminComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    PhonePipe,
+    SortPipe
   ],
   imports: [
+    FilterPipeModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

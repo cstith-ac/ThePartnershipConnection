@@ -3,6 +3,8 @@ import { RouteService } from '../../services/route.service';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
+//import { FilterPipe } from 'src/app/_helpers/filter.pipe';
+import { FilterPipe } from 'ngx-filter-pipe';
 
 @Component({
   selector: 'app-customer3glisting',
@@ -16,15 +18,18 @@ export class Customer3glistingComponent implements OnInit {
 
   page = 1;
   count = 0;
-  tableSize = 5;
-  tableSizes = [5,10,15,25,50,100,150,200];
+  tableSize = 10;
+  tableSizes = [10,15,25,50,100,150,200];
 
   fileName = 'customer3glisting.xlsx';
 
+  zipCodeFilter: any = { zipCode: '' };
+
   constructor(
     private spinnerService: NgxSpinnerService,
-    private routeService: RouteService
-  ) { }
+    private routeService: RouteService,
+    private filterPipe: FilterPipe
+  ) { console.log(filterPipe.transform(this.customer3glisting, { zipCode: '29081'})) }
 
   ngOnInit() {
     this.spinnerService.show();
