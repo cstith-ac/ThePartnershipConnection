@@ -13,6 +13,7 @@ import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PhonePipe } from './_helpers/phone.pipe';
 
 import { ValidateService } from '../app/services/validate.service';
@@ -58,7 +59,6 @@ import { Customer3glistingComponent } from './components/customer3glisting/custo
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ServiceviewComponent } from './components/serviceview/serviceview.component';
 import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';

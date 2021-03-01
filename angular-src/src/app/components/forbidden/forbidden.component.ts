@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-forbidden',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ForbiddenComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _location: Location) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+  }
+
+  backToPrevPage() {
+    this._location.back();
   }
 
 }

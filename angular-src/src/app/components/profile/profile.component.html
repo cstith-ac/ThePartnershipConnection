@@ -7,10 +7,27 @@
                         <h3 class="mb-0">{{ user.firstName }}'s profile information</h3>
                     </div>
                     <div class="col-4 text-right">
-                        <!-- <a href="#!" class="btn btn-sm btn-primary">View my settings</a> -->
-                        <button class="btn btn-primary boc-btn ml-0" (click)="openSettingsModal()" disabled>
+                        <!-- <button class="btn btn-primary boc-btn ml-0" (click)="openSettingsModal()" disabled>
                             <i class="ni ni-ui-04 pr-2 align-middle"></i>Settings
-                        </button>
+                        </button> -->
+                        <ng-template #content let-modal>
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="modal-basic-title">Settings</h4>
+                              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                <ul *ngFor="let setting of afaUserSettings">
+                                    <li>{{ setting.availablePermissions }}</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+                            </div>
+                          </ng-template>
+                          
+                          <button class="btn btn-lg btn-outline-primary" (click)="openSettingsModal(content)" disabled><i class="fas fa-cog mr-2"></i>Settings</button>
                     </div>
                 </div>
             </div>

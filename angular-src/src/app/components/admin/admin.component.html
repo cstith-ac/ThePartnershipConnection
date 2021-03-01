@@ -11,8 +11,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <ul>
-                            <li>An admin or super admin can access this dashboard.</li>
+                        <ul class="list-group">
+                            <li class="list-group-item">An admin or super admin can access this dashboard.</li>
                         </ul>
                         <!-- <h3>Directions</h3>
                         <ul class="list-group">
@@ -42,10 +42,8 @@
                           </select> -->
                         </div>
                       </div>
-                      <div>
-                        <div class="p-2 bd-highlight">
-                          <input type="text" placeholder="Search">
-                        </div>
+                      <div class="mt-2">
+                        <input type="text" class="form-control" placeholder="Search">
                       </div>
                     </div>
                     
@@ -54,7 +52,8 @@
                       <table class="table">
                           <thead>
                             <tr>
-                                <th scope="col">Name</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
                               <!-- <th scope="col">Alarm Account</th>
                               <th scope="col">Customer Number</th>
                               <th scope="col">Customer Name</th>
@@ -83,7 +82,8 @@
                             </tr>
                           </thead>
                           <tbody>
-                              <tr>John Doe</tr>
+                              <td>John</td>
+                              <td>Doe</td>
                             <!-- <tr *ngFor="let item of customer3glisting | paginate : {
                                       itemsPerPage: tableSize,
                                       currentPage: page,

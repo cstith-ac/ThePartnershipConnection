@@ -15,11 +15,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card-content">
-                        <h2 class="card-title" [style.color]="'#039be5'">404 - PAGE NOT FOUND</h2>
-                        <p [style.color]="'#039be5'">Hmm.</p>
-                        <p [style.color]="'#039be5'">It seems that you're lost in a perpetual black hole. Let us help guide you out and get you back home</p>
-                        <button class="btn btn-primary">Back</button>
-                        <button class="btn btn-primary">Home</button>
+                        <h2 class="card-title" [style.color]="'#039be5'" [style.font-size]="'3.1rem'">404 - PAGE NOT FOUND</h2>
+                        <p [style.font-size]="'2rem'">Hmm.</p>
+                        <p [style.font-size]="'2rem'">It seems that you're lost in a perpetual black hole. Let us help guide you out and get you back home</p>
+                        <button class="btn btn-primary" (click)="backToPrevPage()">Back</button>
+                        <button class="btn btn-primary" disabled>Home</button>
                     </div>
                 </div>
             </div>

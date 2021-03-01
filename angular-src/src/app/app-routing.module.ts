@@ -191,7 +191,7 @@ const routes: Routes = [
   },
   {
     path: 'forbidden',
-    component: ForbiddenComponent
+    component: ForbiddenComponent //403 Forbidden -> Forbidden
   },
   {
     path: 'admin',
