@@ -29,7 +29,11 @@ export class Customer3glistingComponent implements OnInit {
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     private filterPipe: FilterPipe
-  ) { console.log(filterPipe.transform(this.customer3glisting, { zipCode: '29081'})) }
+  ) { 
+    console.log(filterPipe.transform(
+      this.customer3glisting, { zipCode: '29081' }
+    )) 
+    }
 
   ngOnInit() {
     this.spinnerService.show();

@@ -63,6 +63,8 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
 import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { GridModule } from '@progress/kendo-angular-grid';
+
 
 @NgModule({
   declarations: [
@@ -127,7 +129,8 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
         }
       }
     }),
-    NgbModule
+    NgbModule,
+    GridModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService],
   bootstrap: [AppComponent]

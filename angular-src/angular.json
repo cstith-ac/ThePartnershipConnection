@@ -27,6 +27,7 @@
               "src/favicon.ico",
               "src/assets/img/tpc_logo.jpg",
               "src/assets/img/alarmConnections_Logo.png",
+              "src/assets/img/AlarmConnections_Logo_Icon_RGB.png",
               "src/assets/img/forbidden_stop_sign_clipart.jpg",
               "src/assets/img/403_stop.png",
               "src/assets/img/iconfinder_7-Computer-Sad_2672789.png",
@@ -36,6 +37,9 @@
               "src/web.config"
             ],
             "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/css/argon.css",
@@ -66,8 +70,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -108,6 +112,9 @@
               "src/assets"
             ],
             "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
               "src/styles.css"
             ],
             "scripts": []
