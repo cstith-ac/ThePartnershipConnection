@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
+import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
+import { process, State } from '@progress/kendo-data-query';
 import { NgxSpinnerService } from 'ngx-spinner';
-import * as XLSX from 'xlsx';
-//import { FilterPipe } from 'src/app/_helpers/filter.pipe';
-import { FilterPipe } from 'ngx-filter-pipe';
+// import * as XLSX from 'xlsx';
+// import { FilterPipe } from 'ngx-filter-pipe';
 
 @Component({
   selector: 'app-customer3glisting',
@@ -12,38 +13,53 @@ import { FilterPipe } from 'ngx-filter-pipe';
   styleUrls: ['./customer3glisting.component.css']
 })
 export class Customer3glistingComponent implements OnInit {
-  customer3glisting: Customer3GListing[];
-
-  isShown: boolean = true ; // show by default
-
-  page = 1;
-  count = 0;
-  tableSize = 10;
-  tableSizes = [10,15,25,50,100,150,200];
-
-  fileName = 'customer3glisting.xlsx';
-
-  zipCodeFilter: any = { zipCode: '' };
+  public columns: any[] = [
+    {field: "AlarmAccount"}, 
+    {field: "CustomerNumber"}, 
+    {field: "CustomerName"},
+    {field: "CustomerType"},
+    {field: "CustomerType"},
+    {field: "SiteName"},
+    {field: "SiteNumber"},
+    {field: "Address1"},
+    {field: "Address2"},
+    {field: "City"},
+    {field: "State"},
+    {field: "ZipCode"},
+    {field: "PanelTypeCode"},
+    {field: "PanelLocation"},
+    {field: "SystemCode"},
+    {field: "CellType"},
+    {field: "CellGeneration"},
+    {field: "CellModel"},
+    {field: "Offer1"},
+    {field: "Offer2"},
+    {field: "Offer3"},
+    {field: "Offer4"},
+    {field: "RMRatCustomer"},
+    {field: "RMRatSite"},
+    {field: "RMRatSystem"}
+  ];
+  //customer3glisting:Customer3GListing[];
+  public gridData: Customer3GListing[];
+  public pageSize: number = 5;
+  public fileName: string = 'customer3glisting.xlsx';
+  public date: any;
 
   constructor(
-    private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
-    private filterPipe: FilterPipe
-  ) { 
-    console.log(filterPipe.transform(
-      this.customer3glisting, { zipCode: '29081' }
-    )) 
-    }
+    private spinnerService: NgxSpinnerService
+  ) { }
 
   ngOnInit() {
     this.spinnerService.show();
     setTimeout(() => {
       this.spinnerService.hide();
-    }, 30000)
+    }, 8000)
 
     this.routeService.getCustomer3GListing().subscribe(
       res => {
-        this.customer3glisting = res;
+        this.gridData = res;
       }
     )
   }
@@ -51,37 +67,26 @@ export class Customer3glistingComponent implements OnInit {
   load3GList() {
     this.routeService.getCustomer3GListing().subscribe(
       res => {
-        this.customer3glisting = res;
+        this.gridData = res;
       }
     )
   }
 
-  onTableDataChange(event) {
-    this.page = event;
-    //this.load3GList();
-    this.spinnerService.hide();
-  }
+  public state: State = {
+    skip: 0,
+    take: 5,
+    
+    // Initial filter descriptor
+    // filter: {
+    //   logic: 'and',
+    //   filters: [{ field: 'ProductName', operator: 'contains', value: 'Chef' }]
+    // }
+  };
 
-  onTableSizeChange(event) {
-    this.tableSize = event.target.value;
-    this.page = 1;
-    //this.load3GList();
-    this.spinnerService.hide();
-  }
+  // public gridData: GridDataResult = process(this.customer3glisting, this.state);
 
-  toggleShow() {
-    this.isShown = !this.isShown;
-  }
-
-  exportExcel() {
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
- 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
- 
-    /* save to file */  
-    XLSX.writeFile(wb, this.fileName);
-  }
+  // public dataStateChange(state: DataStateChangeEvent): void {
+  //   this.state = state;
+  //   this.gridData = process(this.customer3glisting, this.state);
+  // }
 }

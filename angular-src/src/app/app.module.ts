@@ -15,6 +15,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { GridModule, ExcelModule  } from '@progress/kendo-angular-grid';
+//import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
+
 import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';
 
@@ -63,7 +66,6 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
 import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
-import { GridModule } from '@progress/kendo-angular-grid';
 
 
 @NgModule({
@@ -130,7 +132,9 @@ import { GridModule } from '@progress/kendo-angular-grid';
       }
     }),
     NgbModule,
-    GridModule
+    GridModule,
+    ExcelModule,
+    //ExcelExportModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService],
   bootstrap: [AppComponent]
