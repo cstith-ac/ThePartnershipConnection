@@ -23,6 +23,37 @@ export class RouteService {
 
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) { }
 
+  getAllUsers(): Observable<any>{
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json',
+      'Authorization':'Bearer '+this.authToken })
+    };
+    return this.http.get<any>(this.baseUrl + '/api/Administration', httpOptions);
+  }
+
+  //Similar to getCustomerCareDashboardInfoById()
+  getUser(id: number): Observable<any>{
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  // Admin and Super Admin Only
+  updateUser(id: number): Observable<any>{
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   getCustomerAccessList(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
@@ -78,16 +109,6 @@ export class RouteService {
     )
   }
 
-  // getCustomer3GListing(id:string): Observable<any> {
-  //   this.loadToken();
-  //   let httpOptions = { 
-  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-  //   };
-  //   return this.http.get<any>(`${this.baseUrl}/api/Customer3GListing/` + id, httpOptions).pipe(
-  //     catchError(this.errorHandler)
-  //   )
-  // }
-
   getServiceTicketInfo2ById(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
@@ -132,10 +153,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/CustomerToSiteList', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CustomerToSiteList', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/CustomerToSiteList', httpOptions);
   }
 
@@ -151,10 +169,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
-      };
-      //console.log('getting all systems from the server')
-    //return this.http.get<any>('https://localhost:44314/api/CCAssistant_Systems', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CCAssistant_Systems', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/CCAssistant_Systems', httpOptions);
   }
 
@@ -162,10 +177,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/PartnerInformation', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/PartnerInformation', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/PartnerInformation', httpOptions);
   }
 
@@ -181,10 +193,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/PartnerContactList', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/PartnerContactList', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/PartnerContactList', httpOptions);
   }
 
@@ -200,10 +209,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/CallSummaryClassList', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CallSummaryClassList', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/CallSummaryClassList', httpOptions);
   }
 
@@ -256,10 +262,7 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-      };
-      //console.log(httpOptions)
-    //return this.http.get<any>('https://localhost:44314/api/CallSummaryResolutions', httpOptions);
-    // return this.http.get<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CallSummaryResolutions', httpOptions);
+    };
     return this.http.get<any>(this.baseUrl + '/api/CallSummaryResolutions', httpOptions); 
   }
 
@@ -300,9 +303,6 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
     };
-    //console.log(httpOptions)
-    //return this.http.post<any>('https://localhost:44314/api/CallSummaryAdd', httpOptions);
-    // return this.http.post<any>('https://thepartnershipconnectionapi.azurewebsites.net/api/CallSummaryAdd', httpOptions);
     return this.http.post<SummaryAdd>(this.baseUrl + '/api/CallSummaryAdd',summaryAdd, httpOptions);
   }
 

@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
-//import 'rxjs/add/operator/map';
 import { AuthGuard } from '../app/guards/auth.guard';
 import { AdminGuard } from '../app/guards/admin.guard';
 import { EmployeeGuard } from '../app/guards/employee.guard';
@@ -16,7 +15,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { GridModule, ExcelModule  } from '@progress/kendo-angular-grid';
-//import { ExcelExportModule } from '@progress/kendo-angular-excel-export';
 
 import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';
@@ -66,6 +64,7 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
 import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { AdmineditComponent } from './components/adminedit/adminedit.component';
 
 
 @NgModule({
@@ -110,7 +109,8 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
     AdminComponent,
     PagenotfoundComponent,
     PhonePipe,
-    SortPipe
+    SortPipe,
+    AdmineditComponent
   ],
   imports: [
     FilterPipeModule,
@@ -133,8 +133,7 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
     }),
     NgbModule,
     GridModule,
-    ExcelModule,
-    //ExcelExportModule
+    ExcelModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService],
   bootstrap: [AppComponent]

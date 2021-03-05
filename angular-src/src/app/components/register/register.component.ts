@@ -21,7 +21,23 @@ export class RegisterComponent implements OnInit {
   username: String;
   email: String;
   afauserLink: String;
-  // afaRoles: [19,14,9,5,1];
+  afaRoleAdminOnly = [
+    {
+      id: 9,
+      userTier: "Employee",
+      availablePermissions: ["Manage Partner","Customer Care View", "Service View", "Collections View"]
+    },
+    {
+      id: 5,
+      userTier: "Partner",
+      availablePermissions: ["Manage Customer User", "Manage Partner (same base)", "Update Partner Contact Info", "View Aging (Base)", "View Cancels (Base)", "View Service Tickets (Base)", "Create Service Tickets (Base)", "View Incentives (Base)", "Create Incentives (Base)", "View 3G List (Base)"]
+    },
+    {
+      id: 1,
+      userTier: "Customer",
+      availablePermissions: ["Manage Customer User (same customer)", "View Invoice (account)", "View Service Tickets (account)", "Create Service Tickets (account)", "Pay Invoice (account)", "Update Contact Info (Account)"]
+    }
+  ];
   afaRole = [
     {
       id: 19,
@@ -63,7 +79,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private validateService: ValidateService,
-    private authService: AuthService,
+    public authService: AuthService,
     private flashMessage: FlashMessagesService,
     private router: Router,
     private formBuilder: FormBuilder) {
@@ -107,6 +123,7 @@ export class RegisterComponent implements OnInit {
           email: this.email,
           username: this.username,
           afauserLink: this.afauserLink,
+          afaRoleAdminOnly: this.afaRoleAdminOnly,
           afaRole: this.afaRole,
           afaEmployee: this.afaEmployee,
           password: this.password

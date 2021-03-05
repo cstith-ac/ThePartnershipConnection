@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouteService } from '../../services/route.service';
+import { AspNetUsers } from '../../models/aspnetusers';
 
 @Component({
   selector: 'app-admin',
@@ -6,10 +9,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  allUsers: AspNetUsers[];
 
-  constructor() { }
+  constructor(
+    public routeService: RouteService,
+    private router: Router
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.routeService.getAllUsers().subscribe(
+      res => {
+        this.allUsers = res;
+      }
+    ) 
+  }
+
+  editCurrentUser(id:number) {
+    this.router.navigate(['admin-edit/'+ id])
   }
 
 }

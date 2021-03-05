@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { RouteService } from '../../services/route.service';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { DataStateChangeEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { process, State } from '@progress/kendo-data-query';
 import { NgxSpinnerService } from 'ngx-spinner';
-// import * as XLSX from 'xlsx';
-// import { FilterPipe } from 'ngx-filter-pipe';
+declare var $: any;
 
 @Component({
   selector: 'app-customer3glisting',
@@ -40,11 +39,12 @@ export class Customer3glistingComponent implements OnInit {
     {field: "RMRatSite"},
     {field: "RMRatSystem"}
   ];
-  //customer3glisting:Customer3GListing[];
   public gridData: Customer3GListing[];
   public pageSize: number = 5;
-  public fileName: string = 'customer3glisting.xlsx';
-  public date: any;
+  public fileName: string;
+  public dateTime: any;
+
+  @ViewChild("dateTime") dateTimeView: ElementRef;
 
   constructor(
     private routeService: RouteService,
@@ -85,8 +85,14 @@ export class Customer3glistingComponent implements OnInit {
 
   // public gridData: GridDataResult = process(this.customer3glisting, this.state);
 
-  // public dataStateChange(state: DataStateChangeEvent): void {
-  //   this.state = state;
-  //   this.gridData = process(this.customer3glisting, this.state);
-  // }
+  public dataStateChange(state: DataStateChangeEvent) {
+    console.log('change')
+  }
+
+  saveDateTime() {
+    this.dateTime = new Date().toDateString();
+    this.fileName = 'customer3glisting'+this.dateTime+'.xlsx';
+    console.log(this.dateTimeView);
+  }
+  
 }

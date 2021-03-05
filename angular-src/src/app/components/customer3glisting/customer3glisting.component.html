@@ -152,9 +152,10 @@
   [resizable]="true"
   [pageSize]="pageSize"
   [groupable]="true"
+  #dateTime
 >
 <ng-template kendoGridToolbarTemplate>
-  <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+  <button type="button" kendoGridExcelCommand icon="file-excel" (click)="saveDateTime()">Export to Excel</button>
 </ng-template>
 <kendo-grid-column field="alarm_Account" title="Alarm Account"></kendo-grid-column>
 <kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
@@ -181,7 +182,7 @@
 <kendo-grid-column field="rmrAtCustomer" title="RMR At Customer"></kendo-grid-column>
 <kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
 <kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column>
-<kendo-grid-excel [date]="date" [fileName]="fileName"></kendo-grid-excel>
+<kendo-grid-excel [fileName]="fileName"></kendo-grid-excel>
 </kendo-grid>
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
   <p style="color: white">Please Wait...</p>  

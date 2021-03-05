@@ -89,7 +89,7 @@ export class AuthService {
     const user: any = JSON.parse(localStorage.getItem('user'));
     //console.log(user.username)
 
-    if(user.afaRole === 19) {
+    if(user.afaRole === 14 || user.afaRole === 19) {
       return true;
     } else {
       this.flashMessage.show('You do not have authorization to register a user', 

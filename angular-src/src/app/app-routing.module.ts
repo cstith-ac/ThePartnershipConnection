@@ -40,6 +40,7 @@ import { ServiceviewComponent } from './components/serviceview/serviceview.compo
 import { CollectionsviewComponent } from './components/collectionsview/collectionsview.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { AdmineditComponent } from './components/adminedit/adminedit.component';
 
 const routes: Routes = [
   {
@@ -200,6 +201,11 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard, AdminGuard],
     // canDeactivate: [UnsavedchangesGuard]
+  },
+  {
+    path: 'admin-edit/:id',
+    component: AdmineditComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

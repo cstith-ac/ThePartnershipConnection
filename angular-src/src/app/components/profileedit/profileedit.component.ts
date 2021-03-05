@@ -25,7 +25,6 @@ export class ProfileeditComponent implements OnInit {
 
     this.authService.getProfile().subscribe(
       res => {
-        //console.log(res)
         this.user = res;
       },
       err => {
