@@ -29,3 +29,7 @@
 .ratingValueBg3 {
     background-color: #40D835;
 }
+.underlineDashed {
+    text-decoration: underline;
+    text-decoration-style:dashed;
+}
