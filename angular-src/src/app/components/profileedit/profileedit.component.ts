@@ -54,12 +54,12 @@ export class ProfileeditComponent implements OnInit {
   // }
 
   onSubmit(form: FormGroup) {
-    console.log('Email: ', form.value.email)
-    console.log('First name: ', form.value.firstName)
-    console.log('Last name: ', form.value.lastName)
-    console.log('Phone number: ', form.value.phoneNumber)
-    console.log('Cell: ', form.value.cellPhoneNumber1)
-    console.log('Alt email: ', form.value.altEmail)
+    // console.log('Email: ', form.value.email)
+    // console.log('First name: ', form.value.firstName)
+    // console.log('Last name: ', form.value.lastName)
+    // console.log('Phone number: ', form.value.phoneNumber)
+    // console.log('Cell: ', form.value.cellPhoneNumber1)
+    // console.log('Alt email: ', form.value.altEmail)
 
     this.authService.updateUserProfile(this.updateProfileForm.value)
       .subscribe(

@@ -8,6 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
+import { ResetPassword } from '../models/resetpassword';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,15 @@ export class RouteService {
   baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) { }
+
+  refreshList() {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json',
+      'Authorization':'Bearer '+this.authToken })
+    };
+    this.http.get(`${this.baseUrl}/api/administration`, httpOptions);
+  }
 
   getAllUsers(): Observable<any>{
     this.loadToken();
@@ -43,16 +53,35 @@ export class RouteService {
     )
   }
 
-  // Admin and Super Admin Only
-  updateUser(id: number): Observable<any>{
+  deleteUser(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
     };
-    return this.http.get<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
+    return this.http.delete<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
       catchError(this.errorHandler)
     )
   }
+
+  // Admin and Super Admin Only - Currently used to update a password ONLY
+  updatePassword(resetPassord: ResetPassword):  Observable<ResetPassword>{
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    return this.http.post<ResetPassword>(this.baseUrl + '/api/Administration/ResetPassword',resetPassord , httpOptions);
+  }
+
+  //This will be used in the future by an admin or super admin to update an entire profile of a user
+  // updateUser(id: number): Observable<any>{
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+  //   };
+  //   return this.http.get<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
+  //     catchError(this.errorHandler)
+  //   )
+  // }
 
   getCustomerAccessList(): Observable<any> {
     this.loadToken();

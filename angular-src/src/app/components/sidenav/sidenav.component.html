@@ -28,7 +28,7 @@
         <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Customer Care View</a>
         <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Service View</a>
         <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Collections View</a>
-        <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()" disabled>Admin (Currently View Only)</a>
+        <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()" disabled>Admin</a>
       </div>
       <hr>
       <div class="list-group list-group-flush">
