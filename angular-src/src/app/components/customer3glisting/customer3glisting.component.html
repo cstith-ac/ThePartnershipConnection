@@ -1,140 +1,4 @@
-<!-- <div class="row">
-    <div class="col-xl-12">
-        <div class="card bg-secondary shadow">
-            <div class="card-header bg-white border-0">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                        <h3>Partner Dashboard</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2>Toggle Directions Show/Hide</h2>
-                        <label class="switch">
-                          <input type="checkbox" (click)="toggleShow()">
-                          <span class="slider round"></span>
-                        </label>
-                        <div *ngIf="isShown" class="row container-fluid"  id="divshow" >
-                          <ul class="list-group">
-                            <li class="list-group-item">Click on the table</li>
-                            <li class="list-group-item">Use your left arrow key to scroll left <i class="fas fa-arrow-left"></i></li>
-                            <li class="list-group-item">Use your right arrow key to scroll right <i class="fas fa-arrow-right"></i></li>
-                            <li class="list-group-item">Use your up arrow key to scroll up <i class="fas fa-arrow-up"></i></li>
-                            <li class="list-group-item">Use your down arrow key to scroll down <i class="fas fa-arrow-down"></i></li>
-                          </ul>
-                        </div>
-                    </div>
-                </div>
-                
-              <div class="row">
-                  <div class="col-md-12 pl-0 mt-2">
-                    <div class="d-flex flex-row-reverse bd-highlight mb-2">
-                      <div>
-                        <div class="p-2 bd-highlight">
-                          <button class="btn btn-primary" (click)="exportExcel()">Export and Print Excel</button>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="p-2 bd-highlight">
-                          <select (change)="onTableSizeChange($event)" class="custom-select">
-                            <option *ngFor="let size of tableSizes" [ngValue]="size">
-                              {{ size }}
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="mt-2">
-                        <input type="text" class="form-control" placeholder="Search by Zip Code" [(ngModel)]="zipCodeFilter.zipCode">
-                      </div>
-                    </div>
-                    
-                    <div class="table-responsive">
-                      <table class="table" id="excel-table">
-                          <thead>
-                            <tr>
-                              <th scope="col">Alarm Account</th>
-                              <th scope="col">Customer Number</th>
-                              <th scope="col">Customer Name</th>
-                              <th scope="col">Customer Type</th>
-                              <th scope="col">Customer Type</th>
-                              <th scope="col">Site Number</th>
-                              <th scope="col">Address 1</th>
-                              <th scope="col">Address 2</th>
-                              <th scope="col">City</th>
-                              <th scope="col">State</th>
-                              <th scope="col">Zip Code</th>
-                              <th scope="col">Panel Type Code</th>
-                              <th scope="col">Panel Location</th>
-                              <th scope="col">System Code</th>
-                              <th scope="col">Cell Type</th>
-                              <th scope="col">Cell Generation</th>
-                              <th scope="col">Cell Model</th>
-                              <th scope="col">Carrier</th>
-                              <th scope="col">Offer 1</th>
-                              <th scope="col">Offer 2</th>
-                              <th scope="col">Offer 3</th>
-                              <th scope="col">Offer 4</th>
-                              <th scope="col">RMR at Customer</th>
-                              <th scope="col">RMR at Site</th>
-                              <th scope="col">RMR at System</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let item of customer3glisting | paginate : {
-                                itemsPerPage: tableSize,
-                                currentPage: page,
-                                totalItems: count
-                              } | filterBy: zipCodeFilter;
-                        ">
-                              <th scope="row">{{item.alarm_Account}}</th>
-                              <td>{{ item.customer_Number }}</td>
-                              <td>{{ item.customer_Name }}</td>
-                              <td>{{ item.customerType }}</td>
-                              <td>{{ item.siteName }}</td>
-                              <td>{{ item.site_Number }}</td>
-                              <td>{{ item.address_1 }}</td>
-                              <td>{{ item.address_2 }}</td>
-                              <td>{{ item.city }}</td>
-                              <td>{{ item.state }}</td>
-                              <td>{{ item.zipCode }}</td>
-                              <td>{{ item.panel_Type_Code }}</td>
-                              <td>{{ item.panel_Location }}</td>
-                              <td>{{ item.system_Code }}</td>
-                              <td>{{ item.cellType }}</td>
-                              <td>{{ item.cellGeneration }}</td>
-                              <td>{{ item.cellModel }}</td>
-                              <td>{{ item.carrier }}</td>
-                              <td>{{ item.offer1 }}</td>
-                              <td>{{ item.offer2 }}</td>
-                              <td>{{ item.offer3 }}</td>
-                              <td>{{ item.offer4 }}</td>
-                              <td>{{ item.rmrAtCustomer }}</td>
-                              <td>{{ item.rmrAtSite }}</td>
-                              <td>{{ item.rmrAtSystem }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      
-                        <div class="d-flex justify-content-center">
-                          <pagination-controls  
-                            previousLabel="Prev" 
-                            nextLabel="Next" 
-                            (pageChange)="onTableDataChange($event)">
-                          </pagination-controls>
-                        </div>
-                    </div>
-                  </div>
-              </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
-    <p style="color: white">Please Wait...</p>  
-</ngx-spinner> -->
+<!-- <p id="dateTime" #dateTime>{{dateTime}}</p> -->
 <kendo-grid
   [kendoGridBinding]="gridData"
   [pageSize]="$any(state).take"
@@ -155,34 +19,56 @@
   #dateTime
 >
 <ng-template kendoGridToolbarTemplate>
-  <button type="button" kendoGridExcelCommand icon="file-excel" (click)="saveDateTime()">Export to Excel</button>
+
+  <!-- <button type="button" class="k-button" icon="file-excel" (click)="saveDateTime()">Export to Excel</button> -->
+  <!-- <button type="button" class="k-button" icon="file-excel" (click)="workbook()">Export to Excel</button> -->
+  <button 
+    type="button" 
+    kendoGridExcelCommand 
+    icon="file-excel"
+  >Export to Excel
+  </button>
 </ng-template>
-<kendo-grid-column field="alarm_Account" title="Alarm Account"></kendo-grid-column>
-<kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
-<kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
-<kendo-grid-column field="customerType" title="Customer Type"></kendo-grid-column>
-<kendo-grid-column field="siteName" title="Site Name"></kendo-grid-column>
-<kendo-grid-column field="site_Number" title="Site Number"></kendo-grid-column>
-<kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
-<kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column>
-<kendo-grid-column field="city" title="City"></kendo-grid-column>
-<kendo-grid-column field="state" title="State"></kendo-grid-column>
-<kendo-grid-column field="zipCode" title="Zip Code"></kendo-grid-column>
-<kendo-grid-column field="panel_Type_Code" title="Panel Type Code"></kendo-grid-column>
-<kendo-grid-column field="panel_Location" title="Panel Location"></kendo-grid-column>
-<kendo-grid-column field="system_Code" title="System Code"></kendo-grid-column>
-<kendo-grid-column field="cellType" title="Cell Type"></kendo-grid-column>
-<kendo-grid-column field="cellGeneration" title="Cell Generation"></kendo-grid-column>
-<kendo-grid-column field="cellModel" title="Cell Model"></kendo-grid-column>
-<kendo-grid-column field="carrier" title="Carrier"></kendo-grid-column>
-<kendo-grid-column field="offer1" title="Offer 1"></kendo-grid-column>
-<kendo-grid-column field="offer2" title="Offer 2"></kendo-grid-column>
-<kendo-grid-column field="offer3" title="Offer 3"></kendo-grid-column>
-<kendo-grid-column field="offer4" title="Offer 4"></kendo-grid-column>
-<kendo-grid-column field="rmrAtCustomer" title="RMR At Customer"></kendo-grid-column>
-<kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
-<kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column>
-<kendo-grid-excel [fileName]="fileName"></kendo-grid-excel>
+<kendo-grid-column-group 
+  [title]="html"
+  [autoSize]="true"
+  #dateTime>
+  <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+    <p [innerHTML]="html"></p>
+  </ng-template>
+  <kendo-grid-column field="alarm_Account" title="Alarm Account">
+  </kendo-grid-column>
+  <!-- <kendo-grid-column field="alarm_Account" title="Alarms Account">
+    <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+      {{column.field}}({{columnIndex}})
+    </ng-template>
+  </kendo-grid-column> -->
+  <kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
+  <kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
+  <kendo-grid-column field="customerType" title="Customer Type"></kendo-grid-column>
+  <kendo-grid-column field="siteName" title="Site Name"></kendo-grid-column>
+  <kendo-grid-column field="site_Number" title="Site Number"></kendo-grid-column>
+  <kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
+  <kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column>
+  <kendo-grid-column field="city" title="City"></kendo-grid-column>
+  <kendo-grid-column field="state" title="State"></kendo-grid-column>
+  <kendo-grid-column field="zipCode" title="Zip Code"></kendo-grid-column>
+  <kendo-grid-column field="panel_Type_Code" title="Panel Type Code"></kendo-grid-column>
+  <kendo-grid-column field="panel_Location" title="Panel Location"></kendo-grid-column>
+  <kendo-grid-column field="system_Code" title="System Code"></kendo-grid-column>
+  <kendo-grid-column field="cellType" title="Cell Type"></kendo-grid-column>
+  <kendo-grid-column field="cellGeneration" title="Cell Generation"></kendo-grid-column>
+  <kendo-grid-column field="cellModel" title="Cell Model"></kendo-grid-column>
+  <kendo-grid-column field="carrier" title="Carrier"></kendo-grid-column>
+  <kendo-grid-column field="offer1" title="Offer 1"></kendo-grid-column>
+  <kendo-grid-column field="offer2" title="Offer 2"></kendo-grid-column>
+  <kendo-grid-column field="offer3" title="Offer 3"></kendo-grid-column>
+  <kendo-grid-column field="offer4" title="Offer 4"></kendo-grid-column>
+  <kendo-grid-column field="rmrAtCustomer" title="RMR At Customer"></kendo-grid-column>
+  <kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
+  <kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column>
+</kendo-grid-column-group>
+<kendo-grid-excel fileName="customer3glisting"></kendo-grid-excel>
 </kendo-grid>
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
   <p style="color: white">Please Wait...</p>  

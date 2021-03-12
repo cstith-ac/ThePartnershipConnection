@@ -193,11 +193,11 @@
                                         </div>
                                         
                                         <div class="col-md-6">
-                                            <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd">Save</button>
+                                            <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd" [disabled]="clicked">Save</button>
                                         </div>
                                     </div>
                                 </form>
-                                <button type="submit" class="btn float-right save-btn bg-danger text-white call-summary-reset" (click)="formReset()">Reset</button>
+                                <button type="reset" class="btn float-right save-btn bg-danger text-white call-summary-reset" (click)="ticketFieldResetButton()" [disabled]="enableReset">Reset</button>
                                 <!-- Result -->
                                 <!-- <div id="ticketNumberResult" class="pt-4">
                                     <h5>Ticket Number</h5>

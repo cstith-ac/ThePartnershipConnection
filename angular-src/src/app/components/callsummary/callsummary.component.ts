@@ -44,6 +44,8 @@ export class CallsummaryComponent implements OnInit {
 
   selectedValue: number;
   selectedCallType: number;
+  clicked = false;
+  enableReset = true;
 
   constructor(
     public fb: FormBuilder,
@@ -120,7 +122,7 @@ export class CallsummaryComponent implements OnInit {
     $("#showCallSummaryModal").click(function (e) {
       e.preventDefault();
       $("#callSummaryModal").modal("show");
-      moveResizeModal()
+      //moveResizeModal()
     })
 
     $("#hideCallSummaryModal").click(function (e) {
@@ -128,31 +130,31 @@ export class CallsummaryComponent implements OnInit {
       $("#callSummaryModal").modal("hide");
     })
 
-    // Move and resize modals
-    function moveResizeModal() {
-      $(".modal-header").on('mousedown', function (downEvt) {
-        var $draggable = $(this)
-        var x = downEvt.pageX - $draggable.offset().left,
-          y = downEvt.pageY - $draggable.offset().top;
-        $('body').on('mousemove.draggable', function (moveEvt) {
-          $draggable.closest(".modal-dialog").offset({
-            "left": moveEvt.pageX - x,
-            "top": moveEvt.pageY - y
-          })
-        })
-        $('.modal-content').resizable({
-          //alsoResize: ".modal-dialog",
-          minHeight: 300,
-          minWidth: 300
-        });
-        $('body').on('mouseup', function () {
-          $("body").off("mousemove.draggable")
-        })
-        $draggable.closest(".modal").one("bs.modal.hide", function () {
-          $("body").off("mousemove.draggable")
-        })
-      })
-    }
+    // // Move and resize modals
+    // function moveResizeModal() {
+    //   $(".modal-header").on('mousedown', function (downEvt) {
+    //     var $draggable = $(this)
+    //     var x = downEvt.pageX - $draggable.offset().left,
+    //       y = downEvt.pageY - $draggable.offset().top;
+    //     $('body').on('mousemove.draggable', function (moveEvt) {
+    //       $draggable.closest(".modal-dialog").offset({
+    //         "left": moveEvt.pageX - x,
+    //         "top": moveEvt.pageY - y
+    //       })
+    //     })
+    //     $('.modal-content').resizable({
+    //       //alsoResize: ".modal-dialog",
+    //       minHeight: 300,
+    //       minWidth: 300
+    //     });
+    //     $('body').on('mouseup', function () {
+    //       $("body").off("mousemove.draggable")
+    //     })
+    //     $draggable.closest(".modal").one("bs.modal.hide", function () {
+    //       $("body").off("mousemove.draggable")
+    //     })
+    //   })
+    // }
   }
 
   isIssueResolved(event){
@@ -179,18 +181,9 @@ export class CallsummaryComponent implements OnInit {
             .then(res => {
               console.log(res)
             })
-          //no hard-coded values!
-          // this.routeService.getSiteToSystemList(1).subscribe(
-          //   res => {
-          //     console.log(res)
-          //     this.siteToSystemList = [].concat(res);
-
-          //     //this is reseting the variable id to 1
-          //     //this will not work!
-          //   }
-          // )
+          
           this.siteToSystemList = [].concat(res);
-          //this.siteToSystemList.map(x => x.customerSystemID = 1)
+       
         } else {
           console.log(res)
           this.siteToSystemList = [].concat(res);
@@ -279,17 +272,6 @@ export class CallsummaryComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    //console.log('Valid?', form.valid); // true or false
-    console.log('SedonaUser', this.sedonaUser);
-    console.log('SystemID', form.value.SystemID);
-    //console.log('callSummaryClassList', form.value.callSummaryClassList);//not required
-    console.log('ProblemID', form.value.ProblemID);
-    console.log('ResolutionID', form.value.ResolutionID);
-    console.log('NextStepID', form.value.CallSummaryNextSteps);
-    console.log('CustomerOnCall', form.value.CustomerOnCall);
-    console.log('CustomerCallBackPhone', form.value.CustomerCallBackPhone);
-    console.log('CustomerComments', form.value.CustomerComments);
-    console.log('TechNotes', form.value.TechNotes);
 
     this.submitted = true;
 
@@ -302,22 +284,27 @@ export class CallsummaryComponent implements OnInit {
       .subscribe(
         result => {
           confirm('Click ok to confirm form submission')
-          this.resetForm(form);
           this.divView.nativeElement.innerHTML = result;
+          this.submitted = false;
+          this.clicked = true;
+          this.enableReset = false;
+          //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
+          this.resetForm(form);
         },
         error => console.log('error: ', error)
       );
   }
 
   // Clear the ticket number from the UI 
-  formReset() {
-    this.callSummaryAddForm.reset();
+  ticketFieldResetButton() {
     this.divView.nativeElement.innerHTML = '';
+    this.clicked = false;
   }
 
   resetForm(form: FormGroup) {
     this.submitted = false;
-    form.reset();
+    form.markAllAsTouched();
+    this.callSummaryAddForm.reset(this.callSummaryAddForm.value);
   }
 
 }
