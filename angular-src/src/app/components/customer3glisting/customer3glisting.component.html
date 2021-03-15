@@ -1,4 +1,3 @@
-<!-- <p id="dateTime" #dateTime>{{dateTime}}</p> -->
 <kendo-grid
   [kendoGridBinding]="gridData"
   [pageSize]="$any(state).take"
@@ -16,12 +15,10 @@
   [resizable]="true"
   [pageSize]="pageSize"
   [groupable]="true"
+  [columnMenu]="true"
   #dateTime
 >
 <ng-template kendoGridToolbarTemplate>
-
-  <!-- <button type="button" class="k-button" icon="file-excel" (click)="saveDateTime()">Export to Excel</button> -->
-  <!-- <button type="button" class="k-button" icon="file-excel" (click)="workbook()">Export to Excel</button> -->
   <button 
     type="button" 
     kendoGridExcelCommand 
@@ -30,11 +27,11 @@
   </button>
 </ng-template>
 <kendo-grid-column-group 
-  [title]="html"
+  [title]="today"
   [autoSize]="true"
   #dateTime>
   <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-    <p [innerHTML]="html"></p>
+    <p [innerHTML]="today"></p>
   </ng-template>
   <kendo-grid-column field="alarm_Account" title="Alarm Account">
   </kendo-grid-column>

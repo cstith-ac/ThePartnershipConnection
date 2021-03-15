@@ -103,6 +103,7 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
   open3GModal() {
     $("#threeGModal").modal("show");
+    console.log(this.basicUpgradeInfo);
   }
 
 }

@@ -43,11 +43,9 @@ export class Customer3glistingComponent implements OnInit {
     {field: "RMRatSystem"}
   ];
   public gridData: any[];
-  //public gridData: Customer3GListing[];
   public pageSize: number = 5;
   public fileName: string;
-  //dateTime: string = new Date().toDateString();
-  public html = new Date().toDateString();
+  public today = new Date().toDateString();
 
   @ViewChild("dateTime") dateTimeView: ElementRef;
 
@@ -184,7 +182,6 @@ export class Customer3glistingComponent implements OnInit {
             // Second row (data)
             {
               cells: <WorkbookSheetRowCell[]>[
-                { value: this.dateTime},
                 { value: "alarm_Account", fontSize:'14px', color: 'red' },
                 { value: "customer_Name" },
                 { value: "customerType" },
@@ -271,7 +268,7 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   saveDateTime() {
-    this.dateTime = new Date().toDateString();
+    //this.dateTime = new Date().toDateString();
     this.fileName = 'customer3glisting.xlsx';
     //console.log(this.dateTimeView);
     const workbook = new Workbook({

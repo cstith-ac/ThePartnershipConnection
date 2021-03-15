@@ -1,4 +1,4 @@
-<div class="d-flex" id="wrapper">
+<div class="d-flex toggled" id="wrapper">
 
     <!-- Sidebar -->
     <div class="border-right" id="sidebar-wrapper">
@@ -94,21 +94,6 @@
                                 <div>
                                     <h2 class="lead font-weight900 mt-0" id="partnerCode">{{ item.partnerCode }}</h2>
                                 </div>
-                                <!-- <div class="marginTopBottom-1rem">
-                                    <span id="address1">{{ item.address1 }}</span>
-                                </div>
-                                <div class="marginTopBottom-1rem">
-                                    <span id="address2">{{ item.address2 }}</span>
-                                </div>
-                                <div class="marginTopBottom-1rem">
-                                    <span id="city">{{ item.city }}</span>, <span id="state">{{ item.state }}</span>&nbsp;<span id="zipCode">{{ item.zipCode }}</span>
-                                </div>
-                                <div class="marginTopBottom-1rem">
-                                    <span id="phone1">{{ item.phone1 }}</span>
-                                </div>
-                                <div class="marginTopBottom-1rem">
-                                    <span id="phone2">{{ item.phone2 }}</span>
-                                </div> -->
                                 <div class="marginTopBottom-1rem">
                                     <span id="eMail" class="blue-text">{{ item.eMail }}</span>
                                 </div>
@@ -135,7 +120,7 @@
                           <h2 class="dark-blue-text mb-0">Primary Contacts</h2>
                         </div>
                         <div class="row table-responsive">
-                          <table class="table table-borderless">
+                          <table class="table table-borderless" *ngIf="partnerInformation">
                               <thead>
                                   <tr></tr>
                               </thead>

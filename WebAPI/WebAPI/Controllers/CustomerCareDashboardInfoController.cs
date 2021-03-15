@@ -47,6 +47,7 @@ namespace WebAPI.Controllers
                 var c = user.AfauserLink;
                 var getUserCode = await db.CustomerAccessList.FromSqlRaw("select * from dbo.CustomerAccessList where usercode = '" + c + "' and SlotNumber = 0").ToListAsync();
                 var customerID = new SqlParameter("@CustomerId", getUserCode[0].CustomerId);
+                //var customerID = new SqlParameter("@CustomerId", 95444);
                 var result = await db.GetCustomerCareDashboardInfos.FromSqlRaw("EXECUTE [dbo].[CustomerCareDashboardInfo] @CustomerID", customerID).ToListAsync();
                 List<CustomerCareDashboardInfo> Lst = result.Select(s => new CustomerCareDashboardInfo
                 {

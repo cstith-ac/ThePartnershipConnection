@@ -37,3 +37,7 @@ pre {
     /* height: 110px; */
     height: 15vh;
 }
+.underlineDashed {
+    text-decoration: underline;
+    text-decoration-style:dashed;
+}

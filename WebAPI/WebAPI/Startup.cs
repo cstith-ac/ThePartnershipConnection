@@ -45,7 +45,11 @@ namespace WebAPI
             //}, ServiceLifetime.Transient);
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("TPC_DevDatabase"));
+                options.UseSqlServer(Configuration.GetConnectionString("TPC_DevDatabase"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure();
+                    });
             });
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

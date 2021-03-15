@@ -1,6 +1,5 @@
 <div class="">
     <div class="card" id="afa-card-border0">
-        <!-- <a class="btn btn-primary btn-lg mt-5" routerLink="/dashboard">Back to Dashboard</a> -->
         <a routerlink="/dashboard" ng-reflect-router-link="/dashboard" href="/dashboard">
             <button class="btn btn-primary mt-5 ml-4">Return to Customer View</button>
         </a>
@@ -42,7 +41,15 @@
     
                     <p>
                         Account #<span id="alarmAccount" style="margin-right:1rem">{{systemInfo.alarmAccount}}</span>&nbsp;&nbsp;
-                        <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span>
+
+                        <span *ngIf="systemInfo.featureMessage === '3G'" else non3GBlock>
+                            <!-- Open Feature Message Modal -->
+                            <span id="featureMessage" class="special-flag-text" (click)="open3GModal()" [ngClass]="'underlineDashed'">{{systemInfo.featureMessage}}</span>
+                        </span>
+                        <ng-template #non3GBlock>
+                            <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span>
+                        </ng-template>
+                        <!-- <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span> -->
                     </p>
                     <p>
                         <span class="afa-text-dark-blue">
@@ -144,7 +151,81 @@
    
 </div>
 
-<!-- Modal -->
+<!-- Feature Message Modal -->
+<div class="modal fade" id="threeGModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12">
+                    <!-- <h2 class="modal-title" id="exampleModalLabel">title</h2> -->
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card border-0">
+                    <div class="card-body p-0" id="">
+                        <!-- <div class="col-md-12" *ngFor="let item of basicUpgradeInfo">
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item"> {{item.upgradeOptions}}</li>
+                                    <li class="list-group-item"> {{item.upgradeOption1}}</li>
+                                    <li class="list-group-item"> {{item.upgradeOption2}}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item">{{item.requirements}}</li>
+                                    <li class="list-group-item"> {{item.requirement1}}</li>
+                                    <li class="list-group-item"> {{item.requirement2}}</li>
+                                </ul>
+                            </div>
+                        </div> -->
+            
+                        <div class="table-responsive">
+                            <table class="table align-items-center" *ngFor="let item of basicUpgradeInfo">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            {{item.upgradeOptions}}
+                                        </th>
+                                        <th scope="col">
+                                            {{item.requirements}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>{{item.upgradeOption1}}</th>
+                                        <th>{{item.requirement1}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>{{item.upgradeOption2}}</th>
+                                        <th>{{item.requirement2}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>{{item.upgradeOption3}}</th>
+                                        <th>{{item.requirement3}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>{{item.upgradeOption4}}</th>
+                                        <th>{{item.requirement4}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Last Service Ticket Modal -->
 <div class="modal fade" id="lastServiceTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <!-- <div class="modal-content">
