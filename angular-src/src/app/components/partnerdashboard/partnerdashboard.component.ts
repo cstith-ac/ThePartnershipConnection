@@ -35,7 +35,7 @@ export class PartnerdashboardComponent implements OnInit {
 
   routeToCustomer3GList() {
     console.log('route')
-    this.router.navigate(["/customer-3g-listing/"])
+    this.router.navigate(["/customer-3g-listing/"]);
 
     // this.spinnerService.show();
     // setTimeout(() => {
@@ -47,6 +47,10 @@ export class PartnerdashboardComponent implements OnInit {
     //     this.customer3glisting = res;
     //   }
     // )
+  }
+
+  routeToIncentiveEntry() {
+    this.router.navigate(["/incentive-entry"]);
   }
 
   // onTableDataChange(event) {

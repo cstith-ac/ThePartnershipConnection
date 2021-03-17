@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -12,7 +13,6 @@ import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { GridModule, ExcelModule  } from '@progress/kendo-angular-grid';
 
@@ -65,6 +65,13 @@ import { NavlistComponent } from './components/navlist/navlist.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { AdmineditComponent } from './components/adminedit/adminedit.component';
+import { IncentiveentryComponent } from './components/incentiveentry/incentiveentry.component';
+import { IncentivedashboardComponent } from './components/incentivedashboard/incentivedashboard.component';
+import { IncentivenewcustomerComponent } from './components/incentivenewcustomer/incentivenewcustomer.component';
+import { IncentivenewsiteComponent } from './components/incentivenewsite/incentivenewsite.component';
+import { IncentiverecurringComponent } from './components/incentiverecurring/incentiverecurring.component';
+import { IncentiveequipmatComponent } from './components/incentiveequipmat/incentiveequipmat.component';
+import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
 
 
 @NgModule({
@@ -110,7 +117,14 @@ import { AdmineditComponent } from './components/adminedit/adminedit.component';
     PagenotfoundComponent,
     PhonePipe,
     SortPipe,
-    AdmineditComponent
+    AdmineditComponent,
+    IncentiveentryComponent,
+    IncentivedashboardComponent,
+    IncentivenewcustomerComponent,
+    IncentivenewsiteComponent,
+    IncentiverecurringComponent,
+    IncentiveequipmatComponent,
+    IncentivelaborchargesComponent
   ],
   imports: [
     FilterPipeModule,

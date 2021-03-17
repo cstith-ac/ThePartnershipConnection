@@ -41,6 +41,10 @@ import { CollectionsviewComponent } from './components/collectionsview/collectio
 import { AdminComponent } from './components/admin/admin.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { AdmineditComponent } from './components/adminedit/adminedit.component';
+import { IncentiveentryComponent } from './components/incentiveentry/incentiveentry.component';
+import { IncentivedashboardComponent } from './components/incentivedashboard/incentivedashboard.component';
+import { IncentivenewcustomerComponent } from './components/incentivenewcustomer/incentivenewcustomer.component';
+import { IncentivenewsiteComponent } from './components/incentivenewsite/incentivenewsite.component';
 
 const routes: Routes = [
   {
@@ -181,6 +185,22 @@ const routes: Routes = [
     component: Customer3glistingComponent,
     canActivate: [AuthGuard, PartnerGuard],
     //canDeactivate: [UnsavedchangesGuard]
+  },
+  {
+    path: 'incentive-entry',
+    component: IncentiveentryComponent
+  },
+  {
+    path: 'incentive-dashboard',
+    component: IncentivedashboardComponent
+  },
+  {
+    path: 'new-customer',
+    component: IncentivenewcustomerComponent
+  },
+  {
+    path: 'new-site',
+    component: IncentivenewsiteComponent
   },
   {
     path: 'service-view',
