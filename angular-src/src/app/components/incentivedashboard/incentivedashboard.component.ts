@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -10,8 +10,39 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@ang
   styleUrls: ['./incentivedashboard.component.css']
 })
 export class IncentivedashboardComponent implements OnInit {
+  @Input() event:any;
+
   closeResult = '';
+  incentiveEntryForm: FormGroup;
   recurringItemEntryForm: FormGroup;
+  customer: '';
+  site: '';
+  system: '';
+  newSystem: '';
+  newCustomer: '';
+  newSite: '';
+  accountNumber: '';
+  panelType: '';
+  location: '';
+  centralStation: '';
+  additionalInfo: '';
+  invoiceUpload: '';
+  siteVisitUpload: '';
+  contractUpload: '';
+  subscriberFormUpload: '';
+  otherDocument1Upload: '';
+  otherDocument2Upload: '';
+  invoiceNumber: '';
+  invoiceTotal: '';
+  tax: '';
+  recurring: '';
+  equipmentAndMaterials: '';
+  laborCharges: '';
+  lineItemSubtotal: '';
+  startDate: '';
+  term: '';
+  signalsTested: '';
+
   columns: string[];
 
   constructor(
@@ -24,6 +55,37 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.incentiveEntryForm = this.fb.group({
+      customer: '',
+      site: '',
+      system: '',
+      newSystem: '',
+      newCustomer: '',
+      newSite: '',
+      accountNumber: '',
+      panelType: '',
+      location: '',
+      centralStation: '',
+      additionalInfo: '',
+      invoiceUpload: '',
+      siteVisitUpload: '',
+      contractUpload: '',
+      subscriberFormUpload: '',
+      otherDocument1Upload: '',
+      otherDocument2Upload: '',
+      invoiceNumber: '',
+      invoiceTotal: '',
+      tax: '',
+      recurring: '',
+      equipmentAndMaterials: '',
+      laborCharges: '',
+      lineItemSubtotal: '',
+      startDate: '',
+      term: '',
+      signalsTested: ''
+    })
+
+
     this.recurringItemEntryForm = this.fb.group({
       //table => item, description, bill cycle, rmr, pass through, billing starts, add to an existing rmr item, multiple, total
     })
@@ -52,7 +114,7 @@ export class IncentivedashboardComponent implements OnInit {
       rmr: new FormControl(null, {
         validators: [Validators.required]
       }),
-      passThrough: new FormControl(null, {
+      passhrough: new FormControl(null, {
         validators: [Validators.required]
       }),
       billingStarts: new FormControl(null, {
@@ -70,16 +132,8 @@ export class IncentivedashboardComponent implements OnInit {
     })
   }
 
-  get tableRowArray(): FormArray {
-    return this.recurringItemEntryForm.get('tableRowArray') as FormArray;
-  }
-
-  addNewRow(): void {
-    this.tableRowArray.push(this.createTableRow());
-  }
-
-  onDeleteRow(rowIndex: number): void {
-    this.tableRowArray.removeAt(rowIndex);
+  onSubmit(form: FormGroup) {
+    console.log(form.value.customer)
   }
 
   routeToNewCustomer() {
@@ -94,38 +148,50 @@ export class IncentivedashboardComponent implements OnInit {
     //this.router.navigate(["new-site"]);
   }
 
-  openRecurringModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  routeToRecurring() {
+    this.router.navigate(["incentive-recurring"]);
   }
 
-  openEquipMaterialsModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  routeToEquipMaterials() {
+    this.router.navigate(["incentive-equipment-materials"]);
   }
 
-  openLaborChargesModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  routeToLaborCharges() {
+    this.router.navigate(["incentive-labor-charges"]);
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
+  // openRecurringModal(content) {
+  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
+
+  // openEquipMaterialsModal(content) {
+  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
+
+  // openLaborChargesModal(content) {
+  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
+
+  // private getDismissReason(reason: any): string {
+  //   if (reason === ModalDismissReasons.ESC) {
+  //     return 'by pressing ESC';
+  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+  //     return 'by clicking on a backdrop';
+  //   } else {
+  //     return `with: ${reason}`;
+  //   }
+  // }
 
 }

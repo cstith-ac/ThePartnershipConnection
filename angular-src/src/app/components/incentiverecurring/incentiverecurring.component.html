@@ -1,1 +1,153 @@
-<p>incentiverecurring works!</p>
+<div class="card">
+    <div class="col-md-12">
+        <h2>Incentive Entry</h2>
+    </div>
+    <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
+        <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
+    </a>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span class="mr-5">Invoice #</span>
+                <span class="ml-5">Customer Name</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span>Customer Site Information</span>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span>Customer System Information</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Recurring Item Entry</h3>
+            </div>
+        </div>
+        <div class="table" style="overflow: scroll;"> 
+            <form>
+                <table>
+                    <thead style="background: lightgray;">
+                        <tr>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Bill Cycle</th>
+                            <th>RMR</th>
+                            <th>Pass Through</th>
+                            <th>Billing Starts</th>
+                            <th>Add to an Existing RMR Item</th>
+                            <th>Multiple</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select class="form-control col-sm-12">
+                                    <option>Monitoring</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control">
+                            </td>
+                            <td>
+                                <select class="form-control col-sm-12">
+                                    <option>Monthly</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!-- <div class="input-group d-flex justify-content-left">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                                </div> -->
+                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                                <!-- <div class="input-group d-flex justify-content-left">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                                </div> -->
+                            </td>
+                            <td>
+                                <input type="date" class="form-control col-sm-12">
+                            </td>
+                            <td>
+                                <input type="checkbox" class="form-control form-check-input">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control col-sm-3">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                                <!-- <div class="input-group d-flex justify-content-left">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                                </div> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class="col-md-12">
+            <form>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Item</label>
+                        <select class="form-control">
+                            <option>Monitoring</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Bill Cycle</label>
+                        <select class="form-control"> 
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>RMR</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Pass Through</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Starts</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Add to an Existing RMR Item</label>
+                        <input type="checkbox" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Multiple</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Total</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> -->
+</div>
+
+

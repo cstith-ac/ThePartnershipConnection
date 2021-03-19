@@ -45,6 +45,9 @@ import { IncentiveentryComponent } from './components/incentiveentry/incentiveen
 import { IncentivedashboardComponent } from './components/incentivedashboard/incentivedashboard.component';
 import { IncentivenewcustomerComponent } from './components/incentivenewcustomer/incentivenewcustomer.component';
 import { IncentivenewsiteComponent } from './components/incentivenewsite/incentivenewsite.component';
+import { IncentiverecurringComponent } from './components/incentiverecurring/incentiverecurring.component';
+import { IncentiveequipmatComponent } from './components/incentiveequipmat/incentiveequipmat.component';
+import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
 
 const routes: Routes = [
   {
@@ -188,19 +191,38 @@ const routes: Routes = [
   },
   {
     path: 'incentive-entry',
-    component: IncentiveentryComponent
+    component: IncentiveentryComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'incentive-dashboard',
-    component: IncentivedashboardComponent
+    component: IncentivedashboardComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'new-customer',
-    component: IncentivenewcustomerComponent
+    component: IncentivenewcustomerComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'new-site',
-    component: IncentivenewsiteComponent
+    component: IncentivenewsiteComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'incentive-recurring',
+    component: IncentiverecurringComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'incentive-equipment-materials',
+    component: IncentiveequipmatComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'incentive-labor-charges',
+    component: IncentivelaborchargesComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'service-view',

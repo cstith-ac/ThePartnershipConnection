@@ -1,1 +1,67 @@
-<p>incentivelaborcharges works!</p>
+<div class="card">
+    <h2>Incentive Entry</h2>
+    <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
+        <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
+    </a>
+    <div class="row">
+        <div class="col-md-6 offset-md-4">
+            <span class="mr-5">Invoice #</span>
+            <span class="ml-5">Customer Name</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-4">
+            <span>Customer Site Information</span>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-4">
+            <span>Customer System Information</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Labor Entry</h3>
+        </div>
+    </div>
+    <div class="table-responsive" style="overflow: scroll;"> 
+        <table>
+            <thead style="background: lightgray;">
+                <tr>
+                    <th>Description</th>
+                    <th>Hours</th>
+                    <th>Cost per Hour</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control col-sm-3" placeholder="0">
+                    </td>
+                    <td>
+                        <div class="input-group d-flex justify-content-left">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group d-flex justify-content-left">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="text" class="form-control col-sm-8" placeholder="0.00">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

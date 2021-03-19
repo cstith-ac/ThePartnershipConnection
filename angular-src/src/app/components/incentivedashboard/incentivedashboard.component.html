@@ -313,14 +313,16 @@
         </div>
     </form>
 </div> -->
-
-<form>
+<div class="card">
+    <div class="card-body">
+        <h2>Incentive Entry</h2>
+<form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)">
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-5">
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Customer</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="customer" formControlName="customer">
                     <span class="pl-4" (click)="routeToNewCustomer()">
                         <i class="fas fa-plus-circle"></i>
                         New Customer
@@ -328,7 +330,7 @@
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Site</label>
-                    <input type="search" class="form-control col-sm-5">
+                    <input type="search" class="form-control col-sm-5" [(ngModel)]="site" formControlName="site">
                     <span class="pl-4" (click)="routeToNewSite()">
                         <i class="fas fa-plus-circle"></i>
                         New Site
@@ -336,119 +338,126 @@
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">System</label>
-                    <input type="search" class="form-control col-sm-5">
+                    <input type="search" class="form-control col-sm-5" [(ngModel)]="system" formControlName="system">
                 </div>
-                <div class="form-group form-inline">
-                    <label class="col-sm-2 col-form-label">This is a new system</label>
-                    <input type="checkbox" class="form-control col-sm-2">
+                <div class="form-group form-inline form-check">
+                    <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
+                    <input type="checkbox" class="form-control form-check-input" [(ngModel)]="newSystem" formControlName="newSystem">
                 </div>
                 <div class="form-group form-inline">
                     <p class="text-danger">Verify System Information!</p>
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Account #</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="accountNumber" formControlName="accountNumber">
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Panel Type</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="panelType" formControlName="panelType">
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Location</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="location" formControlName="location">
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Central Station</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="centralStation" formControlName="centralStation">
                 </div>
                 <div class="form-group form-inline">
                     <label class="col-sm-2 col-form-label">Additional Info</label>
-                    <input type="text" class="form-control col-sm-5">
+                    <input type="text" class="form-control col-sm-5" [(ngModel)]="additionalInfo" formControlName="additionalInfo">
                 </div>
             </div>
             <div class="col-md-7">
                 <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            Upload Documents
+                        </h3>
+                    </div>
+                </div>
+                <div class="row form-inline">
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
+                        <div class="form-group">
                             <label class="col-sm-4 col-form-label pl-0">Invoice</label>
                             <!-- <i class="far fa-play-circle"></i> -->
                             <i class="fas fa-upload pr-3"></i>
-                            <input type="file" class="form-control col-sm-6">
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="invoiceUpload" formControlName="invoiceUpload">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
-                            <label class="col-sm-5 col-form-label">Subscriber Form</label>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-form-label">Subscriber Form</label>
                             <!-- <i class="far fa-play-circle"></i> -->
                             <i class="fas fa-upload pr-3"></i>
-                            <input type="file" class="form-control col-sm-6">
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="subscriberFormUpload" formControlName="subscriberFormUpload">
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row form-inline">
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
+                        <div class="form-group">
                             <label class="col-sm-4 col-form-label pl-0">Site Visit</label>
                             <!-- <i class="far fa-play-circle"></i> -->
                             <i class="fas fa-upload pr-3"></i>
-                            <input type="file" class="form-control col-sm-6">
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="siteVisitUpload" formControlName="siteVisitUpload">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
+                        <div class="form-group">
                             <label class="col-sm-5 col-form-label">Other Document</label>
                             <!-- <i class="far fa-play-circle"></i> -->
                             <i class="fas fa-upload pr-3"></i>
-                            <input type="file" class="form-control col-sm-6">
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="otherDocument1Upload" formControlName="otherDocument1Upload">
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row form-inline">
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
+                        <div class="form-group">
                             <label class="col-sm-4 col-form-label pl-0">Contract</label>
                             <i class="fas fa-upload pr-3"></i>
                             <!-- <i class="far fa-play-circle"></i> -->
-                            <input type="file" class="form-control col-sm-6">
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="contractUpload" formControlName="contractUpload">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group form-inline">
+                        <div class="form-group">
                             <label class="col-sm-5 col-form-label">Other Document</label>
                             <!-- <i class="far fa-play-circle"></i> -->
                             <i class="fas fa-upload pr-3"></i>
-                            <input type="file" class="form-control col-sm-6"> 
+                            <input type="file" class="form-control col-sm-6" [(ngModel)]="otherDocument2Upload" formControlName="otherDocument2Upload"> 
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group form-inline">
+                <div class="row form-inline mb-4">
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label class="col-sm-4 col-form-label pl-0">Invoice #</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control col-sm-10">
+                            <div class="input-group d-flex justify-content-center">
+                                <input type="text" class="form-control col-sm-10" [(ngModel)]="invoiceNumber" formControlName="invoiceNumber">
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="form-group form-inline">
-                            <label class="col-sm-2 col-form-label">Total</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 col-form-label">Total</label>
                             <div class="input-group d-flex justify-content-center">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-8">
+                                <input type="text" class="form-control col-sm-8" [(ngModel)]="invoiceTotal" formControlName="invoiceTotal">
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="form-group form-inline">
-                            <label class="col-sm-2 col-form-label">Tax</label>
-                            <div class="input-group">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 col-form-label">Tax</label>
+                            <div class="input-group d-flex justify-content-center">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-10">
+                                <input type="text" class="form-control col-sm-10" [(ngModel)]="tax" formControlName="tax">
                             </div>
                         </div>
                     </div>
@@ -458,31 +467,52 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-4 col-form-label pl-0">Recurring</label>
                             (Enter Line Items)
-                            <ng-template #content let-modal>
+                            <!-- <ng-template #content let-modal>
                                 <div class="modal-header">
-                                  <h4 class="modal-title" id="modal-basic-title">Incentive Entry</h4>
+                                    <div class="col-md-6">
+                                        <h4 class="modal-title" id="modal-basic-title">Incentive Entry</h4>
+                                    </div>
                                   <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
                                 <div class="modal-body">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <span>Invoice #</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span>Customer Name</span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span>Customer Site Information</span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span>Customer System Information</span>
+                                        </div>
+                                    </div>
                                     <h2>Recurring Item Entry</h2>
                                     <form [formGroup]="recurringItemEntryForm" (ngSubmit)="recurringItemEntryForm">
 
-                                        <table class="table table-striped" [value]="tableRowArray.controls" [responsive]="true">
+                                        <table class="table table-striped">
                                             <thead>
                                             <tr>
-                                              <th scope="col">#</th>
-                                              <th scope="col">Country</th>
-                                              <th scope="col">Area</th>
-                                              <th scope="col">Population</th>
+                                              <th scope="col">Item</th>
+                                              <th scope="col">Description</th>
+                                              <th scope="col">Bill Cycle</th>
+                                              <th scope="col">RMR</th>
+                                              <th scope="col">Pass Through</th>
+                                              <th scope="col">Billing Starts</th>
+                                              <th scope="col">Add to an Existing RMR Item</th>
+                                              <th scope="col">Multiple</th>
+                                              <th scope="col">Total</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                               <th scope="row"></th>
                                               <td>
-                                                foo
+                                                <input type="text">
                                               </td>
                                               <td>foo</td>
                                               <td>foo</td>
@@ -495,21 +525,24 @@
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
                                 </div>
-                            </ng-template>
-                            <a (click)="openRecurringModal(content)">
+                            </ng-template> -->
+                            <!-- <a (click)="openRecurringModal(content)">
+                                <i class="fas fa-plus-circle pl-3"></i>
+                            </a> -->
+                            <a (click)="routeToRecurring()">
                                 <i class="fas fa-plus-circle pl-3"></i>
                             </a>
                             <div class="input-group col-sm-3 ml-auto">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-6">
+                                <input type="text" class="form-control col-sm-6" [(ngModel)]="recurring" formControlName="recurring">
                             </div>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-4 col-form-label pl-0">Equipment &amp; Materials</label>
                             (Enter Line Items)
-                            <ng-template #content let-modal>
+                            <!-- <ng-template #content let-modal>
                                 <div class="modal-header">
                                     <h4 class="modal-title" id="modal-basic-title">Incentive Entry</h4>
                                     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -522,21 +555,24 @@
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
                                   </div>
-                            </ng-template>
-                            <a (click)="openEquipMaterialsModal(content)">
+                            </ng-template> -->
+                            <!-- <a (click)="openEquipMaterialsModal(content)">
+                                <i class="fas fa-plus-circle pl-3"></i>
+                            </a> -->
+                            <a (click)="routeToEquipMaterials()">
                                 <i class="fas fa-plus-circle pl-3"></i>
                             </a>
                             <div class="input-group col-sm-3 ml-auto">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-6">
+                                <input type="text" class="form-control col-sm-6" [(ngModel)]="equipmentAndMaterials" formControlName="equipmentAndMaterials">
                             </div>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-4 col-form-label pl-0">Labor Charges</label>
                             (Enter Line Items)
-                            <ng-template #content let-modal>
+                            <!-- <ng-template #content let-modal>
                                 <div class="modal-header">
                                     <h4 class="modal-title" id="modal-basic-title">Incentive Entry</h4>
                                     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -549,15 +585,18 @@
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
                                   </div>
-                            </ng-template>
-                            <a (click)="openLaborChargesModal(content)">
+                            </ng-template> -->
+                            <!-- <a (click)="openLaborChargesModal(content)">
+                                <i class="fas fa-plus-circle pl-3"></i>
+                            </a> -->
+                            <a (click)="routeToLaborCharges()">
                                 <i class="fas fa-plus-circle pl-3"></i>
                             </a>
                             <div class="input-group col-sm-3 ml-auto">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-6">
+                                <input type="text" class="form-control col-sm-6" [(ngModel)]="laborCharges" formControlName="laborCharges">
                             </div>
                         </div>
                         <div class="form-group form-inline">
@@ -566,22 +605,22 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control col-sm-6">
+                                <input type="text" class="form-control col-sm-6" [(ngModel)]="lineItemSubtotal" formControlName="lineItemSubtotal">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group form-inline">
                             <label class="col-sm-3 col-form-label">Start Date</label>
-                            <input type="date" class="form-control col-sm-5">
+                            <input type="date" class="form-control col-sm-5" [(ngModel)]="startDate" formControlName="startDate">
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-3 col-form-label">Term</label>
-                            <input type="month" class="form-control col-sm-2 mr-3">Months
+                            <input type="month" class="form-control col-sm-2 mr-3" [(ngModel)]="term" formControlName="term">Months
                         </div>
-                        <div class="form-group form-inline">
-                            <label class="col-sm-5 col-form-label text-danger font-weight-bold">Signals Tested!</label>
-                            <input type="checkbox" class="form-control col-sm-2">
+                        <div class="form-group form-inline form-check">
+                            <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
+                            <input type="checkbox" class="form-control form-check-input" [(ngModel)]="signalsTested" formControlName="signalsTested">
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-10 col-form-label">
@@ -604,3 +643,5 @@
         </div>
     </div>
 </form>
+    </div>
+</div>
