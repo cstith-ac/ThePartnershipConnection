@@ -1,0 +1,29 @@
+export class IncentiveDashboard {
+    customer: string;
+    site: string;
+    system: string;
+    newSystem: string;
+    newCustomer: boolean;
+    newSite: boolean;
+    accountNumber: string;
+    panelType: string;
+    location: string;
+    centralStation: string;
+    additionalInfo: string;
+    invoiceUpload: string;
+    siteVisitUpload: string;
+    contractUpload: string;
+    subscriberFormUpload: string;
+    otherDocument1Upload: string;
+    otherDocument2Upload: string;
+    invoiceNumber: number;
+    invoiceTotal: number;
+    tax: number;
+    recurring: string;
+    equipmentAndMaterials: string;
+    laborCharges: string;
+    lineItemSubtotal: string;
+    startDate: number;
+    term: number;
+    signalsTested: boolean;
+}

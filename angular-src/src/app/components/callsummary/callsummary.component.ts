@@ -129,32 +129,6 @@ export class CallsummaryComponent implements OnInit {
       e.preventDefault();
       $("#callSummaryModal").modal("hide");
     })
-
-    // // Move and resize modals
-    // function moveResizeModal() {
-    //   $(".modal-header").on('mousedown', function (downEvt) {
-    //     var $draggable = $(this)
-    //     var x = downEvt.pageX - $draggable.offset().left,
-    //       y = downEvt.pageY - $draggable.offset().top;
-    //     $('body').on('mousemove.draggable', function (moveEvt) {
-    //       $draggable.closest(".modal-dialog").offset({
-    //         "left": moveEvt.pageX - x,
-    //         "top": moveEvt.pageY - y
-    //       })
-    //     })
-    //     $('.modal-content').resizable({
-    //       //alsoResize: ".modal-dialog",
-    //       minHeight: 300,
-    //       minWidth: 300
-    //     });
-    //     $('body').on('mouseup', function () {
-    //       $("body").off("mousemove.draggable")
-    //     })
-    //     $draggable.closest(".modal").one("bs.modal.hide", function () {
-    //       $("body").off("mousemove.draggable")
-    //     })
-    //   })
-    // }
   }
 
   isIssueResolved(event){

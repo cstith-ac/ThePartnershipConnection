@@ -3,3 +3,8 @@
     background-color: #34e5f2;
     color: black;
 }
+.form-check-input {
+    position: absolute;
+    margin-top: .3rem;
+    margin-left: 18.25rem;
+}

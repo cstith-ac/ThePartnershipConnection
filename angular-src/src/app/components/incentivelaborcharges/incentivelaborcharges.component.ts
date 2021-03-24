@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouteService } from '../../services/route.service';
+import { ListLaborItems } from '../../models/listlaboritems';
 
 @Component({
   selector: 'app-incentivelaborcharges',
@@ -6,10 +9,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./incentivelaborcharges.component.css']
 })
 export class IncentivelaborchargesComponent implements OnInit {
+  incentiveLaborChargesEntryForm: FormGroup;
+  listLaborItems: ListLaborItems[];
 
-  constructor() { }
+  description: '';
 
-  ngOnInit(): void {
+  constructor(
+    public fb: FormBuilder,
+    public routeService: RouteService
+  ) { }
+
+  ngOnInit() {
+    this.incentiveLaborChargesEntryForm = this.fb.group({
+      Description: ["", Validators.required],
+      Hours: ["", Validators.required],
+      CostPerHour: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
+
+    this.routeService.getListLaborItems().subscribe(
+      res => {
+        this.listLaborItems = res;
+      }
+    )
+  }
+
+  onSubmit(form: FormGroup) {
+    console.log(form.value.Total)
   }
 
 }

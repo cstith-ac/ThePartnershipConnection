@@ -48,6 +48,13 @@ namespace WebAPI.Models
         public virtual DbSet<CustomerContractNotes> GetCustomerContractNotes { get; set; }
         public virtual DbSet<CustomerContractInfo> GetCustomerContractInfos { get; set; }
         public virtual DbSet<Customer3GListing> GetCustomer3GListings { get; set; }
+        public virtual DbSet<ListPanelTypes> GetListPanelTypes { get; set; }
+        public virtual DbSet<ListCentralStations> GetListCentralStations { get; set; }
+        public virtual DbSet<ListSitesForCustomer> GetListSitesForCustomers { get; set; }
+        public virtual DbSet<ListSystemsForSite> GetListSystemsForSites { get; set; }
+        public virtual DbSet<ListRecurringItems> GetListRecurringItems { get; set; }
+        public virtual DbSet<ListMaterialItems> GetListMaterialItems { get; set; }
+        public virtual DbSet<ListLaborItems> GetListLaborItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -332,6 +339,41 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<Customer3GListing>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListPanelTypes>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListCentralStations>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListSitesForCustomer>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListSystemsForSite>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListRecurringItems>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListMaterialItems>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListLaborItems>(entity =>
             {
                 entity.HasNoKey();
             });

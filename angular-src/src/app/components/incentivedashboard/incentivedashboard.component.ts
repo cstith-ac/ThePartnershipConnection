@@ -1,8 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { IncentiveDashboard } from '../../models/incentivedashboard';
+import { IncentiveEntry } from '../../models/incentiveentry'; 
+import { ListPanelTypes } from '../../models/listpaneltypes';
+import { ListCentralStations } from '../../models/listcentralstations';
+import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
+import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -10,7 +16,17 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
   styleUrls: ['./incentivedashboard.component.css']
 })
 export class IncentivedashboardComponent implements OnInit {
-  @Input() event:any;
+  @Input() incentiveEntryOutput:[];
+
+  id;
+  incentiveEntry: IncentiveEntry[];
+  incentivedashboard:any[];
+  listpaneltypes: ListPanelTypes[];
+  listcentralstations: ListCentralStations[];
+  listsitesforcustomer: ListSitesForCustomer[];
+  listSystemsForSite: ListSystemsForSite[];
+
+  selectedValue: number;
 
   closeResult = '';
   incentiveEntryForm: FormGroup;
@@ -56,39 +72,81 @@ export class IncentivedashboardComponent implements OnInit {
 
   ngOnInit() {
     this.incentiveEntryForm = this.fb.group({
-      customer: '',
-      site: '',
-      system: '',
-      newSystem: '',
-      newCustomer: '',
-      newSite: '',
-      accountNumber: '',
-      panelType: '',
-      location: '',
-      centralStation: '',
-      additionalInfo: '',
-      invoiceUpload: '',
-      siteVisitUpload: '',
-      contractUpload: '',
-      subscriberFormUpload: '',
-      otherDocument1Upload: '',
-      otherDocument2Upload: '',
-      invoiceNumber: '',
-      invoiceTotal: '',
-      tax: '',
-      recurring: '',
-      equipmentAndMaterials: '',
-      laborCharges: '',
-      lineItemSubtotal: '',
-      startDate: '',
-      term: '',
-      signalsTested: ''
+      Customer: ["", Validators.required],
+      Site: ["", Validators.required],
+      System: ["", Validators.required],
+      NewSystem: ["", Validators.required],
+      NewCustomer: ["", Validators.required],
+      NewSite: ["", Validators.required],
+      AccountNumber: ["", Validators.required],
+      PanelType: ["", Validators.required],
+      Location: ["", Validators.required],
+      CentralStation: ["", Validators.required],
+      AdditionalInfo: ["", Validators.required],
+      InvoiceUpload: ["", Validators.required],
+      SiteVisitUpload: ["", Validators.required],
+      ContractUpload: ["", Validators.required],
+      SubscriberFormUpload: ["", Validators.required],
+      OtherDocument1Upload: ["", Validators.required],
+      OtherDocument2Upload: ["", Validators.required],
+      InvoiceNumber: ["", Validators.required],
+      InvoiceTotal: ["", Validators.required],
+      Tax: ["", Validators.required],
+      Recurring: ["", Validators.required],
+      EquipmentAndMaterials: ["", Validators.required],
+      LaborCharges: ["", Validators.required],
+      LineItemSubtotal: ["", Validators.required],
+      StartDate: ["", Validators.required],
+      Term: ["", Validators.required],
+      SignalsTested: ["", Validators.required]
     })
 
 
     this.recurringItemEntryForm = this.fb.group({
       //table => item, description, bill cycle, rmr, pass through, billing starts, add to an existing rmr item, multiple, total
     })
+
+    this.routeService.getListPanelTypes().subscribe(
+      res => {
+        this.listpaneltypes = res;
+      }
+    )
+
+    this.routeService.getListCentralStations().subscribe(
+      res => {
+        this.listcentralstations = res;
+      }
+    )
+
+    this.routeService.getListSitesForCustomer(107746).subscribe(
+      res => {
+        //console.log(res)
+        this.listsitesforcustomer = [].concat(res);
+      }
+    )
+
+    // this.routeService.getListSystemsForSite(117019).subscribe(
+    //   res => {
+    //     this.listsystemsforsite = [].concat(res);
+    //   }
+    // )
+  }
+
+  selectSiteToSystem(val: any) {
+    this.updateSystem(val)
+  }
+
+  updateSystem(val: any) {
+    let id = val;
+    //let id = 117019;
+    // append CustomerSiteID to get ListSystemsForSite
+    this.routeService.getListSystemsForSite(id).subscribe(
+      res => {
+        //this.listsystemsforsite = res;
+        console.log(res)
+        this.listSystemsForSite = [].concat(res);
+      }
+    )
   }
 
   private createForm(): void {

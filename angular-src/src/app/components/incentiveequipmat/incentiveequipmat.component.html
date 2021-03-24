@@ -1,9 +1,77 @@
 <div class="card">
-    <h2>Incentive Entry</h2>
+    <div class="col-md-12">
+        <h2>Incentive Entry</h2>
+    </div>
     <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
-        <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
+    <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
     </a>
-    <div class="row">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span class="mr-5">Invoice #</span>
+                <span class="ml-5">Customer Name</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span>Customer Site Information</span>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-4">
+                <span>Customer System Information</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Recurring Item Entry</h3>
+            </div>
+        </div>
+        <div style="overflow: auto;">
+            <div class="table table-recurring">
+                <div class="thead">
+                    <div class="tr">
+                        <div class="td">Item</div>
+                        <div class="td">Description</div>
+                        <div class="td">Quantity</div>
+                        <div class="td">Cost</div>
+                        <div class="td">Total</div>
+                        <div class="td"></div>
+                    </div>
+                </div>
+                <div class="tbody">
+                    <form class="tr" [formGroup]="incentiveEquipMatEntryForm" (ngSubmit)="onSubmit(incentiveEquipMatEntryForm)">
+                        <div class="td">
+                            <div class="dropdown">
+                                <select formControlName="Item" class="form-control">
+                                    <option value="monitoring">Monitoring</option>
+                                    <!-- <option *ngFor="let item of listRecurringItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option> -->
+                                </select>
+                            </div>
+                            <!-- <input type="text" [(ngModel)]="item" formControlName="Item"> -->
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="description" formControlName="Description">
+                        </div>
+                        <div class="td">
+                            <input type="text" formControlName="Quantity">
+                        </div>
+                        
+                        <div class="td">
+                            <input type="text" formControlName="Cost">
+                        </div>
+                        <div class="td">
+                            <input type="text" formControlName="Total">
+                        </div>
+                        <div class="td action">
+                            <button type="button" (click)="onSubmit(incentiveEquipMatEntryForm)">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row">
         <div class="col-md-6 offset-md-4">
             <span class="mr-5">Invoice #</span>
             <span class="ml-5">Customer Name</span>
@@ -23,8 +91,8 @@
         <div class="col-md-12">
             <h3>Equipment and Materials Entry</h3>
         </div>
-    </div>
-    <div class="table-responsive" style="overflow: scroll;"> 
+    </div> -->
+    <!-- <div class="table-responsive" style="overflow: scroll;"> 
         <table>
             <thead style="background: lightgray;">
                 <tr>
@@ -67,7 +135,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
 </div>
 
 

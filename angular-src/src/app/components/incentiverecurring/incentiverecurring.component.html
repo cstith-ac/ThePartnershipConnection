@@ -3,7 +3,7 @@
         <h2>Incentive Entry</h2>
     </div>
     <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
-        <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
+    <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
     </a>
     <div class="card-body">
         <div class="row">
@@ -27,7 +27,72 @@
                 <h3>Recurring Item Entry</h3>
             </div>
         </div>
-        <div class="table" style="overflow: scroll;"> 
+        <div style="overflow: auto;">
+            <div class="table table-recurring">
+                <div class="thead">
+                    <div class="tr">
+                        <div class="td">Monitoring</div>
+                        <div class="td">Description</div>
+                        <div class="td">Bill Cycle</div>
+                        <div class="td">RMR</div>
+                        <div class="td">Pass Through</div>
+                        <div class="td">Billing Starts</div>
+                        <div class="td">Add to an Existing RMR Item</div>
+                        <div class="td">Multiple</div>
+                        <div class="td">Total</div>
+                        <div class="td"></div>
+                    </div>
+                </div>
+                <div class="tbody">
+                    <form class="tr" [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onSubmit(incentiveRecurringEntryForm)">
+                        <div class="td">
+                            <div class="dropdown">
+                                <select formControlName="Item" class="form-control">
+                                    <option *ngFor="let item of listRecurringItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option>
+                                </select>
+                            </div>
+                            <!-- <input type="text" [(ngModel)]="item" formControlName="Item"> -->
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="description" formControlName="Description">
+                        </div>
+                        <div class="td">
+                            <div class="dropdown">
+                                <select formControlName="BillCycle" class="form-control">
+                                    <!-- <option *ngFor="let item of listRecurringItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option> -->
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <!-- <input type="text" [(ngModel)]="billCycle" formControlName="BillCycle"> -->
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="rmr" formControlName="RMR">
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="passThrough" formControlName="PassThrough">
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="billingStarts" formControlName="BillingStarts">
+                        </div>
+                        <div class="td">
+                            <input type="checkbox" style="margin-right: 10rem;" [(ngModel)]="addToAnExistingRMRItem" formControlName="AddToAnExistingRMRItem">
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="multiple" formControlName="Multiple">
+                        </div>
+                        <div class="td">
+                            <input type="text" [(ngModel)]="total" formControlName="Total">
+                        </div>
+                        <div class="td action">
+                            <button type="button" (click)="onSubmit(incentiveRecurringEntryForm)">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <em>The width of this jumps around a bit because of the INPUTs but you could fix this by giving a width to each column or the table DIV.</em> -->
+        <!-- <div class="table" style="overflow: scroll;"> 
             <form>
                 <table>
                     <thead style="background: lightgray;">
@@ -59,22 +124,10 @@
                                 </select>
                             </td>
                             <td>
-                                <!-- <div class="input-group d-flex justify-content-left">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                                </div> -->
                                 <input type="text" class="form-control col-sm-8" placeholder="0.00">
                             </td>
                             <td>
                                 <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                                <!-- <div class="input-group d-flex justify-content-left">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                                </div> -->
                             </td>
                             <td>
                                 <input type="date" class="form-control col-sm-12">
@@ -87,18 +140,12 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                                <!-- <div class="input-group d-flex justify-content-left">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                                </div> -->
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </form>
-        </div>
+        </div> -->
     </div>
     <!-- <div class="row">
         <div class="col-md-12">
