@@ -14,7 +14,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterPipeModule } from 'ngx-filter-pipe';
-import { GridModule, ExcelModule  } from '@progress/kendo-angular-grid';
+import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 
 import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';

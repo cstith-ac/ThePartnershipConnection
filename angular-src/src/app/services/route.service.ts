@@ -391,6 +391,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/ListLaborItems/`, httpOptions);
   }
 
+  getCustomerSearchList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchList/`, httpOptions);
+  }
+
   loadToken() {
     const token = localStorage.getItem('token');
     this.authToken = token;

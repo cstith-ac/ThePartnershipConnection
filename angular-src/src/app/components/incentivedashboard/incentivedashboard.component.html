@@ -9,6 +9,9 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
                             <input type="text" class="form-control col-sm-5" [(ngModel)]="customer" formControlName="Customer">
+                            <span class="ml-2" (click)="searchCustomer(content)">
+                                <i class="fas fa-search"></i>
+                            </span>
                             <span class="pl-4" (click)="routeToNewCustomer()">
                                 <i class="fas fa-plus-circle"></i>
                                 New Customer
@@ -23,6 +26,9 @@
                                     </option>
                                 </select>
                             </div>
+                            <span class="ml-2">
+                                <i class="fas fa-search"></i>
+                            </span>
                             <span class="pl-4" (click)="routeToNewSite()">
                                 <i class="fas fa-plus-circle"></i>
                                 New Site
@@ -37,6 +43,9 @@
                                     </option>
                                 </select>
                             </div>
+                            <span class="ml-2">
+                                <i class="fas fa-search"></i>
+                            </span>
                         </div>
                         <div class="form-group form-inline form-check">
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
@@ -72,7 +81,6 @@
                                     </option>
                                 </select>
                             </div>
-                            <!-- <input type="text" class="form-control col-sm-5" [(ngModel)]="centralStation" formControlName="centralStation"> -->
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Additional Info</label>
@@ -124,14 +132,12 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-form-label pl-0">Contract</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <!-- <i class="far fa-play-circle"></i> -->
                                     <input type="file" class="form-control col-sm-6" [(ngModel)]="contractUpload" formControlName="ContractUpload">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-sm-5 col-form-label">Other Document</label>
-                                    <!-- <i class="far fa-play-circle"></i> -->
                                     <i class="fas fa-upload pr-3"></i>
                                     <input type="file" class="form-control col-sm-6" [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"> 
                                 </div>
@@ -180,10 +186,6 @@
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
                                     <label class="col-form-label pl-0">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label>
-                                    <!-- (Enter Line Items)
-                                    <a (click)="routeToRecurring()">
-                                        <i class="fas fa-plus-circle pl-3"></i>
-                                    </a> -->
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -193,10 +195,6 @@
                                 </div>
                                 <div class="form-group form-inline">
                                     <label class="col-form-label pl-0">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label>
-                                    <!-- (Enter Line Items)
-                                    <a (click)="routeToEquipMaterials()">
-                                        <i class="fas fa-plus-circle pl-3"></i>
-                                    </a> -->
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -206,10 +204,6 @@
                                 </div>
                                 <div class="form-group form-inline">
                                     <label class="col-form-label pl-0">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label>
-                                    <!-- (Enter Line Items)
-                                    <a (click)="routeToLaborCharges()">
-                                        <i class="fas fa-plus-circle pl-3"></i>
-                                    </a> -->
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -258,3 +252,147 @@
         </form>
     </div>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Search</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <kendo-grid
+            [kendoGridBinding]="gridData"
+            kendoGridSelectBy="customer_id"
+            [selectedKeys]="mySelection"
+            [pageSize]="20"
+            [pageable]="true"
+            [sortable]="true"
+            [groupable]="true"
+            [reorderable]="true"
+            [resizable]="true"
+            [height]="480"
+            [columnMenu]="{ filter: true }"
+        >
+            <ng-template kendoGridToolbarTemplate>
+                <input 
+                    placeholder="Search in all columns..." 
+                    kendoTextBox 
+                    (input)="onFilter($event.target.value)" 
+                />
+                <!-- <button kendoGridExcelCommand type="button" icon="file-excel" style="float:right;">Export to Excel</button>
+                <button kendoGridPDFCommand icon="file-pdf" style="float:right;">Export to PDF</button> -->
+            </ng-template>
+            <!-- <kendo-grid-checkbox-column
+                [width]="45"
+                [headerClass]="{'text-center': true}"
+                [class]="{'text-center': true}"
+                [resizable]="false"
+                [columnMenu]="false"
+            ></kendo-grid-checkbox-column> -->
+            <kendo-grid-column 
+                field="customer_Number" 
+                title="Customer Number" 
+                [width]="220"
+                filter="text">
+                <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="customer-photo" [ngStyle]="{'background-image' : photoURL(dataItem)}"></div>
+                    <div class="customer-name">{{ dataItem.customer_Number }}</div>
+                </ng-template> -->
+            </kendo-grid-column>
+            <!-- <kendo-grid-column field="customer_Name" title="Customer Name" [width]="220">
+            </kendo-grid-column> -->
+            <kendo-grid-column
+                field="customer_Name"
+                title="Customer Name"
+                [width]="100"
+                [class]="{'text-center': true}"
+                [resizable]="true"
+                filter="text"
+            >
+                <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                    <img class="flag" [src]="flagURL(dataItem)" width="30">
+                </ng-template> -->
+            </kendo-grid-column>
+            <kendo-grid-column
+                field="customerStatus"
+                title="Customer Status"
+                [width]="100"
+                [class]="{'text-center': true}"
+                [resizable]="false"
+            >
+                <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                    <span *ngIf="dataItem.is_online === true" class="badge badge-success">Online</span>
+                    <span *ngIf="dataItem.is_online === false" class="badge badge-danger">Offline</span>
+                </ng-template> -->
+            </kendo-grid-column>
+            <kendo-grid-column
+                    field="address_1"
+                    title="Address 1"
+                    [width]="110"
+                    [resizable]="false"
+                >
+                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                        <kendo-rating
+                            [value]="dataItem.rating"
+                            [max]="5"
+                        ></kendo-rating>
+                    </ng-template> -->
+                </kendo-grid-column>
+                <kendo-grid-column
+                    field="address_2"
+                    title="Address 2"
+                    [width]="230"
+                    [resizable]="false"
+                >
+                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                        <kendo-sparkline type="bar"
+                            [data]="dataItem.target"
+                            [tooltip]="{visible: false}"
+                            [transitions]="true"
+                            [seriesDefaults]="{labels: {background: 'none', visible: true, format: '{0}%'}}"
+                        >
+                            <kendo-chart-area opacity="0" [width]="200"></kendo-chart-area>
+                            <kendo-chart-value-axis>
+                                <kendo-chart-value-axis-item [min]="0" [max]="130">
+                                </kendo-chart-value-axis-item>
+                            </kendo-chart-value-axis>
+                        </kendo-sparkline>
+                    </ng-template> -->
+                </kendo-grid-column>
+                <kendo-grid-column
+                    field="address_3"
+                    title="Address 3"
+                    [width]="100"
+                >
+                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
+                        <span [ngClass]="{'red text-bold': dataItem.budget < 0}">{{ dataItem.budget | currency }}</span>
+                    </ng-template> -->
+                </kendo-grid-column>
+                <kendo-grid-column field="city" title="City" [width]="130">
+                </kendo-grid-column>
+                <kendo-grid-column field="state" title="State" [width]="200">
+                </kendo-grid-column>
+                <kendo-grid-column field="zipCode" title="Zip Code" [width]="200">
+                </kendo-grid-column>
+
+            <!-- <kendo-grid-pdf fileName="Employees.pdf" [repeatHeaders]="true"></kendo-grid-pdf>
+            <kendo-grid-excel fileName="Employees.xlsx"></kendo-grid-excel> -->
+        </kendo-grid>
+
+      <!-- <form>
+        <div class="form-group">
+          <label for="searchText">Search Text</label>
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </form> -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>

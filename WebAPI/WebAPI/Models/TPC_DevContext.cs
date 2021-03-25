@@ -55,6 +55,7 @@ namespace WebAPI.Models
         public virtual DbSet<ListRecurringItems> GetListRecurringItems { get; set; }
         public virtual DbSet<ListMaterialItems> GetListMaterialItems { get; set; }
         public virtual DbSet<ListLaborItems> GetListLaborItems { get; set; }
+        public virtual DbSet<CustomerSearchList> GetCustomerSearchLists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -374,6 +375,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<ListLaborItems>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSearchList>(entity =>
             {
                 entity.HasNoKey();
             });

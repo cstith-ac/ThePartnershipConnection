@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { DataBindingDirective } from '@progress/kendo-angular-grid';
+import { process } from '@progress/kendo-data-query';
 import { Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +11,7 @@ import { ListPanelTypes } from '../../models/listpaneltypes';
 import { ListCentralStations } from '../../models/listcentralstations';
 import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
 import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
+import { CustomerSearchList } from '../../models/customerseachlist';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -17,6 +20,9 @@ import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
 })
 export class IncentivedashboardComponent implements OnInit {
   @Input() incentiveEntryOutput:[];
+  @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
+  public gridData: CustomerSearchList[];
+  public gridView: CustomerSearchList[];
 
   id;
   incentiveEntry: IncentiveEntry[];
@@ -25,6 +31,8 @@ export class IncentivedashboardComponent implements OnInit {
   listcentralstations: ListCentralStations[];
   listsitesforcustomer: ListSitesForCustomer[];
   listSystemsForSite: ListSystemsForSite[];
+  customerSearchList: CustomerSearchList[];
+  filteredCustomerSearchList: CustomerSearchList[];
 
   selectedValue: number;
 
@@ -60,6 +68,7 @@ export class IncentivedashboardComponent implements OnInit {
   signalsTested: '';
 
   columns: string[];
+  public mySelection: string[] = [];
 
   constructor(
     private router: Router,
@@ -71,6 +80,8 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.gridView = this.gridData;
+
     this.incentiveEntryForm = this.fb.group({
       Customer: ["", Validators.required],
       Site: ["", Validators.required],
@@ -125,12 +136,45 @@ export class IncentivedashboardComponent implements OnInit {
       }
     )
 
+    this.routeService.getCustomerSearchList().subscribe(
+      res => {
+        //this.customerSearchList = res;
+        this.gridData = res;
+      }
+    )
+
     // this.routeService.getListSystemsForSite(117019).subscribe(
     //   res => {
     //     this.listsystemsforsite = [].concat(res);
     //   }
     // )
   }
+
+  public onFilter(inputValue: string): void {
+    console.log(inputValue)
+    this.gridView = process(this.gridData, {
+        filter: {
+            logic: "or",
+            filters: [
+                {
+                    field: 'customer_Number',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'customer_Name',
+                    operator: 'contains',
+                    value: inputValue
+                },
+            ],
+        }
+    }).data;
+    
+    this.dataBinding.skip = 0;
+    // this.gridData.filter(function(person) {
+    //   return person.customer_Name = inputValue
+    // })
+}
 
   selectSiteToSystem(val: any) {
     this.updateSystem(val)
@@ -218,6 +262,22 @@ export class IncentivedashboardComponent implements OnInit {
     this.router.navigate(["incentive-labor-charges"]);
   }
 
+  searchCustomer(content) {
+    console.log('searching for customer...')
+    //bring up a modal
+    this.modalService.open(content, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    //hit the api
+    //select a result
+    //populate the result on the main screen
+  }
+
   // openRecurringModal(content) {
   //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
   //     console.log(result)
@@ -242,14 +302,14 @@ export class IncentivedashboardComponent implements OnInit {
   //   });
   // }
 
-  // private getDismissReason(reason: any): string {
-  //   if (reason === ModalDismissReasons.ESC) {
-  //     return 'by pressing ESC';
-  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-  //     return 'by clicking on a backdrop';
-  //   } else {
-  //     return `with: ${reason}`;
-  //   }
-  // }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
 }
