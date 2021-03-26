@@ -32,9 +32,13 @@ export class IncentivedashboardComponent implements OnInit {
   listsitesforcustomer: ListSitesForCustomer[];
   listSystemsForSite: ListSystemsForSite[];
   customerSearchList: CustomerSearchList[];
-  filteredCustomerSearchList: CustomerSearchList[];
 
   selectedValue: number;
+
+  p: number = 1;
+  searchValue:string;
+  searchByCustomer:boolean;
+  searchByBillingAddress:boolean;
 
   closeResult = '';
   incentiveEntryForm: FormGroup;
@@ -66,6 +70,8 @@ export class IncentivedashboardComponent implements OnInit {
   startDate: '';
   term: '';
   signalsTested: '';
+
+  customer_id;
 
   columns: string[];
   public mySelection: string[] = [];
@@ -138,7 +144,7 @@ export class IncentivedashboardComponent implements OnInit {
 
     this.routeService.getCustomerSearchList().subscribe(
       res => {
-        //this.customerSearchList = res;
+        this.customerSearchList = res;
         this.gridData = res;
       }
     )
@@ -174,7 +180,47 @@ export class IncentivedashboardComponent implements OnInit {
     // this.gridData.filter(function(person) {
     //   return person.customer_Name = inputValue
     // })
-}
+  }
+
+  onItemChangeToCustomer(value) {
+    //this is the default lookup value radio select
+    console.log("Customer value is : ", value);
+    if(value === 'on') {
+      console.log('this value is on')
+      //let the customer filter by customer_Name or customer_Number
+    }
+  }
+
+  onItemChangeToBilling(value) {
+    console.log("Billing value is : ", value);
+    if(value === 'on') {
+      console.log('this value is on')
+      //let the customer filter by Bill Address 1, Bill Address 2, or Bill Phone
+    }
+  }
+
+  onItemChangeToSite(value) {
+    console.log("Site value is : ", value);
+    if(value === 'on') {
+      console.log('this value is on')
+      //let the customer filter by Site Address 1, Site Address 2, or Site Phone
+    }
+  }
+
+  onItemChangeToCentralStation(value) {
+    console.log("Central Station value is : ", value);
+    if(value === 'on') {
+      console.log('this value is on')
+      //let the customer filter by Alarm Account
+    }
+  }
+
+  selectCustomer(customer_id:number) {
+    //If search by customer radio is selected, filter by customer_Number
+    //If search by customer radio is selected, filter by customer_Name
+    console.log(customer_id)
+    //once a customer is selected, push the customer name to the dashboard
+  }
 
   selectSiteToSystem(val: any) {
     this.updateSystem(val)
@@ -262,8 +308,7 @@ export class IncentivedashboardComponent implements OnInit {
     this.router.navigate(["incentive-labor-charges"]);
   }
 
-  searchCustomer(content) {
-    console.log('searching for customer...')
+  openSearchCustomerModal(content) {
     //bring up a modal
     this.modalService.open(content, {
       windowClass: 'my-class',

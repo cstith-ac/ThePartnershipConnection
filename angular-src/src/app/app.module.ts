@@ -14,6 +14,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { FilterPipe } from './_helpers/filter.pipe';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 
 import { PhonePipe } from './_helpers/phone.pipe';
@@ -117,6 +118,7 @@ import { IncentivelaborchargesComponent } from './components/incentivelaborcharg
     PagenotfoundComponent,
     PhonePipe,
     SortPipe,
+    FilterPipe,
     AdmineditComponent,
     IncentiveentryComponent,
     IncentivedashboardComponent,

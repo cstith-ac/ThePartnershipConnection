@@ -9,7 +9,7 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
                             <input type="text" class="form-control col-sm-5" [(ngModel)]="customer" formControlName="Customer">
-                            <span class="ml-2" (click)="searchCustomer(content)">
+                            <span class="ml-2" (click)="openSearchCustomerModal(content)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <span class="pl-4" (click)="routeToNewCustomer()">
@@ -261,7 +261,118 @@
       </button>
     </div>
     <div class="modal-body">
-        <kendo-grid
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-sm-12">
+                    <h2>Look up a customer</h2>
+                </div>
+                <div class="col-sm-12 input-group">
+                    <input type="text" class="form-control" [(ngModel)]="searchValue">
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary border-left-0" id="search-border" type="button">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+                <!-- <div class="col-sm-8">
+                    <input type="text" class="form-control" [(ngModel)]="searchValue">
+                </div> -->
+            </div>
+            <div class="col-md-4">
+                <h2>Search By:</h2>
+                <form>
+                    <div class="form-group">
+                        <input 
+                            [(ngModel)]="searchByCustomer"
+                            [checked]="true"
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCustomer($event.target.value)"
+                        >
+                        <label>Customer</label>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToBilling($event.target.value)"
+                        >
+                        <label>Billing Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToSite($event.target.value)"
+                        >
+                        <label>Site Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCentralStation($event.target.value)"
+                        >
+                        <label>Central Station #</label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Options:</h2>
+                <form>
+                    <h3>Cancelled Customers</h3>
+                    <div class="radio-label-vertical-wrapper">
+                        <div class="form-group">
+                          <!-- <label>Rate Please<sup class="text-danger">* </sup></label> -->
+                          <label class="radio-label-vertical">
+                            <input type="radio" name="cancelledCustomers" value="0" required>Include</label>
+                          <label class="radio-label-vertical">
+                            <input type="radio" name="cancelledCustomers" value="1" required>Exclude</label>
+                        </div>
+                      </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Customer Number</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Customer Status</th>
+                    <th scope="col">Address Line 1</th>
+                    <th scope="col">Address Line 2</th>
+                    <th scope="col">Address Line 3</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Zip Code</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }">
+                    <td>{{ customer.customer_Number }}</td>
+                    <td>{{ customer.customer_Name }}</td>
+                    <td>{{ customer.customerStatus }}</td>
+                    <td>{{ customer.address_1 }}</td>
+                    <td>{{ customer.address_2 }}</td>
+                    <td>{{ customer.address_3 }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td>{{ customer.state }}</td>
+                    <td>{{ customer.zipCode }}</td>
+                    <td>
+                        <button class="btn btn-primary" (click)="selectCustomer(customer.customer_id)">
+                            Select
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+        <!-- <kendo-grid
             [kendoGridBinding]="gridData"
             kendoGridSelectBy="customer_id"
             [selectedKeys]="mySelection"
@@ -280,28 +391,13 @@
                     kendoTextBox 
                     (input)="onFilter($event.target.value)" 
                 />
-                <!-- <button kendoGridExcelCommand type="button" icon="file-excel" style="float:right;">Export to Excel</button>
-                <button kendoGridPDFCommand icon="file-pdf" style="float:right;">Export to PDF</button> -->
             </ng-template>
-            <!-- <kendo-grid-checkbox-column
-                [width]="45"
-                [headerClass]="{'text-center': true}"
-                [class]="{'text-center': true}"
-                [resizable]="false"
-                [columnMenu]="false"
-            ></kendo-grid-checkbox-column> -->
             <kendo-grid-column 
                 field="customer_Number" 
                 title="Customer Number" 
                 [width]="220"
                 filter="text">
-                <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                    <div class="customer-photo" [ngStyle]="{'background-image' : photoURL(dataItem)}"></div>
-                    <div class="customer-name">{{ dataItem.customer_Number }}</div>
-                </ng-template> -->
             </kendo-grid-column>
-            <!-- <kendo-grid-column field="customer_Name" title="Customer Name" [width]="220">
-            </kendo-grid-column> -->
             <kendo-grid-column
                 field="customer_Name"
                 title="Customer Name"
@@ -310,9 +406,6 @@
                 [resizable]="true"
                 filter="text"
             >
-                <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                    <img class="flag" [src]="flagURL(dataItem)" width="30">
-                </ng-template> -->
             </kendo-grid-column>
             <kendo-grid-column
                 field="customerStatus"
@@ -321,78 +414,36 @@
                 [class]="{'text-center': true}"
                 [resizable]="false"
             >
-                <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                    <span *ngIf="dataItem.is_online === true" class="badge badge-success">Online</span>
-                    <span *ngIf="dataItem.is_online === false" class="badge badge-danger">Offline</span>
-                </ng-template> -->
             </kendo-grid-column>
             <kendo-grid-column
-                    field="address_1"
-                    title="Address 1"
-                    [width]="110"
-                    [resizable]="false"
+                field="address_1"
+                title="Address 1"
+                [width]="110"
+                [resizable]="false"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+                field="address_2"
+                title="Address 2"
+                [width]="230"
+                [resizable]="false"
                 >
-                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                        <kendo-rating
-                            [value]="dataItem.rating"
-                            [max]="5"
-                        ></kendo-rating>
-                    </ng-template> -->
-                </kendo-grid-column>
-                <kendo-grid-column
-                    field="address_2"
-                    title="Address 2"
-                    [width]="230"
-                    [resizable]="false"
-                >
-                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                        <kendo-sparkline type="bar"
-                            [data]="dataItem.target"
-                            [tooltip]="{visible: false}"
-                            [transitions]="true"
-                            [seriesDefaults]="{labels: {background: 'none', visible: true, format: '{0}%'}}"
-                        >
-                            <kendo-chart-area opacity="0" [width]="200"></kendo-chart-area>
-                            <kendo-chart-value-axis>
-                                <kendo-chart-value-axis-item [min]="0" [max]="130">
-                                </kendo-chart-value-axis-item>
-                            </kendo-chart-value-axis>
-                        </kendo-sparkline>
-                    </ng-template> -->
-                </kendo-grid-column>
-                <kendo-grid-column
-                    field="address_3"
-                    title="Address 3"
-                    [width]="100"
-                >
-                    <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                        <span [ngClass]="{'red text-bold': dataItem.budget < 0}">{{ dataItem.budget | currency }}</span>
-                    </ng-template> -->
-                </kendo-grid-column>
-                <kendo-grid-column field="city" title="City" [width]="130">
-                </kendo-grid-column>
-                <kendo-grid-column field="state" title="State" [width]="200">
-                </kendo-grid-column>
-                <kendo-grid-column field="zipCode" title="Zip Code" [width]="200">
-                </kendo-grid-column>
-
-            <!-- <kendo-grid-pdf fileName="Employees.pdf" [repeatHeaders]="true"></kendo-grid-pdf>
-            <kendo-grid-excel fileName="Employees.xlsx"></kendo-grid-excel> -->
-        </kendo-grid>
-
-      <!-- <form>
-        <div class="form-group">
-          <label for="searchText">Search Text</label>
-          <div class="input-group">
-            <input type="email" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-            </div>
-          </div>
-        </div>
-      </form> -->
+            </kendo-grid-column>
+            <kendo-grid-column
+                field="address_3"
+                title="Address 3"
+                [width]="100"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column field="city" title="City" [width]="130">
+            </kendo-grid-column>
+            <kendo-grid-column field="state" title="State" [width]="200">
+            </kendo-grid-column>
+            <kendo-grid-column field="zipCode" title="Zip Code" [width]="200">
+            </kendo-grid-column>
+        </kendo-grid> -->
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
     </div>
-  </ng-template>
+</ng-template>
