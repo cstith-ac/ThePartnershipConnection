@@ -25,10 +25,10 @@ export class SysteminfodetailComponent implements OnInit {
       upgradeOption3: "Alula BAT Connect  with Slim-Line Touchpad",
       upgradeOption4: "Qolsys Interactive​ complete system upgrade",
       requirements: "Expected cost to customer requirements",
-      requirement1: "$5.00 RMR increase and $99 customer payment.",
-      requirement2: "$5.00 RMR increase and $99 customer payment.", 
-      requirement3: "Minimum $10.00 to $15.00 RMR increase and $199 to $399 customer payment.",
-      requirement4: "Full system interactive upgrade. Site evaluation required to quote cost to customer."
+      requirement1: "$0 Down and Minimum $5.00 RMR increase ($7.00 Optimal) required OR  a $99 customer payment.",
+      requirement2: "$0 Down and Minimum $5.00 RMR increase ($7.00 Optimal) required OR  a $99 customer payment.", 
+      requirement3: "FREE Installation with a Minimum $7.00 RMR increase ($10.00 Optimal) AND 50% off for the Slim Line Keypad, a $399.00 Value for just $199.95",
+      requirement4: "Onsite quote necessary"
     },
   ]
   
