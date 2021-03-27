@@ -14,9 +14,9 @@ export class FilterPipe implements PipeTransform {
 
     return CustomerSearchLists.filter(x => 
       x.customer_Name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-      x.customer_Number.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
-      
-      );
+      x.customer_Number.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+      x.customerStatus.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+    );
   }
 }
 

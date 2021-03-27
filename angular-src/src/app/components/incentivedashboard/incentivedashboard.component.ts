@@ -25,6 +25,7 @@ export class IncentivedashboardComponent implements OnInit {
   public gridView: CustomerSearchList[];
 
   id;
+  customersiteid;
   incentiveEntry: IncentiveEntry[];
   incentivedashboard:any[];
   listpaneltypes: ListPanelTypes[];
@@ -43,7 +44,7 @@ export class IncentivedashboardComponent implements OnInit {
   closeResult = '';
   incentiveEntryForm: FormGroup;
   recurringItemEntryForm: FormGroup;
-  customer: '';
+  customer: string;
   site: '';
   system: '';
   newSystem: '';
@@ -86,6 +87,7 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.gridView = this.gridData;
 
     this.incentiveEntryForm = this.fb.group({
@@ -135,17 +137,16 @@ export class IncentivedashboardComponent implements OnInit {
       }
     )
 
-    this.routeService.getListSitesForCustomer(107746).subscribe(
-      res => {
-        //console.log(res)
-        this.listsitesforcustomer = [].concat(res);
-      }
-    )
+    // this.routeService.getListSitesForCustomer(107746).subscribe(
+    //   res => {
+    //     this.listsitesforcustomer = [].concat(res);
+    //   }
+    // )
 
     this.routeService.getCustomerSearchList().subscribe(
       res => {
         this.customerSearchList = res;
-        this.gridData = res;
+        //this.gridData = res;
       }
     )
 
@@ -182,6 +183,31 @@ export class IncentivedashboardComponent implements OnInit {
     // })
   }
 
+  //filter cancelled customers or by customerStatus (active or cancel)
+  onItemChangeToInclude(value) {
+    //console.log("Include cancelled customers: ", value)
+    if(value === '0') {
+      console.log('filter the table by active customers: ', value)
+      //filter the table by active customers
+      let cancel = this.customerSearchList.filter(x => x.customerStatus === 'Cancel');
+      console.group(cancel);
+    }
+  }
+
+  onItemChangeToExclude(value) {
+    //this is the default selected radio value
+    //console.log("Exclude cancelled customers: ", value)
+    if(value === '1') {
+      //this.searchValue = "Active"
+      console.log('filter the table by cancelled customers: ', value)
+      //filter the table by cancelled customers
+      let active = this.customerSearchList.filter(x => x.customerStatus === 'Active');
+      console.log(active);
+    }
+  }
+  //filter inactive sites or by
+  //filter inactive systems or by
+
   onItemChangeToCustomer(value) {
     //this is the default lookup value radio select
     console.log("Customer value is : ", value);
@@ -215,25 +241,74 @@ export class IncentivedashboardComponent implements OnInit {
     }
   }
 
-  selectCustomer(customer_id:number) {
+  selectCustomer(customer_id:number,customer_Name:string) {
     //If search by customer radio is selected, filter by customer_Number
     //If search by customer radio is selected, filter by customer_Name
-    console.log(customer_id)
-    //once a customer is selected, push the customer name to the dashboard
+    let selectedCustomerName = customer_Name;
+    let selectedCustomerid = customer_id;
+    //once a customer is selected, push the customer_Name to customer input on Incentive Entry
+    console.log(selectedCustomerName)
+    console.log(selectedCustomerid);
+    this.customer = selectedCustomerName
+    this.id = selectedCustomerid
+    //after selecting a customer, close the modal
+    this.modalService.dismissAll();
+
+    this.routeService.getListSitesForCustomer(this.id).subscribe(
+      res => {
+        this.listsitesforcustomer = [].concat(res);
+      }
+    )
   }
 
-  selectSiteToSystem(val: any) {
-    this.updateSystem(val)
+  selectSystemsForCustomer(customersiteid:number) {
+    this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+      res => {
+        console.log(res)
+      }
+    )
   }
 
-  updateSystem(val: any) {
-    let id = val;
+  selectSitesForCustomer(val: any) {
+    this.updateSite(val)
+  }
+
+  updateSite(val: any) {
+    console.log('call this')
+    //let id = val;
+    console.log(this.id)
     //let id = 117019;
     // append CustomerSiteID to get ListSystemsForSite
-    this.routeService.getListSystemsForSite(id).subscribe(
+    this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        //this.listsystemsforsite = res;
-        console.log(res)
+        this.listsitesforcustomer = [].concat(res);
+        // this.customersiteid = this.listsitesforcustomer.forEach(x => x.customer_Site_id)
+        //console.log(this.listsitesforcustomer)
+        //console.log(typeof(this.listsitesforcustomer))
+        for(var prop in this.listsitesforcustomer) {
+          //console.log(prop,this.listsitesforcustomer[prop].customer_Site_id);
+          this.customersiteid = this.listsitesforcustomer[prop].customer_Site_id;
+          //console.log(this.customersiteid) 
+          this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+            res => {
+              this.listSystemsForSite = [].concat(res);
+            }
+          )
+        }
+      }
+    )
+  }
+
+  selectSiteToSystem(customer_Site_id:number) {
+    this.updateSystem(customer_Site_id);
+    console.log(customer_Site_id)
+  }
+
+  updateSystem(customer_Site_id:number) {
+    console.log('call update system')
+    //get the CustomerSiteID
+    this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+      res => {
         this.listSystemsForSite = [].concat(res);
       }
     )
@@ -315,6 +390,7 @@ export class IncentivedashboardComponent implements OnInit {
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {
       console.log(result)
+      debugger
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });

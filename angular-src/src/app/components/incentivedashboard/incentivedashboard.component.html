@@ -8,7 +8,12 @@
                     <div class="col-md-5">
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
-                            <input type="text" class="form-control col-sm-5" [(ngModel)]="customer" formControlName="Customer">
+                            <input 
+                                type="text" 
+                                class="form-control col-sm-5" 
+                                [(ngModel)]="customer" 
+                                formControlName="Customer"
+                            >
                             <span class="ml-2" (click)="openSearchCustomerModal(content)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -20,7 +25,11 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Site</label>
                             <div class="dropdown">
-                                <select formControlName="Site" class="form-control col-sm-12" [(ngModel)]="selectedValue" (ngModelChange)="updateSystem($event)">
+                                <select 
+                                    formControlName="Site" 
+                                    class="form-control col-sm-12" 
+                                    [(ngModel)]="selectedValue" 
+                                    (ngModelChange)="updateSite($event)">
                                     <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
                                         {{ site.siteName }}
                                     </option>
@@ -37,7 +46,12 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System</label>
                             <div class="dropdown">
-                                <select formControlName="System" class="form-control col-sm-12">
+                                <select 
+                                    formControlName="System" 
+                                    class="form-control col-sm-12"
+                                    [(ngModel)]="selectedValue"
+                                    (ngModelChange)="updateSystem($event)"
+                                >
                                     <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
                                         {{ system.systemType }}
                                     </option>
@@ -100,7 +114,12 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-form-label pl-0">Invoice</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="invoiceUpload" formControlName="InvoiceUpload">
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="invoiceUpload" 
+                                        formControlName="InvoiceUpload"
+                                    >
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -267,7 +286,11 @@
                     <h2>Look up a customer</h2>
                 </div>
                 <div class="col-sm-12 input-group">
-                    <input type="text" class="form-control" [(ngModel)]="searchValue">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        [(ngModel)]="searchValue"
+                    >
                     <span class="input-group-append">
                         <button class="btn btn-outline-secondary border-left-0" id="search-border" type="button">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -324,16 +347,30 @@
             <div class="col-md-4">
                 <h2>Options:</h2>
                 <form>
-                    <h3>Cancelled Customers</h3>
-                    <div class="radio-label-vertical-wrapper">
-                        <div class="form-group">
-                          <!-- <label>Rate Please<sup class="text-danger">* </sup></label> -->
-                          <label class="radio-label-vertical">
-                            <input type="radio" name="cancelledCustomers" value="0" required>Include</label>
-                          <label class="radio-label-vertical">
-                            <input type="radio" name="cancelledCustomers" value="1" required>Exclude</label>
+                    <div class="row">
+                        <h3>Cancelled Customers</h3>
+                        <div class="radio-label-vertical-wrapper">
+                            <div class="form-group">
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="0" 
+                                    required
+                                    (change)="onItemChangeToInclude($event.target.value)"
+                                >Include</label>
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="1" 
+                                    required
+                                    [checked]="true"
+                                    (change)="onItemChangeToExclude($event.target.value)"
+                                >Exclude</label>
+                            </div>
                         </div>
-                      </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -364,7 +401,7 @@
                     <td>{{ customer.state }}</td>
                     <td>{{ customer.zipCode }}</td>
                     <td>
-                        <button class="btn btn-primary" (click)="selectCustomer(customer.customer_id)">
+                        <button class="btn btn-primary" (click)="selectCustomer(customer.customer_id,customer.customer_Name)">
                             Select
                         </button>
                     </td>
