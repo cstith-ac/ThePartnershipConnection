@@ -178,9 +178,6 @@ export class IncentivedashboardComponent implements OnInit {
     }).data;
     
     this.dataBinding.skip = 0;
-    // this.gridData.filter(function(person) {
-    //   return person.customer_Name = inputValue
-    // })
   }
 
   //filter cancelled customers or by customerStatus (active or cancel)
@@ -241,6 +238,7 @@ export class IncentivedashboardComponent implements OnInit {
     }
   }
 
+  //select Customer 1st
   selectCustomer(customer_id:number,customer_Name:string) {
     //If search by customer radio is selected, filter by customer_Number
     //If search by customer radio is selected, filter by customer_Name
@@ -260,6 +258,14 @@ export class IncentivedashboardComponent implements OnInit {
       }
     )
   }
+
+  //select System 1st
+  //then select customer for site
+  selectSite() {
+
+  }
+
+  //select Site 1st
 
   selectSystemsForCustomer(customersiteid:number) {
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
@@ -390,13 +396,23 @@ export class IncentivedashboardComponent implements OnInit {
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {
       console.log(result)
-      debugger
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
     //hit the api
     //select a result
     //populate the result on the main screen
+  }
+
+  openSearchSiteModal(site) {
+    this.modalService.open(site, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   // openRecurringModal(content) {

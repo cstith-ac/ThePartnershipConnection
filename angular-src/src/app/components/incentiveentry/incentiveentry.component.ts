@@ -47,17 +47,17 @@ export class IncentiveentryComponent implements OnInit {
       // NewSite: '',
       // SystemTransfer: '',
       // Other: ''
-      CustomerVisit:  [false, Validators.requiredTrue],
-      ContractResign:  [false, Validators.requiredTrue],
-      AddRate:  [false, Validators.requiredTrue],
-      LteUpgrade:  [false, Validators.requiredTrue],
-      LandlineToCellConversion:  [false, Validators.requiredTrue],
-      SystemReprogram:  [false, Validators.requiredTrue],
-      ServicePerformed:  [false, Validators.requiredTrue],
-      SitePickup:  [false, Validators.requiredTrue],
-      NewSite:  [false, Validators.requiredTrue],
-      SystemTransfer:  [false, Validators.requiredTrue],
-      Other:  [false, Validators.requiredTrue]
+      CustomerVisit:  [true, Validators.requiredTrue],
+      ContractResign:  [true, Validators.requiredTrue],
+      AddRate:  [true, Validators.requiredTrue],
+      LteUpgrade:  [true, Validators.requiredTrue],
+      LandlineToCellConversion:  [true, Validators.requiredTrue],
+      SystemReprogram:  [true, Validators.requiredTrue],
+      ServicePerformed:  [true, Validators.requiredTrue],
+      SitePickup:  [true, Validators.requiredTrue],
+      NewSite:  [true, Validators.requiredTrue],
+      SystemTransfer:  [true, Validators.requiredTrue],
+      Other:  [true, Validators.requiredTrue]
     })
   }
 

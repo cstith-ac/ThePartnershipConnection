@@ -35,7 +35,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <span class="ml-2">
+                            <span class="ml-2" (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <span class="pl-4" (click)="routeToNewSite()">
@@ -386,11 +386,11 @@
                     <th scope="col">City</th>
                     <th scope="col">State</th>
                     <th scope="col">Zip Code</th>
-                    <th scope="col"></th>
+                    <!-- <th scope="col"></th> -->
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }">
+                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id,customer.customer_Name)" click>
                     <td>{{ customer.customer_Number }}</td>
                     <td>{{ customer.customer_Name }}</td>
                     <td>{{ customer.customerStatus }}</td>
@@ -400,11 +400,14 @@
                     <td>{{ customer.city }}</td>
                     <td>{{ customer.state }}</td>
                     <td>{{ customer.zipCode }}</td>
-                    <td>
-                        <button class="btn btn-primary" (click)="selectCustomer(customer.customer_id,customer.customer_Name)">
+                    <!-- <td>
+                        <button 
+                            class="btn btn-primary" 
+                            (click)="selectCustomer(customer.customer_id,customer.customer_Name)"
+                        >
                             Select
                         </button>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -479,6 +482,140 @@
             <kendo-grid-column field="zipCode" title="Zip Code" [width]="200">
             </kendo-grid-column>
         </kendo-grid> -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #site let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Search</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-sm-12">
+                    <h2>Look up a site</h2>
+                </div>
+                <div class="col-sm-12 input-group">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        [(ngModel)]="searchValue"
+                    >
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary border-left-0" id="search-border" type="button">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h2>Search By:</h2>
+                <form>
+                    <div class="form-group">
+                        <input 
+                            [(ngModel)]="searchByCustomer"
+                            [checked]="true"
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCustomer($event.target.value)"
+                        >
+                        <label>Customer</label>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToBilling($event.target.value)"
+                        >
+                        <label>Billing Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToSite($event.target.value)"
+                        >
+                        <label>Site Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCentralStation($event.target.value)"
+                        >
+                        <label>Central Station #</label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Options:</h2>
+                <form>
+                    <div class="row">
+                        <h3>Cancelled Customers</h3>
+                        <div class="radio-label-vertical-wrapper">
+                            <div class="form-group">
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="0" 
+                                    required
+                                    (change)="onItemChangeToInclude($event.target.value)"
+                                >Include</label>
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="1" 
+                                    required
+                                    [checked]="true"
+                                    (change)="onItemChangeToExclude($event.target.value)"
+                                >Exclude</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Customer Number</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Customer Status</th>
+                    <th scope="col">Address Line 1</th>
+                    <th scope="col">Address Line 2</th>
+                    <th scope="col">Address Line 3</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Zip Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id,customer.customer_Name)" click>
+                    <td>{{ customer.customer_Number }}</td>
+                    <td>{{ customer.customer_Name }}</td>
+                    <td>{{ customer.customerStatus }}</td>
+                    <td>{{ customer.address_1 }}</td>
+                    <td>{{ customer.address_2 }}</td>
+                    <td>{{ customer.address_3 }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td>{{ customer.state }}</td>
+                    <td>{{ customer.zipCode }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>

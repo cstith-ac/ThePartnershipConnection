@@ -13,12 +13,12 @@ import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FilterPipeModule } from 'ngx-filter-pipe';
-import { FilterPipe } from './_helpers/filter.pipe';
-import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
-
 import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';
+import { FilterPipeModule } from 'ngx-filter-pipe';
+import { FilterPipe } from './_helpers/filter.pipe';
+import { PointerStyleDirective } from './_helpers/pointer-style.directive';
+import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
@@ -126,7 +126,8 @@ import { IncentivelaborchargesComponent } from './components/incentivelaborcharg
     IncentivenewsiteComponent,
     IncentiverecurringComponent,
     IncentiveequipmatComponent,
-    IncentivelaborchargesComponent
+    IncentivelaborchargesComponent,
+    PointerStyleDirective
   ],
   imports: [
     FilterPipeModule,
