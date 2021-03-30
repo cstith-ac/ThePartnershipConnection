@@ -1,4 +1,4 @@
-import { CustomerSearchList } from '../models/customerseachlist';
+import { CustomerSearchList } from '../models/customersearchlist';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

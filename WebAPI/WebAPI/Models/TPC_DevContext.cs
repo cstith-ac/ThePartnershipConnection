@@ -56,6 +56,8 @@ namespace WebAPI.Models
         public virtual DbSet<ListMaterialItems> GetListMaterialItems { get; set; }
         public virtual DbSet<ListLaborItems> GetListLaborItems { get; set; }
         public virtual DbSet<CustomerSearchList> GetCustomerSearchLists { get; set; }
+        public virtual DbSet<CustomerSearchListSites> GetCustomerSearchListSites { get; set; }
+        public virtual DbSet<CustomerSearchListCentralStation> GetCustomerSearchListCentralStations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -380,6 +382,16 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<CustomerSearchList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSearchListSites>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSearchListCentralStation>(entity =>
             {
                 entity.HasNoKey();
             });

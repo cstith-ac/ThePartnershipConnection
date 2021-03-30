@@ -73,6 +73,8 @@ import { IncentivenewsiteComponent } from './components/incentivenewsite/incenti
 import { IncentiverecurringComponent } from './components/incentiverecurring/incentiverecurring.component';
 import { IncentiveequipmatComponent } from './components/incentiveequipmat/incentiveequipmat.component';
 import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
+import { FilterSitePipe } from './_helpers/filter-site.pipe';
+import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
 
 
 @NgModule({
@@ -127,7 +129,9 @@ import { IncentivelaborchargesComponent } from './components/incentivelaborcharg
     IncentiverecurringComponent,
     IncentiveequipmatComponent,
     IncentivelaborchargesComponent,
-    PointerStyleDirective
+    PointerStyleDirective,
+    FilterSitePipe,
+    FilterCentralStationPipe
   ],
   imports: [
     FilterPipeModule,

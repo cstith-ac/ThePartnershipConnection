@@ -399,6 +399,22 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchList/`, httpOptions);
   }
 
+  getCustomerSearchListSite(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListSite/`, httpOptions);
+  }
+
+  getCustomerSearchListCentralStation(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListCentralStation/`, httpOptions);
+  }
+
   loadToken() {
     const token = localStorage.getItem('token');
     this.authToken = token;

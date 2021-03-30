@@ -11,7 +11,9 @@ import { ListPanelTypes } from '../../models/listpaneltypes';
 import { ListCentralStations } from '../../models/listcentralstations';
 import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
 import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
-import { CustomerSearchList } from '../../models/customerseachlist';
+import { CustomerSearchList } from '../../models/customersearchlist';
+import { CustomerSearchListSite } from '../../models/customersearchlistsite';
+import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -33,6 +35,8 @@ export class IncentivedashboardComponent implements OnInit {
   listsitesforcustomer: ListSitesForCustomer[];
   listSystemsForSite: ListSystemsForSite[];
   customerSearchList: CustomerSearchList[];
+  customerSearchListSite: CustomerSearchListSite[];
+  customerSearchListCentralStation: CustomerSearchListCentralStation[];
 
   selectedValue: number;
 
@@ -40,11 +44,19 @@ export class IncentivedashboardComponent implements OnInit {
   searchValue:string;
   searchByCustomer:boolean;
   searchByBillingAddress:boolean;
+  isSiteSelectionFirst: boolean = false;
+  isRemoveDropdown: boolean = true;
 
   closeResult = '';
   incentiveEntryForm: FormGroup;
   recurringItemEntryForm: FormGroup;
   customer: string;
+  siteName: string;
+  customerSiteId: number;
+  systemType: string;
+  customerSystemId: number;
+  alarmAccount: string;
+  systemCode: string;
   site: '';
   system: '';
   newSystem: '';
@@ -94,6 +106,7 @@ export class IncentivedashboardComponent implements OnInit {
       Customer: ["", Validators.required],
       Site: ["", Validators.required],
       System: ["", Validators.required],
+      SystemType: ["", Validators.required],
       NewSystem: ["", Validators.required],
       NewCustomer: ["", Validators.required],
       NewSite: ["", Validators.required],
@@ -146,7 +159,18 @@ export class IncentivedashboardComponent implements OnInit {
     this.routeService.getCustomerSearchList().subscribe(
       res => {
         this.customerSearchList = res;
-        //this.gridData = res;
+      }
+    )
+
+    this.routeService.getCustomerSearchListSite().subscribe(
+      res => {
+        this.customerSearchListSite = res;
+      }
+    )
+
+    this.routeService.getCustomerSearchListCentralStation().subscribe(
+      res => {
+        this.customerSearchListCentralStation = res;
       }
     )
 
@@ -157,28 +181,28 @@ export class IncentivedashboardComponent implements OnInit {
     // )
   }
 
-  public onFilter(inputValue: string): void {
-    console.log(inputValue)
-    this.gridView = process(this.gridData, {
-        filter: {
-            logic: "or",
-            filters: [
-                {
-                    field: 'customer_Number',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'customer_Name',
-                    operator: 'contains',
-                    value: inputValue
-                },
-            ],
-        }
-    }).data;
+  // public onFilter(inputValue: string): void {
+  //   console.log(inputValue)
+  //   this.gridView = process(this.gridData, {
+  //       filter: {
+  //           logic: "or",
+  //           filters: [
+  //               {
+  //                   field: 'customer_Number',
+  //                   operator: 'contains',
+  //                   value: inputValue
+  //               },
+  //               {
+  //                   field: 'customer_Name',
+  //                   operator: 'contains',
+  //                   value: inputValue
+  //               },
+  //           ],
+  //       }
+  //   }).data;
     
-    this.dataBinding.skip = 0;
-  }
+  //   this.dataBinding.skip = 0;
+  // }
 
   //filter cancelled customers or by customerStatus (active or cancel)
   onItemChangeToInclude(value) {
@@ -245,8 +269,8 @@ export class IncentivedashboardComponent implements OnInit {
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     //once a customer is selected, push the customer_Name to customer input on Incentive Entry
-    console.log(selectedCustomerName)
-    console.log(selectedCustomerid);
+    // console.log(selectedCustomerName)
+    // console.log(selectedCustomerid);
     this.customer = selectedCustomerName
     this.id = selectedCustomerid
     //after selecting a customer, close the modal
@@ -259,13 +283,68 @@ export class IncentivedashboardComponent implements OnInit {
     )
   }
 
-  //select System 1st
-  //then select customer for site
-  selectSite() {
+  //select Site 1st
+  selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number) {
+    let selectedCustomerName = customer_Name;
+    let selectedCustomerid = customer_id;
+    let selectedSiteName = siteName;
+    let selectedCustomerSiteId = customer_Site_Id;
 
+    console.log(selectedCustomerName)
+    console.log(selectedCustomerid);
+    console.log(selectedSiteName);
+    console.log(selectedCustomerSiteId);
+    //push the selectedSiteName to the UI
+    //once a site is selected, push the siteName to site on Incentive Entry
+    this.siteName = selectedSiteName;
+    this.customer = selectedCustomerName;
+    this.customerSiteId = selectedCustomerSiteId;
+    this.modalService.dismissAll();
+
+    this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
+    this.isRemoveDropdown = !this.isRemoveDropdown;
+    //populate customer, populate system
+    this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
+      res => {
+        //console.log(res.systemType)
+        //get systemType
+        this.systemType = res.systemType
+      }
+    )
+    
   }
 
-  //select Site 1st
+  //select Central Station 1st
+  selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, system_Code:string) {
+    let selectedCustomerid = customer_id;
+    let selectedCustomerSiteId = customer_Site_Id;
+    let selectedCustomerSystemId = customer_System_Id;
+    let selectedSystemCode = system_Code;
+    debugger
+    console.log(selectedCustomerid)
+    console.log(selectedCustomerSiteId)
+    console.log(selectedCustomerSystemId);
+    console.log(selectedSystemCode);
+
+    this.customerSystemId = selectedCustomerSystemId;
+    this.modalService.dismissAll();
+
+    this.routeService.getCustomerSearchListCentralStation().subscribe(
+      res => {
+        //console.log(typeof(res));
+        // res.
+        //console.log(this.customerSearchListCentralStation)
+        // for(var prop in this.customerSearchListCentralStation) {
+        //   this.alarmAccount = this.customerSearchListCentralStation[prop].alarmAccount;
+        // }
+        // console.log(this.alarmAccount)
+        Object.values(this.customerSearchListCentralStation).forEach(val => {
+          //console.log(val);
+          //Object.values(val).filter(x => x.)
+        })
+      }
+    )
+  }
 
   selectSystemsForCustomer(customersiteid:number) {
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
@@ -280,9 +359,9 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   updateSite(val: any) {
-    console.log('call this')
+    //console.log('call this')
     //let id = val;
-    console.log(this.id)
+    //console.log(this.id)
     //let id = 117019;
     // append CustomerSiteID to get ListSystemsForSite
     this.routeService.getListSitesForCustomer(this.id).subscribe(
@@ -311,7 +390,7 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   updateSystem(customer_Site_id:number) {
-    console.log('call update system')
+    //console.log('call update system')
     //get the CustomerSiteID
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
       res => {
@@ -406,6 +485,17 @@ export class IncentivedashboardComponent implements OnInit {
 
   openSearchSiteModal(site) {
     this.modalService.open(site, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openSearchSystemModal(system) {
+    this.modalService.open(system, {
       windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {

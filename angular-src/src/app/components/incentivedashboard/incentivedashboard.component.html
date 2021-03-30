@@ -24,17 +24,45 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Site</label>
-                            <div class="dropdown">
+
+                            <div *ngIf="isSiteSelectionFirst">
+                                <input 
+                                    type="text" 
+                                    class="form-control col-sm-12" 
+                                    [(ngModel)]="siteName" 
+                                    formControlName="Site"
+                                >
+                            </div>
+                            <!-- <input 
+                                type="text" 
+                                class="form-control col-sm-5" 
+                                [(ngModel)]="siteName" 
+                                formControlName="Site"
+                            > -->
+                            <div *ngIf="isRemoveDropdown">
+                                <div class="dropdown">
+                                    <select 
+                                        formControlName="Site" 
+                                        class="form-control col-sm-12" 
+                                        [(ngModel)]="siteName" 
+                                        (ngModelChange)="updateSite($event)">
+                                        <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
+                                            {{ site.siteName }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class="dropdown">
                                 <select 
                                     formControlName="Site" 
                                     class="form-control col-sm-12" 
-                                    [(ngModel)]="selectedValue" 
+                                    [(ngModel)]="siteName" 
                                     (ngModelChange)="updateSite($event)">
                                     <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
                                         {{ site.siteName }}
                                     </option>
                                 </select>
-                            </div>
+                            </div> -->
                             <span class="ml-2" (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -45,7 +73,37 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System</label>
-                            <div class="dropdown">
+
+                            <div *ngIf="isSiteSelectionFirst">
+                                <input 
+                                    type="text" 
+                                    class="form-control col-sm-12" 
+                                    [(ngModel)]="systemType" 
+                                    formControlName="SystemType"
+                                >
+                            </div>
+                            <!-- <input 
+                                type="text" 
+                                class="form-control col-sm-12" 
+                                [(ngModel)]="systemType" 
+                                formControlName="SystemType"
+                            > -->
+
+                            <div *ngIf="isRemoveDropdown">
+                                <div class="dropdown">
+                                    <select 
+                                        formControlName="System" 
+                                        class="form-control col-sm-12"
+                                        [(ngModel)]="selectedValue"
+                                        (ngModelChange)="updateSystem($event)"
+                                    >
+                                        <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
+                                            {{ system.systemType }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class="dropdown">
                                 <select 
                                     formControlName="System" 
                                     class="form-control col-sm-12"
@@ -56,8 +114,8 @@
                                         {{ system.systemType }}
                                     </option>
                                 </select>
-                            </div>
-                            <span class="ml-2">
+                            </div> -->
+                            <span class="ml-2" (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
                         </div>
@@ -274,7 +332,7 @@
 
 <ng-template #content let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Search</h4>
+      <h4 class="modal-title" id="modal-basic-title">Search By Customer</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -490,7 +548,7 @@
 
 <ng-template #site let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Search</h4>
+      <h4 class="modal-title" id="modal-basic-title">Search By Site</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -599,19 +657,171 @@
                     <th scope="col">City</th>
                     <th scope="col">State</th>
                     <th scope="col">Zip Code</th>
+                    <th scope="col">Site Number</th>
+                    <th scope="col">Site Name</th>
+                    <th scope="col">Site Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id,customer.customer_Name)" click>
-                    <td>{{ customer.customer_Number }}</td>
-                    <td>{{ customer.customer_Name }}</td>
-                    <td>{{ customer.customerStatus }}</td>
-                    <td>{{ customer.address_1 }}</td>
-                    <td>{{ customer.address_2 }}</td>
-                    <td>{{ customer.address_3 }}</td>
-                    <td>{{ customer.city }}</td>
-                    <td>{{ customer.state }}</td>
-                    <td>{{ customer.zipCode }}</td>
+                <tr *ngFor="let site of customerSearchListSite | filterSite:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectSite(site.customer_id,site.customer_Name, site.siteName, site.customer_Site_Id)" click>
+                    <td>{{ site.customer_Number }}</td>
+                    <td>{{ site.customer_Name }}</td>
+                    <td>{{ site.customerStatus }}</td>
+                    <td>{{ site.address_1 }}</td>
+                    <td>{{ site.address_2 }}</td>
+                    <td>{{ site.address_3 }}</td>
+                    <td>{{ site.city }}</td>
+                    <td>{{ site.state }}</td>
+                    <td>{{ site.zipCode }}</td>
+                    <td>{{ site.site_Number }}</td>
+                    <td>{{ site.siteName }}</td>
+                    <td>{{ site.siteStatus }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #system let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Search By System/Central Station</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col-sm-12">
+                    <h2>Look up a system/Central Station</h2>
+                </div>
+                <div class="col-sm-12 input-group">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        [(ngModel)]="searchValue"
+                    >
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary border-left-0" id="search-border" type="button">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h2>Search By:</h2>
+                <form>
+                    <div class="form-group">
+                        <input 
+                            [(ngModel)]="searchByCustomer"
+                            [checked]="true"
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCustomer($event.target.value)"
+                        >
+                        <label>Customer</label>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToBilling($event.target.value)"
+                        >
+                        <label>Billing Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToSite($event.target.value)"
+                        >
+                        <label>Site Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCentralStation($event.target.value)"
+                        >
+                        <label>Central Station #</label>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Options:</h2>
+                <form>
+                    <div class="row">
+                        <h3>Cancelled Customers</h3>
+                        <div class="radio-label-vertical-wrapper">
+                            <div class="form-group">
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="0" 
+                                    required
+                                    (change)="onItemChangeToInclude($event.target.value)"
+                                >Include</label>
+                            <label class="radio-label-vertical">
+                                <input 
+                                    type="radio" 
+                                    name="cancelledCustomers" 
+                                    [value]="1" 
+                                    required
+                                    [checked]="true"
+                                    (change)="onItemChangeToExclude($event.target.value)"
+                                >Exclude</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Alarm Account</th>
+                    <th scope="col">System Status</th>
+                    <th scope="col">System Code</th>
+                    <th scope="col">Customer Number</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Customer Status</th>
+                    <th scope="col">Address Line 1</th>
+                    <th scope="col">Address Line 2</th>
+                    <th scope="col">Address Line 3</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Zip Code</th>
+                    <th scope="col">Site Number</th>
+                    <th scope="col">Site Name</th>
+                    <th scope="col">Site Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let station of customerSearchListCentralStation | filterCentralStation:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCentralStation(station.customer_id, station.customer_Site_Id, station.customer_System_Id, station.system_Code)" click>
+                    <td>{{ station.alarmAccount }}</td>
+                    <td>{{ station.systemStatus }}</td>
+                    <td>{{ station.system_Code }}</td>
+                    <td>{{ station.customer_Number }}</td>
+                    <td>{{ station.customer_Name }}</td>
+                    <td>{{ station.customerStatus }}</td>
+                    <td>{{ station.address_1 }}</td>
+                    <td>{{ station.address_2 }}</td>
+                    <td>{{ station.address_3 }}</td>
+                    <td>{{ station.city }}</td>
+                    <td>{{ station.state }}</td>
+                    <td>{{ station.zipCode }}</td>
+                    <td>{{ station.site_Number }}</td>
+                    <td>{{ station.siteName }}</td>
+                    <td>{{ station.siteStatus }}</td>
                 </tr>
             </tbody>
         </table>
