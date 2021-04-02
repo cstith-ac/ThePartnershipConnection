@@ -52,6 +52,7 @@ namespace WebAPI.Controllers
                     Customer_System_Id = s.Customer_System_Id,
                     AlarmAccount = s.AlarmAccount,
                     SystemStatus = s.SystemStatus,
+                    System_Code = s.System_Code,
                     Customer_Number = s.Customer_Number,
                     Customer_Name = s.Customer_Name,
                     CustomerStatus = s.CustomerStatus,

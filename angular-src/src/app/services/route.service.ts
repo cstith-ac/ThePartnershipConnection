@@ -335,6 +335,17 @@ export class RouteService {
     return this.http.post<SummaryAdd>(this.baseUrl + '/api/CallSummaryAdd',summaryAdd, httpOptions);
   }
 
+  getListSystemTypes(): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/ListSystemTypes`, httpOptions);
+  }
+
   getListPanelTypes(): Observable<any> {
     this.loadToken();
     let httpOptions = { 

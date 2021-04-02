@@ -74,12 +74,12 @@
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System</label>
 
-                            <div *ngIf="isSiteSelectionFirst">
+                            <div *ngIf="isSystemSelectionFirst">
                                 <input 
                                     type="text" 
                                     class="form-control col-sm-12" 
-                                    [(ngModel)]="systemType" 
-                                    formControlName="SystemType"
+                                    [(ngModel)]="systemCode" 
+                                    formControlName="SystemCode"
                                 >
                             </div>
                             <!-- <input 
@@ -89,7 +89,7 @@
                                 formControlName="SystemType"
                             > -->
 
-                            <div *ngIf="isRemoveDropdown">
+                            <div *ngIf="isRemoveSystemDropdown">
                                 <div class="dropdown">
                                     <select 
                                         formControlName="System" 
@@ -98,7 +98,7 @@
                                         (ngModelChange)="updateSystem($event)"
                                     >
                                         <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
-                                            {{ system.systemType }}
+                                            {{ system.systemType }} - {{  system.alarmAccount }}
                                         </option>
                                     </select>
                                 </div>
@@ -118,17 +118,32 @@
                             <span class="ml-2" (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
+                            <input type="checkbox" class="form-control form-check-input" [(ngModel)]="newSystem" formControlName="NewSystem">
+                            <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                         </div>
-                        <div class="form-group form-inline form-check">
+                        <!-- <div class="form-group form-inline form-check">
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                             <input type="checkbox" class="form-control form-check-input" [(ngModel)]="newSystem" formControlName="NewSystem">
-                        </div>
+                        </div> -->
                         <div class="form-group form-inline">
                             <p class="text-danger">Verify System Information!</p>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Account #</label>
                             <input type="text" class="form-control col-sm-5" [(ngModel)]="accountNumber" formControlName="AccountNumber">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="col-sm-2 col-form-label">System Type</label>
+                            <div class="dropdown">
+                                <select formControlName="SystemType" class="form-control col-sm-12" [(ngModel)]="systemType">
+                                    <option *ngFor="let list of listsystemtypes" value="{{ list.system_Id }}" [ngValue]="list.system_Id">
+                                        {{ list.systemName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <span class="col-sm-4">
+                                <small>If <b>Other</b> is selected, please describe in Additional Info</small>
+                            </span>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Panel Type</label>
@@ -139,6 +154,9 @@
                                     </option>
                                 </select>
                             </div>
+                            <span class="col-sm-4">
+                                <small>If <b>Other</b> is selected, please describe in Additional Info</small>
+                            </span>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Location</label>
@@ -153,10 +171,13 @@
                                     </option>
                                 </select>
                             </div>
+                            <span class="col-sm-4">
+                                <small>If <b>Other</b> is selected, please describe in Additional Info</small>
+                            </span>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Additional Info</label>
-                            <input type="text" class="form-control col-sm-5" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo">
+                            <input type="text" class="form-control col-sm-10" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo">
                         </div>
                     </div>
                     <div class="col-md-7">
@@ -182,7 +203,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="col-sm-4 col-form-label">Subscriber Form</label>
+                                    <label class="col-sm-5 col-form-label">Subscriber Form</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input type="file" class="form-control col-sm-6" [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload">
                                 </div>
@@ -262,7 +283,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label>
+                                    <label class="col-form-label pl-0 col-sm-9">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label>
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -271,7 +292,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label>
+                                    <label class="col-form-label pl-0 col-sm-9">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label>
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -280,7 +301,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label>
+                                    <label class="col-form-label pl-0 col-sm-9">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label>
                                     <div class="input-group col-sm-3 ml-auto">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -316,11 +337,20 @@
                                         <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
                                     </label>
                                 </div>
-                                <div class="col-md-4 offset-md-8">
+                                <div class="col-md-12 offset-md-0">
+                                    <div class="row d-flex justify-content-between">
+                                      <button class="btn btn-success">Add/View Comments</button>
+                                      <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
+                                    </div>
+                                  </div>
+                                <!-- <div class="col-md-4 offset-md-8">
+                                    <div class="row justify-content-end">
+                                        <button class="btn btn-success">Add/View Comments</button>
+                                    </div>
                                     <div class="row justify-content-end">
                                         <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div> 
@@ -470,76 +500,6 @@
             </tbody>
         </table>
         <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
-        <!-- <kendo-grid
-            [kendoGridBinding]="gridData"
-            kendoGridSelectBy="customer_id"
-            [selectedKeys]="mySelection"
-            [pageSize]="20"
-            [pageable]="true"
-            [sortable]="true"
-            [groupable]="true"
-            [reorderable]="true"
-            [resizable]="true"
-            [height]="480"
-            [columnMenu]="{ filter: true }"
-        >
-            <ng-template kendoGridToolbarTemplate>
-                <input 
-                    placeholder="Search in all columns..." 
-                    kendoTextBox 
-                    (input)="onFilter($event.target.value)" 
-                />
-            </ng-template>
-            <kendo-grid-column 
-                field="customer_Number" 
-                title="Customer Number" 
-                [width]="220"
-                filter="text">
-            </kendo-grid-column>
-            <kendo-grid-column
-                field="customer_Name"
-                title="Customer Name"
-                [width]="100"
-                [class]="{'text-center': true}"
-                [resizable]="true"
-                filter="text"
-            >
-            </kendo-grid-column>
-            <kendo-grid-column
-                field="customerStatus"
-                title="Customer Status"
-                [width]="100"
-                [class]="{'text-center': true}"
-                [resizable]="false"
-            >
-            </kendo-grid-column>
-            <kendo-grid-column
-                field="address_1"
-                title="Address 1"
-                [width]="110"
-                [resizable]="false"
-            >
-            </kendo-grid-column>
-            <kendo-grid-column
-                field="address_2"
-                title="Address 2"
-                [width]="230"
-                [resizable]="false"
-                >
-            </kendo-grid-column>
-            <kendo-grid-column
-                field="address_3"
-                title="Address 3"
-                [width]="100"
-            >
-            </kendo-grid-column>
-            <kendo-grid-column field="city" title="City" [width]="130">
-            </kendo-grid-column>
-            <kendo-grid-column field="state" title="State" [width]="200">
-            </kendo-grid-column>
-            <kendo-grid-column field="zipCode" title="Zip Code" [width]="200">
-            </kendo-grid-column>
-        </kendo-grid> -->
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
@@ -806,7 +766,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let station of customerSearchListCentralStation | filterCentralStation:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCentralStation(station.customer_id, station.customer_Site_Id, station.customer_System_Id, station.system_Code)" click>
+                <tr *ngFor="let station of customerSearchListCentralStation | filterCentralStation:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCentralStation(station.customer_id, station.customer_Site_Id, station.customer_System_Id, station.alarmAccount, station.system_Code, station.customer_Name)" click>
                     <td>{{ station.alarmAccount }}</td>
                     <td>{{ station.systemStatus }}</td>
                     <td>{{ station.system_Code }}</td>

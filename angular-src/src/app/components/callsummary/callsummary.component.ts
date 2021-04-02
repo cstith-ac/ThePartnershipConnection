@@ -64,7 +64,9 @@ export class CallsummaryComponent implements OnInit {
       ResolutionID: ["", Validators.required],
       CallSummaryNextSteps: ["", Validators.required],
       CustomerComments: ["", Validators.required],
+      //TechComments: ["", Validators.required],
       TechNotes: ["", Validators.required],
+      ResolutionNotes: ["", Validators.required],
       CustomerOnCall: ["", Validators.required],
       CustomerCallBackPhone: ["", [Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]]
     })
@@ -176,7 +178,7 @@ export class CallsummaryComponent implements OnInit {
   //Get the Problem_class_id of call type / class list
   showProblemsBasedOnClassSelect(val: any) {
     this.customFunction(val);
-    //console.log(val)
+    console.log('called')
   }
 
   //Change the Problems dropdown based on the selection of Call Type 
@@ -253,6 +255,9 @@ export class CallsummaryComponent implements OnInit {
     // if(form.value.SystemID === null) {
     //   this.siteToSystemList = 1
     // }
+    if(this.callSummaryAddForm.invalid) {
+      return;
+    }
 
     this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
       .subscribe(
@@ -263,7 +268,7 @@ export class CallsummaryComponent implements OnInit {
           this.clicked = true;
           this.enableReset = false;
           //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
-          this.resetForm(form);
+          //this.resetForm(form);
         },
         error => console.log('error: ', error)
       );
@@ -275,9 +280,20 @@ export class CallsummaryComponent implements OnInit {
     this.clicked = false;
   }
 
+  // resetForm() {
+  //   console.log('reset')
+  //   this.submitted = false;
+  //   this.callSummaryAddForm.reset()
+  //   this.callSummaryAddForm.markAsPristine();
+  //   this.callSummaryAddForm.markAsUntouched();
+  // }
+
   resetForm(form: FormGroup) {
     this.submitted = false;
-    form.markAllAsTouched();
+    //form.markAllAsTouched();
+    form.markAsUntouched();
+    form.markAsPristine();
+    form.clearValidators();
     this.callSummaryAddForm.reset(this.callSummaryAddForm.value);
   }
 

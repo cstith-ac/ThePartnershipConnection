@@ -151,19 +151,23 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
+                                                <label class="col-form-label">Customer Call Back Phone</label>
+                                                <input formControlName="CustomerCallBackPhone" type="text" class="form-control" [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" mask="(000) 000-0000 x999">
+                                                <small *ngIf="f.CustomerCallBackPhone.invalid && f.CustomerCallBackPhone.touched" class="text-danger">Phone no is Required(minimum length 10,numbers are only allowed)</small>
+                                              </div>
+                                            <!-- <div class="form-group">
                                                 <label>Customer Call Back Phone</label>
-                                                <!-- <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 ext" mask="(000) 000 0000 000"> -->
-                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" mask="(000) 000-0000 x000">
+                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 ext" mask="(000) 000 0000 000">
                                                 <div *ngIf="submitted && f.CustomerCallBackPhone.errors" class="invalid-feedback">
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.required">A customer call back phone # is required</div>
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.minlength">Minimum 10 characters are required</div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-12">
-                                            <div class="form-group" id="custCommentsTextArea" *ngIf="!show">
+                                            <div class="form-group" id="custCommentsTextArea">
                                                 <label>Customer Comments</label>
                                                 <textarea formControlName="CustomerComments" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerComments.errors }"></textarea>
                                                 <div *ngIf="submitted && f.CustomerComments.errors" class="invalid-feedback">
@@ -172,13 +176,27 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!--tech notes-->
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-group" id="techNotesTextArea" *ngIf="!show">
+                                                <label>Tech Comments</label>
+                                                <textarea formControlName="TechNotes" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.TechNotes.errors }"></textarea>
+                                                <div *ngIf="submitted && f.TechNotes.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.TechNotes.errors.required">Tech Comments are required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-12">
                                             <div class="form-group" id="resNotesTextArea" *ngIf="show">
                                                 <label>Resolution Notes</label>
-                                                <textarea formControlName="TechNotes" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.TechNotes.errors }"></textarea>
-                                                <div *ngIf="submitted && f.TechNotes.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.TechNotes.errors.required">Tech Notes are required</div>
+                                                <textarea formControlName="ResolutionNotes" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ResolutionNotes.errors }"></textarea>
+                                                <div *ngIf="submitted && f.ResolutionNotes.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.ResolutionNotes.errors.required">Resolution Notes are required</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -193,6 +211,7 @@
                                         </div>
                                         
                                         <div class="col-md-6">
+                                            <!-- <button class="btn btn-primary" type="button" (click)="resetForm()">Reset</button> -->
                                             <button type="submit" class="btn btn-primary float-right save-btn" id="callSummaryAdd" [disabled]="clicked">Save</button>
                                         </div>
                                     </div>

@@ -9,9 +9,10 @@
   background-color: #34e5f2;
   color: black;
 }
-::ng-deep .modal {
+/* The next style breaks the other modals, ie. Call Summary. Needs another way to achieve desired result*/
+/* ::ng-deep .modal {
   text-align: center;
-}
+} */
 ::ng-deep .my-class .modal-dialog { 
   /* max-width: max-content;
   max-width: 80%;

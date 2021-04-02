@@ -14,6 +14,7 @@ import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
 import { CustomerSearchList } from '../../models/customersearchlist';
 import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
+import { ListSystemTypes } from '../../models/listsystemtypes';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -37,6 +38,7 @@ export class IncentivedashboardComponent implements OnInit {
   customerSearchList: CustomerSearchList[];
   customerSearchListSite: CustomerSearchListSite[];
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
+  listsystemtypes: ListSystemTypes[];
 
   selectedValue: number;
 
@@ -45,7 +47,9 @@ export class IncentivedashboardComponent implements OnInit {
   searchByCustomer:boolean;
   searchByBillingAddress:boolean;
   isSiteSelectionFirst: boolean = false;
+  isSystemSelectionFirst: boolean = false;
   isRemoveDropdown: boolean = true;
+  isRemoveSystemDropdown: boolean = true;
 
   closeResult = '';
   incentiveEntryForm: FormGroup;
@@ -63,6 +67,7 @@ export class IncentivedashboardComponent implements OnInit {
   newCustomer: '';
   newSite: '';
   accountNumber: '';
+  // systemType: '';
   panelType: '';
   location: '';
   centralStation: '';
@@ -107,6 +112,7 @@ export class IncentivedashboardComponent implements OnInit {
       Site: ["", Validators.required],
       System: ["", Validators.required],
       SystemType: ["", Validators.required],
+      SystemCode: ["", Validators.required],
       NewSystem: ["", Validators.required],
       NewCustomer: ["", Validators.required],
       NewSite: ["", Validators.required],
@@ -137,6 +143,12 @@ export class IncentivedashboardComponent implements OnInit {
     this.recurringItemEntryForm = this.fb.group({
       //table => item, description, bill cycle, rmr, pass through, billing starts, add to an existing rmr item, multiple, total
     })
+
+    this.routeService.getListSystemTypes().subscribe(
+      res => {
+        this.listsystemtypes = res;
+      }
+    )
 
     this.routeService.getListPanelTypes().subscribe(
       res => {
@@ -281,6 +293,7 @@ export class IncentivedashboardComponent implements OnInit {
         this.listsitesforcustomer = [].concat(res);
       }
     )
+    
   }
 
   //select Site 1st
@@ -306,28 +319,54 @@ export class IncentivedashboardComponent implements OnInit {
     //populate customer, populate system
     this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
       res => {
-        //console.log(res.systemType)
-        //get systemType
-        this.systemType = res.systemType
+        // console.log(res.alarmAccount);
+        // console.log(res.systemType);
+        let alarmAccount = res.alarmAccount;
+        let systemType = res.systemType
+        console.log(alarmAccount);
+        console.log(systemType);
+        this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
+        this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+        this.systemCode = alarmAccount + ' - ' + systemType
+        //this.systemType = res.systemType
       }
     )
     
   }
 
   //select Central Station 1st
-  selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, system_Code:string) {
+  selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, alarmAccount:string, systemCode: string, customer_Name:string) {
     let selectedCustomerid = customer_id;
     let selectedCustomerSiteId = customer_Site_Id;
     let selectedCustomerSystemId = customer_System_Id;
-    let selectedSystemCode = system_Code;
-    debugger
+    let selectedAlarmAccount = alarmAccount;
+    let selectedSystemCode = systemCode;
+    let selectedCustomerName = customer_Name;
+    
     console.log(selectedCustomerid)
     console.log(selectedCustomerSiteId)
     console.log(selectedCustomerSystemId);
+    console.log(selectedAlarmAccount);
     console.log(selectedSystemCode);
+    console.log(selectedCustomerName);
 
+    this.id = selectedCustomerid;
     this.customerSystemId = selectedCustomerSystemId;
+    this.alarmAccount = selectedAlarmAccount;
+    this.systemCode = selectedAlarmAccount+' - '+selectedSystemCode;
+    this.customer = selectedCustomerName;
     this.modalService.dismissAll();
+
+    this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
+    this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+
+    //populate site, populate customer
+    this.routeService.getListSitesForCustomer(selectedCustomerid).subscribe(
+      res => {
+        console.log(res.siteName);
+        this.siteName = res.siteName
+      }
+    )
 
     this.routeService.getCustomerSearchListCentralStation().subscribe(
       res => {
