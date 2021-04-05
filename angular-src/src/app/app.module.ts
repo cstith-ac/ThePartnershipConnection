@@ -19,6 +19,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FilterPipe } from './_helpers/filter.pipe';
 import { PointerStyleDirective } from './_helpers/pointer-style.directive';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
+import { CommonModule, CurrencyPipe} from '@angular/common';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
@@ -134,6 +135,7 @@ import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe
     FilterCentralStationPipe
   ],
   imports: [
+    CommonModule,
     FilterPipeModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -156,7 +158,7 @@ import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe
     GridModule,
     ExcelModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService],
+  providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

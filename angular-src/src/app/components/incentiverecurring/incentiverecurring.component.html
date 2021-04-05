@@ -31,7 +31,7 @@
             <div class="table table-recurring">
                 <div class="thead">
                     <div class="tr">
-                        <div class="td">Monitoring</div>
+                        <div class="td">Service Provided</div>
                         <div class="td">Description</div>
                         <div class="td">Bill Cycle</div>
                         <div class="td">RMR</div>
@@ -40,6 +40,7 @@
                         <div class="td">Add to an Existing RMR Item</div>
                         <div class="td">Multiple</div>
                         <div class="td">Total</div>
+                        <div class="td"></div>
                         <div class="td"></div>
                     </div>
                 </div>
@@ -63,10 +64,15 @@
                                     <option value="monthly">Monthly</option>
                                 </select>
                             </div>
-                            <!-- <input type="text" [(ngModel)]="billCycle" formControlName="BillCycle"> -->
                         </div>
                         <div class="td">
-                            <input type="text" [(ngModel)]="rmr" formControlName="RMR">
+                            <input 
+                                (blur)="transformAmount($event)"
+                                type="text" 
+                                [(ngModel)]="rmr" 
+                                formControlName="RMR"
+                                placeholder="$0.00"
+                            >
                         </div>
                         <div class="td">
                             <input type="text" [(ngModel)]="passThrough" formControlName="PassThrough">
@@ -75,10 +81,21 @@
                             <input type="text" [(ngModel)]="billingStarts" formControlName="BillingStarts">
                         </div>
                         <div class="td">
-                            <input type="checkbox" style="margin-right: 10rem;" [(ngModel)]="addToAnExistingRMRItem" formControlName="AddToAnExistingRMRItem">
+                            <input 
+                                type="checkbox" 
+                                style="margin-right: 10rem;" 
+                                [(ngModel)]="addToAnExistingRMRItem" formControlName="AddToAnExistingRMRItem"
+                            >
                         </div>
                         <div class="td">
-                            <input type="text" [(ngModel)]="multiple" formControlName="Multiple">
+                            <div class="dropdown">
+                                <select formControlName="Multiple" class="form-control">
+                                    <!-- <option *ngFor="let item of listRecurringItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option> -->
+                                    <option value="25">25</option>
+                                    <option value="0">0</option>
+                                </select>
+                            </div>
+                            <!-- <input type="text" [(ngModel)]="multiple" formControlName="Multiple"> -->
                         </div>
                         <div class="td">
                             <input type="text" [(ngModel)]="total" formControlName="Total">
@@ -86,115 +103,14 @@
                         <div class="td action">
                             <button type="button" (click)="onSubmit(incentiveRecurringEntryForm)">Submit</button>
                         </div>
+                        <div class="td action">
+                            <button type="button" (click)="addNewItem()">Add</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-        
-        <!-- <em>The width of this jumps around a bit because of the INPUTs but you could fix this by giving a width to each column or the table DIV.</em> -->
-        <!-- <div class="table" style="overflow: scroll;"> 
-            <form>
-                <table>
-                    <thead style="background: lightgray;">
-                        <tr>
-                            <th>Item</th>
-                            <th>Description</th>
-                            <th>Bill Cycle</th>
-                            <th>RMR</th>
-                            <th>Pass Through</th>
-                            <th>Billing Starts</th>
-                            <th>Add to an Existing RMR Item</th>
-                            <th>Multiple</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <select class="form-control col-sm-12">
-                                    <option>Monitoring</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control">
-                            </td>
-                            <td>
-                                <select class="form-control col-sm-12">
-                                    <option>Monthly</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                            </td>
-                            <td>
-                                <input type="date" class="form-control col-sm-12">
-                            </td>
-                            <td>
-                                <input type="checkbox" class="form-control form-check-input">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control col-sm-3">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control col-sm-8" placeholder="0.00">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div> -->
     </div>
-    <!-- <div class="row">
-        <div class="col-md-12">
-            <form>
-                <div class="row">
-                    <div class="form-group">
-                        <label>Item</label>
-                        <select class="form-control">
-                            <option>Monitoring</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Bill Cycle</label>
-                        <select class="form-control"> 
-                            <option>Monthly</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>RMR</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Pass Through</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Billing Starts</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Add to an Existing RMR Item</label>
-                        <input type="checkbox" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Multiple</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Total</label>
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> -->
 </div>
 
 

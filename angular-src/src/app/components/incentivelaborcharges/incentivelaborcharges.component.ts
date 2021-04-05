@@ -21,6 +21,7 @@ export class IncentivelaborchargesComponent implements OnInit {
 
   ngOnInit() {
     this.incentiveLaborChargesEntryForm = this.fb.group({
+      Item: ["", Validators.required],
       Description: ["", Validators.required],
       Hours: ["", Validators.required],
       CostPerHour: ["", Validators.required],

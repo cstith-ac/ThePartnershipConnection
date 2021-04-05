@@ -31,6 +31,7 @@
             <div class="table table-recurring">
                 <div class="thead">
                     <div class="tr">
+                        <div class="td">Item</div>
                         <div class="td">Description</div>
                         <div class="td">Hours</div>
                         <div class="td">Cost per Hour</div>
@@ -47,6 +48,9 @@
                                 </select>
                             </div>
                         </div> -->
+                        <div class="td">
+                            <input type="text" formControlName="Item">
+                        </div>
                         <div class="td">
                             <input type="text" [(ngModel)]="description" formControlName="Description">
                         </div>

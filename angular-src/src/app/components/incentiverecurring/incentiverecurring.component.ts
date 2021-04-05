@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { CurrencyPipe, CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { ListRecurringItems } from 'src/app/models/listrecurringitems';
 import { RouteService } from '../../services/route.service';
 
@@ -16,7 +17,7 @@ export class IncentiverecurringComponent implements OnInit {
   item: '';
   description: '';
   billCycle: '';
-  rmr: '';
+  rmr;
   passThrough: '';
   billingStarts: '';
   addToAnExistingRMRItem: '';
@@ -25,20 +26,21 @@ export class IncentiverecurringComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    public routeService: RouteService
+    public routeService: RouteService,
+    private currencyPipe: CurrencyPipe
   ) { }
 
   ngOnInit() {
     this.incentiveRecurringEntryForm = this.fb.group({
-      Item: '',
-      Description: '',
-      BillCycle: '',
-      RMR: '',
-      PassThrough: '',
-      BillingStarts: '',
-      AddToAnExistingRMRItem: '',
-      Multiple: '',
-      Total:'',
+      Item: ["", Validators.required],
+      Description: ["", Validators.required],
+      BillCycle: ["", Validators.required],
+      RMR: ["", Validators.required],
+      PassThrough: ["", Validators.required],
+      BillingStarts: ["", Validators.required],
+      AddToAnExistingRMRItem: ["", Validators.required],
+      Multiple: ["", Validators.required],
+      Total: ["", Validators.required]
     })
 
     this.routeService.getListRecurringItems().subscribe(
@@ -51,6 +53,17 @@ export class IncentiverecurringComponent implements OnInit {
 
   onSubmit(form: FormGroup) {
     console.log(form.value.Total)
+  }
+
+  //whenever user clicks add new item, a new element should be inserted into the formArray
+  addNewItem() {
+    console.log('add')
+  }
+
+  transformAmount(element) {
+    this.rmr = this.currencyPipe.transform(this.rmr, '$');
+
+    element.target.value = this.rmr;
   }
 
 }
