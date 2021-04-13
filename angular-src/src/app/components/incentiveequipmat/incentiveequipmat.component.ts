@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { ListMaterialItems } from '../../models/listmaterialitems';
 
@@ -21,16 +21,31 @@ export class IncentiveequipmatComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     public routeService: RouteService
-  ) { }
+  ) {
+    this.incentiveEquipMatEntryForm = this.fb.group({
+      entry: this.fb.array([
+        this.fb.group({
+          Item: ["", Validators.required],
+          Description: ["", Validators.required],
+          Quantity: ["", Validators.required],
+          Cost: ["", Validators.required],
+          Total: ["", Validators.required]
+        })
+      ])
+    })
+   }
 
   ngOnInit() {
     this.incentiveEquipMatEntryForm = this.fb.group({
-      Item: ["", Validators.required],
-      Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
-      Total: ["", Validators.required]
+      entryRows: this.fb.array([this.initEntryRow()])
     })
+    // this.incentiveEquipMatEntryForm = this.fb.group({
+    //   Item: ["", Validators.required],
+    //   Description: ["", Validators.required],
+    //   Quantity: ["", Validators.required],
+    //   Cost: ["", Validators.required],
+    //   Total: ["", Validators.required]
+    // })
 
     this.routeService.getListMaterialItems().subscribe(
       res => {
@@ -39,8 +54,20 @@ export class IncentiveequipmatComponent implements OnInit {
     )
   }
 
+  initEntryRow() {
+    return this.fb.group({
+      Item: ["", Validators.required],
+      Description: ["", Validators.required],
+      Quantity: ["", Validators.required],
+      Cost: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
+  }
+
   onSubmit(form: FormGroup) {
-    console.log(form.value.Total)
+    //console.log(form.value.Total)
+    const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRows'];
+    control.push(this.initEntryRow());
   }
 
 }

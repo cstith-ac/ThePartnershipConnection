@@ -8,6 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
+import { Incentive_ADD_Start } from '../models/incentiveaddstart';
 import { ResetPassword } from '../models/resetpassword';
 
 @Injectable({
@@ -19,6 +20,7 @@ export class RouteService {
   res: any;
 
   data: SummaryAdd[] = [];
+  incentiveAddStart: Incentive_ADD_Start[] = [];
 
   baseUrl = environment.baseUrl;
 
@@ -424,6 +426,30 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
     };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListCentralStation/`, httpOptions);
+  }
+
+  getListMultiples(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/ListMultiples/`, httpOptions);
+  }
+
+  getCustomerSystemInfoGetByID(id: number): Observable<any>{
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSystemInfoGet/`+ id, httpOptions);
+  }
+
+  postIncentiveADDStart(incentiveStart: Incentive_ADD_Start) {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    };
+    return this.http.post<Incentive_ADD_Start>(`${this.baseUrl}/api/IncentiveAddStart/`+ incentiveStart, httpOptions)
   }
 
   loadToken() {

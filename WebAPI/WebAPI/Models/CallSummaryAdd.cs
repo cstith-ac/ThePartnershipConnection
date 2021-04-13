@@ -21,10 +21,10 @@ namespace WebAPI.Models
 
         [StringLength(1000)]
         public string TechNotes { get; set; }
-        [Required]
+        //[Required]
         [StringLength(200)]
         public string CustomerOnCall { get; set; }
-        [Required]
+        //[Required]
         [StringLength(15)]
         public string CustomerCallBackPhone { get; set; }
         //[Key]

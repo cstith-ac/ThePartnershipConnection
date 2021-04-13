@@ -1,4 +1,4 @@
-.table-recurring {
+/* .table-recurring {
 	display:table;
 	border-collapse:separate;
 	border-spacing:2px;
@@ -25,4 +25,33 @@
 }
 .dropdown {
 	display: ruby;
+} */
+
+header, .row {
+	display: flex;  /* aligns all child elements (flex items) in a row */
+}
+  
+.col {
+	flex: 1;        /* distributes space on the line equally among items */
+}
+.center-block {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 15px;
+}
+.row-entry-margin {
+	margin: 10px auto;
+}
+.row-entry-padding {
+	padding: 10px 10px 10px 10px;
+}
+.row-entry-multiple-select {
+	width: 140px;
+}
+.recurring-header-bg {
+	background-color: #34e5f2;
+}
+.btn-submit {
+	background-color: #1ade13;
 }

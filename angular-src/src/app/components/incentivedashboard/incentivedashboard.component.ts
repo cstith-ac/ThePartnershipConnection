@@ -15,6 +15,7 @@ import { CustomerSearchList } from '../../models/customersearchlist';
 import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 import { ListSystemTypes } from '../../models/listsystemtypes';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -26,6 +27,9 @@ export class IncentivedashboardComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   public gridData: CustomerSearchList[];
   public gridView: CustomerSearchList[];
+
+  user:any=Object;
+  userEmailAddress: '';
 
   id;
   customersiteid;
@@ -50,6 +54,13 @@ export class IncentivedashboardComponent implements OnInit {
   isSystemSelectionFirst: boolean = false;
   isRemoveDropdown: boolean = true;
   isRemoveSystemDropdown: boolean = true;
+  serviceIncluded = 'Y';
+  renewalMonths='12';
+  customer_Site_id: any;
+  customer_System_id:number;
+  systemName: string;
+  panel_Type_Id: number;
+  panelName: string;
 
   closeResult = '';
   incentiveEntryForm: FormGroup;
@@ -69,8 +80,8 @@ export class IncentivedashboardComponent implements OnInit {
   accountNumber: '';
   // systemType: '';
   panelType: '';
-  location: '';
-  centralStation: '';
+  panelLocation: '';
+  centralStationID: '';
   additionalInfo: '';
   invoiceUpload: '';
   siteVisitUpload: '';
@@ -78,7 +89,8 @@ export class IncentivedashboardComponent implements OnInit {
   subscriberFormUpload: '';
   otherDocument1Upload: '';
   otherDocument2Upload: '';
-  invoiceNumber: '';
+  partnerInvoiceNumber: '';
+  partnerInvoiceDate: '';
   invoiceTotal: '';
   tax: '';
   recurring: '';
@@ -96,6 +108,7 @@ export class IncentivedashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
+    public authService: AuthService,
     private routeService: RouteService,
     private modalService: NgbModal,
     public fb: FormBuilder
@@ -105,38 +118,53 @@ export class IncentivedashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.gridView = this.gridData;
+    // this.gridView = this.gridData;
+    this.authService.getProfile().subscribe(
+      res => {
+        this.user = res;
+        //console.log(this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email)
+      },
+      err => {
+        console.log(err)
+      }
+    )
 
     this.incentiveEntryForm = this.fb.group({
-      Customer: ["", Validators.required],
-      Site: ["", Validators.required],
-      System: ["", Validators.required],
-      SystemType: ["", Validators.required],
+      UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
+      //CustomerID: this.id, //@CustomerID
+      CustomerID: ["", Validators.required], //@CustomerID
+      Site: ["", Validators.required], //@CustomerSiteID
+      System: ["", Validators.required], //@CustomerSystemID
+      SystemType: ["", Validators.required], //@SystemTypeID
       SystemCode: ["", Validators.required],
       NewSystem: ["", Validators.required],
       NewCustomer: ["", Validators.required],
       NewSite: ["", Validators.required],
-      AccountNumber: ["", Validators.required],
-      PanelType: ["", Validators.required],
-      Location: ["", Validators.required],
-      CentralStation: ["", Validators.required],
-      AdditionalInfo: ["", Validators.required],
+      AlarmAccount: ["", Validators.required], //@AlarmAccount
+      PanelType: ["", Validators.required], //@PanelTypeID
+      PanelLocation: ["", Validators.required], //@PanelLocation
+      CentralStationID: ["", Validators.required], //@CentralStationID
+      AdditionalInfo: ["", Validators.required], //@AdditionalInfo
       InvoiceUpload: ["", Validators.required],
       SiteVisitUpload: ["", Validators.required],
       ContractUpload: ["", Validators.required],
       SubscriberFormUpload: ["", Validators.required],
       OtherDocument1Upload: ["", Validators.required],
       OtherDocument2Upload: ["", Validators.required],
-      InvoiceNumber: ["", Validators.required],
+      PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
+      PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
       InvoiceTotal: ["", Validators.required],
       Tax: ["", Validators.required],
       Recurring: ["", Validators.required],
       EquipmentAndMaterials: ["", Validators.required],
       LaborCharges: ["", Validators.required],
       LineItemSubtotal: ["", Validators.required],
-      StartDate: ["", Validators.required],
-      Term: ["", Validators.required],
-      SignalsTested: ["", Validators.required]
+      ContractDate: ["", Validators.required], //@ContractDate
+      ContractTerm: ["", Validators.required], //@ContractTerm
+      RenewalMonths: [""], //@RenewalMonths
+      ServiceIncluded: [""], //@ServiceInclude
+      SignalsTested: ["", Validators.required],
+      PartnerComments: [""] //@PartnerComments
     })
 
 
@@ -283,17 +311,55 @@ export class IncentivedashboardComponent implements OnInit {
     //once a customer is selected, push the customer_Name to customer input on Incentive Entry
     // console.log(selectedCustomerName)
     // console.log(selectedCustomerid);
-    this.customer = selectedCustomerName
-    this.id = selectedCustomerid
+    this.customer = selectedCustomerName;
+    this.id = selectedCustomerid;
     //after selecting a customer, close the modal
     this.modalService.dismissAll();
 
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
         this.listsitesforcustomer = [].concat(res);
+
+        //get the customer_Site_id
+        // this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
+        // //make a call to getListSystemsForSite
+        // this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+        //   res => {
+        //     //get the customer_System_id
+        //     //console.log(res.customer_System_id);
+        //     this.customer_System_id = res.customer_System_id;
+        //     //console.log(this.customer_System_id);
+        //     //make a get request to dbo.CustomerSystemInfoGet
+        //     this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+        //       res => {
+                
+        //         this.alarmAccount = res.accountNumber;
+        //         this.systemType = res.systemType;
+        //         //get the System_Id 
+        //         //make a get request to dbo.ListSystemTypes to find the appropriate system type matching the returned systemType
+        //         this.routeService.getListSystemTypes().subscribe(
+        //           res => {
+                    
+        //             let result = res.filter(a => a.system_Id===this.systemType)
+                    
+        //             for(var i in result) {
+                      
+        //               this.systemName = result[i].systemName;
+        //             }
+        //           }
+        //         )
+        //         //populate the panel type
+
+        //         //populate the central station
+        //       }
+        //     )
+        //     //populate the fields for Account #, System Type, Panel Type, Panel Location, Central Station
+        //   }
+        // )
       }
     )
-    
+
+    //this.incentiveEntryForm.value.CustomerID = this.id;
   }
 
   //select Site 1st
@@ -319,15 +385,30 @@ export class IncentivedashboardComponent implements OnInit {
     //populate customer, populate system
     this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
       res => {
-        // console.log(res.alarmAccount);
-        // console.log(res.systemType);
+        // if the site is selected 1st, get the CustomerSystemID.
+        // Use the ID for the dbo.CustomerSystemInfoGet API call
+        console.log(res.customer_System_id);
+        this.customer_System_id = res.customer_System_id;
+
+        this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+          res => {
+            //console.log(res);
+            this.alarmAccount = res.accountNumber
+            this.systemType = res.systemType;
+            this.panelType = res.panelType
+            this.panelLocation = res.panelLocation
+            this.centralStationID = res.centralStationID
+          }
+        )
+
         let alarmAccount = res.alarmAccount;
         let systemType = res.systemType
         console.log(alarmAccount);
         console.log(systemType);
         this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
         this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
-        this.systemCode = alarmAccount + ' - ' + systemType
+        this.systemCode = alarmAccount + ' - ' + systemType;
+
         //this.systemType = res.systemType
       }
     )
@@ -343,12 +424,12 @@ export class IncentivedashboardComponent implements OnInit {
     let selectedSystemCode = systemCode;
     let selectedCustomerName = customer_Name;
     
-    console.log(selectedCustomerid)
-    console.log(selectedCustomerSiteId)
-    console.log(selectedCustomerSystemId);
-    console.log(selectedAlarmAccount);
-    console.log(selectedSystemCode);
-    console.log(selectedCustomerName);
+    // console.log(selectedCustomerid)
+    // console.log(selectedCustomerSiteId)
+    // console.log(selectedCustomerSystemId);
+    // console.log(selectedAlarmAccount);
+    // console.log(selectedSystemCode);
+    // console.log(selectedCustomerName);
 
     this.id = selectedCustomerid;
     this.customerSystemId = selectedCustomerSystemId;
@@ -359,30 +440,45 @@ export class IncentivedashboardComponent implements OnInit {
 
     this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
     this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+    this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
+    this.isRemoveDropdown = !this.isRemoveDropdown;
+
+    //console.log(this.customerSystemId)
 
     //populate site, populate customer
     this.routeService.getListSitesForCustomer(selectedCustomerid).subscribe(
       res => {
-        console.log(res.siteName);
+        //console.log(res.siteName);
         this.siteName = res.siteName
       }
     )
 
-    this.routeService.getCustomerSearchListCentralStation().subscribe(
+    this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
       res => {
-        //console.log(typeof(res));
-        // res.
-        //console.log(this.customerSearchListCentralStation)
-        // for(var prop in this.customerSearchListCentralStation) {
-        //   this.alarmAccount = this.customerSearchListCentralStation[prop].alarmAccount;
-        // }
-        // console.log(this.alarmAccount)
-        Object.values(this.customerSearchListCentralStation).forEach(val => {
-          //console.log(val);
-          //Object.values(val).filter(x => x.)
-        })
+        //console.log(res);
+        this.alarmAccount = res.accountNumber
+        this.systemType = res.systemType;
+        this.panelType = res.panelType
+        this.panelLocation = res.panelLocation
+        this.centralStationID = res.centralStationID
       }
     )
+
+    // this.routeService.getCustomerSearchListCentralStation().subscribe(
+    //   res => {
+    //     console.log(typeof(res));
+    //     res.
+    //     console.log(this.customerSearchListCentralStation)
+    //     for(var prop in this.customerSearchListCentralStation) {
+    //       this.alarmAccount = this.customerSearchListCentralStation[prop].alarmAccount;
+    //     }
+    //     console.log(this.alarmAccount)
+    //     Object.values(this.customerSearchListCentralStation).forEach(val => {
+    //       console.log(val);
+    //       Object.values(val).filter(x => x.)
+    //     })
+    //   }
+    // )
   }
 
   selectSystemsForCustomer(customersiteid:number) {
@@ -434,6 +530,50 @@ export class IncentivedashboardComponent implements OnInit {
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
       res => {
         this.listSystemsForSite = [].concat(res);
+        console.log(typeof(this.listSystemsForSite))//object
+        for(var i = 0; i < this.listSystemsForSite.length; i++) {
+          this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+        }
+
+        //the customer is selected 1st
+        //now populate the Account # field
+        //make a get request to dbo.CustomerSystemInfoGet
+        this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+          res => {
+            console.log(res);
+            this.alarmAccount = res.accountNumber
+            this.systemType = res.systemType;
+            this.panelType = res.panelType
+            this.panelLocation = res.panelLocation
+            this.centralStationID = res.centralStationID
+
+            this.routeService.getListSystemTypes().subscribe(
+              res => {
+                console.log(res)
+                let result = res.filter(a => a.system_Id===this.systemType)
+                
+                for(var i in result) {
+                  
+                  this.systemName = result[i].systemName;
+                }
+              }
+            )
+
+            this.routeService.getListPanelTypes().subscribe(
+              res => {
+                console.log(res) //object
+                let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
+
+                for(var i in result) {
+                  this.panelName = result[i].panelName
+                  console.log(this.panelType)
+                }
+              }
+            )
+
+            //this.routeService.getlistpa
+          }
+        )
       }
     )
   }
@@ -480,7 +620,54 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    console.log(form.value.customer)
+    // Get the following values
+    // @UserEmailAddress NVarChar(50),
+    // @CustomerID Int,
+    // @CustomerSiteID Int,
+    // @CustomerSystemID Int,
+    // @AlarmAccount NVarChar(50),
+    // @SystemTypeID Int,
+    // @PanelTypeID Int,
+    // @PanelLocation NVarChar(50),
+    // @CentralStationID Int,
+    // @AdditionalInfo NVarChar(255),
+    // @PartnerInvoiceNumber NVarChar(30),
+    // @PartnerInvoiceDate DateTime,
+    // @ContractDate DateTime,
+    // @ContractTerm Int,
+    // @ServiceIncluded NVarChar(2),
+    // @PartnerComments NVarChar(1024)
+
+    console.log('@UserEmailAddress :' +form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
+    console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
+    //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
+    console.log('@CustomerSiteID :' + parseInt(form.value.Site)) // @CustomerSiteID Int,
+    console.log('@CustomerSystemID :' + parseInt(form.value.System)) // @CustomerSystemID Int,
+    console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
+    console.log('@SystemTypeID :' + parseInt(form.value.SystemType)) // @SystemTypeID Int,
+    console.log('@PanelTypeID :' + parseInt(form.value.PanelType)) // @PanelTypeID Int,
+    console.log('@PanelLocation :' +form.value.PanelLocation) // @PanelLocation NVarChar(50),
+    console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+    console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    console.log('@PartnerInvoiceNumber :' +form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
+    console.log('@PartnerInvoiceDate :' +form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
+    console.log('@ContractDate :' +form.value.ContractDate) // @ContractDate DateTime,
+    console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+
+    //console.log(form.value.RenewalMonths) // @RenewalMonths Int,
+    console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
+    //console.log(form.value.) // @ServiceIncluded NVarChar(2),
+    console.log('@ServiceIncluded :' +this.serviceIncluded);
+
+    console.log('@PartnerComments :' +form.value.PartnerComments) // @PartnerComments NVarChar(1024)
+
+    // this.routeService.postIncentiveADDStart(this.incentiveEntryForm.value).subscribe(
+    //   result => {
+    //     confirm('Click ok to confirm form submission')
+
+    //   },
+    //   error => console.log('error: ', error);
+    // )
   }
 
   routeToNewCustomer() {
@@ -517,9 +704,6 @@ export class IncentivedashboardComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    //hit the api
-    //select a result
-    //populate the result on the main screen
   }
 
   openSearchSiteModal(site) {
@@ -542,6 +726,17 @@ export class IncentivedashboardComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  openAddViewCommentsModal(comments) {
+    this.modalService.open(comments, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    })
   }
 
   // openRecurringModal(content) {

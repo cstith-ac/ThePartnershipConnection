@@ -19,6 +19,13 @@ export class PartnerwindowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // if(this.authService.isEmployee) {
+    //   this.routeService.getCustomerCareDashboardInfo().subscribe(
+    //     res => {
+    //       this.dashboardinfo = res;
+    //     }
+    //   )
+    // }
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
         this.dashboardinfo = res;
@@ -27,7 +34,7 @@ export class PartnerwindowComponent implements OnInit {
 
     if(this.authService.isPartner()) {
       setTimeout(() => {
-        console.log(this.elementRef.nativeElement)
+        //console.log(this.elementRef.nativeElement)
         this.elementRef.nativeElement.style.display = 'none';
       }, 1)
     }

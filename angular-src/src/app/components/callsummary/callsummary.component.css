@@ -12,3 +12,12 @@ textarea.ng-invalid.ng-touched{
     top: -80px;
     left: 500px;
 }
+.toast {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* position: inherit; */
+}
+::ng-deep .toast-header {
+    color: #ff0101;
+}

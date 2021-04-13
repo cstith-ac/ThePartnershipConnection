@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ListSystemTypesController : ControllerBase
+    public class CustomerSystemInfoGetController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public ListSystemTypesController(
+        public CustomerSystemInfoGetController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -33,31 +33,11 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<Object> GetListSystemTypes()
+        public CustomerSystemInfoGet GetCustomerSystemInfoByID(int id)
         {
-            var list = new List<ListSystemTypes>();
-
-            await using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                var result = await db.GetListSystemTypes.FromSqlRaw("Execute [dbo].[ListSystemTypes]").ToListAsync();
-                List<ListSystemTypes> Lst = result.Select(s => new ListSystemTypes
-                {
-                    System_Id = s.System_Id,
-                    SystemName = s.SystemName
-                }).ToList();
-
-                return Lst;
-            }
+            return db.GetCustomerSystemInfoGets.FromSqlRaw("EXECUTE [dbo].[CustomerSystemInfoGet] @CustomerSystemID={0}", id).ToListAsync().Result.FirstOrDefault();
         }
-
-        //[HttpGet("{id}")]
-        //[Authorize]
-        //public ListSystemTypes GetListSystemTypesByID(int id)
-        //{
-        //    return db.GetListSystemTypes.FromSqlRaw("Execute [dbo].[ListSystemTypes]", id).ToListAsync().Result.FirstOrDefault();
-        //}
     }
 }

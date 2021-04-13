@@ -9,5 +9,6 @@ namespace WebAPI.Models
     {
         public int Panel_Type_Id { get; set; }
         public string PanelName { get; set; }
+        public string Inactive { get; set; }
     }
 }

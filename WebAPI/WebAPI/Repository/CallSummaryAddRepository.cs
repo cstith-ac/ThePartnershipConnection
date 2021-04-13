@@ -43,6 +43,10 @@ namespace WebAPI.Repository
             }
             var techNotesParam = new SqlParameter("@TechNotes", ticketNumberAdded.TechNotes);
             var customerOnCallParam = new SqlParameter("@CustomerOnCall", ticketNumberAdded.CustomerOnCall);
+            if (ticketNumberAdded.CustomerOnCall == null)
+            {
+                customerOnCallParam.Value = "";
+            }
             var customerCallBackPhoneParam = new SqlParameter("@CustomerCallBackPhone", ticketNumberAdded.CustomerCallBackPhone);
 
             // define the output parameter that needs to be retained

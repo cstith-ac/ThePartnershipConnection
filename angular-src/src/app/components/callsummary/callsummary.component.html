@@ -82,8 +82,16 @@
                                             <div class="form-group btn-group" id="callTypeDropdown">
                                                 <label class="d-block call-summary-select">Call Type</label>
                                                 <div class="dropdown">
-                                                    <select formControlName="callSummaryClassList" class="form-control form-control-lg" id="callSummaryClassListSelect" [ngClass]="{ 'is-invalid': submitted && f.callSummaryClassList.errors }" [(ngModel)]="selectedCallType" (ngModelChange)="showProblemsBasedOnClassSelect($event)">
-                                                        <option *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" [ngValue]="type.problem_Class_id">{{ type.problem_Class_description }}</option>
+                                                    <select 
+                                                        formControlName="callSummaryClassList" class="form-control form-control-lg" id="callSummaryClassListSelect" 
+                                                        [ngClass]="{ 'is-invalid': submitted && f.callSummaryClassList.errors }" 
+                                                        [(ngModel)]="selectedCallType" 
+                                                        (ngModelChange)="showProblemsBasedOnClassSelect($event)"
+                                                    >
+                                                        <option 
+                                                            *ngFor="let type of callSummaryClassList" value="{{ type.problem_Class_id }}" 
+                                                            [ngValue]="type.problem_Class_id"
+                                                        >{{ type.problem_Class_description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.callSummaryClassList.errors" class="invalid-feedback">
                                                         <div *ngIf="f.callSummaryClassList.errors.required">A call type selection is required</div>
@@ -95,8 +103,19 @@
                                             <div class="form-group btn-group" id="callTypeDropdown">
                                                 <label class="d-block call-summary-select">Problems</label>
                                                 <div class="dropdown">
-                                                    <select formControlName="ProblemID" class="form-control form-control-lg" id="callSummaryProblems" [ngClass]="{ 'is-invalid': submitted && f.ProblemID.errors }">
-                                                        <option *ngFor="let problem of callSummaryProblems" value="{{ problem.problem_Id }}" [ngValue]="problem.problem_Id">{{ problem.description }}</option>
+                                                    <!-- <ngb-toast *ngIf="show" header="ALERT" [autohide]="false" (hidden)="showProblem=false">
+                                                    You must <u>manually</u> select a problem to proceed
+                                                    </ngb-toast> -->
+                                                    <select 
+                                                        formControlName="ProblemID" 
+                                                        class="form-control form-control-lg" id="callSummaryProblems" 
+                                                        [ngClass]="{ 'is-invalid': submitted && f.ProblemID.errors }"
+                                                        [(ngModel)]="selectedProblemType"
+                                                    >
+                                                        <option 
+                                                            *ngFor="let problem of callSummaryProblems" value="{{ problem.problem_Id }}" 
+                                                            [ngValue]="problem.problem_Id"
+                                                        >{{ problem.description }}</option>
                                                     </select>
                                                     <div *ngIf="submitted && f.ProblemID.errors" class="invalid-feedback">
                                                         <div *ngIf="f.ProblemID.errors.required">A problem selection is required</div>
@@ -135,29 +154,42 @@
                                         <div class="col-md-6">
                                             <div class="form-group btn-group">
                                                 <label>Was the issue resolved?</label>
-                                                <input checked type="checkbox" class="ml-1 mt-1" (change)="isIssueResolved($event)">
+                                                <input checked type="checkbox" class="ml-1 mb-2" (change)="isIssueResolved($event)">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Customer On Call</label>
-                                                <input type="text" [(ngModel)]="customerOnCall" formControlName="CustomerOnCall" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerOnCall.errors }">
-                                                <div *ngIf="submitted && f.CustomerOnCall.errors" class="invalid-feedback">
+                                                <label class="col-form-label">Customer On Call</label>
+                                                <input 
+                                                    type="text" 
+                                                    [(ngModel)]="customerOnCall" formControlName="CustomerOnCall" class="form-control" 
+                                                    [ngClass]="{ 'is-invalid': submitted && f.CustomerOnCall.errors }"
+                                                >
+                                                <small *ngIf="f.CustomerOnCall.invalid && f.CustomerOnCall.touched" class="text-danger">Customer On Call is required</small>
+                                                <!-- <div *ngIf="submitted && f.CustomerOnCall.errors" class="invalid-feedback">
                                                     <div *ngIf="f.CustomerOnCall.errors.required">Customer On Call is required</div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="col-form-label">Customer Call Back Phone</label>
-                                                <input formControlName="CustomerCallBackPhone" type="text" class="form-control" [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" mask="(000) 000-0000 x999">
+                                                <input 
+                                                    formControlName="CustomerCallBackPhone" 
+                                                    type="text" class="form-control"
+                                                    [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }"
+                                                    [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" 
+                                                    mask="(000) 000-0000 x999">
                                                 <small *ngIf="f.CustomerCallBackPhone.invalid && f.CustomerCallBackPhone.touched" class="text-danger">Phone no is Required(minimum length 10,numbers are only allowed)</small>
-                                              </div>
+                                            </div>
                                             <!-- <div class="form-group">
                                                 <label>Customer Call Back Phone</label>
-                                                <input type="text" [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 ext" mask="(000) 000 0000 000">
+                                                <input 
+                                                    type="text" 
+                                                    [(ngModel)]="customerCallBackPhone" formControlName="CustomerCallBackPhone" class="form-control" 
+                                                    [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }" placeholder="(123) 456-789 ext" mask="(000) 000 0000 000">
                                                 <div *ngIf="submitted && f.CustomerCallBackPhone.errors" class="invalid-feedback">
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.required">A customer call back phone # is required</div>
                                                     <div *ngIf="f.CustomerCallBackPhone.errors.minlength">Minimum 10 characters are required</div>

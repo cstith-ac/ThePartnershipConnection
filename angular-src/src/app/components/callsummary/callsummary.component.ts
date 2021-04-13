@@ -23,6 +23,7 @@ export class CallsummaryComponent implements OnInit {
   
   authToken: any;
   show: boolean = true;
+  showProblem = true;
 
   callSummaryAddForm: FormGroup;
   submitted = false;
@@ -43,6 +44,7 @@ export class CallsummaryComponent implements OnInit {
 
   selectedValue: number;
   selectedCallType: number;
+  selectedProblemType: number;
   clicked = false;
   enableReset = true;
 
@@ -64,11 +66,31 @@ export class CallsummaryComponent implements OnInit {
       CallSummaryNextSteps: ["", Validators.required],
       CustomerComments: ["", Validators.required],
       TechNotes: ["", Validators.required],
-      //ResolutionNotes: ["", Validators.required],
-      ResolutionNotes: [""],
+      ResolutionNotes: ["", Validators.required],
+      //ResolutionNotes: [""],
+      //CustomerOnCall: [""],
       CustomerOnCall: ["", Validators.required],
       CustomerCallBackPhone: ["", [Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]]
+      //CustomerCallBackPhone: [""]
     })
+
+    //optional customer on call and customer call back phone HACK
+    // this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
+    // this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
+    // this.callSummaryAddForm.controls['CustomerOnCall'].clearValidators();
+
+    // setTimeout(() => {
+    //   this.callSummaryAddForm.controls.CustomerOnCall.setValue(" ");
+    // }, 4);
+    this.callSummaryAddForm.controls["CustomerOnCall"].setValue("")
+
+    // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
+    // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
+    // this.callSummaryAddForm.controls['CustomerCallBackPhone'].clearValidators();
+    // setTimeout(() => {
+    //   this.callSummaryAddForm.controls.CustomerCallBackPhone.setValue(" ");
+    // }, 4);
+    //this.callSummaryAddForm.controls["CustomerCallBackPhone"].setValue("")
 
     this.authService.getProfile().subscribe(
       res => {
@@ -102,11 +124,11 @@ export class CallsummaryComponent implements OnInit {
       }
     )
 
-    this.routeService.getCallSummaryProblems().subscribe(
-      res => {
-        this.callSummaryProblems = res;
-      }
-    )
+    // this.routeService.getCallSummaryProblems().subscribe(
+    //   res => {
+    //     this.callSummaryProblems = res;
+    //   }
+    // )
 
     this.routeService.getCallSummaryResolutions().subscribe(
       res => {
@@ -132,11 +154,40 @@ export class CallsummaryComponent implements OnInit {
     })
   }
 
+  // if the issue was resolved (checked = true), don't require customer on call and customer call back phone
+  // else if the issue was not resolved, require customer on call and customer call back phone
+
   isIssueResolved(event){
     if(event.target.checked) {
       this.show = true;
+      console.log(event.target.checked)
+
+      // Customer on call and customer call back phone are not required
+
+      console.log(this.callSummaryAddForm.controls.CustomerOnCall)
+      this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
+      this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
+
+      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
+      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
+      
     } else {
       this.show = false;
+      console.log(event.target.checked)
+
+      // customer on call and customer call back phone are required
+
+      this.callSummaryAddForm.controls.CustomerOnCall.markAsPristine();
+      this.callSummaryAddForm.controls.CustomerOnCall.markAsUntouched();
+      this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({'incorrect':true})
+      this.callSummaryAddForm.get('CustomerOnCall').setValidators([
+        Validators.required
+      ]);
+
+      this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsPristine();
+      this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsUntouched();
+      this.callSummaryAddForm.controls['CustomerCallBackPhone'].setErrors({'incorrect':true})
+      this.callSummaryAddForm.get('CustomerCallBackPhone').setValidators([Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]);
     }
   }
 
@@ -160,7 +211,7 @@ export class CallsummaryComponent implements OnInit {
           this.siteToSystemList = [].concat(res);
        
         } else {
-          console.log(res)
+          //console.log(res)
           this.siteToSystemList = [].concat(res);
         }
 
@@ -177,22 +228,24 @@ export class CallsummaryComponent implements OnInit {
   //Get the Problem_class_id of call type / class list
   showProblemsBasedOnClassSelect(val: any) {
     this.customFunction(val);
-    console.log('called')
+    //console.log('called ' + val)
   }
 
   //Change the Problems dropdown based on the selection of Call Type 
   customFunction(val: any) {
     if(val === 5) {
-      console.log("The id selected is: " + val);
+      console.log(val);
 
-      this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      this.callSummaryAddForm.controls.ProblemID.markAsDirty();
+      this.callSummaryProblems = []; // ==> CORRECT
+
+      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
+      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
      
       //change ProblemID pristine to false, touched to true, status to valid
       //mark as touched, valid, and dirty
-      setTimeout(() => {
-        this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      }, 4);
+      // setTimeout(() => {
+      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
+      // }, 4);
 
       //execute CallSummaryProblems with a parameter of Other if this is selected
       //exec dbo.CallSummaryProblems O
@@ -205,18 +258,20 @@ export class CallsummaryComponent implements OnInit {
       //then change options in Problems dropdown
     }
     if(val === 1) {
-      console.log("The id selected is: " + val);
+      //console.log("The id selected is: " + val);
 
-      this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      this.callSummaryAddForm.controls.ProblemID.markAsDirty();
+      this.callSummaryProblems = []; // ==> CORRECT
+
+      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
+      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
      
       //change ProblemID pristine to false, touched to true, status to valid
       //mark as touched, valid, and dirty
-      setTimeout(() => {
-        this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      }, 4);
+      // setTimeout(() => {
+      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
+      // }, 4);
 
-       //execute CallSummaryProblems with a parameter of S if this is selected
+       //execute CallSummaryProblems with a parameter of Service if this is selected
        //exec dbo.CallSummaryProblems S
        this.routeService.getCallSummaryProblemsS().subscribe(
          res => {
@@ -229,40 +284,45 @@ export class CallsummaryComponent implements OnInit {
     if(val === 2) {
       console.log("The id selected is: " + val);
 
-      this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      this.callSummaryAddForm.controls.ProblemID.markAsDirty();
+      this.callSummaryProblems = []; // ==> CORRECT
+
+      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
+      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
      
       //change ProblemID pristine to false, touched to true, status to valid
       //mark as touched, valid, and dirty
-      setTimeout(() => {
-        this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      }, 4);
+      // setTimeout(() => {
+      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
+      // }, 4);
 
-       //execute CallSummaryProblems with a parameter of CC 
+       //execute CallSummaryProblems with a parameter of Customer Care 
        //exec dbo.CallSummaryProblems CC -- this is called and displayed as a default dropdown value for Problems
        this.routeService.getCallSummaryProblems().subscribe(
          res => {
-          this.callSummaryProblems = res;
+           console.log(res)
+           this.callSummaryProblems = res;
          }
        )
     }
     if(val === 3) {
       console.log("The id selected is: " + val);
 
-      this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      this.callSummaryAddForm.controls.ProblemID.markAsDirty();
+      this.callSummaryProblems = []; // ==> CORRECT
+
+      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
+      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
      
       //change ProblemID pristine to false, touched to true, status to valid
       //mark as touched, valid, and dirty
-      setTimeout(() => {
-        this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      }, 4);
+      // setTimeout(() => {
+      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
+      // }, 4);
 
        //execute CallSummaryProblems with a parameter of Incentives if this is selected
        //exec dbo.CallSummaryProblems IC
        this.routeService.getCallSummaryProblemsIC().subscribe(
          res => {
-           //console.log(res);
+           console.log(res);
            this.callSummaryProblems = res;
          }
        )
@@ -271,20 +331,22 @@ export class CallsummaryComponent implements OnInit {
     if(val === 4) {
       console.log("The id selected is: " + val);
 
-      this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      this.callSummaryAddForm.controls.ProblemID.markAsDirty();
+      this.callSummaryProblems = []; // ==> CORRECT
+
+      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
+      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
      
       //change ProblemID pristine to false, touched to true, status to valid
       //mark as touched, valid, and dirty
-      setTimeout(() => {
-        this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      }, 4);
+      // setTimeout(() => {
+      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
+      // }, 4);
 
        //execute CallSummaryProblems with a parameter of Invoicing if this is selected
        //exec dbo.CallSummaryProblems IV
        this.routeService.getCallSummaryProblemsIV().subscribe(
          res => {
-           //console.log(res);
+           console.log(res);
            this.callSummaryProblems = res;
          }
        )
@@ -304,6 +366,8 @@ export class CallsummaryComponent implements OnInit {
     // if(form.value.SystemID === null) {
     //   this.siteToSystemList = 1
     // }
+    //this.callSummaryAddForm.setErrors({ 'invalid': false });
+    // form.value.CustomerOnCall="";
     
     // commented code below causes form to remain invalid until ALL fields are completed
     // if(this.callSummaryAddForm.invalid) {

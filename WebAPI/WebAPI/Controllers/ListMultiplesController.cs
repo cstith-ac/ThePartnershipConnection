@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ListSystemTypesController : ControllerBase
+    public class ListMultiplesController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public ListSystemTypesController(
+        public ListMultiplesController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -35,29 +35,21 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<Object> GetListSystemTypes()
+        public async Task<Object> GetListMultiples()
         {
-            var list = new List<ListSystemTypes>();
+            var list = new List<ListMultiples>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var result = await db.GetListSystemTypes.FromSqlRaw("Execute [dbo].[ListSystemTypes]").ToListAsync();
-                List<ListSystemTypes> Lst = result.Select(s => new ListSystemTypes
+                var result = await db.GetListMultiples.FromSqlRaw("Execute [dbo].[ListMultiples]").ToListAsync();
+                List<ListMultiples> Lst = result.Select(s => new ListMultiples
                 {
-                    System_Id = s.System_Id,
-                    SystemName = s.SystemName
+                    Multiple = s.Multiple
                 }).ToList();
 
                 return Lst;
             }
         }
-
-        //[HttpGet("{id}")]
-        //[Authorize]
-        //public ListSystemTypes GetListSystemTypesByID(int id)
-        //{
-        //    return db.GetListSystemTypes.FromSqlRaw("Execute [dbo].[ListSystemTypes]", id).ToListAsync().Result.FirstOrDefault();
-        //}
     }
 }

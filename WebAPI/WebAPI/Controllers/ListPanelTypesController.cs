@@ -46,7 +46,8 @@ namespace WebAPI.Controllers
                 List<ListPanelTypes> Lst = result.Select(s => new ListPanelTypes
                 {
                     Panel_Type_Id = s.Panel_Type_Id,
-                    PanelName = s.PanelName
+                    PanelName = s.PanelName,
+                    Inactive = s.Inactive
                 }).ToList();
 
                 return Lst;

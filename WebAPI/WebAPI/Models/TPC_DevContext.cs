@@ -59,6 +59,9 @@ namespace WebAPI.Models
         public virtual DbSet<CustomerSearchListSites> GetCustomerSearchListSites { get; set; }
         public virtual DbSet<CustomerSearchListCentralStation> GetCustomerSearchListCentralStations { get; set; }
         public virtual DbSet<ListSystemTypes> GetListSystemTypes { get; set; }
+        public virtual DbSet<ListMultiples> GetListMultiples { get; set; }
+        public virtual DbSet<CustomerSystemInfoGet> GetCustomerSystemInfoGets { get; set; }
+        public virtual DbSet<Incentive_ADD_Start> GetIncentive_ADD_StartResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -398,6 +401,21 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<ListSystemTypes>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<ListMultiples>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSystemInfoGet>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Incentive_ADD_Start>(entity =>
             {
                 entity.HasNoKey();
             });
