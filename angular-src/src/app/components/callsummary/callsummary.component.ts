@@ -11,6 +11,7 @@ import { SummaryResolutions } from 'src/app/models/summaryresolutions';
 import { SystemList } from 'src/app/models/systemlist';
 import { RouteService } from '../../services/route.service';
 import { AuthService } from '../../services/auth.service';
+import { numberSymbols } from '@progress/kendo-angular-intl';
 declare var $: any;
 
 @Component({
@@ -56,6 +57,8 @@ export class CallsummaryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.show) // the issue has been resolved. The checkbox for Was the issue resolved? is checked by default
+
     this.callSummaryAddForm = this.fb.group({
       SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
       site: '',
@@ -70,7 +73,7 @@ export class CallsummaryComponent implements OnInit {
       //ResolutionNotes: [""],
       //CustomerOnCall: [""],
       CustomerOnCall: ["", Validators.required],
-      CustomerCallBackPhone: ["", [Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]]
+      CustomerCallBackPhone: ["", Validators.required]
       //CustomerCallBackPhone: [""]
     })
 
@@ -82,7 +85,7 @@ export class CallsummaryComponent implements OnInit {
     // setTimeout(() => {
     //   this.callSummaryAddForm.controls.CustomerOnCall.setValue(" ");
     // }, 4);
-    this.callSummaryAddForm.controls["CustomerOnCall"].setValue("")
+    //this.callSummaryAddForm.controls["CustomerOnCall"].setValue("")
 
     // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
     // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
@@ -159,14 +162,36 @@ export class CallsummaryComponent implements OnInit {
 
   isIssueResolved(event){
     if(event.target.checked) {
-      this.show = true;
+      this.show = true; // default value
       console.log(event.target.checked)
 
-      // Customer on call and customer call back phone are not required
+      while(this.show = true) {
+        console.log(typeof(this.callSummaryAddForm.controls["CustomerOnCall"].status)) //string
+        console.log(this.callSummaryAddForm.controls["CustomerCallBackPhone"].status)
+        let cust = this.callSummaryAddForm.controls["CustomerOnCall"].status;
+        let numb = this.callSummaryAddForm.controls["CustomerCallBackPhone"].status;
+    
+        //cust.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+        //numb.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+
+        // Customer on call and customer call back phone are not required
+        // mark the field Customer On Call as not required
+        this.callSummaryAddForm.controls['CustomerOnCall'].markAsTouched();
+        this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"Valid"})
+
+        this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsTouched();
+        this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"Valid"})
+        
+        return
+      }
+
+      
+      //console.log(customerOnCallControl);
+      // this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({required:false})
 
       console.log(this.callSummaryAddForm.controls.CustomerOnCall)
-      this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
-      this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
+      // this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
+      // this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
 
       // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
       // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
@@ -176,18 +201,29 @@ export class CallsummaryComponent implements OnInit {
       console.log(event.target.checked)
 
       // customer on call and customer call back phone are required
+      while(this.show = false) {
+        console.log(this.callSummaryAddForm.controls["CustomerOnCall"].status)
+        console.log(this.callSummaryAddForm.controls["CustomerCallBackPhone"].status)
 
-      this.callSummaryAddForm.controls.CustomerOnCall.markAsPristine();
-      this.callSummaryAddForm.controls.CustomerOnCall.markAsUntouched();
-      this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({'incorrect':true})
-      this.callSummaryAddForm.get('CustomerOnCall').setValidators([
-        Validators.required
-      ]);
+        this.callSummaryAddForm.controls['CustomerOnCall'].markAsUntouched()
+        this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"INVALID"})
 
-      this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsPristine();
-      this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsUntouched();
-      this.callSummaryAddForm.controls['CustomerCallBackPhone'].setErrors({'incorrect':true})
-      this.callSummaryAddForm.get('CustomerCallBackPhone').setValidators([Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]);
+        this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsUntouched();
+        this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"INVALID"})
+        return
+      }
+
+      // this.callSummaryAddForm.controls.CustomerOnCall.markAsPristine();
+      // this.callSummaryAddForm.controls.CustomerOnCall.markAsUntouched();
+      // this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({'incorrect':true})
+      // this.callSummaryAddForm.get('CustomerOnCall').setValidators([
+      //   Validators.required
+      // ]);
+
+      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsPristine();
+      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsUntouched();
+      // this.callSummaryAddForm.controls['CustomerCallBackPhone'].setErrors({'incorrect':true})
+      // this.callSummaryAddForm.get('CustomerCallBackPhone').setValidators([Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]);
     }
   }
 
