@@ -42,6 +42,7 @@ namespace WebAPI.Models
         public virtual DbSet<CallSummaryProblems> GetCallSummaryProblems { get; set; }
         public virtual DbSet<CallSummaryNextSteps> GetCallSummaryNextSteps { get; set; }
         public virtual DbSet<CallSummaryAdd> GetCallSummaryAddResults { get; set; }
+        public virtual DbSet<CallSummaryUpdate> GetCallSummaryUpdates { get; set; }
         public virtual DbSet<ServiceTicketInfo> GetServiceTicketInfos { get; set; }
         public virtual DbSet<ServiceTicketInfo2> GetServiceTicketInfos2 { get; set; }
         public virtual DbSet<ServiceTicketNotes> GetServiceTicketNotes { get; set; }
@@ -317,6 +318,11 @@ namespace WebAPI.Models
             modelBuilder.Entity<CallSummaryAdd>(entity =>
             {
                 //entity.HasIndex(e => e.TicketNumber);
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CallSummaryUpdate>(entity =>
+            {
                 entity.HasNoKey();
             });
 

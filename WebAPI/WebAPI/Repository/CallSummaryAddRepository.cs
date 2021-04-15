@@ -48,6 +48,10 @@ namespace WebAPI.Repository
                 customerOnCallParam.Value = "";
             }
             var customerCallBackPhoneParam = new SqlParameter("@CustomerCallBackPhone", ticketNumberAdded.CustomerCallBackPhone);
+            if (ticketNumberAdded.CustomerCallBackPhone == null)
+            {
+                customerCallBackPhoneParam.Value = "";
+            }
 
             // define the output parameter that needs to be retained
             // for the Id created when the Stored Procedure executes 

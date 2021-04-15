@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    public class CallSummaryAdd
+    public class CallSummaryUpdate
     {
-        [Required]
-        [StringLength(100)]
+        public int TicketNumber { get; set; }
         public string SedonaUser { get; set; }
-        public int SystemID { get; set; }
+        public int CustomerSiteID { get; set; }
+        public int CustomerSystemID { get; set; }
         public int ProblemID { get; set; }
         public int? ResolutionID { get; set; }
         public int NextStepID { get; set; }
-        
+
         [StringLength(1000)]
         public string CustomerComments { get; set; }
 
@@ -27,13 +27,5 @@ namespace WebAPI.Models
 
         [StringLength(15)]
         public string CustomerCallBackPhone { get; set; }
-        //[Key]
-        public int TicketNumber { get; set; }
-
-        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        //public int Service_Ticket_Id { get; set; }
-
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int Customer_Id { get; set; }
     }
 }

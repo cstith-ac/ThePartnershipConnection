@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { ClassList } from 'src/app/models/classlist';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
 import { NextSteps } from 'src/app/models/nextsteps';
@@ -21,10 +20,14 @@ declare var $: any;
 })
 export class CallsummaryComponent implements OnInit {
   @ViewChild("ticketNumber") divView: ElementRef;
+  @ViewChild("changeText") divText: ElementRef;
   
   authToken: any;
   show: boolean = true;
   showProblem = true;
+
+  changeToUpdateButton = false;
+  showSaveButton = true;
 
   callSummaryAddForm: FormGroup;
   submitted = false;
@@ -49,16 +52,36 @@ export class CallsummaryComponent implements OnInit {
   clicked = false;
   enableReset = true;
 
+  returnedTicketNumber: any;
+
   constructor(
     public fb: FormBuilder,
     public routeService: RouteService,
     public authService: AuthService,
     private http: HttpClient
-  ) { }
+  ) { 
+    this.callSummaryAddForm = this.fb.group({
+      SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
+      site: '',
+      SystemID: ["", Validators.required],
+      callSummaryClassList: ["", Validators.required],
+      ProblemID: ["", Validators.required],
+      ResolutionID: [""],
+      CallSummaryNextSteps: [""],
+      CustomerComments: ["", Validators.required],
+      TechNotes: [""],
+      ResolutionNotes: ["", Validators.required],
+      CustomerOnCall: [""],
+      CustomerCallBackPhone: [""],
+      FormStatus: [true]
+    })
+  }
 
   ngOnInit() {
     console.log(this.show) // the issue has been resolved. The checkbox for Was the issue resolved? is checked by default
 
+    this.buildForm();
+    this.setIsRequiredValuesValidators();
     this.callSummaryAddForm = this.fb.group({
       SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
       site: '',
@@ -66,42 +89,19 @@ export class CallsummaryComponent implements OnInit {
       callSummaryClassList: ["", Validators.required],
       ProblemID: ["", Validators.required],
       ResolutionID: ["", Validators.required],
-      CallSummaryNextSteps: ["", Validators.required],
+      CallSummaryNextSteps: [""],
       CustomerComments: ["", Validators.required],
-      TechNotes: ["", Validators.required],
-      ResolutionNotes: ["", Validators.required],
-      //ResolutionNotes: [""],
-      //CustomerOnCall: [""],
-      CustomerOnCall: ["", Validators.required],
-      CustomerCallBackPhone: ["", Validators.required]
-      //CustomerCallBackPhone: [""]
+      TechNotes: [""],
+      ResolutionNotes: [""],
+      CustomerOnCall: [""],
+      CustomerCallBackPhone: [""],
+      FormStatus: [true]
     })
-
-    //optional customer on call and customer call back phone HACK
-    // this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
-    // this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
-    // this.callSummaryAddForm.controls['CustomerOnCall'].clearValidators();
-
-    // setTimeout(() => {
-    //   this.callSummaryAddForm.controls.CustomerOnCall.setValue(" ");
-    // }, 4);
-    //this.callSummaryAddForm.controls["CustomerOnCall"].setValue("")
-
-    // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
-    // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
-    // this.callSummaryAddForm.controls['CustomerCallBackPhone'].clearValidators();
-    // setTimeout(() => {
-    //   this.callSummaryAddForm.controls.CustomerCallBackPhone.setValue(" ");
-    // }, 4);
-    //this.callSummaryAddForm.controls["CustomerCallBackPhone"].setValue("")
 
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        //console.log(JSON.parse(localStorage.getItem('user')))
         this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink;
-        //console.log(this.sedonaUser)
-        //console.log(JSON.parse(localStorage.getItem('user')).afauserLink)
       },
       err => {
         console.log(err);
@@ -122,16 +122,9 @@ export class CallsummaryComponent implements OnInit {
 
     this.routeService.getCallSummaryClassList().subscribe(
       res => {
-        //console.log(res)
         this.callSummaryClassList = res;
       }
     )
-
-    // this.routeService.getCallSummaryProblems().subscribe(
-    //   res => {
-    //     this.callSummaryProblems = res;
-    //   }
-    // )
 
     this.routeService.getCallSummaryResolutions().subscribe(
       res => {
@@ -157,73 +150,194 @@ export class CallsummaryComponent implements OnInit {
     })
   }
 
+  buildForm() {
+    this.callSummaryAddForm = this.fb.group({
+      SedonaUser: this.sedonaUser = JSON.parse(localStorage.getItem('user')).afauserLink,
+      site: '',
+      SystemID: ["", Validators.required],
+      callSummaryClassList: ["", Validators.required],
+      ProblemID: ["", Validators.required],
+      ResolutionID: [""],
+      CallSummaryNextSteps: [""],
+      CustomerComments: [""],
+      TechNotes: [""],
+      ResolutionNotes: [""],
+      CustomerOnCall: [""],
+      CustomerCallBackPhone: [""],
+      FormStatus: [true]
+    })
+  }
+
+  setIsRequiredValuesValidators() {
+    const resolutionIDControl = this.callSummaryAddForm.get("ResolutionID");
+    const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+    const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
+    const techNotesControl = this.callSummaryAddForm.get("TechNotes");
+    const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
+    const customerOnCallControl = this.callSummaryAddForm.get("CustomerOnCall");
+    const customerCallBackPhoneControl = this.callSummaryAddForm.get("CustomerCallBackPhone");
+
+    this.callSummaryAddForm.get("FormStatus").valueChanges.subscribe(
+      (FormStatus => {
+        //console.log(typeof(FormStatus))
+        if(FormStatus === true) {
+          //the issue was resolved / checked
+          // console.log(FormStatus)
+          // console.log(customerOnCallControl);
+          // console.log(customerCallBackPhoneControl);
+          resolutionIDControl.setValidators([Validators.required]);
+          callSummaryNextStepsControl.setValidators(null);
+          customerCommentsControl.setValidators([Validators.required]);
+          techNotesControl.setValidators(null);
+          resolutionNotesControl.setValidators([Validators.required]);
+          customerOnCallControl.setValidators(null);
+          customerCallBackPhoneControl.setValidators(null);
+          //this.callSummaryAddForm.setValue({status:"Valid"});
+          // this.callSummaryAddForm.removeControl("CustomerOnCall")
+          // this.callSummaryAddForm.removeControl("CustomerCallBackPhone")
+        }
+
+        if(FormStatus === false) {
+          //the issue was unresolved / unchecked
+          console.log(FormStatus)
+          // console.log(customerOnCallControl);
+          // console.log(customerCallBackPhoneControl);
+          resolutionIDControl.setValidators(null);
+          callSummaryNextStepsControl.setValidators([Validators.required]);
+          customerCommentsControl.setValidators([Validators.required]);
+          techNotesControl.setValidators([Validators.required]);
+          resolutionNotesControl.setValidators(null);
+          customerOnCallControl.setValidators([Validators.required]);
+          customerCallBackPhoneControl.setValidators([Validators.required]);
+        }
+
+        resolutionIDControl.updateValueAndValidity();
+        customerOnCallControl.updateValueAndValidity();
+        callSummaryNextStepsControl.updateValueAndValidity();
+        customerCommentsControl.updateValueAndValidity();
+        techNotesControl.updateValueAndValidity();
+        resolutionNotesControl.updateValueAndValidity();
+        customerOnCallControl.updateValueAndValidity();
+        customerCallBackPhoneControl.updateValueAndValidity();
+      })
+    )
+  }
+
   // if the issue was resolved (checked = true), don't require customer on call and customer call back phone
   // else if the issue was not resolved, require customer on call and customer call back phone
 
   isIssueResolved(event){
     if(event.target.checked) {
       this.show = true; // default value
-      console.log(event.target.checked)
+      //checked
+      const resolutionIDControl = this.callSummaryAddForm.get("ResolutionID");
+      const customerOnCallControl = this.callSummaryAddForm.get("CustomerOnCall");
+      const customerCallBackPhoneControl = this.callSummaryAddForm.get("CustomerCallBackPhone");
+      const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
+      const techNotesControl = this.callSummaryAddForm.get("TechNotes");
+      const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+      const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
 
-      while(this.show = true) {
-        console.log(typeof(this.callSummaryAddForm.controls["CustomerOnCall"].status)) //string
-        console.log(this.callSummaryAddForm.controls["CustomerCallBackPhone"].status)
-        let cust = this.callSummaryAddForm.controls["CustomerOnCall"].status;
-        let numb = this.callSummaryAddForm.controls["CustomerCallBackPhone"].status;
-    
-        //cust.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
-        //numb.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+      resolutionIDControl.setValidators([Validators.required]);
+      resolutionIDControl.setValue('');
+      resolutionIDControl.updateValueAndValidity();
+      customerOnCallControl.setValidators(null);
+      customerOnCallControl.updateValueAndValidity();
+      customerCallBackPhoneControl.setValidators(null);
+      customerCallBackPhoneControl.updateValueAndValidity();
+      customerCommentsControl.setValidators(null);
+      customerCommentsControl.updateValueAndValidity();
+      techNotesControl.setValidators(null);
+      techNotesControl.updateValueAndValidity();
+      callSummaryNextStepsControl.setValidators(null);
+      callSummaryNextStepsControl.updateValueAndValidity();
+      resolutionNotesControl.setValidators([Validators.required]);
+      resolutionNotesControl.updateValueAndValidity();
 
-        // Customer on call and customer call back phone are not required
-        // mark the field Customer On Call as not required
-        this.callSummaryAddForm.controls['CustomerOnCall'].markAsTouched();
-        this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"Valid"})
+      //console.log(event.target.checked)
 
-        this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsTouched();
-        this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"Valid"})
+      // if(this.show = true) {
+      //     let cust = this.callSummaryAddForm.controls["CustomerOnCall"].status;
+      //     let numb = this.callSummaryAddForm.controls["CustomerCallBackPhone"].status;
+      //     cust.toString();
+      //     numb.toString();
+      //     cust.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+      //     numb.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+
+      //     // Customer on call and customer call back phone are not required
+      //     // mark the field Customer On Call as not required
+      //     this.callSummaryAddForm.controls['CustomerOnCall'].markAsTouched();
+      //     this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"Valid"})
+
+      //     this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsTouched();
+      //     this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"Valid"})
+      // }
+
+      // while(this.show = true) {
+      //   let cust = this.callSummaryAddForm.controls["CustomerOnCall"].status;
+      //   let numb = this.callSummaryAddForm.controls["CustomerCallBackPhone"].status;
+      //   cust.toString();
+      //   numb.toString();
+      //   cust.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+      //   numb.replace("INVALID","VALID"); //Return a string where "x" is replaced with "y"
+
+      //   // Customer on call and customer call back phone are not required
+      //   // mark the field Customer On Call as not required
+      //   this.callSummaryAddForm.controls['CustomerOnCall'].markAsTouched();
+      //   this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"Valid"})
+
+      //   this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsTouched();
+      //   this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"Valid"})
         
-        return
-      }
-
-      
-      //console.log(customerOnCallControl);
-      // this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({required:false})
-
-      console.log(this.callSummaryAddForm.controls.CustomerOnCall)
-      // this.callSummaryAddForm.controls.CustomerOnCall.markAsTouched();
-      // this.callSummaryAddForm.controls.CustomerOnCall.markAsDirty();
-
-      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsTouched();
-      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsDirty();
+      //   return
+      // }
       
     } else {
       this.show = false;
-      console.log(event.target.checked)
+      //unchecked
+      const resolutionIDControl = this.callSummaryAddForm.get("ResolutionID");
+      const customerOnCallControl = this.callSummaryAddForm.get("CustomerOnCall");
+      const customerCallBackPhoneControl = this.callSummaryAddForm.get("CustomerCallBackPhone");
+      const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
+      const techNotesControl = this.callSummaryAddForm.get("TechNotes");
+      const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+      const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
+
+      resolutionIDControl.setValidators(null);
+      resolutionIDControl.setValue(1);
+      resolutionIDControl.updateValueAndValidity();
+      customerOnCallControl.setValidators([Validators.required]);
+      customerOnCallControl.updateValueAndValidity();
+      customerCallBackPhoneControl.setValidators([Validators.required]);
+      customerCallBackPhoneControl.updateValueAndValidity();
+      customerCommentsControl.setValidators([Validators.required]);
+      customerCommentsControl.updateValueAndValidity();
+      techNotesControl.setValidators([Validators.required]);
+      techNotesControl.updateValueAndValidity();
+      callSummaryNextStepsControl.setValidators([Validators.required]);
+      callSummaryNextStepsControl.updateValueAndValidity();
+      resolutionNotesControl.setValidators(null);
+      resolutionNotesControl.updateValueAndValidity();
+
+      //console.log(event.target.checked)
 
       // customer on call and customer call back phone are required
-      while(this.show = false) {
-        console.log(this.callSummaryAddForm.controls["CustomerOnCall"].status)
-        console.log(this.callSummaryAddForm.controls["CustomerCallBackPhone"].status)
+      // while(this.show = false) {
 
-        this.callSummaryAddForm.controls['CustomerOnCall'].markAsUntouched()
-        this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"INVALID"})
+      //   let cust = this.callSummaryAddForm.controls["CustomerOnCall"].status;
+      //   let numb = this.callSummaryAddForm.controls["CustomerCallBackPhone"].status;
+      //   cust.toString();
+      //   numb.toString();
+      //   cust.replace("VALID","INVALID"); //Return a string where "x" is replaced with "y"
+      //   numb.replace("VALID","INVALID"); //Return a string where "x" is replaced with "y"
 
-        this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsUntouched();
-        this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"INVALID"})
-        return
-      }
+      //   this.callSummaryAddForm.controls['CustomerOnCall'].markAsUntouched()
+      //   this.callSummaryAddForm.controls['CustomerOnCall'].patchValue({[status]:"INVALID"})
 
-      // this.callSummaryAddForm.controls.CustomerOnCall.markAsPristine();
-      // this.callSummaryAddForm.controls.CustomerOnCall.markAsUntouched();
-      // this.callSummaryAddForm.controls['CustomerOnCall'].setErrors({'incorrect':true})
-      // this.callSummaryAddForm.get('CustomerOnCall').setValidators([
-      //   Validators.required
-      // ]);
-
-      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsPristine();
-      // this.callSummaryAddForm.controls.CustomerCallBackPhone.markAsUntouched();
-      // this.callSummaryAddForm.controls['CustomerCallBackPhone'].setErrors({'incorrect':true})
-      // this.callSummaryAddForm.get('CustomerCallBackPhone').setValidators([Validators.required, Validators.minLength(10), Validators.pattern('^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$')]);
+      //   this.callSummaryAddForm.controls['CustomerCallBackPhone'].markAsUntouched();
+      //   this.callSummaryAddForm.controls['CustomerCallBackPhone'].patchValue({status:"INVALID"})
+      //   return
+      // }
     }
   }
 
@@ -264,125 +378,65 @@ export class CallsummaryComponent implements OnInit {
   //Get the Problem_class_id of call type / class list
   showProblemsBasedOnClassSelect(val: any) {
     this.customFunction(val);
-    //console.log('called ' + val)
   }
 
   //Change the Problems dropdown based on the selection of Call Type 
   customFunction(val: any) {
     if(val === 5) {
-      console.log(val);
 
       this.callSummaryProblems = []; // ==> CORRECT
 
-      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
-     
-      //change ProblemID pristine to false, touched to true, status to valid
-      //mark as touched, valid, and dirty
-      // setTimeout(() => {
-      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      // }, 4);
-
-      //execute CallSummaryProblems with a parameter of Other if this is selected
-      //exec dbo.CallSummaryProblems O
+      //exec dbo.CallSummaryProblems O - execute CallSummaryProblems with a parameter of Other if this is selected
       this.routeService.getCallSummaryProblemsO().subscribe(
         res => {
-          console.log(res);
           this.callSummaryProblems = res;
         }
       )
       //then change options in Problems dropdown
     }
     if(val === 1) {
-      //console.log("The id selected is: " + val);
 
       this.callSummaryProblems = []; // ==> CORRECT
 
-      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
-     
-      //change ProblemID pristine to false, touched to true, status to valid
-      //mark as touched, valid, and dirty
-      // setTimeout(() => {
-      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      // }, 4);
-
-       //execute CallSummaryProblems with a parameter of Service if this is selected
-       //exec dbo.CallSummaryProblems S
+       //exec dbo.CallSummaryProblems S - execute CallSummaryProblems with a parameter of Service if this is selected
        this.routeService.getCallSummaryProblemsS().subscribe(
          res => {
-           //console.log(res);
            this.callSummaryProblems = res;
          }
        )
        //then change options in Problems dropdown
     }
     if(val === 2) {
-      console.log("The id selected is: " + val);
 
       this.callSummaryProblems = []; // ==> CORRECT
 
-      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
-     
-      //change ProblemID pristine to false, touched to true, status to valid
-      //mark as touched, valid, and dirty
-      // setTimeout(() => {
-      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      // }, 4);
-
-       //execute CallSummaryProblems with a parameter of Customer Care 
-       //exec dbo.CallSummaryProblems CC -- this is called and displayed as a default dropdown value for Problems
+       //dbo.CallSummaryProblems CC - execute CallSummaryProblems with a parameter of Customer Care 
+       
        this.routeService.getCallSummaryProblems().subscribe(
          res => {
-           console.log(res)
            this.callSummaryProblems = res;
          }
        )
     }
     if(val === 3) {
-      console.log("The id selected is: " + val);
 
       this.callSummaryProblems = []; // ==> CORRECT
 
-      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
-     
-      //change ProblemID pristine to false, touched to true, status to valid
-      //mark as touched, valid, and dirty
-      // setTimeout(() => {
-      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      // }, 4);
-
-       //execute CallSummaryProblems with a parameter of Incentives if this is selected
-       //exec dbo.CallSummaryProblems IC
+       //exec dbo.CallSummaryProblems IC - execute CallSummaryProblems with a parameter of Incentives if this is selected
        this.routeService.getCallSummaryProblemsIC().subscribe(
-         res => {
-           console.log(res);
+         res => {;
            this.callSummaryProblems = res;
          }
        )
        //then change options in Problems dropdown
     }
     if(val === 4) {
-      console.log("The id selected is: " + val);
 
       this.callSummaryProblems = []; // ==> CORRECT
 
-      // this.callSummaryAddForm.controls.ProblemID.markAsTouched();
-      // this.callSummaryAddForm.controls.ProblemID.markAsDirty();
-     
-      //change ProblemID pristine to false, touched to true, status to valid
-      //mark as touched, valid, and dirty
-      // setTimeout(() => {
-      //   this.callSummaryAddForm.controls.ProblemID.setValue("Valid");
-      // }, 4);
-
-       //execute CallSummaryProblems with a parameter of Invoicing if this is selected
-       //exec dbo.CallSummaryProblems IV
+       //exec dbo.CallSummaryProblems IV - execute CallSummaryProblems with a parameter of Invoicing if this is selected
        this.routeService.getCallSummaryProblemsIV().subscribe(
-         res => {
-           console.log(res);
+         res => {;
            this.callSummaryProblems = res;
          }
        )
@@ -398,7 +452,7 @@ export class CallsummaryComponent implements OnInit {
 
     this.submitted = true;
 
-    console.log(this.callSummaryAddForm.value);
+    //console.log(this.callSummaryAddForm.value);
     // if(form.value.SystemID === null) {
     //   this.siteToSystemList = 1
     // }
@@ -406,24 +460,72 @@ export class CallsummaryComponent implements OnInit {
     // form.value.CustomerOnCall="";
     
     // commented code below causes form to remain invalid until ALL fields are completed
-    // if(this.callSummaryAddForm.invalid) {
-    //   return;
-    // }
+    if(this.callSummaryAddForm.invalid) {
+      //alert('this form is not valid')
+      return;
+    }
+    
+    //if(this.callSummaryAddForm.get("FormStatus").value = true)
 
-    this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
+    if(this.callSummaryAddForm.valid) {
+      console.log(this.callSummaryAddForm.value)
+      confirm('Click ok to confirm form submission')
+
+      //display a confirmation box asking if the user is sure they would like to submit
+      //if yes, submit http request
+      //if no, return
+
+      this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
       .subscribe(
         result => {
-          confirm('Click ok to confirm form submission')
+          // confirm('Click ok to confirm form submission')
+
+          //this.divText.nativeElement.innerHTML = "Update";
+
+          //or remove the former button and replace with an update button
+          this.changeToUpdateButton = true;
+          this.showSaveButton = false;
+
+          this.returnedTicketNumber = result;
           this.divView.nativeElement.innerHTML = result;
           this.submitted = false;
-          this.clicked = true;
+          this.clicked = false;
           this.enableReset = false;
           //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
           //this.resetForm(form);
         },
         error => console.log('error: ', error)
       );
+    }
   }
+
+  updateForm(e) {
+    e.preventDefault();
+    console.log('update form')
+    this.routeService.putCallSummaryUpdate(this.returnedTicketNumber, this.callSummaryAddForm.value).subscribe(
+      res => {
+        console.log(res);
+      }
+    )
+  }
+
+  // this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
+  //   .subscribe(
+  //     result => {
+  //       confirm('Click ok to confirm form submission')
+
+  //       this.divText.nativeElement.innerHTML = "Update";
+        
+  //       this.divView.nativeElement.innerHTML = result;
+  //       this.submitted = false;
+  //       this.clicked = true;
+  //       this.enableReset = false;
+  //       //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
+  //       //this.resetForm(form);
+  //     },
+  //     error => console.log('error: ', error)
+  //   );
+  // }
 
   // Clear the ticket number from the UI 
   ticketFieldResetButton() {

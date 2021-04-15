@@ -92,6 +92,7 @@ namespace WebAPI
             services.AddTransient<TPC_DevContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICallSummaryAddRepository, CallSummaryAddRepository>();
+            services.AddScoped<ICallSummaryUpdateRepository, CallSummaryUpdateRepository>();
             services.AddScoped<IIncentive_ADD_StartRepository, Incentive_ADD_StartRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 

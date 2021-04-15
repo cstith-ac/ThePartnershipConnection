@@ -10,6 +10,7 @@ import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
 import { Incentive_ADD_Start } from '../models/incentiveaddstart';
 import { ResetPassword } from '../models/resetpassword';
+import { SummaryUpdate } from '../models/summaryupdate';
 
 @Injectable({
   providedIn: 'root'
@@ -335,6 +336,15 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
     };
     return this.http.post<SummaryAdd>(this.baseUrl + '/api/CallSummaryAdd',summaryAdd, httpOptions);
+  }
+
+  putCallSummaryUpdate(id:number, params: any): Observable<SummaryUpdate> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    // return this.http.put<SummaryUpdate>(this.baseUrl + '/api/CallSummaryUpdate', id, httpOptions);
+    return this.http.put<SummaryUpdate>(`${this.baseUrl}/api/CallSummaryUpdate/${id}`, params, httpOptions);
   }
 
   getListSystemTypes(): Observable<any> {

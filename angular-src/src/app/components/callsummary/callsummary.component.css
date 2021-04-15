@@ -2,11 +2,11 @@
     color: #1220EF;
     font-weight:700;
 }
-input.ng-invalid.ng-touched,
+/* input.ng-invalid.ng-touched,
 select.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched{
 	border-color: #dc3545;
-}
+} */
 .call-summary-reset {
     position: relative;
     top: -80px;
@@ -20,4 +20,13 @@ textarea.ng-invalid.ng-touched{
 }
 ::ng-deep .toast-header {
     color: #ff0101;
+}
+.update-btn {
+    border-radius: 30px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: orangered;
+    padding: 0.1rem 2.2rem;
+    font-size: 1.5rem;
+    font-weight: 500;
 }
