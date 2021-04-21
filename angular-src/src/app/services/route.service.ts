@@ -343,7 +343,6 @@ export class RouteService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
     };
-    // return this.http.put<SummaryUpdate>(this.baseUrl + '/api/CallSummaryUpdate', id, httpOptions);
     return this.http.put<SummaryUpdate>(`${this.baseUrl}/api/CallSummaryUpdate/${id}`, params, httpOptions);
   }
 

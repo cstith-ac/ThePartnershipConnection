@@ -31,7 +31,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<IActionResult> InsertCallSummaryUpdateResult([FromBody] CallSummaryUpdate callSummaryUpdate)
         {
             return Ok(await _repository.InsertCallSummaryUpdateResult(callSummaryUpdate));

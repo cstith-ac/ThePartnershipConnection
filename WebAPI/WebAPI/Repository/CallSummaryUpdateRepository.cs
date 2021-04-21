@@ -36,16 +36,32 @@ namespace WebAPI.Repository
             var problemIDParam = new SqlParameter("@ProblemID", callSummaryUpdate.ProblemID);
 
             var resolutionIDParam = new SqlParameter("@ResolutionID", callSummaryUpdate.ResolutionID);
+            if (callSummaryUpdate.ResolutionID == null)
+            {
+                resolutionIDParam.Value = "1";
+            }
 
             var nextStepIDParam = new SqlParameter("@NextStepID", callSummaryUpdate.NextStepID);
 
             var customerCommentsParam = new SqlParameter("@CustomerComments", callSummaryUpdate.CustomerComments);
+            if (callSummaryUpdate.CustomerComments == null)
+            {
+                customerCommentsParam.Value = "1";
+            }
 
             var techNotesParam = new SqlParameter("TechNotes", callSummaryUpdate.TechNotes);
 
             var customerOnCallParam = new SqlParameter("CustomerOnCall", callSummaryUpdate.CustomerOnCall);
+            if (callSummaryUpdate.CustomerOnCall == null)
+            {
+                customerOnCallParam.Value = "";
+            }
 
             var customerCallBackPhoneParam = new SqlParameter("CustomerCallBackPhone", callSummaryUpdate.CustomerCallBackPhone);
+            if (callSummaryUpdate.CustomerCallBackPhone == null)
+            {
+                customerCallBackPhoneParam.Value = "";
+            }
 
             var ticketNumberParam = new SqlParameter("@TicketNumber", callSummaryUpdate.TicketNumber);
 

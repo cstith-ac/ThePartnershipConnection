@@ -255,11 +255,11 @@
                                             <!-- <button class="btn btn-primary" type="button" (click)="resetForm()">Reset</button> -->
                                             
                                             <ng-container *ngIf="showSaveButton">
-                                                <button type="submit" class="btn btn-primary save-btn" id="callSummaryAdd" [disabled]="clicked">Save</button>
+                                                <button type="submit" class="btn btn-primary save-btn float-right" id="callSummaryAdd" [disabled]="clicked">Save</button>
                                             </ng-container>
 
                                             <ng-container *ngIf="changeToUpdateButton">
-                                                <button class="btn-primary update-btn" (click)="updateForm($event)">Update</button>
+                                                <button class="btn update-btn float-right" (click)="updateForm($event)">Update</button>
                                             </ng-container>
                                         </div>
                                     </div>

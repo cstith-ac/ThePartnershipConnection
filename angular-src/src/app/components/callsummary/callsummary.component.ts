@@ -21,6 +21,11 @@ declare var $: any;
 export class CallsummaryComponent implements OnInit {
   @ViewChild("ticketNumber") divView: ElementRef;
   @ViewChild("changeText") divText: ElementRef;
+
+  updateWithTicket;
+  updateWithCustomerSiteID;
+  updateWithCustomerSystemID;
+  updateResult;
   
   authToken: any;
   show: boolean = true;
@@ -73,7 +78,8 @@ export class CallsummaryComponent implements OnInit {
       ResolutionNotes: ["", Validators.required],
       CustomerOnCall: [""],
       CustomerCallBackPhone: [""],
-      FormStatus: [true]
+      FormStatus: [true],
+      TickeNumber:""
     })
   }
 
@@ -501,12 +507,70 @@ export class CallsummaryComponent implements OnInit {
 
   updateForm(e) {
     e.preventDefault();
-    console.log('update form')
-    this.routeService.putCallSummaryUpdate(this.returnedTicketNumber, this.callSummaryAddForm.value).subscribe(
+    console.log(this.returnedTicketNumber);
+    console.log(this.callSummaryAddForm.value);
+    
+    var addToObject = function (obj, key, value) {
+
+      // Create a temp object and index variable
+      var temp = {};
+      var i = 0;
+    
+      // Loop through the original object
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+    
+          // If the indexes match, add the new item
+          if (i === key && value) {
+            temp[key] = value;
+          }
+    
+          // Add the current item in the loop to the temp obj
+          temp[prop] = obj[prop];
+    
+          // Increase the count
+          i++;
+    
+        }
+      }
+    
+      // If no index, add to the end
+      if (key && value) {
+        temp[key] = value;
+      }
+    
+      return temp;
+    
+    };
+    //update object with TicketNumber, CustomerSiteID, CustomerSystemID
+    var updateWithTicket = addToObject(this.callSummaryAddForm.value,'TicketNumber',this.returnedTicketNumber);
+    var updateWithCustomerSiteID = addToObject(this.callSummaryAddForm.value,'CustomerSiteID',this.callSummaryAddForm.controls["site"].value);
+    var updateWithCustomerSystemID = addToObject(this.callSummaryAddForm.value,'CustomerSystemID',this.callSummaryAddForm.controls["SystemID"].value);
+    console.log(updateWithTicket)//Object
+    console.log(updateWithCustomerSiteID);
+    console.log(updateWithCustomerSystemID);
+
+    this.updateWithTicket = updateWithTicket;
+    this.updateWithCustomerSiteID = updateWithCustomerSiteID;
+    this.updateWithCustomerSystemID = updateWithCustomerSystemID;
+    this.updateResult = {
+      ...this.updateWithTicket,
+      ...this.updateWithCustomerSiteID,
+      ...this.updateWithCustomerSystemID
+    }
+    console.log(this.updateResult);
+    this.routeService.putCallSummaryUpdate(this.returnedTicketNumber,this.updateResult).subscribe(
       res => {
         console.log(res);
+        //display notification if 200 OK received
+
       }
     )
+    // this.routeService.putCallSummaryUpdate(this.returnedTicketNumber, this.callSummaryAddForm.value).subscribe(
+    //   res => {
+    //     console.log(res);
+    //   }
+    // )
   }
 
   // this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
