@@ -8,3 +8,12 @@
     margin-top: .3rem;
     margin-left: 18.25rem;
 }
+.incentive-header {
+    color: #6050A5;
+}
+.company {
+    color: red;
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.2;
+}

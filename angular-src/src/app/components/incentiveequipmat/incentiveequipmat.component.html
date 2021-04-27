@@ -1,12 +1,43 @@
 <div class="card">
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
         <h2>Incentive Entry</h2>
-    </div>
+    </div> -->
     <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
-    <button class="btn btn-primary mt-5 ml-4">Return to Incentive Entry</button>
+    <button class="btn return-btn mt-5 ml-4">Return to Incentive Entry</button>
     </a>
     <div class="card-body">
-        <div class="row">
+        <div class="row ml-0">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 pl-0">
+                        <h1 class="incentive-header">Incentive Entry
+                            <!-- <span class="company">{{ companyName }} - {{ partnerCode }}</span> -->
+                        </h1>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="mr-5 font-weight-bold">Invoice #</span>
+                        <span class="ml-5 font-weight-bold">Customer Name</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                        <span class="font-weight-bold">Customer Site Information</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                        <span class="font-weight-bold">Customer System Information</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 pl-0">
+                        <h3 class="incentive-header">Equipment and Materials Entry</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row ml-0">
             <div class="col-md-6 offset-md-4">
                 <span class="mr-5">Invoice #</span>
                 <span class="ml-5">Customer Name</span>
@@ -26,7 +57,7 @@
             <div class="col-md-12">
                 <h3>Equipment and Materials Entry</h3>
             </div>
-        </div>
+        </div> -->
 
         <section>
             <header class="equipmat-header-bg">
@@ -64,8 +95,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="dropdown">
-                                    <select formControlName="Item" class="form-control">
-                                        <option *ngFor="let item of listMatItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option>
+                                    <select formControlName="ItemID" class="form-control">
+                                        <option *ngFor="let item of listMatItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemName }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -104,12 +135,12 @@
                                 >
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-add" (click)="addNewItem(incentiveEquipMatEntryForm)">
                                     <i class="fas fa-plus pr-1"></i>Add
                                 </button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary btn-submit" (click)="onSubmit(incentiveEquipMatEntryForm)">
+                                <button class="btn btn-submit" (click)="onSubmit(incentiveEquipMatEntryForm)">
                                     <i class="fas fa-upload pr-1"></i>Submit
                                 </button>
                             </div>
@@ -128,7 +159,7 @@
                                 <label class="form-group">Item</label>
                                 <div class="dropdown">
                                     <select formControlName="Item" class="form-control">
-                                        <option *ngFor="let item of listMatItems" value="{{item.itemCode}}" [ngValue]="item.itemCode">{{ item.itemName }}</option>
+                                        <option *ngFor="let item of listMatItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemName }}</option>
                                     </select>
                                 </div>
                             </div>

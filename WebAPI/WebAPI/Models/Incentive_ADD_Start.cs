@@ -8,6 +8,7 @@ namespace WebAPI.Models
     public class Incentive_ADD_Start
     {
         public string UserEmailAddress { get; set; }
+        public int InstallCompanyID { get; set; }
         public int CustomerID { get; set; }
         public int CustomerSiteID { get; set; }
         public int CustomerSystemID { get; set; }

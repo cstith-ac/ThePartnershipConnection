@@ -45,7 +45,8 @@ export class CallsummaryComponent implements OnInit {
   callSummaryClassList: ClassList[];
   callSummaryProblems: SummaryProblems[];
   callSummaryResolutions: SummaryResolutions[];
-  callSummaryNextSteps: NextSteps[];
+  //callSummaryNextSteps: NextSteps[];
+  nextStepID: NextSteps[];
   customerOnCall: '';
   customerCallBackPhone: '';
   customerComments: '';
@@ -72,6 +73,7 @@ export class CallsummaryComponent implements OnInit {
       callSummaryClassList: ["", Validators.required],
       ProblemID: ["", Validators.required],
       ResolutionID: [""],
+      NextStepID: [""],
       CallSummaryNextSteps: [""],
       CustomerComments: ["", Validators.required],
       TechNotes: [""],
@@ -95,6 +97,7 @@ export class CallsummaryComponent implements OnInit {
       callSummaryClassList: ["", Validators.required],
       ProblemID: ["", Validators.required],
       ResolutionID: ["", Validators.required],
+      NextStepID: [""],
       CallSummaryNextSteps: [""],
       CustomerComments: ["", Validators.required],
       TechNotes: [""],
@@ -140,7 +143,7 @@ export class CallsummaryComponent implements OnInit {
 
     this.routeService.getCallSummaryNextSteps().subscribe(
       res => {
-        this.callSummaryNextSteps = res;
+        this.nextStepID = res;
       }
     )
 
@@ -164,6 +167,7 @@ export class CallsummaryComponent implements OnInit {
       callSummaryClassList: ["", Validators.required],
       ProblemID: ["", Validators.required],
       ResolutionID: [""],
+      NextStepID: [""],
       CallSummaryNextSteps: [""],
       CustomerComments: [""],
       TechNotes: [""],
@@ -176,7 +180,8 @@ export class CallsummaryComponent implements OnInit {
 
   setIsRequiredValuesValidators() {
     const resolutionIDControl = this.callSummaryAddForm.get("ResolutionID");
-    const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+    //const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+    const callSummaryNextStepsControl = this.callSummaryAddForm.get("NextStepID");
     const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
     const techNotesControl = this.callSummaryAddForm.get("TechNotes");
     const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
@@ -241,7 +246,7 @@ export class CallsummaryComponent implements OnInit {
       const customerCallBackPhoneControl = this.callSummaryAddForm.get("CustomerCallBackPhone");
       const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
       const techNotesControl = this.callSummaryAddForm.get("TechNotes");
-      const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+      const callSummaryNextStepsControl = this.callSummaryAddForm.get("NextStepID");
       const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
 
       resolutionIDControl.setValidators([Validators.required]);
@@ -306,7 +311,7 @@ export class CallsummaryComponent implements OnInit {
       const customerCallBackPhoneControl = this.callSummaryAddForm.get("CustomerCallBackPhone");
       const customerCommentsControl = this.callSummaryAddForm.get("CustomerComments");
       const techNotesControl = this.callSummaryAddForm.get("TechNotes");
-      const callSummaryNextStepsControl = this.callSummaryAddForm.get("CallSummaryNextSteps");
+      const callSummaryNextStepsControl = this.callSummaryAddForm.get("NextStepID");
       const resolutionNotesControl = this.callSummaryAddForm.get("ResolutionNotes");
 
       resolutionIDControl.setValidators(null);
@@ -563,7 +568,7 @@ export class CallsummaryComponent implements OnInit {
       res => {
         console.log(res);
         //display notification if 200 OK received
-
+        alert("Ticket updated successfully");
       }
     )
     // this.routeService.putCallSummaryUpdate(this.returnedTicketNumber, this.callSummaryAddForm.value).subscribe(

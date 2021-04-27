@@ -14,12 +14,13 @@ namespace WebAPI.Repository
     {
         private readonly string _connectionString;
         private List<Incentive_ADD_Start> _incentive_ADD_StartResults;
-        private readonly TPC_DevContext context;
+        //private readonly TPC_DevContext context;
+        private readonly AFAContext context;
 
-        public Incentive_ADD_StartRepository(IConfiguration configuration, TPC_DevContext context)
+        public Incentive_ADD_StartRepository(IConfiguration configuration, AFAContext context)
         {
             _incentive_ADD_StartResults = new List<Incentive_ADD_Start>();
-            _connectionString = configuration.GetConnectionString("TPC_DevDatabase");
+            _connectionString = configuration.GetConnectionString("AFADatabase");
             this.context = context;
         }
 
@@ -27,6 +28,7 @@ namespace WebAPI.Repository
         {
             // define SqlParameters for the other two params to be passed
             var userEmailAddressParam = new SqlParameter("@UserEmailAddress", jobIDAdded.UserEmailAddress);
+            var installCompanyIDParam = new SqlParameter("@InstallCompanyID", jobIDAdded.InstallCompanyID);
             var customerIDParam = new SqlParameter("@CustomerID", jobIDAdded.CustomerID);
             var customerSiteIDParam = new SqlParameter("@CustomerSiteID", jobIDAdded.CustomerSiteID);
             var customerSystemIDParam = new SqlParameter("@CustomerSystemID", jobIDAdded.CustomerSystemID);
@@ -64,10 +66,11 @@ namespace WebAPI.Repository
 
             // we're using the awaitable version since GetOrCreateUserAsync() method is marked async
 
-            await context.Database.ExecuteSqlRawAsync("exec dbo.Incentive_ADD_Start @UserEmailAddress, @CustomerID, @CustomerSiteID, @CustomerSystemID, @AlarmAccount, @SystemTypeID, @PanelTypeID, @PanelLocation, @CentralStationID, @AdditionalInfo, @PartnerInvoiceNumber, @PartnerInvoiceDate, @ContractDate, @ContractTerm, @RenewalMonths, @ServiceIncluded, @PartnerComments",
+            await context.Database.ExecuteSqlRawAsync("exec dbo.Incentive_ADD_Start @UserEmailAddress,@InstallCompanyID ,@CustomerID, @CustomerSiteID, @CustomerSystemID, @AlarmAccount, @SystemTypeID, @PanelTypeID, @PanelLocation, @CentralStationID, @AdditionalInfo, @PartnerInvoiceNumber, @PartnerInvoiceDate, @ContractDate, @ContractTerm, @RenewalMonths, @ServiceIncluded, @PartnerComments, @JobID out",
                 userEmailAddressParam,
+                installCompanyIDParam,
                 customerIDParam,
-                customerIDParam,
+                customerSiteIDParam,
                 customerSystemIDParam,
                 alarmAccountParam,
                 systemTypeIDParam,
@@ -81,7 +84,8 @@ namespace WebAPI.Repository
                 contractTermParam,
                 renewalMonthsParam,
                 serviceIncludedParam,
-                partnerCommentsParam);
+                partnerCommentsParam,
+                jobIDParam);
 
             // the userIdParam which represents the Output param
             // now holds the Id of the new user and is an Object type

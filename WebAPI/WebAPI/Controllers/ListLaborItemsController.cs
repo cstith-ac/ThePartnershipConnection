@@ -45,6 +45,7 @@ namespace WebAPI.Controllers
                 var result = await db.GetListLaborItems.FromSqlRaw("EXECUTE [dbo].[ListLaborItems]").ToListAsync();
                 List<ListLaborItems> Lst = result.Select(s => new ListLaborItems
                 {
+                    item_id = s.item_id,
                     ItemCode = s.ItemCode,
                     ItemName = s.ItemName,
                     DefaultCost = s.DefaultCost

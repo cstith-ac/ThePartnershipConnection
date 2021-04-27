@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild } from '@angular/core';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -16,13 +16,15 @@ import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 import { ListSystemTypes } from '../../models/listsystemtypes';
 import { AuthService } from '../../services/auth.service';
+import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-incentivedashboard',
   templateUrl: './incentivedashboard.component.html',
   styleUrls: ['./incentivedashboard.component.css']
 })
-export class IncentivedashboardComponent implements OnInit {
+export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   public gridData: CustomerSearchList[];
@@ -30,6 +32,10 @@ export class IncentivedashboardComponent implements OnInit {
 
   user:any=Object;
   userEmailAddress: '';
+
+  companyName;
+  partnerCode;
+  installCompanyID;
 
   id;
   customersiteid;
@@ -63,7 +69,7 @@ export class IncentivedashboardComponent implements OnInit {
   panelName: string;
 
   closeResult = '';
-  incentiveEntryForm: FormGroup;
+  incentiveDashboardForm: FormGroup;
   recurringItemEntryForm: FormGroup;
   customer: string;
   siteName: string;
@@ -108,8 +114,11 @@ export class IncentivedashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private incentiveEntryService: IncentiveEntryService,
     public authService: AuthService,
     private routeService: RouteService,
+    public jwtHelper: JwtHelperService,
     private modalService: NgbModal,
     public fb: FormBuilder
   ) { 
@@ -117,6 +126,40 @@ export class IncentivedashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('companyName');
+      localStorage.removeItem('installCompanyID');
+      localStorage.removeItem('partnerCode');
+      this.router.navigate(["login"]);
+    } else {
+      console.log('your logged in')
+    }
+
+    //console.log(this.incentiveEntryService.sharedIncentiveInfo)//object
+
+    //If there's a recurring, materials and equipment, and labor total in the service that's available...
+    //then display in the total in the recurring, materials and equipment, and labor inputs
+    const v = Object.keys(this.incentiveEntryService.sharedIncentiveRecurringInfo)[14];
+    console.log(v)//object
+
+    //get the company name and partner code from shared service
+    // this.companyName = Object.values(this.incentiveEntryService.sharedIncentiveInfo)[0];
+    this.companyName = localStorage.getItem('companyName');
+    // this.partnerCode = Object.values(this.incentiveEntryService.sharedIncentiveInfo)[1];
+    this.partnerCode = localStorage.getItem('partnerCode');
+    this.installCompanyID = localStorage.getItem('installCompanyID');
+    // console.log(Object.values(this.incentiveEntryService.sharedIncentiveInfo)[0])
+
+    // for (let value of Object.values(this.incentiveEntryService.sharedIncentiveInfo)) {
+    //   console.log(`${value}`);
+    // }
+
+    // for(let value of Object.values(this.incentiveEntryService.sharedIncentiveInfo)) {
+    //   console.log(value);
+    // }
+    //let formValue = Object.fromEntries()
 
     // this.gridView = this.gridData;
     this.authService.getProfile().subscribe(
@@ -129,11 +172,12 @@ export class IncentivedashboardComponent implements OnInit {
       }
     )
 
-    this.incentiveEntryForm = this.fb.group({
+    this.incentiveDashboardForm = this.fb.group({
       UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
       //CustomerID: this.id, //@CustomerID
+      InstallCompanyID: this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID')),
       CustomerID: ["", Validators.required], //@CustomerID
-      Site: ["", Validators.required], //@CustomerSiteID
+      CustomerSiteID: ["", Validators.required], //@CustomerSiteID
       System: ["", Validators.required], //@CustomerSystemID
       SystemType: ["", Validators.required], //@SystemTypeID
       SystemCode: ["", Validators.required],
@@ -219,6 +263,26 @@ export class IncentivedashboardComponent implements OnInit {
     //     this.listsystemsforsite = [].concat(res);
     //   }
     // )
+  }
+
+  ngAfterViewChecked() {
+    //If there's a recurring, materials and equipment, and labor total in the service that's available...
+    //then display in the total in the recurring, materials and equipment, and labor inputs 
+    // for(var i = 0; i < this.incentiveEntryService.sharedIncentiveInfo; i++) {
+    //   console.log(i)
+    // }
+    //console.log("ngAfterViewChecked was called from " + this.activatedRoute.url);
+    //console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo.value);
+    // for(var item in this.incentiveEntryService.sharedIncentiveRecurringInfo) {
+    //   console.log(item +" = "+this.incentiveEntryService.sharedIncentiveRecurringInfo[item])
+    // }
+  } 
+
+  ngOnChanges(){
+    //console.log('ngOnChange was called from ' + this.activatedRoute.url)
+  }
+  ngOnDestroy(){
+    //console.log('ngOnDestroy was called ' + this.activatedRoute.url)
   }
 
   // public onFilter(inputValue: string): void {
@@ -359,7 +423,7 @@ export class IncentivedashboardComponent implements OnInit {
       }
     )
 
-    //this.incentiveEntryForm.value.CustomerID = this.id;
+    //this.incentiveDashboardForm.value.CustomerID = this.id;
   }
 
   //select Site 1st
@@ -661,13 +725,20 @@ export class IncentivedashboardComponent implements OnInit {
 
     console.log('@PartnerComments :' +form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
-    // this.routeService.postIncentiveADDStart(this.incentiveEntryForm.value).subscribe(
-    //   result => {
-    //     confirm('Click ok to confirm form submission')
+    //Replaces CustomerID with customer_id from the database instead of the customer_Name
+    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
+    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.siteName);
+    // debugger
+    // return
 
-    //   },
-    //   error => console.log('error: ', error);
-    // )
+    // confirm('Click ok to confirm form submission')
+    
+    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+      result => {
+        console.log(result)
+      },
+      //error => console.log('error: ', error);
+    )
   }
 
   routeToNewCustomer() {

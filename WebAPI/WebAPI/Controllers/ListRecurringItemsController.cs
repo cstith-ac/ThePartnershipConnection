@@ -48,6 +48,7 @@ namespace WebAPI.Controllers
                 var result = await db.GetListRecurringItems.FromSqlRaw("EXECUTE [dbo].[ListRecurringItems] @CustomerSystemID", customerSystemId).ToListAsync();
                 List<ListRecurringItems> Lst = result.Select(s => new ListRecurringItems
                 {
+                    item_id = s.item_id,
                     ItemCode = s.ItemCode,
                     ItemName = s.ItemName,
                     ExistsOnSystem = s.ExistsOnSystem

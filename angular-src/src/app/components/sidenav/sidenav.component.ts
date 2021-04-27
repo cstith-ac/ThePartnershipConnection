@@ -104,6 +104,9 @@ export class SidenavComponent implements OnInit {
     //implementing this workaround until the JS in the auth service is fixed
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('companyName');
+    localStorage.removeItem('partnerCode');
+    localStorage.removeItem('installCompanyID');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

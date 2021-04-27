@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
+import { Router } from '@angular/router';
 import { ListMaterialItems } from '../../models/listmaterialitems';
+import { IncentiveEntryService } from '../../services/incentive-entry.service';
 
 @Component({
   selector: 'app-incentiveequipmat',
   templateUrl: './incentiveequipmat.component.html',
   styleUrls: ['./incentiveequipmat.component.css']
 })
-export class IncentiveequipmatComponent implements OnInit {
+export class IncentiveequipmatComponent implements OnInit, OnDestroy {
   incentiveEquipMatEntryForm: FormGroup;
   listMatItems: ListMaterialItems[];
 
@@ -20,12 +22,14 @@ export class IncentiveequipmatComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    public routeService: RouteService
+    private incentiveEntryService: IncentiveEntryService,
+    public routeService: RouteService,
+    private router: Router
   ) {
     this.incentiveEquipMatEntryForm = this.fb.group({
       entry: this.fb.array([
         this.fb.group({
-          Item: ["", Validators.required],
+          ItemID: ["", Validators.required],
           Description: ["", Validators.required],
           Quantity: ["", Validators.required],
           Cost: ["", Validators.required],
@@ -54,9 +58,13 @@ export class IncentiveequipmatComponent implements OnInit {
     )
   }
 
+  ngOnDestroy(){
+    console.log('destroyed')
+  }
+
   initEntryRow() {
     return this.fb.group({
-      Item: ["", Validators.required],
+      ItemID: ["", Validators.required],
       Description: ["", Validators.required],
       Quantity: ["", Validators.required],
       Cost: ["", Validators.required],
@@ -67,7 +75,23 @@ export class IncentiveequipmatComponent implements OnInit {
   onSubmit(form: FormGroup) {
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRows'];
+    //push values to the incentive component
+    //not working. will use in the ngOnDestroy
+    this.incentiveEntryService.sharedIncentiveEquipMatInfo = control;
+    
+    this.router.navigate(['/incentive-dashboard'])
+
+    return
     control.push(this.initEntryRow());
+  }
+
+  //whenever user clicks add new item, a new element should be inserted into the formArray
+  addNewItem(form: FormGroup) {
+    console.log('add')
+    const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRows'];
+    control.push(this.initEntryRow());
+
+    //add a delete row button
   }
 
 }

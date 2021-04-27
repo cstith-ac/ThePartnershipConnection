@@ -5,6 +5,7 @@ import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -26,11 +27,18 @@ export class PartnerdashboardComponent implements OnInit {
     private routeService: RouteService,
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    public jwtHelper: JwtHelperService
   ) { }
 
   ngOnInit() {
-    //this.load3GList()
+    if(this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.router.navigate(["login"]);
+    } else {
+      console.log('your logged in')
+    }
   }
 
   routeToCustomer3GList() {

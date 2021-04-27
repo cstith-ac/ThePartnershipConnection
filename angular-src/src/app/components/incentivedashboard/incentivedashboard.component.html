@@ -1,8 +1,15 @@
 <div class="card">
     <div class="card-body">
-        <h2>Incentive Entry</h2>
-        {{incentiveEntry}}
-        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)">
+        <div class="row ml-0">
+            <div class="col-md-12">
+                <div class="row">
+                    <h1 class="incentive-header">Incentive Entry | 
+                        <span class="company">{{ companyName }} - {{ partnerCode }}</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="incentiveDashboardForm" (ngSubmit)="onSubmit(incentiveDashboardForm)">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-5">
@@ -39,7 +46,7 @@
                                     type="text" 
                                     class="form-control col-sm-12" 
                                     [(ngModel)]="siteName" 
-                                    formControlName="Site"
+                                    formControlName="CustomerSiteID"
                                 >
                             </div>
                             <!-- <input 
@@ -51,7 +58,7 @@
                             <div *ngIf="isRemoveDropdown">
                                 <div class="dropdown">
                                     <select 
-                                        formControlName="Site" 
+                                        formControlName="CustomerSiteID" 
                                         class="form-control col-sm-12" 
                                         [(ngModel)]="siteName" 
                                         (ngModelChange)="updateSite($event)">
@@ -318,7 +325,11 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control col-sm-6" [(ngModel)]="recurring" formControlName="Recurring">
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="recurring" formControlName="Recurring"
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
@@ -355,8 +366,11 @@
                                     <input type="date" class="form-control col-sm-5" [(ngModel)]="startDate" formControlName="ContractDate">
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-sm-3 col-form-label">Term</label>
-                                    <input type="month" class="form-control col-sm-2 mr-3" formControlName="ContractTerm">Months
+                                    <label class="col-sm-2 col-form-label">Term</label>
+                                    <input type="month" class="form-control col-sm-2 mr-3" formControlName="ContractTerm">Mo
+
+                                    <label class="col-sm-3 col-form-label">Renewal</label>
+                                    <input type="month" class="form-control col-sm-2 mr-3" formControlName="RenewalMonths">Mo
                                 </div>
                                 <div class="form-group form-inline form-check">
                                     <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
@@ -373,7 +387,8 @@
                                       <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
                                     </div> -->
                                     <button type="button" class="btn btn-success btn-light-green" (click)="openAddViewCommentsModal(comments)">Add/View Comments</button>
-                                    <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveEntryForm)">Submit Incentive</button>
+                                    <!-- <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button> -->
+                                    <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button>
                                   </div>
                             </div>
                         </div>
@@ -833,7 +848,7 @@
                 
             </div> -->
             <div class="col-md-12">
-                <form [formGroup]="incentiveEntryForm">
+                <form [formGroup]="incentiveDashboardForm">
                     <div class="form-group">
                         <label class="d-block text-center">
                             <div class="col-sm-7 m-auto">

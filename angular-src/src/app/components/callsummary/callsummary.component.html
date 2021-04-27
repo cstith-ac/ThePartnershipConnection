@@ -140,11 +140,11 @@
                                             <div class="form-group btn-group" id="callTypeDropdown" *ngIf="!show"> 
                                                 <label class="d-block call-summary-select">Next Step</label>
                                                 <div class="dropdown">
-                                                    <select formControlName="CallSummaryNextSteps" class="form-control form-control-lg" id="callSummaryNextSteps" [ngClass]="{ 'is-invalid': submitted && f.CallSummaryNextSteps.errors }">
-                                                        <option *ngFor="let nextStep of callSummaryNextSteps" value="{{ nextStep.employeeID }}" [ngValue]="nextStep.employeeID">{{ nextStep.employeeName }}</option>
+                                                    <select formControlName="NextStepID" class="form-control form-control-lg" id="NextStepID" [ngClass]="{ 'is-invalid': submitted && f.NextStepID.errors }">
+                                                        <option *ngFor="let nextStep of nextStepID" value="{{ nextStep.employeeID }}" [ngValue]="nextStep.employeeID">{{ nextStep.employeeName }}</option>
                                                     </select>
-                                                    <div *ngIf="submitted && f.CallSummaryNextSteps.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.CallSummaryNextSteps.errors.required">A next step selection is required</div>
+                                                    <div *ngIf="submitted && f.NextStepID.errors" class="invalid-feedback">
+                                                        <div *ngIf="f.NextStepID.errors.required">A next step selection is required</div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,5 +1,6 @@
 export class Incentive_ADD_Start {
     userEmailAddress: string;
+    installCompanyID: number;
     customerID: number;
     customerSiteID: number;
     customerSystemID: number;

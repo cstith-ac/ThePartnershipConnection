@@ -27,6 +27,11 @@
 	display: ruby;
 } */
 
+.return-btn {
+	background-color: #1B5EAC;
+	color: #fff;
+}
+
 header, .row {
 	display: flex;  /* aligns all child elements (flex items) in a row */
 }
@@ -50,8 +55,18 @@ header, .row {
 	width: 140px;
 }
 .incentivelabor-header-bg {
-	background-color: #34e5f2;
+	/* background-color: #34e5f2; */
+	background-color: #eae8e8;
+	border: 1px solid #707070;
 }
 .btn-submit {
 	background-color: #1ade13;
+	color: #fff;
+}
+.btn-add {
+	background-color: #1B5EAC;
+	color: #fff;
+}
+.incentive-header {
+	color: #1B5EAC;
 }

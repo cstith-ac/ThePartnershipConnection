@@ -1,4 +1,43 @@
 <div class="container">
+    <!-- <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card bg-secondary shadow border-0 mt-5">
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="flashMessage">
+                        <flash-messages></flash-messages>
+                    </div>
+                    <div class="text-center">
+                        <h2 class="page-header mb-4">Please log in</h2>
+                    </div>
+                    <form (submit)="onLoginSubmit()">
+                        <div class="form-group mb-3">
+                            <div class="input-group input-group-alternative">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                </div>
+                                <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Email">
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-alternative" id="show_hide_password">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                </div>
+                                <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Password">
+                                <div class="input-group-addon show-hide-password">
+                                    <a href=""> <i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" value="Sign in" class="btn btn-primary my-4" id="afa-btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> -->
     <div class="row justify-content-center" *ngIf="!authService.loggedIn(); else showAlreadyLoggedIn">
         <div class="col-lg-5 col-md-7">
             <div class="card bg-secondary shadow border-0 mt-5">

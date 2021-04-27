@@ -25,68 +25,142 @@ namespace WebAPI.Repository
 
         public async Task<int> InsertCallSummaryAddResult(CallSummaryAdd ticketNumberAdded)
         {
-
-            // define SqlParameters for the other two params to be passed
-            var sedonaUserParam = new SqlParameter("@SedonaUser", ticketNumberAdded.SedonaUser);
-            var systemIdParam = new SqlParameter("@SystemID", ticketNumberAdded.SystemID);
-            var problemIdParam = new SqlParameter("@ProblemID", ticketNumberAdded.ProblemID);
-            var resolutionIdParam = new SqlParameter("@ResolutionID", ticketNumberAdded.ResolutionID);
-            if (ticketNumberAdded.ResolutionID == null)
+            await using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                resolutionIdParam.Value = "1";
+                connection.Open();
+
+                // define SqlParameters for the other two params to be passed
+                var sedonaUserParam = new SqlParameter("@SedonaUser", ticketNumberAdded.SedonaUser);
+                var systemIdParam = new SqlParameter("@SystemID", ticketNumberAdded.SystemID);
+                var problemIdParam = new SqlParameter("@ProblemID", ticketNumberAdded.ProblemID);
+                var resolutionIdParam = new SqlParameter("@ResolutionID", ticketNumberAdded.ResolutionID);
+                if (ticketNumberAdded.ResolutionID == null)
+                {
+                    resolutionIdParam.Value = "1";
+                }
+                var nextStepIdParam = new SqlParameter("@NextStepID", ticketNumberAdded.NextStepID);
+                if (ticketNumberAdded.NextStepID == null)
+                {
+                    nextStepIdParam.Value = "";
+                }
+                var customerCommentsParam = new SqlParameter("@CustomerComments", ticketNumberAdded.CustomerComments);
+                if (ticketNumberAdded.CustomerComments == null)
+                {
+                    customerCommentsParam.Value = "1";
+                }
+                var techNotesParam = new SqlParameter("@TechNotes", ticketNumberAdded.TechNotes);
+                var customerOnCallParam = new SqlParameter("@CustomerOnCall", ticketNumberAdded.CustomerOnCall);
+                if (ticketNumberAdded.CustomerOnCall == null)
+                {
+                    customerOnCallParam.Value = "";
+                }
+                var customerCallBackPhoneParam = new SqlParameter("@CustomerCallBackPhone", ticketNumberAdded.CustomerCallBackPhone);
+                if (ticketNumberAdded.CustomerCallBackPhone == null)
+                {
+                    customerCallBackPhoneParam.Value = "";
+                }
+
+                // define the output parameter that needs to be retained
+                // for the Id created when the Stored Procedure executes 
+                // the INSERT command
+                var ticketNumberParam = new SqlParameter("@TicketNumber", SqlDbType.Int);
+
+                // the direction defines what kind of parameter we're passing
+                // it can be one of:
+                // Input
+                // Output
+                // InputOutput -- which does pass a value to Stored Procedure and retains a new state
+                ticketNumberParam.Direction = ParameterDirection.Output;
+
+                // we can also use context.Database.ExecuteSqlCommand() or awaitable ExecuteSqlCommandAsync()
+                // which also produces the same result - but the method is now marked obselete
+                // so we use ExecuteSqlRawAsync() instead
+
+                // we're using the awaitable version since GetOrCreateUserAsync() method is marked async
+                await context.Database.ExecuteSqlRawAsync(
+                        "exec dbo.CallSummaryAddP @SedonaUser, @SystemID, @ProblemID, @ResolutionID, @NextStepID, @CustomerComments, @TechNotes, @CustomerOnCall, @CustomerCallBackPhone, @TicketNumber out",
+                        sedonaUserParam,
+                        systemIdParam,
+                        problemIdParam,
+                        resolutionIdParam,
+                        nextStepIdParam,
+                        customerCommentsParam,
+                        techNotesParam,
+                        customerOnCallParam,
+                        customerCallBackPhoneParam,
+                        ticketNumberParam);
+
+                // the userIdParam which represents the Output param
+                // now holds the Id of the new user and is an Object type
+                // so we convert it to an Integer and send
+                return Convert.ToInt32(ticketNumberParam.Value);
             }
-            var nextStepIdParam = new SqlParameter("@NextStepID", ticketNumberAdded.NextStepID);
-            var customerCommentsParam = new SqlParameter("@CustomerComments", ticketNumberAdded.CustomerComments);
-            if (ticketNumberAdded.CustomerComments == null)
-            {
-                customerCommentsParam.Value = "1";
-            }
-            var techNotesParam = new SqlParameter("@TechNotes", ticketNumberAdded.TechNotes);
-            var customerOnCallParam = new SqlParameter("@CustomerOnCall", ticketNumberAdded.CustomerOnCall);
-            if (ticketNumberAdded.CustomerOnCall == null)
-            {
-                customerOnCallParam.Value = "";
-            }
-            var customerCallBackPhoneParam = new SqlParameter("@CustomerCallBackPhone", ticketNumberAdded.CustomerCallBackPhone);
-            if (ticketNumberAdded.CustomerCallBackPhone == null)
-            {
-                customerCallBackPhoneParam.Value = "";
-            }
 
-            // define the output parameter that needs to be retained
-            // for the Id created when the Stored Procedure executes 
-            // the INSERT command
-            var ticketNumberParam = new SqlParameter("@TicketNumber", SqlDbType.Int);
+            //// define SqlParameters for the other two params to be passed
+            //var sedonaUserParam = new SqlParameter("@SedonaUser", ticketNumberAdded.SedonaUser);
+            //var systemIdParam = new SqlParameter("@SystemID", ticketNumberAdded.SystemID);
+            //var problemIdParam = new SqlParameter("@ProblemID", ticketNumberAdded.ProblemID);
+            //var resolutionIdParam = new SqlParameter("@ResolutionID", ticketNumberAdded.ResolutionID);
+            //if (ticketNumberAdded.ResolutionID == null)
+            //{
+            //    resolutionIdParam.Value = "1";
+            //}
+            //var nextStepIdParam = new SqlParameter("@NextStepID", ticketNumberAdded.NextStepID);
+            //if (ticketNumberAdded.NextStepID == null)
+            //{
+            //    nextStepIdParam.Value = "";
+            //}
+            //var customerCommentsParam = new SqlParameter("@CustomerComments", ticketNumberAdded.CustomerComments);
+            //if (ticketNumberAdded.CustomerComments == null)
+            //{
+            //    customerCommentsParam.Value = "1";
+            //}
+            //var techNotesParam = new SqlParameter("@TechNotes", ticketNumberAdded.TechNotes);
+            //var customerOnCallParam = new SqlParameter("@CustomerOnCall", ticketNumberAdded.CustomerOnCall);
+            //if (ticketNumberAdded.CustomerOnCall == null)
+            //{
+            //    customerOnCallParam.Value = "";
+            //}
+            //var customerCallBackPhoneParam = new SqlParameter("@CustomerCallBackPhone", ticketNumberAdded.CustomerCallBackPhone);
+            //if (ticketNumberAdded.CustomerCallBackPhone == null)
+            //{
+            //    customerCallBackPhoneParam.Value = "";
+            //}
 
-            // the direction defines what kind of parameter we're passing
-            // it can be one of:
-            // Input
-            // Output
-            // InputOutput -- which does pass a value to Stored Procedure and retains a new state
-            ticketNumberParam.Direction = ParameterDirection.Output;
+            //// define the output parameter that needs to be retained
+            //// for the Id created when the Stored Procedure executes 
+            //// the INSERT command
+            //var ticketNumberParam = new SqlParameter("@TicketNumber", SqlDbType.Int);
 
-            // we can also use context.Database.ExecuteSqlCommand() or awaitable ExecuteSqlCommandAsync()
-            // which also produces the same result - but the method is now marked obselete
-            // so we use ExecuteSqlRawAsync() instead
+            //// the direction defines what kind of parameter we're passing
+            //// it can be one of:
+            //// Input
+            //// Output
+            //// InputOutput -- which does pass a value to Stored Procedure and retains a new state
+            //ticketNumberParam.Direction = ParameterDirection.Output;
 
-            // we're using the awaitable version since GetOrCreateUserAsync() method is marked async
-            await context.Database.ExecuteSqlRawAsync(
-                    "exec dbo.CallSummaryAddP @SedonaUser, @SystemID, @ProblemID, @ResolutionID, @NextStepID, @CustomerComments, @TechNotes, @CustomerOnCall, @CustomerCallBackPhone, @TicketNumber out",
-                    sedonaUserParam,
-                    systemIdParam,
-                    problemIdParam,
-                    resolutionIdParam,
-                    nextStepIdParam,
-                    customerCommentsParam,
-                    techNotesParam,
-                    customerOnCallParam,
-                    customerCallBackPhoneParam,
-                    ticketNumberParam);
+            //// we can also use context.Database.ExecuteSqlCommand() or awaitable ExecuteSqlCommandAsync()
+            //// which also produces the same result - but the method is now marked obselete
+            //// so we use ExecuteSqlRawAsync() instead
 
-            // the userIdParam which represents the Output param
-            // now holds the Id of the new user and is an Object type
-            // so we convert it to an Integer and send
-            return Convert.ToInt32(ticketNumberParam.Value);
+            //// we're using the awaitable version since GetOrCreateUserAsync() method is marked async
+            //await context.Database.ExecuteSqlRawAsync(
+            //        "exec dbo.CallSummaryAddP @SedonaUser, @SystemID, @ProblemID, @ResolutionID, @NextStepID, @CustomerComments, @TechNotes, @CustomerOnCall, @CustomerCallBackPhone, @TicketNumber out",
+            //        sedonaUserParam,
+            //        systemIdParam,
+            //        problemIdParam,
+            //        resolutionIdParam,
+            //        nextStepIdParam,
+            //        customerCommentsParam,
+            //        techNotesParam,
+            //        customerOnCallParam,
+            //        customerCallBackPhoneParam,
+            //        ticketNumberParam);
+
+            //// the userIdParam which represents the Output param
+            //// now holds the Id of the new user and is an Object type
+            //// so we convert it to an Integer and send
+            //return Convert.ToInt32(ticketNumberParam.Value);
         }
     }
 }

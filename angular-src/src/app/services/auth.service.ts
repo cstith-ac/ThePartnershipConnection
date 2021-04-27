@@ -14,6 +14,8 @@ import { throwError } from 'rxjs';
 export class AuthService {
   authToken: any;
   user: any;
+  companyName: any;
+  partnerCode: any;
   res: any;
 
   superAdmin: any;
@@ -57,7 +59,7 @@ export class AuthService {
   updateUserProfile(user: UserProfile): Observable<UserProfile> {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
-      };
+    };
     return this.http.put<UserProfile>(`${this.baseUrl}/api/UserProfile/${user.id}`, user, httpOptions);
   }
 
@@ -163,6 +165,8 @@ export class AuthService {
   logout() {
     this.authToken = null;
     this.user = null;
+    this.companyName = null;
+    this.partnerCode = null;
     localStorage.clear;
   }
 

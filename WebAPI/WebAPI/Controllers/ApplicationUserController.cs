@@ -74,6 +74,7 @@ namespace WebAPI.Controllers
                         new Claim("AfauserLink", user.AfauserLink)
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
+                    //Expires = DateTime.UtcNow.AddMinutes(1),//testing purposes ONLY!
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();

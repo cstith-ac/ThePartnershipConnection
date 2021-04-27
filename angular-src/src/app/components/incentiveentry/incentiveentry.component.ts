@@ -1,7 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouteService } from '../../services/route.service';
 import { IncentiveEntry } from '../../models/incentiveentry';
+import { InstallCompanyList } from '../../models/installcompanylist';
+import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-incentiveentry',
@@ -9,12 +13,17 @@ import { IncentiveEntry } from '../../models/incentiveentry';
   styleUrls: ['./incentiveentry.component.css']
 })
 export class IncentiveentryComponent implements OnInit {
-  @Output() incentiveEntryOutput = new EventEmitter<Array<any>>();
+  @Output() incentiveEntryOutput: EventEmitter<any> = new EventEmitter<any>();
+  //@Output() incentiveEntryOutput = new EventEmitter<Array<any>>();
   //@Input() incentiveEntry:IncentiveEntry;
 
   incentiveEntry: IncentiveEntry[];
+  installCompanyList: InstallCompanyList[];
   incentiveEntryForm: FormGroup;
   submitted = false;
+  installCompanyID;
+  companyName;
+  partnerCode;
 
   customerVisit: '';
   contractResign: '';
@@ -29,12 +38,44 @@ export class IncentiveentryComponent implements OnInit {
   other: '';
 
   constructor(
+    private routeService: RouteService,
+    public jwtHelper: JwtHelperService,
+    private incentiveEntryService: IncentiveEntryService,
     private router: Router,
     public fb: FormBuilder
   ) { }
 
   ngOnInit() {
-    
+    if(this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('companyName');
+      localStorage.removeItem('installCompanyID');
+      localStorage.removeItem('partnerCode');
+      this.router.navigate(["login"]);
+    } else {
+      console.log('your logged in')
+    }
+
+    this.routeService.getInstallCompanyList().subscribe(
+      res => {
+        this.installCompanyList = res;
+        
+        for(var i = 0;i < this.installCompanyList.length; i++) {
+
+          this.installCompanyID = this.installCompanyList[i].installCompanyID;
+          localStorage.setItem('installCompanyID',this.installCompanyID);
+
+          this.companyName = this.installCompanyList[i].companyName;
+          localStorage.setItem('companyName',this.companyName);
+
+          this.partnerCode = this.installCompanyList[i].partnerCode;
+          localStorage.setItem('partnerCode',this.partnerCode);
+
+        }
+      }
+    )
+
     this.incentiveEntryForm = this.fb.group({
       // CustomerVisit: '',
       // ContractResign: '',
@@ -47,17 +88,26 @@ export class IncentiveentryComponent implements OnInit {
       // NewSite: '',
       // SystemTransfer: '',
       // Other: ''
-      CustomerVisit:  [true, Validators.requiredTrue],
-      ContractResign:  [true, Validators.requiredTrue],
-      AddRate:  [true, Validators.requiredTrue],
-      LteUpgrade:  [true, Validators.requiredTrue],
-      LandlineToCellConversion:  [true, Validators.requiredTrue],
-      SystemReprogram:  [true, Validators.requiredTrue],
-      ServicePerformed:  [true, Validators.requiredTrue],
-      SitePickup:  [true, Validators.requiredTrue],
-      NewSite:  [true, Validators.requiredTrue],
-      SystemTransfer:  [true, Validators.requiredTrue],
-      Other:  [true, Validators.requiredTrue]
+      // CompanyName: ["", Validators.required],
+      // PartnerCode: ["", Validators.required],
+      CompanyName: this.companyName,
+      PartnerCode: this.partnerCode,
+      ClientVisit:  [false, Validators.requiredTrue],
+      AdoptionVisit: [false, Validators.requiredTrue],
+      NoPhoneNoProblem: [false, Validators.requiredTrue],
+      ContractResign:  [false, Validators.requiredTrue],
+      Reprogram:  [false, Validators.requiredTrue],
+      //AddRate:  [true, Validators.requiredTrue],
+      LteUpgrade:  [false, Validators.requiredTrue],
+      AddNewRMRorService: [false, Validators.requiredTrue],
+      PickUp: [false, Validators.requiredTrue],
+      //LandlineToCellConversion:  [true, Validators.requiredTrue],
+      //SystemReprogram:  [true, Validators.requiredTrue],
+      //ServicePerformed:  [true, Validators.requiredTrue],
+      //SitePickup:  [false, Validators.requiredTrue],
+      NewSite:  [false, Validators.requiredTrue],
+      SystemTransfer:  [false, Validators.requiredTrue],
+      //Other:  [true, Validators.requiredTrue]
     })
   }
 
@@ -70,11 +120,22 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
+
     this.submitted = true;
+
+    this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
+    this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);
+
     this.incentiveEntry = this.incentiveEntryForm.value;
+
+    this.incentiveEntryService.sharedIncentiveInfo = this.incentiveEntry;
+
     this.incentiveEntryOutput.emit(this.incentiveEntry);
-    console.log(Object.values(this.incentiveEntry))
-  
+    //this.incentiveEntryOutput.emit('testing data');
+
+    //console.log(this.incentiveEntryForm.value);
+    //console.log(Object.values(this.incentiveEntry))
+    //return;
     this.router.navigate(["/incentive-dashboard"]);
   }
 

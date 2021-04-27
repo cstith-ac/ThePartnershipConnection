@@ -1,19 +1,159 @@
 <div class="card">
     <div class="card-body">
-        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group btn-group">
-                        <label>Customer Visit</label>
+        <div class="row ml-0">
+            <div class="col-md-12">
+                <div class="row" *ngFor="let item of installCompanyList">
+                    <h1 class="incentive-header">Incentive Entry | <span class="company">{{ item.companyName }} - {{ item.partnerCode}}</span></h1>
+                    <!-- <span>{{ item.companyName }} - {{ item.partnerCode}}</span> -->
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)" #IncentiveInfo="ngForm">
+            <!-- <div class="form-group">
+                <input type="text" class="form-control" formControlName="CompanyName" readonly>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="PartnerCode" readonly>
+            </div> -->
+            <div class="row form-inline mt-5 mb-5">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice #</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice Date</label>
+                        <input type="month" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice Total</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="col-sm-8">Was service performed as part of this incentive?</label>
+                        Yes<input type="checkbox" class="mr-2 ml-2">
+                        No<input type="checkbox" class="mr-2 ml-2">
+                    </div>
+                </div>
+            </div>
+            <div class="row form-inline mt-5 mb-5 align-items-start">
+                <div class="col-md-4">
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Client Visit</label>
                         <input 
                             type="checkbox"
-                            formControlName="CustomerVisit"
+                            formControlName="ClientVisit"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Adoption Visit</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="AdoptionVisit"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>No Phone No Problem</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="NoPhoneNoProblem"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Contract Resign</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="ContractResign"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Reprogram</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="Reprogram"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>LTE Upgrade</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="LteUpgrade"
+                            class="form-check-input"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Add New RMR or Service</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="AddNewRMRorService"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Pick Up</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="PickUp"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>New Site</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="NewSite"
+                            class="form-check-input"
+                        >
+                    </div>
+
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>System Transfer</label>
+                        <input 
+                            type="checkbox"
+                            formControlName="SystemTransfer"
+                            class="form-check-input"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p>Customer Enrolled in Autopay?</p>
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>Credit Card</label>
+                        <input 
+                            type="checkbox"
+                            class="form-check-input"
+                        >
+                    </div>
+                    <div class="form-group btn-group mt-3 mb-3">
+                        <label>ACH</label>
+                        <input 
+                            type="checkbox"
                             class="form-check-input"
                         >
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-12">
                     <div class="form-group btn-group">
                         <label>Contract Resign</label>
@@ -126,11 +266,15 @@
                         >
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary btn-light-blue" >Start Incentive</button>
+                <div class="col-md-4"></div>
+                <div class="col-md-4 offset-md-4">
+                    <button type="submit" class="btn btn-primary btn-light-blue" (click)="onSubmit(IncentiveInfo.value)">Start Incentive</button>
                 </div>
+                <!-- <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary btn-light-blue" >Start Incentive</button>
+                </div> -->
             </div>
             <!-- <button class="btn btn-primary btn-light-blue" (click)="routeToIncentiveDashboard()">
                 Start Incentive

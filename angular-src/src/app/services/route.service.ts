@@ -9,6 +9,9 @@ import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
 import { Incentive_ADD_Start } from '../models/incentiveaddstart';
+import { Incentive_Add_Recurring } from '../models/incentiveaddrecurring';
+import { Incentive_Add_Equipment } from '../models/incentiveaddequipment';
+import { Incentive_Add_Labor } from '../models/incentiveaddlabor';
 import { ResetPassword } from '../models/resetpassword';
 import { SummaryUpdate } from '../models/summaryupdate';
 
@@ -22,6 +25,9 @@ export class RouteService {
 
   data: SummaryAdd[] = [];
   incentiveAddStart: Incentive_ADD_Start[] = [];
+  incentiveAddRecurring: Incentive_Add_Recurring[] = [];
+  incentiveAddEquipment: Incentive_Add_Equipment[] = [];
+  incentiveAddLabor: Incentive_Add_Labor[] = [];
 
   baseUrl = environment.baseUrl;
 
@@ -341,9 +347,11 @@ export class RouteService {
   putCallSummaryUpdate(id:number, params: any): Observable<SummaryUpdate> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken })
     };
-    return this.http.put<SummaryUpdate>(`${this.baseUrl}/api/CallSummaryUpdate/${id}`, params, httpOptions);
+    return this.http.put<SummaryUpdate>(`${this.baseUrl}/api/CallSummaryUpdate/${id}`, params, httpOptions).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   getListSystemTypes(): Observable<any> {
@@ -453,12 +461,44 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSystemInfoGet/`+ id, httpOptions);
   }
 
-  postIncentiveADDStart(incentiveStart: Incentive_ADD_Start) {
+  postIncentiveADDStart(incentiveStart: Incentive_ADD_Start): Observable<any>{
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     };
-    return this.http.post<Incentive_ADD_Start>(`${this.baseUrl}/api/IncentiveAddStart/`+ incentiveStart, httpOptions)
+    return this.http.post<Incentive_ADD_Start>(`${this.baseUrl}/api/Incentive_Add_Start`, incentiveStart, httpOptions)
+  }
+
+  postIncentive_Add_Recurring(incentiveRecurring: Incentive_Add_Recurring): Observable<any>{
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    };
+    return this.http.post<Incentive_Add_Recurring>(`${this.baseUrl}/api/Incentive_Add_Recurring`, incentiveRecurring, httpOptions)
+  }
+
+  postIncentive_Add_Equipment(incentiveEquipment: Incentive_Add_Equipment): Observable<any>{
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    }
+    return this.http.post<Incentive_Add_Equipment>(`${this.baseUrl}/api/Incentive_Add_Equipment`, incentiveEquipment, httpOptions);
+  }
+
+  postIncentive_Add_Labor(incentiveLabor: Incentive_Add_Labor): Observable<any>{
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    }
+    return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, incentiveLabor, httpOptions);
+  }
+
+  getInstallCompanyList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/InstallCompanyList/`, httpOptions);
   }
 
   loadToken() {

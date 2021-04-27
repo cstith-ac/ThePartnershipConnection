@@ -50,6 +50,12 @@ namespace WebAPI
                     {
                         sqlOptions.EnableRetryOnFailure();
                     });
+
+                //options.UseSqlServer(Configuration.GetConnectionString("AFADatabase"),
+                //    sqlServerOptionsAction: sqlOptions =>
+                //    {
+                //        sqlOptions.EnableRetryOnFailure();
+                //    });
             });
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -90,10 +96,14 @@ namespace WebAPI
             //services.AddCors();
 
             services.AddTransient<TPC_DevContext>();
+            services.AddTransient<AFAContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICallSummaryAddRepository, CallSummaryAddRepository>();
             services.AddScoped<ICallSummaryUpdateRepository, CallSummaryUpdateRepository>();
             services.AddScoped<IIncentive_ADD_StartRepository, Incentive_ADD_StartRepository>();
+            services.AddScoped<IIncentive_Add_RecurringRepository, Incentive_Add_RecurringRepository>();
+            services.AddScoped<IIncentive_Add_EquipmentRepository, Incentive_Add_EquipmentRepository>();
+            services.AddScoped<IIncentive_Add_LaborRepository, Incentive_Add_LaborRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
             //JWT Authentication

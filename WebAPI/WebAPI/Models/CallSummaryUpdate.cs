@@ -14,7 +14,7 @@ namespace WebAPI.Models
         public int CustomerSystemID { get; set; }
         public int ProblemID { get; set; }
         public int? ResolutionID { get; set; }
-        public int NextStepID { get; set; }
+        public int? NextStepID { get; set; }
 
         [StringLength(1000)]
         public string CustomerComments { get; set; }

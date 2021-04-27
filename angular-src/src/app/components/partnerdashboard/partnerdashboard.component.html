@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-xl-8">
       <div style="width: 100%;">
           <div class="col-xl-12 mb-5 mb-xl-0 pr-0">
@@ -8,17 +8,210 @@
                 <button class="btn btn-primary" (click)="routeToIncentiveEntry()">Enter an Incentive</button>
               </div>
             </div>
-              <!-- <app-customercaredashboardinfo></app-customercaredashboardinfo> -->
-              <!-- <app-systeminfo></app-systeminfo> -->
+              
           </div>
       </div>
   </div>
   <div class="col-xl-4">
-      <!-- <app-callsummary></app-callsummary> -->
-      <!-- <app-suggestedtopics></app-suggestedtopics> -->
-      <!-- <app-criticalmessage></app-criticalmessage> -->
+      
+  </div>
+</div> -->
+
+<div class="ml-4 mr-4">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Customers with 3G Systems</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="card-text text-primary">AT&amp;T: 232 systems to go. Customers lose connectivity in 8 months!</p>
+              <p class="card-text text-primary">Verizon: 166 systems to go. Customers lose connectivity in 16 months!</p>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View All 3G Customers</button></div>
+            </div>
+          <!-- <p class="card-text text-primary">AT&amp;T: 232 systems to go. Customers lose connectivity in 8 months!</p>
+          <p class="card-text text-primary">Verizon: 166 systems to go. Customers lose connectivity in 16 months!</p>
+          <button class="btn btn-primary" (click)="routeToCustomer3GList()">View All 3G Customers</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Prospects</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="card-text text-primary">38 Pending prospects</p>
+              <p class="card-text text-primary">The oldest is from 10-16-2018</p>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View Prospects</button>
+            </div>
+          </div>
+          <!-- <p class="card-text text-primary">38 Pending prospects</p>
+          <p class="card-text text-primary">The oldest is from 10-16-2018</p> -->
+          <!-- <button class="btn btn-primary">View Prospects</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Atrrition Summary</h2>
+          <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-4 align-self-end text-right"></div>
+          </div>
+          <!-- <p class="card-text">AT&amp;T: 232 systems to go. Customers lose connectivity in 8 months!</p>
+          <p class="card-text">Verizon: 166 systems to go. Customers lose connectivity in 16 months!</p>
+          <button class="btn btn-primary">View Atrrition Summary</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Incentives</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="card-text text-primary">12 Incentives Approved this Month</p>
+              <p class="card-text text-primary">9 Incentives are in Process</p>
+              <p class="card-text text-primary"> <span class="text-danger font-weight-bold">!</span> 4 Incentives are on Hold</p>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn" (click)="routeToIncentiveEntry()">Create an Incentive</button>
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View Incentives</button>
+            </div>
+          </div>
+          <!-- <p class="card-text text-primary">12 Incentives Approved this Month</p>
+          <p class="card-text text-primary">9 Incentives are in Process</p>
+          <p class="card-text text-primary"> <span class="text-danger font-weight-bold">!</span> 4 Incentives are on Hold</p> -->
+          <!-- <button class="btn btn-primary" (click)="routeToIncentiveEntry()">Create an Incentive</button>
+          <button class="btn btn-primary">View Incentives</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Pending Cancels</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="card-text text-primary">There are 56 people with pending cancellations.</p>
+              <p class="card-text text-primary">They have a combined RMR of $1,868.93</p>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View the Cancels</button>
+            </div>
+          </div>
+          <!-- <p class="card-text text-primary">There are 56 people with pending cancellations.</p>
+          <p class="card-text text-primary">They have a combined RMR of $1,868.93</p> -->
+          <!-- <button class="btn btn-primary">View the Cancels</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="">
+        <div class="">
+          <!-- <p>TBD</p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Service Requests</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="card-text text-primary">160 Service Requests pending.</p>
+              <p class="card-text text-primary">0 Service Invoices on hold.</p>
+              <p class="card-text text-primary">0 Service Invoices awaiting approval.</p>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">Create a Request</button>
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View Requests</button>
+            </div>
+          </div>
+          <!-- <p class="card-text text-primary">160 Service Requests pending.</p>
+          <p class="card-text text-primary">0 Service Invoices on hold.</p>
+          <p class="card-text text-primary">0 Service Invoices awaiting approval.</p> -->
+          <!-- <button class="btn btn-primary">Create a Request</button>
+          <button class="btn btn-primary">View Requests</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <h2 class="card-title text-success">Aging Summary</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row ml-0">
+                <p class="card-text pr-3 text-primary">Over 30 Days</p>
+                <p class="card-text pr-3 text-primary">122</p>
+                <p class="card-text text-primary">$9,249.46</p>
+              </div>
+              <div class="row ml-0">
+                <p class="card-text pr-3 text-primary">Over 60 Days</p>
+                <p class="card-text pr-3 text-primary">50</p>
+                <p class="card-text text-primary">$4,049.76</p>
+              </div>
+              <div class="row ml-0">
+                <p class="card-text pr-3 text-warning">Over 90 Days</p>
+                <p class="card-text pr-3 text-warning">25</p>
+                <p class="card-text text-warning">$1,948.22</p>
+              </div>
+              <div class="row ml-0">
+                <p class="card-text pr-3 text-danger">Over 120 Days</p>
+                <p class="card-text pr-3 text-danger">26</p>
+                <p class="card-text text-danger">$3,387.54</p>
+              </div>
+            </div>
+            <div class="col-md-4 align-self-end text-right">
+              <button class="btn btn-primary flex-column partner-dashbrd-btn">View Aging</button>
+            </div>
+          </div>
+          <!-- <div class="row ml-0">
+            <p class="card-text pr-3 text-primary">Over 30 Days</p>
+            <p class="card-text pr-3 text-primary">122</p>
+            <p class="card-text text-primary">$9,249.46</p>
+          </div>
+          <div class="row ml-0">
+            <p class="card-text pr-3 text-primary">Over 60 Days</p>
+            <p class="card-text pr-3 text-primary">50</p>
+            <p class="card-text text-primary">$4,049.76</p>
+          </div>
+          <div class="row ml-0">
+            <p class="card-text pr-3 text-warning">Over 90 Days</p>
+            <p class="card-text pr-3 text-warning">25</p>
+            <p class="card-text text-warning">$1,948.22</p>
+          </div>
+          <div class="row ml-0">
+            <p class="card-text pr-3 text-danger">Over 120 Days</p>
+            <p class="card-text pr-3 text-danger">26</p>
+            <p class="card-text text-danger">$3,387.54</p>
+          </div> -->
+          <!-- <button class="btn btn-primary">View Aging</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="">
+        <div class="">
+          <!-- <p>TBD</p> -->
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+
 <footer class="footer">
   <div class="container">
     <div class="row">

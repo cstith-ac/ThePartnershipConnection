@@ -62,7 +62,9 @@ namespace WebAPI.Models
         public virtual DbSet<ListSystemTypes> GetListSystemTypes { get; set; }
         public virtual DbSet<ListMultiples> GetListMultiples { get; set; }
         public virtual DbSet<CustomerSystemInfoGet> GetCustomerSystemInfoGets { get; set; }
-        public virtual DbSet<Incentive_ADD_Start> GetIncentive_ADD_StartResults { get; set; }
+        //public virtual DbSet<Incentive_ADD_Start> GetIncentive_ADD_StartResults { get; set; }
+        public virtual DbSet<InstallCompanyList> GetInstallCompanyLists { get; set; }
+        //public virtual DbSet<Incentive_Add_Recurring> GetIncentive_Add_RecurringResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -421,10 +423,20 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
-            modelBuilder.Entity<Incentive_ADD_Start>(entity =>
+            //modelBuilder.Entity<Incentive_ADD_Start>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //});
+
+            modelBuilder.Entity<InstallCompanyList>(entity =>
             {
                 entity.HasNoKey();
             });
+
+            //modelBuilder.Entity<Incentive_Add_Recurring>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }

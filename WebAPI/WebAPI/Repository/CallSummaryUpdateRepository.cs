@@ -42,6 +42,10 @@ namespace WebAPI.Repository
             }
 
             var nextStepIDParam = new SqlParameter("@NextStepID", callSummaryUpdate.NextStepID);
+            if (callSummaryUpdate.NextStepID == null)
+            {
+                nextStepIDParam.Value = "";
+            }
 
             var customerCommentsParam = new SqlParameter("@CustomerComments", callSummaryUpdate.CustomerComments);
             if (callSummaryUpdate.CustomerComments == null)
