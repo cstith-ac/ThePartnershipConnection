@@ -97,6 +97,7 @@ namespace WebAPI
 
             services.AddTransient<TPC_DevContext>();
             services.AddTransient<AFAContext>();
+            services.AddTransient<SedonaDocumentsContext>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICallSummaryAddRepository, CallSummaryAddRepository>();
             services.AddScoped<ICallSummaryUpdateRepository, CallSummaryUpdateRepository>();
@@ -104,6 +105,8 @@ namespace WebAPI
             services.AddScoped<IIncentive_Add_RecurringRepository, Incentive_Add_RecurringRepository>();
             services.AddScoped<IIncentive_Add_EquipmentRepository, Incentive_Add_EquipmentRepository>();
             services.AddScoped<IIncentive_Add_LaborRepository, Incentive_Add_LaborRepository>();
+            services.AddScoped<ICustomer_Document_ADDRepository, Customer_Document_ADDRepository>();
+            services.AddScoped<IIncentive_Add_FinishRepository, Incentive_Add_FinishRepository>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
             //JWT Authentication

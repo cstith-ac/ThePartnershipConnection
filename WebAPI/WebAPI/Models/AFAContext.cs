@@ -20,6 +20,7 @@ namespace WebAPI.Models
         public virtual DbSet<Incentive_Add_Recurring> GetIncentive_Add_RecurringResults { get; set; }
         public virtual DbSet<Incentive_Add_Equipment> GetIncentive_Add_EquipmentResults { get; set; }
         public virtual DbSet<Incentive_Add_Labor> GetIncentive_Add_LaborResults { get; set; }
+        public virtual DbSet<Incentive_Add_Finish> GetIncentive_Add_FinishResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +49,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<Incentive_Add_Labor>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Incentive_Add_Finish>(entity =>
             {
                 entity.HasNoKey();
             });
