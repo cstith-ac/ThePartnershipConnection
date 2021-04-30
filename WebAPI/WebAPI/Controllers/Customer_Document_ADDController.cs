@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WebAPI.Models;
 using WebAPI.Repository;
 
@@ -35,7 +27,20 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertCustomer_Document_ADDResult([FromForm] Customer_Document_ADD customer_Document_ADDED)
         {
-            return Ok(await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED));
+            var reqFile = Request.Form.Files.First();
+
+            using (Stream stream = reqFile.OpenReadStream())
+            {
+                using (var binaryReader = new BinaryReader(stream))
+                {
+                    var fileContent = binaryReader.ReadBytes((int)stream.Length);
+                    customer_Document_ADDED.file_data = fileContent;
+                    var result = await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED);
+                    return Ok(result);
+                }
+            }
+
+            //return Ok(await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED));
         }
 
         //[HttpPost]

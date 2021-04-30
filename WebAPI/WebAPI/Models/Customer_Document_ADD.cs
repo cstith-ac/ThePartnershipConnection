@@ -25,9 +25,9 @@ namespace WebAPI.Models
         public string reference2 { get; set; }
         public string reference3 { get; set; }
         public string reference4 { get; set; }
-        //public byte[] file_data { get; set; }
+        public byte[] file_data { get; set; }
         //[NotMapped]
-        public IFormFile file_data { get; set; }
+        //public IFormFile file_data { get; set; }
         public int document_id { get; set; }
     }
 }

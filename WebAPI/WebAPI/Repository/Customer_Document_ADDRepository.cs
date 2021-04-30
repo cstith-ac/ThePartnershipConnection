@@ -30,10 +30,10 @@ namespace WebAPI.Repository
         {
             await using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                SqlCommand cmd = new SqlCommand();//new stuff
-                cmd.CommandType = CommandType.StoredProcedure;//new stuff
+                //SqlCommand cmd = new SqlCommand();//new stuff
+                //cmd.CommandType = CommandType.StoredProcedure;//new stuff
 
-                connection.Open();
+                //connection.Open();
 
                 // define SqlParameters for the other two params to be passed
                 var company_idParam = new SqlParameter("@company_id", customer_Document_ADDED.company_id);
@@ -53,14 +53,20 @@ namespace WebAPI.Repository
                 var reference3Param = new SqlParameter("@reference3", customer_Document_ADDED.reference3);
                 var reference4Param = new SqlParameter("@reference4", customer_Document_ADDED.reference4);
 
+                if (customer_Document_ADDED.file_data == null || customer_Document_ADDED.file_data.Length == 0)
+                {
+                    throw new System.Exception("There's no file data!");
+                }
+                var file_dataParam = new SqlParameter("@file_data", SqlDbType.Image, customer_Document_ADDED.file_data.Length);
+                file_dataParam.Value = customer_Document_ADDED.file_data;
+                //var file_dataParam = new SqlParameter("@file_data", customer_Document_ADDED.file_data);
 
-                var file_dataParam = new SqlParameter("@file_data", customer_Document_ADDED.file_data);
                 //cmd.Parameters.Add("@file_data", SqlDbType.Binary).Value = file_dataParam;
-                cmd.Parameters.AddWithValue("@file_data", SqlDbType.Binary).Value = file_dataParam;
+                //cmd.Parameters.AddWithValue("@file_data", SqlDbType.Image).Value = file_dataParam;
 
                 //using (var memoryStream = new MemoryStream())
                 //{
-                //    await Customer_Document_ADD.
+                //    await file_dataParam
                 //}
 
                 //file_dataParam.SqlDbType = SqlDbType.Image;
