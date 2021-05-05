@@ -19,18 +19,19 @@ export class PartnerwindowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if(this.authService.isEmployee) {
-    //   this.routeService.getCustomerCareDashboardInfo().subscribe(
-    //     res => {
-    //       this.dashboardinfo = res;
-    //     }
-    //   )
-    // }
-    this.routeService.getCustomerCareDashboardInfo().subscribe(
-      res => {
-        this.dashboardinfo = res;
-      }
-    )
+    //get the customer care dashboard only if user is Super Admin (19), Admin (14) or Employee (9)
+    if(this.authService.isEmployee()) {
+      this.routeService.getCustomerCareDashboardInfo().subscribe(
+        res => {
+          this.dashboardinfo = res;
+        }
+      )
+    }
+    // this.routeService.getCustomerCareDashboardInfo().subscribe(
+    //   res => {
+    //     this.dashboardinfo = res;
+    //   }
+    // )
 
     if(this.authService.isPartner()) {
       setTimeout(() => {

@@ -12,6 +12,7 @@ import { Incentive_ADD_Start } from '../models/incentiveaddstart';
 import { Incentive_Add_Recurring } from '../models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../models/incentiveaddlabor';
+import { Customer_Document_ADD } from '../models/customerdocumentadd';
 import { ResetPassword } from '../models/resetpassword';
 import { SummaryUpdate } from '../models/summaryupdate';
 
@@ -28,6 +29,7 @@ export class RouteService {
   incentiveAddRecurring: Incentive_Add_Recurring[] = [];
   incentiveAddEquipment: Incentive_Add_Equipment[] = [];
   incentiveAddLabor: Incentive_Add_Labor[] = [];
+  customerDocumentADD: Customer_Document_ADD[] = [];
 
   baseUrl = environment.baseUrl;
 
@@ -491,6 +493,14 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     }
     return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, incentiveLabor, httpOptions);
+  }
+
+  postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<Customer_Document_ADD> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
   }
 
   getInstallCompanyList(): Observable<any> {

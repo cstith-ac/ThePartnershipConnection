@@ -19,19 +19,34 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="mr-2">Invoice #</label>
-                        <input type="text" class="form-control">
+                        <input
+                            formControlName="InvoiceNumber"
+                            [(ngModel)]="invoiceNumber" 
+                            type="text" 
+                            class="form-control"
+                        >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="mr-2">Invoice Date</label>
-                        <input type="month" class="form-control">
+                        <input
+                            formControlName="InvoiceDate"
+                            [(ngModel)]="invoiceDate" 
+                            type="date" 
+                            class="form-control"
+                        >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="mr-2">Invoice Total</label>
-                        <input type="text" class="form-control">
+                        <input
+                            formControlName="InvoiceTotal"
+                            [(ngModel)]="invoiceTotal"
+                            type="text" 
+                            class="form-control"
+                        >
                     </div>
                 </div>
                 <div class="col-md-3">

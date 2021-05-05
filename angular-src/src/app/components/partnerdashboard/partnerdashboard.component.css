@@ -2,3 +2,8 @@
     white-space: break-spaces;
     cursor: pointer;
 }
+.card-deck > .card {
+    width: 31%;
+    flex-wrap: wrap;
+    flex: initial;
+}

@@ -17,7 +17,9 @@ namespace WebAPI.Models
         public int security_level { get; set; }
         public string file_name { get; set; }
         public int file_size { get; set; }
-        public DateTime upload_date { get; set; }
+        public DateTime upload_date = DateTime.Now;
+        //public DateTime upload_date { get; set; }
+        //public DateTimeOffset upload_date { get; set; }
         public string document_ext { get; set; }
         public string user_code { get; set; }
         public string user_description { get; set; }

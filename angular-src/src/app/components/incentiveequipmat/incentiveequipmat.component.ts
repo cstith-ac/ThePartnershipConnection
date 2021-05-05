@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
-import { ListMaterialItems } from '../../models/listmaterialitems';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { ListMaterialItems } from '../../models/listmaterialitems';
 
 @Component({
   selector: 'app-incentiveequipmat',
@@ -12,13 +12,14 @@ import { IncentiveEntryService } from '../../services/incentive-entry.service';
 })
 export class IncentiveequipmatComponent implements OnInit, OnDestroy {
   incentiveEquipMatEntryForm: FormGroup;
+
   listMatItems: ListMaterialItems[];
 
   item: '';
   description: '';
-  quantity: '';
-  cost: '';
-  total: '';
+  quantity: number;
+  cost: number;
+  total: number;
 
   constructor(
     public fb: FormBuilder,
@@ -59,7 +60,12 @@ export class IncentiveequipmatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    console.log('destroyed')
+    console.log('destroyed');
+    //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
+    //send the form data to incentive dashboard
+    const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRows'];
+    this.incentiveEntryService.sharedIncentiveEquipMatInfo = control;
+    //submit this form from the incentive dashboard
   }
 
   initEntryRow() {
@@ -79,9 +85,11 @@ export class IncentiveequipmatComponent implements OnInit, OnDestroy {
     //not working. will use in the ngOnDestroy
     this.incentiveEntryService.sharedIncentiveEquipMatInfo = control;
     
+    //push the equipmat total to the incentive dashboard component
+    localStorage.setItem('totalEquipMatCalc', this.total.toString());
     this.router.navigate(['/incentive-dashboard'])
-
     return
+
     control.push(this.initEntryRow());
   }
 
@@ -92,6 +100,20 @@ export class IncentiveequipmatComponent implements OnInit, OnDestroy {
     control.push(this.initEntryRow());
 
     //add a delete row button
+  }
+
+  calculateQuantity(val:any) {
+    console.log(this.quantity);
+  }
+
+  calculateCost(val:any){
+    console.log(this.cost);
+    this.calculateTotal(val)
+  }
+
+  calculateTotal(val:any) {
+    let totalEquipMatCalc = this.total = (this.quantity * this.cost);
+    this.incentiveEquipMatEntryForm.controls.entryRows['Total'].patchValue(totalEquipMatCalc);
   }
 
 }

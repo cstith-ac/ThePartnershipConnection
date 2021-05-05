@@ -109,29 +109,37 @@
                             </div>
                             <div class="col">
                                 <input 
-                                    type="number" 
-                                    formControlName="Hours" 
+                                    type="text" 
+                                    formControlName="Hours"
+                                    [(ngModel)]="hours" 
                                     class="form-control"
+                                    (change)="calculateHours($event)"
                                 >
                             </div>
                             <div class="col">
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="CostPerHour" 
+                                    formControlName="CostPerHour"
+                                    [(ngModel)]="costPerHour"
                                     placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
+                                    mask="separator.2" 
+                                    thousandSeparator=","
                                     prefix="$"
+                                    (change)="calculateCostPerHour($event)"
                                 >
                             </div>
                             <div class="col">
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="Total" 
+                                    formControlName="Total"
+                                    [(ngModel)]="total" 
                                     placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
+                                    mask="separator.2" 
+                                    thousandSeparator=","
                                     prefix="$"
+                                    (change)="calculateTotal($event)"
                                 >
                             </div>
                             <div class="col">

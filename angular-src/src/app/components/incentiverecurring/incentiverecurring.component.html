@@ -335,9 +335,12 @@
                                 type="text"
                                 class="form-control"
                                 formControlName="RMR"
+                                [(ngModel)]="rmr"
                                 placeholder="$0.00"
-                                mask="separator.2" thousandSeparator=","
+                                mask="separator.2" 
+                                thousandSeparator=","
                                 prefix="$"
+                                (change)="calculateRMR($event)"
                               >
                             </div>
                             <div class="col">
@@ -345,9 +348,12 @@
                                 type="text"
                                 class="form-control" 
                                 formControlName="PassThrough"
+                                [(ngModel)]="passThrough"
                                 placeholder="$0.00"
-                                mask="separator.2" thousandSeparator=","
+                                mask="separator.2" 
+                                thousandSeparator=","
                                 prefix="$"
+                                (change)="calculatePassThrough($event)"
                               >
                             </div>
                             <div class="col">
@@ -366,7 +372,7 @@
                             </div>
                             <div class="col text-center">
                               <div class="dropdown">
-                                  <select formControlName="Multiple" class="form-control">
+                                  <select formControlName="Multiple" [(ngModel)]="multiple" class="form-control" (change)="calculateMultiple($event)">
                                       <option
                                           *ngFor="let m of listMultiples" 
                                           value="{{m.multiple}}" 
@@ -377,13 +383,16 @@
                             </div>
                             <div class="col">
                               <input 
-                              type="text"
-                              class="form-control"
-                              formControlName="Total"
-                              placeholder="$0.00"
-                              mask="separator.2" thousandSeparator=","
-                              prefix="$"
-                          >
+                                type="text"
+                                class="form-control"
+                                formControlName="Total"
+                                [(ngModel)]="total"
+                                placeholder="$0.00"
+                                mask="separator.2" 
+                                thousandSeparator=","
+                                prefix="$"
+                                (change)="calculateTotal($event)"
+                              >
                             </div>
                             <div class="col">
                                 <button class="btn btn-add" (click)="addNewItem(incentiveRecurringEntryForm)">

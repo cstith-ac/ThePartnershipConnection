@@ -23,11 +23,12 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
   item: '';
   description: '';
   billCycle: '';
-  //rmr;
-  //passThrough;
+  rmr: number;
+  passThrough: number;
   billingStarts: '';
   addToAnExistingRMRItem: '';
-  multiple: '';
+  multiple: number;
+  total: number;
 
   constructor(
     public fb: FormBuilder,
@@ -59,7 +60,7 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     })
 
     this.incentiveRecurringEntryForm.controls.entryRows.valueChanges.subscribe(form => {
-      console.log(form[0].RMR)
+      //console.log(form[0].RMR)
       if(form[0].RMR) {
         this.incentiveRecurringEntryForm.patchValue({
           RMR: this.currencyPipe.transform(form[0].RMR.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
@@ -109,7 +110,6 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
 
     this.routeService.getListRecurringItems().subscribe(
       res => {
-        //console.log(res);
         this.listRecurringItems = res;
       }
     )
@@ -152,9 +152,10 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     //this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
     
     //push the recurring total to the incentive dashboard component
-
+    localStorage.setItem('totalRecurringCalc',this.total.toString());
     this.router.navigate(['/incentive-dashboard'])
     return
+
     control.push(this.initEntryRow());
   }
 
@@ -165,6 +166,27 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     control.push(this.initEntryRow());
 
     //add a delete row button
+  }
+
+  calculateRMR(val:any){
+    console.log(this.rmr);
+  }
+
+  calculatePassThrough(val:any) {
+    console.log(this.passThrough);
+  }
+
+  calculateMultiple(val:any) {
+    console.log(this.multiple);
+    this.calculateTotal(val)
+  }
+
+  calculateTotal(val:any) {
+    
+    let totalRecurringCalc = this.total = (this.rmr - this.passThrough) * this.multiple;
+    this.incentiveRecurringEntryForm.controls.entryRows['Total'].patchValue(totalRecurringCalc);
+    
+    //this.totalRecurringCalc = totalRecurringCalc;
   }
 
   // transformAmount(element) {

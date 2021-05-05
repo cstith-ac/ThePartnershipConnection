@@ -107,6 +107,12 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('companyName');
     localStorage.removeItem('partnerCode');
     localStorage.removeItem('installCompanyID');
+    localStorage.removeItem('totalRecurringCalc');
+    localStorage.removeItem('totalEquipMatCalc');
+    localStorage.removeItem('totalLaborChargesCalc');
+    localStorage.removeItem('invoiceDate');
+    localStorage.removeItem('invoiceNumber');
+    localStorage.removeItem('invoiceTotal');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

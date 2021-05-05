@@ -223,6 +223,7 @@
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="invoiceUpload" 
                                         formControlName="InvoiceUpload"
+                                        (change)="getFileDetails($event)"
                                     >
                                 </div>
                             </div>
@@ -230,7 +231,12 @@
                                 <div class="form-group">
                                     <label class="col-sm-5 col-form-label">Subscriber Form</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload">
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
+                                        (change)="getFileDetails($event)"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -239,14 +245,22 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-form-label pl-0">Site Visit</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload">
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
+                                    >
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-sm-5 col-form-label">Other Document</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload">
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -255,14 +269,22 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-form-label pl-0">Contract</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="contractUpload" formControlName="ContractUpload">
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="contractUpload" formControlName="ContractUpload"
+                                    >
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-sm-5 col-form-label">Other Document</label>
                                     <i class="fas fa-upload pr-3"></i>
-                                    <input type="file" class="form-control col-sm-6" [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"> 
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
+                                    > 
                                 </div>
                             </div>
                         </div>
@@ -278,7 +300,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-7 col-form-label pl-0">Invoice #</label>
                                     <div class="input-group d-flex justify-content-center">
-                                        <input type="text" class="form-control col-sm-10" [(ngModel)]="partnerInvoiceNumber" formControlName="PartnerInvoiceNumber">
+                                        <input 
+                                            type="text" class="form-control col-sm-10" 
+                                            [(ngModel)]="invoiceNumber" formControlName="PartnerInvoiceNumber">
                                     </div>
                                 </div>
                             </div>
@@ -286,7 +310,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-7 col-form-label pl-0">Invoice Date</label>
                                     <div class="input-group d-flex justify-content-center">
-                                        <input type="date" class="form-control col-sm-10" [(ngModel)]="partnerInvoiceDate" formControlName="PartnerInvoiceDate">
+                                        <input 
+                                            type="date" class="form-control col-sm-12" 
+                                            [(ngModel)]="invoiceDate" formControlName="PartnerInvoiceDate">
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +327,8 @@
                                             placeholder="$0.00"
                                             mask="separator.2" thousandSeparator=","
                                             prefix="$"
-                                            type="text" class="form-control col-sm-8" [(ngModel)]="invoiceTotal" formControlName="InvoiceTotal">
+                                            type="text" class="form-control col-sm-8" [(ngModel)]="invoiceTotal"
+                                            formControlName="InvoiceTotal">
                                     </div>
                                 </div>
                             </div>

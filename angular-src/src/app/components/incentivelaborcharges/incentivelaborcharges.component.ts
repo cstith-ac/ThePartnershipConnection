@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
-import { ListLaborItems } from '../../models/listlaboritems';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { ListLaborItems } from '../../models/listlaboritems';
 
 @Component({
   selector: 'app-incentivelaborcharges',
@@ -12,9 +12,13 @@ import { IncentiveEntryService } from '../../services/incentive-entry.service';
 })
 export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
   incentiveLaborChargesEntryForm: FormGroup;
+
   listLaborItems: ListLaborItems[];
 
   description: '';
+  hours: number;
+  costPerHour: number;
+  total: number;
 
   constructor(
     public fb: FormBuilder,
@@ -56,6 +60,10 @@ export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     console.log('destroyed')
+    //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
+    //send the form data to incentive dashboard
+    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRows'];
+    this.incentiveEntryService.sharedIncentiveLaborChargesInfo = control;
   }
 
   initEntryRow() {
@@ -74,7 +82,9 @@ export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
     //push values to the incentive component
     //not working. will use in the ngOnDestroy
     this.incentiveEntryService.sharedIncentiveLaborChargesInfo = control;
-    
+
+    //push the labor charges total to the incentive dashboard
+    localStorage.setItem('totalLaborChargesCalc', this.total.toString());
     this.router.navigate(['/incentive-dashboard'])
 
     return
@@ -87,6 +97,20 @@ export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
     control.push(this.initEntryRow());
 
     //add a delete row button
+  }
+
+  calculateHours(val:any) {
+    console.log(this.hours);
+  }
+
+  calculateCostPerHour(val:any) {
+    console.log(this.costPerHour);
+    this.calculateTotal(val);
+  }
+
+  calculateTotal(val:any) {
+    let totalLaborChargesCalc = this.total = this.hours * this.costPerHour;
+    this.incentiveLaborChargesEntryForm.controls.entryRows['Total'].patchValue(totalLaborChargesCalc);
   }
 
 }

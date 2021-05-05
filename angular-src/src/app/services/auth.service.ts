@@ -16,6 +16,8 @@ export class AuthService {
   user: any;
   companyName: any;
   partnerCode: any;
+  totalEquipMatCalc: any;
+  totalRecurringCalc: any;
   res: any;
 
   superAdmin: any;
@@ -167,6 +169,8 @@ export class AuthService {
     this.user = null;
     this.companyName = null;
     this.partnerCode = null;
+    this.totalEquipMatCalc = null;
+    this.totalRecurringCalc = null;
     localStorage.clear;
   }
 

@@ -110,28 +110,34 @@
                             <div class="col">
                                 <input 
                                     type="number" 
-                                    formControlName="Quantity" 
+                                    formControlName="Quantity"
+                                    [(ngModel)]="quantity" 
                                     class="form-control"
+                                    (change)="calculateQuantity($event)"
                                 >
                             </div>
                             <div class="col">
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="Cost" 
+                                    formControlName="Cost"
+                                    [(ngModel)]="cost" 
                                     placeholder="$0.00"
                                     mask="separator.2" thousandSeparator=","
                                     prefix="$"
+                                    (change)="calculateCost($event)"
                                 >
                             </div>
                             <div class="col">
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="Total" 
+                                    formControlName="Total"
+                                    [(ngModel)]="total"
                                     placeholder="$0.00"
                                     mask="separator.2" thousandSeparator=","
                                     prefix="$"
+                                    (change)="calculateTotal($event)"
                                 >
                             </div>
                             <div class="col">

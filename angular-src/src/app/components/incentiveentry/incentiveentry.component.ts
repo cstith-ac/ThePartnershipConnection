@@ -25,6 +25,10 @@ export class IncentiveentryComponent implements OnInit {
   companyName;
   partnerCode;
 
+  invoiceNumber;
+  invoiceDate;
+  invoiceTotal;
+
   customerVisit: '';
   contractResign: '';
   addRate: '';
@@ -52,6 +56,9 @@ export class IncentiveentryComponent implements OnInit {
       localStorage.removeItem('companyName');
       localStorage.removeItem('installCompanyID');
       localStorage.removeItem('partnerCode');
+      localStorage.removeItem('invoiceNumber');
+      localStorage.removeItem('invoiceDate');
+      localStorage.removeItem('invoiceTotal')
       this.router.navigate(["login"]);
     } else {
       console.log('your logged in')
@@ -90,6 +97,9 @@ export class IncentiveentryComponent implements OnInit {
       // Other: ''
       // CompanyName: ["", Validators.required],
       // PartnerCode: ["", Validators.required],
+      InvoiceNumber: ["", Validators.required],
+      InvoiceDate: ["", Validators.required],
+      InvoiceTotal: ["", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
       ClientVisit:  [false, Validators.requiredTrue],
@@ -122,6 +132,10 @@ export class IncentiveentryComponent implements OnInit {
   onSubmit(form: FormGroup) {
 
     this.submitted = true;
+
+    localStorage.setItem('invoiceNumber',this.invoiceNumber);
+    localStorage.setItem('invoiceDate',this.invoiceDate);
+    localStorage.setItem('invoiceTotal',this.invoiceTotal);
 
     this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
     this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);

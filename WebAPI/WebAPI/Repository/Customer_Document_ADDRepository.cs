@@ -42,8 +42,18 @@ namespace WebAPI.Repository
                 var customer_system_idParam = new SqlParameter("@customer_system_id", customer_Document_ADDED.customer_system_id);
                 var job_idParam = new SqlParameter("@job_id", customer_Document_ADDED.job_id);
                 var security_levelParam = new SqlParameter("@security_level", customer_Document_ADDED.security_level);
+
+                if (customer_Document_ADDED.file_name == null || customer_Document_ADDED.file_name.Length == 0)
+                {
+                    throw new System.Exception("There's no file name!");
+                }
                 var file_nameParam = new SqlParameter("@file_name", customer_Document_ADDED.file_name);
                 var file_sizeParam = new SqlParameter("@file_size", customer_Document_ADDED.file_size);
+
+                if (customer_Document_ADDED.upload_date == null)
+                {
+                    throw new System.Exception("There's no date!");
+                }
                 var upload_dateParam = new SqlParameter("@upload_date", customer_Document_ADDED.upload_date);
                 var document_extParam = new SqlParameter("@document_ext", customer_Document_ADDED.document_ext);
                 var user_codeParam = new SqlParameter("@user_code", customer_Document_ADDED.user_code);
