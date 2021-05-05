@@ -17,6 +17,7 @@ export class Customer_Document_ADD {
     reference2: string;
     reference3: string;
     reference4: string;
-    file_data: ImageBitmap;
+    //file_data: ImageBitmap;
+    file_data: File = null;
     document_id: number;
 }

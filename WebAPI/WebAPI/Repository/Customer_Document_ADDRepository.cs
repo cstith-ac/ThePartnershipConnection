@@ -36,6 +36,10 @@ namespace WebAPI.Repository
                 //connection.Open();
 
                 // define SqlParameters for the other two params to be passed
+                if (customer_Document_ADDED.company_id.ToString() == null || customer_Document_ADDED.company_id == 0)
+                {
+                    throw new System.Exception("There's no company id!");
+                }
                 var company_idParam = new SqlParameter("@company_id", customer_Document_ADDED.company_id);
                 var customer_idParam = new SqlParameter("@customer_id", customer_Document_ADDED.customer_id);
                 var customer_site_idParam = new SqlParameter("@customer_site_id", customer_Document_ADDED.customer_site_id);

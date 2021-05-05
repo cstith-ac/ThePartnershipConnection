@@ -32,6 +32,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public gridData: CustomerSearchList[];
   public gridView: CustomerSearchList[];
 
+  authToken: any;
   user:any=Object;
   userEmailAddress: '';
 
@@ -353,6 +354,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
   //   this.dataBinding.skip = 0;
   // }
+
+  loadToken() {
+    const token = localStorage.getItem('token');
+    this.authToken = token;
+  }
 
   //filter cancelled customers or by customerStatus (active or cancel)
   onItemChangeToInclude(value) {
@@ -778,46 +784,73 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // )
   
     //append required parameters to the frmData
-    const frmData = new FormData();
+    let frmData = new FormData();
     
-    frmData.append('@company_id', this.installCompanyID);
+    frmData.append('company_id', form.get('InstallCompanyID').value);
+    //frmData.append('@company_id', this.installCompanyID);
+    frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
     // frmData.append('@customer_id', this.customer_id);
-    frmData.append('@customer_id', '74004');
-    frmData.append('@customer_site_id', this.customersiteid);
-    frmData.append('@customer_system_id', this.customer_System_id);
+    //frmData.append('@customer_id', '74004');
+
+    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //frmData.append('@customer_site_id', this.customersiteid);
+
+    frmData.append('customer_system_id', this.incentiveDashboardForm.get('System').value);
+    //frmData.append('@customer_system_id', this.customer_System_id);
+    
     // frmData.append('@job_id', this.job_id);
-    frmData.append('@job_id', '19');
-    frmData.append('@security_level', this.security_level);
-    frmData.append('@file_name', this.file_name);
+    frmData.append('job_id', '19');
+    frmData.append('security_level', this.security_level);
+    frmData.append('file_name', this.file_name);
     //frmData.append('@file_name', 'test file name');
-    frmData.append('@file_size', this.file_size);
-    //frmData.append('@upload_date', this.invoiceDate);
-    frmData.append('@upload_date', '5/4/2021 12:00:00 AM');
-    frmData.append('@document_ext', '*Contracts');
-    frmData.append('@user_code', 'PPC');
-    frmData.append('@user_description', 'Test');
-    frmData.append('@reference1', null);
-    frmData.append('@reference2', null);
-    frmData.append('@reference3', null);
-    frmData.append('@reference4', null);
+    frmData.append('file_size', this.file_size);
+    frmData.append('upload_date', this.invoiceDate);
+    //frmData.append('upload_date', '5/4/2021 12:00:00 AM');
+    frmData.append('document_ext', '*Contracts');
+    frmData.append('user_code', 'PPC');
+    frmData.append('user_description', 'Test 3');
+    frmData.append('reference1', null);
+    frmData.append('reference2', null);
+    frmData.append('reference3', null);
+    frmData.append('reference4', null);
     // frmData.append('@file_data', this.myFiles[i]);
-    frmData.append('@document_id', '1');
+    // frmData.append('@document_id', '1');
 
     for (var i = 0; i < this.myFiles.length; i++) {
-      frmData.append("@file_data", this.myFiles[i]);
+      frmData.append("file_data", this.myFiles[i]);
       console.log(frmData)
     }
+    //frmData.append('@file_data', this.myFiles[i]);
+    frmData.append('document_id', '1');
+
+    // Display the key/value pairs
+    console.log(Object.entries(frmData));//returns an empty array!
+    var options = {content: frmData};
 
     //submit this after the job id is returned
-    let httpOptions = {
-      headers: new HttpHeaders(
-          { 
-            'Accept': 'application/json',
-            'Authorization':'Bearer '+ 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI3MCIsIkFmYVJvbGUiOiI1IiwiQWZhdXNlckxpbmsiOiJ0ZXN0IiwibmJmIjoxNjIwMTM0NTU5LCJleHAiOjE2MjAyMjA5NTksImlhdCI6MTYyMDEzNDU1OX0.N7tfYie7sMTzNoQpzZ4AbNSgLuiyVO3KCSsJPakMbCg'
-          }
-        )
-    };
-    this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData,httpOptions).subscribe(
+    // const httpOptions = {
+    //   headers: new HttpHeaders(
+    //       { 
+    //         //'Content-Type': 'application/json',
+    //         'Content-Type': 'multipart/form-data',
+    //         'Referer': 'http://localhost:4200',
+    //         'Origin': 'http://localhost:4200',
+    //         'Accept': 'application/json',
+    //         //'Accept': '*/*',
+    //         'Authorization':'Bearer '+ this.loadToken()
+    //       }
+    //     )
+    //     //,responseType: 'text' as const
+    //     //.set('content-type','application/json').set('content-length','6')
+    // };
+    const headers = new HttpHeaders();
+    headers.append('Content-Type','multipart/form-data');
+    headers.append('Authorization','Bearer '+ this.loadToken());
+    headers.append('Accept', 'application/json');
+    this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData, {
+      headers:headers,
+      responseType: 'text'
+    }).subscribe(
       data => {
         debugger
         console.log(data);
@@ -837,7 +870,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       //get the file name
       //this.file_name = e.target.files[i].name;
-      this.file_name = 'test file name';
+      this.file_name = 'test file name 3';
       //get the file size
       this.file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;

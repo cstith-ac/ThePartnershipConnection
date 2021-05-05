@@ -37,6 +37,7 @@ namespace WebAPI.Controllers
                     customer_Document_ADDED.file_data = fileContent;
                     var result = await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED);
                     return Ok(result);
+                    //return new ObjectResult(result);
                 }
             }
 
