@@ -298,10 +298,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   console.log(item +" = "+this.incentiveEntryService.sharedIncentiveRecurringInfo[item])
     // }
     //console.log('ngAfterViewChecked was called from ' + this.activatedRoute.url)
-    this.recurring = localStorage.getItem('totalRecurringCalc');
-    this.equipmentAndMaterials = localStorage.getItem('totalEquipMatCalc');
-    this.laborCharges = localStorage.getItem('totalLaborChargesCalc');
-    this.installCompanyID = localStorage.getItem('installCompanyID');
+    // if(localStorage.getItem('totalRecurringCalc')) {
+    //   this.recurring = localStorage.getItem('totalRecurringCalc');
+    // }
+    // if(localStorage.getItem('totalEquipMatCalc')) {
+    //   this.equipmentAndMaterials = localStorage.getItem('totalEquipMatCalc');
+    // }
+    // if(localStorage.getItem('totalLaborChargesCalc')) {
+    //   this.laborCharges = localStorage.getItem('totalLaborChargesCalc');
+    // }
+    // this.installCompanyID = localStorage.getItem('installCompanyID');
     
     //add the lines (if applicable)
     if(this.recurring > 0) {
@@ -768,6 +774,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // confirm('Click ok to confirm form submission')
 
+    // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
     // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
     //   result => {
     //     console.log(result)
@@ -775,6 +782,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   this.job_id = result
     //   },
     //   //error => console.log('error: ', error);
+    // )
+
+    // this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
+    // )
+
+    // this.routeService.postIncentive_Add_Equipment(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
+    // )
+
+    // this.routeService.postIncentive_Add_Labor(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
     // )
 
     // this.routeService.postCustomerDocumentADD(this.incentiveDashboardForm.value).subscribe(
@@ -786,23 +814,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //append required parameters to the frmData
     let frmData = new FormData();
     
-    frmData.append('company_id', form.get('InstallCompanyID').value);
-    //frmData.append('@company_id', this.installCompanyID);
+    //37 = Sandbox, 6 = Production
+    frmData.append('company_id','37');
+
     frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-    // frmData.append('@customer_id', this.customer_id);
-    //frmData.append('@customer_id', '74004');
 
     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-    //frmData.append('@customer_site_id', this.customersiteid);
 
     frmData.append('customer_system_id', this.incentiveDashboardForm.get('System').value);
-    //frmData.append('@customer_system_id', this.customer_System_id);
     
     // frmData.append('@job_id', this.job_id);
     frmData.append('job_id', '19');
     frmData.append('security_level', this.security_level);
+
+    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
     frmData.append('file_name', this.file_name);
-    //frmData.append('@file_name', 'test file name');
     frmData.append('file_size', this.file_size);
     frmData.append('upload_date', this.invoiceDate);
     //frmData.append('upload_date', '5/4/2021 12:00:00 AM');

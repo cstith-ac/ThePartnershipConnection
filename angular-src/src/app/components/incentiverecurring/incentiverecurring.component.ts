@@ -13,7 +13,7 @@ import { Incentive_Add_Recurring } from '../../models/incentiveaddrecurring';
   templateUrl: './incentiverecurring.component.html',
   styleUrls: ['./incentiverecurring.component.css']
 })
-export class IncentiverecurringComponent implements OnInit, OnDestroy {
+export class IncentiverecurringComponent implements OnInit {
   incentiveRecurringEntryForm: FormGroup;
 
   listRecurringItems: ListRecurringItems[];
@@ -37,21 +37,21 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     private incentiveEntryService: IncentiveEntryService,
     private currencyPipe: CurrencyPipe
   ) { 
-    this.incentiveRecurringEntryForm = this.fb.group({
-      entry: this.fb.array([
-        this.fb.group({
-          ItemID: ["", Validators.required],
-          Description: ["", Validators.required],
-          BillCycle: ["", Validators.required],
-          RMR: ["", Validators.required],
-          PassThrough: ["", Validators.required],
-          BillingStartDate: ["", Validators.required],
-          Add2Item: [""],
-          Multiple: ["", Validators.required],
-          Total: ["", Validators.required]
-        })
-      ])
-    })
+    // this.incentiveRecurringEntryForm = this.fb.group({
+    //   entry: this.fb.array([
+    //     this.fb.group({
+    //       ItemID: ["", Validators.required],
+    //       Description: ["", Validators.required],
+    //       BillCycle: ["", Validators.required],
+    //       RMR: ["", Validators.required],
+    //       PassThrough: ["", Validators.required],
+    //       BillingStartDate: ["", Validators.required],
+    //       Add2Item: [""],
+    //       Multiple: ["", Validators.required],
+    //       Total: ["", Validators.required]
+    //     })
+    //   ])
+    // })
   }
 
   ngOnInit() {
@@ -121,14 +121,14 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnDestroy(){
-    console.log('destroyed')
-    //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
-    //send the form data to incentive dashboard
-    const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
-    this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
-    //submit this form from the incentive dashboard
-  }
+  // ngOnDestroy(){
+  //   console.log('destroyed')
+  //   //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
+  //   //send the form data to incentive dashboard
+  //   const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
+  //   this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
+  //   //submit this form from the incentive dashboard
+  // }
 
   initEntryRow() {
     return this.fb.group({
@@ -152,7 +152,7 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
     //this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
     
     //push the recurring total to the incentive dashboard component
-    localStorage.setItem('totalRecurringCalc',this.total.toString());
+    // localStorage.setItem('totalRecurringCalc',this.total.toString());
     this.router.navigate(['/incentive-dashboard'])
     return
 
@@ -160,12 +160,23 @@ export class IncentiverecurringComponent implements OnInit, OnDestroy {
   }
 
   //whenever user clicks add new item, a new element should be inserted into the formArray
-  addNewItem(form: FormGroup) {
-    console.log('add')
-    const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
-    control.push(this.initEntryRow());
+  // addNewItem(form: FormGroup) {
+  //   console.log('add')
+  //   const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
+  //   control.push(this.initEntryRow());
+
+  //   //add a delete row button
+  // }
+  addNewItem():void {
+    (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
+    .push(this.initEntryRow());
 
     //add a delete row button
+  }
+
+  removeNewItem(i: number) {
+    const control = (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
+    .removeAt(i);
   }
 
   calculateRMR(val:any){

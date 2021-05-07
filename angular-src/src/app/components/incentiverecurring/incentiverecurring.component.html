@@ -301,7 +301,7 @@
                 <span class="align-middle">Total</span>
               </div>
               <div class="col"></div>
-              <div class="col"></div>
+              <!-- <div class="col"></div> -->
             </header>
 
             <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onSubmit(incentiveRecurringEntryForm)">
@@ -335,12 +335,12 @@
                                 type="text"
                                 class="form-control"
                                 formControlName="RMR"
-                                [(ngModel)]="rmr"
+                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                (change)="calculateRMR($event)"
+                                
                               >
                             </div>
                             <div class="col">
@@ -348,12 +348,12 @@
                                 type="text"
                                 class="form-control" 
                                 formControlName="PassThrough"
-                                [(ngModel)]="passThrough"
+                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                (change)="calculatePassThrough($event)"
+                                
                               >
                             </div>
                             <div class="col">
@@ -372,7 +372,7 @@
                             </div>
                             <div class="col text-center">
                               <div class="dropdown">
-                                  <select formControlName="Multiple" [(ngModel)]="multiple" class="form-control" (change)="calculateMultiple($event)">
+                                  <select formControlName="Multiple"  class="form-control" >
                                       <option
                                           *ngFor="let m of listMultiples" 
                                           value="{{m.multiple}}" 
@@ -386,26 +386,39 @@
                                 type="text"
                                 class="form-control"
                                 formControlName="Total"
-                                [(ngModel)]="total"
+                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                (change)="calculateTotal($event)"
+                                
                               >
                             </div>
-                            <div class="col">
+                            <!-- <div class="col">
                                 <button class="btn btn-add" (click)="addNewItem(incentiveRecurringEntryForm)">
+                                    <i class="fas fa-plus pr-1"></i>Add
+                                </button>
+                            </div> -->
+                            <div class="col">
+                                <button class="btn btn-add" type="button" (click)="addNewItem()">
                                     <i class="fas fa-plus pr-1"></i>Add
                                 </button>
                             </div>
                             <div class="col">
+                                <button class="btn btn-add" type="button" *ngIf="incentiveRecurringEntryForm.controls.entryRows['controls'].length > 1" (click)="removeNewItem(i)">
+                                    <i class="fas fa-plus pr-1"></i>Remove
+                                </button>
+                            </div>
+                            <!-- <div class="col">
                                 <button class="btn btn-submit" (click)="onSubmit(incentiveRecurringEntryForm)">
                                     <i class="fas fa-upload pr-1"></i>Submit
                                 </button>
-                            </div>
+                            </div> -->
                           </div>
                     </div>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Submit" class="btn btn-submit" (click)="onSubmit(incentiveRecurringEntryForm)">
                 </div>
             </form>
           </section>

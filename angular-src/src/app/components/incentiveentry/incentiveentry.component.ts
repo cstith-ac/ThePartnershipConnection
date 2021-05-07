@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
@@ -27,7 +28,7 @@ export class IncentiveentryComponent implements OnInit {
 
   invoiceNumber;
   invoiceDate;
-  invoiceTotal;
+  invoiceTotal;//currencypipe
 
   customerVisit: '';
   contractResign: '';
@@ -42,6 +43,7 @@ export class IncentiveentryComponent implements OnInit {
   other: '';
 
   constructor(
+    private currencyPipe: CurrencyPipe,
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
     private incentiveEntryService: IncentiveEntryService,
@@ -119,6 +121,12 @@ export class IncentiveentryComponent implements OnInit {
       SystemTransfer:  [false, Validators.requiredTrue],
       //Other:  [true, Validators.requiredTrue]
     })
+  }
+
+  transformAmount(element) {
+    this.invoiceTotal = this.currencyPipe.transform(this.invoiceTotal, '$');
+
+    element.target.value = this.invoiceTotal;
   }
 
   // routeToIncentiveDashboard() {
