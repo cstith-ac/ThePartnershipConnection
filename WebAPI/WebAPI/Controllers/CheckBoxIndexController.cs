@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CheckBoxIndex>>> GetCheckBoxIndices()
         {
             return await db.GetCheckBoxIndexes.ToListAsync();

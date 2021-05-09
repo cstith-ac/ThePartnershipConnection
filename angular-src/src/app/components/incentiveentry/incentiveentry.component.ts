@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { IncentiveEntry } from '../../models/incentiveentry';
 import { InstallCompanyList } from '../../models/installcompanylist';
+import { CheckBoxIndex } from '../../models/checkboxindex';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -20,6 +21,7 @@ export class IncentiveentryComponent implements OnInit {
 
   incentiveEntry: IncentiveEntry[];
   installCompanyList: InstallCompanyList[];
+  checkBoxIndex: CheckBoxIndex[];
   incentiveEntryForm: FormGroup;
   submitted = false;
   installCompanyID;
@@ -41,6 +43,9 @@ export class IncentiveentryComponent implements OnInit {
   newSite: '';
   systemTransfer: '';
   other: '';
+  show: boolean = true;
+  id;
+  checkBoxName;
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -85,41 +90,45 @@ export class IncentiveentryComponent implements OnInit {
       }
     )
 
+    this.routeService.getCheckBoxIndex().subscribe(
+      res => {
+        // this.checkBoxIndex = res;
+        res.forEach(e => {
+          //this.checkBoxIndex.push(e)
+          this.checkBoxIndex = res;
+
+          this.checkBoxIndex.forEach((o,i) => {
+            //console.log(i);
+
+          })
+
+          this.id = e.id;
+          this.checkBoxName = e.checkBoxName;
+
+          //console.log(e.id)
+          //console.log(e.checkBoxName)
+        })
+      }
+    )
+
     this.incentiveEntryForm = this.fb.group({
-      // CustomerVisit: '',
-      // ContractResign: '',
-      // AddRate: '',
-      // LteUpgrade: '',
-      // LandlineToCellConversion: '',
-      // SystemReprogram: '',
-      // ServicePerformed: '',
-      // SitePickup: '',
-      // NewSite: '',
-      // SystemTransfer: '',
-      // Other: ''
-      // CompanyName: ["", Validators.required],
-      // PartnerCode: ["", Validators.required],
       InvoiceNumber: ["", Validators.required],
       InvoiceDate: ["", Validators.required],
       InvoiceTotal: ["", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
-      ClientVisit:  [false, Validators.requiredTrue],
-      AdoptionVisit: [false, Validators.requiredTrue],
-      NoPhoneNoProblem: [false, Validators.requiredTrue],
-      ContractResign:  [false, Validators.requiredTrue],
-      Reprogram:  [false, Validators.requiredTrue],
-      //AddRate:  [true, Validators.requiredTrue],
-      LteUpgrade:  [false, Validators.requiredTrue],
-      AddNewRMRorService: [false, Validators.requiredTrue],
-      PickUp: [false, Validators.requiredTrue],
-      //LandlineToCellConversion:  [true, Validators.requiredTrue],
-      //SystemReprogram:  [true, Validators.requiredTrue],
-      //ServicePerformed:  [true, Validators.requiredTrue],
-      //SitePickup:  [false, Validators.requiredTrue],
-      NewSite:  [false, Validators.requiredTrue],
-      SystemTransfer:  [false, Validators.requiredTrue],
-      //Other:  [true, Validators.requiredTrue]
+      ClientVisit:  [false, Validators.required],
+      AdoptionVisit: [false, Validators.required],
+      LandlineToCell:  [false, Validators.required],
+      ContractResign:  [false, Validators.required],
+      Reprogram:  [false, Validators.required],
+      LteUpgrade:  [false, Validators.required],
+      AddNewRMRorService: [false, Validators.required],
+      PickUp: [false, Validators.required],
+      NewSite:  [false, Validators.required],
+      SystemTransfer:  [false, Validators.required],
+      CreditCardAutoPay: [false, Validators.requiredTrue],
+      ACHAutopay: [false, Validators.requiredTrue]
     })
   }
 
@@ -141,24 +150,54 @@ export class IncentiveentryComponent implements OnInit {
 
     this.submitted = true;
 
-    localStorage.setItem('invoiceNumber',this.invoiceNumber);
-    localStorage.setItem('invoiceDate',this.invoiceDate);
-    localStorage.setItem('invoiceTotal',this.invoiceTotal);
+    // localStorage.setItem('invoiceNumber',this.invoiceNumber);
+    // localStorage.setItem('invoiceDate',this.invoiceDate);
+    // localStorage.setItem('invoiceTotal',this.invoiceTotal);
 
-    this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
-    this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);
+    // this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
+    // this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);
 
-    this.incentiveEntry = this.incentiveEntryForm.value;
+    // this.incentiveEntry = this.incentiveEntryForm.value;
 
-    this.incentiveEntryService.sharedIncentiveInfo = this.incentiveEntry;
+    // this.incentiveEntryService.sharedIncentiveInfo = this.incentiveEntry;
 
-    this.incentiveEntryOutput.emit(this.incentiveEntry);
+    // this.incentiveEntryOutput.emit(this.incentiveEntry);
     //this.incentiveEntryOutput.emit('testing data');
 
-    //console.log(this.incentiveEntryForm.value);
+    console.log(this.incentiveEntryForm.value);
     //console.log(Object.values(this.incentiveEntry))
-    //return;
+    return;
     this.router.navigate(["/incentive-dashboard"]);
+  }
+
+  onChangeCC(e) {
+    if(e.target.checked) {
+      this.incentiveEntryForm.controls['ACHAutopay'].disable();
+    } 
+    if(!e.target.checked) {
+      this.incentiveEntryForm.controls['ACHAutopay'].enable();
+    }
+  }
+
+  onChangeACH(e) {
+    if(e.target.checked) {
+      this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
+    } 
+    if(!e.target.checked) {
+      this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
+    }
+  }
+
+  onChangeClientVisit(e) {
+    if(e.target.checked) {
+      // console.log('checked: '+ e.target.id)
+      // console.log('checked: '+ e.target.checkBoxName)
+      console.log('checked: '+ e.target.value)
+    } else {
+      // console.log('unchecked: ' + e.target.id)
+      // console.log('unchecked: ' + e.target.checkBoxName)
+      console.log('unchecked: '+ e.target.value)
+    }
   }
 
 }

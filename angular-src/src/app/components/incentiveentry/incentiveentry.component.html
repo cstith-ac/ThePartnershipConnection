@@ -7,7 +7,86 @@
                 </div>
             </div>
         </div>
-        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)" #IncentiveInfo="ngForm">
+
+        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)">
+            <!-- <div class="row">
+                <div class="col-md-4" *ngFor="let box of checkBoxIndex; let i=index">
+                    <label>{{box.checkBoxName}}</label>
+                        <input 
+                            type="checkbox" 
+                            name="{{box.id}}" 
+                            [value]="box.id"
+                            (change)="onChangeClientVisit($event)"
+                        >
+                </div>
+            </div> -->
+            <!-- <div class="col-md-4" *ngFor="let box of checkBoxIndex; let i=index">
+                <label>{{box.checkBoxName}}</label>
+                    <input 
+                        type="checkbox" 
+                        name="{{box.id}}" 
+                        [value]="box.id"
+                        (change)="onChangeClientVisit($event)"
+                    >
+            </div> -->
+            <ng-container *ngFor="let box of checkBoxIndex; let i=index">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div *ngIf="box.id&lt;=6">
+                            <label>{{box.checkBoxName}}</label>
+                            <input 
+                                type="checkbox" 
+                                name="{{box.id}}" 
+                                [value]="box.id"
+                                (change)="onChangeClientVisit($event)"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div *ngIf="box.id&gt;6 && box.id&lt;11">
+                            <label>{{box.checkBoxName}}</label>
+                            <input 
+                                type="checkbox" 
+                                name="{{box.id}}" 
+                                [value]="box.id"
+                                (change)="onChangeClientVisit($event)"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div *ngIf="box.id&gt;10">
+                            <label>{{box.checkBoxName}}</label>
+                            <input 
+                                type="checkbox" 
+                                name="{{box.id}}" 
+                                [value]="box.id"
+                                (change)="onChangeClientVisit($event)"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- <label>{{box.checkBoxName}}</label>
+                    <input 
+                        type="checkbox" 
+                        name="{{box.id}}" 
+                        [value]="box.id"
+                        (change)="onChangeClientVisit($event)"
+                    > -->
+            </ng-container>
+        </form>
+        
+        <!-- <div class="row ml-0">
+            <div class="col-md-12">
+                <div class="row" *ngFor="let item of installCompanyList">
+                    <h1 class="incentive-header">Incentive Entry | <span class="company">{{ item.companyName }} - {{ item.partnerCode}}</span></h1>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)" #IncentiveInfo="ngForm" *ngFor="let c of checkBoxIndex">
+            {{checkBoxName}}
             <div class="row form-inline mt-5 mb-5">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -59,6 +138,9 @@
                             type="checkbox"
                             formControlName="ClientVisit"
                             class="form-check-input"
+                            
+                            (change)="onChangeClientVisit($event)"
+                            [id]="c.id"
                         >
                     </div>
 
@@ -68,6 +150,7 @@
                             type="checkbox"
                             formControlName="AdoptionVisit"
                             class="form-check-input"
+                            [id]="c.id"
                         >
                     </div>
 
@@ -75,8 +158,9 @@
                         <label>No Phone No Problem</label>
                         <input 
                             type="checkbox"
-                            formControlName="NoPhoneNoProblem"
+                            formControlName="LandlineToCell"
                             class="form-check-input"
+                            [id]="c.id"
                         >
                     </div>
 
@@ -150,14 +234,18 @@
                         <label>Credit Card</label>
                         <input 
                             type="checkbox"
+                            formControlName="CreditCardAutoPay"
                             class="form-check-input"
+                            (change)="onChangeCC($event)"
                         >
                     </div>
                     <div class="form-group btn-group mt-3 mb-3">
                         <label>ACH</label>
                         <input 
                             type="checkbox"
+                            formControlName="ACHAutopay"
                             class="form-check-input"
+                            (change)="onChangeACH($event)"
                         >
                     </div>
                 </div>
@@ -168,6 +256,6 @@
                     <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(IncentiveInfo.value)">Start Incentive</button>
                 </div>
             </div>
-        </form>
+        </form> -->
     </div>
 </div>
