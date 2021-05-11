@@ -93,7 +93,7 @@ export class IncentiveequipmatComponent implements OnInit {
     // console.log(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Total);
 
     //localStorage.setItem('totalEquipMatCalc', this.total.toString());
-    //this.router.navigate(['/incentive-dashboard'])
+    this.router.navigate(['/incentive-dashboard'])
     return
 
     control.push(this.initEntryRow());

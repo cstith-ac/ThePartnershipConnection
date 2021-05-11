@@ -13,7 +13,7 @@ import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
   styleUrls: ['./incentivelaborcharges.component.css']
 })
 export class IncentivelaborchargesComponent implements OnInit {
-  @Input laborchargesForDashboard: { ItemID: number; Description: string; Hours: number; CostPerHour: number; Total: number }
+  @Input() laborchargesForDashboard: { ItemID: number; Description: string; Hours: number; CostPerHour: number; Total: number }
 
   incentiveLaborChargesEntryForm: FormGroup;
 
@@ -96,7 +96,7 @@ export class IncentivelaborchargesComponent implements OnInit {
     console.log(JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRows'].value));
     console.log(this.incentiveLaborChargesEntryForm.get('entryRows').value);
     localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.value));
-    //this.router.navigate(['/incentive-dashboard'])
+    this.router.navigate(['/incentive-dashboard'])
     return
   }
 
@@ -114,13 +114,12 @@ export class IncentivelaborchargesComponent implements OnInit {
   }
 
   calculateHours(val:any) {
-    console.log(this.hours);
-    this.calculateHours = this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours;
+    this.calculateHours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
+    console.log(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
   }
 
   calculateCostPerHour(val:any) {
-    console.log(this.costPerHour);
-    this.costPerHour = this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour;
+    this.costPerHour = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour);
     this.calculateTotal(val);
   }
 

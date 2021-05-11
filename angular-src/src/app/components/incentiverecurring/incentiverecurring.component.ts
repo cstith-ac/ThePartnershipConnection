@@ -124,15 +124,6 @@ export class IncentiverecurringComponent implements OnInit {
     )
   }
 
-  // ngOnDestroy(){
-  //   console.log('destroyed')
-  //   //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
-  //   //send the form data to incentive dashboard
-  //   const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
-  //   this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
-  //   //submit this form from the incentive dashboard
-  // }
-
   initEntryRow() {
     return this.fb.group({
       ItemID: ["", Validators.required],
@@ -141,7 +132,7 @@ export class IncentiverecurringComponent implements OnInit {
       RMR: ["", Validators.required],
       PassThrough: ["", Validators.required],
       BillingStartDate: ["", Validators.required],
-      Add2Item: [""],
+      Add2Item: [0],
       Multiple: ["", Validators.required],
       Total: ["", Validators.required]
     })
@@ -161,7 +152,7 @@ export class IncentiverecurringComponent implements OnInit {
     //push the recurring total to the incentive dashboard component
     // the parameters itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item are needed in the dashboard component to submit from the submit event
     //console.log(this.incentiveRecurringEntryForm.controls.entryRows['controls'].get('ItemID'))
-    this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Total);
+    this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Total);
     //debugger
     
     console.log(JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value));
@@ -177,7 +168,7 @@ export class IncentiverecurringComponent implements OnInit {
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple);
 
     // localStorage.setItem('totalRecurringCalc',this.total.toString());
-    //this.router.navigate(['/incentive-dashboard'])
+    this.router.navigate(['/incentive-dashboard'])
     return
 
     control.push(this.initEntryRow());
@@ -229,6 +220,21 @@ export class IncentiverecurringComponent implements OnInit {
 
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
     controlArray.controls[0].get('Total').setValue(this.totalRecurringCalc);
+  }
+
+  checkboxChanged(e) {
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+    let currentVal = controlArray.controls[0].get('Add2Item').value;
+    console.log(currentVal)
+    if(currentVal === true) {
+      console.log('change to 1')
+      controlArray.controls[0].get('Add2Item').setValue(1);
+    }
+    else if(currentVal === false) {
+      console.log('change to 0')
+      controlArray.controls[0].get('Add2Item').setValue(0);
+    } 
+    
   }
 
   // transformAmount(element) {

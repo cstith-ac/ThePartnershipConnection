@@ -33,6 +33,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public gridData: CustomerSearchList[];
   public gridView: CustomerSearchList[];
 
+  updateRecurringWithJobID;
+  updateEquipMatWithJobID;
+  updateLaborChargesWithJobID;
+  updateRecurringStoredProc;
+  updateEquipMatStoredProc;
+  updateLaborChargesStoredProc;
+
   authToken: any;
   user:any=Object;
   userEmailAddress: '';
@@ -154,7 +161,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('totalLaborChargesCalc');
       this.router.navigate(["login"]);
     } else {
-      console.log('your logged in')
+      //console.log('your logged in')
     }
 
     //console.log(this.incentiveEntryService.sharedIncentiveInfo)//object
@@ -339,29 +346,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   ngOnDestroy(){
     //console.log('ngOnDestroy was called ' + this.activatedRoute.url)
   }
-
-  // public onFilter(inputValue: string): void {
-  //   console.log(inputValue)
-  //   this.gridView = process(this.gridData, {
-  //       filter: {
-  //           logic: "or",
-  //           filters: [
-  //               {
-  //                   field: 'customer_Number',
-  //                   operator: 'contains',
-  //                   value: inputValue
-  //               },
-  //               {
-  //                   field: 'customer_Name',
-  //                   operator: 'contains',
-  //                   value: inputValue
-  //               },
-  //           ],
-  //       }
-  //   }).data;
-    
-  //   this.dataBinding.skip = 0;
-  // }
 
   loadToken() {
     const token = localStorage.getItem('token');
@@ -745,74 +729,138 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onSubmit(form: FormGroup) {
     //Incentive_ADD_Start
-    console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
-    console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
-    //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
-    // console.log('@CustomerSiteID :' + parseInt(form.value.Site)) // @CustomerSiteID Int,
-    console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
-    console.log('@CustomerSystemID :' + parseInt(form.value.System)) // @CustomerSystemID Int,
-    console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
-    console.log('@SystemTypeID :' + parseInt(form.value.SystemType)) // @SystemTypeID Int,
-    console.log('@PanelTypeID :' + parseInt(form.value.PanelType)) // @PanelTypeID Int,
-    console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
-    console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
-    console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
-    console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
-    console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
-    console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+    // console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
+    // console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
+    // //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
+    // // console.log('@CustomerSiteID :' + parseInt(form.value.Site)) // @CustomerSiteID Int,
+    // console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
+    // console.log('@CustomerSystemID :' + parseInt(form.value.System)) // @CustomerSystemID Int,
+    // console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
+    // console.log('@SystemTypeID :' + parseInt(form.value.SystemType)) // @SystemTypeID Int,
+    // console.log('@PanelTypeID :' + parseInt(form.value.PanelType)) // @PanelTypeID Int,
+    // console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
+    // console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+    // console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    // console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
+    // console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
+    // console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
+    // console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
 
-    //console.log(form.value.RenewalMonths) // @RenewalMonths Int,
-    console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
-    //console.log(form.value.) // @ServiceIncluded NVarChar(2),
-    console.log('@ServiceIncluded :' + this.serviceIncluded);
+    // //console.log(form.value.RenewalMonths) // @RenewalMonths Int,
+    // console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
+    // //console.log(form.value.) // @ServiceIncluded NVarChar(2),
+    // console.log('@ServiceIncluded :' + this.serviceIncluded);
 
-    console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
+    // console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
-    //Replaces CustomerID with customer_id from the database instead of the customer_Name
-    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
-    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.siteName);
-    // debugger
-    // return
+    // //Replaces CustomerID with customer_id from the database instead of the customer_Name
+    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
+    // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.siteName);
 
-    confirm('Click ok to confirm form submission')
+    // confirm('Click ok to confirm form submission')
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
-    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+    // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     console.log(result)
+    //     //returns the job id
+    //     this.job_id = result;
+    //     //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
+    //     this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
+    //       result => {
+    //         console.log(result)
+    //       }
+    //     )
+    //   }
+    // )
+    
+    let getRecurringService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveRecurringInfo);
+    let recurringItemID = getRecurringService.ItemID;
+    let recurringDescription = getRecurringService.Description;
+    let recurringBillCycle = getRecurringService.BillCycle;
+    let recurringRMR = getRecurringService.RMR;
+    let recurringPassThrough = getRecurringService.PassThrough;
+    let recurringBillingStartDate = getRecurringService.BillingStartDate;
+    let recurringMultiple = getRecurringService.Multiple;
+    let recurringAdd2Item = getRecurringService.Add2Item;
+    let recurringTotal = getRecurringService.Total;
+
+    let getEquipMatService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveEquipMatInfo);
+    let equipMatItemID = getEquipMatService.ItemID;
+    let equipMatDescription = getEquipMatService.Description;
+    let equipMatQuantity = getEquipMatService.Quantity;
+    let equipMatCost = getEquipMatService.Cost;
+
+     var addToObject = function (obj, key, value) {
+
+      // Create a temp object and index variable
+      var temp = {};
+      var i = 0;
+    
+      // Loop through the original object
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+    
+          // If the indexes match, add the new item
+          if (i === key && value) {
+            temp[key] = value;
+          }
+    
+          // Add the current item in the loop to the temp obj
+          temp[prop] = obj[prop];
+    
+          // Increase the count
+          i++;
+    
+        }
+      }
+    
+      // If no index, add to the end
+      if (key && value) {
+        temp[key] = value;
+      }
+    
+      return temp;
+    
+    };
+    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19)
+    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
+    var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
+
+    this.updateRecurringStoredProc = {
+      ...this.updateRecurringWithJobID
+    }
+    this.updateEquipMatStoredProc = {
+      ...this.updateEquipMatWithJobID
+    }
+    this.updateLaborChargesStoredProc = {
+      ...this.updateLaborChargesWithJobID
+    }
+    //console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]);
+    //console.log(this.updateRecurringStoredProc)
+
+    //working
+    // this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
+    // )
+
+    //working
+    // this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
+    // )
+
+    this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
       result => {
         console.log(result)
-        //returns the job id
-        this.job_id = result;
-        //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
-        this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
-          result => {
-            console.log(result)
-          }
-        )
       },
-      //error => console.log('error: ', error);
+      error => console.log('error: ', error)
     )
-
-    // this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
-    //   result => {
-    //     console.log(result)
-    //   },
-    //   error => console.log('error: ', error)
-    // )
-
-    // this.routeService.postIncentive_Add_Equipment(this.incentiveDashboardForm.value).subscribe(
-    //   result => {
-    //     console.log(result)
-    //   },
-    //   error => console.log('error: ', error)
-    // )
-
-    // this.routeService.postIncentive_Add_Labor(this.incentiveDashboardForm.value).subscribe(
-    //   result => {
-    //     console.log(result)
-    //   },
-    //   error => console.log('error: ', error)
-    // )
 
     // this.routeService.postCustomerDocumentADD(this.incentiveDashboardForm.value).subscribe(
     //   result => {
@@ -885,22 +933,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // };
 
     return
-    const headers = new HttpHeaders();
-    headers.append('Content-Type','multipart/form-data');
-    headers.append('Authorization','Bearer '+ this.loadToken());
-    headers.append('Accept', 'application/json');
-    this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData, {
-      headers:headers,
-      responseType: 'text'
-    }).subscribe(
-      data => {
-        debugger
-        console.log(data);
-      },
-      (err: HttpErrorResponse) => {
-        console.log(err.message); //Show error, if any
-      }
-    )
+    // const headers = new HttpHeaders();
+    // headers.append('Content-Type','multipart/form-data');
+    // headers.append('Authorization','Bearer '+ this.loadToken());
+    // headers.append('Accept', 'application/json');
+    // this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData, {
+    //   headers:headers,
+    //   responseType: 'text'
+    // }).subscribe(
+    //   data => {
+    //     debugger
+    //     console.log(data);
+    //   },
+    //   (err: HttpErrorResponse) => {
+    //     console.log(err.message); //Show error, if any
+    //   }
+    // )
   }
 
   //Test file upload
