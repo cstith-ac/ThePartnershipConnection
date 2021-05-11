@@ -3,5 +3,6 @@ export class Incentive_Add_Equipment {
     itemID: number;
     description: string;
     quantity: number;
-    cost: number; 
+    cost: number;
+    total: number; 
 }

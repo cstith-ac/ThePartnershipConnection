@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { CurrencyPipe, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ListRecurringItems } from 'src/app/models/listrecurringitems';
@@ -14,6 +14,8 @@ import { Incentive_Add_Recurring } from '../../models/incentiveaddrecurring';
   styleUrls: ['./incentiverecurring.component.css']
 })
 export class IncentiverecurringComponent implements OnInit {
+  @Input() recurringForDashboard: { ItemID: number; Description: string; BillCycle: string; RMR: number; PassThrough: number; BillingStartDate: Date; Multiple: number; Add2Item: number; Total: number }
+  
   incentiveRecurringEntryForm: FormGroup;
 
   listRecurringItems: ListRecurringItems[];
@@ -29,6 +31,7 @@ export class IncentiverecurringComponent implements OnInit {
   addToAnExistingRMRItem: '';
   multiple: number;
   total: number;
+  totalRecurringCalc;
 
   constructor(
     public fb: FormBuilder,
@@ -144,6 +147,10 @@ export class IncentiverecurringComponent implements OnInit {
     })
   }
 
+  get r():FormArray {
+    return this.incentiveRecurringEntryForm.get('entryRows') as FormArray;
+  }
+
   onSubmit(form: FormGroup) {
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
@@ -152,8 +159,25 @@ export class IncentiverecurringComponent implements OnInit {
     //this.incentiveEntryService.sharedIncentiveRecurringInfo = control;
     
     //push the recurring total to the incentive dashboard component
+    // the parameters itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item are needed in the dashboard component to submit from the submit event
+    //console.log(this.incentiveRecurringEntryForm.controls.entryRows['controls'].get('ItemID'))
+    this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Total);
+    //debugger
+    
+    console.log(JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value));
+    console.log(this.incentiveRecurringEntryForm.get('entryRows').value)
+    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.value) )
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID);
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description)
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle)
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillingStartDate);
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Add2Item);
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple);
+
     // localStorage.setItem('totalRecurringCalc',this.total.toString());
-    this.router.navigate(['/incentive-dashboard'])
+    //this.router.navigate(['/incentive-dashboard'])
     return
 
     control.push(this.initEntryRow());
@@ -180,24 +204,31 @@ export class IncentiverecurringComponent implements OnInit {
   }
 
   calculateRMR(val:any){
-    console.log(this.rmr);
+    this.rmr = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
+    //console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
   }
 
   calculatePassThrough(val:any) {
-    console.log(this.passThrough);
+    this.passThrough = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
+    //console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
   }
 
   calculateMultiple(val:any) {
-    console.log(this.multiple);
+    this.multiple = this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple;
     this.calculateTotal(val)
   }
 
   calculateTotal(val:any) {
-    
+    //console.log('calc total')
     let totalRecurringCalc = this.total = (this.rmr - this.passThrough) * this.multiple;
-    this.incentiveRecurringEntryForm.controls.entryRows['Total'].patchValue(totalRecurringCalc);
+
+    //console.log(totalRecurringCalc)
+    //console.log(totalRecurringCalc.toString())
     
-    //this.totalRecurringCalc = totalRecurringCalc;
+    this.totalRecurringCalc = totalRecurringCalc.toString();
+
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+    controlArray.controls[0].get('Total').setValue(this.totalRecurringCalc);
   }
 
   // transformAmount(element) {

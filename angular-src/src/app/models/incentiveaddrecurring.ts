@@ -7,5 +7,6 @@ export class Incentive_Add_Recurring {
     passThrough: number;
     billingStartDate: Date = new Date();
     multiple: number;
-    add2Item: number; 
+    add2Item: number;
+    total: number;
 }

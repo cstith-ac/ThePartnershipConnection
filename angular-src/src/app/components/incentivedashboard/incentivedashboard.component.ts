@@ -20,6 +20,7 @@ import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -52,6 +53,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   customerSearchListSite: CustomerSearchListSite[];
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
   listsystemtypes: ListSystemTypes[];
+  incentive_Add_Recurring: Incentive_Add_Recurring[];
 
   selectedValue: number;
 
@@ -159,8 +161,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
     //then display in the total in the recurring, materials and equipment, and labor inputs
-    const v = Object.keys(this.incentiveEntryService.sharedIncentiveRecurringInfo)[14];
-    console.log(v)//object
+    // const v = Object.keys(this.incentiveEntryService.sharedIncentiveRecurringInfo)[14];
+    // console.log(v)//object
 
     //get the company name and partner code from shared service
     // this.companyName = Object.values(this.incentiveEntryService.sharedIncentiveInfo)[0];
@@ -742,6 +744,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onSubmit(form: FormGroup) {
+    //Incentive_ADD_Start
     console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
     console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
     //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
@@ -772,17 +775,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // debugger
     // return
 
-    // confirm('Click ok to confirm form submission')
+    confirm('Click ok to confirm form submission')
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
-    // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
-    //   result => {
-    //     console.log(result)
-    //   //returns the job id
-    //   this.job_id = result
-    //   },
-    //   //error => console.log('error: ', error);
-    // )
+    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+      result => {
+        console.log(result)
+        //returns the job id
+        this.job_id = result;
+        //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
+        this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
+          result => {
+            console.log(result)
+          }
+        )
+      },
+      //error => console.log('error: ', error);
+    )
 
     // this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
     //   result => {
@@ -810,8 +819,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //     console.log(result)
     //   }
     // )
+
+    // this.routeService.postIncentive_ADD_Finish(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   }
+    // )
   
-    //append required parameters to the frmData
+    //Start of the Document Add. Append required parameters to the frmData
     let frmData = new FormData();
     
     //37 = Sandbox, 6 = Production
@@ -831,7 +846,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     frmData.append('file_name', this.file_name);
     frmData.append('file_size', this.file_size);
     frmData.append('upload_date', this.invoiceDate);
-    //frmData.append('upload_date', '5/4/2021 12:00:00 AM');
     frmData.append('document_ext', '*Contracts');
     frmData.append('user_code', 'PPC');
     frmData.append('user_description', 'Test 3');
@@ -869,6 +883,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //     //,responseType: 'text' as const
     //     //.set('content-type','application/json').set('content-length','6')
     // };
+
+    return
     const headers = new HttpHeaders();
     headers.append('Content-Type','multipart/form-data');
     headers.append('Authorization','Bearer '+ this.loadToken());

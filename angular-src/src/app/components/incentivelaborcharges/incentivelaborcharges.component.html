@@ -110,8 +110,7 @@
                             <div class="col">
                                 <input 
                                     type="text" 
-                                    formControlName="Hours"
-                                    [(ngModel)]="hours" 
+                                    formControlName="Hours" 
                                     class="form-control"
                                     (change)="calculateHours($event)"
                                 >
@@ -121,7 +120,6 @@
                                     type="text"
                                     class="form-control"
                                     formControlName="CostPerHour"
-                                    [(ngModel)]="costPerHour"
                                     placeholder="$0.00"
                                     mask="separator.2" 
                                     thousandSeparator=","
@@ -133,8 +131,7 @@
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="Total"
-                                    [(ngModel)]="total" 
+                                    formControlName="Total" 
                                     placeholder="$0.00"
                                     mask="separator.2" 
                                     thousandSeparator=","
@@ -143,17 +140,23 @@
                                 >
                             </div>
                             <div class="col">
-                                <button class="btn btn-add">
+                                <button class="btn btn-add" (click)="addNewItem()">
                                     <i class="fas fa-plus pr-1"></i>Add
                                 </button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-submit" (click)="onSubmit(incentiveLaborChargesEntryForm)">
+                                <!-- <button class="btn btn-submit" (click)="onSubmit(incentiveLaborChargesEntryForm)">
                                     <i class="fas fa-upload pr-1"></i>Submit
+                                </button> -->
+                                <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                    <i class="fas fa-plus pr-1"></i>Remove
                                 </button>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Submit" class="btn btn-submit">
                 </div>
             </form>
         </section>

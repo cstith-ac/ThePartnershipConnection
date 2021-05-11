@@ -29,6 +29,45 @@
                         (change)="onChangeClientVisit($event)"
                     >
             </div> -->
+            <div class="row form-inline mt-5 mb-5">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice #</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            formControlName="InvoiceNumber">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice Date</label>
+                        <input
+                            type="date" 
+                            class="form-control"
+                            formControlName="InvoiceDate"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="mr-2">Invoice Total</label>
+                        <input
+                            type="text" 
+                            class="form-control"
+                            formControlName="InvoiceTotal"
+                            (blur)="transformAmount($event)"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="col-sm-8">Was service performed as part of this incentive?</label>
+                        Yes<input type="checkbox" class="mr-2 ml-2">
+                        No<input type="checkbox" class="mr-2 ml-2">
+                    </div>
+                </div>
+            </div>
             <ng-container *ngFor="let box of checkBoxIndex; let i=index">
                 <div class="row">
                     <div class="col-md-4">
@@ -76,6 +115,15 @@
                         (change)="onChangeClientVisit($event)"
                     > -->
             </ng-container>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <button (click)=test()>test</button>
+                </div>
+                <!-- <div class="col-md-4 offset-md-4">
+                    <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(IncentiveInfo.value)">Start Incentive</button>
+                </div> -->
+            </div>
         </form>
         
         <!-- <div class="row ml-0">

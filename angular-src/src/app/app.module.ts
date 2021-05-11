@@ -23,6 +23,7 @@ import { CommonModule, CurrencyPipe} from '@angular/common';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
+import { IncentiveEntryService } from '../app/services/incentive-entry.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -158,7 +159,7 @@ import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe
     GridModule,
     ExcelModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
+  providers: [ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

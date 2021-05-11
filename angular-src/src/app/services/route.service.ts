@@ -15,6 +15,7 @@ import { Incentive_Add_Labor } from '../models/incentiveaddlabor';
 import { Customer_Document_ADD } from '../models/customerdocumentadd';
 import { ResetPassword } from '../models/resetpassword';
 import { SummaryUpdate } from '../models/summaryupdate';
+import { Incentive_ADD_Finish } from '../models/incentiveaddfinish';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class RouteService {
   incentiveAddEquipment: Incentive_Add_Equipment[] = [];
   incentiveAddLabor: Incentive_Add_Labor[] = [];
   customerDocumentADD: Customer_Document_ADD[] = [];
+  incentiveAddFinish: Incentive_ADD_Finish[] = [];
 
   baseUrl = environment.baseUrl;
 
@@ -512,6 +514,14 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
     };
     return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
+  }
+
+  postIncentive_ADD_Finish(incentiveAddFinish: Incentive_ADD_Finish): Observable<Incentive_ADD_Finish> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish',incentiveAddFinish, httpOptions);
   }
 
   getInstallCompanyList(): Observable<any> {

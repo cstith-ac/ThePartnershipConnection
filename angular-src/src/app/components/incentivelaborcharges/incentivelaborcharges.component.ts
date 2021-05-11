@@ -1,42 +1,49 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+import { CurrencyPipe, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ListLaborItems } from 'src/app/models/listlaboritems';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
-import { ListLaborItems } from '../../models/listlaboritems';
+import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 
 @Component({
   selector: 'app-incentivelaborcharges',
   templateUrl: './incentivelaborcharges.component.html',
   styleUrls: ['./incentivelaborcharges.component.css']
 })
-export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
+export class IncentivelaborchargesComponent implements OnInit {
+  @Input laborchargesForDashboard: { ItemID: number; Description: string; Hours: number; CostPerHour: number; Total: number }
+
   incentiveLaborChargesEntryForm: FormGroup;
 
   listLaborItems: ListLaborItems[];
+  incentive_Add_Labor: Incentive_Add_Labor[];
 
   description: '';
   hours: number;
   costPerHour: number;
   total: number;
+  totalLaborChargesCalc;
 
   constructor(
     public fb: FormBuilder,
-    private incentiveEntryService: IncentiveEntryService,
     public routeService: RouteService,
-    private router: Router
+    private router: Router,
+    private incentiveEntryService: IncentiveEntryService,
+    private currencyPipe: CurrencyPipe
   ) { 
-    this.incentiveLaborChargesEntryForm = this.fb.group({
-      entry: this.fb.array([
-        this.fb.group({
-          ItemID: ["", Validators.required],
-          Description: ["", Validators.required],
-          Hours: ["", Validators.required],
-          CostPerHour: ["", Validators.required],
-          Total: ["", Validators.required]
-        })
-      ])
-    })
+    // this.incentiveLaborChargesEntryForm = this.fb.group({
+    //   entry: this.fb.array([
+    //     this.fb.group({
+    //       ItemID: ["", Validators.required],
+    //       Description: ["", Validators.required],
+    //       Hours: ["", Validators.required],
+    //       CostPerHour: ["", Validators.required],
+    //       Total: ["", Validators.required]
+    //     })
+    //   ])
+    // })
   }
 
   ngOnInit() {
@@ -58,13 +65,13 @@ export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnDestroy(){
-    console.log('destroyed')
-    //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
-    //send the form data to incentive dashboard
-    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRows'];
-    this.incentiveEntryService.sharedIncentiveLaborChargesInfo = control;
-  }
+  // ngOnDestroy(){
+  //   console.log('destroyed')
+  //   //this lifecycle hook is called after the user submits form and the incentive dashboard component is loaded
+  //   //send the form data to incentive dashboard
+  //   const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRows'];
+  //   this.incentiveEntryService.sharedIncentiveLaborChargesInfo = control;
+  // }
 
   initEntryRow() {
     return this.fb.group({
@@ -76,41 +83,54 @@ export class IncentivelaborchargesComponent implements OnInit, OnDestroy {
     })
   }
 
+  get r():FormArray {
+    return this.incentiveLaborChargesEntryForm.get('entryRows') as FormArray;
+  }
+
   onSubmit(form: FormGroup) {
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRows'];
-    //push values to the incentive component
-    //not working. will use in the ngOnDestroy
-    this.incentiveEntryService.sharedIncentiveLaborChargesInfo = control;
+    
+    this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Total);
 
-    //push the labor charges total to the incentive dashboard
-    localStorage.setItem('totalLaborChargesCalc', this.total.toString());
-    this.router.navigate(['/incentive-dashboard'])
-
+    console.log(JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRows'].value));
+    console.log(this.incentiveLaborChargesEntryForm.get('entryRows').value);
+    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.value));
+    //this.router.navigate(['/incentive-dashboard'])
     return
   }
 
   //whenever user clicks add new item, a new element should be inserted into the formArray
-  addNewItem(form: FormGroup) {
-    console.log('add')
-    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRows'];
-    control.push(this.initEntryRow());
+  addNewItem():void {
+    (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRows'))
+    .push(this.initEntryRow());
 
     //add a delete row button
   }
 
+  removeNewItem(i: number) {
+    const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRows'))
+    .removeAt(i);
+  }
+
   calculateHours(val:any) {
     console.log(this.hours);
+    this.calculateHours = this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours;
   }
 
   calculateCostPerHour(val:any) {
     console.log(this.costPerHour);
+    this.costPerHour = this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour;
     this.calculateTotal(val);
   }
 
   calculateTotal(val:any) {
     let totalLaborChargesCalc = this.total = this.hours * this.costPerHour;
-    this.incentiveLaborChargesEntryForm.controls.entryRows['Total'].patchValue(totalLaborChargesCalc);
+    // this.incentiveLaborChargesEntryForm.controls.entryRows['Total'].patchValue(totalLaborChargesCalc);
+    this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
+
+    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
+    controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);
   }
 
 }

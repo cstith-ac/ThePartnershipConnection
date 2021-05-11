@@ -113,6 +113,7 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('invoiceDate');
     localStorage.removeItem('invoiceNumber');
     localStorage.removeItem('invoiceTotal');
+    localStorage.removeItem('recurringentry');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

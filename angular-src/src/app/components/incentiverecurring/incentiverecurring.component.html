@@ -1,7 +1,4 @@
 <div class="card">
-    <!-- <div class="col-md-12">
-        <h2>Incentive Entry</h2>
-    </div> -->
     <a routerlink="/incentive-dashboard" ng-reflect-router-link="/incentive-dashboard" href="/incentive-dashboard">
     <button class="btn return-btn mt-5 ml-4">Return to Incentive Entry</button>
     </a>
@@ -11,7 +8,6 @@
                 <div class="row">
                     <div class="col-md-6 pl-0">
                         <h1 class="incentive-header">Incentive Entry
-                            <!-- <span class="company">{{ companyName }} - {{ partnerCode }}</span> -->
                         </h1>
                     </div>
                     <div class="col-md-6">
@@ -301,7 +297,7 @@
                 <span class="align-middle">Total</span>
               </div>
               <div class="col"></div>
-              <!-- <div class="col"></div> -->
+              <div class="col"></div>
             </header>
 
             <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onSubmit(incentiveRecurringEntryForm)">
@@ -335,12 +331,11 @@
                                 type="text"
                                 class="form-control"
                                 formControlName="RMR"
-                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                
+                                (change)="calculateRMR($event)"
                               >
                             </div>
                             <div class="col">
@@ -348,12 +343,11 @@
                                 type="text"
                                 class="form-control" 
                                 formControlName="PassThrough"
-                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                
+                                (change)="calculatePassThrough($event)"
                               >
                             </div>
                             <div class="col">
@@ -372,7 +366,8 @@
                             </div>
                             <div class="col text-center">
                               <div class="dropdown">
-                                  <select formControlName="Multiple"  class="form-control" >
+                                  <select 
+                                    formControlName="Multiple"  class="form-control" (change)="calculateMultiple($event)">
                                       <option
                                           *ngFor="let m of listMultiples" 
                                           value="{{m.multiple}}" 
@@ -386,12 +381,11 @@
                                 type="text"
                                 class="form-control"
                                 formControlName="Total"
-                                
                                 placeholder="$0.00"
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                
+                                (change)="calculateTotal($event)"
                               >
                             </div>
                             <!-- <div class="col">
@@ -405,20 +399,15 @@
                                 </button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-add" type="button" *ngIf="incentiveRecurringEntryForm.controls.entryRows['controls'].length > 1" (click)="removeNewItem(i)">
+                                <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
                                     <i class="fas fa-plus pr-1"></i>Remove
                                 </button>
                             </div>
-                            <!-- <div class="col">
-                                <button class="btn btn-submit" (click)="onSubmit(incentiveRecurringEntryForm)">
-                                    <i class="fas fa-upload pr-1"></i>Submit
-                                </button>
-                            </div> -->
                           </div>
                     </div>
                 </div>
                 <div class="col">
-                    <input type="submit" value="Submit" class="btn btn-submit" (click)="onSubmit(incentiveRecurringEntryForm)">
+                    <input type="submit" value="Submit" class="btn btn-submit">
                 </div>
             </form>
           </section>

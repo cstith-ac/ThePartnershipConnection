@@ -146,6 +146,10 @@ export class IncentiveentryComponent implements OnInit {
     return this.incentiveEntryForm.controls; 
   }
 
+  test() {
+    this.router.navigate(["/incentive-dashboard"]);
+  }
+
   onSubmit(form: FormGroup) {
 
     this.submitted = true;
@@ -167,35 +171,35 @@ export class IncentiveentryComponent implements OnInit {
     console.log(this.incentiveEntryForm.value);
     //console.log(Object.values(this.incentiveEntry))
     return;
-    this.router.navigate(["/incentive-dashboard"]);
+    //this.router.navigate(["/incentive-dashboard"]);
   }
 
   onChangeCC(e) {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].disable();
+      console.log('disable ACHAutopay');
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].enable();
+      console.log('enable CreditCardAutoPay');
     }
   }
 
   onChangeACH(e) {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
+      console.log('disable CreditCardAutoPay');
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
+      console.log('enable CreditCardAutoPay');
     }
   }
 
   onChangeClientVisit(e) {
-    if(e.target.checked) {
-      // console.log('checked: '+ e.target.id)
-      // console.log('checked: '+ e.target.checkBoxName)
+    if(e.target.checked) {     
       console.log('checked: '+ e.target.value)
     } else {
-      // console.log('unchecked: ' + e.target.id)
-      // console.log('unchecked: ' + e.target.checkBoxName)
       console.log('unchecked: '+ e.target.value)
     }
   }

@@ -31,14 +31,12 @@ namespace WebAPI.Repository
 
             var serviceCheckedParam = new SqlParameter("@ServiceChecked", incentive_Add_Finish.ServiceChecked);
 
-            var testParam = new SqlParameter("@Test", incentive_Add_Finish.Test);
 
             await context.Database.ExecuteSqlRawAsync(
-                "EXECUTE [dbo].[Incentive_Add_Finish] @IncentiveID, @PartnerTaxAmount, @ServiceChecked, @Test",
+                "EXECUTE [dbo].[Incentive_Add_Finish] @IncentiveID, @PartnerTaxAmount, @ServiceChecked",
                 incentiveIDParam,
                 partnerTaxAmountParam,
-                serviceCheckedParam,
-                testParam);
+                serviceCheckedParam);
 
             return incentive_Add_Finish;
         }

@@ -10,6 +10,5 @@ namespace WebAPI.Models
         public int IncentiveID { get; set; }
         public decimal PartnerTaxAmount { get; set; }
         public string ServiceChecked { get; set; }
-        public string Test { get; set; }
     }
 }

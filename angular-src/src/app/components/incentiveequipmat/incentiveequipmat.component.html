@@ -111,7 +111,6 @@
                                 <input 
                                     type="number" 
                                     formControlName="Quantity"
-                                    [(ngModel)]="quantity" 
                                     class="form-control"
                                     (change)="calculateQuantity($event)"
                                 >
@@ -120,8 +119,7 @@
                                 <input 
                                     type="text"
                                     class="form-control"
-                                    formControlName="Cost"
-                                    [(ngModel)]="cost" 
+                                    formControlName="Cost" 
                                     placeholder="$0.00"
                                     mask="separator.2" thousandSeparator=","
                                     prefix="$"
@@ -133,7 +131,6 @@
                                     type="text"
                                     class="form-control"
                                     formControlName="Total"
-                                    [(ngModel)]="total"
                                     placeholder="$0.00"
                                     mask="separator.2" thousandSeparator=","
                                     prefix="$"
@@ -141,17 +138,23 @@
                                 >
                             </div>
                             <div class="col">
-                                <button class="btn btn-add" (click)="addNewItem(incentiveEquipMatEntryForm)">
+                                <button class="btn btn-add" (click)="addNewItem()">
                                     <i class="fas fa-plus pr-1"></i>Add
                                 </button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-submit" (click)="onSubmit(incentiveEquipMatEntryForm)">
-                                    <i class="fas fa-upload pr-1"></i>Submit
+                                <!-- <button class="btn btn-add" type="button" *ngIf="incentiveRecurringEntryForm.controls.entryRows['controls'].length > 1" (click)="removeNewItem(i)">
+                                    <i class="fas fa-plus pr-1"></i>Remove
+                                </button> -->
+                                <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                    <i class="fas fa-plus pr-1"></i>Remove
                                 </button>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Submit" class="btn btn-submit">
                 </div>
             </form>
         </section>
