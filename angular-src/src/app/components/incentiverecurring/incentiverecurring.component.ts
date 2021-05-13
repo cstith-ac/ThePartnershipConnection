@@ -217,6 +217,7 @@ export class IncentiverecurringComponent implements OnInit {
     //console.log(totalRecurringCalc.toString())
     
     this.totalRecurringCalc = totalRecurringCalc.toString();
+    localStorage.setItem('totalRecurringCalc',this.totalRecurringCalc);
 
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
     controlArray.controls[0].get('Total').setValue(this.totalRecurringCalc);

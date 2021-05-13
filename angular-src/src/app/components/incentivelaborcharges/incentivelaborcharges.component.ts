@@ -114,7 +114,7 @@ export class IncentivelaborchargesComponent implements OnInit {
   }
 
   calculateHours(val:any) {
-    this.calculateHours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
+    this.hours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
     console.log(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
   }
 
@@ -124,9 +124,10 @@ export class IncentivelaborchargesComponent implements OnInit {
   }
 
   calculateTotal(val:any) {
-    let totalLaborChargesCalc = this.total = this.hours * this.costPerHour;
+    let totalLaborChargesCalc = this.total = (this.hours * this.costPerHour);
     // this.incentiveLaborChargesEntryForm.controls.entryRows['Total'].patchValue(totalLaborChargesCalc);
     this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
+    localStorage.setItem('totalLaborChargesCalc', this.totalLaborChargesCalc);
 
     const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
     controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);

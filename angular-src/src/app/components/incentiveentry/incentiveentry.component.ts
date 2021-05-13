@@ -68,7 +68,7 @@ export class IncentiveentryComponent implements OnInit {
       localStorage.removeItem('invoiceTotal')
       this.router.navigate(["login"]);
     } else {
-      console.log('your logged in')
+      //console.log('your logged in')
     }
 
     this.routeService.getInstallCompanyList().subscribe(

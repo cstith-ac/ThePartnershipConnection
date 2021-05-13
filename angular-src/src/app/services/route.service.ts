@@ -484,28 +484,28 @@ export class RouteService {
     return this.http.post<Incentive_ADD_Start>(`${this.baseUrl}/api/Incentive_Add_Start`, incentiveStart, httpOptions)
   }
 
-  postIncentive_Add_Recurring(incentiveRecurring: Incentive_Add_Recurring): Observable<any>{
+  postIncentive_Add_Recurring(params:any): Observable<any>{
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     };
-    return this.http.post<Incentive_Add_Recurring>(`${this.baseUrl}/api/Incentive_Add_Recurring`, incentiveRecurring, httpOptions)
+    return this.http.post<Incentive_Add_Recurring>(`${this.baseUrl}/api/Incentive_Add_Recurring`, params, httpOptions)
   }
 
-  postIncentive_Add_Equipment(incentiveEquipment: Incentive_Add_Equipment): Observable<any>{
+  postIncentive_Add_Equipment(params:any): Observable<any>{
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     }
-    return this.http.post<Incentive_Add_Equipment>(`${this.baseUrl}/api/Incentive_Add_Equipment`, incentiveEquipment, httpOptions);
+    return this.http.post<Incentive_Add_Equipment>(`${this.baseUrl}/api/Incentive_Add_Equipment`, params, httpOptions);
   }
 
-  postIncentive_Add_Labor(incentiveLabor: Incentive_Add_Labor): Observable<any>{
+  postIncentive_Add_Labor(params:any): Observable<any>{
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     }
-    return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, incentiveLabor, httpOptions);
+    return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, params, httpOptions);
   }
 
   postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<Customer_Document_ADD> {
@@ -516,12 +516,12 @@ export class RouteService {
     return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
   }
 
-  postIncentive_ADD_Finish(incentiveAddFinish: Incentive_ADD_Finish): Observable<Incentive_ADD_Finish> {
+  postIncentive_ADD_Finish(params:any): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
     };
-    return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish',incentiveAddFinish, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish',params, httpOptions);
   }
 
   getInstallCompanyList(): Observable<any> {

@@ -135,6 +135,7 @@ export class IncentiveequipmatComponent implements OnInit {
     //this.incentiveEquipMatEntryForm.controls.entryRows['Total'].patchValue(totalEquipMatCalc);
 
     this.totalEquipMatCalc = totalEquipMatCalc.toString();
+    localStorage.setItem('totalEquipMatCalc', this.totalEquipMatCalc);
 
     const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
     controlArray.controls[0].get('Total').setValue(this.totalEquipMatCalc);

@@ -21,6 +21,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
+import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -39,6 +40,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   updateRecurringStoredProc;
   updateEquipMatStoredProc;
   updateLaborChargesStoredProc;
+
+  invoiceFile;
+  subscriberFormFile;
+  siteVisitFile;
+  otherDocument1File;
+  contractFile;
+  otherDocument2File;
 
   authToken: any;
   user:any=Object;
@@ -119,7 +127,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //recurring:number;
   //equipmentAndMaterials: '';
   // laborCharges: '';
-  lineItemSubtotal: '';
+  // lineItemSubtotal: '';
+  lineItemSubtotal;
   startDate: '';
   term: '';
   signalsTested: '';
@@ -129,7 +138,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   job_id;
   security_level:any = 2;
   file_name;
+  subscriber_file_name;
+  site_visit_file_name;
+  other_Document1_file_name;
+  contract_file_name;
+  other_Document2_file_name;
   file_size;
+  subscriber_file_size;
+  site_visit_file_size;
+  other_Document1_file_size;
+  contract_file_size;
+  other_Document2_file_size;
   myFiles:string [] = [];
 
   columns: string[];
@@ -164,34 +183,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //console.log('your logged in')
     }
 
-    //console.log(this.incentiveEntryService.sharedIncentiveInfo)//object
-
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
     //then display in the total in the recurring, materials and equipment, and labor inputs
     // const v = Object.keys(this.incentiveEntryService.sharedIncentiveRecurringInfo)[14];
     // console.log(v)//object
 
-    //get the company name and partner code from shared service
-    // this.companyName = Object.values(this.incentiveEntryService.sharedIncentiveInfo)[0];
     this.companyName = localStorage.getItem('companyName');
-    // this.partnerCode = Object.values(this.incentiveEntryService.sharedIncentiveInfo)[1];
     this.partnerCode = localStorage.getItem('partnerCode');
     this.installCompanyID = localStorage.getItem('installCompanyID');
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
-    this.invoiceTotal = localStorage.getItem('invoiceTotal')
-    // console.log(Object.values(this.incentiveEntryService.sharedIncentiveInfo)[0])
+    this.invoiceTotal = localStorage.getItem('invoiceTotal');
+    
+    this.invoiceFile = localStorage.getItem("invoice");
+    this.subscriberFormFile = localStorage.getItem("subscriberForm");
+    this.siteVisitFile = localStorage.getItem("siteVisit");
+    this.otherDocument1File = localStorage.getItem("otherDocument1");
+    this.contractFile = localStorage.getItem("contract");
+    this.otherDocument2File = localStorage.getItem("otherDocument2");
+    
+    this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
+    this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
+    this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
+    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
 
-    // for (let value of Object.values(this.incentiveEntryService.sharedIncentiveInfo)) {
-    //   console.log(`${value}`);
-    // }
-
-    // for(let value of Object.values(this.incentiveEntryService.sharedIncentiveInfo)) {
-    //   console.log(value);
-    // }
-    //let formValue = Object.fromEntries()
-
-    // this.gridView = this.gridData;
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
@@ -210,21 +225,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       CustomerSiteID: ["", Validators.required], //@CustomerSiteID
       System: ["", Validators.required], //@CustomerSystemID
       SystemType: ["", Validators.required], //@SystemTypeID
-      SystemCode: ["", Validators.required],
-      NewSystem: ["", Validators.required],
-      NewCustomer: ["", Validators.required],
-      NewSite: ["", Validators.required],
+      SystemCode: [""],
+      NewSystem: [""],
+      NewCustomer: [""],
+      NewSite: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
       PanelType: ["", Validators.required], //@PanelTypeID
       PanelLocation: ["", Validators.required], //@PanelLocation
       CentralStationID: ["", Validators.required], //@CentralStationID
       AdditionalInfo: ["", Validators.required], //@AdditionalInfo
-      InvoiceUpload: ["", Validators.required],
-      SiteVisitUpload: ["", Validators.required],
-      ContractUpload: ["", Validators.required],
-      SubscriberFormUpload: ["", Validators.required],
-      OtherDocument1Upload: ["", Validators.required],
-      OtherDocument2Upload: ["", Validators.required],
+      InvoiceUpload: [""],
+      SiteVisitUpload: [""],
+      ContractUpload: [""],
+      SubscriberFormUpload: [""],
+      OtherDocument1Upload: [""],
+      OtherDocument2Upload: [""],
       PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
       PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
       InvoiceTotal: ["", Validators.required],
@@ -235,10 +250,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       LineItemSubtotal: ["", Validators.required],
       ContractDate: ["", Validators.required], //@ContractDate
       ContractTerm: ["", Validators.required], //@ContractTerm
-      RenewalMonths: [""], //@RenewalMonths
+      RenewalMonths: ["", Validators.required], //@RenewalMonths
       ServiceIncluded: [""], //@ServiceInclude
       SignalsTested: ["", Validators.required],
-      PartnerComments: [""] //@PartnerComments
+      PartnerComments: ["", Validators.required] //@PartnerComments
     })
 
 
@@ -314,30 +329,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   this.equipmentAndMaterials = localStorage.getItem('totalEquipMatCalc');
     // }
     // if(localStorage.getItem('totalLaborChargesCalc')) {
+    //  this.equipmentAndMaterials = localStorage.getItem('totalEquipMatCalc');
     //   this.laborCharges = localStorage.getItem('totalLaborChargesCalc');
     // }
     // this.installCompanyID = localStorage.getItem('installCompanyID');
     
     //add the lines (if applicable)
-    if(this.recurring > 0) {
-      this.lineItemSubtotal = this.recurring;
-    }
-    if(this.equipmentAndMaterials > 0) {
-      if(this.recurring === 0 || this.recurring === null) {
-        this.lineItemSubtotal = this.equipmentAndMaterials + this.laborCharges;
-      }
-      else
-      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials;
-    }
-    if(this.laborCharges > 0) {
-      if(this.equipmentAndMaterials === 0 || this.equipmentAndMaterials === null) {
-        this.lineItemSubtotal = this.recurring + this.laborCharges;
-      }
-      else
-      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    }
-    //this.getLineItemSubtotal();
-    //console.log(this.recurring + this.equipmentAndMaterials + this.laborCharges)
+    // if(this.recurring > 0) {
+    //   // this.lineItemSubtotal = this.recurring; //this is add strings together
+    //   this.lineItemSubtotal = parseInt(this.recurring); 
+    // }
+    // if(this.equipmentAndMaterials > 0) {
+    //   if(this.recurring === 0 || this.recurring === null) {
+    //     this.lineItemSubtotal = this.equipmentAndMaterials + this.laborCharges;
+    //   }
+    //   else
+    //   this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials;
+    // }
+    // if(this.laborCharges > 0) {
+    //   if(this.equipmentAndMaterials === 0 || this.equipmentAndMaterials === null) {
+    //     this.lineItemSubtotal = this.recurring + this.laborCharges;
+    //   }
+    //   else
+    //   this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    // }
   } 
 
   ngOnChanges(){
@@ -754,25 +769,53 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
-    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
+    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
     // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.siteName);
 
     // confirm('Click ok to confirm form submission')
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
-    // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
-    //   result => {
-    //     console.log(result)
-    //     //returns the job id
-    //     this.job_id = result;
-    //     //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
-    //     this.routeService.postIncentive_Add_Recurring(this.incentiveDashboardForm.value).subscribe(
-    //       result => {
-    //         console.log(result)
-    //       }
-    //     )
-    //   }
-    // )
+    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+      result => {
+        console.log(result)
+        //returns the job id
+        this.job_id = result;
+        //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
+        this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
+          result => {
+            console.log(result)
+            this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+              result => {
+                console.log(result)
+                this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+                  result => {
+                    console.log(result)
+                    const headers = new HttpHeaders();
+                    headers.append('Content-Type', 'multipart/form-data');
+                    headers.append('Authorization','Bearer ' + this.loadToken());
+                    headers.append('Accept', 'application/json');
+                    this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData, {
+                      headers: headers,
+                      responseType: 'text'
+                    }).subscribe(
+                      data => {
+                        console.log(data);
+                        this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+                          result => {
+                            console.warn(result.status)
+                            console.log('Finished!... '+result);
+                          }
+                        )
+                      }
+                    )
+                  }
+                )
+              }
+            )
+          }
+        )
+      }
+    )
     
     let getRecurringService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveRecurringInfo);
     let recurringItemID = getRecurringService.ItemID;
@@ -823,9 +866,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       return temp;
     
     };
-    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19)
-    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
+    // if() {
+      
+    // }
+    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
+
     var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
+    console.log(updateEquipMatWithJobID)//object includeds jobid
+
+    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
+
+    var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+    updateIncentiveAddFinishWithJobID.incentiveID = 19;
+    updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
+    updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
+    updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+    console.log(updateIncentiveAddFinishWithJobID)//pass this to the request
 
     this.updateRecurringStoredProc = {
       ...this.updateRecurringWithJobID
@@ -839,7 +895,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]);
     //console.log(this.updateRecurringStoredProc)
 
-    //working
     // this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
     //   result => {
     //     console.log(result)
@@ -847,7 +902,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   error => console.log('error: ', error)
     // )
 
-    //working
     // this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
     //   result => {
     //     console.log(result)
@@ -855,12 +909,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   error => console.log('error: ', error)
     // )
 
-    this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
-      result => {
-        console.log(result)
-      },
-      error => console.log('error: ', error)
-    )
+    // this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+    //   result => {
+    //     console.log(result)
+    //   },
+    //   error => console.log('error: ', error)
+    // )
 
     // this.routeService.postCustomerDocumentADD(this.incentiveDashboardForm.value).subscribe(
     //   result => {
@@ -868,7 +922,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   }
     // )
 
-    // this.routeService.postIncentive_ADD_Finish(this.incentiveDashboardForm.value).subscribe(
+    // this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
     //   result => {
     //     console.log(result)
     //   }
@@ -880,7 +934,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //37 = Sandbox, 6 = Production
     frmData.append('company_id','37');
 
-    frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    frmData.append('customer_id', this.id);
 
     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
 
@@ -951,18 +1006,168 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // )
   }
 
-  //Test file upload
+  //Test Invoice file upload
   getFileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      //console.log(e.target.files[i]);
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        //console.log(reader.result);
+        localStorage.setItem("invoice", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      //this.file_name = e.target.files[i].name;
+      this.file_name = 'invoice';
+      //get the file size
+      this.file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      this.myFiles.push(e.target.files[i]);
+    }
+  }
+
+  //Test Subscriber Form file upload
+  getSubscriberFileDetails(e) {
     //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
 
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        localStorage.setItem("subscriberForm", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
       //get the file name
       //this.file_name = e.target.files[i].name;
-      this.file_name = 'test file name 3';
+      this.subscriber_file_name = 'subscriberForm';
       //get the file size
-      this.file_size = e.target.files[i].size;
+      this.subscriber_file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      this.myFiles.push(e.target.files[i]);
+    }
+  }
+
+  //Test Site Visit Form file upload
+  getSiteVisitFileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        localStorage.setItem("siteVisit", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      //this.file_name = e.target.files[i].name;
+      this.site_visit_file_name = 'siteVisit';
+      //get the file size
+      this.site_visit_file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      this.myFiles.push(e.target.files[i]);
+    }
+  }
+
+   //Test Other Document 1 Form file upload
+   getOtherDocument1FileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        localStorage.setItem("otherDocument1", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      //this.file_name = e.target.files[i].name;
+      this.other_Document1_file_name = 'otherDocument1';
+      //get the file size
+      this.other_Document1_file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      this.myFiles.push(e.target.files[i]);
+    }
+  }
+
+  //Test Contract Form file upload
+  getContractFileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        localStorage.setItem("contract", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      //this.file_name = e.target.files[i].name;
+      this.contract_file_name = 'contract';
+      //get the file size
+      this.contract_file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      this.myFiles.push(e.target.files[i]);
+    }
+  }
+
+  //Test Other Document 2 Form file upload
+  getOtherDocument2FileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log(reader.result);
+        localStorage.setItem("otherDocument2", reader.result as string)
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      //this.file_name = e.target.files[i].name;
+      this.other_Document2_file_name = 'otherDocument2';
+      //get the file size
+      this.other_Document2_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
       this.myFiles.push(e.target.files[i]);

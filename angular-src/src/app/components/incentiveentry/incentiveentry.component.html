@@ -68,10 +68,24 @@
                     </div>
                 </div>
             </div>
+            <div class="test">
+                
+            </div>
             <ng-container *ngFor="let box of checkBoxIndex; let i=index">
                 <div class="row">
                     <div class="col-md-4">
-                        <div *ngIf="box.id&lt;=6">
+                        <div class="form-group">
+                            <div *ngIf="box.id&lt;=6">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox" 
+                                    name="{{box.id}}" 
+                                    [value]="box.id"
+                                    (change)="onChangeClientVisit($event)"
+                                >
+                            </div>
+                        </div>
+                        <!-- <div *ngIf="box.id&lt;=6">
                             <label>{{box.checkBoxName}}</label>
                             <input 
                                 type="checkbox" 
@@ -79,11 +93,22 @@
                                 [value]="box.id"
                                 (change)="onChangeClientVisit($event)"
                             >
-                        </div>
+                        </div> -->
                     </div>
                     
                     <div class="col-md-4">
-                        <div *ngIf="box.id&gt;6 && box.id&lt;11">
+                        <div class="form-group">
+                            <div *ngIf="box.id&gt;6 && box.id&lt;11">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox" 
+                                    name="{{box.id}}" 
+                                    [value]="box.id"
+                                    (change)="onChangeClientVisit($event)"
+                                >
+                            </div>
+                        </div>
+                        <!-- <div *ngIf="box.id&gt;6 && box.id&lt;11">
                             <label>{{box.checkBoxName}}</label>
                             <input 
                                 type="checkbox" 
@@ -91,11 +116,22 @@
                                 [value]="box.id"
                                 (change)="onChangeClientVisit($event)"
                             >
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="col-md-4">
-                        <div *ngIf="box.id&gt;10">
+                        <div class="form-group">
+                            <div *ngIf="box.id&gt;10">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox" 
+                                    name="{{box.id}}" 
+                                    [value]="box.id"
+                                    (change)="onChangeClientVisit($event)"
+                                >
+                            </div>
+                        </div>
+                        <!-- <div *ngIf="box.id&gt;10">
                             <label>{{box.checkBoxName}}</label>
                             <input 
                                 type="checkbox" 
@@ -103,7 +139,7 @@
                                 [value]="box.id"
                                 (change)="onChangeClientVisit($event)"
                             >
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 

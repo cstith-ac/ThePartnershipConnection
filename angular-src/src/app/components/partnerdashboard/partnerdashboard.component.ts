@@ -37,7 +37,7 @@ export class PartnerdashboardComponent implements OnInit {
       localStorage.removeItem('user');
       this.router.navigate(["login"]);
     } else {
-      console.log('your logged in')
+      //console.log('your logged in')
     }
   }
 

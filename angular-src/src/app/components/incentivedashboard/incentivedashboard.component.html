@@ -235,7 +235,7 @@
                                         type="file" 
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
-                                        (change)="getFileDetails($event)"
+                                        (change)="getSubscriberFileDetails($event)"
                                     >
                                 </div>
                             </div>
@@ -249,6 +249,7 @@
                                         type="file" 
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
+                                        (change)="getSiteVisitFileDetails($event)"
                                     >
                                 </div>
                             </div>
@@ -260,6 +261,7 @@
                                         type="file" 
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
+                                        (change)="getOtherDocument1FileDetails($event)"
                                     >
                                 </div>
                             </div>
@@ -273,6 +275,7 @@
                                         type="file" 
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="contractUpload" formControlName="ContractUpload"
+                                        (change)="getContractFileDetails($event)"
                                     >
                                 </div>
                             </div>
@@ -284,6 +287,7 @@
                                         type="file" 
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
+                                        (change)="getOtherDocument2FileDetails($event)"
                                     > 
                                 </div>
                             </div>
@@ -415,7 +419,7 @@
                                     </div> -->
                                     <button type="button" class="btn btn-success btn-light-green" (click)="openAddViewCommentsModal(comments)">Add/View Comments</button>
                                     <!-- <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button> -->
-                                    <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button>
+                                    <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button>
                                   </div>
                             </div>
                         </div>
