@@ -46,6 +46,7 @@ export class IncentiveentryComponent implements OnInit {
   show: boolean = true;
   id;
   checkBoxName;
+  dynamicVariable = false; // true based on your condition 
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -92,15 +93,20 @@ export class IncentiveentryComponent implements OnInit {
 
     this.routeService.getCheckBoxIndex().subscribe(
       res => {
+        //console.log(typeof(res))
         // this.checkBoxIndex = res;
         res.forEach(e => {
           //this.checkBoxIndex.push(e)
           this.checkBoxIndex = res;
+          //console.log(this.checkBoxIndex)
+          
 
-          this.checkBoxIndex.forEach((o,i) => {
-            //console.log(i);
+          // this.checkBoxIndex.forEach((o,i) => {
+          //   console.log(i);
+          // })
 
-          })
+          // this.id1 = this.checkBoxIndex.find(i=> i.id=1);
+          // console.log(this.id1);
 
           this.id = e.id;
           this.checkBoxName = e.checkBoxName;
@@ -174,10 +180,26 @@ export class IncentiveentryComponent implements OnInit {
     //this.router.navigate(["/incentive-dashboard"]);
   }
 
+  disableOther(e) {
+    if(e.target.value == 11) {
+      console.log(e.target.value+''+' was checked, disable the other')
+      
+    }
+    if(e.target.value == 12) {
+      console.log(e.target.value+''+' was checked, disable the other')
+    }
+  }
+
   onChangeCC(e) {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].disable();
       console.log('disable ACHAutopay');
+      this.checkBoxIndex.forEach(x=>{
+        //console.log(x);
+        if(e.target.value == 11) {
+          console.log(e.target.value);
+        }
+      })
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].enable();
@@ -189,6 +211,12 @@ export class IncentiveentryComponent implements OnInit {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
       console.log('disable CreditCardAutoPay');
+      this.checkBoxIndex.forEach(x=>{
+        //console.log(x);
+        if(e.target.value == 12) {
+          console.log(e.target.value);
+        }
+      })
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
@@ -196,9 +224,24 @@ export class IncentiveentryComponent implements OnInit {
     }
   }
 
+  onChangeACHorCC(e) {
+    if(e.target.checked && e.target.value === 11) {
+      //console.log(e.target.value)
+      console.log('working for 11...')
+      //this.incentiveEntryForm.controls['ACHAutopay'].disable();
+    } 
+    if (e.target.checked && e.target.value === 12) {
+      //console.log(e.target.value)
+      console.log('working for 12...')
+    }
+  }
+
   onChangeClientVisit(e) {
-    if(e.target.checked) {     
+    if(e.target.checked) {  
+      //e.target.setAttribute('disabled','')   
       console.log('checked: '+ e.target.value)
+      // console.log(this.incentiveEntryForm.get('ACHAutopay').value)
+      // console.log(this.incentiveEntryForm.get('CreditCardAutoPay').value)
     } else {
       console.log('unchecked: '+ e.target.value)
     }

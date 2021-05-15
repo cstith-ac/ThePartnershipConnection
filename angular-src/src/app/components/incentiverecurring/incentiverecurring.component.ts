@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ElementRef } from '@angular/core';
 import { CurrencyPipe, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ListRecurringItems } from 'src/app/models/listrecurringitems';
@@ -15,6 +15,7 @@ import { Incentive_Add_Recurring } from '../../models/incentiveaddrecurring';
 })
 export class IncentiverecurringComponent implements OnInit {
   @Input() recurringForDashboard: { ItemID: number; Description: string; BillCycle: string; RMR: number; PassThrough: number; BillingStartDate: Date; Multiple: number; Add2Item: number; Total: number }
+  @Output() incentiveRecurringOutput = new EventEmitter();
   
   incentiveRecurringEntryForm: FormGroup;
 
@@ -143,7 +144,8 @@ export class IncentiverecurringComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    //console.log(form.value.Total)
+    console.log(form.value.Total)
+    
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRows'];
     //push values to the incentive component
     //not working. will use in the ngOnDestroy
@@ -151,13 +153,17 @@ export class IncentiverecurringComponent implements OnInit {
     
     //push the recurring total to the incentive dashboard component
     // the parameters itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item are needed in the dashboard component to submit from the submit event
+
+    //this.incentiveRecurringOutput.emit(this.totalRecurringCalc);
     //console.log(this.incentiveRecurringEntryForm.controls.entryRows['controls'].get('ItemID'))
     this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Total);
-    //debugger
     
+    // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0])
+    // return
     console.log(JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value));
     console.log(this.incentiveRecurringEntryForm.get('entryRows').value)
-    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.value) )
+    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value[0]))
+    
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID);
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Description)
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].BillCycle)

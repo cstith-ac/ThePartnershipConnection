@@ -30,6 +30,17 @@ namespace WebAPI.Repository
             var itemIDParam = new SqlParameter("@ItemID", incentive_Add_Equipment.ItemID);
 
             var descriptionParam = new SqlParameter("@Description", incentive_Add_Equipment.Description);
+            if (incentive_Add_Equipment.Description == null)
+            {
+                try
+                {
+                    descriptionParam.Value = "A description was not entered from Incentive_Add_Equipment";
+                }
+                catch (Exception ex)
+                {
+                    throw new System.Exception("There's no description!");
+                }
+            }
 
             var quantityParam = new SqlParameter("@Quantity", incentive_Add_Equipment.Quantity);
 

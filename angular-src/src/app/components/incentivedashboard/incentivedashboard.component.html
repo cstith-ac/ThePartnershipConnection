@@ -209,7 +209,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h3>
-                                    Upload Documents
+                                    Upload Documents - (An invoice submission is required)
                                 </h3>
                             </div>
                         </div>
@@ -359,7 +359,7 @@
                                         <input 
                                             type="text" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="recurring" formControlName="Recurring"
+                                            formControlName="Recurring"
                                         >
                                     </div>
                                 </div>
@@ -369,7 +369,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control col-sm-6" [(ngModel)]="equipmentAndMaterials" formControlName="EquipmentAndMaterials">
+                                        <input type="text" class="form-control col-sm-6" formControlName="EquipmentAndMaterials">
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
@@ -378,7 +378,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control col-sm-6" [(ngModel)]="laborCharges" formControlName="LaborCharges">
+                                        <input type="text" class="form-control col-sm-6"  formControlName="LaborCharges">
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
@@ -387,18 +387,27 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control col-sm-6" [(ngModel)]="lineItemSubtotal" formControlName="LineItemSubtotal">
+                                        <input type="text" class="form-control col-sm-6" formControlName="LineItemSubtotal">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
                                     <label class="col-sm-3 col-form-label">Start Date</label>
-                                    <input type="date" class="form-control col-sm-5" [(ngModel)]="startDate" formControlName="ContractDate">
+                                    <input 
+                                        type="date" 
+                                        class="form-control col-sm-5" 
+                                        [(ngModel)]="startDate" formControlName="ContractDate"
+                                        (change)="getContractDate($event)"    
+                                    >
                                 </div>
                                 <div class="form-group form-inline">
                                     <label class="col-sm-2 col-form-label">Term</label>
-                                    <input type="month" class="form-control col-sm-2 mr-3" formControlName="ContractTerm">Mo
+                                    <input 
+                                        type="month" 
+                                        class="form-control col-sm-2 mr-3" formControlName="ContractTerm"
+                                        (keyup)="getContractTerm($event)"
+                                    >Mo
 
                                     <label class="col-sm-3 col-form-label">Renewal</label>
                                     <input type="month" class="form-control col-sm-2 mr-3" formControlName="RenewalMonths">Mo

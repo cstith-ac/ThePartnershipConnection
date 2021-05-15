@@ -13,7 +13,7 @@ namespace WebAPI.Models
         public string BillCycle { get; set; }
         public decimal RMR { get; set; }
         public decimal PassThrough { get; set; }
-        public DateTime BillingStartDate { get; set; }
+        public DateTime? BillingStartDate { get; set; }
         public int Multiple { get; set; }
         public int Add2Item { get; set; }
     }

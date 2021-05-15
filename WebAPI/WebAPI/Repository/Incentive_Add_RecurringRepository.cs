@@ -32,6 +32,17 @@ namespace WebAPI.Repository
             var itemIDParam = new SqlParameter("@ItemID", incentive_Add_Recurring.ItemID);
 
             var descriptionParam = new SqlParameter("@Description", incentive_Add_Recurring.Description);
+            if (incentive_Add_Recurring.Description == null)
+            {
+                try
+                {
+                    descriptionParam.Value = "A description was not entered from Incentive_Add_Recurring";
+                }
+                catch (Exception ex)
+                {
+                    throw new System.Exception("There's no description!");
+                }
+            }
 
             var billCycleParam = new SqlParameter("@BillCycle", incentive_Add_Recurring.BillCycle);
             var rmrParam = new SqlParameter("@RMR", incentive_Add_Recurring.RMR);
@@ -39,6 +50,17 @@ namespace WebAPI.Repository
             var passThroughParam = new SqlParameter("@PassThrough", incentive_Add_Recurring.PassThrough);
 
             var billingStartDateParam = new SqlParameter("@BillingStartDate", incentive_Add_Recurring.BillingStartDate);
+            if (incentive_Add_Recurring.BillingStartDate == null)
+            {
+                try
+                {
+                    billingStartDateParam.Value = "12/31/9999 11:59:59 PM";
+                }
+                catch (Exception)
+                {
+                    throw new System.Exception("There's no BillingStartDate!");
+                }
+            }
 
             var multipleParam = new SqlParameter("@Multiple", incentive_Add_Recurring.Multiple);
 

@@ -17,3 +17,18 @@
     font-style: italic;
     line-height: 1.2;
 }
+.entryColumn2 {
+    position: relative;
+    top: -335px;
+    left: 0px;
+}
+/* .entryColumn3 {
+    position: relative;
+    top: -565px;
+    left: 0px;
+} */ /*old*/
+.entryColumn3 {
+    position: relative;
+    top: -610px;
+    left: 896px;
+}

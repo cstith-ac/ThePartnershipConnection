@@ -30,6 +30,18 @@ namespace WebAPI.Repository
             var itemIDParam = new SqlParameter("@ItemID", incentive_Add_Labor.ItemID);
 
             var descriptionParam = new SqlParameter("@Description", incentive_Add_Labor.Description);
+            if (incentive_Add_Labor.Description == null)
+            {
+                try
+                {
+                    descriptionParam.Value = "A description was not entered from Incentive_Add_Labor";
+                }
+                catch (Exception ex)
+                {
+
+                    throw new System.Exception("There's no desciption");
+                }
+            }
 
             var quantityParam = new SqlParameter("@Quantity", incentive_Add_Labor.Quantity);
 

@@ -9,26 +9,6 @@
         </div>
 
         <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)">
-            <!-- <div class="row">
-                <div class="col-md-4" *ngFor="let box of checkBoxIndex; let i=index">
-                    <label>{{box.checkBoxName}}</label>
-                        <input 
-                            type="checkbox" 
-                            name="{{box.id}}" 
-                            [value]="box.id"
-                            (change)="onChangeClientVisit($event)"
-                        >
-                </div>
-            </div> -->
-            <!-- <div class="col-md-4" *ngFor="let box of checkBoxIndex; let i=index">
-                <label>{{box.checkBoxName}}</label>
-                    <input 
-                        type="checkbox" 
-                        name="{{box.id}}" 
-                        [value]="box.id"
-                        (change)="onChangeClientVisit($event)"
-                    >
-            </div> -->
             <div class="row form-inline mt-5 mb-5">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -68,14 +48,12 @@
                     </div>
                 </div>
             </div>
-            <div class="test">
-                
-            </div>
+            
             <ng-container *ngFor="let box of checkBoxIndex; let i=index">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <div *ngIf="box.id&lt;=6">
+                            <div *ngIf="box.id&gt;0 && box.id&lt;=6">
                                 <label>{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
@@ -84,19 +62,10 @@
                                     (change)="onChangeClientVisit($event)"
                                 >
                             </div>
-                        </div>
-                        <!-- <div *ngIf="box.id&lt;=6">
-                            <label>{{box.checkBoxName}}</label>
-                            <input 
-                                type="checkbox" 
-                                name="{{box.id}}" 
-                                [value]="box.id"
-                                (change)="onChangeClientVisit($event)"
-                            >
-                        </div> -->
+                        </div>          
                     </div>
                     
-                    <div class="col-md-4">
+                    <div class="col-md-4 entryColumn2">
                         <div class="form-group">
                             <div *ngIf="box.id&gt;6 && box.id&lt;11">
                                 <label>{{box.checkBoxName}}</label>
@@ -107,19 +76,37 @@
                                     (change)="onChangeClientVisit($event)"
                                 >
                             </div>
-                        </div>
-                        <!-- <div *ngIf="box.id&gt;6 && box.id&lt;11">
-                            <label>{{box.checkBoxName}}</label>
-                            <input 
-                                type="checkbox" 
-                                name="{{box.id}}" 
-                                [value]="box.id"
-                                (change)="onChangeClientVisit($event)"
-                            >
-                        </div> -->
+                        </div>   
                     </div>
 
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4 entryColumn3">
+                        <p>Customer Enrolled in Autopay?</p>
+                        <div class="form-group btn-group mt-3 mb-3" *ngIf="box.id&gt;10">
+                            <label>Credit Card</label>
+                            <input 
+                                type="checkbox"
+                                name="{{box.id}}" 
+                                    [value]="box.id"
+                                formControlName="CreditCardAutoPay"
+                                class="form-check-input"
+                                (change)="onChangeCC($event)"
+                            >
+                        </div>
+                    </div>
+                    <div class="col-md-4 entryColumn3">
+                        <div class="form-group btn-group mt-3 mb-3" *ngIf="box.id&gt;10">
+                            <label>ACH</label>
+                            <input 
+                                type="checkbox"
+                                name="{{box.id}}" 
+                                    [value]="box.id"
+                                formControlName="ACHAutopay"
+                                class="form-check-input"
+                                (change)="onChangeACH($event)"
+                            >
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-md-4 entryColumn3">
                         <div class="form-group">
                             <div *ngIf="box.id&gt;10">
                                 <label>{{box.checkBoxName}}</label>
@@ -128,37 +115,44 @@
                                     name="{{box.id}}" 
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
+                                    (click)="disableOther($event)"
                                 >
                             </div>
                         </div>
-                        <!-- <div *ngIf="box.id&gt;10">
-                            <label>{{box.checkBoxName}}</label>
-                            <input 
-                                type="checkbox" 
-                                name="{{box.id}}" 
-                                [value]="box.id"
-                                (change)="onChangeClientVisit($event)"
-                            >
-                        </div> -->
-                    </div>
-                </div>
-                
-                <!-- <label>{{box.checkBoxName}}</label>
-                    <input 
-                        type="checkbox" 
-                        name="{{box.id}}" 
-                        [value]="box.id"
-                        (change)="onChangeClientVisit($event)"
-                    > -->
+                    </div> -->
+                </div> 
             </ng-container>
+            <div class="col-md-4 entryColumn3">
+                <p>Customer Enrolled in Autopay?</p>
+                <div class="form-group btn-group mt-3 mb-3">
+                    <label>Credit Card</label>
+                    <input 
+                        type="checkbox"
+                        formControlName="CreditCardAutoPay"
+                        class="form-check-input"
+                        (change)="onChangeCC($event)"
+                        [value]="11"
+                    >
+                </div>
+            </div>
+            <div class="col-md-4 entryColumn3">
+                <div class="form-group btn-group mt-3 mb-3">
+                    <label>ACH</label>
+                    <input 
+                        type="checkbox"
+                        formControlName="ACHAutopay"
+                        class="form-check-input"
+                        (change)="onChangeACH($event)"
+                        [value]="12"
+                    >
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
                     <button (click)=test()>test</button>
                 </div>
-                <!-- <div class="col-md-4 offset-md-4">
-                    <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(IncentiveInfo.value)">Start Incentive</button>
-                </div> -->
+                
             </div>
         </form>
         

@@ -43,7 +43,7 @@ export class AuthService {
 
   authenticateUser(user): Observable<any> {
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }) 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response' }) 
     };
     return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions).pipe(
       catchError(this.errorHandler)

@@ -596,10 +596,12 @@ export class CallsummaryComponent implements OnInit {
   //   );
   // }
 
-  // Clear the ticket number from the UI 
+  // Clear the UI 
   ticketFieldResetButton() {
-    this.divView.nativeElement.innerHTML = '';
-    this.clicked = false;
+    // this.divView.nativeElement.innerHTML = '';
+    // this.clicked = false;
+    this.submitted = false;
+    this.callSummaryAddForm.reset()
   }
 
   // resetForm() {
