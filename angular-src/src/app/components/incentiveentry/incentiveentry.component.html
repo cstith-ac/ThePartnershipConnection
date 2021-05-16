@@ -36,15 +36,46 @@
                             type="text" 
                             class="form-control"
                             formControlName="InvoiceTotal"
-                            (blur)="transformAmount($event)"
+                            placeholder="$0.00"
+                            mask="separator.2" 
+                            thousandSeparator=","
+                            prefix="$"
                         >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="col-sm-8">Was service performed as part of this incentive?</label>
-                        Yes<input type="checkbox" class="mr-2 ml-2">
-                        No<input type="checkbox" class="mr-2 ml-2">
+                        Yes
+                        <!-- <input 
+                            type="checkbox" 
+                            class="mr-2 ml-2" 
+                            formControlName="ServiceIncluded"
+                            (change)="onChangeServiceIncluded($event)"
+                            [value]=""
+                        > -->
+                        <input 
+                            type="radio" 
+                            class="mr-2 ml-2" 
+                            formControlName="ServiceIncluded"
+                            name="ServiceIncluded"
+                            value="yes"
+                        >
+                        No
+                        <!-- <input 
+                            type="checkbox" 
+                            class="mr-2 ml-2" 
+                            formControlName="ServiceIncluded"
+                            (change)="onChangeServiceIncluded($event)"
+                            [value]=""
+                        > -->
+                        <input 
+                        type="radio" 
+                        class="mr-2 ml-2" 
+                        formControlName="ServiceIncluded"
+                        name="ServiceIncluded"
+                        value="no"
+                    >
                     </div>
                 </div>
             </div>
@@ -60,6 +91,7 @@
                                     name="{{box.id}}" 
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
+                                    class="form-check-populate"
                                 >
                             </div>
                         </div>          
@@ -74,6 +106,7 @@
                                     name="{{box.id}}" 
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
+                                    class="form-check-populate"
                                 >
                             </div>
                         </div>   
@@ -147,12 +180,17 @@
                     >
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
                     <button (click)=test()>test</button>
+                </div>   
+            </div> -->
+            <div class="row" [ngStyle]="{'position': 'relative', top: '-420px', left: '0px'}">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 offset-md-4">
+                    <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(incentiveEntryForm)" [disabled]="!incentiveEntryForm.valid">Start Incentive</button>
                 </div>
-                
             </div>
         </form>
         

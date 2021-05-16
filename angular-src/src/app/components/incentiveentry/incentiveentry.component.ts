@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { InstallCompanyList } from '../../models/installcompanylist';
 import { CheckBoxIndex } from '../../models/checkboxindex';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+declare var $: any;
 
 @Component({
   selector: 'app-incentiveentry',
@@ -54,10 +55,22 @@ export class IncentiveentryComponent implements OnInit {
     public jwtHelper: JwtHelperService,
     private incentiveEntryService: IncentiveEntryService,
     private router: Router,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private el: ElementRef
   ) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      let myTag = this.el.nativeElement.querySelector('.entryColumn2');
+      console.log(myTag)
+      // $('.entryColumn2').eq(0).remove();
+      // $('.entryColumn2').eq(1).remove();
+      $('.entryColumn2').eq(2).remove();
+      $('.entryColumn2').eq(3).remove();
+      //$('.entryColumn2').eq(4).remove();
+      //$('.entryColumn2').eq(5).remove();
+    },1000);
+
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -121,18 +134,19 @@ export class IncentiveentryComponent implements OnInit {
       InvoiceNumber: ["", Validators.required],
       InvoiceDate: ["", Validators.required],
       InvoiceTotal: ["", Validators.required],
+      ServiceIncluded: ["", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
-      ClientVisit:  [false, Validators.required],
-      AdoptionVisit: [false, Validators.required],
-      LandlineToCell:  [false, Validators.required],
-      ContractResign:  [false, Validators.required],
-      Reprogram:  [false, Validators.required],
-      LteUpgrade:  [false, Validators.required],
-      AddNewRMRorService: [false, Validators.required],
-      PickUp: [false, Validators.required],
-      NewSite:  [false, Validators.required],
-      SystemTransfer:  [false, Validators.required],
+      ClientVisit:  [false],
+      AdoptionVisit: [false],
+      LandlineToCell:  [false],
+      ContractResign:  [false],
+      Reprogram:  [false],
+      LteUpgrade:  [false],
+      AddNewRMRorService: [false],
+      PickUp: [false],
+      NewSite:  [false],
+      SystemTransfer:  [false],
       CreditCardAutoPay: [false, Validators.requiredTrue],
       ACHAutopay: [false, Validators.requiredTrue]
     })
@@ -160,9 +174,10 @@ export class IncentiveentryComponent implements OnInit {
 
     this.submitted = true;
 
-    // localStorage.setItem('invoiceNumber',this.invoiceNumber);
-    // localStorage.setItem('invoiceDate',this.invoiceDate);
-    // localStorage.setItem('invoiceTotal',this.invoiceTotal);
+    console.log(this.incentiveEntryForm.get('InvoiceNumber').value);
+    localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
+    localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
+    localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
 
     // this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
     // this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);
@@ -174,10 +189,14 @@ export class IncentiveentryComponent implements OnInit {
     // this.incentiveEntryOutput.emit(this.incentiveEntry);
     //this.incentiveEntryOutput.emit('testing data');
 
-    console.log(this.incentiveEntryForm.value);
+    //console.log(this.incentiveEntryForm.value);
     //console.log(Object.values(this.incentiveEntry))
-    return;
-    //this.router.navigate(["/incentive-dashboard"]);
+    //return;
+    this.router.navigate(["/incentive-dashboard"]);
+  }
+
+  onChangeServiceIncluded(e) {
+    console.log(e.target.value)
   }
 
   disableOther(e) {
@@ -193,34 +212,34 @@ export class IncentiveentryComponent implements OnInit {
   onChangeCC(e) {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].disable();
-      console.log('disable ACHAutopay');
+      //console.log('disable ACHAutopay');
       this.checkBoxIndex.forEach(x=>{
         //console.log(x);
         if(e.target.value == 11) {
-          console.log(e.target.value);
+          //console.log(e.target.value);
         }
       })
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].enable();
-      console.log('enable CreditCardAutoPay');
+      //console.log('enable CreditCardAutoPay');
     }
   }
 
   onChangeACH(e) {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
-      console.log('disable CreditCardAutoPay');
+      //console.log('disable CreditCardAutoPay');
       this.checkBoxIndex.forEach(x=>{
         //console.log(x);
         if(e.target.value == 12) {
-          console.log(e.target.value);
+          //console.log(e.target.value);
         }
       })
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
-      console.log('enable CreditCardAutoPay');
+      //console.log('enable CreditCardAutoPay');
     }
   }
 
