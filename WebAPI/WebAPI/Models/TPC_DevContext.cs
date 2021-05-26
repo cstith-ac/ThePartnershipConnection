@@ -67,6 +67,8 @@ namespace WebAPI.Models
         public virtual DbSet<IncentiveItemInfo> GetIncentiveItemInfos { get; set; }
         //public virtual DbSet<Incentive_Add_Recurring> GetIncentive_Add_RecurringResults { get; set; }
         public virtual DbSet<CheckBoxIndex> GetCheckBoxIndexes { get; set; }
+        public virtual DbSet<CheckBoxIncompatible> GetCheckBoxIncompatibles { get; set; }
+        public virtual DbSet<CheckBoxAutoInsert> GetCheckBoxAutoInserts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -449,9 +451,18 @@ namespace WebAPI.Models
             {
                 entity.ToTable("CheckBoxIndex");
                 entity.HasNoKey();
-                //entity.HasIndex(e => e.ID);
+            });
 
-                //entity.HasOne(d => d.CheckBoxName);
+            modelBuilder.Entity<CheckBoxIncompatible>(entity =>
+            {
+                entity.ToTable("CheckBoxIncompatible");
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CheckBoxAutoInsert>(entity =>
+            {
+                entity.ToTable("CheckBoxAutoInsert");
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

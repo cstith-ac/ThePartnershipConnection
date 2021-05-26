@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewChecked, OnChanges, ElementRef } from '@angular/core';
 import { CurrencyPipe, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ListRecurringItems } from 'src/app/models/listrecurringitems';
@@ -13,7 +13,7 @@ import { Incentive_Add_Recurring } from '../../models/incentiveaddrecurring';
   templateUrl: './incentiverecurring.component.html',
   styleUrls: ['./incentiverecurring.component.css']
 })
-export class IncentiverecurringComponent implements OnInit {
+export class IncentiverecurringComponent implements OnInit, AfterViewChecked, OnChanges {
   @Input() recurringForDashboard: { ItemID: number; Description: string; BillCycle: string; RMR: number; PassThrough: number; BillingStartDate: Date; Multiple: number; Add2Item: number; Total: number }
   @Output() incentiveRecurringOutput = new EventEmitter();
   
@@ -23,17 +23,35 @@ export class IncentiverecurringComponent implements OnInit {
   listMultiples: ListMultiples[];
   incentive_Add_Recurring: Incentive_Add_Recurring[];
 
-  item: '';
-  description: '';
+  itemID;
+  itemName;
+  description;
   billCycle: '';
   rmr: number;
   passThrough: number;
-  billingStarts: '';
-  addToAnExistingRMRItem: '';
+  billingStarts;
+  addToAnExistingRMRItem;
   multiple: number;
   total: number;
   totalRecurringCalc;
 
+  newObjectFromLocalStorage;
+  itemIDfromNewObject;
+  rmrFromLocalStorage;
+  passThroughFromLocalStorage;
+  billCycleFromLocalStorage;
+  billingStartsFromLocalStorage;
+  addToAnExistingRMRItemFromLocalStorage;
+  multipleFromLocalStorage;
+  totalFromLocalStorage;
+
+  invoiceNumber;
+  customerName;
+  customerSiteInformation;
+  customerSystemInformation;
+
+  counter:number;
+  
   constructor(
     public fb: FormBuilder,
     public routeService: RouteService,
@@ -59,6 +77,41 @@ export class IncentiverecurringComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.invoiceNumber = localStorage.getItem("invoiceNumber");
+    this.customerName = localStorage.getItem("customerName");
+    this.customerSiteInformation = localStorage.getItem("customerSiteName");
+    this.customerSystemInformation = localStorage.getItem("customerSystemInformation");
+
+    let recurringentryitem = localStorage.getItem("recurringentry");
+    let parsedRecurringEntryItem = JSON.parse(recurringentryitem) as Incentive_Add_Recurring;
+
+    let item = new Incentive_Add_Recurring;
+    this.newObjectFromLocalStorage = Object.assign(item, parsedRecurringEntryItem);
+    console.log(this.newObjectFromLocalStorage);
+
+    //re-populate Item if page is refreshed
+    setTimeout(() => {
+      const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+      controlArray.controls[0].get('ItemID').setValue(this.newObjectFromLocalStorage.ItemID);
+      controlArray.controls[0].get('Description').setValue(this.newObjectFromLocalStorage.Description);
+      controlArray.controls[0].get('BillCycle').setValue(this.newObjectFromLocalStorage.BillCycle);
+      controlArray.controls[0].get('RMR').setValue(this.newObjectFromLocalStorage.RMR);
+      controlArray.controls[0].get('PassThrough').setValue(this.newObjectFromLocalStorage.PassThrough);
+      controlArray.controls[0].get('Add2Item').setValue(this.newObjectFromLocalStorage.Add2Item);
+      controlArray.controls[0].get('Multiple').setValue(this.newObjectFromLocalStorage.Multiple);
+      controlArray.controls[0].get('Total').setValue(this.newObjectFromLocalStorage.Total);
+    },4);
+    
+    //change the dropdown to the itemID
+    // this.description = this.newObjectFromLocalStorage.Description;
+    // this.rmrFromLocalStorage = this.newObjectFromLocalStorage.RMR;  
+    // this.passThroughFromLocalStorage = this.newObjectFromLocalStorage.PassThrough;
+    // this.billCycleFromLocalStorage = this.newObjectFromLocalStorage.BillCycle;
+    // this.billingStartsFromLocalStorage = this.newObjectFromLocalStorage.BillingStartDate;
+    // this.addToAnExistingRMRItemFromLocalStorage = this.newObjectFromLocalStorage.Add2Item;
+    // this.multipleFromLocalStorage = this.newObjectFromLocalStorage.Multiple;
+    // this.totalFromLocalStorage = this.newObjectFromLocalStorage.Total;
+
     this.incentiveRecurringEntryForm = this.fb.group({
       entryRows: this.fb.array([this.initEntryRow()])
     })
@@ -125,6 +178,22 @@ export class IncentiverecurringComponent implements OnInit {
     )
   }
 
+  ngAfterViewChecked() {
+    setTimeout(() => {
+      // const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+      // controlArray.controls[0].get('Description').setValue(this.description);
+    },1000);
+  }
+
+  ngOnChanges() {
+    setTimeout(() => {
+      //this.incentiveRecurringEntryForm.controls["Description"].setValue(this.description);
+      // console.log('ngOnChanges called')
+      // const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+      // controlArray.controls[0].get('Description').setValue(this.description);
+    },1000);
+  }
+
   initEntryRow() {
     return this.fb.group({
       ItemID: ["", Validators.required],
@@ -137,6 +206,49 @@ export class IncentiverecurringComponent implements OnInit {
       Multiple: ["", Validators.required],
       Total: ["", Validators.required]
     })
+  }
+
+  getItemName(e:any,i:number) {
+    // this.counter=0;
+    // for(let x of this.incentiveRecurringEntryForm.controls.entryRows['controls']){
+    //   console.log(this.incentiveRecurringEntryForm.get(['entryRows',this.counter]).value)
+    //   this.counter = this.counter+1;
+    // }
+    
+    // let v = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(function(currentRecurringRow) {
+    //   console.log(currentRecurringRow.ItemID);
+    //   return currentRecurringRow.ItemID;
+    // })
+
+
+    //get the description from listrecurringitems based on the selected ItemID
+    //console.log(e.target.value)//returns 'index: item_id', as a string
+    let currentID = e.target.value;
+
+    setTimeout(() => {
+
+      const getItemID = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(element => {
+        console.log(element,i)
+        
+        const result = this.listRecurringItems.filter(x => x.item_id == element.ItemID);
+        console.log(result)
+        // console.log(element.ItemID);
+
+        var string;
+        result.forEach(function(e) {
+          string = e.itemName.toString();
+        })
+        const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
+        controlArray.at(i).get('Description').setValue(string);//this is working now!!! Yeah!!!
+        // for(let i = 0; i < controlArray.value.length;i++) {
+        //   console.log(i)
+        //   //this gets current index of FormArray plus all previous indexes
+        //   controlArray.at(i).get('Description').setValue(string);
+        // }
+        
+      });
+      
+      }, 4);
   }
 
   get r():FormArray {
@@ -160,8 +272,8 @@ export class IncentiverecurringComponent implements OnInit {
     
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0])
     // return
-    console.log(JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value));
-    console.log(this.incentiveRecurringEntryForm.get('entryRows').value)
+    //console.log(JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value));
+    //console.log(this.incentiveRecurringEntryForm.get('entryRows').value[0])
     localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRows'].value[0]))
     
     // console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].ItemID);
@@ -192,22 +304,38 @@ export class IncentiverecurringComponent implements OnInit {
     (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
     .push(this.initEntryRow());
 
+    // const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+    // controlArray.setValue([]);
+    
     //add a delete row button
   }
 
   removeNewItem(i: number) {
     const control = (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
     .removeAt(i);
+
+    localStorage.removeItem("recurringentry");
+    localStorage.removeItem("totalRecurringCalc");
   }
 
   calculateRMR(val:any){
-    this.rmr = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
-    //console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
+    //this.rmr = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].RMR);
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.RMR);
   }
 
   calculatePassThrough(val:any) {
-    this.passThrough = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
-    //console.log(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
+    // this.passThrough = parseInt(this.incentiveRecurringEntryForm.controls['entryRows'].value[0].PassThrough);
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.PassThrough);
   }
 
   calculateMultiple(val:any) {

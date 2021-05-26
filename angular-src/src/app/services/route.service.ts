@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
@@ -527,9 +527,17 @@ export class RouteService {
   getInstallCompanyList(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     };
     return this.http.get<any>(`${this.baseUrl}/api/InstallCompanyList/`, httpOptions);
+  }
+
+  getCheckBoxIncompatible(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CheckBoxIncompatible/`, httpOptions);
   }
 
   loadToken() {

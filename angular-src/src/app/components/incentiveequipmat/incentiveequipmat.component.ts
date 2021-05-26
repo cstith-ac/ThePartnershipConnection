@@ -20,12 +20,25 @@ export class IncentiveequipmatComponent implements OnInit {
   listMatItems: ListMaterialItems[];
   incentive_Add_Equipment: Incentive_Add_Equipment[];
 
+  itemID;
   item: '';
-  description: '';
+  description;
   quantity: number;
   cost: number;
   total: number;
   totalEquipMatCalc;
+
+  newObjectFromLocalStorage;
+  itemIDFromLocalStorage;
+  descriptionFromLocalStorage;
+  quantityFromLocalStorage;
+  costFromLocalStorage;
+  totalFromLocalStorage;
+
+  invoiceNumber;
+  customerName;
+  customerSiteInformation;
+  customerSystemInformation;
 
   constructor(
     public fb: FormBuilder,
@@ -48,6 +61,34 @@ export class IncentiveequipmatComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.invoiceNumber = localStorage.getItem("invoiceNumber");
+    this.customerName = localStorage.getItem("customerName");
+    this.customerSiteInformation = localStorage.getItem("customerSiteName");
+    this.customerSystemInformation = localStorage.getItem("customerSystemInformation");
+
+    let equipmatentryitem = localStorage.getItem("equipmatentry");
+    let parsedEquipmentMatEntryItem = JSON.parse(equipmatentryitem) as Incentive_Add_Equipment;
+
+    let item = new Incentive_Add_Equipment;
+    this.newObjectFromLocalStorage = Object.assign(item, parsedEquipmentMatEntryItem);
+    console.log(this.newObjectFromLocalStorage);
+
+    //re-populate Item if page is refreshed
+    setTimeout(() => {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+      controlArray.controls[0].get('ItemID').setValue(this.newObjectFromLocalStorage.ItemID);
+      controlArray.controls[0].get('Description').setValue(this.newObjectFromLocalStorage.Description);
+      controlArray.controls[0].get('Quantity').setValue(this.newObjectFromLocalStorage.Quantity);
+      controlArray.controls[0].get('Cost').setValue(this.newObjectFromLocalStorage.Cost);
+      controlArray.controls[0].get('Total').setValue(this.newObjectFromLocalStorage.Total);
+    },4);
+
+    // this.itemID = this.newObjectFromLocalStorage.ItemID;
+    // this.description = this.newObjectFromLocalStorage.Description;
+    // this.quantityFromLocalStorage = this.newObjectFromLocalStorage.Quantity;
+    // this.costFromLocalStorage = this.newObjectFromLocalStorage.Cost;
+    // this.totalFromLocalStorage = this.newObjectFromLocalStorage.Total;
+
     this.incentiveEquipMatEntryForm = this.fb.group({
       entryRows: this.fb.array([this.initEntryRow()])
     })
@@ -76,6 +117,33 @@ export class IncentiveequipmatComponent implements OnInit {
     })
   }
 
+  getItemName(e:any,i:number) {
+    setTimeout(() => {
+
+      const getItemID = this.incentiveEquipMatEntryForm.controls['entryRows'].value.forEach(element => {
+        console.log(element, i);
+
+        const result = this.listMatItems.filter(x => x.item_id == element.ItemID);
+
+        var string;
+        result.forEach(function(e) {
+          string = e.itemName.toString();//extract string from returned array
+        });
+        const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+        controlArray.at(i).get('Description').setValue(string);
+
+      })
+
+      
+      // console.log(result);
+      // const n = result.map(x => {
+      //   return x.itemName
+      // })
+      // this.description = n;
+      // console.log(n);  
+      }, 4);
+  }
+
   onSubmit(form: FormGroup) {
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRows'];
@@ -83,9 +151,9 @@ export class IncentiveequipmatComponent implements OnInit {
     //not working. will use in the ngOnDestroy
     this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Total);
     
-    console.log(JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRows'].value));
-    console.log(this.incentiveEquipMatEntryForm.get('entryRows').value)
-    localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.value) )
+    // console.log(JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRows'].value));
+    // console.log(this.incentiveEquipMatEntryForm.get('entryRows').value)
+    localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0]));
     // console.log(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].ItemID);
     // console.log(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Description)
     // console.log(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Quantity)
@@ -117,6 +185,9 @@ export class IncentiveequipmatComponent implements OnInit {
   removeNewItem(i: number) {
     const control = (<FormArray>this.incentiveEquipMatEntryForm.get('entryRows'))
     .removeAt(i);
+
+    localStorage.removeItem("equipmatentry");
+    localStorage.removeItem("totalEquipMatCalc");
   }
 
   calculateQuantity(val:any) {

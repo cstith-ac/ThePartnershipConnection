@@ -17,7 +17,7 @@
                             <label class="col-sm-2 col-form-label">Customer</label>
                             <input 
                                 type="text"
-                                class="form-control col-sm-5" 
+                                class="form-control col-sm-5 fullWidthInput" 
                                 [(ngModel)]="customer" 
                                 formControlName="CustomerID"
                             >
@@ -44,7 +44,7 @@
                             <div *ngIf="isSiteSelectionFirst">
                                 <input 
                                     type="text" 
-                                    class="form-control col-sm-12" 
+                                    class="form-control col-sm-12 fullWidthInput" 
                                     [(ngModel)]="siteName" 
                                     formControlName="CustomerSiteID"
                                 >
@@ -59,7 +59,7 @@
                                 <div class="dropdown">
                                     <select 
                                         formControlName="CustomerSiteID" 
-                                        class="form-control col-sm-12" 
+                                        class="form-control col-sm-12 fullWidthSelect" 
                                         [(ngModel)]="siteName" 
                                         (ngModelChange)="updateSite($event)">
                                         <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
@@ -93,7 +93,7 @@
                             <div *ngIf="isSystemSelectionFirst">
                                 <input 
                                     type="text" 
-                                    class="form-control col-sm-12" 
+                                    class="form-control col-sm-12 fullWidthInput" 
                                     [(ngModel)]="systemCode" 
                                     formControlName="SystemCode"
                                 >
@@ -109,7 +109,7 @@
                                 <div class="dropdown">
                                     <select 
                                         formControlName="System" 
-                                        class="form-control col-sm-12"
+                                        class="form-control col-sm-12 fullWidthSelect"
                                         [(ngModel)]="selectedValue"
                                         (ngModelChange)="updateSystem($event)"
                                     >
@@ -152,7 +152,7 @@
                             <label class="col-sm-2 col-form-label">System Type</label>
                             <div class="dropdown">
                                 <select 
-                                    formControlName="SystemType" class="form-control col-sm-12" 
+                                    formControlName="SystemType" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="systemType"
                                 >
                                     <option *ngFor="let list of listsystemtypes" value="{{ list.system_Id }}" [ngValue]="list.system_Id">
@@ -168,7 +168,7 @@
                             <label class="col-sm-2 col-form-label">Panel Type</label>
                             <div class="dropdown">
                                 <select 
-                                    formControlName="PanelType" class="form-control col-sm-12" 
+                                    formControlName="PanelType" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="panelType"
                                 >
                                     <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}" [ngValue]="list.panel_Type_Id">
@@ -188,7 +188,7 @@
                             <label class="col-sm-2 col-form-label">Central Station</label>
                             <div class="dropdown">
                                 <select 
-                                    formControlName="CentralStationID" class="form-control col-sm-12" 
+                                    formControlName="CentralStationID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="centralStationID"
                                 >
                                     <option *ngFor="let station of listcentralstations" value="{{ station.centralStationID }}" [ngValue]="station.centralStationID">
@@ -202,7 +202,7 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Additional Info</label>
-                            <input type="text" class="form-control col-sm-10" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo">
+                            <input type="text" class="form-control col-sm-10" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" (keyup)="getAdditionalInfo($event)">
                         </div>
                     </div>
                     <div class="col-md-7">
@@ -332,7 +332,8 @@
                                             mask="separator.2" 
                                             thousandSeparator=","
                                             prefix="$"
-                                            type="text" class="form-control col-sm-8" 
+                                            type="text" 
+                                            class="form-control col-sm-8" 
                                             [(ngModel)]="invoiceTotal"
                                             formControlName="InvoiceTotal">
                                     </div>
@@ -342,10 +343,20 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 col-form-label">Tax</label>
                                     <div class="input-group d-flex justify-content-center">
-                                        <div class="input-group-prepend">
+                                        <!-- <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control col-sm-10" [(ngModel)]="tax" formControlName="Tax">
+                                        </div> -->
+                                        <input
+                                            type="text" 
+                                            class="form-control col-sm-10"
+                                            formControlName="Tax"
+                                            [(ngModel)]="tax"
+                                            placeholder="$0.00"
+                                            mask="separator.2" 
+                                            thousandSeparator=","
+                                            prefix="$"
+                                            (keyup)="getTax($event)"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +405,38 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group form-inline">
+                                <div class="shadow">
+                                    <div class="ml-2 mt-2">
+                                        <h3>Contract Terms</h3>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-3 col-form-label">Start Date</label>
+                                        <input 
+                                            type="date" 
+                                            class="form-control col-sm-5" 
+                                            [(ngModel)]="startDate" formControlName="ContractDate"
+                                            (change)="getContractDate($event)"    
+                                        >
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2 col-form-label">Term</label>
+                                        <input 
+                                            type="number" 
+                                            class="form-control col-sm-2 mr-3"
+                                            [(ngModel)]="contractTerm" formControlName="ContractTerm"
+                                            (keyup)="getContractTerm($event)"
+                                        >Mo
+    
+                                        <label class="col-sm-3 col-form-label">Renewal</label>
+                                        <input 
+                                            type="number"
+                                            class="form-control col-sm-2 mr-3"
+                                            [(ngModel)]="renewal" formControlName="RenewalMonths"
+                                            (keyup)="getRenewal($event)"
+                                        >Mo
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group form-inline">
                                     <label class="col-sm-3 col-form-label">Start Date</label>
                                     <input 
                                         type="date" 
@@ -406,15 +448,37 @@
                                 <div class="form-group form-inline">
                                     <label class="col-sm-2 col-form-label">Term</label>
                                     <input 
-                                        type="month" 
-                                        class="form-control col-sm-2 mr-3" formControlName="ContractTerm"
+                                        type="number" 
+                                        class="form-control col-sm-2 mr-3"
+                                        [(ngModel)]="contractTerm" formControlName="ContractTerm"
                                         (keyup)="getContractTerm($event)"
                                     >Mo
 
                                     <label class="col-sm-3 col-form-label">Renewal</label>
-                                    <input type="month" class="form-control col-sm-2 mr-3" formControlName="RenewalMonths">Mo
+                                    <input 
+                                        type="number"
+                                        class="form-control col-sm-2 mr-3"
+                                        [(ngModel)]="renewal" formControlName="RenewalMonths"
+                                        (keyup)="getRenewal($event)"
+                                    >Mo
+                                </div> -->
+                                <div class="shadow">
+                                    <div class="form-group form-inline form-check mb-0">
+                                        <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
+                                        <input 
+                                            type="checkbox" class="form-control form-check-input" 
+                                            [value]="false"
+                                            [(ngModel)]="signalsTested" formControlName="SignalsTested"
+                                            (change)="onSignalsTested($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group form-inline mb-0">
+                                        <label class="col-sm-10 col-form-label">
+                                            <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-group form-inline form-check">
+                                <!-- <div class="form-group form-inline form-check">
                                     <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
                                     <input type="checkbox" class="form-control form-check-input" [(ngModel)]="signalsTested" formControlName="SignalsTested">
                                 </div>
@@ -422,12 +486,13 @@
                                     <label class="col-sm-10 col-form-label">
                                         <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
                                     </label>
-                                </div>
+                                </div> -->
                                 <div class="col-md-12 offset-md-0">
                                     <!-- <div class="row d-flex justify-content-between">
                                       <button class="btn btn-success">Add/View Comments</button>
                                       <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
                                     </div> -->
+                                    <button type="reset" class="btn btn-danger" (click)="reset()">Reset</button>
                                     <button type="button" class="btn btn-success btn-light-green" (click)="openAddViewCommentsModal(comments)">Add/View Comments</button>
                                     <!-- <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button> -->
                                     <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button>
@@ -440,6 +505,30 @@
         </form>
     </div>
 </div>
+
+<footer class="footer">
+    <div class="ml-5 mr-5">
+        <div class="row pb-3">
+        <div class="col-md-3">
+            <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
+        </div>
+        <div class="col-md-1">
+            <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
+        </div>
+        <div class="col-md-8">
+            <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
+        </div>
+        <!-- <div class="col-sm-12">
+            <h2 class="">The Partnership Connection</h2>
+        </div> -->
+        </div>
+        <!-- <div class="row">
+        <div class="col-sm-12">
+            <p class="">powered by Alarm Connections</p>
+        </div>
+        </div> -->
+    </div>
+</footer>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -897,7 +986,11 @@
                                 <i class="text-center">This space is provided for details, additional information and clarifications for your incentive. All information provided will be available to the incentive processing team!</i>
                             </div>
                         </label>
-                        <textarea class="form-control" rows="12" formControlName="PartnerComments"></textarea>
+                        <textarea 
+                            class="form-control" 
+                            rows="12" formControlName="PartnerComments"
+                            [(ngModel)]="partnerComments"
+                        ></textarea>
                     </div>
                 </form>
             </div>

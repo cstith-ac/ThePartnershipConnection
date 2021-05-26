@@ -6,6 +6,7 @@ import { RouteService } from '../../services/route.service';
 import { IncentiveEntry } from '../../models/incentiveentry';
 import { InstallCompanyList } from '../../models/installcompanylist';
 import { CheckBoxIndex } from '../../models/checkboxindex';
+import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
@@ -23,6 +24,7 @@ export class IncentiveentryComponent implements OnInit {
   incentiveEntry: IncentiveEntry[];
   installCompanyList: InstallCompanyList[];
   checkBoxIndex: CheckBoxIndex[];
+  checkBoxIncompatible: CheckBoxIncompatible[];
   incentiveEntryForm: FormGroup;
   submitted = false;
   installCompanyID;
@@ -44,10 +46,14 @@ export class IncentiveentryComponent implements OnInit {
   newSite: '';
   systemTransfer: '';
   other: '';
-  show: boolean = true;
   id;
   checkBoxName;
-  dynamicVariable = false; // true based on your condition 
+  serviceIncluded;
+  checkBoxIncompatibleSelection;
+  thisBox;
+  notThisBox;
+  selectedForCheckBoxAutoInsert = [];
+  selectedAutopay;
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -60,15 +66,18 @@ export class IncentiveentryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    localStorage.setItem("serviceIncluded","no");
     setTimeout(() => {
       let myTag = this.el.nativeElement.querySelector('.entryColumn2');
-      console.log(myTag)
+      //console.log(myTag)
       // $('.entryColumn2').eq(0).remove();
       // $('.entryColumn2').eq(1).remove();
       $('.entryColumn2').eq(2).remove();
       $('.entryColumn2').eq(3).remove();
       //$('.entryColumn2').eq(4).remove();
       //$('.entryColumn2').eq(5).remove();
+
+      this.incentiveEntryForm.controls['PickUp'].disable();
     },1000);
 
     if(this.jwtHelper.isTokenExpired()) {
@@ -79,7 +88,8 @@ export class IncentiveentryComponent implements OnInit {
       localStorage.removeItem('partnerCode');
       localStorage.removeItem('invoiceNumber');
       localStorage.removeItem('invoiceDate');
-      localStorage.removeItem('invoiceTotal')
+      localStorage.removeItem('invoiceTotal');
+      localStorage.removeItem('siteName');
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
@@ -87,6 +97,7 @@ export class IncentiveentryComponent implements OnInit {
 
     this.routeService.getInstallCompanyList().subscribe(
       res => {
+        // console.log(res.status)
         this.installCompanyList = res;
         
         for(var i = 0;i < this.installCompanyList.length; i++) {
@@ -130,11 +141,20 @@ export class IncentiveentryComponent implements OnInit {
       }
     )
 
+    this.routeService.getCheckBoxIncompatible().subscribe(
+      res => {
+        //console.log(res) //Array
+        this.checkBoxIncompatible=res;
+        res.forEach((x) => 
+          console.log(x))
+      }
+    )
+
     this.incentiveEntryForm = this.fb.group({
       InvoiceNumber: ["", Validators.required],
       InvoiceDate: ["", Validators.required],
       InvoiceTotal: ["", Validators.required],
-      ServiceIncluded: ["", Validators.required],
+      ServiceIncluded: ["no", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
       ClientVisit:  [false],
@@ -147,8 +167,8 @@ export class IncentiveentryComponent implements OnInit {
       PickUp: [false],
       NewSite:  [false],
       SystemTransfer:  [false],
-      CreditCardAutoPay: [false, Validators.requiredTrue],
-      ACHAutopay: [false, Validators.requiredTrue]
+      CreditCardAutoPay: [false],
+      ACHAutopay: [false]
     })
   }
 
@@ -166,18 +186,19 @@ export class IncentiveentryComponent implements OnInit {
     return this.incentiveEntryForm.controls; 
   }
 
-  test() {
-    this.router.navigate(["/incentive-dashboard"]);
-  }
+  // test() {
+  //   this.router.navigate(["/incentive-dashboard"]);
+  // }
 
   onSubmit(form: FormGroup) {
 
     this.submitted = true;
 
-    console.log(this.incentiveEntryForm.get('InvoiceNumber').value);
+    // console.log(this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
     localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
+    localStorage.setItem("serviceIncluded",this.serviceIncluded);
 
     // this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
     // this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);
@@ -197,6 +218,8 @@ export class IncentiveentryComponent implements OnInit {
 
   onChangeServiceIncluded(e) {
     console.log(e.target.value)
+    this.serviceIncluded = e.target.value;
+    localStorage.setItem("serviceIncluded",e.target.value);
   }
 
   disableOther(e) {
@@ -213,16 +236,12 @@ export class IncentiveentryComponent implements OnInit {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].disable();
       //console.log('disable ACHAutopay');
-      this.checkBoxIndex.forEach(x=>{
-        //console.log(x);
-        if(e.target.value == 11) {
-          //console.log(e.target.value);
-        }
-      })
+      this.selectedForCheckBoxAutoInsert.push(e.target.value);
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].enable();
       //console.log('enable CreditCardAutoPay');
+      this.selectedForCheckBoxAutoInsert.pop()
     }
   }
 
@@ -230,37 +249,50 @@ export class IncentiveentryComponent implements OnInit {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
       //console.log('disable CreditCardAutoPay');
-      this.checkBoxIndex.forEach(x=>{
-        //console.log(x);
-        if(e.target.value == 12) {
-          //console.log(e.target.value);
-        }
-      })
+      this.selectedForCheckBoxAutoInsert.push(e.target.value);
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
       //console.log('enable CreditCardAutoPay');
+      this.selectedForCheckBoxAutoInsert.pop();
     }
   }
 
-  onChangeACHorCC(e) {
-    if(e.target.checked && e.target.value === 11) {
-      //console.log(e.target.value)
-      console.log('working for 11...')
-      //this.incentiveEntryForm.controls['ACHAutopay'].disable();
-    } 
-    if (e.target.checked && e.target.value === 12) {
-      //console.log(e.target.value)
-      console.log('working for 12...')
-    }
-  }
+  // onChangeACHorCC(e) {
+  //   if(e.target.checked && e.target.value === 11) {
+  //     //console.log(e.target.value)
+  //     console.log('working for 11...')
+  //     //this.incentiveEntryForm.controls['ACHAutopay'].disable();
+  //   } 
+  //   if (e.target.checked && e.target.value === 12) {
+  //     //console.log(e.target.value)
+  //     console.log('working for 12...')
+  //   }
+  // }
 
   onChangeClientVisit(e) {
     if(e.target.checked) {  
-      //e.target.setAttribute('disabled','')   
       console.log('checked: '+ e.target.value)
-      // console.log(this.incentiveEntryForm.get('ACHAutopay').value)
-      // console.log(this.incentiveEntryForm.get('CreditCardAutoPay').value)
+      //if value = 1, do something
+      if(e.target.value == 1) {
+        console.log('do something')
+        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+      }
+      if(e.target.value == 2) {
+        console.log('do something else')
+        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+      }
+      if(e.target.value == 11) {
+        console.log('do something')
+        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+      }
+      if(e.target.value == 12) {
+        console.log('do something else')
+        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+      }
+      //if value == 2, do something
+      //if value = 11, do something
+      //if value == 12, do something
     } else {
       console.log('unchecked: '+ e.target.value)
     }

@@ -82,3 +82,23 @@
   font-style: italic;
   line-height: 1.2;
 }
+.shadow {
+  border: 1px solid black;
+  margin-bottom: 2.1rem;
+}
+
+.fullWidthSelect {
+  /* width: calc(17vw - 20px); */
+  width: calc(15vw - 20px);
+}
+
+.fullWidthInput {
+  width: calc(17vw - 20px);
+}
+
+.footer-logo {
+  color: #1B5EAC;
+}
+.mt-25 {
+  margin-top: 25px;
+}

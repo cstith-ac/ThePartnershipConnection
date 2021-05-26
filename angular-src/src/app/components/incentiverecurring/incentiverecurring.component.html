@@ -11,18 +11,19 @@
                         </h1>
                     </div>
                     <div class="col-md-6">
-                        <span class="mr-5 font-weight-bold">Invoice #</span>
-                        <span class="ml-5 font-weight-bold">Customer Name</span>
+                        <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                        </span>
+                        <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customerName }}</span></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 offset-md-6">
-                        <span class="font-weight-bold">Customer Site Information</span>
+                        <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteInformation }}</span></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 offset-md-6">
-                        <span class="font-weight-bold">Customer System Information</span>
+                        <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ customerSystemInformation }}</span></span>
                     </div>
                 </div>
                 <div class="row">
@@ -306,8 +307,13 @@
                         <div class="row">
                             <div class="col">
                               <div class="dropdown">
-                                  <select formControlName="ItemID" class="form-control">
-                                      <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemName }}</option>
+                                  <select 
+                                    formControlName="ItemID" 
+                                    class="form-control" 
+                                    (change)="getItemName($event,i)"
+                                    name="something_{{i}}"
+                                  >
+                                      <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id" >{{ item.itemCode }}</option>
                                   </select>
                               </div>
                             </div>
@@ -316,13 +322,16 @@
                                 type="text"
                                 class="form-control" 
                                 formControlName="Description"
-                            >
+                                name="something_{{i}}"
+                              >
                             </div>
                             <div class="col">
                               <div class="dropdown">
                                   <select formControlName="BillCycle" class="form-control">
-                                      
-                                      <option value="monthly">Monthly</option>
+                                      <option value="m">Monthly</option>
+                                      <option value="q">Quarterly</option>
+                                      <option value="s">Semi-Annual</option>
+                                      <option value="a">Annual</option>
                                   </select>
                               </div>
                             </div>
@@ -341,7 +350,7 @@
                             <div class="col">
                               <input 
                                 type="text"
-                                class="form-control" 
+                                class="form-control"
                                 formControlName="PassThrough"
                                 placeholder="$0.00"
                                 mask="separator.2" 
@@ -353,14 +362,14 @@
                             <div class="col">
                               <input 
                                 type="date"
-                                class="form-control" 
+                                class="form-control"
                                 formControlName="BillingStartDate"
                               >
                             </div>
                             <div class="col">
                               <input
                                 class="center-block"
-                                type="checkbox" 
+                                type="checkbox"
                                 formControlName="Add2Item"
                                 (change)="checkboxChanged($event)"
                                 >
@@ -368,7 +377,9 @@
                             <div class="col text-center">
                               <div class="dropdown">
                                   <select 
-                                    formControlName="Multiple"  class="form-control" (change)="calculateMultiple($event)">
+                                    formControlName="Multiple"  
+                                    class="form-control"
+                                    (change)="calculateMultiple($event)">
                                       <option
                                           *ngFor="let m of listMultiples" 
                                           value="{{m.multiple}}" 
@@ -387,6 +398,7 @@
                                 thousandSeparator=","
                                 prefix="$"
                                 (change)="calculateTotal($event)"
+                                [attr.disabled]="true"
                               >
                             </div>
                             <!-- <div class="col">
@@ -415,4 +427,26 @@
     </div>
 </div>
 
-
+<footer class="footer">
+    <div class="ml-5 mr-5">
+        <div class="row pb-3">
+        <div class="col-md-3">
+            <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
+        </div>
+        <div class="col-md-1">
+            <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
+        </div>
+        <div class="col-md-8">
+            <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
+        </div>
+        <!-- <div class="col-sm-12">
+            <h2 class="">The Partnership Connection</h2>
+        </div> -->
+        </div>
+        <!-- <div class="row">
+        <div class="col-sm-12">
+            <p class="">powered by Alarm Connections</p>
+        </div>
+        </div> -->
+    </div>
+</footer>

@@ -23,6 +23,7 @@
     font-size: 1rem;
     font-style: italic;
     line-height: 1.2;
+    margin-top: 10px;
 }
 .entryColumn2 {
     position: relative;
@@ -58,15 +59,15 @@ input[type="radio"]{
     box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 1px;
  }
  
- input[type="radio"]:checked {
+input[type="radio"]:checked {
    appearance: none;
    outline: none;
    padding: 0;
    content: none;
    border: none;
- }
+}
  
- input[type="radio"]:checked::before{
+input[type="radio"]:checked::before{
    position: absolute;
    color: green !important;
    content: "\00A0\2713\00A0" !important;
@@ -74,4 +75,11 @@ input[type="radio"]{
    font-weight: bolder;
    /* font-size: 21px; */
    font-size: 10px;
- }
+}
+
+.footer-logo {
+    color: #1B5EAC;
+}
+.mt-25 {
+    margin-top: 25px;
+}

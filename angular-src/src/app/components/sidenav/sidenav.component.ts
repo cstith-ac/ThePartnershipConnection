@@ -124,6 +124,22 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('otherDocument2');
     localStorage.removeItem('contractDate');
     localStorage.removeItem('contractTerm');
+    localStorage.removeItem('serviceIncluded');
+    localStorage.removeItem('customerName');
+    localStorage.removeItem('customerSiteName');
+    localStorage.removeItem('customerSystemInformation');
+    localStorage.removeItem('alarmAccount');
+    localStorage.removeItem('systemType');
+    localStorage.removeItem('panelType');
+    localStorage.removeItem('panelLocation');
+    localStorage.removeItem('centralStationID');
+    localStorage.removeItem('customerSiteId');
+    localStorage.removeItem('renewal');
+    localStorage.removeItem('tax');
+    localStorage.removeItem('additionalInfo');
+    localStorage.removeItem('partnerComments');
+    localStorage.removeItem('signalsTested');
+    localStorage.removeItem('siteName');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',
@@ -189,6 +205,42 @@ export class SidenavComponent implements OnInit {
   toggleShow(newTab: string): void {
     //this.isShown = !this.isShown;
     this.activeTab = newTab;
+  }
+
+  removeDashboardData() {
+    localStorage.removeItem('installCompanyID');
+    localStorage.removeItem('totalRecurringCalc');
+    localStorage.removeItem('totalEquipMatCalc');
+    localStorage.removeItem('totalLaborChargesCalc');
+    localStorage.removeItem('invoiceDate');
+    localStorage.removeItem('invoiceNumber');
+    localStorage.removeItem('invoiceTotal');
+    localStorage.removeItem('recurringentry');
+    localStorage.removeItem('equipmatentry');
+    localStorage.removeItem('laborchargesentry');
+    localStorage.removeItem('invoice');
+    localStorage.removeItem('subscriberForm');
+    localStorage.removeItem('siteVisit');
+    localStorage.removeItem('otherDocument1');
+    localStorage.removeItem('contract');
+    localStorage.removeItem('otherDocument2');
+    localStorage.removeItem('contractDate');
+    localStorage.removeItem('contractTerm');
+    localStorage.removeItem('serviceIncluded');
+    localStorage.removeItem('customerName');
+    localStorage.removeItem('customerSiteName');
+    localStorage.removeItem('customerSystemInformation');
+    localStorage.removeItem('alarmAccount');
+    localStorage.removeItem('systemType');
+    localStorage.removeItem('panelType');
+    localStorage.removeItem('panelLocation');
+    localStorage.removeItem('centralStationID');
+    localStorage.removeItem('customerSiteId');
+    localStorage.removeItem('renewal');
+    localStorage.removeItem('tax');
+    localStorage.removeItem('additionalInfo');
+    localStorage.removeItem('partnerComments');
+    localStorage.removeItem('signalsTested');
   }
 
 }

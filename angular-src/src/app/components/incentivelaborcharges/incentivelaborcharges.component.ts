@@ -20,11 +20,24 @@ export class IncentivelaborchargesComponent implements OnInit {
   listLaborItems: ListLaborItems[];
   incentive_Add_Labor: Incentive_Add_Labor[];
 
-  description: '';
+  itemID;
+  description;
   hours: number;
   costPerHour: number;
   total: number;
   totalLaborChargesCalc;
+
+  newObjectFromLocalStorage;
+  itemIDFromLocalStorage;
+  descriptionFromLocalStorage;
+  hoursFromLocalStorage;
+  costPerHourFromLocalStorage;
+  totalFromLocalStorage;
+
+  invoiceNumber;
+  customerName;
+  customerSiteInformation;
+  customerSystemInformation;
 
   constructor(
     public fb: FormBuilder,
@@ -47,6 +60,33 @@ export class IncentivelaborchargesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.invoiceNumber = localStorage.getItem("invoiceNumber");
+    this.customerName = localStorage.getItem("customerName");
+    this.customerSiteInformation = localStorage.getItem("customerSiteName");
+    this.customerSystemInformation = localStorage.getItem("customerSystemInformation");
+
+    let laborchargesentry = localStorage.getItem("laborchargesentry");
+    let parsedLaborChargesEntryItem = JSON.parse(laborchargesentry) as Incentive_Add_Labor;
+
+    let item = new Incentive_Add_Labor;
+    this.newObjectFromLocalStorage = Object.assign(item, parsedLaborChargesEntryItem);
+
+    //re-populate Item if page is refreshed
+    setTimeout(() => {
+      const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+      controlArray.controls[0].get('ItemID').setValue(this.newObjectFromLocalStorage.ItemID);
+      controlArray.controls[0].get('Description').setValue(this.newObjectFromLocalStorage.Description);
+      controlArray.controls[0].get('Hours').setValue(this.newObjectFromLocalStorage.Hours);
+      controlArray.controls[0].get('CostPerHour').setValue(this.newObjectFromLocalStorage.CostPerHour);
+      controlArray.controls[0].get('Total').setValue(this.newObjectFromLocalStorage.Total);
+    }, 4);
+
+    // this.itemID = this.newObjectFromLocalStorage.ItemID;
+    // this.description = this.newObjectFromLocalStorage.Description;
+    // this.hoursFromLocalStorage = this.newObjectFromLocalStorage.Hours;
+    // this.costPerHourFromLocalStorage = this.newObjectFromLocalStorage.CostPerHour;
+    // this.totalFromLocalStorage = this.newObjectFromLocalStorage.Total;
+
     this.incentiveLaborChargesEntryForm = this.fb.group({
       entryRows: this.fb.array([this.initEntryRow()])
     })
@@ -83,6 +123,33 @@ export class IncentivelaborchargesComponent implements OnInit {
     })
   }
 
+  getItemName(e:any,i:number) {
+    //get the description from listrecurringitems based on the selected ItemID
+    console.log(e.target.value)//returns 'index: item_id', as a string
+    let currentID = e.target.value;
+    setTimeout(() => {
+
+      const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRows'].value.forEach(element => {
+        const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
+
+        var string;
+        result.forEach(function(e) {
+          string = e.itemName.toString();//extract string from returned array
+        });
+        // console.log(string);
+        const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+        controlArray.at(i).get('Description').setValue(string);
+      })
+      
+      //console.log(result);
+      // const n = result.map(x => {
+      //   return x.itemName
+      // })
+      // this.description = n;
+      // console.log(n);  
+      }, 4);
+  }
+
   get r():FormArray {
     return this.incentiveLaborChargesEntryForm.get('entryRows') as FormArray;
   }
@@ -93,9 +160,10 @@ export class IncentivelaborchargesComponent implements OnInit {
     
     this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour, this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Total);
 
-    console.log(JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRows'].value));
-    console.log(this.incentiveLaborChargesEntryForm.get('entryRows').value);
-    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.value));
+    // console.log(JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRows'].value));
+    // console.log(this.incentiveLaborChargesEntryForm.get('entryRows').value);
+    // localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.value));
+    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0]));
     this.router.navigate(['/incentive-dashboard'])
     return
   }

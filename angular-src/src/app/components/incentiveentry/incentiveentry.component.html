@@ -3,7 +3,19 @@
         <div class="row ml-0">
             <div class="col-md-12">
                 <div class="row" *ngFor="let item of installCompanyList">
-                    <h1 class="incentive-header">Incentive Entry | <span class="company">{{ item.companyName }} - {{ item.partnerCode}}</span></h1>
+                    <h1 class="incentive-header">Incentive Entry | </h1>
+                    <span *ngIf="installCompanyList.length &lt; 2; else multipleCompanyNameBlock">
+                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}}</p>
+                    </span>
+                    <ng-template #multipleCompanyNameBlock>
+                        <select name="" id="">
+                            <option value="">Company one</option>
+                            <option value="">Company two</option>
+                            <option value="">Company three</option>
+                            <option value="">Company four</option>
+                        </select>
+                    </ng-template>
+                    <!-- <p class="company">{{ item.companyName }} - {{ item.partnerCode}}</p> -->
                 </div>
             </div>
         </div>
@@ -59,6 +71,7 @@
                             class="mr-2 ml-2" 
                             formControlName="ServiceIncluded"
                             name="ServiceIncluded"
+                            (change)="onChangeServiceIncluded($event)"
                             value="yes"
                         >
                         No
@@ -70,12 +83,13 @@
                             [value]=""
                         > -->
                         <input 
-                        type="radio" 
-                        class="mr-2 ml-2" 
-                        formControlName="ServiceIncluded"
-                        name="ServiceIncluded"
-                        value="no"
-                    >
+                            type="radio" 
+                            class="mr-2 ml-2" 
+                            formControlName="ServiceIncluded"
+                            name="ServiceIncluded"
+                            (change)="onChangeServiceIncluded($event)"
+                            value="no"
+                        >
                     </div>
                 </div>
             </div>
@@ -107,6 +121,7 @@
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
                                     class="form-check-populate"
+                                    [disabled]="box.id&gt;7"
                                 >
                             </div>
                         </div>   
@@ -375,3 +390,26 @@
         </form> -->
     </div>
 </div>
+<footer class="footer">
+    <div class="ml-5 mr-5">
+      <div class="row pb-3">
+        <div class="col-md-3">
+          <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
+        </div>
+        <div class="col-md-1">
+          <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
+        </div>
+        <div class="col-md-8">
+          <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
+        </div>
+        <!-- <div class="col-sm-12">
+          <h2 class="">The Partnership Connection</h2>
+        </div> -->
+      </div>
+      <!-- <div class="row">
+        <div class="col-sm-12">
+          <p class="">powered by Alarm Connections</p>
+        </div>
+      </div> -->
+    </div>
+  </footer>
