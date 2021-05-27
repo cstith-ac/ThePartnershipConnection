@@ -190,26 +190,42 @@ export class IncentiveequipmatComponent implements OnInit {
     localStorage.removeItem("totalEquipMatCalc");
   }
 
-  calculateQuantity(val:any) {
-    this.quantity = this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Quantity;
-    console.log(this.quantity);
+  calculateQuantity(val:any,i:number) {
+    //this.quantity = this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Quantity;
+    const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.quantity = rowVal.Quantity;
+    //console.log(this.quantity);
   }
 
-  calculateCost(val:any){
-    this.cost = parseInt(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Cost);
-    console.log(this.cost);
-    this.calculateTotal(val)
+  calculateCost(val:any,i:number){
+    // this.cost = parseInt(this.incentiveEquipMatEntryForm.controls['entryRows'].value[0].Cost);
+    const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.cost = parseInt(rowVal.Cost);
+    //console.log(this.cost);
+    this.calculateTotal(val,i)
   }
 
-  calculateTotal(val:any) {
+  calculateTotal(val:any,i:number) {
     let totalEquipMatCalc = this.total = (this.quantity * this.cost);
     //this.incentiveEquipMatEntryForm.controls.entryRows['Total'].patchValue(totalEquipMatCalc);
 
     this.totalEquipMatCalc = totalEquipMatCalc.toString();
     localStorage.setItem('totalEquipMatCalc', this.totalEquipMatCalc);
 
-    const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
-    controlArray.controls[0].get('Total').setValue(this.totalEquipMatCalc);
+    const getItemID = this.incentiveEquipMatEntryForm.controls['entryRows'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+      controlArray.at(i).get('Total').setValue(this.totalEquipMatCalc);
+    })
+    // const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
+    // controlArray.controls[0].get('Total').setValue(this.totalEquipMatCalc);
   }
 
 }

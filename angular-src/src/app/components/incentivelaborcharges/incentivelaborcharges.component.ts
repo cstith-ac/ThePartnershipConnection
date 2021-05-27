@@ -128,25 +128,17 @@ export class IncentivelaborchargesComponent implements OnInit {
     console.log(e.target.value)//returns 'index: item_id', as a string
     let currentID = e.target.value;
     setTimeout(() => {
+        const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRows'].value.forEach(element => {
+          const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
 
-      const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRows'].value.forEach(element => {
-        const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
-
-        var string;
-        result.forEach(function(e) {
-          string = e.itemName.toString();//extract string from returned array
-        });
-        // console.log(string);
-        const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
-        controlArray.at(i).get('Description').setValue(string);
-      })
-      
-      //console.log(result);
-      // const n = result.map(x => {
-      //   return x.itemName
-      // })
-      // this.description = n;
-      // console.log(n);  
+          var string;
+          result.forEach(function(e) {
+            string = e.itemName.toString();//extract string from returned array
+          });
+          // console.log(string);
+          const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+          controlArray.at(i).get('Description').setValue(string);
+        })
       }, 4);
   }
 
@@ -182,23 +174,39 @@ export class IncentivelaborchargesComponent implements OnInit {
   }
 
   calculateHours(val:any) {
-    this.hours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
-    console.log(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
+    //this.hours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
+    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    //console.log(rowVal.Hours);
+    this.hours = parseInt(rowVal.Hours);
   }
 
-  calculateCostPerHour(val:any) {
-    this.costPerHour = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour);
-    this.calculateTotal(val);
+  calculateCostPerHour(val:any,i:number) {
+    // this.costPerHour = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour);
+    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.costPerHour = parseInt(rowVal.CostPerHour);
+    this.calculateTotal(val,i);
   }
 
-  calculateTotal(val:any) {
+  calculateTotal(val:any,i:number) {
     let totalLaborChargesCalc = this.total = (this.hours * this.costPerHour);
-    // this.incentiveLaborChargesEntryForm.controls.entryRows['Total'].patchValue(totalLaborChargesCalc);
+    
     this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
     localStorage.setItem('totalLaborChargesCalc', this.totalLaborChargesCalc);
 
-    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
-    controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);
+    const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRows'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
+      controlArray.at(i).get('Total').setValue(this.totalLaborChargesCalc);
+    })
+    // const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
+    // controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);
   }
 
 }

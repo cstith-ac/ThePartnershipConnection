@@ -117,7 +117,7 @@
                                     type="number" 
                                     formControlName="Quantity"
                                     class="form-control"
-                                    (change)="calculateQuantity($event)"
+                                    (change)="calculateQuantity($event,i)"
                                 >
                             </div>
                             <div class="col">
@@ -126,9 +126,10 @@
                                     class="form-control"
                                     formControlName="Cost"
                                     placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
+                                    mask="separator.2" 
+                                    thousandSeparator=","
                                     prefix="$"
-                                    (change)="calculateCost($event)"
+                                    (change)="calculateCost($event,i)"
                                 >
                             </div>
                             <div class="col">
@@ -137,9 +138,10 @@
                                     class="form-control"
                                     formControlName="Total"
                                     placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
+                                    mask="separator.2" 
+                                    thousandSeparator=","
                                     prefix="$"
-                                    (change)="calculateTotal($event)"
+                                    (change)="calculateTotal($event,i)"
                                     [attr.disabled]="true"
                                 >
                             </div>

@@ -129,7 +129,7 @@
                                     mask="separator.2" 
                                     thousandSeparator=","
                                     prefix="$"
-                                    (change)="calculateCostPerHour($event)"
+                                    (change)="calculateCostPerHour($event,i)"
                                 >
                             </div>
                             <div class="col">
@@ -141,7 +141,7 @@
                                     mask="separator.2" 
                                     thousandSeparator=","
                                     prefix="$"
-                                    (change)="calculateTotal($event)"
+                                    (change)="calculateTotal($event,i)"
                                     [attr.disabled]="true"
                                 >
                             </div>
