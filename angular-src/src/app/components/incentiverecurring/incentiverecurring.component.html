@@ -379,7 +379,7 @@
                                   <select 
                                     formControlName="Multiple"  
                                     class="form-control"
-                                    (change)="calculateMultiple($event)">
+                                    (change)="calculateMultiple($event,i)">
                                       <option
                                           *ngFor="let m of listMultiples" 
                                           value="{{m.multiple}}" 
@@ -397,7 +397,7 @@
                                 mask="separator.2" 
                                 thousandSeparator=","
                                 prefix="$"
-                                (change)="calculateTotal($event)"
+                                (change)="calculateTotal($event,i)"
                                 [attr.disabled]="true"
                               >
                             </div>

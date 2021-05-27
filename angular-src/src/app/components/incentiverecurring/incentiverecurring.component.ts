@@ -326,6 +326,7 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
       rowVal = e.value;
     });
     console.log(rowVal.RMR);
+    this.rmr = parseInt(rowVal.RMR);
   }
 
   calculatePassThrough(val:any) {
@@ -336,14 +337,22 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
       rowVal = e.value;
     });
     console.log(rowVal.PassThrough);
+    this.passThrough = parseInt(rowVal.PassThrough);
   }
 
-  calculateMultiple(val:any) {
-    this.multiple = this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple;
-    this.calculateTotal(val)
+  calculateMultiple(val:any,i:number) {
+    //this.multiple = this.incentiveRecurringEntryForm.controls['entryRows'].value[0].Multiple;
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.Multiple);
+    this.multiple = rowVal.Multiple;
+    this.calculateTotal(val,i)
   }
 
-  calculateTotal(val:any) {
+  calculateTotal(val:any,i:number) {
     //console.log('calc total')
     let totalRecurringCalc = this.total = (this.rmr - this.passThrough) * this.multiple;
 
@@ -353,8 +362,17 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
     this.totalRecurringCalc = totalRecurringCalc.toString();
     localStorage.setItem('totalRecurringCalc',this.totalRecurringCalc);
 
-    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
-    controlArray.controls[0].get('Total').setValue(this.totalRecurringCalc);
+    const getItemID = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
+      controlArray.at(i).get('Total').setValue(this.totalRecurringCalc);
+    })
+
+    // const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')
+
+    // console.log(this.incentiveRecurringEntryForm.controls);
+    // console.log(controlArray.controls);//Array
+    // controlArray.controls['Total'].patchValue({Total:this.totalRecurringCalc})
+    
   }
 
   checkboxChanged(e) {
