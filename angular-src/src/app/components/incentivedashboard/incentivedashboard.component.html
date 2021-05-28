@@ -215,7 +215,7 @@
                         </div>
                         <div class="row form-inline mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" >
                                     <label class="col-sm-4 col-form-label pl-0">Invoice</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -226,6 +226,33 @@
                                         (change)="getFileDetails($event)"
                                     >
                                 </div>
+                                <div class="form-group" *ngIf="showFile">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <p class="mb-0 ml-4" #invoice>{{invoiceUpload}}</p>
+                                    <i class="pl-3 far fa-trash-alt pl-6 text-danger" (click)="removeFile()"></i>
+                                </div>
+                                
+                                <!-- <div class="form-group" *ngIf="!invoiceUpload">
+                                    <label class="col-sm-4 col-form-label pl-0">Invoice</label>
+                                    <i class="fas fa-upload pr-3"></i>
+                                    <input 
+                                        type="file" 
+                                        class="form-control col-sm-6" 
+                                        [(ngModel)]="invoiceUpload" 
+                                        formControlName="InvoiceUpload"
+                                        (change)="getFileDetails($event)"
+                                    >
+                                </div>
+                                <div class="form-group" *ngIf="invoiceUpload">
+                                    <label class="col-sm-4 col-form-label pl-0">Invoice</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6" 
+                                            value="{{invoiceUpload}}" 
+                                            #invoice
+                                        ><i class="far fa-trash-alt" (click)="removeFile()"></i>
+                                </div> -->
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">

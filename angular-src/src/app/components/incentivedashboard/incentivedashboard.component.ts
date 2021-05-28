@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild, ElementRef } from '@angular/core';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -31,8 +31,7 @@ import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
-  public gridData: CustomerSearchList[];
-  public gridView: CustomerSearchList[];
+  @ViewChild("invoice") divInvoice: ElementRef;
 
   updateRecurringWithJobID;
   updateEquipMatWithJobID;
@@ -110,12 +109,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   panelLocation: '';
   centralStationID: '';
   // additionalInfo: '';
-  invoiceUpload: '';
-  siteVisitUpload: '';
-  contractUpload: '';
-  subscriberFormUpload: '';
-  otherDocument1Upload: '';
-  otherDocument2Upload: '';
+  // invoiceUpload: '';
+  // siteVisitUpload: '';
+  // contractUpload: '';
+  // subscriberFormUpload: '';
+  // otherDocument1Upload: '';
+  // otherDocument2Upload: '';
+  invoiceUpload;
+  siteVisitUpload;
+  contractUpload;
+  subscriberFormUpload;
+  otherDocument1Upload;
+  otherDocument2Upload;
   invoiceNumber;
   invoiceDate;
   invoiceTotal;
@@ -156,6 +161,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   contract_file_size;
   other_Document2_file_size;
   myFiles:string [] = [];
+
+  showFile: boolean = true;
 
   columns: string[];
   public mySelection: string[] = [];
@@ -276,7 +283,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.invoiceTotal = localStorage.getItem('invoiceTotal');
     
     //Get Files from local storage if page is refreshed
-    //this.invoiceFile = localStorage.getItem("invoice");
+    this.invoiceFile = localStorage.getItem("invoice");
+    this.invoiceUpload = localStorage.getItem("invoiceName");
       console.log(localStorage.getItem("invoice"));
     this.subscriberFormFile = localStorage.getItem("subscriberForm");
     this.siteVisitFile = localStorage.getItem("siteVisit");
@@ -1200,26 +1208,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
-      //console.log(e.target.files[i]);
+      console.log(e.target.files[i]);
 
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        //console.log(reader.result);
-        localStorage.setItem("invoice", reader.result as string)
+        console.log(reader.result);
+        //console.log(reader.readAsDataURL(f));
+        //this.divInvoice.nativeElement.innerHTML = reader.result;
+        localStorage.setItem("invoice", reader.result as string);
+        this.showFile = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.file_name = 'invoice';
+      this.file_name = e.target.files[i].name;
+      //this.file_name = 'invoice';
+      localStorage.setItem('invoiceName',this.file_name);
+      this.divInvoice.nativeElement.innerHTML = this.file_name;
       //get the file size
       this.file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
       this.myFiles.push(e.target.files[i]);
+
+      
     }
   }
 
@@ -1235,6 +1250,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       reader.addEventListener("load", () => {
         console.log(reader.result);
+        //this.divText.nativeElement.innerHTML = "Update"
         localStorage.setItem("subscriberForm", reader.result as string)
       });
 
@@ -1361,6 +1377,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.myFiles.push(e.target.files[i]);
     }
+  }
+
+  removeFile(){
+    console.log('remove this file')
+    localStorage.removeItem('invoiceName');
+    localStorage.removeItem('invoice');
+    this.divInvoice.nativeElement.value = '';
+    this.showFile = false;
   }
 
   getLineItemSubtotal() {

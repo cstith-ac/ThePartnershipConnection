@@ -122,6 +122,7 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('otherDocument1');
     localStorage.removeItem('contract');
     localStorage.removeItem('otherDocument2');
+    localStorage.removeItem('invoiceName');
     localStorage.removeItem('contractDate');
     localStorage.removeItem('contractTerm');
     localStorage.removeItem('serviceIncluded');
