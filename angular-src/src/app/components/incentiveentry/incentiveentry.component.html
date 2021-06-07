@@ -44,7 +44,13 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="mr-2">Invoice Total</label>
-                        <input
+                        <kendo-numerictextbox
+                            format="c2"
+                            [value]="value"
+                            placeholder="$0.00"
+                            formControlName="InvoiceTotal"
+                        ></kendo-numerictextbox>
+                        <!-- <input
                             type="text" 
                             class="form-control"
                             formControlName="InvoiceTotal"
@@ -52,7 +58,7 @@
                             mask="separator.2" 
                             thousandSeparator=","
                             prefix="$"
-                        >
+                        > -->
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -170,6 +176,33 @@
                     </div> -->
                 </div> 
             </ng-container>
+            <!-- <div class="col-md-4 entryColumn3">
+                <p>Customer Enrolled in Autopay?</p>
+                <div class="form-group btn-group mt-3 mb-3">
+                    <label>Credit Card</label>
+                    <input 
+                        type="radio"
+                        name="AutoPay"
+                        formControlName="AutoPay"
+                        class="ml-2 mt-1"
+                        (change)="onChangeCC($event)"
+                        value="11"
+                    >
+                </div>
+            </div>
+            <div class="col-md-4 entryColumn3">
+                <div class="form-group btn-group mt-3 mb-3">
+                    <label>ACH</label>
+                    <input 
+                        type="radio"
+                        name="AutoPay"
+                        formControlName="AutoPay"
+                        class="ml-2 mt-1"
+                        (change)="onChangeACH($event)"
+                        value="12"
+                    >
+                </div>
+            </div> -->
             <div class="col-md-4 entryColumn3">
                 <p>Customer Enrolled in Autopay?</p>
                 <div class="form-group btn-group mt-3 mb-3">
@@ -195,12 +228,7 @@
                     >
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <button (click)=test()>test</button>
-                </div>   
-            </div> -->
+            
             <div class="row" [ngStyle]="{'position': 'relative', top: '-420px', left: '0px'}">
                 <div class="col-md-4"></div>
                 <div class="col-md-4 offset-md-4">

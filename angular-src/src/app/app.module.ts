@@ -19,6 +19,9 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FilterPipe } from './_helpers/filter.pipe';
 import { PointerStyleDirective } from './_helpers/pointer-style.directive';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { LabelModule } from '@progress/kendo-angular-label';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 import { CommonModule, CurrencyPipe} from '@angular/common';
 
 import { ValidateService } from '../app/services/validate.service';
@@ -77,6 +80,8 @@ import { IncentiveequipmatComponent } from './components/incentiveequipmat/incen
 import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
 import { FilterSitePipe } from './_helpers/filter-site.pipe';
 import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
+import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
+// import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 
 @NgModule({
@@ -133,9 +138,14 @@ import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe
     IncentivelaborchargesComponent,
     PointerStyleDirective,
     FilterSitePipe,
-    FilterCentralStationPipe
+    FilterCentralStationPipe,
+    IncentiveDashboardTestComponent,
+    //CustomerTestComponent
   ],
   imports: [
+    DropDownsModule,
+    LabelModule,
+    InputsModule,
     CommonModule,
     FilterPipeModule,
     BrowserModule,

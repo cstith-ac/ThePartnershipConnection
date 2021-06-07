@@ -34,7 +34,7 @@ namespace WebAPI.Repository
             {
                 try
                 {
-                    descriptionParam.Value = "A description was not entered from Incentive_Add_Equipment";
+                    descriptionParam.Value = "";
                 }
                 catch (Exception ex)
                 {

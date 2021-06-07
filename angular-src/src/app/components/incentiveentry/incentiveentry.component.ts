@@ -18,8 +18,13 @@ declare var $: any;
 })
 export class IncentiveentryComponent implements OnInit {
   @Output() incentiveEntryOutput: EventEmitter<any> = new EventEmitter<any>();
-  //@Output() incentiveEntryOutput = new EventEmitter<Array<any>>();
-  //@Input() incentiveEntry:IncentiveEntry;
+  public value;
+  public percentage = 0.7;
+  public formatOptions: any = {
+    style: "currency",
+    currency: "EUR",
+    currencyDisplay: "name",
+  };
 
   incentiveEntry: IncentiveEntry[];
   installCompanyList: InstallCompanyList[];
@@ -167,6 +172,7 @@ export class IncentiveentryComponent implements OnInit {
       PickUp: [false],
       NewSite:  [false],
       SystemTransfer:  [false],
+      AutoPay: [false],
       CreditCardAutoPay: [false],
       ACHAutopay: [false]
     })
@@ -214,6 +220,7 @@ export class IncentiveentryComponent implements OnInit {
     //console.log(Object.values(this.incentiveEntry))
     //return;
     this.router.navigate(["/incentive-dashboard"]);
+    //this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
   }
 
   onChangeServiceIncluded(e) {
@@ -222,17 +229,18 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem("serviceIncluded",e.target.value);
   }
 
-  disableOther(e) {
-    if(e.target.value == 11) {
-      console.log(e.target.value+''+' was checked, disable the other')
+  // disableOther(e) {
+  //   if(e.target.value == 11) {
+  //     console.log(e.target.value+''+' was checked, disable the other')
       
-    }
-    if(e.target.value == 12) {
-      console.log(e.target.value+''+' was checked, disable the other')
-    }
-  }
+  //   }
+  //   if(e.target.value == 12) {
+  //     console.log(e.target.value+''+' was checked, disable the other')
+  //   }
+  // }
 
   onChangeCC(e) {
+    //console.log(e.target.value)
     if(e.target.checked) {
       this.incentiveEntryForm.controls['ACHAutopay'].disable();
       //console.log('disable ACHAutopay');
@@ -246,6 +254,7 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   onChangeACH(e) {
+    //console.log(e.target.value)
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
       //console.log('disable CreditCardAutoPay');
@@ -272,22 +281,22 @@ export class IncentiveentryComponent implements OnInit {
 
   onChangeClientVisit(e) {
     if(e.target.checked) {  
-      console.log('checked: '+ e.target.value)
+      //console.log('checked: '+ e.target.value)
       //if value = 1, do something
       if(e.target.value == 1) {
-        console.log('do something')
+        //console.log('do something')
         this.selectedForCheckBoxAutoInsert.push(e.target.value);
       }
       if(e.target.value == 2) {
-        console.log('do something else')
+        //console.log('do something else')
         this.selectedForCheckBoxAutoInsert.push(e.target.value);
       }
       if(e.target.value == 11) {
-        console.log('do something')
+        //console.log('do something')
         this.selectedForCheckBoxAutoInsert.push(e.target.value);
       }
       if(e.target.value == 12) {
-        console.log('do something else')
+        //console.log('do something else')
         this.selectedForCheckBoxAutoInsert.push(e.target.value);
       }
       //if value == 2, do something

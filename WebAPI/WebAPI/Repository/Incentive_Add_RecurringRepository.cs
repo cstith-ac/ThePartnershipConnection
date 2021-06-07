@@ -36,7 +36,7 @@ namespace WebAPI.Repository
             {
                 try
                 {
-                    descriptionParam.Value = "A description was not entered from Incentive_Add_Recurring";
+                    descriptionParam.Value = "";
                 }
                 catch (Exception ex)
                 {
@@ -45,6 +45,10 @@ namespace WebAPI.Repository
             }
 
             var billCycleParam = new SqlParameter("@BillCycle", incentive_Add_Recurring.BillCycle);
+            if (incentive_Add_Recurring.BillCycle == null)
+            {
+                billCycleParam.Value = "0";
+            }
             var rmrParam = new SqlParameter("@RMR", incentive_Add_Recurring.RMR);
 
             var passThroughParam = new SqlParameter("@PassThrough", incentive_Add_Recurring.PassThrough);

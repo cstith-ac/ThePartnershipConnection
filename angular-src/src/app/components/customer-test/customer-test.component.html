@@ -1,0 +1,15 @@
+<p>customer-test works!</p><label class="col-sm-2 col-form-label">Customer</label>
+<input 
+    type="text"
+    class="form-control col-sm-5 fullWidthInput" 
+    [(ngModel)]="customer" 
+    formControlName="CustomerID"
+    (change)="getCustomer($event)"
+>
+<span class="ml-2" (click)="openSearchCustomerModal(content)">
+    <i class="fas fa-search"></i>
+</span>
+<span class="pl-4" (click)="routeToNewCustomer()">
+    <i class="fas fa-plus-circle"></i>
+    New Customer
+</span>

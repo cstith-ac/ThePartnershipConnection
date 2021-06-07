@@ -72,6 +72,7 @@ namespace WebAPI
                                               //.AllowCredentials()
                             .WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
                             .AllowAnyHeader()
+                            //.SetIsOriginAllowed(origin => true)
                             .AllowAnyMethod();
                     })
             );

@@ -48,6 +48,8 @@ import { IncentivenewsiteComponent } from './components/incentivenewsite/incenti
 import { IncentiverecurringComponent } from './components/incentiverecurring/incentiverecurring.component';
 import { IncentiveequipmatComponent } from './components/incentiveequipmat/incentiveequipmat.component';
 import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
+import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
+// import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
   {
@@ -199,6 +201,16 @@ const routes: Routes = [
     component: IncentivedashboardComponent,
     canActivate: [AuthGuard, PartnerGuard]
   },
+  {
+    path: 'incentive-dashboard-test',
+    component: IncentiveDashboardTestComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  // {
+  //   path: 'customer-test',
+  //   component: CustomerTestComponent,
+  //   canActivate: [AuthGuard, PartnerGuard]
+  // },
   {
     path: 'new-customer',
     component: IncentivenewcustomerComponent,

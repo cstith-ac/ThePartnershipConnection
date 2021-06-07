@@ -38,11 +38,27 @@ namespace WebAPI.Repository
             var panelLocationParam = new SqlParameter("@PanelLocation", jobIDAdded.PanelLocation);
             var centralStationIDParam = new SqlParameter("@CentralStationID", jobIDAdded.CentralStationID);
             var additionalInfoParam = new SqlParameter("@AdditionalInfo", jobIDAdded.AdditionalInfo);
+            if (jobIDAdded.AdditionalInfo == null)
+            {
+                additionalInfoParam.Value = "";
+            }
             var partnerInvoiceNumberParam = new SqlParameter("@PartnerInvoiceNumber", jobIDAdded.PartnerInvoiceNumber);
             var partnerInvoiceDateParam = new SqlParameter("@PartnerInvoiceDate", jobIDAdded.PartnerInvoiceDate);
             var contractDateParam = new SqlParameter("@ContractDate", jobIDAdded.ContractDate);
+            if (jobIDAdded.ContractDate == null)
+            {
+                contractDateParam.Value = "2012-07-20";
+            }
             var contractTermParam = new SqlParameter("@ContractTerm", jobIDAdded.ContractTerm);
+            if (jobIDAdded.ContractTerm == null)
+            {
+                contractTermParam.Value = "0";
+            }
             var renewalMonthsParam = new SqlParameter("@RenewalMonths", jobIDAdded.RenewalMonths);
+            if (jobIDAdded.RenewalMonths == null)
+            {
+                renewalMonthsParam.Value = "0";
+            }
             var serviceIncludedParam = new SqlParameter("@ServiceIncluded", jobIDAdded.ServiceIncluded);
             var partnerCommentsParam = new SqlParameter("@PartnerComments", jobIDAdded.PartnerComments);
 

@@ -1,12 +1,13 @@
 import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild, ElementRef } from '@angular/core';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
+import { environment } from '../../../environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { IncentiveDashboard } from '../../models/incentivedashboard';
-import { IncentiveEntry } from '../../models/incentiveentry'; 
+import { IncentiveEntry } from '../../models/incentiveentry';
 import { ListPanelTypes } from '../../models/listpaneltypes';
 import { ListCentralStations } from '../../models/listcentralstations';
 import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
@@ -32,6 +33,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   @ViewChild("invoice") divInvoice: ElementRef;
+  @ViewChild("subscriberForm") divSubscriberForm: ElementRef;
+  @ViewChild("siteVisit") divSiteVisit: ElementRef;
+  @ViewChild("otherDocument1") divOtherDocument1: ElementRef;
+  @ViewChild("contract") divContract: ElementRef;
+  @ViewChild("otherDocument2") divOtherDocument2: ElementRef;
+
+  baseUrl = environment.baseUrl;
+
+  public value;
 
   updateRecurringWithJobID;
   updateEquipMatWithJobID;
@@ -39,13 +49,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   updateRecurringStoredProc;
   updateEquipMatStoredProc;
   updateLaborChargesStoredProc;
-
-  invoiceFile;
-  subscriberFormFile;
-  siteVisitFile;
-  otherDocument1File;
-  contractFile;
-  otherDocument2File;
 
   authToken: any;
   user:any=Object;
@@ -68,6 +71,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
   listsystemtypes: ListSystemTypes[];
   incentive_Add_Recurring: Incentive_Add_Recurring[];
+
+  dashboardSelectForLocalStorage = new IncentiveDashboard;
 
   selectedValue: number;
 
@@ -115,12 +120,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   // subscriberFormUpload: '';
   // otherDocument1Upload: '';
   // otherDocument2Upload: '';
+  customerSiteName;
+  invoiceFile;
+  subscriberFormFile;
+  siteVisitFile;
+  otherDocument1File;
+  contractFile;
+  otherDocument2File;
+
   invoiceUpload;
+  invoiceFileSizeUpload;
   siteVisitUpload;
-  contractUpload;
+  siteVisitFileSizeUpload;
   subscriberFormUpload;
+  subscriberFormFileSizeUpload;
   otherDocument1Upload;
+  otherDocument1FileSizeUpload;
+  contractUpload;
+  contractFileSizeUpload;
   otherDocument2Upload;
+  otherDocument2FileSizeUpload;
+
   invoiceNumber;
   invoiceDate;
   invoiceTotal;
@@ -140,7 +160,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   contractTerm;
   renewal;
   // signalsTested: '';
-  signalsTested="n";
+  signalsTested;
   additionalInfo;
   partnerComments;
 
@@ -148,6 +168,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   job_id;
   security_level:any = 2;
+
   file_name;
   subscriber_file_name;
   site_visit_file_name;
@@ -162,7 +183,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   other_Document2_file_size;
   myFiles:string [] = [];
 
-  showFile: boolean = true;
+  showInvoiceFile: boolean = true;
+  showSubscriberFormFile: boolean = true;
+  showSiteVisitFile: boolean = true;
+  showOtherDocument1File: boolean = true;
+  showContractFile: boolean = true;
+  showOtherDocument2File: boolean = true;
 
   columns: string[];
   public mySelection: string[] = [];
@@ -177,11 +203,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     private modalService: NgbModal,
     public fb: FormBuilder,
     private httpService: HttpClient
-  ) { 
+  ) {
     this.columns = ['Item', 'Description', 'Bill Cycle', 'RMR', 'Pass Through', 'Billing Starts', 'Add To An Existing RMR Item', 'Multiple', 'Total']
   }
 
   ngOnInit() {
+    // var retrievedObject = localStorage.getItem("testObject");
+    // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+    // var parsedRetrievedObject = JSON.parse(retrievedObject);
+    // console.log(parsedRetrievedObject);
+
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -197,108 +228,132 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('serviceIncluded');
       localStorage.removeItem('siteName');
       localStorage.removeItem('customerName');
+      localStorage.removeItem('signalsTested');
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
     }
 
+    // This isn't working properly
     // => System Selected 1st
     //Get Customer, Site, and System from local storage if page is refreshed
-    this.customer = localStorage.getItem("customerName");
-    this.siteName = localStorage.getItem("customerSiteName");
-    if(this.siteName) {
-      this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
-    }
-    this.systemCode = localStorage.getItem("customerSystemInformation");
-    if(this.systemCode) {
-      this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
-      this.isRemoveDropdown = !this.isRemoveDropdown;
-      this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
-    }
+    // this.customer = localStorage.getItem("customerName");
+    // this.siteName = localStorage.getItem("customerSiteName");
+    // if(this.siteName) {
+    //   this.isRemoveDropdown = !this.isRemoveDropdown;
+    //   this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
+    // }
+    // this.systemCode = localStorage.getItem("customerSystemInformation");
+    // if(this.systemCode) {
+    //   this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
+    //   this.isRemoveDropdown = !this.isRemoveDropdown;
+    //   this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+    // }
 
     //Get Account #, System Type from local storage if page is refreshed
-    this.alarmAccount = localStorage.getItem("alarmAccount");
-    this.systemType = localStorage.getItem("systemType");
-    this.customersiteid = localStorage.getItem("customerSiteId");
-    this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
-      res => {
-        this.listSystemsForSite = [].concat(res);
-        console.log(typeof(this.listSystemsForSite))//object
-        for(var i = 0; i < this.listSystemsForSite.length; i++) {
-          this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
-        }
+    // this.alarmAccount = localStorage.getItem("alarmAccount");
+    // this.systemType = localStorage.getItem("systemType");
+    // this.customersiteid = localStorage.getItem("customerSiteId");
 
-        //the customer is selected 1st
-        //now populate the Account # field
-        //make a get request to dbo.CustomerSystemInfoGet
-        this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
-          res => {
-            console.log(res);
-            this.alarmAccount = res.accountNumber
-            this.systemType = res.systemType;
-            this.panelType = res.panelType
-            this.panelLocation = res.panelLocation
-            this.centralStationID = res.centralStationID
+    // this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+    //   res => {
+    //     this.listSystemsForSite = [].concat(res);
+    //     console.log(typeof(this.listSystemsForSite))//object
+    //     for(var i = 0; i < this.listSystemsForSite.length; i++) {
+    //       this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+    //     }
 
-            this.routeService.getListSystemTypes().subscribe(
-              res => {
-                console.log(res)
-                let result = res.filter(a => a.system_Id===this.systemType)
-                
-                for(var i in result) {
-                  this.systemName = result[i].systemName;
-                }
-              }
-            )
+    //     //the customer is selected 1st
+    //     //now populate the Account # field
+    //     //make a get request to dbo.CustomerSystemInfoGet
+    //     this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+    //       res => {
+    //         console.log(res);
+    //         this.alarmAccount = res.accountNumber
+    //         this.systemType = res.systemType;
+    //         this.panelType = res.panelType
+    //         this.panelLocation = res.panelLocation
+    //         this.centralStationID = res.centralStationID
 
-            this.routeService.getListPanelTypes().subscribe(
-              res => {
-                console.log(res) //object
-                let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
+    //         this.routeService.getListSystemTypes().subscribe(
+    //           res => {
+    //             console.log(res)
+    //             let result = res.filter(a => a.system_Id===this.systemType)
 
-                for(var i in result) {
-                  this.panelName = result[i].panelName
-                  console.log(this.panelType)
-                }
-              }
-            )
+    //             for(var i in result) {
+    //               this.systemName = result[i].systemName;
+    //             }
+    //           }
+    //         )
 
-          }
-        )
-      }
-    )
-    this.panelType = localStorage.getItem("panelType") as any;
-    this.panelLocation = localStorage.getItem("panelLocation") as any;
-    this.centralStationID = localStorage.getItem("centralStationID") as any;
+    //         this.routeService.getListPanelTypes().subscribe(
+    //           res => {
+    //             console.log(res) //object
+    //             let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
 
-    // => Site Selected 1st
+    //             for(var i in result) {
+    //               this.panelName = result[i].panelName
+    //               console.log(this.panelType)
+    //             }
+    //           }
+    //         )
 
-    // => Customer Selected 1st
+    //       }
+    //     )
+    //   }
+    // )
+    // this.panelType = localStorage.getItem("panelType") as any;
+    // this.panelLocation = localStorage.getItem("panelLocation") as any;
+    // this.centralStationID = localStorage.getItem("centralStationID") as any;
+
+    // // => Site Selected 1st
+
+    // // => Customer Selected 1st
 
     this.companyName = localStorage.getItem('companyName');
     this.partnerCode = localStorage.getItem('partnerCode');
     this.installCompanyID = localStorage.getItem('installCompanyID');
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
-    this.invoiceTotal = localStorage.getItem('invoiceTotal');
-    
-    //Get Files from local storage if page is refreshed
+    this.invoiceTotal = parseInt(localStorage.getItem('invoiceTotal'));
+
+    // //Get Files from local storage if page is refreshed
     this.invoiceFile = localStorage.getItem("invoice");
     this.invoiceUpload = localStorage.getItem("invoiceName");
-      console.log(localStorage.getItem("invoice"));
-    this.subscriberFormFile = localStorage.getItem("subscriberForm");
-    this.siteVisitFile = localStorage.getItem("siteVisit");
-    this.otherDocument1File = localStorage.getItem("otherDocument1");
-    this.contractFile = localStorage.getItem("contract");
-    this.otherDocument2File = localStorage.getItem("otherDocument2");
+    this.invoiceFileSizeUpload = localStorage.getItem("fileSize");
+    this.subscriberFormUpload = localStorage.getItem("subscriberFormName");
+    this.siteVisitUpload = localStorage.getItem("siteVisitName");
+    this.otherDocument1Upload = localStorage.getItem("otherDocument1Name");
+    this.contractUpload = localStorage.getItem("contractName");
+    this.otherDocument2Upload = localStorage.getItem("otherDocument2Name");
 
-    this.additionalInfo = localStorage.getItem("additionalInfo")
-    this.tax = localStorage.getItem("tax");
-    this.contractTerm = localStorage.getItem("contractTerm");
-    this.renewal = localStorage.getItem("renewal");
-    this.partnerComments = localStorage.getItem("partnerComments");
-    this.signalsTested = localStorage.getItem("signalsTested");
-    
+    //Hide delete icon if there's no file in localstorage
+    if(!this.invoiceUpload) {
+      this.showInvoiceFile = false;
+    }
+    if(!this.subscriberFormUpload) {
+      this.showSubscriberFormFile = false;
+    }
+    if(!this.siteVisitUpload) {
+      this.showSiteVisitFile = false;
+    }
+    if(!this.otherDocument1Upload) {
+      this.showOtherDocument1File = false;
+    }
+    if(!this.contractUpload) {
+      this.showContractFile = false;
+    }
+    if(!this.otherDocument2Upload) {
+      this.showOtherDocument2File = false;
+    }
+
+    // this.additionalInfo = localStorage.getItem("additionalInfo")
+    // this.tax = localStorage.getItem("tax");
+    // this.contractTerm = localStorage.getItem("contractTerm");
+    // this.renewal = localStorage.getItem("renewal");
+    // this.partnerComments = localStorage.getItem("partnerComments");
+    // this.signalsTested = localStorage.getItem("signalsTested");
+
     this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
     this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
@@ -320,7 +375,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       InstallCompanyID: this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID')),
       CustomerID: ["", Validators.required], //@CustomerID
       CustomerSiteID: ["", Validators.required], //@CustomerSiteID
-      System: ["", Validators.required], //@CustomerSystemID
+      System: [""], //@CustomerSystemID
       SystemType: ["", Validators.required], //@SystemTypeID
       SystemCode: [""],
       NewSystem: [""],
@@ -328,9 +383,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       NewSite: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
       PanelType: ["", Validators.required], //@PanelTypeID
-      PanelLocation: ["", Validators.required], //@PanelLocation
+      PanelLocation: [""], //@PanelLocation
       CentralStationID: ["", Validators.required], //@CentralStationID
-      AdditionalInfo: ["", Validators.required], //@AdditionalInfo
+      AdditionalInfo: [""], //@AdditionalInfo
       InvoiceUpload: [""],
       SiteVisitUpload: [""],
       ContractUpload: [""],
@@ -340,21 +395,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
       PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
       InvoiceTotal: ["", Validators.required],
-      Tax: ["", Validators.required],
+      Tax: [""],
       Recurring: [""],
       EquipmentAndMaterials: [""],
       LaborCharges: [""],
       LineItemSubtotal: [""],
-      ContractDate: ["", Validators.required], //@ContractDate
-      ContractTerm: ["", Validators.required], //@ContractTerm
-      RenewalMonths: ["", Validators.required], //@RenewalMonths
+      ContractDate: [""], //@ContractDate
+      ContractTerm: [""], //@ContractTerm
+      RenewalMonths: [""], //@RenewalMonths
       ServiceIncluded: [""], //@ServiceInclude
       SignalsTested: ["", Validators.required],
-      PartnerComments: ["", Validators.required] //@PartnerComments
-    })
+      PartnerComments: [""] //@PartnerComments
+    });
 
+    // if(localStorage.getItem('testObject')) {
+    //   //return true;
+    //   console.log('there is something in localstorage')
+    // } else {
+    //   this.onChanges();
+    // }
+
+    this.onChanges();
+    
     // let deleteme = this.incentiveEntryService.sharedIncentiveRecurringInfo.push(JSON.parse(localStorage.getItem('recurringentry')))
-     
+
     // console.log(typeof(deleteme))//number??
 
     // console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]);
@@ -413,24 +477,74 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // )
   }
 
+  onChanges():void {
+
+    // let dashboardSelectForLocalStorage = new IncentiveDashboard;
+
+    // if(localStorage.getItem('testObject')) {
+    //   return
+    // } 
+
+    // this.incentiveDashboardForm.get('CustomerID').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.customer = val;
+    // })
+
+    // this.incentiveDashboardForm.get('CustomerSiteID').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.site = val;
+    // })
+
+    // this.incentiveDashboardForm.get('System').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.system = val;
+    // })
+
+    // this.incentiveDashboardForm.get('AlarmAccount').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.accountNumber = val;
+    // })
+
+    // this.incentiveDashboardForm.get('SystemType').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.system = val;
+    // })
+
+    // this.incentiveDashboardForm.get('PanelType').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.panelType = val;
+    // })
+
+    // this.incentiveDashboardForm.get('PanelLocation').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.location = val;
+    // })
+
+    // this.incentiveDashboardForm.get('CentralStationID').valueChanges.subscribe(val => {
+    //   this.dashboardSelectForLocalStorage.centralStation
+    //   console.log(this.dashboardSelectForLocalStorage);
+    //   localStorage.setItem("testObject",JSON.stringify(this.dashboardSelectForLocalStorage))
+    // })
+
+    this.incentiveDashboardForm.get('AdditionalInfo').valueChanges.subscribe(val => {
+      console.log(val);
+    })//let's find a better way to get this value
+  }
+
   ngAfterViewChecked() {
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
-    //then display in the total in the recurring, materials and equipment, and labor inputs 
+    //then display in the total in the recurring, materials and equipment, and labor inputs
     //this.getRecurringFromLocalStorage();
-    
+
     setTimeout(() => {
+      
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].updateValueAndValidity();
+
+        this.onChanges();
       }
-  
+
       if(!isNaN(parseFloat(this.equipmentAndMaterials))) {
         this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue(this.equipmentAndMaterials);
         this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue(this.equipmentAndMaterials);
         this.incentiveDashboardForm.controls["EquipmentAndMaterials"].updateValueAndValidity();
       }
-      
+
       if(!isNaN(parseFloat(this.laborCharges))) {
         //set valid
         this.incentiveDashboardForm.controls["LaborCharges"].setValidators(null);
@@ -459,26 +573,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       // if there's a page refresh, re-populate fields with previously entered values
       this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));
-      //this.tax = localStorage.getItem("tax")
-      //this.incentiveDashboardForm.controls["Tax"].setValue(localStorage.getItem("tax"));
-      // this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
+      this.tax = localStorage.getItem("tax")
+      this.incentiveDashboardForm.controls["Tax"].setValue(localStorage.getItem("tax"));
+      this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
 
       // get key/value pairs from localstorage
       // string to object
       // store in variable
-      
-      // let recurringFromLocalStorage = localStorage.getItem("recurringentry");
-      // JSON.parse(recurringFromLocalStorage);
+
+      let recurringFromLocalStorage = localStorage.getItem("recurringentry");
+      JSON.parse(recurringFromLocalStorage);
       // console.log(recurringFromLocalStorage);
 
     }, 1000);
-  } 
+  }
 
   ngOnChanges(){
-    //console.log('ngOnChange was called from ' + this.activatedRoute.url)
+    console.log('ngOnChange was called from ' + this.activatedRoute.url)
   }
   ngOnDestroy(){
-    //console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
+    console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
   }
 
   reset() {
@@ -495,15 +609,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('recurringentry');
       localStorage.removeItem('equipmatentry');
       localStorage.removeItem('laborchargesentry');
+      localStorage.removeItem('invoiceName');
+      localStorage.removeItem('invoiceFileSize');
       localStorage.removeItem('invoice');
       localStorage.removeItem('subscriberForm');
+      localStorage.removeItem('subscriberFormName');
       localStorage.removeItem('siteVisit');
+      localStorage.removeItem('siteVisitName');
       localStorage.removeItem('otherDocument1');
+      localStorage.removeItem('otherDocument1Name');
       localStorage.removeItem('contract');
+      localStorage.removeItem('contractName');
       localStorage.removeItem('otherDocument2');
+      localStorage.removeItem('otherDocument2Name');
       localStorage.removeItem('contractDate');
       localStorage.removeItem('contractTerm');
       localStorage.removeItem('serviceIncluded');
+      localStorage.removeItem('customerId');
       localStorage.removeItem('customerName');
       localStorage.removeItem('customerSiteName');
       localStorage.removeItem('customerSystemInformation');
@@ -517,10 +639,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('tax');
       localStorage.removeItem('additionalInfo');
       localStorage.removeItem('partnerComments');
+      localStorage.removeItem('signalsTested');
+      localStorage.removeItem('testObject');
 
       this.router.navigate(['incentive-entry/']);
     }
-    
+
   }
 
   getAdditionalInfo(e){
@@ -588,7 +712,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onItemChangeToBilling(value) {
-    console.log("Billing value is : ", value);
+    //console.log("Billing value is : ", value);
     if(value === 'on') {
       console.log('this value is on')
       //let the customer filter by Bill Address 1, Bill Address 2, or Bill Phone
@@ -596,7 +720,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onItemChangeToSite(value) {
-    console.log("Site value is : ", value);
+    //console.log("Site value is : ", value);
     if(value === 'on') {
       console.log('this value is on')
       //let the customer filter by Site Address 1, Site Address 2, or Site Phone
@@ -604,7 +728,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onItemChangeToCentralStation(value) {
-    console.log("Central Station value is : ", value);
+    //console.log("Central Station value is : ", value);
     if(value === 'on') {
       console.log('this value is on')
       //let the customer filter by Alarm Account
@@ -619,10 +743,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     //once a customer is selected, push the customer_Name to customer input on Incentive Entry
-    
+
     this.customer = selectedCustomerName;
     this.id = selectedCustomerid;
-    
+
+    //localStorage.setItem("customerName",this.customer);
+    //localStorage.setItem("customerId",this.id);
+
     //after selecting a customer, close the modal
     this.modalService.dismissAll();
 
@@ -631,41 +758,43 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.listsitesforcustomer = [].concat(res);
 
         //get the customer_Site_id
-        // this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
-        // //make a call to getListSystemsForSite
-        // this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
-        //   res => {
-        //     //get the customer_System_id
-        //     //console.log(res.customer_System_id);
-        //     this.customer_System_id = res.customer_System_id;
-        //     //console.log(this.customer_System_id);
-        //     //make a get request to dbo.CustomerSystemInfoGet
-        //     this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
-        //       res => {
-                
-        //         this.alarmAccount = res.accountNumber;
-        //         this.systemType = res.systemType;
-        //         //get the System_Id 
-        //         //make a get request to dbo.ListSystemTypes to find the appropriate system type matching the returned systemType
-        //         this.routeService.getListSystemTypes().subscribe(
-        //           res => {
-                    
-        //             let result = res.filter(a => a.system_Id===this.systemType)
-                    
-        //             for(var i in result) {
-                      
-        //               this.systemName = result[i].systemName;
-        //             }
-        //           }
-        //         )
-        //         //populate the panel type
+        this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
+        this.customerSiteName = this.listsitesforcustomer[0].siteName;
+        //localStorage.setItem("customerSiteName", this.customerSiteName);
+        //make a call to getListSystemsForSite
+        this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+          res => {
+            //get the customer_System_id
+            //console.log(res.customer_System_id);
+            this.customer_System_id = res.customer_System_id;
+            //console.log(this.customer_System_id);
+            //make a get request to dbo.CustomerSystemInfoGet
+            this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+              res => {
 
-        //         //populate the central station
-        //       }
-        //     )
-        //     //populate the fields for Account #, System Type, Panel Type, Panel Location, Central Station
-        //   }
-        // )
+                this.alarmAccount = res.accountNumber;
+                this.systemType = res.systemType;
+                //get the System_Id
+                //make a get request to dbo.ListSystemTypes to find the appropriate system type matching the returned systemType
+                this.routeService.getListSystemTypes().subscribe(
+                  res => {
+
+                    let result = res.filter(a => a.system_Id===this.systemType)
+
+                    for(var i in result) {
+
+                      this.systemName = result[i].systemName;
+                    }
+                  }
+                )
+                //populate the panel type
+
+                //populate the central station
+              }
+            )
+            //populate the fields for Account #, System Type, Panel Type, Panel Location, Central Station
+          }
+        )
       }
     )
 
@@ -679,10 +808,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     let selectedSiteName = siteName;
     let selectedCustomerSiteId = customer_Site_Id;
 
-    console.log(selectedCustomerName)
-    console.log(selectedCustomerid);
-    console.log(selectedSiteName);
-    console.log(selectedCustomerSiteId);
+    // console.log(selectedCustomerName)
+    // console.log(selectedCustomerid);
+    // console.log(selectedSiteName);
+    // console.log(selectedCustomerSiteId);
     //push the selectedSiteName to the UI
     //once a site is selected, push the siteName to site on Incentive Entry
     this.siteName = selectedSiteName;
@@ -701,7 +830,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       res => {
         // if the site is selected 1st, get the CustomerSystemID.
         // Use the ID for the dbo.CustomerSystemInfoGet API call
-        console.log(res.customer_System_id);
+        //console.log(res.customer_System_id);
         this.customer_System_id = res.customer_System_id;
 
         this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
@@ -717,8 +846,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
         let alarmAccount = res.alarmAccount;
         let systemType = res.systemType
-        console.log(alarmAccount);
-        console.log(systemType);
+        // console.log(alarmAccount);
+        // console.log(systemType);
         this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
         this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
         this.systemCode = alarmAccount + ' - ' + systemType;
@@ -726,7 +855,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //this.systemType = res.systemType
       }
     )
-    
+
   }
 
   //select Central Station 1st
@@ -737,7 +866,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     let selectedAlarmAccount = alarmAccount;
     let selectedSystemCode = systemCode;
     let selectedCustomerName = customer_Name;
-    
+
     // console.log(selectedCustomerid)
     // console.log(selectedCustomerSiteId)
     // console.log(selectedCustomerSystemId);
@@ -751,8 +880,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.systemCode = selectedAlarmAccount+' - '+selectedSystemCode;
     this.customer = selectedCustomerName;
 
-    localStorage.setItem("customerName", this.customer);
-    localStorage.setItem("customerSystemInformation", this.systemCode)
+    //localStorage.setItem("customerName", this.customer);
+    //localStorage.setItem("customerSystemInformation", this.systemCode)
 
     this.modalService.dismissAll();
 
@@ -768,7 +897,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       res => {
         //console.log(res.siteName);
         this.siteName = res.siteName
-        localStorage.setItem("customerSiteName",this.siteName);
+        //localStorage.setItem("customerSiteName",this.siteName);
       }
     )
 
@@ -782,11 +911,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.centralStationID = res.centralStationID
 
         //Store these values in localstorage to retrieve if the page is refreshed
-        localStorage.setItem('alarmAccount', this.alarmAccount);
-        localStorage.setItem('systemType', this.systemType);
-        localStorage.setItem('panelType', this.panelType);
-        localStorage.setItem('panelLocation', this.panelLocation);
-        localStorage.setItem('centralStationID', this.centralStationID);
+        //localStorage.setItem('alarmAccount', this.alarmAccount);
+        //localStorage.setItem('systemType', this.systemType);
+        //localStorage.setItem('panelType', this.panelType);
+        //localStorage.setItem('panelLocation', this.panelLocation);
+        //localStorage.setItem('centralStationID', this.centralStationID);
 
       }
     )
@@ -811,7 +940,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   selectSystemsForCustomer(customersiteid:number) {
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
       res => {
-        console.log(res)
+        //console.log(res)
       }
     )
   }
@@ -835,8 +964,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         for(var prop in this.listsitesforcustomer) {
           //console.log(prop,this.listsitesforcustomer[prop].customer_Site_id);
           this.customersiteid = this.listsitesforcustomer[prop].customer_Site_id;
-          localStorage.setItem('customerSiteId',this.customersiteid);
-          //console.log(this.customersiteid) 
+          //localStorage.setItem('customerSiteId',this.customersiteid);
+          //console.log(this.customersiteid)
           this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
             res => {
               this.listSystemsForSite = [].concat(res);
@@ -849,16 +978,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   selectSiteToSystem(customer_Site_id:number) {
     this.updateSystem(customer_Site_id);
-    console.log(customer_Site_id)
+    //console.log(customer_Site_id)
   }
 
   updateSystem(customer_Site_id:number) {
-    console.log('call update system')
+    //console.log('call update system')
     //get the CustomerSiteID
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
       res => {
         this.listSystemsForSite = [].concat(res);
-        console.log(typeof(this.listSystemsForSite))//object
+        //console.log(typeof(this.listSystemsForSite))//object
         for(var i = 0; i < this.listSystemsForSite.length; i++) {
           this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
         }
@@ -868,9 +997,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //make a get request to dbo.CustomerSystemInfoGet
         this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
           res => {
-            console.log(res);
-            //this.alarmAccount = res.accountNumber;
-            this.alarmAccount = localStorage.getItem("alarmAccount")
+            //console.log(res);
+            this.alarmAccount = res.accountNumber;
+            //this.alarmAccount = localStorage.getItem("alarmAccount")
             this.systemType = res.systemType;
             this.panelType = res.panelType
             this.panelLocation = res.panelLocation
@@ -878,9 +1007,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
             this.routeService.getListSystemTypes().subscribe(
               res => {
-                console.log(res)
+                //console.log(res)
                 let result = res.filter(a => a.system_Id===this.systemType)
-                
+
                 for(var i in result) {
                   this.systemName = result[i].systemName;
                 }
@@ -889,12 +1018,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
             this.routeService.getListPanelTypes().subscribe(
               res => {
-                console.log(res) //object
+                //console.log(res) //object
                 let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
 
                 for(var i in result) {
                   this.panelName = result[i].panelName
-                  console.log(this.panelType)
+                  //console.log(this.panelType)
                 }
               }
             )
@@ -903,6 +1032,42 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         )
       }
     )
+
+    setTimeout(() => {
+      this.incentiveDashboardForm.get('CustomerID').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.customer = val;
+      })
+  
+      this.incentiveDashboardForm.get('CustomerSiteID').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.site = val;
+      })
+  
+      this.incentiveDashboardForm.get('System').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.system = val;
+      })
+  
+      this.incentiveDashboardForm.get('AlarmAccount').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.accountNumber = val;
+      })
+  
+      this.incentiveDashboardForm.get('SystemType').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.system = val;
+      })
+  
+      this.incentiveDashboardForm.get('PanelType').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.panelType = val;
+      })
+  
+      this.incentiveDashboardForm.get('PanelLocation').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.location = val;
+      })
+  
+      this.incentiveDashboardForm.get('CentralStationID').valueChanges.subscribe(val => {
+        this.dashboardSelectForLocalStorage.centralStation
+        console.log(this.dashboardSelectForLocalStorage);
+        localStorage.setItem("testObject",JSON.stringify(this.dashboardSelectForLocalStorage))
+      })
+    }, 4);
   }
 
   onSubmit(form: FormGroup) {
@@ -933,6 +1098,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
+    this.incentiveDashboardForm.controls["ContractTerm"].setValue(0);
     // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.siteName);
 
     // confirm('Click ok to confirm form submission')
@@ -940,7 +1106,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
     this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
       result => {
-        console.log(result)
+        //console.log(result)
         //returns the job id
         this.job_id = result;
         //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
@@ -960,7 +1126,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                     headers.append('Content-Type', 'multipart/form-data');
                     headers.append('Authorization','Bearer ' + this.loadToken());
                     headers.append('Accept', 'application/json');
-                    this.httpService.post("http://localhost:63052/api/Customer_Document_ADD", frmData, {
+                    //https://thepartnershipconnectionapi.azurewebsites.net/api/Incentive_Add_Labor
+                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
                       headers: headers,
                       responseType: 'text'
                     }).subscribe(
@@ -970,8 +1137,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
                           result => {
                             console.warn(result.status)
-                            console.log('Finished!... '+result);
+                            console.log('Finished!... ');
                             this.incentiveDashboardForm.reset();
+                            this.reset();
                           }
                         )
                       }
@@ -984,7 +1152,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         )
       }
     )
-    
+
     let getRecurringService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveRecurringInfo);
     let recurringItemID = getRecurringService.ItemID;
     let recurringDescription = getRecurringService.Description;
@@ -1007,45 +1175,45 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       // Create a temp object and index variable
       var temp = {};
       var i = 0;
-    
+
       // Loop through the original object
       for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
-    
+
           // If the indexes match, add the new item
           if (i === key && value) {
             temp[key] = value;
           }
-    
+
           // Add the current item in the loop to the temp obj
           temp[prop] = obj[prop];
-    
+
           // Increase the count
           i++;
-    
+
         }
       }
-    
+
       // If no index, add to the end
       if (key && value) {
         temp[key] = value;
       }
-    
+
       return temp;
-    
+
     };
-    
+
     //check localstorage for the key recurringentry
-    // if(localStorage.getItem("recurringentry")) {
-    //   console.log('there is a recurringentry item in localstorage')
-    //   this.recurringFromLocalStorage = JSON.parse(localStorage.getItem("recurringentry"));
-    //   console.log(this.recurringFromLocalStorage);
-    // }
-    // if(!localStorage.getItem("recurringentry")) {
-    //   console.log('there is not a recurringentry item in localstorage')
-    //   this.recurringFromLocalStorage = [];
-    //   console.log(this.recurringFromLocalStorage);
-    // }
+    if(localStorage.getItem("recurringentry")) {
+      console.log('there is a recurringentry item in localstorage')
+      this.recurringFromLocalStorage = JSON.parse(localStorage.getItem("recurringentry"));
+      console.log(this.recurringFromLocalStorage);
+    }
+    if(!localStorage.getItem("recurringentry")) {
+      console.log('there is not a recurringentry item in localstorage')
+      this.recurringFromLocalStorage = [];
+      console.log(this.recurringFromLocalStorage);
+    }
 
     // var updateRecurringWithJobID = addToObject({"ItemID":335,
     // "Description":"test",
@@ -1063,17 +1231,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
     // }
     //if there is an item in localstorage, get this...
-    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
-    console.log(updateRecurringWithJobID)//object includeds jobid
-    
-    var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
-    console.log(updateEquipMatWithJobID)//object includeds jobid
+    // var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
+    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
+    //console.log(updateRecurringWithJobID)//object includes jobid
 
-    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
-    console.log(updateLaborChargesWithJobID)//object includeds jobid
+    // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
+    var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
+    //console.log(updateEquipMatWithJobID)//object includes jobid
+
+    // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
+    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
+    //console.log(updateLaborChargesWithJobID)//object includes jobid
 
     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-    updateIncentiveAddFinishWithJobID.incentiveID = 19;
+    // updateIncentiveAddFinishWithJobID.incentiveID = 19;
+    updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
     updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
     // updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
     updateIncentiveAddFinishWithJobID.serviceChecked = this.serviceIncluded;
@@ -1124,10 +1296,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //     console.log(result)
     //   }
     // )
-  
+
     //Start of the Document Add. Append required parameters to the frmData
     let frmData = new FormData();
-    
+
     //37 = Sandbox, 6 = Production
     frmData.append('company_id','37');
 
@@ -1137,9 +1309,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
 
     frmData.append('customer_system_id', this.incentiveDashboardForm.get('System').value);
-    
-    // frmData.append('@job_id', this.job_id);
-    frmData.append('job_id', '19');
+
+    frmData.append('@job_id', this.job_id);
+    //frmData.append('job_id', '19');
     frmData.append('security_level', this.security_level);
 
     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
@@ -1148,7 +1320,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     frmData.append('upload_date', this.invoiceDate);
     frmData.append('document_ext', '*Contracts');
     frmData.append('user_code', 'PPC');
-    frmData.append('user_description', 'Test 3');
+    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    frmData.append('user_description', 'Invoice');
     frmData.append('reference1', null);
     frmData.append('reference2', null);
     frmData.append('reference3', null);
@@ -1170,7 +1343,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //submit this after the job id is returned
     // const httpOptions = {
     //   headers: new HttpHeaders(
-    //       { 
+    //       {
     //         //'Content-Type': 'application/json',
     //         'Content-Type': 'multipart/form-data',
     //         'Referer': 'http://localhost:4200',
@@ -1214,11 +1387,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        //console.log(reader.readAsDataURL(f));
-        //this.divInvoice.nativeElement.innerHTML = reader.result;
+        //console.log(reader.result);
         localStorage.setItem("invoice", reader.result as string);
-        this.showFile = true;
+        this.showInvoiceFile = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
@@ -1227,14 +1398,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.file_name = e.target.files[i].name;
       //this.file_name = 'invoice';
       localStorage.setItem('invoiceName',this.file_name);
-      this.divInvoice.nativeElement.innerHTML = this.file_name;
+      //this.divInvoice.nativeElement.innerHTML = this.file_name;
       //get the file size
       this.file_size = e.target.files[i].size;
+      console.log(this.file_size);
+      localStorage.setItem('invoiceFileSize',this.file_size);
       //this.invoiceDate = e.target.files[i].lastModified;
 
       this.myFiles.push(e.target.files[i]);
-
-      
     }
   }
 
@@ -1249,16 +1420,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        //this.divText.nativeElement.innerHTML = "Update"
-        localStorage.setItem("subscriberForm", reader.result as string)
+        localStorage.setItem("subscriberForm", reader.result as string);
+        this.showSubscriberFormFile = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.subscriber_file_name = 'subscriberForm';
+      this.subscriber_file_name = e.target.files[i].name;
+      //this.subscriber_file_name = 'subscriberForm';
+      localStorage.setItem('subscriberFormName', this.subscriber_file_name);
+      this.divSubscriberForm.nativeElement.innerHTML = this.subscriber_file_name;
       //get the file size
       this.subscriber_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1269,7 +1441,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //Test Site Visit Form file upload
   getSiteVisitFileDetails(e) {
-    //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
@@ -1278,15 +1449,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        localStorage.setItem("siteVisit", reader.result as string)
+        localStorage.setItem("siteVisit", reader.result as string);
+        this.showSiteVisitFile = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.site_visit_file_name = 'siteVisit';
+      this.site_visit_file_name = e.target.files[i].name;
+      //this.site_visit_file_name = 'siteVisit';
+      localStorage.setItem('siteVisitName', this.site_visit_file_name);
+      this.divSiteVisit.nativeElement.innerHTML = this.site_visit_file_name;
       //get the file size
       this.site_visit_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1297,7 +1470,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
    //Test Other Document 1 Form file upload
    getOtherDocument1FileDetails(e) {
-    //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
@@ -1306,15 +1478,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        localStorage.setItem("otherDocument1", reader.result as string)
+        localStorage.setItem("otherDocument1", reader.result as string);
+        this.showOtherDocument1File = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.other_Document1_file_name = 'otherDocument1';
+      this.other_Document1_file_name = e.target.files[i].name;
+      //this.other_Document1_file_name = 'otherDocument1';
+      localStorage.setItem('otherDocument1Name', this.other_Document1_file_name);
+      this.divOtherDocument1.nativeElement.innerHTML = this.other_Document1_file_name;
       //get the file size
       this.other_Document1_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1325,7 +1499,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //Test Contract Form file upload
   getContractFileDetails(e) {
-    //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
@@ -1334,15 +1507,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        localStorage.setItem("contract", reader.result as string)
+        localStorage.setItem("contract", reader.result as string);
+        this.showContractFile = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.contract_file_name = 'contract';
+      this.contract_file_name = e.target.files[i].name;
+      //this.contract_file_name = 'contract';
+      localStorage.setItem('contractName', this.contract_file_name);
+      this.divContract.nativeElement.innerHTML = this.contract_file_name;
       //get the file size
       this.contract_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1353,7 +1528,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //Test Other Document 2 Form file upload
   getOtherDocument2FileDetails(e) {
-    //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
@@ -1362,15 +1536,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        console.log(reader.result);
-        localStorage.setItem("otherDocument2", reader.result as string)
+        localStorage.setItem("otherDocument2", reader.result as string);
+        this.showOtherDocument2File = true;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
-      //this.file_name = e.target.files[i].name;
-      this.other_Document2_file_name = 'otherDocument2';
+      this.other_Document2_file_name = e.target.files[i].name;
+      //this.other_Document2_file_name = 'otherDocument2';
+      localStorage.setItem('otherDocument2Name', this.other_Document2_file_name);
+      this.divOtherDocument2.nativeElement.innerHTML = this.other_Document2_file_name;
       //get the file size
       this.other_Document2_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1379,12 +1555,52 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  removeFile(){
+  removeInvoiceFile(){
     console.log('remove this file')
     localStorage.removeItem('invoiceName');
     localStorage.removeItem('invoice');
     this.divInvoice.nativeElement.value = '';
-    this.showFile = false;
+    this.showInvoiceFile = false;
+  }
+
+  removeSubscriberFormFile() {
+    console.log('remove this file')
+    localStorage.removeItem('subscriberFormName');
+    localStorage.removeItem('subscriberForm');
+    this.divSubscriberForm.nativeElement.value = '';
+    this.showSubscriberFormFile = false;
+  }
+
+  removeSiteVisitFile() {
+    console.log('remove this file')
+    localStorage.removeItem('siteVisitName');
+    localStorage.removeItem('siteVisit');
+    this.divSiteVisit.nativeElement.value = '';
+    this.showSiteVisitFile = false;
+  }
+
+  removeOtherDocument1File() {
+    console.log('remove this file')
+    localStorage.removeItem('otherDocument1Name');
+    localStorage.removeItem('otherDocument1');
+    this.divOtherDocument1.nativeElement.value = '';
+    this.showOtherDocument1File = false;
+  }
+
+  removeContractFile() {
+    console.log('remove this file')
+    localStorage.removeItem('contractName');
+    localStorage.removeItem('contract');
+    this.divContract.nativeElement.value = '';
+    this.showContractFile = false;
+  }
+
+  removeOtherDocument2File() {
+    console.log('remove this file')
+    localStorage.removeItem('otherDocument2Name');
+    localStorage.removeItem('otherDocument2');
+    this.divOtherDocument2.nativeElement.value = '';
+    this.showOtherDocument2File = false;
   }
 
   getLineItemSubtotal() {

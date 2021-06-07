@@ -1,0 +1,459 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="row ml-0">
+                <div class="col-md-12">
+                    <div class="row">
+                        <h1 class="incentive-header">Incentive Entry | 
+                            <span class="company">{{ companyName }} - {{ partnerCode }}</span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <!-- <form class="form" [formGroup]="incentiveDashboardTestForm" (ngSubmit)="onSubmit(incentiveDashboardTestForm)">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group form-inline">
+                                <p>Customer:</p>
+                                <kendo-dropdownlist
+                                    [data]="CustomerSearchList"
+                                    [value]="selectedCategory"
+                                    [defaultItem]="defaultItemCategories"
+                                    [textField]="'categoryName'"
+                                    [valueField]="'categoryId'"
+                                    (valueChange)="handleCategoryChange($event)"
+                                >
+                                </kendo-dropdownlist>
+                                <span class="ml-2" (click)="openSearchCustomerModal(content)">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <span class="pl-4" (click)="routeToNewCustomer()">
+                                    <i class="fas fa-plus-circle"></i>
+                                    New Customer
+                                </span>
+                            </div>
+                            <div class="form-group form-inline">
+                                <p>Site:</p>
+                                <kendo-dropdownlist
+                                    [data]="CustomerSearchListSite"
+                                    [value]="selectedCategory"
+                                    [defaultItem]="defaultItemCategories"
+                                    [textField]="'categoryName'"
+                                    [valueField]="'categoryId'"
+                                    (valueChange)="handleCategoryChange($event)"
+                                >
+                                </kendo-dropdownlist>
+                                
+                                <span class="ml-2" (click)="openSearchSiteModal(site)">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <span class="pl-4" (click)="routeToNewSite()">
+                                    <i class="fas fa-plus-circle"></i>
+                                    New Site
+                                </span>
+                            </div>
+                            <div class="form-group form-inline">
+                                    <div class="dropdown">
+                                        <select 
+                                            formControlName="System" 
+                                            class="form-control col-sm-12 fullWidthSelect"
+                                            [(ngModel)]="selectedValue"
+                                            (ngModelChange)="updateSystem($event)"
+                                        >
+                                            <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
+                                                {{ system.systemType }} - {{  system.alarmAccount }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <p>System:</p>
+                                <kendo-dropdownlist
+                                    [data]="CustomerSearchListCentralStation"
+                                    [value]="selectedCategory"
+                                    [defaultItem]="defaultItemCategories"
+                                    [textField]="'categoryName'"
+                                    [valueField]="'categoryId'"
+                                    (valueChange)="handleCategoryChange($event)"
+                                >
+                                </kendo-dropdownlist>
+                                <span class="ml-2" (click)="openSearchSystemModal(system)">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="checkbox" class="form-control form-check-input ml-3" [(ngModel)]="newSystem" formControlName="NewSystem">
+                                <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
+                            </div>
+                            
+                            <div class="form-group form-inline">
+                                <p class="text-danger">Verify System Information!</p>
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">Account #</label>
+                                <input type="text" class="form-control col-sm-5" [(ngModel)]="alarmAccount" formControlName="AlarmAccount">
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">System Type</label>
+                                <div class="dropdown">
+                                    <select 
+                                        formControlName="SystemType" class="form-control col-sm-12 fullWidthSelect" 
+                                        [(ngModel)]="systemType"
+                                    >
+                                        <option *ngFor="let list of listsystemtypes" value="{{ list.system_Id }}" [ngValue]="list.system_Id">
+                                            {{ list.systemName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <span class="col-sm-4">
+                                    <small>If <b>Other</b> is selected, please describe in Comments Section</small>
+                                </span>
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">Panel Type</label>
+                                <div class="dropdown">
+                                    <select 
+                                        formControlName="PanelType" class="form-control col-sm-12 fullWidthSelect" 
+                                        [(ngModel)]="panelType"
+                                    >
+                                        <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}" [ngValue]="list.panel_Type_Id">
+                                            {{ list.panelName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <span class="col-sm-4">
+                                    <small>If <b>Other</b> is selected, please describe in Comments Section</small>
+                                </span>
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">Panel Location</label>
+                                <input type="text" class="form-control col-sm-5" [(ngModel)]="panelLocation" formControlName="PanelLocation">
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">Central Station</label>
+                                <div class="dropdown">
+                                    <select 
+                                        formControlName="CentralStationID" class="form-control col-sm-12 fullWidthSelect" 
+                                        [(ngModel)]="centralStationID"
+                                    >
+                                        <option *ngFor="let station of listcentralstations" value="{{ station.centralStationID }}" [ngValue]="station.centralStationID">
+                                            {{ station.csName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <span class="col-sm-4">
+                                    <small>If <b>Other</b> is selected, please describe in Comments Section</small>
+                                </span>
+                            </div>
+                            <div class="form-group form-inline">
+                                <label class="col-sm-2 col-form-label">Additional Info</label>
+                                <input type="text" class="form-control col-sm-10" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" (keyup)="getAdditionalInfo($event)">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>
+                                        Upload Documents - (An invoice submission is required)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showInvoiceFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Invoice</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="invoiceUpload" 
+                                            formControlName="InvoiceUpload"
+                                            (change)="getFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showInvoiceFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #invoice>{{invoiceUpload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeInvoiceFile()"></i>
+                                    </div>
+                                </div>
+    
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showSubscriberFormFile">
+                                        <label class="col-sm-5 col-form-label">Subscriber Form</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
+                                            (change)="getSubscriberFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showSubscriberFormFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriberFormUpload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showSiteVisitFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Site Visit</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
+                                            (change)="getSiteVisitFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showSiteVisitFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{siteVisitUpload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showOtherDocument1File">
+                                        <label class="col-sm-5 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
+                                            (change)="getOtherDocument1FileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showOtherDocument1File">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{otherDocument1Upload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showContractFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Contract</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="contractUpload" formControlName="ContractUpload"
+                                            (change)="getContractFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showContractFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        
+                                        <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showOtherDocument2File">
+                                        <label class="col-sm-5 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
+                                            (change)="getOtherDocument2FileDetails($event)"
+                                        > 
+                                    </div>
+                                    <div class="form-group" *ngIf="showOtherDocument2File">
+                                        <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{otherDocument2Upload}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>
+                                        Incentive Information
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-4">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-7 col-form-label pl-0">Invoice #</label>
+                                        <div class="input-group d-flex justify-content-center">
+                                            <input 
+                                                type="text" class="form-control col-sm-10" 
+                                                [(ngModel)]="invoiceNumber" formControlName="PartnerInvoiceNumber">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-7 col-form-label pl-0">Invoice Date</label>
+                                        <div class="input-group d-flex justify-content-center">
+                                            <input 
+                                                type="date" class="form-control col-sm-12" 
+                                                [(ngModel)]="invoiceDate" formControlName="PartnerInvoiceDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-form-label">Total</label>
+                                        <div class="input-group d-flex justify-content-center">
+                                            
+                                            <input
+                                                placeholder="$0.00"
+                                                mask="separator.2" 
+                                                thousandSeparator=","
+                                                prefix="$"
+                                                type="text" 
+                                                class="form-control col-sm-8" 
+                                                [(ngModel)]="invoiceTotal"
+                                                formControlName="InvoiceTotal">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-form-label">Tax</label>
+                                        <div class="input-group d-flex justify-content-center">
+                                           
+                                            <input
+                                                type="text" 
+                                                class="form-control col-sm-10"
+                                                formControlName="Tax"
+                                                [(ngModel)]="tax"
+                                                placeholder="$0.00"
+                                                mask="separator.2" 
+                                                thousandSeparator=","
+                                                prefix="$"
+                                                (keyup)="getTax($event)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-inline">
+                                        <label class="col-form-label pl-0 col-sm-9">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label>
+                                        <div class="input-group col-sm-3 ml-auto">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                class="form-control col-sm-6" 
+                                                formControlName="Recurring"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-form-label pl-0 col-sm-9">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label>
+                                        <div class="input-group col-sm-3 ml-auto">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="text" class="form-control col-sm-6" formControlName="EquipmentAndMaterials">
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-form-label pl-0 col-sm-9">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label>
+                                        <div class="input-group col-sm-3 ml-auto">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="text" class="form-control col-sm-6"  formControlName="LaborCharges">
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-5 col-form-label pl-0 display-contents">Line Item Subtotal</label>
+                                        <div class="input-group col-sm-3 ml-auto">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div>
+                                            <input type="text" class="form-control col-sm-6" formControlName="LineItemSubtotal">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="shadow">
+                                        <div class="ml-2 mt-2">
+                                            <h3>Contract Terms</h3>
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label class="col-sm-3 col-form-label">Start Date</label>
+                                            <input 
+                                                type="date" 
+                                                class="form-control col-sm-5" 
+                                                [(ngModel)]="startDate" formControlName="ContractDate"
+                                                (change)="getContractDate($event)"    
+                                            >
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label class="col-sm-2 col-form-label">Term</label>
+                                            <input 
+                                                type="number" 
+                                                class="form-control col-sm-2 mr-3"
+                                                [(ngModel)]="contractTerm" formControlName="ContractTerm"
+                                                (keyup)="getContractTerm($event)"
+                                            >Mo
+        
+                                            <label class="col-sm-3 col-form-label">Renewal</label>
+                                            <input 
+                                                type="number"
+                                                class="form-control col-sm-2 mr-3"
+                                                [(ngModel)]="renewal" formControlName="RenewalMonths"
+                                                (keyup)="getRenewal($event)"
+                                            >Mo
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="shadow">
+                                        <div class="form-group form-inline form-check mb-0">
+                                            <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
+                                            <input 
+                                                type="checkbox" class="form-control form-check-input" 
+                                                [value]="false"
+                                                [(ngModel)]="signalsTested" formControlName="SignalsTested"
+                                                (change)="onSignalsTested($event)"
+                                            >
+                                        </div>
+                                        <div class="form-group form-inline mb-0">
+                                            <label class="col-sm-10 col-form-label">
+                                                <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-12 offset-md-0">
+                                        <button type="reset" class="btn btn-danger" (click)="reset()">Reset</button>
+                                        <button type="button" class="btn btn-success btn-light-green" (click)="openAddViewCommentsModal(comments)">Add/View Comments</button>
+                                        <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardTestForm)" [disabled]="!incentiveDashboardTestForm.valid">Submit Incentive</button>
+                                      </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </form> -->
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="ml-5 mr-5">
+        <div class="row pb-3">
+        <div class="col-md-3">
+            <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
+        </div>
+        <div class="col-md-1">
+            <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
+        </div>
+        <div class="col-md-8">
+            <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
+        </div>
+        
+        </div>
+        
+    </div>
+</footer>

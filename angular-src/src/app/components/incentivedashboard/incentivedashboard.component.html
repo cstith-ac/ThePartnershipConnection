@@ -95,7 +95,7 @@
                                     type="text" 
                                     class="form-control col-sm-12 fullWidthInput" 
                                     [(ngModel)]="systemCode" 
-                                    formControlName="SystemCode"
+                                    formControlName="System"
                                 >
                             </div>
                             <!-- <input 
@@ -215,7 +215,7 @@
                         </div>
                         <div class="row form-inline mb-3">
                             <div class="col-md-6">
-                                <div class="form-group" >
+                                <div class="form-group" *ngIf="!showInvoiceFile">
                                     <label class="col-sm-4 col-form-label pl-0">Invoice</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -226,36 +226,15 @@
                                         (change)="getFileDetails($event)"
                                     >
                                 </div>
-                                <div class="form-group" *ngIf="showFile">
+                                <div class="form-group" *ngIf="showInvoiceFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4" #invoice>{{invoiceUpload}}</p>
-                                    <i class="pl-3 far fa-trash-alt pl-6 text-danger" (click)="removeFile()"></i>
+                                    <p class="mb-0 ml-4 uploaded-file" #invoice>{{invoiceUpload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeInvoiceFile()"></i>
                                 </div>
-                                
-                                <!-- <div class="form-group" *ngIf="!invoiceUpload">
-                                    <label class="col-sm-4 col-form-label pl-0">Invoice</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="invoiceUpload" 
-                                        formControlName="InvoiceUpload"
-                                        (change)="getFileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="invoiceUpload">
-                                    <label class="col-sm-4 col-form-label pl-0">Invoice</label>
-                                        <i class="fas fa-upload pr-3"></i>
-                                        <input 
-                                            type="text" 
-                                            class="form-control col-sm-6" 
-                                            value="{{invoiceUpload}}" 
-                                            #invoice
-                                        ><i class="far fa-trash-alt" (click)="removeFile()"></i>
-                                </div> -->
                             </div>
+
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!showSubscriberFormFile">
                                     <label class="col-sm-5 col-form-label">Subscriber Form</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -265,11 +244,16 @@
                                         (change)="getSubscriberFileDetails($event)"
                                     >
                                 </div>
+                                <div class="form-group" *ngIf="showSubscriberFormFile">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriberFormUpload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="row form-inline mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!showSiteVisitFile">
                                     <label class="col-sm-4 col-form-label pl-0">Site Visit</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -279,9 +263,14 @@
                                         (change)="getSiteVisitFileDetails($event)"
                                     >
                                 </div>
+                                <div class="form-group" *ngIf="showSiteVisitFile">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{siteVisitUpload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!showOtherDocument1File">
                                     <label class="col-sm-5 col-form-label">Other Document</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -291,11 +280,16 @@
                                         (change)="getOtherDocument1FileDetails($event)"
                                     >
                                 </div>
+                                <div class="form-group" *ngIf="showOtherDocument1File">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{otherDocument1Upload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="row form-inline mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!showContractFile">
                                     <label class="col-sm-4 col-form-label pl-0">Contract</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -305,9 +299,15 @@
                                         (change)="getContractFileDetails($event)"
                                     >
                                 </div>
+                                <div class="form-group" *ngIf="showContractFile">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <!-- <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p> -->
+                                    <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!showOtherDocument2File">
                                     <label class="col-sm-5 col-form-label">Other Document</label>
                                     <i class="fas fa-upload pr-3"></i>
                                     <input 
@@ -316,6 +316,11 @@
                                         [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
                                         (change)="getOtherDocument2FileDetails($event)"
                                     > 
+                                </div>
+                                <div class="form-group" *ngIf="showOtherDocument2File">
+                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
+                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{otherDocument2Upload}}</p>
+                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
                                 </div>
                             </div>
                         </div>
@@ -351,10 +356,12 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 col-form-label">Total</label>
                                     <div class="input-group d-flex justify-content-center">
-                                        <!-- <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div> -->
-                                        <input
+                                        <kendo-numerictextbox
+                                            format="c2"
+                                            [value]="invoiceTotal"
+                                            placeholder="$0.00"
+                                        ></kendo-numerictextbox>
+                                        <!-- <input
                                             placeholder="$0.00"
                                             mask="separator.2" 
                                             thousandSeparator=","
@@ -362,7 +369,7 @@
                                             type="text" 
                                             class="form-control col-sm-8" 
                                             [(ngModel)]="invoiceTotal"
-                                            formControlName="InvoiceTotal">
+                                            formControlName="InvoiceTotal"> -->
                                     </div>
                                 </div>
                             </div>

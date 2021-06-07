@@ -21,8 +21,8 @@ namespace WebAPI.Models
         public string PartnerInvoiceNumber { get; set; }
         public string PartnerInvoiceDate { get; set; }
         public string ContractDate { get; set; }
-        public int ContractTerm { get; set; }
-        public int RenewalMonths { get; set; }
+        public int? ContractTerm { get; set; }
+        public int? RenewalMonths { get; set; }
         public string ServiceIncluded { get; set; }
         public string PartnerComments { get; set; }
         public int JobID { get; set; }
