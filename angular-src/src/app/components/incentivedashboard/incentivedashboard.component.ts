@@ -1,11 +1,12 @@
 import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild, ElementRef } from '@angular/core';
+import { Location } from '@angular/common';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
 import { environment } from '../../../environments/environment';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { IncentiveDashboard } from '../../models/incentivedashboard';
 import { IncentiveEntry } from '../../models/incentiveentry';
 import { ListPanelTypes } from '../../models/listpaneltypes';
@@ -16,12 +17,18 @@ import { CustomerSearchList } from '../../models/customersearchlist';
 import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 import { ListSystemTypes } from '../../models/listsystemtypes';
+import { ListRecurringItems } from 'src/app/models/listrecurringitems';
+import { ListMultiples } from 'src/app/models/listmultiples';
+import { ListMaterialItems } from '../../models/listmaterialitems';
+import { ListLaborItems } from 'src/app/models/listlaboritems';
 import { AuthService } from '../../services/auth.service';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
+import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
+import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 
 @Component({
@@ -71,6 +78,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
   listsystemtypes: ListSystemTypes[];
   incentive_Add_Recurring: Incentive_Add_Recurring[];
+  listRecurringItems: ListRecurringItems[];
+  listMultiples: ListMultiples[];
+  listMatItems: ListMaterialItems[];
+  incentive_Add_Equipment: Incentive_Add_Equipment[];
+  listLaborItems: ListLaborItems[];
+  incentive_Add_Labor: Incentive_Add_Labor[];
 
   dashboardSelectForLocalStorage = new IncentiveDashboard;
 
@@ -96,6 +109,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   closeResult = '';
   incentiveDashboardForm: FormGroup;
   recurringItemEntryForm: FormGroup;
+  incentiveRecurringEntryForm: FormGroup;
+  incentiveEquipMatEntryForm: FormGroup;
+  incentiveLaborChargesEntryForm: FormGroup;
+
+  rmr: number;
+  passThrough: number;
+  multiple: number;
+  total: number;
+  totalRecurringCalc;
+  itemID;
+  description;
+  quantity: number;
+  cost: number;
+  hours: number;
+  costPerHour: number;
+  totalEquipMatCalc;
+  totalLaborChargesCalc;
+  placeholder="$0.00";
+
   customer: string;
   siteName: string;
   customerSiteId: number;
@@ -202,10 +234,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     public jwtHelper: JwtHelperService,
     private modalService: NgbModal,
     public fb: FormBuilder,
-    private httpService: HttpClient
+    private httpService: HttpClient,
+    private location: Location
   ) {
-    this.columns = ['Item', 'Description', 'Bill Cycle', 'RMR', 'Pass Through', 'Billing Starts', 'Add To An Existing RMR Item', 'Multiple', 'Total']
+    // this.columns = ['Item', 'Description', 'Bill Cycle', 'RMR', 'Pass Through', 'Billing Starts', 'Add To An Existing RMR Item', 'Multiple', 'Total']
+    router.events.forEach((event) => {
+      if(event instanceof NavigationStart) {
+        if(event.navigationTrigger === 'popstate') {
+          console.log(event)
+          // router.navigate(['/incentive-dashboard'], {replaceUrl:true});
+          // location.replaceState('/incentive-dashboard');
+        } 
+      }
+    })
   }
+  
 
   ngOnInit() {
     // var retrievedObject = localStorage.getItem("testObject");
@@ -349,8 +392,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // this.additionalInfo = localStorage.getItem("additionalInfo")
     // this.tax = localStorage.getItem("tax");
-    // this.contractTerm = localStorage.getItem("contractTerm");
-    // this.renewal = localStorage.getItem("renewal");
+    this.contractTerm = localStorage.getItem("contractTerm");
+    this.renewal = localStorage.getItem("renewal");
     // this.partnerComments = localStorage.getItem("partnerComments");
     // this.signalsTested = localStorage.getItem("signalsTested");
 
@@ -368,6 +411,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         console.log(err)
       }
     )
+
+    this.incentiveRecurringEntryForm = this.fb.group({
+      entryRowsRecurring: this.fb.array([this.initEntryRow()])
+    })
+
+    this.incentiveEquipMatEntryForm = this.fb.group({
+      entryRowsEquipMat: this.fb.array([this.initEquipMatEntryRow()])
+    })
+
+    this.incentiveLaborChargesEntryForm = this.fb.group({
+      entryRowsLaborCharges: this.fb.array([this.initLaborChargesEntryRow()])
+    })
 
     this.incentiveDashboardForm = this.fb.group({
       UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
@@ -394,7 +449,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       OtherDocument2Upload: [""],
       PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
       PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
-      InvoiceTotal: ["", Validators.required],
+      InvoiceTotal: [""],
       Tax: [""],
       Recurring: [""],
       EquipmentAndMaterials: [""],
@@ -407,6 +462,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       SignalsTested: ["", Validators.required],
       PartnerComments: [""] //@PartnerComments
     });
+
+    this.routeService.getListRecurringItems().subscribe(
+      res => {
+        this.listRecurringItems = res;
+      }
+    )
+
+    this.routeService.getListMultiples().subscribe(
+      res => {
+        this.listMultiples = res;
+      }
+    )
+
+    this.routeService.getListMaterialItems().subscribe(
+      res => {
+        this.listMatItems = res;
+      }
+    )
+
+    this.routeService.getListLaborItems().subscribe(
+      res => {
+        this.listLaborItems = res;
+      }
+    )
 
     // if(localStorage.getItem('testObject')) {
     //   //return true;
@@ -532,50 +611,50 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     setTimeout(() => {
       
       if(!isNaN(parseFloat(this.recurring))) {
-        this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
-        this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
+        this.incentiveDashboardForm.controls["Recurring"].setValue('$'+this.recurring);
+        this.incentiveDashboardForm.controls["Recurring"].setValue('$'+this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].updateValueAndValidity();
 
         this.onChanges();
       }
 
       if(!isNaN(parseFloat(this.equipmentAndMaterials))) {
-        this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue(this.equipmentAndMaterials);
-        this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue(this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue('$'+this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["EquipmentAndMaterials"].setValue('$'+this.equipmentAndMaterials);
         this.incentiveDashboardForm.controls["EquipmentAndMaterials"].updateValueAndValidity();
       }
 
       if(!isNaN(parseFloat(this.laborCharges))) {
         //set valid
         this.incentiveDashboardForm.controls["LaborCharges"].setValidators(null);
-        this.incentiveDashboardForm.controls["LaborCharges"].setValue(this.laborCharges);
+        this.incentiveDashboardForm.controls["LaborCharges"].setValue('$'+this.laborCharges);
         this.incentiveDashboardForm.controls["LaborCharges"].updateValueAndValidity();
       }
 
       if(this.recurring) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+this.recurring);
       }
       if(this.laborCharges) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.laborCharges);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+this.laborCharges);
       }
       if(this.equipmentAndMaterials) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+this.equipmentAndMaterials);
       }
       if(this.equipmentAndMaterials && this.laborCharges) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.equipmentAndMaterials + this.laborCharges);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+(this.equipmentAndMaterials + this.laborCharges));
       }
       if(this.recurring && this.equipmentAndMaterials) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring + this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+(this.recurring + this.equipmentAndMaterials));
       }
       if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring + this.equipmentAndMaterials + this.laborCharges);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue('$'+(this.recurring + this.equipmentAndMaterials + this.laborCharges));
       }
 
       // if there's a page refresh, re-populate fields with previously entered values
       this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));
       this.tax = localStorage.getItem("tax")
       this.incentiveDashboardForm.controls["Tax"].setValue(localStorage.getItem("tax"));
-      this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
+      //this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
 
       // get key/value pairs from localstorage
       // string to object
@@ -593,6 +672,40 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
   ngOnDestroy(){
     console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
+  }
+
+  initEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      BillCycle: ["", Validators.required],
+      RMR: ["", Validators.required],
+      PassThrough: ["", Validators.required],
+      BillingStartDate: ["", Validators.required],
+      Add2Item: [0],
+      Multiple: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
+  }
+
+  initEquipMatEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      Quantity: ["", Validators.required],
+      Cost: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
+  }
+
+  initLaborChargesEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      Hours: ["", Validators.required],
+      CostPerHour: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
   }
 
   reset() {
@@ -647,6 +760,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   }
 
+  getTotalRecurringCalc(e) {
+    console.log('number required')
+    // this.totalRecurringCalc = parseInt(localStorage.getItem(this.totalRecurringCalc))
+  }
+
   getAdditionalInfo(e){
     let newAdditionalInfo = e.target.value;
     localStorage.setItem("additionalInfo", newAdditionalInfo);
@@ -664,6 +782,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   getContractTerm(e) {
     let newContractTerm = e.target.value;
+    console.log(newContractTerm);
     localStorage.setItem("contractTerm", newContractTerm);
   }
 
@@ -1139,7 +1258,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                             console.warn(result.status)
                             console.log('Finished!... ');
                             this.incentiveDashboardForm.reset();
-                            this.reset();
                           }
                         )
                       }
@@ -1639,6 +1757,352 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.router.navigate(["incentive-recurring"]);
   }
 
+  /****Recurring Modal */
+  openRecurringModal(recurring) {
+    this.modalService.open(recurring, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  getItemName(e:any,i:number) {
+    // this.counter=0;
+    // for(let x of this.incentiveRecurringEntryForm.controls.entryRows['controls']){
+    //   console.log(this.incentiveRecurringEntryForm.get(['entryRows',this.counter]).value)
+    //   this.counter = this.counter+1;
+    // }
+    
+    // let v = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(function(currentRecurringRow) {
+    //   console.log(currentRecurringRow.ItemID);
+    //   return currentRecurringRow.ItemID;
+    // })
+
+
+    //get the description from listrecurringitems based on the selected ItemID
+    //console.log(e.target.value)//returns 'index: item_id', as a string
+    let currentID = e.target.value;
+
+    setTimeout(() => {
+
+      const getItemID = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+        console.log(element,i)
+        
+        const result = this.listRecurringItems.filter(x => x.item_id == element.ItemID);
+        console.log(result)
+        // console.log(element.ItemID);
+
+        var string;
+        result.forEach(function(e) {
+          string = e.itemName.toString();
+        })
+        const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
+        controlArray.at(i).get('Description').setValue(string);//this is working now!!! Yeah!!!
+        // for(let i = 0; i < controlArray.value.length;i++) {
+        //   console.log(i)
+        //   //this gets current index of FormArray plus all previous indexes
+        //   controlArray.at(i).get('Description').setValue(string);
+        // }
+        
+      });
+      
+      }, 4);
+  }
+
+  get r():FormArray {
+    return this.incentiveRecurringEntryForm.get('entryRowsRecurring') as FormArray;
+  }
+
+  onRecurringSubmit(form: FormGroup) {
+    console.log(form.value.Total)
+    
+    const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRowsRecurring'];
+    
+    this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
+    
+    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0]))
+    
+    this.modalService.dismissAll()
+  }
+
+  addNewItem():void {
+    (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
+    .push(this.initEntryRow());
+  }
+
+  removeNewItem(i: number) {
+    if(i > 0) {
+      const control = (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
+    .removeAt(i);
+    }
+
+    // (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
+    // .push(this.initEntryRow());
+
+    localStorage.removeItem("recurringentry");
+    localStorage.removeItem("totalRecurringCalc");
+  }
+
+  calculateRMR(val:any){
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.RMR);
+    this.rmr = parseInt(rowVal.RMR);
+  }
+
+  calculatePassThrough(val:any) {
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.PassThrough);
+    this.passThrough = parseInt(rowVal.PassThrough);
+  }
+
+  calculateMultiple(val:any,i:number) {
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    console.log(rowVal.Multiple);
+    this.multiple = rowVal.Multiple;
+    this.calculateTotal(val,i)
+  }
+
+  calculateTotal(val:any,i:number) {
+    let totalRecurringCalc = this.total = (this.rmr - this.passThrough) * this.multiple;
+    
+    this.totalRecurringCalc = totalRecurringCalc.toString();
+    localStorage.setItem('totalRecurringCalc',this.totalRecurringCalc);
+
+    const getItemID = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
+      controlArray.at(i).get('Total').setValue('$'+this.totalRecurringCalc);
+    })
+  }
+
+  checkboxChanged(e) {
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring')
+    let currentVal = controlArray.controls[0].get('Add2Item').value;
+    console.log(currentVal)
+    if(currentVal === true) {
+      console.log('change to 1')
+      controlArray.controls[0].get('Add2Item').setValue(1);
+    }
+    else if(currentVal === false) {
+      console.log('change to 0')
+      controlArray.controls[0].get('Add2Item').setValue(0);
+    } 
+    
+  }
+  /****END Recurring Modal *********************************/
+
+  /****Equipment & Materials Modal *********************************/
+  openEquipMaterialsModal(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  getEquipMatItemName(e:any,i:number) {
+    setTimeout(() => {
+
+      const getItemID = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+        console.log(element, i);
+
+        const result = this.listMatItems.filter(x => x.item_id == element.ItemID);
+
+        var string;
+        result.forEach(function(e) {
+          string = e.itemName.toString();//extract string from returned array
+        });
+        const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+        controlArray.at(i).get('Description').setValue(string);
+
+      })
+      }, 4);
+  }
+
+  onEquipMatSubmit(form: FormGroup) {
+    //console.log(form.value.Total)
+    const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
+    //push values to the incentive component
+    //not working. will use in the ngOnDestroy
+    this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
+
+    localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0]));
+
+    this.modalService.dismissAll();
+  }
+
+  addNewEquipMatItem():void {
+    (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+    .push(this.initEquipMatEntryRow());
+
+    //add a delete row button
+  }
+
+  removeNewEquipMatItem(i: number) {
+    if(i > 0) {
+      const control = (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+    .removeAt(i);
+    }
+
+    // (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+    // .push(this.initEquipMatEntryRow());
+
+    localStorage.removeItem("equipmatentry");
+    localStorage.removeItem("totalEquipMatCalc");
+  }
+
+  calculateQuantity(val:any,i:number) {
+    const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.quantity = rowVal.Quantity;
+  }
+
+  calculateCost(val:any,i:number){
+    const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.cost = parseInt(rowVal.Cost);
+    this.calculateEquipMatTotal(val,i)
+  }
+
+  calculateEquipMatTotal(val:any,i:number) {
+    let totalEquipMatCalc = this.total = (this.quantity * this.cost);
+
+    this.totalEquipMatCalc = totalEquipMatCalc.toString();
+    localStorage.setItem('totalEquipMatCalc', this.totalEquipMatCalc);
+
+    const getItemID = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlArray.at(i).get('Total').setValue('$'+this.totalEquipMatCalc);
+    })
+  }
+  /****END Equipment & Materials Modal *********************************/
+
+  /****Labor Charges Modal *********************************/
+  openLaborChargesModal(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  getLaborChargesItemName(e:any,i:number) {
+    //get the description from listrecurringitems based on the selected ItemID
+    console.log(e.target.value)//returns 'index: item_id', as a string
+    let currentID = e.target.value;
+    setTimeout(() => {
+        const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(element => {
+          const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
+
+          var string;
+          result.forEach(function(e) {
+            string = e.itemName.toString();//extract string from returned array
+          });
+          // console.log(string);
+          const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
+          controlArray.at(i).get('Description').setValue(string);
+        })
+      }, 4);
+  }
+
+  onLaborChargesSubmit(form: FormGroup) {
+    //console.log(form.value.Total)
+    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
+
+    const laborChargesArr = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
+    let rowVal;
+    laborChargesArr.controls.forEach(function(e) {
+      rowVal = e.value;
+      console.log(rowVal);
+    })
+
+    return
+    
+    this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Hours, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].CostPerHour, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
+
+    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0]));
+    
+    this.modalService.dismissAll();
+  }
+
+  addNewLaborChargesItem():void {
+    (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
+    .push(this.initLaborChargesEntryRow());
+
+    //add a delete row button
+  }
+
+  removeNewLaborChargesItem(i: number) {
+    if(i > 0) {
+      const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
+    .removeAt(i);
+    }
+    // const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
+    // .removeAt(i);
+    // (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
+    // .push(this.initLaborChargesEntryRow());
+
+    localStorage.removeItem("laborchargesentry");
+    localStorage.removeItem("totalLaborChargesCalc");
+  }
+
+  calculateHours(val:any) {
+    //this.hours = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].Hours);
+    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    //console.log(rowVal.Hours);
+    this.hours = parseInt(rowVal.Hours);
+  }
+
+  calculateCostPerHour(val:any,i:number) {
+    // this.costPerHour = parseInt(this.incentiveLaborChargesEntryForm.controls['entryRows'].value[0].CostPerHour);
+    const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
+    var rowVal;
+    controlArray.controls.forEach(function(e) {
+      rowVal = e.value;
+    });
+    this.costPerHour = parseInt(rowVal.CostPerHour);
+    this.calculateLaborChargesTotal(val,i);
+  }
+
+  calculateLaborChargesTotal(val:any,i:number) {
+    let totalLaborChargesCalc = this.total = (this.hours * this.costPerHour);
+    
+    this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
+    localStorage.setItem('totalLaborChargesCalc', this.totalLaborChargesCalc);
+
+    const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(element => {
+      const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
+      controlArray.at(i).get('Total').setValue('$'+this.totalLaborChargesCalc);
+    })
+    // const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
+    // controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);
+  }
+  /****END Labor Charges Modal *********************************/
+
   routeToEquipMaterials() {
     this.router.navigate(["incentive-equipment-materials"]);
   }
@@ -1694,22 +2158,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     })
   }
-
-  // openRecurringModal(content) {
-  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-  //     console.log(result)
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
-
-  // openEquipMaterialsModal(content) {
-  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-  //     console.log(result)
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
 
   // openLaborChargesModal(content) {
   //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {

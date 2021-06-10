@@ -72,6 +72,7 @@ export class IncentiveentryComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem("serviceIncluded","no");
+
     setTimeout(() => {
       let myTag = this.el.nativeElement.querySelector('.entryColumn2');
       //console.log(myTag)
@@ -284,7 +285,7 @@ export class IncentiveentryComponent implements OnInit {
       //console.log('checked: '+ e.target.value)
       //if value = 1, do something
       if(e.target.value == 1) {
-        //console.log('do something')
+        //this.incentiveEntryForm.get('AdoptionVisit').disable();
         this.selectedForCheckBoxAutoInsert.push(e.target.value);
       }
       if(e.target.value == 2) {
@@ -302,7 +303,20 @@ export class IncentiveentryComponent implements OnInit {
       //if value == 2, do something
       //if value = 11, do something
       //if value == 12, do something
-    } else {
+    } else if (!e.target.checked) {
+      if(e.target.value == 1) {
+        this.incentiveEntryForm.get('AdoptionVisit').enable();
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 2) {
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 11) {
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 12) {
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
       console.log('unchecked: '+ e.target.value)
     }
   }

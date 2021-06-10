@@ -186,6 +186,9 @@ export class IncentiveequipmatComponent implements OnInit {
     const control = (<FormArray>this.incentiveEquipMatEntryForm.get('entryRows'))
     .removeAt(i);
 
+    (<FormArray>this.incentiveEquipMatEntryForm.get('entryRows'))
+    .push(this.initEntryRow());
+
     localStorage.removeItem("equipmatentry");
     localStorage.removeItem("totalEquipMatCalc");
   }
@@ -222,7 +225,7 @@ export class IncentiveequipmatComponent implements OnInit {
 
     const getItemID = this.incentiveEquipMatEntryForm.controls['entryRows'].value.forEach(element => {
       const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
-      controlArray.at(i).get('Total').setValue(this.totalEquipMatCalc);
+      controlArray.at(i).get('Total').setValue('$'+this.totalEquipMatCalc);
     })
     // const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRows');
     // controlArray.controls[0].get('Total').setValue(this.totalEquipMatCalc);

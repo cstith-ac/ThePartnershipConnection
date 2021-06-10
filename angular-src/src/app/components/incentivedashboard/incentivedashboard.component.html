@@ -228,7 +228,7 @@
                                 </div>
                                 <div class="form-group" *ngIf="showInvoiceFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #invoice>{{invoiceUpload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #invoice>{{file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeInvoiceFile()"></i>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                 </div>
                                 <div class="form-group" *ngIf="showSubscriberFormFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriberFormUpload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriber_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
                                 </div>
                             </div>
@@ -359,6 +359,7 @@
                                         <kendo-numerictextbox
                                             format="c2"
                                             [value]="invoiceTotal"
+                                            [spinners]="false"
                                             placeholder="$0.00"
                                         ></kendo-numerictextbox>
                                         <!-- <input
@@ -398,43 +399,86 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0 col-sm-9">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label>
-                                    <div class="input-group col-sm-3 ml-auto">
-                                        <div class="input-group-prepend">
+                                    <!-- <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label> -->
+                                    <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label>
+                                    <div class="input-group col-sm-5 ml-auto">
+                                        <!-- <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
-                                        </div>
-                                        <input 
+                                        </div> -->
+                                        <kendo-numerictextbox
+                                            format="c2"
+                                            [value]="totalRecurringCalc"
+                                            [spinners]="false"
+                                            placeholder="$0.00"
+                                            (change)="getTotalRecurringCalc($event)"
+                                        ></kendo-numerictextbox>
+                                        <!-- <input 
                                             type="text" 
                                             class="form-control col-sm-6" 
                                             formControlName="Recurring"
+                                            placeholder="$0.00"
+                                            [(ngModel)]="totalRecurringCalc"
+                                        > -->
+                                    </div>
+                                </div>
+                                <div class="form-group form-inline">
+                                    <!-- <div class="col-sm-4">
+                                        <label class="col-form-label pl-0 col-sm-9">Equipment &amp; Materials</label>
+                                    </div>
+                                    <div class="col-sm-4 pl-0 pr-0">
+                                        <span>(Enter Line Items)</span>
+                                        <i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6" 
+                                            formControlName="EquipmentAndMaterials"
+                                            placeholder="$0.00"
+                                        >
+                                    </div> -->
+                                    <!-- <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label> -->
+                                    <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label>
+                                    <div class="input-group col-sm-5 ml-auto">
+                                        
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6" 
+                                            formControlName="EquipmentAndMaterials"
+                                            placeholder="$0.00"
+                                            [(ngModel)]="totalEquipMatCalc"
                                         >
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0 col-sm-9">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label>
-                                    <div class="input-group col-sm-3 ml-auto">
-                                        <div class="input-group-prepend">
+                                    <!-- <label class="col-form-label pl-0 col-sm-6">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label> -->
+                                    <label class="col-form-label pl-0 col-sm-6">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openLaborChargesModal(laborcharges)"></i></label>
+                                    <div class="input-group col-sm-5 ml-auto">
+                                        <!-- <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control col-sm-6" formControlName="EquipmentAndMaterials">
+                                        </div> -->
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6"  
+                                            formControlName="LaborCharges"
+                                            placeholder="$0.00"
+                                            [(ngModel)]="totalLaborChargesCalc"
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0 col-sm-9">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label>
-                                    <div class="input-group col-sm-3 ml-auto">
-                                        <div class="input-group-prepend">
+                                    <label class="col-sm-6 col-form-label pl-0 display-contents">Line Item Subtotal</label>
+                                    <div class="input-group col-sm-5 ml-auto">
+                                        <!-- <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control col-sm-6"  formControlName="LaborCharges">
-                                    </div>
-                                </div>
-                                <div class="form-group form-inline">
-                                    <label class="col-sm-5 col-form-label pl-0 display-contents">Line Item Subtotal</label>
-                                    <div class="input-group col-sm-3 ml-auto">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input type="text" class="form-control col-sm-6" formControlName="LineItemSubtotal">
+                                        </div> -->
+                                        <input 
+                                            type="text" 
+                                            class="form-control col-sm-6" 
+                                            formControlName="LineItemSubtotal"
+                                            placeholder="$0.00"
+                                            [attr.disabled]="true"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -456,17 +500,19 @@
                                         <label class="col-sm-2 col-form-label">Term</label>
                                         <input 
                                             type="number" 
+                                            min="0"
                                             class="form-control col-sm-2 mr-3"
                                             [(ngModel)]="contractTerm" formControlName="ContractTerm"
-                                            (keyup)="getContractTerm($event)"
+                                            (change)="getContractTerm($event)"
                                         >Mo
     
                                         <label class="col-sm-3 col-form-label">Renewal</label>
                                         <input 
                                             type="number"
+                                            min="0"
                                             class="form-control col-sm-2 mr-3"
                                             [(ngModel)]="renewal" formControlName="RenewalMonths"
-                                            (keyup)="getRenewal($event)"
+                                            (change)="getRenewal($event)"
                                         >Mo
                                     </div>
                                 </div>
@@ -1032,5 +1078,535 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #recurring let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Title</h4>
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <div class="row ml-0">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 pl-0">
+                                <h1 class="incentive-header">Incentive Entry
+                                </h1>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                                </span>
+                                <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-md-6">
+                                <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-md-6">
+                                <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pl-0">
+                                <h3 class="incentive-header">Recurring Item Entry</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section>
+                    <header class="recurring-header-bg">
+                        <div class="col">
+                            <span class="align-middle">Service Provided</span>
+                        </div>
+                        <div class="col">
+                          <span class="align-middle">Description</span>  
+                        </div>
+                        <div class="col">
+                          <span class="align-middle">Bill Cycle</span>
+                        </div>
+                        <div class="col">
+                          <span class="align-middle">RMR</span>
+                        </div>
+                        <div class="col">
+                          <span class="align-middle">Pass Through</span>
+                        </div>
+                        <div class="col">
+                          <span class="align-middle">Billing Starts</span>
+                        </div>
+                        <div class="col text-center">
+                          <span class="align-middle">Add to an Existing RMR Item</span>
+                        </div>
+                        <div class="col text-center">
+                          <span class="align-middle">Multiple</span>
+                        </div>
+                        <div class="col text-center">
+                          <span class="align-middle">Total</span>
+                        </div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                    </header>
+                    <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onRecurringSubmit(incentiveRecurringEntryForm)">
+                        <div formArrayName="entryRowsRecurring">
+                            <div class="row-entry-padding" *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRowsRecurring['controls']; let i=index" [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col">
+                                      <div class="dropdown">
+                                          <select 
+                                            formControlName="ItemID" 
+                                            class="form-control" 
+                                            (change)="getItemName($event,i)"
+                                            name="something_{{i}}"
+                                          >
+                                              <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id" >{{ item.itemCode }}</option>
+                                          </select>
+                                      </div>
+                                    </div>
+                                    <div class="col">
+                                      <input 
+                                        type="text"
+                                        class="form-control" 
+                                        formControlName="Description"
+                                        name="something_{{i}}"
+                                      >
+                                    </div>
+                                    <div class="col">
+                                      <div class="dropdown">
+                                          <select formControlName="BillCycle" class="form-control">
+                                              <option value="m">Monthly</option>
+                                              <option value="q">Quarterly</option>
+                                              <option value="s">Semi-Annual</option>
+                                              <option value="a">Annual</option>
+                                          </select>
+                                      </div>
+                                    </div>
+                                    <div class="col">
+                                      <!-- <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="RMR"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculateRMR($event)"
+                                      > -->
+                                      <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="RMR"
+                                        [spinners]="false"
+                                        (change)="calculateRMR($event)"
+                                        [style.width]="'80%'"
+                                      ></kendo-numerictextbox>
+                                    </div>
+                                    <div class="col">
+                                      <!-- <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="PassThrough"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculatePassThrough($event)"
+                                      > -->
+                                      <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="PassThrough"
+                                        [spinners]="false"
+                                        (change)="calculatePassThrough($event)"
+                                        [style.width]="'80%'"
+                                      ></kendo-numerictextbox>
+                                    </div>
+                                    <div class="col">
+                                      <input 
+                                        type="date"
+                                        class="form-control"
+                                        formControlName="BillingStartDate"
+                                      >
+                                    </div>
+                                    <div class="col">
+                                      <input
+                                        class="center-block"
+                                        type="checkbox"
+                                        formControlName="Add2Item"
+                                        (change)="checkboxChanged($event)"
+                                        >
+                                    </div>
+                                    <div class="col text-center">
+                                      <div class="dropdown">
+                                          <select 
+                                            formControlName="Multiple"  
+                                            class="form-control"
+                                            (change)="calculateMultiple($event,i)">
+                                              <option
+                                                  *ngFor="let m of listMultiples" 
+                                                  value="{{m.multiple}}" 
+                                                  [ngValue]="m.multiple"
+                                              >{{ m.multiple }}</option>
+                                          </select>
+                                      </div>
+                                    </div>
+                                    <div class="col">
+                                      <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="Total"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculateTotal($event,i)"
+                                        [attr.disabled]="true"
+                                      >
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-add" type="button" (click)="addNewItem()">
+                                            <i class="fas fa-plus pr-1"></i>Add
+                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                            <i class="fas fa-minus pr-1"></i>Remove
+                                        </button>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Submit" class="btn btn-submit">
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #equipmat let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Title</h4>
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <div class="row ml-0">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 pl-0">
+                            <h1 class="incentive-header">Incentive Entry
+                            </h1>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                            </span>
+                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 pl-0">
+                            <h3 class="incentive-header">Equipment and Materials Entry</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <section>
+                <header class="equipmat-header-bg">
+                    <div class="col">
+                        <span class="align-middle">
+                            Item
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Description
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Quantity
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Cost
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Total
+                        </span>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </header>
+                <form [formGroup]="incentiveEquipMatEntryForm" (ngSubmit)="onEquipMatSubmit(incentiveEquipMatEntryForm)">
+                    <div formArrayName="entryRowsEquipMat">
+                        <div class="row-entry-padding" *ngFor="let entryRow of incentiveEquipMatEntryForm.controls.entryRowsEquipMat['controls']; let i=index" [formGroupName]="i">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="dropdown">
+                                        <select 
+                                            formControlName="ItemID" class="form-control" 
+                                            (change)="getEquipMatItemName($event,i)"
+                                            name="something_{{i}}"
+                                        >
+                                            <option *ngFor="let item of listMatItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemCode }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="text" 
+                                        class="form-control"
+                                        formControlName="Description" 
+                                        name="something_{{i}}"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="number" 
+                                        formControlName="Quantity"
+                                        class="form-control"
+                                        (change)="calculateQuantity($event,i)"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <!-- <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="Cost"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculateCost($event,i)"
+                                    > -->
+                                    <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="Cost"
+                                        [spinners]="false"
+                                        (change)="calculateCost($event,i)"
+                                        [style.width]="'80%'"
+                                    ></kendo-numerictextbox>
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="Total"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculateEquipMatTotal($event,i)"
+                                        [attr.disabled]="true"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-add" type="button"(click)="addNewEquipMatItem()">
+                                        <i class="fas fa-plus pr-1"></i>Add
+                                    </button>
+                                </div>
+                                <!-- <div class="col" *ngIf="i&gt;1">
+                                    <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                        <i class="fas fa-plus pr-1"></i>Remove
+                                    </button>
+                                </div> -->
+                                <div class="col">
+                                    <button class="btn btn-add" type="button" (click)="removeNewEquipMatItem(i)">
+                                        <i class="fas fa-minus pr-1"></i>Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <input type="submit" value="Submit" class="btn btn-submit">
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #laborcharges let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Title</h4>
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <div class="row ml-0">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 pl-0">
+                            <h1 class="incentive-header">Incentive Entry
+                            </h1>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                            </span>
+                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 pl-0">
+                            <h3 class="incentive-header">Labor Entry</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <section>
+                <header class="equipmat-header-bg">
+                    <div class="col">
+                        <span class="align-middle">
+                            Item
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Description
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Hours
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                           Cost per Cost
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="align-middle">
+                            Total
+                        </span>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </header>
+                <form [formGroup]="incentiveLaborChargesEntryForm" (ngSubmit)="onLaborChargesSubmit(incentiveLaborChargesEntryForm)">
+                    <div formArrayName="entryRowsLaborCharges">
+                        <div class="row-entry-padding" *ngFor="let entryRow of incentiveLaborChargesEntryForm.controls.entryRowsLaborCharges['controls']; let i=index;" [formGroupName]="i">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="dropdown">
+                                        <select 
+                                            formControlName="ItemID" class="form-control" 
+                                            (change)="getLaborChargesItemName($event,i)"
+                                            name="something_{{i}}"
+                                        >
+                                            <option *ngFor="let item of listLaborItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemCode }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="text" 
+                                        class="form-control"
+                                        formControlName="Description"
+                                        name="something_{{i}}"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="text" 
+                                        formControlName="Hours"
+                                        class="form-control"
+                                        (change)="calculateHours($event)"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <!-- <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="CostPerHour"
+                                        placeholder="$0.00"
+                                        mask="separator.2" 
+                                        thousandSeparator=","
+                                        prefix="$"
+                                        (change)="calculateCostPerHour($event,i)"
+                                    > -->
+                                    <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="CostPerHour"
+                                        [spinners]="false"
+                                        (change)="calculateCostPerHour($event,i)"
+                                        [style.width]="'80%'"
+                                    ></kendo-numerictextbox>
+                                </div>
+                                <div class="col">
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="Total" 
+                                        [placeholder]="placeholder"
+                                        prefix="$"
+                                        (change)="calculateLaborChargesTotal($event,i)"
+                                        [attr.disabled]="true"
+                                    >
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-add" type="button" (click)="addNewLaborChargesItem()">
+                                        <i class="fas fa-plus pr-1"></i>Add
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <!-- <button class="btn btn-submit" (click)="onSubmit(incentiveLaborChargesEntryForm)">
+                                        <i class="fas fa-upload pr-1"></i>Submit
+                                    </button> -->
+                                    <button class="btn btn-add" type="button" (click)="removeNewLaborChargesItem(i)">
+                                        <i class="fas fa-minus pr-1"></i>Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <input type="submit" value="Submit" class="btn btn-submit">
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 </ng-template>

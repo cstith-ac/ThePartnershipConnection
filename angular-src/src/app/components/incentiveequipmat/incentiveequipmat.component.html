@@ -121,7 +121,7 @@
                                 >
                             </div>
                             <div class="col">
-                                <input 
+                                <!-- <input 
                                     type="text"
                                     class="form-control"
                                     formControlName="Cost"
@@ -130,7 +130,15 @@
                                     thousandSeparator=","
                                     prefix="$"
                                     (change)="calculateCost($event,i)"
-                                >
+                                > -->
+                                <kendo-numerictextbox
+                                    format="c2"
+                                    placeholder="$0.00"
+                                    formControlName="Cost"
+                                    [spinners]="false"
+                                    (change)="calculateCost($event,i)"
+                                    [style.width]="'80%'"
+                                ></kendo-numerictextbox>
                             </div>
                             <div class="col">
                                 <input 

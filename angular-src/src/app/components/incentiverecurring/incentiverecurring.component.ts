@@ -116,28 +116,30 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
       entryRows: this.fb.array([this.initEntryRow()])
     })
 
-    this.incentiveRecurringEntryForm.controls.entryRows.valueChanges.subscribe(form => {
-      //console.log(form[0].RMR)
-      if(form[0].RMR) {
-        this.incentiveRecurringEntryForm.patchValue({
-          RMR: this.currencyPipe.transform(form[0].RMR.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
-        }, {emitEvent:false});
-      }
-    })
-    this.incentiveRecurringEntryForm.valueChanges.subscribe(form => {
-      if(form.PassThrough) {
-        this.incentiveRecurringEntryForm.patchValue({
-          PassThrough: this.currencyPipe.transform(form.PassThrough.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
-        }, {emitEvent:false});
-      }
-    })
-    this.incentiveRecurringEntryForm.valueChanges.subscribe(form => {
-      if(form.Total) {
-        this.incentiveRecurringEntryForm.patchValue({
-          Total: this.currencyPipe.transform(form.Total.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
-        }, {emitEvent:false});
-      }
-    })
+    // this.incentiveRecurringEntryForm.controls.entryRows.valueChanges.subscribe(form => {
+    //   if(form[0].RMR) {
+    //     this.incentiveRecurringEntryForm.patchValue({
+    //       RMR: this.currencyPipe.transform(form[0].RMR.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
+    //     }, {emitEvent:false});
+    //   }
+    // });
+
+    // this.incentiveRecurringEntryForm.valueChanges.subscribe(form => {
+    //   if(form.PassThrough) {
+    //     this.incentiveRecurringEntryForm.patchValue({
+    //       PassThrough: this.currencyPipe.transform(form.PassThrough.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
+    //     }, {emitEvent:false});
+    //   }
+    // });
+
+    // this.incentiveRecurringEntryForm.valueChanges.subscribe(form => {
+    //   if(form.Total) {
+    //     this.incentiveRecurringEntryForm.patchValue({
+    //       Total: this.currencyPipe.transform(form.Total.replace(/\D/g, '').replace(/^0+/, ''), 'USD', 'symbol', '1.0-0')
+    //     }, {emitEvent:false});
+    //   }
+    // });
+
     // this.incentiveRecurringEntryForm = this.fb.group({
     //   entry: this.fb.array([
     //     this.fb.group({
@@ -314,6 +316,9 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
     const control = (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
     .removeAt(i);
 
+    (<FormArray>this.incentiveRecurringEntryForm.get('entryRows'))
+    .push(this.initEntryRow());
+
     localStorage.removeItem("recurringentry");
     localStorage.removeItem("totalRecurringCalc");
   }
@@ -364,7 +369,7 @@ export class IncentiverecurringComponent implements OnInit, AfterViewChecked, On
 
     const getItemID = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(element => {
       const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows');
-      controlArray.at(i).get('Total').setValue(this.totalRecurringCalc);
+      controlArray.at(i).get('Total').setValue('$'+this.totalRecurringCalc);
     })
 
     // const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRows')

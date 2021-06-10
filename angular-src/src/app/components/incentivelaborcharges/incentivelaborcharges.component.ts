@@ -15,6 +15,8 @@ import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 export class IncentivelaborchargesComponent implements OnInit {
   @Input() laborchargesForDashboard: { ItemID: number; Description: string; Hours: number; CostPerHour: number; Total: number }
 
+  placeholder="$0.00";
+
   incentiveLaborChargesEntryForm: FormGroup;
 
   listLaborItems: ListLaborItems[];
@@ -171,6 +173,12 @@ export class IncentivelaborchargesComponent implements OnInit {
   removeNewItem(i: number) {
     const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRows'))
     .removeAt(i);
+
+    (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRows'))
+    .push(this.initEntryRow());
+
+    localStorage.removeItem("laborchargesentry");
+    localStorage.removeItem("totalLaborChargesCalc");
   }
 
   calculateHours(val:any) {
@@ -203,7 +211,7 @@ export class IncentivelaborchargesComponent implements OnInit {
 
     const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRows'].value.forEach(element => {
       const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows');
-      controlArray.at(i).get('Total').setValue(this.totalLaborChargesCalc);
+      controlArray.at(i).get('Total').setValue('$'+this.totalLaborChargesCalc);
     })
     // const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRows')
     // controlArray.controls[0].get('Total').setValue(this.totalLaborChargesCalc);

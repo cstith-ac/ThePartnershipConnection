@@ -32,242 +32,45 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
 
-        <!-- <div class="row">
-            <div class="col-md-6 offset-md-4">
-                <span class="mr-5">Invoice #</span>
-                <span class="ml-5">Customer Name</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 offset-md-4">
-                <span>Customer Site Information</span>
-            </div> 
-        </div>
-        <div class="row">
-            <div class="col-md-6 offset-md-4">
-                <span>Customer System Information</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Recurring Item Entry</h3>
-            </div>
-        </div> -->
-        <!-- <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onSubmit(incentiveRecurringEntryForm)">
-            <div formArrayName="entryRows">
-                <div *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRows['controls']; let i=index" [formGroupName]="i">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-form-label">Service Provided</label>
-                                <div class="dropdown">
-                                    <select formControlName="Item" class="form-control">
-                                        <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemName }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Description</label>
-                                <input 
-                                    type="text" 
-                                    formControlName="Description" 
-                                    class="form-control"
-                                >
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Bill Cycle</label>
-                                <div class="dropdown">
-                                    <select 
-                                        formControlName="BillCycle" 
-                                        class="form-control">
-                                        <option value="monthly">Monthly</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">RMR</label>
-                                <input 
-                                    type="text"
-                                    class="form-control"
-                                    formControlName="RMR" 
-                                    placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
-                                    prefix="$"
-                                >
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Pass Through</label>
-                                <input 
-                                    type="text" 
-                                    class="form-control"
-                                    formControlName="PassThrough" 
-                                    placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
-                                    prefix="$"
-                                >
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-form-label">Billing Starts</label>
-                                <input 
-                                    type="date"
-                                    class="form-control"
-                                    formControlName="BillingStarts"
-                                >
-                            </div>
-                            <div class="form-group" style="margin-top:4rem;margin-bottom: 1.9rem;">
-                                <label class="col-form-label">Add to an Existing RMR Item</label>
-                                <input 
-                                    type="checkbox"
-                                    class=""
-                                    formControlName="AddToAnExistingRMRItem"
-                                >
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Multiple</label>
-                                <div class="dropdown">
-                                    <select class="form-control" formControlName="Multiple">
-                                        <option
-                                            *ngFor="let m of listMultiples" 
-                                            value="{{m.multiple}}" 
-                                            [ngValue]="m.multiple"
-                                        >{{ m.multiple }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Total</label>
-                                <input 
-                                    type="text"
-                                    class="form-control" 
-                                    formControlName="Total" 
-                                    placeholder="$0.00"
-                                    mask="separator.2" thousandSeparator=","
-                                    prefix="$"
-                                >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button class="btn btn-primary">Submit</button>
-                                <button class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form> -->
-        
-        <!-- <div style="overflow: auto;">
-            <div class="table table-recurring">
-                <div class="thead">
-                    <div class="tr">
-                        <div class="td">Service Provided</div>
-                        <div class="td">Description</div>
-                        <div class="td">Bill Cycle</div>
-                        <div class="td">RMR</div>
-                        <div class="td">Pass Through</div>
-                        <div class="td">Billing Starts</div>
-                        <div class="td">Add to an Existing RMR Item</div>
-                        <div class="td">Multiple</div>
-                        <div class="td">Total</div>
-                        <div class="td"></div>
-                        <div class="td"></div>
-                    </div>
-                </div>
-                <div class="tbody">
-                    <form class="tr" [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onSubmit(incentiveRecurringEntryForm)">
-                        <div class="td">
-                            <div class="dropdown">
-                                <select formControlName="Item" class="form-control">
-                                    <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemName }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="text"
-                                class="form-control" 
-                                formControlName="Description"
-                            >
-                        </div>
-                        <div class="td">
-                            <div class="dropdown">
-                                <select formControlName="BillCycle" class="form-control">
-                                    
-                                    <option value="monthly">Monthly</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="text"
-                                class="form-control"
-                                formControlName="RMR"
-                                placeholder="$0.00"
-                                mask="separator.2" thousandSeparator=","
-                                prefix="$"
-                            >
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="text"
-                                class="form-control" 
-                                formControlName="PassThrough"
-                                placeholder="$0.00"
-                                mask="separator.2" thousandSeparator=","
-                                prefix="$"
-                            >
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="date"
-                                class="form-control" 
-                                formControlName="BillingStarts"
-                            >
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="checkbox" 
-                                style="margin-right: 10rem;" 
-                                formControlName="AddToAnExistingRMRItem"
-                            >
-                        </div>
-                        <div class="td">
-                            <div class="dropdown">
-                                <select formControlName="Multiple" class="form-control">
-                                    <option
-                                        *ngFor="let m of listMultiples" 
-                                        value="{{m.multiple}}" 
-                                        [ngValue]="m.multiple"
-                                    >{{ m.multiple }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="td">
-                            <input 
-                                type="text"
-                                class="form-control"
-                                formControlName="Total"
-                                placeholder="$0.00"
-                                mask="separator.2" thousandSeparator=","
-                                prefix="$"
-                            >
-                        </div>
-                        <div class="td action">
-                            <button type="button" class="btn btn-primary" (click)="addNewItem()">Add</button>
-                        </div>
-                        <div class="td action">
-                            <button type="button" class="btn btn-success" (click)="onSubmit(incentiveRecurringEntryForm)">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> -->
-        
+        <!-- <kendo-grid>
+            <kendo-grid-column title="Item">
+                <ng-template kendoGridCellTemplate>
+                    <kendo-dropdownlist [data]="listRecurringItems"> </kendo-dropdownlist>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Description" title="Description">
+                <input  type="text" />
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Bill Cycle">
+                <ng-template kendoGridCellTemplate>
+                    <input  type="text" />
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="RMR">
+                <ng-template kendoGridCellTemplate>
+                    <input  type="text" />
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column title="Pass Through" [sortable]="false">
+                <ng-template kendoGridCellTemplate>
+                    <input  type="text" />
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="Action" [sortable]="false">
+                <ng-template kendoGridCellTemplate>
+                    <button class="btn btn-add" type="button"
+                        (click)=addNewItem()>Add</button>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid> -->
+
         <section>
             <header class="recurring-header-bg">
               <div class="col">
@@ -336,13 +139,7 @@
                               </div>
                             </div>
                             <div class="col">
-                                <!-- <kendo-numerictextbox
-                                    format="c2"
-                                    formControlName="RMR"
-                                    placeholder="$0.00"
-                                    (change)="calculateRMR($event)"
-                                ></kendo-numerictextbox> -->
-                              <input 
+                              <!-- <input 
                                 type="text"
                                 class="form-control"
                                 formControlName="RMR"
@@ -351,10 +148,18 @@
                                 thousandSeparator=","
                                 prefix="$"
                                 (change)="calculateRMR($event)"
-                              >
+                              > -->
+                              <kendo-numerictextbox
+                                format="c2"
+                                placeholder="$0.00"
+                                formControlName="RMR"
+                                [spinners]="false"
+                                (change)="calculateRMR($event)"
+                                [style.width]="'80%'"
+                              ></kendo-numerictextbox>
                             </div>
                             <div class="col">
-                              <input 
+                              <!-- <input 
                                 type="text"
                                 class="form-control"
                                 formControlName="PassThrough"
@@ -363,7 +168,15 @@
                                 thousandSeparator=","
                                 prefix="$"
                                 (change)="calculatePassThrough($event)"
-                              >
+                              > -->
+                              <kendo-numerictextbox
+                                format="c2"
+                                placeholder="$0.00"
+                                formControlName="PassThrough"
+                                [spinners]="false"
+                                (change)="calculatePassThrough($event)"
+                                [style.width]="'80%'"
+                              ></kendo-numerictextbox>
                             </div>
                             <div class="col">
                               <input 
@@ -407,11 +220,6 @@
                                 [attr.disabled]="true"
                               >
                             </div>
-                            <!-- <div class="col">
-                                <button class="btn btn-add" (click)="addNewItem(incentiveRecurringEntryForm)">
-                                    <i class="fas fa-plus pr-1"></i>Add
-                                </button>
-                            </div> -->
                             <div class="col">
                                 <button class="btn btn-add" type="button" (click)="addNewItem()">
                                     <i class="fas fa-plus pr-1"></i>Add
@@ -445,14 +253,6 @@
         <div class="col-md-8">
             <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
         </div>
-        <!-- <div class="col-sm-12">
-            <h2 class="">The Partnership Connection</h2>
-        </div> -->
         </div>
-        <!-- <div class="row">
-        <div class="col-sm-12">
-            <p class="">powered by Alarm Connections</p>
-        </div>
-        </div> -->
     </div>
 </footer>

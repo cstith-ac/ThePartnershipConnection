@@ -18,14 +18,16 @@
 /* ::ng-deep .modal {
   text-align: center;
 } */
+/*
 ::ng-deep .my-class .modal-dialog { 
-  /* max-width: max-content;
-  max-width: 80%;
-  width: 80%; */
-  text-align: left; /* you'll likely want this */
+  text-align: left; 
   max-width: 100%;
   width: auto !important;
   display: inline-block;
+} */
+::ng-deep .modal-dialog{
+  max-width: 1450px !important;
+  width: 1450px;
 }
 .radio-label-vertical-wrapper {
   padding-bottom: 13px;
@@ -111,4 +113,48 @@
   padding: .625rem .75rem;
   color: #8898aa;
   height: calc(2.75rem + 2px);
+}
+.recurring-header-bg,
+.equipmat-header-bg,
+.incentivelabor-header-bg {
+	/* background-color: #34e5f2; */
+	background-color: #eae8e8;
+	border: 1px solid #707070;
+}
+/* .equipmat-header-bg {
+	background-color: #eae8e8;
+	border: 1px solid #707070;
+}
+.incentivelabor-header-bg {
+	background-color: #eae8e8;
+	border: 1px solid #707070;
+} */
+header, .row {
+	display: flex;  /* aligns all child elements (flex items) in a row */
+} 
+.col {
+	flex: 1;        /* distributes space on the line equally among items */
+}
+.center-block {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 15px;
+}
+.row-entry-margin {
+	margin: 10px auto;
+}
+.row-entry-padding {
+	padding: 10px 10px 10px 10px;
+}
+.row-entry-multiple-select {
+	width: 140px;
+}
+.btn-submit {
+	background-color: #1ade13;
+	color: #fff;
+}
+.btn-add {
+	background-color: #1B5EAC;
+	color: #fff;
 }
