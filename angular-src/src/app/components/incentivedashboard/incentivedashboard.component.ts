@@ -481,49 +481,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onChanges():void {
 
-    // let dashboardSelectForLocalStorage = new IncentiveDashboard;
-
-    // if(localStorage.getItem('testObject')) {
-    //   return
-    // } 
-
-    // this.incentiveDashboardForm.get('CustomerID').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.customer = val;
-    // })
-
-    // this.incentiveDashboardForm.get('CustomerSiteID').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.site = val;
-    // })
-
-    // this.incentiveDashboardForm.get('System').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.system = val;
-    // })
-
-    // this.incentiveDashboardForm.get('AlarmAccount').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.accountNumber = val;
-    // })
-
-    // this.incentiveDashboardForm.get('SystemType').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.system = val;
-    // })
-
-    // this.incentiveDashboardForm.get('PanelType').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.panelType = val;
-    // })
-
-    // this.incentiveDashboardForm.get('PanelLocation').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.location = val;
-    // })
-
-    // this.incentiveDashboardForm.get('CentralStationID').valueChanges.subscribe(val => {
-    //   this.dashboardSelectForLocalStorage.centralStation
-    //   console.log(this.dashboardSelectForLocalStorage);
-    //   localStorage.setItem("testObject",JSON.stringify(this.dashboardSelectForLocalStorage))
-    // })
-
-    this.incentiveDashboardForm.get('AdditionalInfo').valueChanges.subscribe(val => {
-      console.log(val);
-    })//let's find a better way to get this value
+    // this.incentiveDashboardForm.get('AdditionalInfo').valueChanges.subscribe(val => {
+    //   console.log(val);
+    // })//let's find a better way to get this value
   }
 
   ngAfterViewChecked() {
@@ -555,19 +515,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
 
       if(this.recurring) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring));
       }
       if(this.equipmentAndMaterials) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials));
       }
       if(this.laborCharges) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.laborCharges);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.laborCharges));
       }
       if(this.equipmentAndMaterials && this.laborCharges) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.equipmentAndMaterials + this.laborCharges);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges));
       }
       if(this.recurring && this.equipmentAndMaterials) {
-        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring + this.equipmentAndMaterials);
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials));
+      }
+      if(this.recurring && this.laborCharges) {
+        this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.laborCharges));
       }
       if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.recurring + this.equipmentAndMaterials + this.laborCharges);
@@ -1868,6 +1831,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
     
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalRecurringCalc);
+
+    this.recurring=this.totalRecurringCalc;
+
     localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0]))
     
     this.modalService.dismissAll()
@@ -1954,7 +1921,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   /****Equipment & Materials Modal *********************************/
   openEquipMaterialsModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass: 'my-class'}).result.then((result) => {
       console.log(result)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -1986,6 +1953,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //push values to the incentive component
     //not working. will use in the ngOnDestroy
     this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
+
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalEquipMatCalc);
+
+    this.equipmentAndMaterials=this.totalEquipMatCalc;
 
     localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0]));
 
@@ -2047,7 +2018,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   /****Labor Charges Modal *********************************/
   openLaborChargesModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass: 'custom-modal-width'}).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass: 'my-class'}).result.then((result) => {
       console.log(result)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -2087,6 +2058,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // return
     
     this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
+
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalLaborChargesCalc);
+
+    this.laborCharges=this.totalLaborChargesCalc;
 
     localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0]));
     

@@ -797,7 +797,9 @@ p {
 }
 
 .my-class .modal-dialog {
-    max-width: 1450px !important;
+    /* max-width: 1450px !important; */
+    max-width: 1530px !important;
     /*max-width: 1250px !important;*/
-    width: 1450px;
+    /* width: 1450px; */
+    width: 1530px;
   }
