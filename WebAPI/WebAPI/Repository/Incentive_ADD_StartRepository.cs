@@ -61,6 +61,10 @@ namespace WebAPI.Repository
             }
             var serviceIncludedParam = new SqlParameter("@ServiceIncluded", jobIDAdded.ServiceIncluded);
             var partnerCommentsParam = new SqlParameter("@PartnerComments", jobIDAdded.PartnerComments);
+            if (jobIDAdded.PartnerComments == null)
+            {
+                partnerCommentsParam.Value = "There are no partner comments";
+            }
 
             // define the output parameter that needs to be retained
             // for the Id created when the Stored Procedure executes 

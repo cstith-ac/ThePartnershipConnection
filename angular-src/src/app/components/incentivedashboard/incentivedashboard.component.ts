@@ -122,8 +122,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   description;
   quantity: number;
   cost: number;
-  hours: number;
-  costPerHour: number;
+  //hours: number;
+  laborQuantity: number;
+  //costPerHour: number;
+  laborCost: number;
   totalEquipMatCalc;
   totalLaborChargesCalc;
   placeholder="$0.00";
@@ -131,7 +133,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   customer: string;
   siteName: string;
   customerSiteId: number;
-  systemType: string;
+  systemTypeID: string;
   customerSystemId: number;
   alarmAccount: string;
   systemCode: string;
@@ -142,7 +144,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   newSite: '';
   accountNumber: '';
   // systemType: '';
-  panelType: '';
+  panelTypeID: '';
   panelLocation: '';
   centralStationID: '';
   // additionalInfo: '';
@@ -359,13 +361,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       CustomerID: ["", Validators.required], //@CustomerID
       CustomerSiteID: ["", Validators.required], //@CustomerSiteID
       CustomerSystemID: [""], //@CustomerSystemID
-      SystemType: ["", Validators.required], //@SystemTypeID
+      SystemTypeID: ["", Validators.required], //@SystemTypeID
       SystemCode: [""],
       NewSystem: [""],
       NewCustomer: [""],
       NewSite: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
-      PanelType: ["", Validators.required], //@PanelTypeID
+      PanelTypeID: ["", Validators.required], //@PanelTypeID
       PanelLocation: [""], //@PanelLocation
       CentralStationID: ["", Validators.required], //@CentralStationID
       AdditionalInfo: [""], //@AdditionalInfo
@@ -623,8 +625,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     return this.fb.group({
       ItemID: ["", Validators.required],
       Description: ["", Validators.required],
-      Hours: ["", Validators.required],
-      CostPerHour: ["", Validators.required],
+      Quantity: ["", Validators.required],
+      Cost: ["", Validators.required],
       Total: ["", Validators.required]
     })
   }
@@ -808,13 +810,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               res => {
 
                 this.alarmAccount = res.accountNumber;
-                this.systemType = res.systemType;
+                this.systemTypeID = res.systemType;
                 //get the System_Id
                 //make a get request to dbo.ListSystemTypes to find the appropriate system type matching the returned systemType
                 this.routeService.getListSystemTypes().subscribe(
                   res => {
 
-                    let result = res.filter(a => a.system_Id===this.systemType)
+                    let result = res.filter(a => a.system_Id===this.systemTypeID)
 
                     for(var i in result) {
 
@@ -871,21 +873,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
           res => {
             //console.log(res);
-            this.alarmAccount = res.accountNumber
-            this.systemType = res.systemType;
-            this.panelType = res.panelType
-            this.panelLocation = res.panelLocation
-            this.centralStationID = res.centralStationID
+            this.alarmAccount = res.accountNumber;
+            this.centralStationID = res.centralStationID;
+            this.panelLocation = res.panelLocation;
+            this.panelTypeID = res.panelType;
+            this.systemTypeID = res.systemType;
           }
         )
 
         let alarmAccount = res.alarmAccount;
-        let systemType = res.systemType
+        let systemTypeID = res.systemType
         // console.log(alarmAccount);
         // console.log(systemType);
         this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
         this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
-        this.systemCode = alarmAccount + ' - ' + systemType;
+        this.systemCode = alarmAccount + ' - ' + systemTypeID;
 
         //this.systemType = res.systemType
       }
@@ -940,12 +942,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
       res => {
         // console.log(res);
-        this.alarmAccount = res.accountNumber
-        this.systemType = res.systemType;
-        this.panelType = res.panelType
-        this.panelLocation = res.panelLocation
-        this.centralStationID = res.centralStationID
-
+        // this.alarmAccount = res.accountNumber;
+        // this.centralStationID = res.centralStationID;
+        //account number
+        this.accountNumber = res.accountNumber;
+        this.additionalInfo = res.additionalInfo;
+        this.centralStationID = res.centralStationID;
+        
+        this.panelLocation = res.panelLocation;
+        this.panelTypeID = res.panelType;
+        this.systemTypeID = res.systemType;
+        
         //Store these values in localstorage to retrieve if the page is refreshed
         //localStorage.setItem('alarmAccount', this.alarmAccount);
         //localStorage.setItem('systemType', this.systemType);
@@ -1034,17 +1041,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
           res => {
             //console.log(res);
-            this.alarmAccount = res.accountNumber;
-            //this.alarmAccount = localStorage.getItem("alarmAccount")
-            this.systemType = res.systemType;
-            this.panelType = res.panelType
-            this.panelLocation = res.panelLocation
-            this.centralStationID = res.centralStationID
+            this.accountNumber = res.accountNumber;
+            this.additionalInfo = res.additionalInfo;
+            this.centralStationID = res.centralStationID;
+            
+            this.panelLocation = res.panelLocation;
+            this.panelTypeID = res.panelType;
+            this.systemTypeID = res.systemType;
 
             this.routeService.getListSystemTypes().subscribe(
               res => {
                 //console.log(res)
-                let result = res.filter(a => a.system_Id===this.systemType)
+                let result = res.filter(a => a.system_Id===this.systemTypeID)
 
                 for(var i in result) {
                   this.systemName = result[i].systemName;
@@ -1108,33 +1116,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onSubmit(form: FormGroup) {
     //Incentive_ADD_Start
-    // console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
-    // console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
-    // //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
-    // // console.log('@CustomerSiteID :' + parseInt(form.value.Site)) // @CustomerSiteID Int,
-    // console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
-    //console.log('@CustomerSystemID :' + parseInt(form.value.System)) // @CustomerSystemID Int,
-    // console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
-    // console.log('@SystemTypeID :' + parseInt(form.value.SystemType)) // @SystemTypeID Int,
-    // console.log('@PanelTypeID :' + parseInt(form.value.PanelType)) // @PanelTypeID Int,
-    // console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
-    // console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    // console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
-    // console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
-    // console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
-    //console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
-    // console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+    console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
+    console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
+    //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
+    console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
+    console.log('@CustomerSystemID :' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
+    console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
+    console.log('@SystemTypeID :' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
+    console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
+    console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
+    console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+    console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
+    console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
+    console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
+    console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+    console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
+    // console.log(form.value.) // @ServiceIncluded NVarChar(2),
+    console.log('@ServiceIncluded :' + form.value.ServiceIncluded);
 
-    // //console.log(form.value.RenewalMonths) // @RenewalMonths Int,
-    // console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
-    // //console.log(form.value.) // @ServiceIncluded NVarChar(2),
-    // console.log('@ServiceIncluded :' + this.serviceIncluded);
-
-    // console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
+    console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
     this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
+    this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
+    this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
+    // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
     this.incentiveDashboardForm.controls["ContractTerm"].setValue(0);
     this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
 
@@ -1146,19 +1154,128 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //console.log(result)
         //returns the job id
         this.job_id = result;
-        //recurring needs incentiveid, itemid, description, billcyle, rmr, passthrough, billingstartdate, multiple,and add2item
+        //check if Status of Recurring, Equipment, and/or Labor is invalid
+        //if valid, form needs to get passed
+        //if invalid, skip to Customer_Document_ADD
+        // if(this.incentiveRecurringEntryForm.status==="VALID"){
+
+        // }
+        // if(this.incentiveEquipMatEntryForm.status==="VALID"){
+          
+        // }
+        // if(this.incentiveLaborChargesEntryForm.status==="VALID"){
+          
+        // }
+        var addToObject = function (obj, key, value) {
+          // Create a temp object and index variable
+          var temp = {};
+          var i = 0;
+          // Loop through the original object
+          for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+              // If the indexes match, add the new item
+              if (i === key && value) {
+                temp[key] = value;
+              }
+              // Add the current item in the loop to the temp obj
+              temp[prop] = obj[prop];
+              // Increase the count
+              i++;
+            }
+          }
+          // If no index, add to the end
+          if (key && value) {
+            temp[key] = value;
+          }
+          return temp;
+        };
+        var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
         this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
           result => {
             // debugger
             console.log(result)
+            var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
             this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
               result => {
                 // debugger
                 console.log(result)
+                var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
                 this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
                   result => {
                     // debugger
-                    console.log(result)
+                    console.log(result); //this shows a new object with 0 or null values!
+
+                    //create frmData object, add values, and append id
+                    // var addToObject = function (obj, key, value) {
+                    //   // Create a temp object and index variable
+                    //   var temp = {};
+                    //   var i = 0;
+                    //   // Loop through the original object
+                    //   for (var prop in obj) {
+                    //     if (obj.hasOwnProperty(prop)) {
+                    //       // If the indexes match, add the new item
+                    //       if (i === key && value) {
+                    //         temp[key] = value;
+                    //       }
+                    //       // Add the current item in the loop to the temp obj
+                    //       temp[prop] = obj[prop];
+                    //       // Increase the count
+                    //       i++;
+                    //     }
+                    //   }
+                    //   // If no index, add to the end
+                    //   if (key && value) {
+                    //     temp[key] = value;
+                    //   }
+                    //   return temp;
+                    // };
+                    let frmData = new FormData();
+
+                    // 37 = Sandbox, 6 = Production
+                    frmData.append('company_id','37');
+
+                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                    frmData.append('customer_id', this.id);
+
+                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+
+                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                    //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+                    frmData.append('job_id', this.job_id);
+                    //frmData.append('job_id', '19');
+                    frmData.append('security_level', this.security_level);
+
+                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                    frmData.append('file_name', this.file_name);
+                    frmData.append('file_size', this.file_size);
+                    frmData.append('upload_date', this.invoiceDate);
+                    frmData.append('document_ext', '*Contracts');
+                    frmData.append('user_code', 'PPC');
+                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                    frmData.append('user_description', 'Invoice');
+                    frmData.append('reference1', null);
+                    frmData.append('reference2', null);
+                    frmData.append('reference3', null);
+                    frmData.append('reference4', null);
+                    // frmData.append('@file_data', this.myFiles[i]);
+                    // frmData.append('@document_id', '1');
+
+                    for (var i = 0; i < this.myFiles.length; i++) {
+                      frmData.append("file_data", this.myFiles[i]);
+                      console.log(frmData)
+                    }
+                    //frmData.append('@file_data', this.myFiles[i]);
+                    frmData.append('document_id', '1');
+
+                    console.log(this.job_id)
+                    // Display the key/value pairs
+                    console.log(Object.entries(frmData));//returns an empty array!
+                    var options = {content: frmData};
+
+                    console.log(frmData);
+                    console.log(this.job_id);
+                    //debugger
                     const headers = new HttpHeaders();
                     headers.append('Content-Type', 'multipart/form-data');
                     headers.append('Authorization','Bearer ' + this.loadToken());
@@ -1171,9 +1288,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                       data => {
                         // debugger
                         console.log(data);
+                        var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+                        // updateIncentiveAddFinishWithJobID.incentiveID = 19;
+                        updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+                        updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
+                        // updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
+                        // updateIncentiveAddFinishWithJobID.serviceChecked = this.serviceIncluded;
+                        updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+                        updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
                         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
                           result => {
-                            console.warn(result.status)
                             console.log('Finished!... ');
                             //this.incentiveDashboardForm.reset();
                           }
@@ -1206,7 +1330,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     let equipMatQuantity = getEquipMatService.Quantity;
     let equipMatCost = getEquipMatService.Cost;
 
-     var addToObject = function (obj, key, value) {
+    var addToObject = function (obj, key, value) {
 
       // Create a temp object and index variable
       var temp = {};
@@ -1335,48 +1459,49 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // )
 
     //Start of the Document Add. Append required parameters to the frmData
-    let frmData = new FormData();
+    // let frmData = new FormData();
 
-    //37 = Sandbox, 6 = Production
-    frmData.append('company_id','37');
+    // //37 = Sandbox, 6 = Production
+    // frmData.append('company_id','37');
 
-    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-    frmData.append('customer_id', this.id);
+    // // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    // frmData.append('customer_id', this.id);
 
-    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    // frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
 
-     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-    //frmData.append('customer_system_id', this.customerSystemId.toString());
+    //  frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    // //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-    frmData.append('@job_id', this.job_id);
-    //frmData.append('job_id', '19');
-    frmData.append('security_level', this.security_level);
+    // frmData.append('@job_id', this.job_id);
+    // //frmData.append('job_id', '19');
+    // frmData.append('security_level', this.security_level);
 
-    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    frmData.append('file_name', this.file_name);
-    frmData.append('file_size', this.file_size);
-    frmData.append('upload_date', this.invoiceDate);
-    frmData.append('document_ext', '*Contracts');
-    frmData.append('user_code', 'PPC');
-    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    frmData.append('user_description', 'Invoice');
-    frmData.append('reference1', null);
-    frmData.append('reference2', null);
-    frmData.append('reference3', null);
-    frmData.append('reference4', null);
-    // frmData.append('@file_data', this.myFiles[i]);
-    // frmData.append('@document_id', '1');
+    // //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    // frmData.append('file_name', this.file_name);
+    // frmData.append('file_size', this.file_size);
+    // frmData.append('upload_date', this.invoiceDate);
+    // frmData.append('document_ext', '*Contracts');
+    // frmData.append('user_code', 'PPC');
+    // //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    // frmData.append('user_description', 'Invoice');
+    // frmData.append('reference1', null);
+    // frmData.append('reference2', null);
+    // frmData.append('reference3', null);
+    // frmData.append('reference4', null);
+    // // frmData.append('@file_data', this.myFiles[i]);
+    // // frmData.append('@document_id', '1');
 
-    for (var i = 0; i < this.myFiles.length; i++) {
-      frmData.append("file_data", this.myFiles[i]);
-      console.log(frmData)
-    }
-    //frmData.append('@file_data', this.myFiles[i]);
-    frmData.append('document_id', '1');
+    // for (var i = 0; i < this.myFiles.length; i++) {
+    //   frmData.append("file_data", this.myFiles[i]);
+    //   console.log(frmData)
+    // }
+    // //frmData.append('@file_data', this.myFiles[i]);
+    // frmData.append('document_id', '1');
 
-    // Display the key/value pairs
-    console.log(Object.entries(frmData));//returns an empty array!
-    var options = {content: frmData};
+    // console.log(this.job_id)
+    // // Display the key/value pairs
+    // console.log(Object.entries(frmData));//returns an empty array!
+    // var options = {content: frmData};
 
     //submit this after the job id is returned
     // const httpOptions = {
@@ -1922,7 +2047,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   /****Labor Charges Modal *********************************/
   openLaborChargesModal(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass: 'custom-modal-width'}).result.then((result) => {
       console.log(result)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -1961,7 +2086,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // return
     
-    this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Hours, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].CostPerHour, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
+    this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
 
     localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0]));
     
@@ -1997,7 +2122,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       rowVal = e.value;
     });
     //console.log(rowVal.Hours);
-    this.hours = parseInt(rowVal.Hours);
+    this.laborQuantity = parseInt(rowVal.Quantity);
   }
 
   calculateCostPerHour(val:any,i:number) {
@@ -2007,12 +2132,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     controlArray.controls.forEach(function(e) {
       rowVal = e.value;
     });
-    this.costPerHour = parseInt(rowVal.CostPerHour);
+    this.laborCost = parseInt(rowVal.Cost);
     this.calculateLaborChargesTotal(val,i);
   }
 
   calculateLaborChargesTotal(val:any,i:number) {
-    let totalLaborChargesCalc = this.total = (this.hours * this.costPerHour);
+    let totalLaborChargesCalc = this.total = (this.laborQuantity * this.laborCost);
     
     // this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
     this.totalLaborChargesCalc = totalLaborChargesCalc;

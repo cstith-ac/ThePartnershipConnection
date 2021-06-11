@@ -152,8 +152,8 @@
                             <label class="col-sm-2 col-form-label">System Type</label>
                             <div class="dropdown">
                                 <select 
-                                    formControlName="SystemType" class="form-control col-sm-12 fullWidthSelect" 
-                                    [(ngModel)]="systemType"
+                                    formControlName="SystemTypeID" class="form-control col-sm-12 fullWidthSelect" 
+                                    [(ngModel)]="systemTypeID"
                                 >
                                     <option *ngFor="let list of listsystemtypes" value="{{ list.system_Id }}" [ngValue]="list.system_Id">
                                         {{ list.systemName }}
@@ -168,8 +168,8 @@
                             <label class="col-sm-2 col-form-label">Panel Type</label>
                             <div class="dropdown">
                                 <select 
-                                    formControlName="PanelType" class="form-control col-sm-12 fullWidthSelect" 
-                                    [(ngModel)]="panelType"
+                                    formControlName="PanelTypeID" class="form-control col-sm-12 fullWidthSelect" 
+                                    [(ngModel)]="panelTypeID"
                                 >
                                     <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}" [ngValue]="list.panel_Type_Id">
                                         {{ list.panelName }}
@@ -1567,7 +1567,7 @@
                                 <div class="col">
                                     <input 
                                         type="text" 
-                                        formControlName="Hours"
+                                        formControlName="Quantity"
                                         class="form-control"
                                         (change)="calculateHours($event)"
                                     >
@@ -1586,7 +1586,7 @@
                                     <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
-                                        formControlName="CostPerHour"
+                                        formControlName="Cost"
                                         [spinners]="false"
                                         (change)="calculateCostPerHour($event,i)"
                                         [style.width]="'80%'"

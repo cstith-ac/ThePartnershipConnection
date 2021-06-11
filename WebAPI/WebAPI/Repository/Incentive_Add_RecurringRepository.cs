@@ -58,7 +58,7 @@ namespace WebAPI.Repository
             {
                 try
                 {
-                    billingStartDateParam.Value = "12/31/9999 11:59:59 PM";
+                    billingStartDateParam.Value = "1899-12-30";
                 }
                 catch (Exception)
                 {

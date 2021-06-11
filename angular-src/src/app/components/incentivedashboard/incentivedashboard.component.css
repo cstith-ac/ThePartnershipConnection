@@ -25,11 +25,17 @@
   width: auto !important;
   display: inline-block;
 } */
-::ng-deep .modal-dialog{
-  /* max-width: 1450px !important; */
-  max-width: 1250px !important;
-  width: 1450px;
-}
+
+/* .recurring .modal-content {
+  max-width: 1450px !important; */
+  /*max-width: 1250px !important;*/
+  /* width: 1450px;
+} */
+/* ::ng-deep .modal-dialog {
+  max-width: 1450px !important; */
+  /*max-width: 1250px !important;*/
+  /* width: 1450px;
+} */
 .radio-label-vertical-wrapper {
   padding-bottom: 13px;
   position: relative;

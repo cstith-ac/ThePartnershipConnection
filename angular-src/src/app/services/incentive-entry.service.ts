@@ -30,13 +30,13 @@ export class IncentiveEntryService {
     })
   }
 
-  updateLaborCharges(ItemID: number, Description: string, Hours: number, CostPerHour: number, Total: number) {
+  updateLaborCharges(ItemID: number, Description: string, Quantity: number, Cost: number, Total: number) {
     console.log('updateLaborCharges');
     this.sharedIncentiveLaborChargesInfo.push({
       ItemID,
       Description,
-      Hours,
-      CostPerHour,
+      Quantity,
+      Cost,
       Total
     })
   }
