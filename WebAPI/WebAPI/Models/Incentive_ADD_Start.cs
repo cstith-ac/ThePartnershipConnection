@@ -20,7 +20,7 @@ namespace WebAPI.Models
         public string AdditionalInfo { get; set; }
         public string PartnerInvoiceNumber { get; set; }
         public string PartnerInvoiceDate { get; set; }
-        public string ContractDate { get; set; }
+        public string? ContractDate { get; set; }
         public int? ContractTerm { get; set; }
         public int? RenewalMonths { get; set; }
         public string ServiceIncluded { get; set; }

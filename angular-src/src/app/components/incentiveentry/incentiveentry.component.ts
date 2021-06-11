@@ -71,7 +71,7 @@ export class IncentiveentryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    localStorage.setItem("serviceIncluded","no");
+    localStorage.setItem("serviceIncluded","n");
 
     setTimeout(() => {
       let myTag = this.el.nativeElement.querySelector('.entryColumn2');
@@ -160,7 +160,7 @@ export class IncentiveentryComponent implements OnInit {
       InvoiceNumber: ["", Validators.required],
       InvoiceDate: ["", Validators.required],
       InvoiceTotal: ["", Validators.required],
-      ServiceIncluded: ["no", Validators.required],
+      ServiceIncluded: ["n", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
       ClientVisit:  [false],
@@ -205,7 +205,7 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
     localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
-    localStorage.setItem("serviceIncluded",this.serviceIncluded);
+    localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
 
     // this.incentiveEntryForm.controls["CompanyName"].setValue(this.companyName);
     // this.incentiveEntryForm.controls["PartnerCode"].setValue(this.partnerCode);

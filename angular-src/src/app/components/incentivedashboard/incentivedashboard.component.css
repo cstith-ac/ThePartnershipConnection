@@ -26,7 +26,8 @@
   display: inline-block;
 } */
 ::ng-deep .modal-dialog{
-  max-width: 1450px !important;
+  /* max-width: 1450px !important; */
+  max-width: 1250px !important;
   width: 1450px;
 }
 .radio-label-vertical-wrapper {
@@ -157,4 +158,7 @@ header, .row {
 .btn-add {
 	background-color: #1B5EAC;
 	color: #fff;
+}
+.k-input {
+  color:red;
 }

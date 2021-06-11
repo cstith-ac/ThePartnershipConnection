@@ -47,7 +47,7 @@ namespace WebAPI.Repository
             var contractDateParam = new SqlParameter("@ContractDate", jobIDAdded.ContractDate);
             if (jobIDAdded.ContractDate == null)
             {
-                contractDateParam.Value = "2012-07-20";
+                contractDateParam.Value = "1899-12-30";
             }
             var contractTermParam = new SqlParameter("@ContractTerm", jobIDAdded.ContractTerm);
             if (jobIDAdded.ContractTerm == null)
