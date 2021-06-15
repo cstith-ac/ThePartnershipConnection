@@ -264,6 +264,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('companyName');
       localStorage.removeItem('installCompanyID');
       localStorage.removeItem('partnerCode');
+      localStorage.removeItem('equipmatentry');
+      localStorage.removeItem('recurringentry');
+      localStorage.removeItem('laborchargesentry');
       localStorage.removeItem('totalRecurringCalc');
       localStorage.removeItem('totalEquipMatCalc');
       localStorage.removeItem('totalLaborChargesCalc');
@@ -758,11 +761,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.listsitesforcustomer = [].concat(res);
 
         //get the customer_Site_id
-        this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
+        //this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
+        this.customerSiteId = this.listsitesforcustomer[0].customer_Site_id;
         this.customerSiteName = this.listsitesforcustomer[0].siteName;
         //localStorage.setItem("customerSiteName", this.customerSiteName);
         //make a call to getListSystemsForSite
-        this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+        this.routeService.getListSystemsForSite(this.customerSiteId).subscribe(
           res => {
             //get the customer_System_id
             //console.log(res.customer_System_id);
@@ -814,9 +818,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // console.log(selectedCustomerSiteId);
     //push the selectedSiteName to the UI
     //once a site is selected, push the siteName to site on Incentive Entry
+    this.id = selectedCustomerid;
+    this.customerSiteId = selectedCustomerSiteId;
     this.siteName = selectedSiteName;
     this.customer = selectedCustomerName;
-    this.customerSiteId = selectedCustomerSiteId;
+    debugger
 
     // localStorage.setItem("siteName", this.siteName);
     // localStorage.setItem("customerName", this.customer);
@@ -1107,7 +1113,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
     // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
     this.incentiveDashboardForm.controls["ContractTerm"].setValue(0);
-    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
+    // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
+    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customerSiteId);
 
     // confirm('Click ok to confirm form submission')
 
@@ -1155,17 +1162,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
         this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
           result => {
-            // debugger
             console.log(result)
             var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
             this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
               result => {
-                // debugger
                 console.log(result)
                 var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
                 this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
                   result => {
-                    // debugger
                     console.log(result); //this shows a new object with 0 or null values!
 
                     //create frmData object, add values, and append id
@@ -1201,7 +1205,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                     frmData.append('customer_id', this.id);
 
                     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-
+                    //frmData.append('customer_site_id',this.customerSiteId);
+                    debugger
                     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
                     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
