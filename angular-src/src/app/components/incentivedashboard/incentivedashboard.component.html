@@ -79,7 +79,7 @@
                                     </option>
                                 </select>
                             </div> -->
-                            <span class="ml-2" (click)="openSearchSiteModal(site)">
+                            <span class="ml-2" #siteSearchIcon (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <span class="pl-4" (click)="routeToNewSite()">
@@ -131,7 +131,7 @@
                                     </option>
                                 </select>
                             </div> -->
-                            <span class="ml-2" (click)="openSearchSystemModal(system)">
+                            <span class="ml-2" #systemSearchIcon (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <input type="checkbox" class="form-control form-check-input ml-3" [(ngModel)]="newSystem" formControlName="NewSystem">
@@ -265,7 +265,7 @@
                                 </div>
                                 <div class="form-group" *ngIf="showSiteVisitFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{siteVisitUpload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{site_visit_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                                 </div>
                                 <div class="form-group" *ngIf="showOtherDocument1File">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{otherDocument1Upload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{other_Document1_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
                                 </div>
                             </div>
@@ -302,7 +302,7 @@
                                 <div class="form-group" *ngIf="showContractFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
                                     <!-- <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p> -->
-                                    <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #contract>{{contract_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
                                 </div>
                             </div>
@@ -319,7 +319,7 @@
                                 </div>
                                 <div class="form-group" *ngIf="showOtherDocument2File">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{otherDocument2Upload}}</p>
+                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{other_Document2_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
                                 </div>
                             </div>
@@ -378,11 +378,16 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 col-form-label">Tax</label>
                                     <div class="input-group d-flex justify-content-center">
-                                        <!-- <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div> -->
-                                        <input
+                                        <kendo-numerictextbox
+                                            format="c2"
+                                            [value]="partnerTaxAmount"
+                                            [spinners]="false"
+                                            placeholder="$0.00"
+                                            formControlName="PartnerTaxAmount"
+                                        ></kendo-numerictextbox>
+                                        <!-- <input
                                             type="text" 
+                                            [value]="tax"
                                             class="form-control col-sm-10"
                                             formControlName="Tax"
                                             [(ngModel)]="tax"
@@ -391,7 +396,7 @@
                                             thousandSeparator=","
                                             prefix="$"
                                             (keyup)="getTax($event)"
-                                        >
+                                        > -->
                                     </div>
                                 </div>
                             </div>

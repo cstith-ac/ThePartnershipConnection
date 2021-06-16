@@ -39,6 +39,9 @@ import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
+  @ViewChild("customerSearchIcon") divCustomerSearchIcon: ElementRef;
+  @ViewChild("siteSearchIcon") divSiteSearchIcon: ElementRef;
+  @ViewChild("systemSearchIcon") divSystemSearchIcon: ElementRef;
   @ViewChild("invoice") divInvoice: ElementRef;
   @ViewChild("subscriberForm") divSubscriberForm: ElementRef;
   @ViewChild("siteVisit") divSiteVisit: ElementRef;
@@ -178,7 +181,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   invoiceNumber;
   invoiceDate;
   invoiceTotal;
-  tax;
+  partnerTaxAmount=0;
   recurring;
   equipmentAndMaterials;
   laborCharges;
@@ -383,7 +386,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
       PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
       InvoiceTotal: [""],
-      Tax: [""],
+      PartnerTaxAmount: this.partnerTaxAmount,
       Recurring: [""],
       EquipmentAndMaterials: [""],
       LaborCharges: [""],
@@ -541,8 +544,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       // if there's a page refresh, re-populate fields with previously entered values
       this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));
-      this.tax = localStorage.getItem("tax")
-      this.incentiveDashboardForm.controls["Tax"].setValue(localStorage.getItem("tax"));
+      //this.partnerTaxAmount = parseInt(localStorage.getItem("partnerTaxAmount"));
+      //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(localStorage.getItem("partnerTaxAmount"));
       //this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
 
       // get key/value pairs from localstorage
@@ -638,7 +641,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('centralStationID');
       localStorage.removeItem('customerSiteId');
       localStorage.removeItem('renewal');
-      localStorage.removeItem('tax');
+      localStorage.removeItem('partnerTaxAmount');
       localStorage.removeItem('additionalInfo');
       localStorage.removeItem('partnerComments');
       localStorage.removeItem('signalsTested');
@@ -654,9 +657,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.setItem("additionalInfo", newAdditionalInfo);
   }
 
-  getTax(e) {
-    let newTax = e.target.value;
-    localStorage.setItem("tax", newTax);
+  getPartnerTaxAmount(e) {
+    let newPartnerTaxAmount = e.target.value;
+    localStorage.setItem("partnerTaxAmount", newPartnerTaxAmount);
   }
 
   getContractDate(e) {
@@ -740,6 +743,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //select Customer 1st
   selectCustomer(customer_id:number,customer_Name:string) {
+    console.log(this.divSiteSearchIcon.nativeElement);
+    this.divSiteSearchIcon.nativeElement.style.display='none';
+    this.divSystemSearchIcon.nativeElement.style.display='none';
 
     //If search by customer radio is selected, filter by customer_Number
     //If search by customer radio is selected, filter by customer_Name
@@ -807,6 +813,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //select Site 1st
   selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number) {
+    this.divSystemSearchIcon.nativeElement.style.display='none';
+    
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     let selectedSiteName = siteName;
@@ -822,7 +830,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.customerSiteId = selectedCustomerSiteId;
     this.siteName = selectedSiteName;
     this.customer = selectedCustomerName;
-    debugger
 
     // localStorage.setItem("siteName", this.siteName);
     // localStorage.setItem("customerName", this.customer);
@@ -1112,7 +1119,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
     this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
     // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
-    this.incentiveDashboardForm.controls["ContractTerm"].setValue(0);
+    //this.incentiveDashboardForm.controls["ContractTerm"].setValue(0); //this was passing a hard-coded zero value
     // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
     this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customerSiteId);
 
@@ -1196,6 +1203,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                     //   }
                     //   return temp;
                     // };
+
+                    //loop through Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, and Other Document 2
+                    //if a document exists, submit 
+                    //if a document doesn't exist, skip
+
                     let frmData = new FormData();
 
                     // 37 = Sandbox, 6 = Production
@@ -1206,7 +1218,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
                     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
                     //frmData.append('customer_site_id',this.customerSiteId);
-                    debugger
+                    
                     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
                     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
@@ -1259,7 +1271,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
                         // updateIncentiveAddFinishWithJobID.incentiveID = 19;
                         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-                        updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
+                        updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
                         // updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
                         // updateIncentiveAddFinishWithJobID.serviceChecked = this.serviceIncluded;
                         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
@@ -1267,6 +1279,51 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
                           result => {
                             console.log('Finished!... ');
+
+                            localStorage.removeItem('installCompanyID');
+                            localStorage.removeItem('totalRecurringCalc');
+                            localStorage.removeItem('totalEquipMatCalc');
+                            localStorage.removeItem('totalLaborChargesCalc');
+                            localStorage.removeItem('invoiceDate');
+                            localStorage.removeItem('invoiceNumber');
+                            localStorage.removeItem('invoiceTotal');
+                            localStorage.removeItem('recurringentry');
+                            localStorage.removeItem('equipmatentry');
+                            localStorage.removeItem('laborchargesentry');
+                            localStorage.removeItem('invoiceName');
+                            localStorage.removeItem('invoiceFileSize');
+                            localStorage.removeItem('invoice');
+                            localStorage.removeItem('subscriberForm');
+                            localStorage.removeItem('subscriberFormName');
+                            localStorage.removeItem('siteVisit');
+                            localStorage.removeItem('siteVisitName');
+                            localStorage.removeItem('otherDocument1');
+                            localStorage.removeItem('otherDocument1Name');
+                            localStorage.removeItem('contract');
+                            localStorage.removeItem('contractName');
+                            localStorage.removeItem('otherDocument2');
+                            localStorage.removeItem('otherDocument2Name');
+                            localStorage.removeItem('contractDate');
+                            localStorage.removeItem('contractTerm');
+                            localStorage.removeItem('serviceIncluded');
+                            localStorage.removeItem('customerId');
+                            localStorage.removeItem('customerName');
+                            localStorage.removeItem('customerSiteName');
+                            localStorage.removeItem('customerSystemInformation');
+                            localStorage.removeItem('alarmAccount');
+                            localStorage.removeItem('systemType');
+                            localStorage.removeItem('panelType');
+                            localStorage.removeItem('panelLocation');
+                            localStorage.removeItem('centralStationID');
+                            localStorage.removeItem('customerSiteId');
+                            localStorage.removeItem('renewal');
+                            localStorage.removeItem('partnerTaxAmount');
+                            localStorage.removeItem('additionalInfo');
+                            localStorage.removeItem('partnerComments');
+                            localStorage.removeItem('signalsTested');
+                            localStorage.removeItem('testObject');
+
+                            this.router.navigate(['incentive-entry/']);
                             //this.incentiveDashboardForm.reset();
                           }
                         )
@@ -1546,7 +1603,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-
       //upload to localstorage
       const reader = new FileReader();
 
@@ -1561,9 +1617,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.subscriber_file_name = e.target.files[i].name;
       //this.subscriber_file_name = 'subscriberForm';
       localStorage.setItem('subscriberFormName', this.subscriber_file_name);
-      this.divSubscriberForm.nativeElement.innerHTML = this.subscriber_file_name;
+      //this.divSubscriberForm.nativeElement.innerHTML = this.subscriber_file_name;
       //get the file size
       this.subscriber_file_size = e.target.files[i].size;
+      console.log(this.subscriber_file_size)
       //this.invoiceDate = e.target.files[i].lastModified;
 
       this.myFiles.push(e.target.files[i]);
@@ -1590,7 +1647,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.site_visit_file_name = e.target.files[i].name;
       //this.site_visit_file_name = 'siteVisit';
       localStorage.setItem('siteVisitName', this.site_visit_file_name);
-      this.divSiteVisit.nativeElement.innerHTML = this.site_visit_file_name;
+      //this.divSiteVisit.nativeElement.innerHTML = this.site_visit_file_name;
       //get the file size
       this.site_visit_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1619,7 +1676,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.other_Document1_file_name = e.target.files[i].name;
       //this.other_Document1_file_name = 'otherDocument1';
       localStorage.setItem('otherDocument1Name', this.other_Document1_file_name);
-      this.divOtherDocument1.nativeElement.innerHTML = this.other_Document1_file_name;
+      //this.divOtherDocument1.nativeElement.innerHTML = this.other_Document1_file_name;
       //get the file size
       this.other_Document1_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1648,7 +1705,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.contract_file_name = e.target.files[i].name;
       //this.contract_file_name = 'contract';
       localStorage.setItem('contractName', this.contract_file_name);
-      this.divContract.nativeElement.innerHTML = this.contract_file_name;
+      //this.divContract.nativeElement.innerHTML = this.contract_file_name;
       //get the file size
       this.contract_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1677,7 +1734,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.other_Document2_file_name = e.target.files[i].name;
       //this.other_Document2_file_name = 'otherDocument2';
       localStorage.setItem('otherDocument2Name', this.other_Document2_file_name);
-      this.divOtherDocument2.nativeElement.innerHTML = this.other_Document2_file_name;
+      //this.divOtherDocument2.nativeElement.innerHTML = this.other_Document2_file_name;
       //get the file size
       this.other_Document2_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -1687,51 +1744,57 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   removeInvoiceFile(){
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('invoiceName');
     localStorage.removeItem('invoice');
     this.divInvoice.nativeElement.value = '';
     this.showInvoiceFile = false;
+    this.myFiles.pop();
   }
 
   removeSubscriberFormFile() {
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('subscriberFormName');
     localStorage.removeItem('subscriberForm');
     this.divSubscriberForm.nativeElement.value = '';
     this.showSubscriberFormFile = false;
+    this.myFiles.pop();
   }
 
   removeSiteVisitFile() {
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('siteVisitName');
     localStorage.removeItem('siteVisit');
     this.divSiteVisit.nativeElement.value = '';
     this.showSiteVisitFile = false;
+    this.myFiles.pop();
   }
 
   removeOtherDocument1File() {
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('otherDocument1Name');
     localStorage.removeItem('otherDocument1');
     this.divOtherDocument1.nativeElement.value = '';
     this.showOtherDocument1File = false;
+    this.myFiles.pop();
   }
 
   removeContractFile() {
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('contractName');
     localStorage.removeItem('contract');
     this.divContract.nativeElement.value = '';
     this.showContractFile = false;
+    this.myFiles.pop();
   }
 
   removeOtherDocument2File() {
-    console.log('remove this file')
+    // console.log('remove this file')
     localStorage.removeItem('otherDocument2Name');
     localStorage.removeItem('otherDocument2');
     this.divOtherDocument2.nativeElement.value = '';
     this.showOtherDocument2File = false;
+    this.myFiles.pop();
   }
 
   getLineItemSubtotal() {
