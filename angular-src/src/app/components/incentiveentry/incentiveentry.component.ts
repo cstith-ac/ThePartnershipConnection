@@ -163,19 +163,19 @@ export class IncentiveentryComponent implements OnInit {
       ServiceIncluded: ["n", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
-      ClientVisit:  [false],
-      AdoptionVisit: [false],
-      LandlineToCell:  [false],
-      ContractResign:  [false],
-      Reprogram:  [false],
-      LteUpgrade:  [false],
-      AddNewRMRorService: [false],
-      PickUp: [false],
-      NewSite:  [false],
-      SystemTransfer:  [false],
-      AutoPay: [false],
-      CreditCardAutoPay: [false],
-      ACHAutopay: [false]
+      ClientVisit:  ["n"],
+      AdoptionVisit: ["n"],
+      LandlineToCell:  ["n"],
+      ContractResign:  ["n"],
+      Reprogram:  ["n"],
+      LteUpgrade:  ["n"],
+      AddNewRMRorService: ["n"],
+      PickUp: ["n"],
+      NewSite:  ["n"],
+      SystemTransfer:  ["n"],
+      AutoPay: ["n"],
+      CreditCardAutoPay: ["n"],
+      ACHAutopay: ["n"]
     })
   }
 
@@ -200,6 +200,8 @@ export class IncentiveentryComponent implements OnInit {
   onSubmit(form: FormGroup) {
 
     this.submitted = true;
+
+    //this.routeService.postCheckboxAutoInsertList
 
     // console.log(this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
@@ -282,42 +284,117 @@ export class IncentiveentryComponent implements OnInit {
 
   onChangeClientVisit(e) {
     if(e.target.checked) {  
-      //console.log('checked: '+ e.target.value)
-      //if value = 1, do something
       if(e.target.value == 1) {
-        //this.incentiveEntryForm.get('AdoptionVisit').disable();
-        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        console.log(e.target.value + ' y')
+        //this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 2) {
-        //console.log('do something else')
-        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 3) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 4) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 5) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 6) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 7) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 8) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 9) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
+      }
+      if(e.target.value == 10) {
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 11) {
-        //console.log('do something')
-        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 12) {
-        //console.log('do something else')
-        this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        console.log(e.target.value + ' y')
+        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
+        this.selectedForCheckBoxAutoInsert.push('y');
       }
-      //if value == 2, do something
-      //if value = 11, do something
-      //if value == 12, do something
     } else if (!e.target.checked) {
       if(e.target.value == 1) {
-        this.incentiveEntryForm.get('AdoptionVisit').enable();
+        //this.incentiveEntryForm.get('AdoptionVisit').enable();
+        console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
       }
       if(e.target.value == 2) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 3) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 4) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 5) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 6) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 7) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 8) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 9) {
+        console.log(e.target.value + ' n')
+        this.selectedForCheckBoxAutoInsert.pop();
+      }
+      if(e.target.value == 10) {
+        console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
       }
       if(e.target.value == 11) {
+        console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
       }
       if(e.target.value == 12) {
+        console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
       }
-      console.log('unchecked: '+ e.target.value)
+      //console.log('unchecked: '+ e.target.value)
     }
   }
 

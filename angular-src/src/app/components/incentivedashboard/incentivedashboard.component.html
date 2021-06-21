@@ -412,7 +412,7 @@
                                         </div> -->
                                         <kendo-numerictextbox
                                             format="c2"
-                                            [value]="totalRecurringCalc"
+                                            [value]="totalSumRecurring"
                                             formControlName="Recurring"
                                             [spinners]="false"
                                             placeholder="$0.00"
@@ -454,7 +454,7 @@
                                         > -->
                                         <kendo-numerictextbox
                                             format="c2"
-                                            [value]="totalEquipMatCalc"
+                                            [value]="totalSumEquipMat"
                                             formControlName="EquipmentAndMaterials"
                                             [spinners]="false"
                                             placeholder="$0.00"
@@ -477,7 +477,7 @@
                                         > -->
                                         <kendo-numerictextbox
                                             format="c2"
-                                            [value]="totalLaborChargesCalc"
+                                            [value]="totalSumLaborCharges"
                                             formControlName="LaborCharges"
                                             [spinners]="false"
                                             placeholder="$0.00"
@@ -1211,42 +1211,22 @@
                                       </div>
                                     </div>
                                     <div class="col">
-                                      <!-- <input 
-                                        type="text"
-                                        class="form-control"
-                                        formControlName="RMR"
-                                        placeholder="$0.00"
-                                        mask="separator.2" 
-                                        thousandSeparator=","
-                                        prefix="$"
-                                        (change)="calculateRMR($event)"
-                                      > -->
                                       <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
                                         formControlName="RMR"
                                         [spinners]="false"
-                                        (change)="calculateRMR($event)"
+                                        
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
                                     <div class="col">
-                                      <!-- <input 
-                                        type="text"
-                                        class="form-control"
-                                        formControlName="PassThrough"
-                                        placeholder="$0.00"
-                                        mask="separator.2" 
-                                        thousandSeparator=","
-                                        prefix="$"
-                                        (change)="calculatePassThrough($event)"
-                                      > -->
                                       <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
                                         formControlName="PassThrough"
                                         [spinners]="false"
-                                        (change)="calculatePassThrough($event)"
+                                        
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
@@ -1270,7 +1250,7 @@
                                           <select 
                                             formControlName="Multiple"  
                                             class="form-control"
-                                            (change)="calculateMultiple($event,i)">
+                                            >
                                               <option
                                                   *ngFor="let m of listMultiples" 
                                                   value="{{m.multiple}}" 
@@ -1288,7 +1268,7 @@
                                         mask="separator.2" 
                                         thousandSeparator=","
                                         prefix="$"
-                                        (change)="calculateTotal($event,i)"
+                                        
                                         [attr.disabled]="true"
                                       >
                                     </div>
@@ -1308,6 +1288,7 @@
                         <div class="col">
                             <input type="submit" value="Submit" class="btn btn-submit">
                         </div>
+                        <p>Total is: {{ totalSumRecurring }}</p>
                     </form>
                 </section>
             </div>
@@ -1413,26 +1394,16 @@
                                         type="number" 
                                         formControlName="Quantity"
                                         class="form-control"
-                                        (change)="calculateQuantity($event,i)"
+                                        
                                     >
                                 </div>
                                 <div class="col">
-                                    <!-- <input 
-                                        type="text"
-                                        class="form-control"
-                                        formControlName="Cost"
-                                        placeholder="$0.00"
-                                        mask="separator.2" 
-                                        thousandSeparator=","
-                                        prefix="$"
-                                        (change)="calculateCost($event,i)"
-                                    > -->
                                     <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
                                         formControlName="Cost"
                                         [spinners]="false"
-                                        (change)="calculateCost($event,i)"
+                                        
                                         [style.width]="'80%'"
                                     ></kendo-numerictextbox>
                                 </div>
@@ -1445,7 +1416,7 @@
                                         mask="separator.2" 
                                         thousandSeparator=","
                                         prefix="$"
-                                        (change)="calculateEquipMatTotal($event,i)"
+                                        
                                         [attr.disabled]="true"
                                     >
                                 </div>
@@ -1454,11 +1425,7 @@
                                         <i class="fas fa-plus pr-1"></i>Add
                                     </button>
                                 </div>
-                                <!-- <div class="col" *ngIf="i&gt;1">
-                                    <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
-                                        <i class="fas fa-plus pr-1"></i>Remove
-                                    </button>
-                                </div> -->
+                                
                                 <div class="col">
                                     <button class="btn btn-add" type="button" (click)="removeNewEquipMatItem(i)">
                                         <i class="fas fa-minus pr-1"></i>Remove
@@ -1470,6 +1437,7 @@
                     <div class="col">
                         <input type="submit" value="Submit" class="btn btn-submit">
                     </div>
+                    <p>Total is: {{ totalSumEquipMat }}</p>
                 </form>
             </section>
         </div>
@@ -1574,7 +1542,7 @@
                                         type="text" 
                                         formControlName="Quantity"
                                         class="form-control"
-                                        (change)="calculateHours($event)"
+                                        
                                     >
                                 </div>
                                 <div class="col">
@@ -1593,7 +1561,7 @@
                                         placeholder="$0.00"
                                         formControlName="Cost"
                                         [spinners]="false"
-                                        (change)="calculateCostPerHour($event,i)"
+                                        
                                         [style.width]="'80%'"
                                     ></kendo-numerictextbox>
                                 </div>
@@ -1604,7 +1572,7 @@
                                         formControlName="Total" 
                                         [placeholder]="placeholder"
                                         prefix="$"
-                                        (change)="calculateLaborChargesTotal($event,i)"
+                                        
                                         [attr.disabled]="true"
                                     >
                                 </div>
@@ -1627,6 +1595,7 @@
                     <div class="col">
                         <input type="submit" value="Submit" class="btn btn-submit">
                     </div>
+                    <p>Total is: {{ totalSumLaborCharges }}</p>
                 </form>
             </section>
         </div>

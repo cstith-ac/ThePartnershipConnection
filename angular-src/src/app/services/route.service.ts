@@ -540,6 +540,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CheckBoxIncompatible/`, httpOptions);
   }
 
+  postCheckboxAutoInsertList(params:any): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+    };
+    return this.http.post<any>(this.baseUrl + '/api/CheckboxAutoInsertList',params, httpOptions);
+  }
+
   loadToken() {
     const token = localStorage.getItem('token');
     this.authToken = token;

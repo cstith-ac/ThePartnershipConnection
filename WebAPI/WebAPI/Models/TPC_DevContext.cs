@@ -69,6 +69,7 @@ namespace WebAPI.Models
         public virtual DbSet<CheckBoxIndex> GetCheckBoxIndexes { get; set; }
         public virtual DbSet<CheckBoxIncompatible> GetCheckBoxIncompatibles { get; set; }
         public virtual DbSet<CheckBoxAutoInsert> GetCheckBoxAutoInserts { get; set; }
+        public virtual DbSet<CheckboxAutoInsertList> CheckboxAutoInsertLists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -462,6 +463,11 @@ namespace WebAPI.Models
             modelBuilder.Entity<CheckBoxAutoInsert>(entity =>
             {
                 entity.ToTable("CheckBoxAutoInsert");
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CheckboxAutoInsertList>(entity =>
+            {
                 entity.HasNoKey();
             });
 
