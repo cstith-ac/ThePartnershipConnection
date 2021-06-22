@@ -27,18 +27,18 @@
 }
 .entryColumn2 {
     position: relative;
-    top: -335px;
+    /* top: -335px; */
+    top: -304px;
     left: 0px;
 }
-/* .entryColumn3 {
-    position: relative;
-    top: -565px;
-    left: 0px;
-} */ /*old*/
 .entryColumn3 {
     position: relative;
-    top: -610px;
+    /* top: -610px; */
+    top: -578px;
     left: 70%;
+}
+.pb-40 {
+    padding-bottom:40px;
 }
 
 /*****

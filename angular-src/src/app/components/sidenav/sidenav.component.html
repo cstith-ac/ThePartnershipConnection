@@ -47,14 +47,15 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- <span *ngIf="authService.isEmployee">
+        <span *ngIf="authService.loggedIn() && authService.isEmployee()">
           <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Customer Care Connection</span>
         </span>
-        <span *ngIf="authService.isPartner">
+        <span *ngIf="authService.loggedIn() && !authService.isEmployee()">
           <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span>
-        </span> -->
+        </span>
 
-        <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span>
+        <!-- <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span> -->
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <a class="mx-auto mb-0 black-text" id="showPartnerWindowModal" (click)="showPartnerWindowModal()" *ngIf="authService.loggedIn()">

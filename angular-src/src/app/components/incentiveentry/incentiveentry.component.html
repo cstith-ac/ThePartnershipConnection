@@ -105,7 +105,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <div *ngIf="box.id&gt;0 && box.id&lt;=6">
+                            <div *ngIf="box.id&gt;0 && box.id&lt;=2">
                                 <label>{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
@@ -113,6 +113,20 @@
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
                                     class="form-check-populate"
+                                    [checked]="selected === i"
+                                    (change)="selected = i"
+                                    [style.margin-bottom]="'0px'"
+                                >
+                            </div>
+                            <div *ngIf="box.id&gt;3 && box.id&lt;=6">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox" 
+                                    name="{{box.id}}" 
+                                    [value]="box.id"
+                                    (change)="onChangeClientVisit($event)"
+                                    class="form-check-populate"
+                                    
                                 >
                             </div>
                         </div>          

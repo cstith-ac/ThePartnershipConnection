@@ -59,6 +59,7 @@ export class IncentiveentryComponent implements OnInit {
   notThisBox;
   selectedForCheckBoxAutoInsert = [];
   selectedAutopay;
+  selected=-1;
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -163,19 +164,19 @@ export class IncentiveentryComponent implements OnInit {
       ServiceIncluded: ["n", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
-      ClientVisit:  ["n"],
-      AdoptionVisit: ["n"],
-      LandlineToCell:  ["n"],
-      ContractResign:  ["n"],
-      Reprogram:  ["n"],
-      LteUpgrade:  ["n"],
-      AddNewRMRorService: ["n"],
-      PickUp: ["n"],
-      NewSite:  ["n"],
-      SystemTransfer:  ["n"],
-      AutoPay: ["n"],
-      CreditCardAutoPay: ["n"],
-      ACHAutopay: ["n"]
+      ClientVisit:  [false],
+      AdoptionVisit: [false],
+      LandlineToCell:  [false],
+      ContractResign:  [false],
+      Reprogram:  [false],
+      LteUpgrade:  [false],
+      AddNewRMRorService: [false],
+      PickUp: [false],
+      NewSite:  [false],
+      SystemTransfer:  [false],
+      AutoPay: [false],
+      CreditCardAutoPay: [false],
+      ACHAutopay: [false]
     })
   }
 
@@ -221,7 +222,8 @@ export class IncentiveentryComponent implements OnInit {
 
     //console.log(this.incentiveEntryForm.value);
     //console.log(Object.values(this.incentiveEntry))
-    //return;
+    console.log('Y', 'N','N','Y','N','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N')
+
     this.router.navigate(["/incentive-dashboard"]);
     //this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
   }
@@ -270,78 +272,49 @@ export class IncentiveentryComponent implements OnInit {
     }
   }
 
-  // onChangeACHorCC(e) {
-  //   if(e.target.checked && e.target.value === 11) {
-  //     //console.log(e.target.value)
-  //     console.log('working for 11...')
-  //     //this.incentiveEntryForm.controls['ACHAutopay'].disable();
-  //   } 
-  //   if (e.target.checked && e.target.value === 12) {
-  //     //console.log(e.target.value)
-  //     console.log('working for 12...')
-  //   }
-  // }
-
   onChangeClientVisit(e) {
     if(e.target.checked) {  
       if(e.target.value == 1) {
         console.log(e.target.value + ' y')
-        //this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
+        this.incentiveEntryForm.controls['AdoptionVisit'].disable();
+        
       }
       if(e.target.value == 2) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
+        this.incentiveEntryForm.controls['ClientVisit'].disable();
       }
       if(e.target.value == 3) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 4) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 5) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 6) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 7) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 8) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 9) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
       if(e.target.value == 10) {
         console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
-        this.selectedForCheckBoxAutoInsert.push('y');
-      }
-      if(e.target.value == 11) {
-        console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
-        this.selectedForCheckBoxAutoInsert.push('y');
-      }
-      if(e.target.value == 12) {
-        console.log(e.target.value + ' y')
-        // this.selectedForCheckBoxAutoInsert.push(e.target.value);
         this.selectedForCheckBoxAutoInsert.push('y');
       }
     } else if (!e.target.checked) {
@@ -349,10 +322,12 @@ export class IncentiveentryComponent implements OnInit {
         //this.incentiveEntryForm.get('AdoptionVisit').enable();
         console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
+        this.incentiveEntryForm.controls['AdoptionVisit'].enable();
       }
       if(e.target.value == 2) {
         console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
+        this.incentiveEntryForm.controls['ClientVisit'].enable();
       }
       if(e.target.value == 3) {
         console.log(e.target.value + ' n')
@@ -386,15 +361,13 @@ export class IncentiveentryComponent implements OnInit {
         console.log(e.target.value + ' n')
         this.selectedForCheckBoxAutoInsert.pop();
       }
-      if(e.target.value == 11) {
-        console.log(e.target.value + ' n')
-        this.selectedForCheckBoxAutoInsert.pop();
-      }
-      if(e.target.value == 12) {
-        console.log(e.target.value + ' n')
-        this.selectedForCheckBoxAutoInsert.pop();
-      }
       //console.log('unchecked: '+ e.target.value)
+    }
+  }
+
+  disableClientAdoption(e){
+    if(e.target.checked === 1){
+      this.incentiveEntryForm.controls['AdoptionVisit'].disable();
     }
   }
 
