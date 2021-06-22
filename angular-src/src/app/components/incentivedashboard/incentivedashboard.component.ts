@@ -1360,7 +1360,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[0]);
+                          // frmData.append("file_data", this.myFiles[0]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
@@ -1444,7 +1448,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                           console.log(frmData)
                     }
                     if(this.subscriber_file_name) {
-                      console.log(this.myFiles[1])
+                      //console.log(this.myFiles[1])
                         let frmData = new FormData();
   
                         // 37 = Sandbox, 6 = Production
@@ -1475,7 +1479,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[1]);
+                          // frmData.append("file_data", this.myFiles[1]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
@@ -1590,7 +1598,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[2]);
+                          // frmData.append("file_data", this.myFiles[2]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
@@ -1705,7 +1717,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[3]);
+                          // frmData.append("file_data", this.myFiles[3]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
@@ -1820,7 +1836,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[4]);
+                          // frmData.append("file_data", this.myFiles[4]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
@@ -1935,7 +1955,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         frmData.append('reference2', null);
                         frmData.append('reference3', null);
                         frmData.append('reference4', null);
-                          frmData.append("file_data", this.myFiles[5]);
+                          // frmData.append("file_data", this.myFiles[5]);
+                          for(var i = 0; i < this.myFiles.length; i++) {
+                            console.log(this.myFiles[i])
+                            frmData.append("file_data", this.myFiles[i]);
+                          }
                           // perform http request for each file
                           //frmData.append('@file_data', this.myFiles[i]);
                         frmData.append('document_id', '1');
