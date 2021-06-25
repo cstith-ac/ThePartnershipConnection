@@ -15,7 +15,6 @@
                             <option value="">Company four</option>
                         </select>
                     </ng-template>
-                    <!-- <p class="company">{{ item.companyName }} - {{ item.partnerCode}}</p> -->
                 </div>
             </div>
         </div>
@@ -51,28 +50,12 @@
                             formControlName="InvoiceTotal"
                             [spinners]="false"
                         ></kendo-numerictextbox>
-                        <!-- <input
-                            type="text" 
-                            class="form-control"
-                            formControlName="InvoiceTotal"
-                            placeholder="$0.00"
-                            mask="separator.2" 
-                            thousandSeparator=","
-                            prefix="$"
-                        > -->
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="col-sm-8">Was service performed as part of this incentive?</label>
                         Yes
-                        <!-- <input 
-                            type="checkbox" 
-                            class="mr-2 ml-2" 
-                            formControlName="ServiceIncluded"
-                            (change)="onChangeServiceIncluded($event)"
-                            [value]=""
-                        > -->
                         <input 
                             type="radio" 
                             class="mr-2 ml-2" 
@@ -82,13 +65,6 @@
                             value="y"
                         >
                         No
-                        <!-- <input 
-                            type="checkbox" 
-                            class="mr-2 ml-2" 
-                            formControlName="ServiceIncluded"
-                            (change)="onChangeServiceIncluded($event)"
-                            [value]=""
-                        > -->
                         <input 
                             type="radio" 
                             class="mr-2 ml-2" 
@@ -100,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <ng-container *ngFor="let box of checkBoxIndex; let i=index">
                 <div class="row">
                     <div class="col-md-4">
@@ -118,7 +94,7 @@
                                     [style.margin-bottom]="'0px'"
                                 >
                             </div>
-                            <div *ngIf="box.id&gt;3 && box.id&lt;=6">
+                            <div *ngIf="box.id&gt;2 && box.id&lt;=6">
                                 <label>{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
@@ -126,7 +102,6 @@
                                     [value]="box.id"
                                     (change)="onChangeClientVisit($event)"
                                     class="form-check-populate"
-                                    
                                 >
                             </div>
                         </div>          

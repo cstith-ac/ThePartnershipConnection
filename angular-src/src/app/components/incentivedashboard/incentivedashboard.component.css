@@ -167,4 +167,5 @@ header, .row {
 }
 .k-input {
   color:red;
+  /* height: calc(1.5em + 1.3rem) !important; */
 }

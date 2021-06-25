@@ -219,6 +219,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   other_Document1_file_size;
   contract_file_size;
   other_Document2_file_size;
+  file_extension;
+  subscriber_file_extension;
+  site_visit_file_extension;
+  contract_file_extension;
+  other_Document1_file_extension;
+
+  other_Document2_file_extension;
   myFiles:string [] = [];
 
   showInvoiceFile: boolean = true;
@@ -237,6 +244,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   totalSumRecurring: number = 0;
   totalSumEquipMat: number = 0;
   totalSumLaborCharges: number = 0;
+  selectedForCheckBoxAutoInsert:[];
+  selectionsForAutoInsert;
+
+  //temp hard coded Incentive add equip vals
+  itemID0:number;
+  itemType0:string;
+  item_Code0:string;
+  itemDescription0:string;
+  defaultAmount0:number;
+
+  itemID1:number;
+  itemType1:string;
+  item_Code1:string;
+  itemDescription1:string;
+  defaultAmount1:number;
+
+  itemID2:number;
+  itemType2:string;
+  item_Code2:string;
+  itemDescription2:string;
+  defaultAmount2:number;
 
   constructor(
     private router: Router,
@@ -263,11 +291,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   
 
   ngOnInit() {
-    // var retrievedObject = localStorage.getItem("testObject");
-    // console.log('retrievedObject: ', JSON.parse(retrievedObject));
-    // var parsedRetrievedObject = JSON.parse(retrievedObject);
-    // console.log(parsedRetrievedObject);
-
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -287,6 +310,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('siteName');
       localStorage.removeItem('customerName');
       localStorage.removeItem('signalsTested');
+      localStorage.removeItem('checkBoxAutoInsertList');
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
@@ -345,6 +369,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     //this.lineItemSubtotal = this.totalSumRecurring + this.totalSumEquipMat + this.totalSumLaborCharges;
+    this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
 
     this.authService.getProfile().subscribe(
       res => {
@@ -446,6 +471,46 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
+    this.routeService.postCheckboxAutoInsertList(this.selectedForCheckBoxAutoInsert).subscribe(
+      res => {
+        console.log(res);
+        this.selectionsForAutoInsert = res;
+        //console.log(typeof(this.selectionsForAutoInsert)) //object
+        console.log(this.selectionsForAutoInsert[0].itemID);
+        console.log(this.selectionsForAutoInsert[0].itemType);
+        console.log(this.selectionsForAutoInsert[0].item_Code);
+        console.log(this.selectionsForAutoInsert[0].itemDescription);
+        console.log(this.selectionsForAutoInsert[0].defaultAmount);
+
+        this.itemID0 = this.selectionsForAutoInsert[0].itemID;
+        this.itemType0 = this.selectionsForAutoInsert[0].itemType;
+        this.item_Code0 = this.selectionsForAutoInsert[0].item_Code;
+        this.itemDescription0 = this.selectionsForAutoInsert[0].itemDescription;
+        this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;
+
+        this.itemID1 = this.selectionsForAutoInsert[0].itemID;
+        this.itemType1 = this.selectionsForAutoInsert[0].itemType;
+        this.item_Code1 = this.selectionsForAutoInsert[0].item_Code;
+        this.itemDescription1 = this.selectionsForAutoInsert[0].itemDescription;
+        this.defaultAmount1 = this.selectionsForAutoInsert[0].defaultAmount;
+
+        this.itemID2 = this.selectionsForAutoInsert[0].itemID;
+        this.itemType2 = this.selectionsForAutoInsert[0].itemType;
+        this.item_Code2 = this.selectionsForAutoInsert[0].item_Code;
+        this.itemDescription2 = this.selectionsForAutoInsert[0].itemDescription;
+        this.defaultAmount2 = this.selectionsForAutoInsert[0].defaultAmount;
+        //get key value pairs
+        // for(var i in this.selectionsForAutoInsert) {
+        //   console.log(this.selectionsForAutoInsert[i].itemID)
+        //   console.log(this.selectionsForAutoInsert[i].itemType)
+        //   console.log(this.selectionsForAutoInsert[i].item_Code)
+        //   console.log(this.selectionsForAutoInsert[i].itemDescription)
+        //   console.log(this.selectionsForAutoInsert[i].defaultAmount)
+        // }
+        
+      }
+    )
+
     this.onChanges();
     
     // let deleteme = this.incentiveEntryService.sharedIncentiveRecurringInfo.push(JSON.parse(localStorage.getItem('recurringentry')))
@@ -501,11 +566,74 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    // this.routeService.getListSystemsForSite(117019).subscribe(
-    //   res => {
-    //     this.listsystemsforsite = [].concat(res);
-    //   }
-    // )
+    // Depending on the Y/N values from entry page, populate dashboard and modals
+    setTimeout(() => {
+      console.log(this.itemDescription0)
+      
+      // Equipment and Materials
+      // const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlItemIDArray0.controls[0].get('ItemID').setValue(610);
+      const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlItemIDArray0.controls[0].get('ItemID').setValue(this.itemID0 as number);
+
+      // const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlDescriptionArray0.controls[0].get('Description').setValue('Customer Visit');
+
+      const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlDescriptionArray0.controls[0].get('Description').setValue(this.itemDescription0);
+
+      const controlQuantityArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlQuantityArray0.controls[0].get('Quantity').setValue(1);
+
+      // const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlCostArray0.controls[0].get('Cost').setValue(100);
+      const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlCostArray0.controls[0].get('Cost').setValue(this.defaultAmount0);
+
+      (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+      .push(this.initEquipMatEntryRow());
+
+      // const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlItemIDArray1.controls[1].get('ItemID').setValue(598);
+      const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlItemIDArray1.controls[1].get('ItemID').setValue(this.itemID1 as number);
+
+      // const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlDescriptionArray1.controls[1].get('Description').setValue('Contract Resign');
+      const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlDescriptionArray1.controls[1].get('Description').setValue(this.itemDescription1);
+
+      const controlQuantityArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlQuantityArray1.controls[1].get('Quantity').setValue(1);
+
+      // const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlCostArray1.controls[1].get('Cost').setValue(50);
+      const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlCostArray1.controls[1].get('Cost').setValue(this.defaultAmount1);
+
+      (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+      .push(this.initEquipMatEntryRow());
+
+      // const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlItemIDArray2.controls[2].get('ItemID').setValue(642);
+      const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlItemIDArray2.controls[2].get('ItemID').setValue(this.itemID2 as number);
+
+      // const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlDescriptionArray2.controls[2].get('Description').setValue('3G to LTE upgrade Parts');
+      const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlDescriptionArray2.controls[2].get('Description').setValue(this.itemDescription2);
+
+      const controlQuantityArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlQuantityArray2.controls[2].get('Quantity').setValue(1);
+
+      // const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      // controlCostArray2.controls[2].get('Cost').setValue(125);
+      const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlCostArray2.controls[2].get('Cost').setValue(this.defaultAmount2);
+
+      this.lineItemSubtotal = this.totalSumEquipMat;
+    },1500)
   }
 
   onChanges():void {
@@ -515,12 +643,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // })//let's find a better way to get this value
   }
 
+  ngAfterContentInit():void {
+    // let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
+    // console.log(selectedEntryItem);
+    // console.log(this.listRecurringItems)
+  }
+
   ngAfterViewChecked() {
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
     //then display in the total in the recurring, materials and equipment, and labor inputs
     //this.getRecurringFromLocalStorage();
 
     setTimeout(() => {
+      let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
+      //console.log(selectedEntryItem);
       
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
@@ -863,10 +999,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           res => {
             //get the customer_System_id
             //console.log(res.customer_System_id);
-            this.customer_System_id = res.customer_System_id;
+            this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
             //console.log(this.customer_System_id);
             //make a get request to dbo.CustomerSystemInfoGet
-            this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+            this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
               res => {
 
                 this.alarmAccount = res.accountNumber;
@@ -931,9 +1067,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // if the site is selected 1st, get the CustomerSystemID.
         // Use the ID for the dbo.CustomerSystemInfoGet API call
         //console.log(res.customer_System_id);
-        this.customer_System_id = res.customer_System_id;
+        //this.customer_System_id = res.customer_System_id;
+        this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
 
-        this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+        this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
           res => {
             //console.log(res);
             this.alarmAccount = res.accountNumber;
@@ -997,7 +1134,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       res => {
         //console.log(res.siteName);
         this.siteName = res.siteName
-        this.customer_Site_id = res.customer_Site_id;
+        // this.customer_Site_id = res.customer_Site_id;
+        this.customerSiteId = res.customer_Site_id; //fix for error encountered on 06/23/2021
         //localStorage.setItem("customerSiteName",this.siteName);
       }
     )
@@ -1202,7 +1340,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
-    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
+    // this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
+    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customerSystemId); //fix for error encountered on 06/23/2021
     this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
     this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
     // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
@@ -1273,6 +1412,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                     //     console.log(selectedfile)
                     //   }
                     // }
+
                     if(this.file_name) {
                       console.log(this.file_name)
                         let frmData = new FormData();
@@ -1698,6 +1838,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         localStorage.removeItem('partnerComments');
                         localStorage.removeItem('signalsTested');
                         localStorage.removeItem('testObject');
+                        localStorage.removeItem('checkBoxAutoInsertList');
 
                         this.router.navigate(['incentive-entry/']);
                         //this.incentiveDashboardForm.reset();
@@ -2990,6 +3131,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //this.divInvoice.nativeElement.innerHTML = this.file_name;
       //get the file size
       this.file_size = e.target.files[i].size;
+      this.file_extension = this.file_name.split('.').pop();// Get the file extension but not currently used
+      console.log(this.file_extension);
       console.log(this.file_size);
       localStorage.setItem('invoiceFileSize',this.file_size);
       //this.invoiceDate = e.target.files[i].lastModified;
@@ -3448,6 +3591,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(i > 0) {
       const control = (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
     .removeAt(i);
+    }
+
+    if(i == 0) {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+      controlArray.at(i).get('ItemID').setValue('');
+      controlArray.at(i).get('Description').setValue('');
+      controlArray.at(i).get('Quantity').setValue('');
+      controlArray.at(i).get('Cost').setValue('');
+      controlArray.at(i).get('Total').setValue('');
     }
 
     // (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))

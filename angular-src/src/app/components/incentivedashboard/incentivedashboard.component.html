@@ -1216,7 +1216,7 @@
                                         placeholder="$0.00"
                                         formControlName="RMR"
                                         [spinners]="false"
-                                        
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
@@ -1226,7 +1226,7 @@
                                         placeholder="$0.00"
                                         formControlName="PassThrough"
                                         [spinners]="false"
-                                        
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
@@ -1288,7 +1288,7 @@
                         <div class="col">
                             <input type="submit" value="Submit" class="btn btn-submit">
                         </div>
-                        <p>Total is: {{ totalSumRecurring }}</p>
+                        <p>Total is: ${{ totalSumRecurring }}</p>
                     </form>
                 </section>
             </div>
@@ -1403,7 +1403,7 @@
                                         placeholder="$0.00"
                                         formControlName="Cost"
                                         [spinners]="false"
-                                        
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
                                         [style.width]="'80%'"
                                     ></kendo-numerictextbox>
                                 </div>
@@ -1437,7 +1437,7 @@
                     <div class="col">
                         <input type="submit" value="Submit" class="btn btn-submit">
                     </div>
-                    <p>Total is: {{ totalSumEquipMat }}</p>
+                    <p>Total is: ${{ totalSumEquipMat }}</p>
                 </form>
             </section>
         </div>
@@ -1561,7 +1561,7 @@
                                         placeholder="$0.00"
                                         formControlName="Cost"
                                         [spinners]="false"
-                                        
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
                                         [style.width]="'80%'"
                                     ></kendo-numerictextbox>
                                 </div>
@@ -1595,7 +1595,7 @@
                     <div class="col">
                         <input type="submit" value="Submit" class="btn btn-submit">
                     </div>
-                    <p>Total is: {{ totalSumLaborCharges }}</p>
+                    <p>Total is: ${{ totalSumLaborCharges }}</p>
                 </form>
             </section>
         </div>

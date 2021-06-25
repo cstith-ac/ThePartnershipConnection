@@ -540,6 +540,7 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CheckBoxIncompatible/`, httpOptions);
   }
 
+  // exec dbo.CheckboxAutoInsertList
   postCheckboxAutoInsertList(params:any): Observable<any> {
     this.loadToken();
     let httpOptions = { 
