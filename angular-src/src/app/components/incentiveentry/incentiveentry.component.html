@@ -123,11 +123,39 @@
                         </div>   
                     </div>
 
+                    <div class="col-md-4 entryColumn3">
+                        <div *ngIf="box.id&gt;10 && box.id&lt;12">
+                            <div class="form-group btn-group mt-3 mb-3">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox"
+                                    
+                                    class="form-check-input"
+                                    [value]="box.id"
+                                    name="{{box.id}}"
+                                    (change)="onChangeClientVisit($event)"
+                                >
+                            </div>
+                        </div>
+                        <div *ngIf="box.id&gt;11">
+                            <div class="form-group btn-group mt-3 mb-3">
+                                <label>{{box.checkBoxName}}</label>
+                                <input 
+                                    type="checkbox"
+                                    
+                                    class="form-check-input"
+                                    [value]="box.id"
+                                    name="{{box.id}}"
+                                    (change)="onChangeClientVisit($event)"
+                                >
+                            </div>
+                        </div>
+                    </div>
                    
                 </div> 
             </ng-container>
             
-            <div class="col-md-4 entryColumn3">
+            <!-- <div class="col-md-4 entryColumn3">
                 <p>Customer Enrolled in Autopay?</p>
                 <div class="form-group btn-group mt-3 mb-3">
                     <label>Credit Card</label>
@@ -151,9 +179,9 @@
                         [value]="12"
                     >
                 </div>
-            </div>
+            </div> -->
             
-            <div class="row" [ngStyle]="{'position': 'relative', top: '-420px', left: '0px'}">
+            <div class="row" [ngStyle]="{'position': 'relative', top: '-300px', left: '0px'}">
                 <div class="col-md-4"></div>
                 <div class="col-md-4 offset-md-4">
                     <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(incentiveEntryForm)" [disabled]="!incentiveEntryForm.valid">Start Incentive</button>

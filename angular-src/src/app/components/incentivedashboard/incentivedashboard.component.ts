@@ -316,7 +316,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //console.log('your logged in')
     }
 
-
     this.companyName = localStorage.getItem('companyName');
     this.partnerCode = localStorage.getItem('partnerCode');
     this.installCompanyID = localStorage.getItem('installCompanyID');

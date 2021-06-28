@@ -57,6 +57,7 @@ namespace WebAPI.Controllers
             {
                 connection.Open();
 
+                var installCompanyIDParam = new SqlParameter("@InstallCompanyID", 374);
                 var checkBoxStatus1Param = new SqlParameter("@CheckBoxStatus1", "Y");
                 var checkBoxStatus2Param = new SqlParameter("@CheckBoxStatus2", "N");
                 var checkBoxStatus3Param = new SqlParameter("@CheckBoxStatus3", "N");
@@ -88,7 +89,7 @@ namespace WebAPI.Controllers
                 var checkBoxStatus29Param = new SqlParameter("@CheckBoxStatus29", "N");
                 var checkBoxStatus30Param = new SqlParameter("@CheckBoxStatus30", "N");
 
-                var result = await db.CheckboxAutoInsertLists.FromSqlRaw("EXECUTE [dbo].[CheckboxAutoInsertList] @CheckBoxStatus1, @CheckBoxStatus2, @CheckBoxStatus3, @CheckBoxStatus4, @CheckBoxStatus5, @CheckBoxStatus6, @CheckBoxStatus7, @CheckBoxStatus8, @CheckBoxStatus9, @CheckBoxStatus10, @CheckBoxStatus11, @CheckBoxStatus12, @CheckBoxStatus13, @CheckBoxStatus14, @CheckBoxStatus15, @CheckBoxStatus16, @CheckBoxStatus17, @CheckBoxStatus18, @CheckBoxStatus19, @CheckBoxStatus20, @CheckBoxStatus21, @CheckBoxStatus22, @CheckBoxStatus23, @CheckBoxStatus24, @CheckBoxStatus25, @CheckBoxStatus26, @CheckBoxStatus27, @CheckBoxStatus28, @CheckBoxStatus29, @CheckBoxStatus30", checkBoxStatus1Param, checkBoxStatus2Param, checkBoxStatus3Param, checkBoxStatus4Param, checkBoxStatus5Param, checkBoxStatus6Param, checkBoxStatus7Param, checkBoxStatus8Param, checkBoxStatus9Param, checkBoxStatus10Param, checkBoxStatus11Param, checkBoxStatus12Param,
+                var result = await db.CheckboxAutoInsertLists.FromSqlRaw("EXECUTE [dbo].[CheckboxAutoInsertList] @InstallCompanyID, @CheckBoxStatus1, @CheckBoxStatus2, @CheckBoxStatus3, @CheckBoxStatus4, @CheckBoxStatus5, @CheckBoxStatus6, @CheckBoxStatus7, @CheckBoxStatus8, @CheckBoxStatus9, @CheckBoxStatus10, @CheckBoxStatus11, @CheckBoxStatus12, @CheckBoxStatus13, @CheckBoxStatus14, @CheckBoxStatus15, @CheckBoxStatus16, @CheckBoxStatus17, @CheckBoxStatus18, @CheckBoxStatus19, @CheckBoxStatus20, @CheckBoxStatus21, @CheckBoxStatus22, @CheckBoxStatus23, @CheckBoxStatus24, @CheckBoxStatus25, @CheckBoxStatus26, @CheckBoxStatus27, @CheckBoxStatus28, @CheckBoxStatus29, @CheckBoxStatus30", installCompanyIDParam, checkBoxStatus1Param, checkBoxStatus2Param, checkBoxStatus3Param, checkBoxStatus4Param, checkBoxStatus5Param, checkBoxStatus6Param, checkBoxStatus7Param, checkBoxStatus8Param, checkBoxStatus9Param, checkBoxStatus10Param, checkBoxStatus11Param, checkBoxStatus12Param,
                     checkBoxStatus13Param,
                     checkBoxStatus14Param,
                     checkBoxStatus15Param,

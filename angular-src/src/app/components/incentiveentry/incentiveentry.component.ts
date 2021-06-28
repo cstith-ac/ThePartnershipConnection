@@ -218,7 +218,9 @@ export class IncentiveentryComponent implements OnInit {
       SystemTransfer:  [{value:'n', disabled:true, checked:false}],
       CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
       ACHAutopay: [{value:'n', disabled:true, checked:false}],
-      checkArray:this.fb.array([])
+      // CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
+      // ACHAutopay: [{value:'n', disabled:true, checked:false}],
+      // checkArray:this.fb.array([])
     })
   }
 
@@ -263,7 +265,17 @@ export class IncentiveentryComponent implements OnInit {
 
     //Submit to stored proc dbo.CheckBoxAutoInsertList or store the values in localstorage and retrieve these values on the dashboard to populate inputs
     console.log(this.selectedForCheckBoxAutoInsert);
-    localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+    // localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+
+    this.routeService.postCheckboxAutoInsertList(this.selectedForCheckBoxAutoInsert).subscribe(
+      res => {
+        console.log(res);
+        localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(res));
+
+      }
+    )
+
+    //return
     this.router.navigate(["/incentive-dashboard"]);
     //this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
   }
@@ -293,50 +305,20 @@ export class IncentiveentryComponent implements OnInit {
     if(e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
       //console.log('disable CreditCardAutoPay');
-      this.selectedForCheckBoxAutoInsert.push(e.target.value);
+      //this.selectedForCheckBoxAutoInsert.push(e.target.value);
     } 
     if(!e.target.checked) {
       this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
       //console.log('enable CreditCardAutoPay');
-      this.selectedForCheckBoxAutoInsert.pop();
+      //this.selectedForCheckBoxAutoInsert.pop();
     }
   }
 
   onChangeClientVisit(e) {
     if(e.target.checked) {
       //console.log(e.target.value)  
-      if(e.target.value == '1') {
-        // let i:number=0;
-        // this.selectedForCheckBoxAutoInsert.forEach((x) => {
-        //   console.log(x[i]);
-        //   if (x.id == e.target.value) {
-        //     console.log(x.id)
-        //     this.selectedForCheckBoxAutoInsert.splice(i);
-        //     this.selectedForCheckBoxAutoInsert.push('y');
-        //   }
-        // })
+      if(e.target.value == 1) {
         this.selectedForCheckBoxAutoInsert.splice(0,1,'y');
-        
-        // const result = this.selectedForCheckBoxAutoInsert.map(x => {
-        //   const item = this.selectedForCheckBoxAutoInsert.find(({ id }) => id === x.id);
-        //   return item ? item : x;
-        // });
-        // var i = this.selectedForCheckBoxAutoInsert.indexOf(e.target.value);
-        // console.log(i)
-        // if(i > -1) {
-        //   this.selectedForCheckBoxAutoInsert.splice(i,1);
-        // }
-        // console.log(result)
-
-        // this.selectedForCheckBoxAutoInsert.forEach((value,index)=> {
-        //   console.log(value, index)
-        //   this.selectedForCheckBoxAutoInsert.push('y')
-        //   if(value.checked) {
-        //     this.selectedForCheckBoxAutoInsert.push(value.id)
-        //   }
-        // })
-
-        // this.selectedForCheckBoxAutoInsert.push('y');
         this.incentiveEntryForm.controls['AdoptionVisit'].disable();
       }
       if(e.target.value == 2) {
@@ -385,9 +367,19 @@ export class IncentiveentryComponent implements OnInit {
         this.selectedForCheckBoxAutoInsert.splice(9,1,'y');
         // this.selectedForCheckBoxAutoInsert.push('y');
       }
-      console.log('checked: '+ e.target.value);
-      console.log(e.target.value)
-      console.log(e.target.checked);
+      if(e.target.value == 11) {
+        this.selectedForCheckBoxAutoInsert.splice(10,1,'y');
+        this.incentiveEntryForm.controls['ACHAutopay'].disable();
+        this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
+      }
+      if(e.target.value == 12) {
+        this.selectedForCheckBoxAutoInsert.splice(11,1,'y');
+        this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
+        this.incentiveEntryForm.controls['ACHAutopay'].enable();
+      }
+      // console.log('checked: '+ e.target.value);
+      // console.log(e.target.value)
+      // console.log(e.target.checked);
 
     } else if (!e.target.checked) {
       if(e.target.value == 1) {
@@ -435,8 +427,18 @@ export class IncentiveentryComponent implements OnInit {
         this.selectedForCheckBoxAutoInsert.splice(9,1,'n');
         // this.selectedForCheckBoxAutoInsert.pop();
       }
-      console.log('unchecked: '+ e.target.value);
-      console.log(e.target.checked);
+      if(e.target.value == 11) {
+        this.selectedForCheckBoxAutoInsert.splice(10,1,'n');
+        this.incentiveEntryForm.controls['ACHAutopay'].disable();
+        this.incentiveEntryForm.controls['CreditCardAutoPay'].enable();
+      }
+      if(e.target.value == 12) {
+        this.selectedForCheckBoxAutoInsert.splice(11,1,'n');
+        this.incentiveEntryForm.controls['CreditCardAutoPay'].disable();
+        this.incentiveEntryForm.controls['ACHAutopay'].enable();
+      }
+      // console.log('unchecked: '+ e.target.value);
+      // console.log(e.target.checked);
     }
   }
 
