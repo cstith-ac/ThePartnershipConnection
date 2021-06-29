@@ -468,7 +468,14 @@ namespace WebAPI.Models
 
             modelBuilder.Entity<CheckboxAutoInsertList>(entity =>
             {
+                entity.ToTable("CheckboxAutoInsertList");
                 entity.HasNoKey();
+
+                //entity.Property(e => e.InstallCompanyID
+                //    .HasColumnName("InstallCompanyID")
+                //    .ValueGeneratedOnAdd();
+
+                
             });
 
             OnModelCreatingPartial(modelBuilder);

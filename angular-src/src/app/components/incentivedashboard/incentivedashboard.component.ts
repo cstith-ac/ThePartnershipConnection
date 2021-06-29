@@ -244,7 +244,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   totalSumRecurring: number = 0;
   totalSumEquipMat: number = 0;
   totalSumLaborCharges: number = 0;
-  selectedForCheckBoxAutoInsert:[];
+  selectedForCheckBoxAutoInsert:string[];
+  //selectedForCheckBoxAutoInsert:{};
   selectionsForAutoInsert;
 
   //temp hard coded Incentive add equip vals
@@ -369,6 +370,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     //this.lineItemSubtotal = this.totalSumRecurring + this.totalSumEquipMat + this.totalSumLaborCharges;
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
+    console.log(this.selectedForCheckBoxAutoInsert) //object 
 
     this.authService.getProfile().subscribe(
       res => {
@@ -470,9 +472,45 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    this.routeService.postCheckboxAutoInsertList(this.selectedForCheckBoxAutoInsert).subscribe(
+    console.log(this.selectedForCheckBoxAutoInsert[0]);
+
+    this.routeService.postCheckboxAutoInsertList({
+      "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
+      "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
+      "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
+      "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
+      "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
+      "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
+      "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
+      "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
+      "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
+      "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
+      "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
+      "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
+      "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
+      "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
+      "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
+      "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
+      "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
+      "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
+      "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
+      "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
+      "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
+      "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
+      "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
+      "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
+      "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
+      "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
+      "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
+      "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
+      "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
+      "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
+      "InstallCompanyID": this.selectedForCheckBoxAutoInsert[30]
+      
+  }).subscribe(
       res => {
         console.log(res);
+        
         this.selectionsForAutoInsert = res;
         //console.log(typeof(this.selectionsForAutoInsert)) //object
         console.log(this.selectionsForAutoInsert[0].itemID);
@@ -487,17 +525,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.itemDescription0 = this.selectionsForAutoInsert[0].itemDescription;
         this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;
 
-        this.itemID1 = this.selectionsForAutoInsert[0].itemID;
-        this.itemType1 = this.selectionsForAutoInsert[0].itemType;
-        this.item_Code1 = this.selectionsForAutoInsert[0].item_Code;
-        this.itemDescription1 = this.selectionsForAutoInsert[0].itemDescription;
-        this.defaultAmount1 = this.selectionsForAutoInsert[0].defaultAmount;
+        this.itemID1 = this.selectionsForAutoInsert[1].itemID;
+        this.itemType1 = this.selectionsForAutoInsert[1].itemType;
+        this.item_Code1 = this.selectionsForAutoInsert[1].item_Code;
+        this.itemDescription1 = this.selectionsForAutoInsert[1].itemDescription;
+        this.defaultAmount1 = this.selectionsForAutoInsert[1].defaultAmount;
 
-        this.itemID2 = this.selectionsForAutoInsert[0].itemID;
-        this.itemType2 = this.selectionsForAutoInsert[0].itemType;
-        this.item_Code2 = this.selectionsForAutoInsert[0].item_Code;
-        this.itemDescription2 = this.selectionsForAutoInsert[0].itemDescription;
-        this.defaultAmount2 = this.selectionsForAutoInsert[0].defaultAmount;
+        this.itemID2 = this.selectionsForAutoInsert[2].itemID;
+        this.itemType2 = this.selectionsForAutoInsert[2].itemType;
+        this.item_Code2 = this.selectionsForAutoInsert[2].item_Code;
+        this.itemDescription2 = this.selectionsForAutoInsert[2].itemDescription;
+        this.defaultAmount2 = this.selectionsForAutoInsert[2].defaultAmount;
         //get key value pairs
         // for(var i in this.selectionsForAutoInsert) {
         //   console.log(this.selectionsForAutoInsert[i].itemID)
@@ -632,7 +670,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       controlCostArray2.controls[2].get('Cost').setValue(this.defaultAmount2);
 
       this.lineItemSubtotal = this.totalSumEquipMat;
-    },1500)
+    },2500)
   }
 
   onChanges():void {
@@ -654,7 +692,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //this.getRecurringFromLocalStorage();
 
     setTimeout(() => {
-      let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
+      //let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
       //console.log(selectedEntryItem);
       
       if(!isNaN(parseFloat(this.recurring))) {

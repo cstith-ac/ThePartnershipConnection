@@ -91,7 +91,11 @@ namespace WebAPI
                 options.SignIn.RequireConfirmedPhoneNumber = false; 
             });
 
-            services.AddControllers().AddNewtonsoftJson();
+            //services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
 
             //OLD Cors Policy
             //services.AddCors();

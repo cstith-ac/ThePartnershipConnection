@@ -8,6 +8,7 @@ import { InstallCompanyList } from '../../models/installcompanylist';
 import { CheckBoxIndex } from '../../models/checkboxindex';
 import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
 
@@ -30,6 +31,7 @@ export class IncentiveentryComponent implements OnInit {
   installCompanyList: InstallCompanyList[];
   checkBoxIndex: CheckBoxIndex[];
   checkBoxIncompatible: CheckBoxIncompatible[];
+  checkBoxAutoInsertList: CheckBoxAutoInsertList[];
   incentiveEntryForm: FormGroup;
   submitted = false;
   installCompanyID;
@@ -78,6 +80,7 @@ export class IncentiveentryComponent implements OnInit {
     console.log(this.selectedForCheckBoxAutoInsert)
 
     setTimeout(() => {
+      // this.selectedForCheckBoxAutoInsert.push(374)
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ClientVisit').value.value)
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('AdoptionVisit').value.value)
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('LandlineToCell').value.value)
@@ -89,7 +92,8 @@ export class IncentiveentryComponent implements OnInit {
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('NewSite').value.value)
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('SystemTransfer').value.value)
       this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('CreditCardAutoPay').value.value)
-      this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ACHAutopay').value.value)
+      this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ACHAutopay').value.value);
+      //this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
       const n = 'n';
       const times = 30;
       for(let i=13;i<=times;i++){
@@ -98,6 +102,7 @@ export class IncentiveentryComponent implements OnInit {
         //this.selectedForCheckBoxAutoInsert.push(i)
         this.selectedForCheckBoxAutoInsert.push(n.repeat(1))
       }
+      this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
       //this.selectedForCheckBoxAutoInsert.push(n.repeat(30))
       //console.log(this.incentiveEntryForm.get('ClientVisit').value.value);
       // console.log(this.incentiveEntryForm.get('AdoptionVisit').value.value);
@@ -265,9 +270,52 @@ export class IncentiveentryComponent implements OnInit {
 
     //Submit to stored proc dbo.CheckBoxAutoInsertList or store the values in localstorage and retrieve these values on the dashboard to populate inputs
     console.log(this.selectedForCheckBoxAutoInsert);
-    // localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+    localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
 
-    this.routeService.postCheckboxAutoInsertList(this.selectedForCheckBoxAutoInsert).subscribe(
+    // this.routeService.postCheckboxAutoInsertList(JSON.stringify(this.selectedForCheckBoxAutoInsert)).subscribe(
+    //   res => {
+    //     console.log(res);
+    //     localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(res));
+
+    //   }
+    // )
+    let obj = {}
+    this.selectedForCheckBoxAutoInsert.forEach(item => console.log(item))
+
+    //send something like this...
+    this.routeService.postCheckboxAutoInsertList({
+      "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
+      "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
+      "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
+      "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
+      "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
+      "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
+      "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
+      "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
+      "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
+      "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
+      "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
+      "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
+      "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
+      "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
+      "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
+      "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
+      "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
+      "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
+      "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
+      "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
+      "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
+      "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
+      "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
+      "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
+      "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
+      "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
+      "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
+      "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
+      "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
+      "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
+      "InstallCompanyID": this.selectedForCheckBoxAutoInsert[30]
+  }).subscribe(
       res => {
         console.log(res);
         localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(res));
