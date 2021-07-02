@@ -36,6 +36,11 @@
       <div class="list-group list-group-flush">
         <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()">Register</a>
       </div>
+      <div class="list-group list-group-flush">
+        <ul>
+          <li>Version: {{ currentApplicationVersion }}</li>
+        </ul>
+      </div>
     </div>
     <!-- /#sidebar-wrapper -->
   

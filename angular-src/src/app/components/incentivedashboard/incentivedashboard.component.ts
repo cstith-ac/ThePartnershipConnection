@@ -372,6 +372,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object 
 
+    //console.log(this.selectedForCheckBoxAutoInsert.values().next().value)
+
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
@@ -472,7 +474,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    console.log(this.selectedForCheckBoxAutoInsert[0]);
+    //console.log(this.selectedForCheckBoxAutoInsert[0]);
 
     this.routeService.postCheckboxAutoInsertList({
       "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
@@ -519,23 +521,32 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         console.log(this.selectionsForAutoInsert[0].itemDescription);
         console.log(this.selectionsForAutoInsert[0].defaultAmount);
 
-        this.itemID0 = this.selectionsForAutoInsert[0].itemID;
-        this.itemType0 = this.selectionsForAutoInsert[0].itemType;
-        this.item_Code0 = this.selectionsForAutoInsert[0].item_Code;
-        this.itemDescription0 = this.selectionsForAutoInsert[0].itemDescription;
-        this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;
+        if(this.selectionsForAutoInsert[0]) {
+          this.itemID0 = this.selectionsForAutoInsert[0].itemID;
+          this.itemType0 = this.selectionsForAutoInsert[0].itemType;
+          this.item_Code0 = this.selectionsForAutoInsert[0].item_Code;
+          this.itemDescription0 = this.selectionsForAutoInsert[0].itemDescription;
+          this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;  
+        }
+        
 
-        this.itemID1 = this.selectionsForAutoInsert[1].itemID;
-        this.itemType1 = this.selectionsForAutoInsert[1].itemType;
-        this.item_Code1 = this.selectionsForAutoInsert[1].item_Code;
-        this.itemDescription1 = this.selectionsForAutoInsert[1].itemDescription;
-        this.defaultAmount1 = this.selectionsForAutoInsert[1].defaultAmount;
+        if(this.selectionsForAutoInsert[1]) {
+          this.itemID1 = this.selectionsForAutoInsert[1].itemID;
+          this.itemType1 = this.selectionsForAutoInsert[1].itemType;
+          this.item_Code1 = this.selectionsForAutoInsert[1].item_Code;
+          this.itemDescription1 = this.selectionsForAutoInsert[1].itemDescription;
+          this.defaultAmount1 = this.selectionsForAutoInsert[1].defaultAmount;          
+        }
 
-        this.itemID2 = this.selectionsForAutoInsert[2].itemID;
-        this.itemType2 = this.selectionsForAutoInsert[2].itemType;
-        this.item_Code2 = this.selectionsForAutoInsert[2].item_Code;
-        this.itemDescription2 = this.selectionsForAutoInsert[2].itemDescription;
-        this.defaultAmount2 = this.selectionsForAutoInsert[2].defaultAmount;
+
+        if(this.selectionsForAutoInsert[2]) {
+          this.itemID2 = this.selectionsForAutoInsert[2].itemID;
+          this.itemType2 = this.selectionsForAutoInsert[2].itemType;
+          this.item_Code2 = this.selectionsForAutoInsert[2].item_Code;
+          this.itemDescription2 = this.selectionsForAutoInsert[2].itemDescription;
+          this.defaultAmount2 = this.selectionsForAutoInsert[2].defaultAmount;
+        }
+
         //get key value pairs
         // for(var i in this.selectionsForAutoInsert) {
         //   console.log(this.selectionsForAutoInsert[i].itemID)

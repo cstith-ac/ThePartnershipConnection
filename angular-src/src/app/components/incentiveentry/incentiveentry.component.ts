@@ -123,8 +123,11 @@ export class IncentiveentryComponent implements OnInit {
       // $('.entryColumn2').eq(1).remove();
       $('.entryColumn2').eq(2).remove();
       $('.entryColumn2').eq(3).remove();
-      //$('.entryColumn2').eq(4).remove();
-      //$('.entryColumn2').eq(5).remove();
+      $('.entryColumn3').eq(1).remove();
+      $('.entryColumn3').eq(2).remove();
+      $('.entryColumn3').eq(3).remove();
+      $('.entryColumn3').eq(4).remove();
+      $('.entryColumn3').eq(5).remove();
 
       this.incentiveEntryForm.controls['PickUp'].disable();
     },1000);
@@ -279,8 +282,8 @@ export class IncentiveentryComponent implements OnInit {
 
     //   }
     // )
-    let obj = {}
-    this.selectedForCheckBoxAutoInsert.forEach(item => console.log(item))
+    // let obj = {}
+    // this.selectedForCheckBoxAutoInsert.forEach(item => console.log(item))
 
     //send something like this...
     this.routeService.postCheckboxAutoInsertList({

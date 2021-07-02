@@ -12,6 +12,7 @@ import { ContactList } from 'src/app/models/contactlist';
 import { ContactListAdditional } from 'src/app/models/contactlistadditional';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
 import { UserService } from 'src/app/services/user.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-sidenav',
@@ -22,6 +23,8 @@ export class SidenavComponent implements OnInit {
   @ViewChild("userDropdown") userDropdown: ElementRef;
 
   @Input() message: string;
+
+  currentApplicationVersion = environment.appVersion;
 
   user:any=Object;
   partnerInformation: PInformation[];

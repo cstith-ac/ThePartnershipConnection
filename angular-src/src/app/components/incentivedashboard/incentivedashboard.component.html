@@ -1408,7 +1408,16 @@
                                     ></kendo-numerictextbox>
                                 </div>
                                 <div class="col">
-                                    <input 
+                                    <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="Total"
+                                        [spinners]="false"
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
+                                        [style.width]="'80%'"
+                                        [attr.disabled]="true"
+                                    ></kendo-numerictextbox>
+                                    <!-- <input 
                                         type="text"
                                         class="form-control"
                                         formControlName="Total"
@@ -1418,7 +1427,7 @@
                                         prefix="$"
                                         
                                         [attr.disabled]="true"
-                                    >
+                                    > -->
                                 </div>
                                 <div class="col">
                                     <button class="btn btn-add" type="button"(click)="addNewEquipMatItem()">

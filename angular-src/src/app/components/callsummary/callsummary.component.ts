@@ -261,6 +261,7 @@ export class CallsummaryComponent implements OnInit {
       techNotesControl.setValidators(null);
       techNotesControl.updateValueAndValidity();
       callSummaryNextStepsControl.setValidators(null);
+      callSummaryNextStepsControl.setValue(1);
       callSummaryNextStepsControl.updateValueAndValidity();
       resolutionNotesControl.setValidators([Validators.required]);
       resolutionNotesControl.updateValueAndValidity();
@@ -476,7 +477,9 @@ export class CallsummaryComponent implements OnInit {
       return;
     }
     
-    //if(this.callSummaryAddForm.get("FormStatus").value = true)
+    if(this.callSummaryAddForm.controls["NextStepID"].value == "") {
+      this.callSummaryAddForm.controls["NextStepID"].setValue(1);
+    }
 
     if(this.callSummaryAddForm.valid) {
       console.log(this.callSummaryAddForm.value)

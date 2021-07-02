@@ -41,7 +41,7 @@ namespace WebAPI.Repository
                 var nextStepIdParam = new SqlParameter("@NextStepID", ticketNumberAdded.NextStepID);
                 if (ticketNumberAdded.NextStepID == null)
                 {
-                    nextStepIdParam.Value = "";
+                    nextStepIdParam.Value = 1;
                 }
                 var customerCommentsParam = new SqlParameter("@CustomerComments", ticketNumberAdded.CustomerComments);
                 if (ticketNumberAdded.CustomerComments == null)
