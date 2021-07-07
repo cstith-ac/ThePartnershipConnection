@@ -42,7 +42,10 @@ namespace WebAPI.Controllers
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var result = await db.GetCustomerSearchLists.FromSqlRaw("EXECUTE [dbo].[CustomerSearchList]").ToListAsync();
+
+                var email = "aprilm@palmettosecuritysystems.com";
+
+                var result = await db.GetCustomerSearchLists.FromSqlRaw("EXECUTE [dbo].[CustomerSearchList] @EmailAddress = '" + email + "'").ToListAsync();
                 List<CustomerSearchList> Lst = result.Select(s => new CustomerSearchList
                 {
                     customer_id = s.customer_id,

@@ -44,7 +44,8 @@ namespace WebAPI.Controllers
                 connection.Open();
                 //var site = new SqlParameter("@SearchField", "Site");
                 var aa = "AA";
-                var result = await db.GetCustomerSearchListCentralStations.FromSqlRaw("EXECUTE dbo.CustomerSearchList @SearchField ='" + aa + "' ").ToListAsync();
+                var email = "aprilm@palmettosecuritysystems.com";
+                var result = await db.GetCustomerSearchListCentralStations.FromSqlRaw("EXECUTE dbo.CustomerSearchList @EmailAddress ='" + email + "', @SearchField ='" + aa + "' ").ToListAsync();
                 List<CustomerSearchListCentralStation> Lst = result.Select(s => new CustomerSearchListCentralStation
                 {
                     customer_id = s.customer_id,

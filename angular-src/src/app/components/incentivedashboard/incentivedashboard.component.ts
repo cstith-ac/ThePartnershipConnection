@@ -368,6 +368,24 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
     this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    // if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
+
+    // }
+    // if(this.recurring && this.laborCharges) {
+      
+    // }
+    // if(this.equipmentAndMaterials && this.laborCharges) {
+      
+    // }
+    // if(this.recurring) {
+      
+    // }
+    // if(this.equipmentAndMaterials) {
+      
+    // }
+    // if(this.laborCharges) {
+      
+    // }
     //this.lineItemSubtotal = this.totalSumRecurring + this.totalSumEquipMat + this.totalSumLaborCharges;
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object 
@@ -507,11 +525,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
       "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
       "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
-      "InstallCompanyID": this.selectedForCheckBoxAutoInsert[30]
+      "InstallCompanyID": this.installCompanyID
       
-  }).subscribe(
+    }).subscribe(
       res => {
         console.log(res);
+        console.log(Object.keys(res))
         
         this.selectionsForAutoInsert = res;
         //console.log(typeof(this.selectionsForAutoInsert)) //object
@@ -529,7 +548,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;  
         }
         
-
         if(this.selectionsForAutoInsert[1]) {
           this.itemID1 = this.selectionsForAutoInsert[1].itemID;
           this.itemType1 = this.selectionsForAutoInsert[1].itemType;
@@ -538,7 +556,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.defaultAmount1 = this.selectionsForAutoInsert[1].defaultAmount;          
         }
 
-
         if(this.selectionsForAutoInsert[2]) {
           this.itemID2 = this.selectionsForAutoInsert[2].itemID;
           this.itemType2 = this.selectionsForAutoInsert[2].itemType;
@@ -546,31 +563,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.itemDescription2 = this.selectionsForAutoInsert[2].itemDescription;
           this.defaultAmount2 = this.selectionsForAutoInsert[2].defaultAmount;
         }
-
-        //get key value pairs
-        // for(var i in this.selectionsForAutoInsert) {
-        //   console.log(this.selectionsForAutoInsert[i].itemID)
-        //   console.log(this.selectionsForAutoInsert[i].itemType)
-        //   console.log(this.selectionsForAutoInsert[i].item_Code)
-        //   console.log(this.selectionsForAutoInsert[i].itemDescription)
-        //   console.log(this.selectionsForAutoInsert[i].defaultAmount)
-        // }
-        
       }
     )
 
     this.onChanges();
-    
-    // let deleteme = this.incentiveEntryService.sharedIncentiveRecurringInfo.push(JSON.parse(localStorage.getItem('recurringentry')))
 
-    // console.log(typeof(deleteme))//number??
-
-    // console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]);
-    // console.log(typeof(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]))
-
-    this.recurringItemEntryForm = this.fb.group({
-      //table => item, description, bill cycle, rmr, pass through, billing starts, add to an existing rmr item, multiple, total
-    })
+    this.recurringItemEntryForm = this.fb.group({})
 
     this.routeService.getListSystemTypes().subscribe(
       res => {
@@ -590,11 +588,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    // this.routeService.getListSitesForCustomer(107746).subscribe(
-    //   res => {
-    //     this.listsitesforcustomer = [].concat(res);
-    //   }
-    // )
+    //move these three to the individual click events
 
     this.routeService.getCustomerSearchList().subscribe(
       res => {
@@ -684,18 +678,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     },2500)
   }
 
-  onChanges():void {
+  onChanges():void {}
 
-    // this.incentiveDashboardForm.get('AdditionalInfo').valueChanges.subscribe(val => {
-    //   console.log(val);
-    // })//let's find a better way to get this value
-  }
-
-  ngAfterContentInit():void {
-    // let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
-    // console.log(selectedEntryItem);
-    // console.log(this.listRecurringItems)
-  }
+  ngAfterContentInit():void {}
 
   ngAfterViewChecked() {
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
@@ -703,9 +688,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //this.getRecurringFromLocalStorage();
 
     setTimeout(() => {
-      //let selectedEntryItem = this.listRecurringItems.filter(x => x.item_id == 610);
-      //console.log(selectedEntryItem);
-      
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
@@ -916,7 +898,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('additionalInfo');
       localStorage.removeItem('partnerComments');
       localStorage.removeItem('signalsTested');
-      localStorage.removeItem('testObject');
+      localStorage.removeItem('checkBoxAutoInsertList');
+      localStorage.removeItem('totalEquipMatCalc');
 
       this.router.navigate(['incentive-entry/']);
     }
