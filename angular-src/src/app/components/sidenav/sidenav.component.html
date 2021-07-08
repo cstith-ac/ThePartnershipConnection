@@ -11,20 +11,12 @@
            -->
           <a [routerLink]="['/']" class="logo"></a>
         </div>
-        <!-- <a [routerLink]="['/']" class="logo">The Partnership Connection</a> -->
-        <!-- <div class="col-xs-6" id="afa-brand-padding-right">
-          This is the rebranded logo
-          <img src="../../../assets/img/AlarmConnections_Logo_Icon_RGB.png" id="afa-brand-logo">
-        </div>
-        <a [routerLink]="['#']" class="logo" [style.color]="'#1C4156'">The Partnership Connection</a> -->
       </div>
-      <!-- <app-navlist></app-navlist> -->
       {{message}}
       <div class="list-group list-group-flush">
         <a [routerLink]="['/login']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Login</a>
         
         <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner()" (click)="removeDashboardData()">Partner View</a>
-        <!-- <a [routerLink]="['/']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.isEmployee">Employee link</a> -->
 
         <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Recent Customers</a>
         <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Customer Care View</a>
@@ -61,15 +53,12 @@
           <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span>
         </span>
 
-        <!-- <span class="h4 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span> -->
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <a class="mx-auto mb-0 black-text" id="showPartnerWindowModal" (click)="showPartnerWindowModal()" *ngIf="authService.loggedIn()">
             <app-partnerwindow></app-partnerwindow>
           </a>
           
-
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <li class="nav-item dropdown" *ngIf="authService.loggedIn()">
               <a class="nav-link dropdown-toggle afa-text-black-50" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

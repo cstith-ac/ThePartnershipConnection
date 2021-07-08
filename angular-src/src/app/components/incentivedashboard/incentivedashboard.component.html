@@ -1366,7 +1366,10 @@
                     <div class="col"></div>
                     <div class="col"></div>
                 </header>
-                <form [formGroup]="incentiveEquipMatEntryForm" (ngSubmit)="onEquipMatSubmit(incentiveEquipMatEntryForm)">
+                <form 
+                *ngIf="incentiveEquipMatEntryForm"
+                [formGroup]="incentiveEquipMatEntryForm" 
+                (ngSubmit)="onEquipMatSubmit(incentiveEquipMatEntryForm)">
                     <div formArrayName="entryRowsEquipMat">
                         <div class="row-entry-padding" *ngFor="let entryRow of incentiveEquipMatEntryForm.controls.entryRowsEquipMat['controls']; let i=index" [formGroupName]="i">
                             <div class="row">

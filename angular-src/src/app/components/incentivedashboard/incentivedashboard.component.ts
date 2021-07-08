@@ -124,7 +124,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   totalRecurringCalc;
   itemID;
   description;
-  quantity: number;
+  // quantity: number;
+  quantity=1;
   cost: number;
   //hours: number;
   laborQuantity: number;
@@ -267,6 +268,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   itemDescription2:string;
   defaultAmount2:number;
 
+  foo;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -354,18 +357,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.showOtherDocument2File = false;
     }
 
-    // this.additionalInfo = localStorage.getItem("additionalInfo")
-    // this.tax = localStorage.getItem("tax");
     this.contractTerm = localStorage.getItem("contractTerm");
     this.renewal = localStorage.getItem("renewal");
-    // this.partnerComments = localStorage.getItem("partnerComments");
-    // this.signalsTested = localStorage.getItem("signalsTested");
-
-    // Currently, the data entered in each modal clears if closed
-    // Get the object from local storage and re-populate the modal if it is opened again
 
     this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
+    // this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
+    // this is just giving the total but breaks rows
+    // setTimeout(() => {
+    //   this.foo = localStorage.getItem('totalEquipMatCalc');
+    // this.equipmentAndMaterials = parseFloat(this.foo);
+    // }, 3000);
     this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     // if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
@@ -390,7 +392,67 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object 
 
-    //console.log(this.selectedForCheckBoxAutoInsert.values().next().value)
+    this.routeService.getListMaterialItems().subscribe(
+      res => {
+        this.listMatItems = res;
+      }
+    )
+
+    this.routeService.postCheckboxAutoInsertList({
+      "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
+      "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
+      "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
+      "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
+      "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
+      "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
+      "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
+      "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
+      "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
+      "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
+      "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
+      "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
+      "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
+      "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
+      "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
+      "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
+      "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
+      "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
+      "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
+      "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
+      "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
+      "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
+      "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
+      "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
+      "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
+      "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
+      "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
+      "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
+      "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
+      "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
+      //"InstallCompanyID": this.installCompanyID
+    }).subscribe(
+      (data: any[]) => {
+        console.log(data) //object returned
+        let mappedDefaultAmounts = data.map(a => a.defaultAmount);
+        console.log(mappedDefaultAmounts);
+        //get sum from mappedDefaultAmounts
+        let sumMappedDefaultAmounts = mappedDefaultAmounts.reduce(function(a,b) {
+          return a + b
+        },0)
+        console.log(sumMappedDefaultAmounts); // number
+        // localStorage.setItem("totalEquipMatCalc", JSON.stringify(sumMappedDefaultAmounts));
+        // this.totalSumEquipMat = sumMappedDefaultAmounts;
+        this.equipmentAndMaterials = sumMappedDefaultAmounts
+
+      this.incentiveEquipMatEntryForm = this.fb.group({
+        entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
+      });
+
+      this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
+      this.equipMatValueChanges$.subscribe(
+        entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
+      );
+    });
 
     this.authService.getProfile().subscribe(
       res => {
@@ -402,17 +464,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    this.incentiveRecurringEntryForm = this.fb.group({
-      entryRowsRecurring: this.fb.array([this.initEntryRow()])
-    });
+    // this.incentiveRecurringEntryForm = this.fb.group({
+    //   entryRowsRecurring: this.fb.array([this.initEntryRow()])
+    // });
 
     this.incentiveEquipMatEntryForm = this.fb.group({
-      entryRowsEquipMat: this.fb.array([this.initEquipMatEntryRow()])
+      entryRowsEquipMat: this.fb.group({
+        ItemID: ["", Validators.required],
+        Description: ["", Validators.required],
+        Quantity: ["", Validators.required],
+        Cost: ["", Validators.required],
+        Total: ["", Validators.required]
+      })
     });
 
-    this.incentiveLaborChargesEntryForm = this.fb.group({
-      entryRowsLaborCharges: this.fb.array([this.initLaborChargesEntryRow()])
-    });
+    // this.incentiveLaborChargesEntryForm = this.fb.group({
+    //   entryRowsLaborCharges: this.fb.array([this.initLaborChargesEntryRow()])
+    // });
 
     this.incentiveDashboardForm = this.fb.group({
       UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
@@ -453,20 +521,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       PartnerComments: [""] //@PartnerComments
     });
 
-    this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
-    this.recurringValueChanges$.subscribe(
-      entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
-    );
+    // this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
+    // this.recurringValueChanges$.subscribe(
+    //   entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
+    // );
 
     this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
     this.equipMatValueChanges$.subscribe(
       entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
     );
 
-    this.laborChargesValueChanges$ = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].valueChanges;
-    this.laborChargesValueChanges$.subscribe(
-      entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
-    );
+    // this.laborChargesValueChanges$ = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].valueChanges;
+    // this.laborChargesValueChanges$.subscribe(
+    //   entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
+    // );
 
     this.routeService.getListRecurringItems().subscribe(
       res => {
@@ -480,11 +548,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    this.routeService.getListMaterialItems().subscribe(
-      res => {
-        this.listMatItems = res;
-      }
-    )
+    // this.routeService.getListMaterialItems().subscribe(
+    //   res => {
+    //     this.listMatItems = res;
+    //   }
+    // )
 
     this.routeService.getListLaborItems().subscribe(
       res => {
@@ -492,83 +560,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    //console.log(this.selectedForCheckBoxAutoInsert[0]);
-
-    this.routeService.postCheckboxAutoInsertList({
-      "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
-      "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
-      "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
-      "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
-      "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
-      "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
-      "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
-      "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
-      "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
-      "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
-      "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
-      "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
-      "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
-      "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
-      "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
-      "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
-      "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
-      "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
-      "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
-      "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
-      "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
-      "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
-      "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
-      "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
-      "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
-      "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
-      "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
-      "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
-      "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
-      "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
-      "InstallCompanyID": this.installCompanyID
-      
-    }).subscribe(
-      res => {
-        console.log(res);
-        console.log(Object.keys(res))
-        
-        this.selectionsForAutoInsert = res;
-        //console.log(typeof(this.selectionsForAutoInsert)) //object
-        console.log(this.selectionsForAutoInsert[0].itemID);
-        console.log(this.selectionsForAutoInsert[0].itemType);
-        console.log(this.selectionsForAutoInsert[0].item_Code);
-        console.log(this.selectionsForAutoInsert[0].itemDescription);
-        console.log(this.selectionsForAutoInsert[0].defaultAmount);
-
-        if(this.selectionsForAutoInsert[0]) {
-          this.itemID0 = this.selectionsForAutoInsert[0].itemID;
-          this.itemType0 = this.selectionsForAutoInsert[0].itemType;
-          this.item_Code0 = this.selectionsForAutoInsert[0].item_Code;
-          this.itemDescription0 = this.selectionsForAutoInsert[0].itemDescription;
-          this.defaultAmount0 = this.selectionsForAutoInsert[0].defaultAmount;  
-        }
-        
-        if(this.selectionsForAutoInsert[1]) {
-          this.itemID1 = this.selectionsForAutoInsert[1].itemID;
-          this.itemType1 = this.selectionsForAutoInsert[1].itemType;
-          this.item_Code1 = this.selectionsForAutoInsert[1].item_Code;
-          this.itemDescription1 = this.selectionsForAutoInsert[1].itemDescription;
-          this.defaultAmount1 = this.selectionsForAutoInsert[1].defaultAmount;          
-        }
-
-        if(this.selectionsForAutoInsert[2]) {
-          this.itemID2 = this.selectionsForAutoInsert[2].itemID;
-          this.itemType2 = this.selectionsForAutoInsert[2].itemType;
-          this.item_Code2 = this.selectionsForAutoInsert[2].item_Code;
-          this.itemDescription2 = this.selectionsForAutoInsert[2].itemDescription;
-          this.defaultAmount2 = this.selectionsForAutoInsert[2].defaultAmount;
-        }
-      }
-    )
-
     this.onChanges();
 
-    this.recurringItemEntryForm = this.fb.group({})
+    // this.recurringItemEntryForm = this.fb.group({})
 
     this.routeService.getListSystemTypes().subscribe(
       res => {
@@ -609,73 +603,73 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
 
     // Depending on the Y/N values from entry page, populate dashboard and modals
-    setTimeout(() => {
-      console.log(this.itemDescription0)
+    // setTimeout(() => {
+    //   console.log(this.itemDescription0)
       
-      // Equipment and Materials
-      // const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlItemIDArray0.controls[0].get('ItemID').setValue(610);
-      const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlItemIDArray0.controls[0].get('ItemID').setValue(this.itemID0 as number);
+    //   // Equipment and Materials
+    //   // const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlItemIDArray0.controls[0].get('ItemID').setValue(610);
+    //   const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlItemIDArray0.controls[0].get('ItemID').setValue(this.itemID0 as number);
 
-      // const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlDescriptionArray0.controls[0].get('Description').setValue('Customer Visit');
+    //   // const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlDescriptionArray0.controls[0].get('Description').setValue('Customer Visit');
 
-      const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlDescriptionArray0.controls[0].get('Description').setValue(this.itemDescription0);
+    //   const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlDescriptionArray0.controls[0].get('Description').setValue(this.itemDescription0);
 
-      const controlQuantityArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlQuantityArray0.controls[0].get('Quantity').setValue(1);
+    //   const controlQuantityArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlQuantityArray0.controls[0].get('Quantity').setValue(1);
 
-      // const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlCostArray0.controls[0].get('Cost').setValue(100);
-      const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlCostArray0.controls[0].get('Cost').setValue(this.defaultAmount0);
+    //   // const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlCostArray0.controls[0].get('Cost').setValue(100);
+    //   const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlCostArray0.controls[0].get('Cost').setValue(this.defaultAmount0);
 
-      (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-      .push(this.initEquipMatEntryRow());
+    //   (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+    //   .push(this.initEquipMatEntryRow());
 
-      // const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlItemIDArray1.controls[1].get('ItemID').setValue(598);
-      const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlItemIDArray1.controls[1].get('ItemID').setValue(this.itemID1 as number);
+    //   // const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlItemIDArray1.controls[1].get('ItemID').setValue(598);
+    //   const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlItemIDArray1.controls[1].get('ItemID').setValue(this.itemID1 as number);
 
-      // const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlDescriptionArray1.controls[1].get('Description').setValue('Contract Resign');
-      const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlDescriptionArray1.controls[1].get('Description').setValue(this.itemDescription1);
+    //   // const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlDescriptionArray1.controls[1].get('Description').setValue('Contract Resign');
+    //   const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlDescriptionArray1.controls[1].get('Description').setValue(this.itemDescription1);
 
-      const controlQuantityArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlQuantityArray1.controls[1].get('Quantity').setValue(1);
+    //   const controlQuantityArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlQuantityArray1.controls[1].get('Quantity').setValue(1);
 
-      // const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlCostArray1.controls[1].get('Cost').setValue(50);
-      const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlCostArray1.controls[1].get('Cost').setValue(this.defaultAmount1);
+    //   // const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlCostArray1.controls[1].get('Cost').setValue(50);
+    //   const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlCostArray1.controls[1].get('Cost').setValue(this.defaultAmount1);
 
-      (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-      .push(this.initEquipMatEntryRow());
+    //   (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
+    //   .push(this.initEquipMatEntryRow());
 
-      // const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlItemIDArray2.controls[2].get('ItemID').setValue(642);
-      const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlItemIDArray2.controls[2].get('ItemID').setValue(this.itemID2 as number);
+    //   // const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlItemIDArray2.controls[2].get('ItemID').setValue(642);
+    //   const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlItemIDArray2.controls[2].get('ItemID').setValue(this.itemID2 as number);
 
-      // const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlDescriptionArray2.controls[2].get('Description').setValue('3G to LTE upgrade Parts');
-      const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlDescriptionArray2.controls[2].get('Description').setValue(this.itemDescription2);
+    //   // const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlDescriptionArray2.controls[2].get('Description').setValue('3G to LTE upgrade Parts');
+    //   const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlDescriptionArray2.controls[2].get('Description').setValue(this.itemDescription2);
 
-      const controlQuantityArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlQuantityArray2.controls[2].get('Quantity').setValue(1);
+    //   const controlQuantityArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlQuantityArray2.controls[2].get('Quantity').setValue(1);
 
-      // const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      // controlCostArray2.controls[2].get('Cost').setValue(125);
-      const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlCostArray2.controls[2].get('Cost').setValue(this.defaultAmount2);
+    //   // const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   // controlCostArray2.controls[2].get('Cost').setValue(125);
+    //   const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
+    //   controlCostArray2.controls[2].get('Cost').setValue(this.defaultAmount2);
 
-      this.lineItemSubtotal = this.totalSumEquipMat;
-    },2500)
+    //   this.lineItemSubtotal = this.totalSumEquipMat;
+    // },2500)
   }
 
   onChanges():void {}
@@ -753,9 +747,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
   ngOnDestroy():void {
     console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
-    this.recurringValueChanges$.unsubscribe();
-    this.laborChargesValueChanges$.unsubscribe();
+    //this.recurringValueChanges$.unsubscribe();
+    //this.laborChargesValueChanges$.unsubscribe();
     this.equipMatValueChanges$.unsubscribe();
+  }
+
+  private generateDatumFormGroup(datum) {
+    return this.fb.group({
+      ItemID: this.fb.control(datum.itemID),
+      Description: this.fb.control(datum.itemDescription),
+      Quantity: this.fb.control(1),
+      Cost: this.fb.control(datum.defaultAmount ),
+      Total: this.fb.control(this.quantity * datum.defaultAmount)
+    })
   }
 
   initEntryRow() {
@@ -773,15 +777,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
 
-  initEquipMatEntryRow() {
-    return this.fb.group({
-      ItemID: ["", Validators.required],
-      Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
-      Total: ["", Validators.required]
-    })
-  }
+  // initEquipMatEntryRow() {
+  //   return this.fb.group({
+  //     ItemID: ["", Validators.required],
+  //     Description: ["", Validators.required],
+  //     Quantity: ["", Validators.required],
+  //     Cost: ["", Validators.required],
+  //     Total: ["", Validators.required]
+  //   })
+  // }
 
   initLaborChargesEntryRow() {
     return this.fb.group({
@@ -814,6 +818,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   } 
 
   private updateTotalLaborCharges(entryRowsLaborCharges:any) {
+    console.log('updateTotalLaborCharges was called')
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
     this.totalSumLaborCharges=0;
 
@@ -833,7 +838,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  private updateTotalEquipMat(entryRowsEquipMat:any) {
+   updateTotalEquipMat(entryRowsEquipMat:any) {
+    console.log('updateTotalEquipMat was called')
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
     this.totalSumEquipMat=0;
 
@@ -3602,13 +3608,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //not working. will use in the ngOnDestroy
     this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
 
-    // this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
 
     this.equipmentAndMaterials=this.totalSumEquipMat;
 
     localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0]));
 
     this.modalService.dismissAll();
+  }
+
+  initEquipMatEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      Quantity: ["", Validators.required],
+      Cost: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
   }
 
   addNewEquipMatItem():void {

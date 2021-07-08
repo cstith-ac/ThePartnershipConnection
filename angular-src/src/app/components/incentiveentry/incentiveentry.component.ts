@@ -393,8 +393,8 @@ export class IncentiveentryComponent implements OnInit {
   //   )
 
     //return
-    //this.router.navigate(["/incentive-dashboard"]);
-    this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
+    this.router.navigate(["/incentive-dashboard"]);
+    //this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
   }
 
   disableOther(e) {

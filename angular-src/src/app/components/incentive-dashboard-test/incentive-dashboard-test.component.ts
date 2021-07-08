@@ -131,7 +131,7 @@ export class IncentiveDashboardTestComponent implements OnInit {
     return this.fb.group({
       ItemID: this.fb.control(datum.itemID),
       Description: this.fb.control(datum.itemDescription),
-      Quantity: this.fb.control( 1),
+      Quantity: this.fb.control(1),
       Cost: this.fb.control(datum.defaultAmount ),
       Total: this.fb.control(1 * datum.defaultAmount)
     })
