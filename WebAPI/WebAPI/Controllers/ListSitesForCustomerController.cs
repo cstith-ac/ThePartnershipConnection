@@ -33,6 +33,14 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
+        // Get all sites
+        //[HttpGet]
+        //[Authorize]
+        //public ListSitesForCustomer GetAllListSitesForCustomers()
+        //{
+        //    return db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer").ToListAsync().Result.FirstOrDefault();
+        //}
+
         [HttpGet("{id}")]
         [Authorize]
         public ListSitesForCustomer GetListSitesForCustomers(int id)

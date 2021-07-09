@@ -106,9 +106,24 @@ export class IncentiveDashboardTestComponent implements OnInit {
       "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
       //"InstallCompanyID": this.installCompanyID
     }).subscribe((data: any[]) => {
+      localStorage.setItem('equipmatentry', JSON.stringify(data));
+
+        let mappedDefaultAmounts = data.map(a => a.defaultAmount);
+        console.log(mappedDefaultAmounts);
+        //get sum from mappedDefaultAmounts
+        let sumMappedDefaultAmounts = mappedDefaultAmounts.reduce(function(a,b) {
+          return a + b
+        },0)
+        console.log(sumMappedDefaultAmounts); // number
+        this.totalSumEquipMat = sumMappedDefaultAmounts
+
+        this.equipmentAndMaterials = sumMappedDefaultAmounts
+
       this.incentiveEquipMatEntryForm = this.fb.group({
         entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
       });
+
+      console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
 
       this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
       this.equipMatValueChanges$.subscribe(

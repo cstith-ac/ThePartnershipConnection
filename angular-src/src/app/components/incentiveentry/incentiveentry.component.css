@@ -94,6 +94,15 @@ input[type="radio"]:checked::before{
 .footer {
     padding: 0;
 }
+.footer p {
+    margin-bottom: 0;
+}
+.footer h2 {
+    margin-bottom: 0;
+}
+.footer img {
+    margin-bottom: 0;
+}
 .footer-logo {
     color: #1B5EAC;
 }
