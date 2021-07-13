@@ -596,92 +596,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     //move these three to the individual click events
 
-    this.routeService.getCustomerSearchList().subscribe(
-      res => {
-        this.customerSearchList = res;
-      }
-    )
+    // this.routeService.getCustomerSearchList().subscribe(
+    //   res => {
+    //     this.customerSearchList = res;
+    //   }
+    // )
 
-    this.routeService.getCustomerSearchListSite().subscribe(
-      res => {
-        this.customerSearchListSite = res;
-      }
-    )
+    // this.routeService.getCustomerSearchListSite().subscribe(
+    //   res => {
+    //     this.customerSearchListSite = res;
+    //   }
+    // )
 
-    this.routeService.getCustomerSearchListCentralStation().subscribe(
-      res => {
-        this.customerSearchListCentralStation = res;
-      }
-    )
-
-    // Depending on the Y/N values from entry page, populate dashboard and modals
-    // setTimeout(() => {
-    //   console.log(this.itemDescription0)
-      
-    //   // Equipment and Materials
-    //   // const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlItemIDArray0.controls[0].get('ItemID').setValue(610);
-    //   const controlItemIDArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlItemIDArray0.controls[0].get('ItemID').setValue(this.itemID0 as number);
-
-    //   // const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlDescriptionArray0.controls[0].get('Description').setValue('Customer Visit');
-
-    //   const controlDescriptionArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlDescriptionArray0.controls[0].get('Description').setValue(this.itemDescription0);
-
-    //   const controlQuantityArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlQuantityArray0.controls[0].get('Quantity').setValue(1);
-
-    //   // const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlCostArray0.controls[0].get('Cost').setValue(100);
-    //   const controlCostArray0 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlCostArray0.controls[0].get('Cost').setValue(this.defaultAmount0);
-
-    //   (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-    //   .push(this.initEquipMatEntryRow());
-
-    //   // const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlItemIDArray1.controls[1].get('ItemID').setValue(598);
-    //   const controlItemIDArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlItemIDArray1.controls[1].get('ItemID').setValue(this.itemID1 as number);
-
-    //   // const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlDescriptionArray1.controls[1].get('Description').setValue('Contract Resign');
-    //   const controlDescriptionArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlDescriptionArray1.controls[1].get('Description').setValue(this.itemDescription1);
-
-    //   const controlQuantityArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlQuantityArray1.controls[1].get('Quantity').setValue(1);
-
-    //   // const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlCostArray1.controls[1].get('Cost').setValue(50);
-    //   const controlCostArray1 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlCostArray1.controls[1].get('Cost').setValue(this.defaultAmount1);
-
-    //   (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-    //   .push(this.initEquipMatEntryRow());
-
-    //   // const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlItemIDArray2.controls[2].get('ItemID').setValue(642);
-    //   const controlItemIDArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlItemIDArray2.controls[2].get('ItemID').setValue(this.itemID2 as number);
-
-    //   // const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlDescriptionArray2.controls[2].get('Description').setValue('3G to LTE upgrade Parts');
-    //   const controlDescriptionArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlDescriptionArray2.controls[2].get('Description').setValue(this.itemDescription2);
-
-    //   const controlQuantityArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlQuantityArray2.controls[2].get('Quantity').setValue(1);
-
-    //   // const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   // controlCostArray2.controls[2].get('Cost').setValue(125);
-    //   const controlCostArray2 = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-    //   controlCostArray2.controls[2].get('Cost').setValue(this.defaultAmount2);
-
-    //   this.lineItemSubtotal = this.totalSumEquipMat;
-    // },2500)
+    // this.routeService.getCustomerSearchListCentralStation().subscribe(
+    //   res => {
+    //     this.customerSearchListCentralStation = res;
+    //   }
+    // )
   }
 
   onChanges():void {}
@@ -1014,25 +945,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   //select Customer 1st
+  openSearchCustomerModal(content) {
+    this.modalService.open(content, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    this.routeService.getCustomerSearchList().subscribe(
+      res => {
+        this.customerSearchList = res;
+      }
+    )
+  }
+
   selectCustomer(customer_id:number,customer_Name:string) {
     console.log(this.divSiteSearchIcon.nativeElement);
     this.divSiteSearchIcon.nativeElement.style.display='none';
     this.divSystemSearchIcon.nativeElement.style.display='none';
 
-    //If search by customer radio is selected, filter by customer_Number
-    //If search by customer radio is selected, filter by customer_Name
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
-    //once a customer is selected, push the customer_Name to customer input on Incentive Entry
 
     this.customer = selectedCustomerName;
     this.id = selectedCustomerid;
 
-    //localStorage.setItem("customerName",this.customer);
-    //localStorage.setItem("customerId",this.id);
-
-    //after selecting a customer, close the modal
     this.modalService.dismissAll();
+
+    //updateSite called
 
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
@@ -1046,9 +985,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //make a call to getListSystemsForSite
         this.routeService.getListSystemsForSite(this.customerSiteId).subscribe(
           res => {
-            //get the customer_System_id
-            //console.log(res.customer_System_id);
-            this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
+            
+            for(var i = 0; i < res.length; i++) {
+              console.log(res[i].customer_System_id)
+              this.customerSystemId = res[i].customer_System_id
+            }
+
+            //this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
             //console.log(this.customer_System_id);
             //make a get request to dbo.CustomerSystemInfoGet
             this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
@@ -1083,6 +1026,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //this.incentiveDashboardForm.value.CustomerID = this.id;
   }
 
+  openSearchSiteModal(site) {
+    this.modalService.open(site, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    this.routeService.getCustomerSearchListSite().subscribe(
+      res => {
+        this.customerSearchListSite = res;
+      }
+    )
+  }
+
   //select Site 1st
   selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number) {
     this.divSystemSearchIcon.nativeElement.style.display='none';
@@ -1113,15 +1069,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //populate customer, populate system
     this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
       res => {
-        // if the site is selected 1st, get the CustomerSystemID.
-        // Use the ID for the dbo.CustomerSystemInfoGet API call
-        //console.log(res.customer_System_id);
-        //this.customer_System_id = res.customer_System_id;
-        this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
+        for(var i = 0; i < res.length; i++) {
+          console.log(res[i])
+          this.customerSystemId = res[i].customer_System_id;
+          this.systemTypeID = res[i].systemType;
+          this.alarmAccount = res[i].alarmAccount;
+        }
+        //this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
 
         this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
           res => {
-            //console.log(res);
+            for(var i = 0; i < res.length; i++) {
+              console.log(res[i])
+            }
             this.alarmAccount = res.accountNumber;
             this.centralStationID = res.centralStationID;
             this.panelLocation = res.panelLocation;
@@ -1130,8 +1090,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }
         )
 
-        let alarmAccount = res.alarmAccount;
-        let systemTypeID = res.systemType
+        let alarmAccount = this.alarmAccount;
+        let systemTypeID = this.systemTypeID;
         // console.log(alarmAccount);
         // console.log(systemType);
         this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
@@ -1142,6 +1102,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
+  }
+
+  openSearchSystemModal(system) {
+    this.modalService.open(system, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    this.routeService.getCustomerSearchListCentralStation().subscribe(
+      res => {
+        this.customerSearchListCentralStation = res;
+      }
+    )
   }
 
   //select Central Station 1st
@@ -1181,20 +1154,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //populate site, populate customer
     this.routeService.getListSitesForCustomer(selectedCustomerid).subscribe(
       res => {
-        //console.log(res.siteName);
-        this.siteName = res.siteName
+        for(var i = 0; i < res.length; i++) {
+          console.log(res[i].siteName)
+          this.siteName = res[i].siteName;
+          this.customerSiteId = res[i].customer_Site_id;
+        }
+        console.log(res.siteName);
+        //this.siteName = res[i].siteName
         // this.customer_Site_id = res.customer_Site_id;
-        this.customerSiteId = res.customer_Site_id; //fix for error encountered on 06/23/2021
+        //this.customerSiteId = res[i].customer_Site_id; //fix for error encountered on 06/23/2021
         //localStorage.setItem("customerSiteName",this.siteName);
       }
     )
 
     this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
       res => {
-        // console.log(res);
-        // this.alarmAccount = res.accountNumber;
-        // this.centralStationID = res.centralStationID;
-        //account number
+
         this.accountNumber = res.accountNumber;
         this.additionalInfo = res.additionalInfo;
         this.centralStationID = res.centralStationID;
@@ -1202,32 +1177,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.panelLocation = res.panelLocation;
         this.panelTypeID = res.panelType;
         this.systemTypeID = res.systemType;
-        
-        //Store these values in localstorage to retrieve if the page is refreshed
-        //localStorage.setItem('alarmAccount', this.alarmAccount);
-        //localStorage.setItem('systemType', this.systemType);
-        //localStorage.setItem('panelType', this.panelType);
-        //localStorage.setItem('panelLocation', this.panelLocation);
-        //localStorage.setItem('centralStationID', this.centralStationID);
-
       }
     )
-
-    // this.routeService.getCustomerSearchListCentralStation().subscribe(
-    //   res => {
-    //     console.log(typeof(res));
-    //     res.
-    //     console.log(this.customerSearchListCentralStation)
-    //     for(var prop in this.customerSearchListCentralStation) {
-    //       this.alarmAccount = this.customerSearchListCentralStation[prop].alarmAccount;
-    //     }
-    //     console.log(this.alarmAccount)
-    //     Object.values(this.customerSearchListCentralStation).forEach(val => {
-    //       console.log(val);
-    //       Object.values(val).filter(x => x.)
-    //     })
-    //   }
-    // )
   }
 
   selectSystemsForCustomer(customersiteid:number) {
@@ -1243,28 +1194,31 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   updateSite(val: any) {
-    //console.log('call this')
-    //let id = val;
-    //console.log(this.id)
-    //let id = 117019;
-    // append CustomerSiteID to get ListSystemsForSite
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        this.listsitesforcustomer = [].concat(res);
-        // this.customersiteid = this.listsitesforcustomer.forEach(x => x.customer_Site_id)
-        //console.log(this.listsitesforcustomer)
-        //console.log(typeof(this.listsitesforcustomer))
-        for(var prop in this.listsitesforcustomer) {
-          //console.log(prop,this.listsitesforcustomer[prop].customer_Site_id);
-          this.customersiteid = this.listsitesforcustomer[prop].customer_Site_id;
-          //localStorage.setItem('customerSiteId',this.customersiteid);
-          //console.log(this.customersiteid)
-          this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
-            res => {
-              this.listSystemsForSite = [].concat(res);
-            }
-          )
+        console.log(res)
+        this.listsitesforcustomer = res;
+        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+          console.log(this.listsitesforcustomer[i].customer_Site_id)
+          this.customersiteid = this.listsitesforcustomer[i].customer_Site_id;
         }
+        this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+          res => {
+            this.listSystemsForSite = [].concat(res);
+          }
+        )
+        // this.listsitesforcustomer = [].concat(res);
+
+        // for(var prop in this.listsitesforcustomer) {
+          
+        //   this.customersiteid = this.listsitesforcustomer[prop].customer_Site_id;
+          
+        //   this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+        //     res => {
+        //       this.listSystemsForSite = [].concat(res);
+        //     }
+        //   )
+        // }
       }
     )
   }
@@ -1275,19 +1229,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   updateSystem(customer_Site_id:number) {
-    //console.log('call update system')
-    //get the CustomerSiteID
+
     this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
       res => {
+        console.log(res)
         this.listSystemsForSite = [].concat(res);
-        //console.log(typeof(this.listSystemsForSite))//object
+        
         for(var i = 0; i < this.listSystemsForSite.length; i++) {
           this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
         }
 
-        //the customer is selected 1st
-        //now populate the Account # field
-        //make a get request to dbo.CustomerSystemInfoGet
         this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
           res => {
             //console.log(res);
@@ -1301,7 +1252,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
             this.routeService.getListSystemTypes().subscribe(
               res => {
-                //console.log(res)
+
                 let result = res.filter(a => a.system_Id===this.systemTypeID)
 
                 for(var i in result) {
@@ -1312,12 +1263,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
             this.routeService.getListPanelTypes().subscribe(
               res => {
-                //console.log(res) //object
+
                 let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
 
                 for(var i in result) {
                   this.panelName = result[i].panelName
-                  //console.log(this.panelType)
+                 
                 }
               }
             )
@@ -3879,14 +3830,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   routeToNewCustomer() {
     console.log('go to new customer')
-    //Holding off on this until TBD
-    //this.router.navigate(["new-customer"]);
   }
 
   routeToNewSite() {
     console.log('go to new site');
-    //Holding off on this until TBD
-    //this.router.navigate(["new-site"]);
   }
 
   routeToRecurring() {
@@ -4289,39 +4236,39 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.router.navigate(["incentive-labor-charges"]);
   }
 
-  openSearchCustomerModal(content) {
-    //bring up a modal
-    this.modalService.open(content, {
-      windowClass: 'my-class',
-      ariaLabelledBy: 'modal-basic-title'
-    }).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
+  // openSearchCustomerModal(content) {
+  //   //bring up a modal
+  //   this.modalService.open(content, {
+  //     windowClass: 'my-class',
+  //     ariaLabelledBy: 'modal-basic-title'
+  //   }).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
 
-  openSearchSiteModal(site) {
-    this.modalService.open(site, {
-      windowClass: 'my-class',
-      ariaLabelledBy: 'modal-basic-title'
-    }).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
+  // openSearchSiteModal(site) {
+  //   this.modalService.open(site, {
+  //     windowClass: 'my-class',
+  //     ariaLabelledBy: 'modal-basic-title'
+  //   }).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
 
-  openSearchSystemModal(system) {
-    this.modalService.open(system, {
-      windowClass: 'my-class',
-      ariaLabelledBy: 'modal-basic-title'
-    }).result.then((result) => {
-      console.log(result)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
+  // openSearchSystemModal(system) {
+  //   this.modalService.open(system, {
+  //     windowClass: 'my-class',
+  //     ariaLabelledBy: 'modal-basic-title'
+  //   }).result.then((result) => {
+  //     console.log(result)
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
 
   openAddViewCommentsModal(comments) {
     this.modalService.open(comments, {

@@ -33,7 +33,6 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        // Get all sites
         //[HttpGet]
         //[Authorize]
         //public ListSitesForCustomer GetAllListSitesForCustomers()
@@ -43,9 +42,10 @@ namespace WebAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public ListSitesForCustomer GetListSitesForCustomers(int id)
+        public async Task<Object> GetListSitesForCustomers(int id)
         {
-            return db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer @CustomerID={0}", id).ToListAsync().Result.FirstOrDefault();
+            //return db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer @CustomerID={0}", id).ToListAsync().Result.FirstOrDefault();
+            return await db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer @CustomerID={0}", id).ToListAsync();
         }
 
         //[HttpGet]

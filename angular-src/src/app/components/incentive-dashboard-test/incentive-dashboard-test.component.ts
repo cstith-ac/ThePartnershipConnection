@@ -1,8 +1,13 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { ListMaterialItems } from '../../models/listmaterialitems';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
+import { CustomerSearchList } from '../../models/customersearchlist';
+import { CustomerSearchListSite } from '../../models/customersearchlistsite';
+import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
+import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
 import { IncentiveDashboard } from '../../models/incentivedashboard';
 import { AuthService } from '../../services/auth.service';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
@@ -22,6 +27,76 @@ export class IncentiveDashboardTestComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   incentiveEquipMatEntryForm: FormGroup;
 
+  selectIncentiveDashboardTestForm: FormGroup;
+  incentiveDashboardTestForm: FormGroup;
+
+  customers = [
+    {
+      "id": 1,
+      "name": "Gary Payton"
+    },
+    {
+      "id": 2,
+      "name": "Betty White"
+    },
+    {
+      "id": 3,
+      "name": "Greg Street"
+    },
+    {
+      "id": 4,
+      "name": "Reggie Noble"
+    },
+    {
+      "id": 5,
+      "name": "Jose Conseco"
+    }
+  ];
+  sites = [
+    {
+      "id": 1,
+      "name": "Philadelphia, PA"
+    },
+    {
+      "id": 2,
+      "name": "Dallas, TX"
+    },
+    {
+      "id": 3,
+      "name": "Nashville, TN"
+    },
+    {
+      "id": 4,
+      "name": "New Castle, DE"
+    },
+    {
+      "id": 5,
+      "name": "Denver, CO"
+    }
+  ];
+  systems = [
+    {
+      "id": 1,
+      "name": "Business"
+    },
+    {
+      "id": 2,
+      "name": "Information Technology"
+    },
+    {
+      "id": 3,
+      "name": "Operations"
+    },
+    {
+      "id": 4,
+      "name": "Community Relations"
+    },
+    {
+      "id": 5,
+      "name": "Promotions"
+    }
+  ]
+
   authToken: any;
   user:any=Object;
   userEmailAddress: '';
@@ -34,8 +109,18 @@ export class IncentiveDashboardTestComponent implements OnInit {
   listMatItems: ListMaterialItems[];
   selectedForCheckBoxAutoInsert:any[];
   installCompanyID = parseInt(localStorage.getItem('installCompanyID'));
+  closeResult = '';
+  customerSearchList: CustomerSearchList[];
+  customerSearchListSite: CustomerSearchListSite[];
+  customerSearchListCentralStation: CustomerSearchListCentralStation[];
+  listsitesforcustomer: ListSitesForCustomer[];
+  p: number = 1;
+  searchValue:string;
+  id;
+  customer;
 
   constructor(
+    private modalService: NgbModal,
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
     public fb: FormBuilder,
@@ -69,6 +154,50 @@ export class IncentiveDashboardTestComponent implements OnInit {
         this.listMatItems = res;
       }
     )
+
+    // this.selectIncentiveDashboardTestForm = this.fb.group({
+    //   customer: '',
+    //   site: '',
+    //   system: ''
+    // })
+    this.incentiveDashboardTestForm = this.fb.group({
+      UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
+      //CustomerID: this.id, //@CustomerID
+      InstallCompanyID: this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID')),
+      CustomerID: ["", Validators.required], //@CustomerID
+      CustomerSiteID: ["", Validators.required], //@CustomerSiteID
+      CustomerSystemID: [""], //@CustomerSystemID
+      SystemTypeID: ["", Validators.required], //@SystemTypeID
+      SystemCode: [""],
+      NewSystem: [""],
+      NewCustomer: [""],
+      NewSite: [""],
+      AlarmAccount: ["", Validators.required], //@AlarmAccount
+      PanelTypeID: ["", Validators.required], //@PanelTypeID
+      PanelLocation: [""], //@PanelLocation
+      CentralStationID: ["", Validators.required], //@CentralStationID
+      AdditionalInfo: [""], //@AdditionalInfo
+      InvoiceUpload: [""],
+      SiteVisitUpload: [""],
+      ContractUpload: [""],
+      SubscriberFormUpload: [""],
+      OtherDocument1Upload: [""],
+      OtherDocument2Upload: [""],
+      PartnerInvoiceNumber: ["", Validators.required], //@PartnerInvoiceNumber
+      PartnerInvoiceDate: ["", Validators.required], //@PartnerInvoiceDate
+      InvoiceTotal: [""],
+      //PartnerTaxAmount: this.partnerTaxAmount,
+      Recurring: [""],
+      EquipmentAndMaterials: [""],
+      LaborCharges: [""],
+      LineItemSubtotal: [""],
+      ContractDate: [""], //@ContractDate
+      ContractTerm: [""], //@ContractTerm
+      RenewalMonths: [""], //@RenewalMonths
+      ServiceIncluded: localStorage.getItem('serviceIncluded'), //@ServiceInclude
+      SignalsTested: ["", Validators.required],
+      PartnerComments: [""] //@PartnerComments
+    });
 
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object
@@ -135,11 +264,45 @@ export class IncentiveDashboardTestComponent implements OnInit {
     this.lineItemSubtotal = this.equipmentAndMaterials;
   }
 
-  ngOnChanges(): void {
-    // this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
-    // this.equipMatValueChanges$.subscribe(
-    //   entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
-    // );
+  public selectedCustomer: { name: string, id: number };
+  public selectedSite: { name: string, id: number };
+  public selectedSystem: { name: string, id: number };
+
+  openSearchCustomerModal(content) {
+    //bring up a modal
+    this.modalService.open(content, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    this.routeService.getCustomerSearchList().subscribe(
+      res => {
+        this.customerSearchList = res;
+      }
+    )
+  }
+
+  selectCustomer(customer_id:number,customer_Name:string) {
+    console.log('select')
+
+    let selectedCustomerName = customer_Name;
+    let selectedCustomerid = customer_id;
+
+    this.customer = selectedCustomerName;
+    this.id = selectedCustomerid;
+
+    this.modalService.dismissAll();
+
+    this.routeService.getListSitesForCustomer(this.id).subscribe(
+      res => {
+        //console.log(res)
+        this.listsitesforcustomer = res;
+
+        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+          console.log(this.listsitesforcustomer[i])
+        }
+      }
+    )
   }
 
   private generateDatumFormGroup(datum) {
@@ -225,6 +388,18 @@ export class IncentiveDashboardTestComponent implements OnInit {
 
     localStorage.removeItem("equipmatentry");
     localStorage.removeItem("totalEquipMatCalc");
+  }
+
+  onCustomerChange(value) {
+    console.log(value);
+  }
+
+  onSiteChange(value) {
+    console.log(value);
+  }
+
+  onSystemChange(value) {
+    console.log(value);
   }
 
   loadToken() {

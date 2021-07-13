@@ -33,11 +33,18 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
+        //[HttpGet("{id}")]
+        //[Authorize]
+        //public ListSystemsForSite GetListSystemsForSites(int id)
+        //{
+        //    return db.GetListSystemsForSites.FromSqlRaw("EXEC dbo.ListSystemsForSite @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
+        //}
+
         [HttpGet("{id}")]
         [Authorize]
-        public ListSystemsForSite GetListSystemsForSites(int id)
+        public async Task<Object> GetListSystemsForSites(int id)
         {
-            return db.GetListSystemsForSites.FromSqlRaw("EXEC dbo.ListSystemsForSite @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
+            return await db.GetListSystemsForSites.FromSqlRaw("EXEC dbo.ListSystemsForSite @CustomerSiteID={0}", id).ToListAsync();
         }
 
         //[HttpGet]
