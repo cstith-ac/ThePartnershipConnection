@@ -1,5 +1,11 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+/* .btn {
+    font-weight: 500;
+}
+.btn-success {
+    background-color: #5abd78;
+} */
 #menu-toggle {
     color: #000;
     border-color: transparent;
@@ -40,7 +46,9 @@ for details on configuring this project to bundle and minify static web assets. 
 #afa-brand-logo {
     height: 3.5vw;
 }
-
+/* #afa-brand-logo {
+    height: 2.1vw;
+} */
 a.navbar-brand {
     white-space: normal;
     text-align: center;

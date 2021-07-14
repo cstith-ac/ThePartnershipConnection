@@ -46,29 +46,5 @@ namespace WebAPI.Controllers
         {
             return await db.GetListSystemsForSites.FromSqlRaw("EXEC dbo.ListSystemsForSite @CustomerSiteID={0}", id).ToListAsync();
         }
-
-        //[HttpGet]
-        //[Authorize]
-        //public async Task<Object> GetListSystemsForSites()
-        //{
-        //    var systems = new List<ListSystemsForSite>();
-
-        //    await using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        connection.Open();
-
-        //        var customerSiteId = new SqlParameter("@CustomerSiteId", 117019);
-        //        var result = await db.GetListSystemsForSites.FromSqlRaw("EXECUTE [dbo].[ListSystemsForSite] @CustomerSiteID", customerSiteId).ToListAsync();
-        //        List<ListSystemsForSite> Lst = result.Select(s => new ListSystemsForSite
-        //        {
-        //            Customer_System_id = s.Customer_System_id,
-        //            AlarmAccount = s.AlarmAccount,
-        //            SystemType = s.SystemType,
-        //            SystemStatus = s.SystemStatus
-        //        }).ToList();
-
-        //        return Lst;
-        //    }
-        //}
     }
 }

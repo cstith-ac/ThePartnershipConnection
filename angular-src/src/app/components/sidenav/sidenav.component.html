@@ -4,6 +4,7 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">
         <div class="col-xs-6" id="afa-brand-padding-right">
+          <!-- <img src="../../../assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png" id="afa-brand-logo"> -->
           <img src="../../../assets/img/AlarmConnections_Logo_Icon_RGB.png" id="afa-brand-logo">
         </div>
         <div class="col-xs-6" >
@@ -28,7 +29,7 @@
       <div class="list-group list-group-flush">
         <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()">Register</a>
       </div>
-      <div class="list-group list-group-flush">
+      <div class="list-group list-group-flush" [ngStyle]="{position: 'absolute',bottom:'0'}">
         <ul>
           <li>Version: {{ currentApplicationVersion }}</li>
         </ul>

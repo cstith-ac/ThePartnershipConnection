@@ -35,7 +35,8 @@
               "src/assets/img/sad404.svg",
               "src/assets/img/forbidden_403.svg",
               "src/web.config",
-              "src/assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg"
+              "src/assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg",
+              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png"
             ],
             "styles": [
               {

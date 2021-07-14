@@ -39,6 +39,10 @@ import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
+
+  @ViewChild('siteRef') siteElement: ElementRef;
+  @ViewChild('systemRef') systemElement: ElementRef;
+
   @ViewChild("customerSearchIcon") divCustomerSearchIcon: ElementRef;
   @ViewChild("siteSearchIcon") divSiteSearchIcon: ElementRef;
   @ViewChild("systemSearchIcon") divSystemSearchIcon: ElementRef;
@@ -64,6 +68,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   user:any=Object;
   userEmailAddress: '';
 
+  customer_Number;
   companyName;
   partnerCode;
   installCompanyID;
@@ -269,6 +274,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   defaultAmount2:number;
 
   foo;
+  target;
 
   constructor(
     private router: Router,
@@ -593,26 +599,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.listcentralstations = res;
       }
     )
-
-    //move these three to the individual click events
-
-    // this.routeService.getCustomerSearchList().subscribe(
-    //   res => {
-    //     this.customerSearchList = res;
-    //   }
-    // )
-
-    // this.routeService.getCustomerSearchListSite().subscribe(
-    //   res => {
-    //     this.customerSearchListSite = res;
-    //   }
-    // )
-
-    // this.routeService.getCustomerSearchListCentralStation().subscribe(
-    //   res => {
-    //     this.customerSearchListCentralStation = res;
-    //   }
-    // )
   }
 
   onChanges():void {}
@@ -958,72 +944,110 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  selectCustomer(customer_id:number,customer_Name:string) {
+  selectCustomer(customer_id:number,customer_Name:string,customer_Number:string) {
     console.log(this.divSiteSearchIcon.nativeElement);
     this.divSiteSearchIcon.nativeElement.style.display='none';
     this.divSystemSearchIcon.nativeElement.style.display='none';
 
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
+    let selectedCustomerNumber = customer_Number;
 
-    this.customer = selectedCustomerName;
+    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
     this.id = selectedCustomerid;
+    //this.incentiveDashboardForm.get("CustomerID").setValue(this.id);
 
     this.modalService.dismissAll();
 
-    //updateSite called
-
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        this.listsitesforcustomer = [].concat(res);
-
-        //get the customer_Site_id
-        //this.customer_Site_id = this.listsitesforcustomer[0].customer_Site_id;
-        this.customerSiteId = this.listsitesforcustomer[0].customer_Site_id;
-        this.customerSiteName = this.listsitesforcustomer[0].siteName;
-        //localStorage.setItem("customerSiteName", this.customerSiteName);
-        //make a call to getListSystemsForSite
-        this.routeService.getListSystemsForSite(this.customerSiteId).subscribe(
-          res => {
-            
-            for(var i = 0; i < res.length; i++) {
-              console.log(res[i].customer_System_id)
-              this.customerSystemId = res[i].customer_System_id
-            }
-
-            //this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
-            //console.log(this.customer_System_id);
-            //make a get request to dbo.CustomerSystemInfoGet
-            this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
-              res => {
-
-                this.alarmAccount = res.accountNumber;
-                this.systemTypeID = res.systemType;
-                //get the System_Id
-                //make a get request to dbo.ListSystemTypes to find the appropriate system type matching the returned systemType
-                this.routeService.getListSystemTypes().subscribe(
-                  res => {
-
-                    let result = res.filter(a => a.system_Id===this.systemTypeID)
-
-                    for(var i in result) {
-
-                      this.systemName = result[i].systemName;
-                    }
-                  }
-                )
-                //populate the panel type
-
-                //populate the central station
-              }
-            )
-            //populate the fields for Account #, System Type, Panel Type, Panel Location, Central Station
-          }
-        )
+        //console.log(res);
+        this.listsitesforcustomer = res;
+        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+          console.log(this.listsitesforcustomer[i])
+          
+        }
       }
     )
+  }
 
-    //this.incentiveDashboardForm.value.CustomerID = this.id;
+  onChangeSite(e){
+    //focus System
+    this.systemElement.nativeElement.focus()
+
+    for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+      // console.log(this.listsitesforcustomer[i].customer_Site_id)
+      // console.log(e.target.value)
+      // this.customer_Site_id = 182015;
+      this.alarmAccount = '';
+      this.systemTypeID ='';
+      this.panelTypeID = '';
+      this.panelLocation = '';
+      this.centralStationID = '';
+      this.additionalInfo = '';
+
+      this.customer_Site_id = parseInt(e.target.value);
+      this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
+
+      this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+        res => {
+          //console.log(res)
+          this.listSystemsForSite = res;
+
+          for(var i = 0; i < this.listSystemsForSite.length; i ++) {
+            console.log(this.listSystemsForSite[i].customer_System_id)
+            //Get Customer_system_id for dbo.CustomerSystemInfoGet
+            //this.customer_System_id = e.target.value;
+            this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+            this.systemTypeID = this.listSystemsForSite[i].systemType;
+            this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+            
+            this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+              res => {
+                console.log(res)
+                this.alarmAccount = res.accountNumber;
+                this.systemTypeID = res.systemType;
+                this.panelTypeID = res.panelType;
+                this.panelLocation = res.panelLocation;
+                this.centralStationID = res.centralStationID;
+                this.additionalInfo = res.additionalInfo;
+              }
+            )
+          }
+        }
+      )
+    }
+  }
+
+  onChangeSystem(e) {
+    console.log(e.target.value) 
+    for(var i = 0; i < this.listSystemsForSite.length; i ++) {
+      //console.log(this.listSystemsForSite[i].customer_System_id)
+      //Get Customer_system_id for dbo.CustomerSystemInfoGet
+      this.alarmAccount = '';
+      this.systemTypeID ='';
+      this.panelTypeID = '';
+      this.panelLocation = '';
+      this.centralStationID = '';
+      this.additionalInfo = '';
+
+      this.customer_System_id = parseInt(e.target.value);
+      this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+
+      this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+        res => {
+          // console.log(res)
+          // console.log(res.accountNumber)
+          //this.incentiveDashboardForm.get('AlarmAccount').setValue(res.alarmAccount)
+          this.alarmAccount = res.accountNumber;
+          this.systemTypeID = res.systemType;
+          this.panelTypeID = res.panelType;
+          this.panelLocation = res.panelLocation;
+          this.centralStationID = res.centralStationID;
+          this.additionalInfo = res.additionalInfo;
+        }
+      )
+    }
   }
 
   openSearchSiteModal(site) {
@@ -1035,18 +1059,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.routeService.getCustomerSearchListSite().subscribe(
       res => {
         this.customerSearchListSite = res;
+        console.log(this.customerSearchListSite)
+        for(var i = 0; i < this.customerSearchListSite.length; i++) {
+          console.log(this.customerSearchListSite[i])
+        }
       }
     )
   }
 
   //select Site 1st
-  selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number) {
+  selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number,customer_Number:string) {
     this.divSystemSearchIcon.nativeElement.style.display='none';
     
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     let selectedSiteName = siteName;
     let selectedCustomerSiteId = customer_Site_Id;
+    let selectedCustomerNumber = customer_Number;
 
     // console.log(selectedCustomerName)
     // console.log(selectedCustomerid);
@@ -1057,50 +1086,64 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.id = selectedCustomerid;
     this.customerSiteId = selectedCustomerSiteId;
     this.siteName = selectedSiteName;
-    this.customer = selectedCustomerName;
+    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
 
     // localStorage.setItem("siteName", this.siteName);
     // localStorage.setItem("customerName", this.customer);
 
     this.modalService.dismissAll();
 
-    this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
-    this.isRemoveDropdown = !this.isRemoveDropdown;
-    //populate customer, populate system
-    this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
+    this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        for(var i = 0; i < res.length; i++) {
-          console.log(res[i])
-          this.customerSystemId = res[i].customer_System_id;
-          this.systemTypeID = res[i].systemType;
-          this.alarmAccount = res[i].alarmAccount;
+        //console.log(res);
+        this.listsitesforcustomer = res;
+        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+          console.log(this.listsitesforcustomer[i])
+          
         }
-        //this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
-
-        this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
-          res => {
-            for(var i = 0; i < res.length; i++) {
-              console.log(res[i])
-            }
-            this.alarmAccount = res.accountNumber;
-            this.centralStationID = res.centralStationID;
-            this.panelLocation = res.panelLocation;
-            this.panelTypeID = res.panelType;
-            this.systemTypeID = res.systemType;
-          }
-        )
-
-        let alarmAccount = this.alarmAccount;
-        let systemTypeID = this.systemTypeID;
-        // console.log(alarmAccount);
-        // console.log(systemType);
-        this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
-        this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
-        this.systemCode = alarmAccount + ' - ' + systemTypeID;
-
-        //this.systemType = res.systemType
       }
     )
+
+    //focus Site
+    this.siteElement.nativeElement.focus()
+
+    // this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
+    // this.isRemoveDropdown = !this.isRemoveDropdown;
+    //populate customer, populate system
+    // this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
+    //   res => {
+    //     for(var i = 0; i < res.length; i++) {
+    //       console.log(res[i])
+    //       this.customerSystemId = res[i].customer_System_id;
+    //       this.systemTypeID = res[i].systemType;
+    //       this.alarmAccount = res[i].alarmAccount;
+    //     }
+    //     //this.customerSystemId = res.customer_System_id; //fix for error encountered on 06/23/2021
+
+    //     this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
+    //       res => {
+    //         for(var i = 0; i < res.length; i++) {
+    //           console.log(res[i])
+    //         }
+    //         this.alarmAccount = res.accountNumber;
+    //         this.centralStationID = res.centralStationID;
+    //         this.panelLocation = res.panelLocation;
+    //         this.panelTypeID = res.panelType;
+    //         this.systemTypeID = res.systemType;
+    //       }
+    //     )
+
+    //     let alarmAccount = this.alarmAccount;
+    //     let systemTypeID = this.systemTypeID;
+    //     // console.log(alarmAccount);
+    //     // console.log(systemType);
+    //     this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
+    //     this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+    //     this.systemCode = alarmAccount + ' - ' + systemTypeID;
+
+    //     //this.systemType = res.systemType
+    //   }
+    // )
 
   }
 
@@ -1113,18 +1156,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.routeService.getCustomerSearchListCentralStation().subscribe(
       res => {
         this.customerSearchListCentralStation = res;
+        console.log(this.customerSearchListCentralStation)
+        for(var i = 0; i < this.customerSearchListCentralStation.length; i++) {
+          console.log(this.customerSearchListCentralStation[i])
+        }
       }
     )
   }
 
   //select Central Station 1st
-  selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, alarmAccount:string, systemCode: string, customer_Name:string) {
+  selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, alarmAccount:string, system_Code: string, customer_Name:string, customer_Number:string) {
     let selectedCustomerid = customer_id;
     let selectedCustomerSiteId = customer_Site_Id;
     let selectedCustomerSystemId = customer_System_Id;
     let selectedAlarmAccount = alarmAccount;
-    let selectedSystemCode = systemCode;
+    let selectedSystemCode = system_Code;
     let selectedCustomerName = customer_Name;
+    let selectedCustomerNumber = customer_Number;
 
     // console.log(selectedCustomerid)
     // console.log(selectedCustomerSiteId)
@@ -1136,49 +1184,69 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.id = selectedCustomerid;
     this.customerSystemId = selectedCustomerSystemId;
     this.alarmAccount = selectedAlarmAccount;
+    this.customer_Number = selectedCustomerNumber;
     this.systemCode = selectedAlarmAccount+' - '+selectedSystemCode;
-    this.customer = selectedCustomerName;
+    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
 
-    //localStorage.setItem("customerName", this.customer);
-    //localStorage.setItem("customerSystemInformation", this.systemCode)
+    console.log(selectedCustomerSiteId);
+    console.log(selectedAlarmAccount+' - '+selectedSystemCode)
 
     this.modalService.dismissAll();
 
-    this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
-    this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
-    this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
-    this.isRemoveDropdown = !this.isRemoveDropdown;
-
-    //console.log(this.customerSystemId)
-
-    //populate site, populate customer
-    this.routeService.getListSitesForCustomer(selectedCustomerid).subscribe(
+    this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        for(var i = 0; i < res.length; i++) {
-          console.log(res[i].siteName)
-          this.siteName = res[i].siteName;
-          this.customerSiteId = res[i].customer_Site_id;
+        //console.log(res);
+        this.listsitesforcustomer = res;
+        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+          console.log(this.listsitesforcustomer[i].customer_Site_id)
+
+          //focus Site
+          this.siteElement.nativeElement.focus()
+
+          //focus System
+
+          // capture the chosen customer_Site_id
+          // compare selectedCustomerSiteId vs
+          // this.routeService.getListSystemsForSite(selectedCustomerSiteId).subscribe(
+          //   res => {
+          //     console.log(res)
+          //     this.selectedValue = res
+          //   }
+          // )
         }
-        console.log(res.siteName);
-        //this.siteName = res[i].siteName
-        // this.customer_Site_id = res.customer_Site_id;
-        //this.customerSiteId = res[i].customer_Site_id; //fix for error encountered on 06/23/2021
-        //localStorage.setItem("customerSiteName",this.siteName);
       }
     )
 
-    this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
-      res => {
+    // this.isSystemSelectionFirst = !this.isSystemSelectionFirst;
+    // this.isRemoveSystemDropdown = !this.isRemoveSystemDropdown;
+    // this.isSiteSelectionFirst = !this.isSiteSelectionFirst;
+    // this.isRemoveDropdown = !this.isRemoveDropdown;
 
-        this.accountNumber = res.accountNumber;
-        this.additionalInfo = res.additionalInfo;
-        this.centralStationID = res.centralStationID;
+
+    // //populate site, populate customer
+    // this.routeService.getListSitesForCustomer(selectedCustomerid).subscribe(
+    //   res => {
+    //     for(var i = 0; i < res.length; i++) {
+    //       console.log(res[i].siteName)
+    //       this.siteName = res[i].siteName;
+    //       this.customerSiteId = res[i].customer_Site_id;
+    //     }
+    //     console.log(res.siteName);
+    //   }
+    // )
+
+    // this.routeService.getCustomerSystemInfoGetByID(this.customerSystemId).subscribe(
+    //   res => {
+
+    //     this.accountNumber = res.accountNumber;
+    //     this.additionalInfo = res.additionalInfo;
+    //     this.centralStationID = res.centralStationID;
         
-        this.panelLocation = res.panelLocation;
-        this.panelTypeID = res.panelType;
-        this.systemTypeID = res.systemType;
-      }
-    )
+    //     this.panelLocation = res.panelLocation;
+    //     this.panelTypeID = res.panelType;
+    //     this.systemTypeID = res.systemType;
+    //   }
+    // )
   }
 
   selectSystemsForCustomer(customersiteid:number) {
@@ -1189,131 +1257,119 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  selectSitesForCustomer(val: any) {
-    this.updateSite(val)
-  }
+  // selectSitesForCustomer(val: any) {
+  //   this.updateSite(val)
+  // }
 
-  updateSite(val: any) {
-    this.routeService.getListSitesForCustomer(this.id).subscribe(
-      res => {
-        console.log(res)
-        this.listsitesforcustomer = res;
-        for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          console.log(this.listsitesforcustomer[i].customer_Site_id)
-          this.customersiteid = this.listsitesforcustomer[i].customer_Site_id;
-        }
-        this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
-          res => {
-            this.listSystemsForSite = [].concat(res);
-          }
-        )
-        // this.listsitesforcustomer = [].concat(res);
+  // updateSite(val: any) {
+  //   this.routeService.getListSitesForCustomer(this.id).subscribe(
+  //     res => {
+  //       console.log(res)
+  //       this.listsitesforcustomer = res;
+  //       for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+  //         console.log(this.listsitesforcustomer[i].customer_Site_id)
+  //         this.customersiteid = this.listsitesforcustomer[i].customer_Site_id;
+  //       }
+  //       this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+  //         res => {
+  //           this.listSystemsForSite = [].concat(res);
+  //         }
+  //       )
+  //     }
+  //   )
+  // }
 
-        // for(var prop in this.listsitesforcustomer) {
-          
-        //   this.customersiteid = this.listsitesforcustomer[prop].customer_Site_id;
-          
-        //   this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
-        //     res => {
-        //       this.listSystemsForSite = [].concat(res);
-        //     }
-        //   )
-        // }
-      }
-    )
-  }
+  // selectSiteToSystem(customer_Site_id:number) {
+  //   this.updateSystem(customer_Site_id);
+  //   //console.log(customer_Site_id)
+  // }
 
-  selectSiteToSystem(customer_Site_id:number) {
-    this.updateSystem(customer_Site_id);
-    //console.log(customer_Site_id)
-  }
+  // updateSystem(customer_Site_id:number) {
 
-  updateSystem(customer_Site_id:number) {
-
-    this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
-      res => {
-        console.log(res)
-        this.listSystemsForSite = [].concat(res);
+  //   this.routeService.getListSystemsForSite(this.customersiteid).subscribe(
+  //     res => {
+  //       console.log(res)
+  //       this.listSystemsForSite = [].concat(res);
         
-        for(var i = 0; i < this.listSystemsForSite.length; i++) {
-          this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
-        }
+  //       for(var i = 0; i < this.listSystemsForSite.length; i++) {
+  //         this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+  //       }
 
-        this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
-          res => {
-            //console.log(res);
-            this.accountNumber = res.accountNumber;
-            this.additionalInfo = res.additionalInfo;
-            this.centralStationID = res.centralStationID;
+  //       this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+  //         res => {
+  //           //console.log(res);
+  //           this.accountNumber = res.accountNumber;
+  //           this.additionalInfo = res.additionalInfo;
+  //           this.centralStationID = res.centralStationID;
             
-            this.panelLocation = res.panelLocation;
-            this.panelTypeID = res.panelType;
-            this.systemTypeID = res.systemType;
+  //           this.panelLocation = res.panelLocation;
+  //           this.panelTypeID = res.panelType;
+  //           this.systemTypeID = res.systemType;
 
-            this.routeService.getListSystemTypes().subscribe(
-              res => {
+  //           this.routeService.getListSystemTypes().subscribe(
+  //             res => {
 
-                let result = res.filter(a => a.system_Id===this.systemTypeID)
+  //               let result = res.filter(a => a.system_Id===this.systemTypeID)
 
-                for(var i in result) {
-                  this.systemName = result[i].systemName;
-                }
-              }
-            )
+  //               for(var i in result) {
+  //                 this.systemName = result[i].systemName;
+  //               }
+  //             }
+  //           )
 
-            this.routeService.getListPanelTypes().subscribe(
-              res => {
+  //           this.routeService.getListPanelTypes().subscribe(
+  //             res => {
 
-                let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
+  //               let result = res.filter(p => p.panel_Type_Id===this.panel_Type_Id)
 
-                for(var i in result) {
-                  this.panelName = result[i].panelName
+  //               for(var i in result) {
+  //                 this.panelName = result[i].panelName
                  
-                }
-              }
-            )
+  //               }
+  //             }
+  //           )
 
-          }
-        )
-      }
-    )
+  //         }
+  //       )
+  //     }
+  //   )
 
-    // setTimeout(() => {
-    //   this.incentiveDashboardForm.get('CustomerID').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.customer = val;
-    //   })
+  //   // setTimeout(() => {
+  //   //   this.incentiveDashboardForm.get('CustomerID').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.customer = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('CustomerSiteID').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.site = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('CustomerSiteID').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.site = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('CustomerSystemID').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.system = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('CustomerSystemID').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.system = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('AlarmAccount').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.accountNumber = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('AlarmAccount').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.accountNumber = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('SystemType').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.system = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('SystemType').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.system = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('PanelType').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.panelType = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('PanelType').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.panelType = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('PanelLocation').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.location = val;
-    //   })
+  //   //   this.incentiveDashboardForm.get('PanelLocation').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.location = val;
+  //   //   })
   
-    //   this.incentiveDashboardForm.get('CentralStationID').valueChanges.subscribe(val => {
-    //     this.dashboardSelectForLocalStorage.centralStation
-    //     console.log(this.dashboardSelectForLocalStorage);
-    //     localStorage.setItem("testObject",JSON.stringify(this.dashboardSelectForLocalStorage))
-    //   })
-    // }, 4);
-  }
+  //   //   this.incentiveDashboardForm.get('CentralStationID').valueChanges.subscribe(val => {
+  //   //     this.dashboardSelectForLocalStorage.centralStation
+  //   //     console.log(this.dashboardSelectForLocalStorage);
+  //   //     localStorage.setItem("testObject",JSON.stringify(this.dashboardSelectForLocalStorage))
+  //   //   })
+  //   // }, 4);
+  // }
 
   onSubmit(form: FormGroup) {
     //Incentive_ADD_Start
@@ -1341,13 +1397,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
     // this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
-    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customerSystemId); //fix for error encountered on 06/23/2021
+    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id); //fix for error encountered on 06/23/2021
     this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
     this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
     // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
     //this.incentiveDashboardForm.controls["ContractTerm"].setValue(0); //this was passing a hard-coded zero value
     // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
-    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customerSiteId);
+    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
 
     // confirm('Click ok to confirm form submission')
 
@@ -3853,20 +3909,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   getItemName(e:any,i:number) {
-    // this.counter=0;
-    // for(let x of this.incentiveRecurringEntryForm.controls.entryRows['controls']){
-    //   console.log(this.incentiveRecurringEntryForm.get(['entryRows',this.counter]).value)
-    //   this.counter = this.counter+1;
-    // }
-    
-    // let v = this.incentiveRecurringEntryForm.controls['entryRows'].value.forEach(function(currentRecurringRow) {
-    //   console.log(currentRecurringRow.ItemID);
-    //   return currentRecurringRow.ItemID;
-    // })
-
-
-    //get the description from listrecurringitems based on the selected ItemID
-    //console.log(e.target.value)//returns 'index: item_id', as a string
     let currentID = e.target.value;
 
     setTimeout(() => {
@@ -3883,13 +3925,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           string = e.itemName.toString();
         })
         const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-        controlArray.at(i).get('Description').setValue(string);//this is working now!!! Yeah!!!
-        // for(let i = 0; i < controlArray.value.length;i++) {
-        //   console.log(i)
-        //   //this gets current index of FormArray plus all previous indexes
-        //   controlArray.at(i).get('Description').setValue(string);
-        // }
-        
+        controlArray.at(i).get('Description').setValue(string);
       });
       
       }, 4);
@@ -3927,61 +3963,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     .removeAt(i);
     }
 
-    // (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
-    // .push(this.initEntryRow());
-
     localStorage.removeItem("recurringentry");
     localStorage.removeItem("totalRecurringCalc");
   }
-
-  // calculateRMR(val:any){
-  //   const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   console.log(rowVal.RMR);
-  //   this.rmr = parseInt(rowVal.RMR);
-  // }
-
-  // calculatePassThrough(val:any) {
-  //   const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   console.log(rowVal.PassThrough);
-  //   this.passThrough = parseInt(rowVal.PassThrough);
-  // }
-
-  // calculateMultiple(val:any,i:number) {
-  //   const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   console.log(rowVal.Multiple);
-  //   this.multiple = rowVal.Multiple;
-  //   this.calculateTotal(val,i)
-  // }
-
-  // calculateTotal(val:any,i:number) {
-  //   let totalRecurringCalc = this.total = (this.rmr - this.passThrough) * this.multiple;
-    
-  //   console.log(totalRecurringCalc);
-
-  //   this.totalRecurringCalc = totalRecurringCalc;
-    
-  //   localStorage.setItem('totalRecurringCalc',this.totalRecurringCalc);
-
-  //   const getItemID = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-  //     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-
-  //     controlArray.at(i).get('Total').setValue('$'+this.totalRecurringCalc);
-
-  //     console.log(controlArray.at(i).get('Total').value);
-  //   })
-  // }
 
   checkboxChanged(e) {
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring')
@@ -4039,13 +4023,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.equipmentAndMaterials=this.totalSumEquipMat;
     console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
     localStorage.setItem('equipmatentry', JSON.stringify(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value));
-    // let allVals = control.controls.forEach((element, index) => {
-    //   console.log(element.value) //object FormGroup
-    //   localStorage.setItem('equipmatentry', JSON.stringify(element.value));
-    // });
-    //return
-
-    // localStorage.setItem('equipmatentry',JSON.stringify(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0]));
 
     this.modalService.dismissAll();
   }
@@ -4089,36 +4066,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.removeItem("totalEquipMatCalc");
   }
 
-  // calculateQuantity(val:any,i:number) {
-  //   const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   this.quantity = rowVal.Quantity;
-  // }
-
-  // calculateCost(val:any,i:number){
-  //   const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   this.cost = parseInt(rowVal.Cost);
-  //   this.calculateEquipMatTotal(val,i)
-  // }
-
-  // calculateEquipMatTotal(val:any,i:number) {
-  //   let totalEquipMatCalc = this.total = (this.quantity * this.cost);
-
-  //   this.totalEquipMatCalc = totalEquipMatCalc;
-  //   localStorage.setItem('totalEquipMatCalc', this.totalEquipMatCalc);
-
-  //   const getItemID = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-  //     const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-  //     controlArray.at(i).get('Total').setValue('$'+this.totalEquipMatCalc);
-  //   })
-  // }
   /****END Equipment & Materials Modal *********************************/
 
   /****Labor Charges Modal *********************************/
@@ -4152,15 +4099,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   onLaborChargesSubmit(form: FormGroup) {
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
-
-    // const laborChargesArr = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
-    // let rowVal;
-    // laborChargesArr.controls.forEach(function(e) {
-    //   rowVal = e.value;
-    //   console.log(rowVal);
-    // })
-
-    // return
     
     this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
 
@@ -4193,39 +4131,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.removeItem("laborchargesentry");
     localStorage.removeItem("totalLaborChargesCalc");
   }
-
-  // calculateHours(val:any) {
-  //   const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   //console.log(rowVal.Hours);
-  //   this.laborQuantity = parseInt(rowVal.Quantity);
-  // }
-
-  // calculateCostPerHour(val:any,i:number) {
-  //   const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
-  //   var rowVal;
-  //   controlArray.controls.forEach(function(e) {
-  //     rowVal = e.value;
-  //   });
-  //   this.laborCost = parseInt(rowVal.Cost);
-  //   this.calculateLaborChargesTotal(val,i);
-  // }
-
-  // calculateLaborChargesTotal(val:any,i:number) {
-  //   let totalLaborChargesCalc = this.total = (this.laborQuantity * this.laborCost);
-    
-  //   // this.totalLaborChargesCalc = totalLaborChargesCalc.toString();
-  //   this.totalLaborChargesCalc = totalLaborChargesCalc;
-  //   localStorage.setItem('totalLaborChargesCalc', this.totalLaborChargesCalc);
-
-  //   const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(element => {
-  //     const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
-  //     controlArray.at(i).get('Total').setValue('$'+this.totalLaborChargesCalc);
-  //   })
-  // }
   /****END Labor Charges Modal *********************************/
 
   routeToEquipMaterials() {

@@ -13,6 +13,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-5">
+                        <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
                             <input 
@@ -21,14 +22,6 @@
                                 [(ngModel)]="customer" 
                                 formControlName="CustomerID"
                             >
-                            
-                            <!-- <input 
-                                type="text" 
-                                class="form-control col-sm-12" 
-                                [(ngModel)]="systemCode" 
-                                formControlName="SystemCode"
-                            > -->
-
                             <span class="ml-2" (click)="openSearchCustomerModal(content)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -38,9 +31,9 @@
                             </span>
                         </div>
                         
+                        <!--SITE-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Site</label>
-
                             <div *ngIf="isSiteSelectionFirst">
                                 <input 
                                     type="text" 
@@ -49,36 +42,25 @@
                                     formControlName="CustomerSiteID"
                                 >
                             </div>
-                            <!-- <input 
-                                type="text" 
-                                class="form-control col-sm-5" 
-                                [(ngModel)]="siteName" 
-                                formControlName="Site"
-                            > -->
                             <div *ngIf="isRemoveDropdown">
                                 <div class="dropdown">
                                     <select 
+                                        #siteRef
                                         formControlName="CustomerSiteID" 
                                         class="form-control col-sm-12 fullWidthSelect" 
-                                        [(ngModel)]="siteName" 
-                                        (ngModelChange)="updateSite($event)">
-                                        <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
-                                            {{ site.siteName }}
+                                        [(ngModel)]="siteName"
+                                        (change)="onChangeSite($event)" 
+                                    >
+                                        <option 
+                                            *ngFor="let site of listsitesforcustomer" 
+                                            value="{{ site.customer_Site_id }}" 
+                                            
+                                        >
+                                            {{ site.siteName }} - {{ site.address_1 }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="dropdown">
-                                <select 
-                                    formControlName="Site" 
-                                    class="form-control col-sm-12" 
-                                    [(ngModel)]="siteName" 
-                                    (ngModelChange)="updateSite($event)">
-                                    <option *ngFor="let site of listsitesforcustomer" value="{{ site.customer_Site_id }}" [ngValue]="site.customer_Site_id">
-                                        {{ site.siteName }}
-                                    </option>
-                                </select>
-                            </div> -->
                             <span class="ml-2" #siteSearchIcon (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -88,6 +70,7 @@
                             </span>
                         </div>
                         
+                        <!--SYSTEM-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System</label>
 
@@ -99,49 +82,31 @@
                                     formControlName="CustomerSystemID"
                                 >
                             </div>
-                            <!-- <input 
-                                type="text" 
-                                class="form-control col-sm-12" 
-                                [(ngModel)]="systemType" 
-                                formControlName="SystemType"
-                            > -->
-
                             <div *ngIf="isRemoveSystemDropdown">
                                 <div class="dropdown">
                                     <select 
+                                        #systemRef
                                         formControlName="CustomerSystemID" 
                                         class="form-control col-sm-12 fullWidthSelect"
                                         [(ngModel)]="selectedValue"
-                                        (ngModelChange)="updateSystem($event)"
+                                        (change)="onChangeSystem($event)"
                                     >
-                                        <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
+                                        <option 
+                                            *ngFor="let system of listSystemsForSite" 
+                                            value="{{ system.customer_System_id }}" 
+                                        >
                                             {{ system.systemType }} - {{  system.alarmAccount }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="dropdown">
-                                <select 
-                                    formControlName="System" 
-                                    class="form-control col-sm-12"
-                                    [(ngModel)]="selectedValue"
-                                    (ngModelChange)="updateSystem($event)"
-                                >
-                                    <option *ngFor="let system of listSystemsForSite" value="{{ system.customer_System_id }}" [ngValue]="system.customer_System_id">
-                                        {{ system.systemType }}
-                                    </option>
-                                </select>
-                            </div> -->
                             <span class="ml-2" #systemSearchIcon (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <input type="checkbox" class="form-control form-check-input ml-3" [(ngModel)]="newSystem" formControlName="NewSystem">
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                         </div>
-                        <!-- <div class="form-group form-inline form-check">
-                            <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
-                            <input type="checkbox" class="form-control form-check-input" [(ngModel)]="newSystem" formControlName="NewSystem">
-                        </div> -->
+
                         <div class="form-group form-inline">
                             <p class="text-danger">Verify System Information!</p>
                         </div>
@@ -751,7 +716,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id,customer.customer_Name)" click>
+                <tr *ngFor="let customer of customerSearchList | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id,customer.customer_Name,customer.customer_Number)" click>
                     <td>{{ customer.customer_Number }}</td>
                     <td>{{ customer.customer_Name }}</td>
                     <td>{{ customer.customerStatus }}</td>
@@ -897,7 +862,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let site of customerSearchListSite | filterSite:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectSite(site.customer_id,site.customer_Name, site.siteName, site.customer_Site_Id)" click>
+                <tr *ngFor="let site of customerSearchListSite | filterSite:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectSite(site.customer_id,site.customer_Name, site.siteName, site.customer_Site_Id,site.customer_Number)" click>
                     <td>{{ site.customer_Number }}</td>
                     <td>{{ site.customer_Name }}</td>
                     <td>{{ site.customerStatus }}</td>
@@ -1040,7 +1005,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let station of customerSearchListCentralStation | filterCentralStation:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCentralStation(station.customer_id, station.customer_Site_Id, station.customer_System_Id, station.alarmAccount, station.system_Code, station.customer_Name)" click>
+                <tr *ngFor="let station of customerSearchListCentralStation | filterCentralStation:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCentralStation(station.customer_id, station.customer_Site_Id, station.customer_System_Id, station.alarmAccount, station.system_Code, station.customer_Name, station.customer_Number)" click>
                     <td>{{ station.alarmAccount }}</td>
                     <td>{{ station.systemStatus }}</td>
                     <td>{{ station.system_Code }}</td>

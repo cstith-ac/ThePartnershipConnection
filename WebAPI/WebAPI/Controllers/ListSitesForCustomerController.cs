@@ -47,33 +47,5 @@ namespace WebAPI.Controllers
             //return db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer @CustomerID={0}", id).ToListAsync().Result.FirstOrDefault();
             return await db.GetListSitesForCustomers.FromSqlRaw("EXEC dbo.ListSitesForCustomer @CustomerID={0}", id).ToListAsync();
         }
-
-        //[HttpGet]
-        //[Authorize]
-        //public async Task<Object> GetListSitesForCustomers()
-        //{
-        //    var customers = new List<ListSitesForCustomer>();
-
-        //    await using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        connection.Open();
-
-        //        var customerID = new SqlParameter("@CustomerId", 107746);
-        //        var result = await db.GetListSitesForCustomers.FromSqlRaw("EXECUTE [dbo].[ListSitesForCustomer] @CustomerID", customerID).ToListAsync();
-        //        List<ListSitesForCustomer> Lst = result.Select(s => new ListSitesForCustomer
-        //        {
-        //            Customer_Site_id = s.Customer_Site_id,
-        //            SiteName = s.SiteName,
-        //            SiteStatus = s.SiteStatus,
-        //            Address_1 = s.Address_1,
-        //            Address_2 = s.Address_2,
-        //            City = s.City,
-        //            State = s.State,
-        //            ZipCode = s.ZipCode
-        //        }).ToList();
-
-        //        return Lst;
-        //    }
-        //}
     }
 }

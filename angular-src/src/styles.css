@@ -1,1 +1,133 @@
 /* You can add global styles to this file, and also import other style files */
+/* a, p, li, label, input, option, span, pre, button {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather Bold', serif !important;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Black';
+    src: url(assets/fonts/SourceSansPro-Black.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Black Italic';
+    src: url(assets/fonts/SourceSansPro-BlackItalic.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Bold';
+    src: url(assets/fonts/SourceSansPro-Bold.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Bold Italic';
+    src: url(assets/fonts/SourceSansPro-BoldItalic.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Extra Light';
+    src: url(assets/fonts/SourceSansPro-ExtraLight.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Extra Light Italic';
+    src: url(assets/fonts/SourceSansPro-ExtraLightItalic.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Italic';
+    src: url(assets/fonts/SourceSansPro-Italic.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Light';
+    src: url(assets/fonts/SourceSansPro-Light.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro Light Italic';
+    src: url(assets/fonts/SourceSansPro-LightItalic.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url(assets/fonts/SourceSansPro-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Source Sans Pro SemiBold';
+    src: url(assets/fonts/SourceSansPro-SemiBold.ttf)
+}
+
+@font-face {
+    font-family: 'Source Sans Pro SemiBold Italic';
+    src: url(assets/fonts/SourceSansPro-SemiBoldItalic.ttf)
+}
+@font-face {
+    font-family: 'Merriweather Black';
+    src: url(assets/fonts/Merriweather-Black.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Black Italic';
+    src: url(assets/fonts/Merriweather-BlackItalic.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Bold';
+    src: url(assets/fonts/Merriweather-Bold.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Bold Italic';
+    src: url(assets/fonts/Merriweather-BoldItalic.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Italic';
+    src: url(assets/fonts/Merriweather-Italic.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Light';
+    src: url(assets/fonts/Merriweather-Light.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Light Italic';
+    src: url(assets/fonts/Merriweather-LightItalic.ttf);
+}
+@font-face {
+    font-family: 'Merriweather Regular';
+    src: url(assets/fonts/Merriweather-Regular.ttf);
+}
+@font-face {
+    font-family: 'Charlevoix Pro Black';
+    src: url(assets/fonts/CharlevoixPro-Black.otf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro Bold';
+    src: url(assets/fonts/CharlevoixPro-Bold.ttf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro ExtraBold';
+    src: url(assets/fonts/CharlevoixPro-ExtraBold.ttf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro Light';
+    src: url(assets/fonts/CharlevoixPro-Light.ttf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro Medium';
+    src: url(assets/fonts/CharlevoixPro-Medium.ttf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro Regular';
+    src: url(assets/fonts/CharlevoixPro-Regular.otf)
+}
+
+@font-face {
+    font-family: 'Charlevoix Pro Thin';
+    src: url(assets/fonts/CharlevoixPro-Thin.otf)
+} */
