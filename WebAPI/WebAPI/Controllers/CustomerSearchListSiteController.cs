@@ -44,7 +44,14 @@ namespace WebAPI.Controllers
                 connection.Open();
                 //var site = new SqlParameter("@SearchField", "Site");
                 var site = "Site";
-                var email = "aprilm@palmettosecuritysystems.com";
+
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                var c = user.UserName;
+
+                //var email = "aprilm@palmettosecuritysystems.com";
+                var email = c;
+
                 var result = await db.GetCustomerSearchListSites.FromSqlRaw("EXECUTE dbo.CustomerSearchList @EmailAddress = '" + email + "', @SearchField ='" + site + "' ").ToListAsync();
                 List<CustomerSearchListSites> Lst = result.Select(s => new CustomerSearchListSites
                 {

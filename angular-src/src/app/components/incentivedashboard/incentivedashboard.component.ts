@@ -959,13 +959,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.modalService.dismissAll();
 
+    //focus Site
+    this.siteElement.nativeElement.focus()
+
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
         //console.log(res);
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
           console.log(this.listsitesforcustomer[i])
-          
         }
       }
     )
@@ -988,6 +990,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.customer_Site_id = parseInt(e.target.value);
       this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
+
+      console.log(e.target.options[e.target.options.selectedIndex].text)
+      this.customerSiteName = e.target.options[e.target.options.selectedIndex].text
 
       this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
         res => {
@@ -1033,6 +1038,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.customer_System_id = parseInt(e.target.value);
       this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+
+      console.log(e.target.options[e.target.options.selectedIndex].text)
+      this.systemName = e.target.options[e.target.options.selectedIndex].text
 
       this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
         res => {

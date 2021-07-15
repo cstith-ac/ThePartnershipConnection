@@ -52,9 +52,6 @@ namespace WebAPI.Controllers
             //    user.AfauserLink
             //};
 
-
-
-
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();

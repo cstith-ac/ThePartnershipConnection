@@ -70,6 +70,7 @@ namespace WebAPI.Models
         public virtual DbSet<CheckBoxIncompatible> GetCheckBoxIncompatibles { get; set; }
         public virtual DbSet<CheckBoxAutoInsert> GetCheckBoxAutoInserts { get; set; }
         public virtual DbSet<CheckboxAutoInsertList> CheckboxAutoInsertLists { get; set; }
+        public virtual DbSet<CustomerSearchMatch> GetCustomerSearchMatches { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -470,12 +471,11 @@ namespace WebAPI.Models
             {
                 entity.ToTable("CheckboxAutoInsertList");
                 entity.HasNoKey();
+            });
 
-                //entity.Property(e => e.InstallCompanyID
-                //    .HasColumnName("InstallCompanyID")
-                //    .ValueGeneratedOnAdd();
-
-                
+            modelBuilder.Entity<CustomerSearchMatch>(entity =>
+            {
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

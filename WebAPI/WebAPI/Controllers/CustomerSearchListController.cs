@@ -43,7 +43,12 @@ namespace WebAPI.Controllers
             {
                 connection.Open();
 
-                var email = "aprilm@palmettosecuritysystems.com";
+                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                var c = user.UserName;
+
+                //var email = "aprilm@palmettosecuritysystems.com";
+                var email = c;
 
                 var result = await db.GetCustomerSearchLists.FromSqlRaw("EXECUTE [dbo].[CustomerSearchList] @EmailAddress = '" + email + "'").ToListAsync();
                 List<CustomerSearchList> Lst = result.Select(s => new CustomerSearchList
