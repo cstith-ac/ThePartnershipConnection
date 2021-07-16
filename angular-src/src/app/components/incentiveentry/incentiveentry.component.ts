@@ -558,4 +558,11 @@ export class IncentiveentryComponent implements OnInit {
     }
   }
 
+  openInstallCompanyList() {
+    //open a modal with a list containing InstallCompanyList
+    //select an item from the InstallCompanyList
+    //this will update the incentive entry companyName and partnerCode
+    console.log('openInstallCompanyList')
+  }
+
 }

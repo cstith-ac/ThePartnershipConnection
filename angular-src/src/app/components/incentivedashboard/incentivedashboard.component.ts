@@ -74,7 +74,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   userEmailAddress: '';
 
   customer_Number;
-  customerNumber;
+  customerNumber; //used for getServerResponse ng-autocomplete
   companyName;
   partnerCode;
   installCompanyID;
@@ -910,6 +910,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                 res => {
                   console.log(res)
                   this.listSystemsForSite = res;
+
+                  for(var i = 0; i < this.listSystemsForSite.length; i++) {
+                    console.log(this.listSystemsForSite[i].customer_System_id)
+
+                    this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+                    this.systemTypeID = this.listSystemsForSite[i].systemType;
+                    this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+
+                    this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+                      res => {
+                        this.alarmAccount = res.accountNumber;
+                        this.systemTypeID = res.systemType;
+                        this.panelTypeID = res.panelType;
+                        this.panelLocation = res.panelLocation;
+                        this.centralStationID = res.centralStationID;
+                        this.additionalInfo = res.additionalInfo;
+                      }
+                    )
+                  }
                 })
             }
           }
@@ -935,6 +954,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.results = [];
     this.incentiveDashboardForm.controls["CustomerSiteID"].reset();
     this.incentiveDashboardForm.controls["CustomerSystemID"].reset();
+    this.incentiveDashboardForm.controls["AlarmAccount"].reset();
+    this.incentiveDashboardForm.controls["SystemTypeID"].reset();
+    this.incentiveDashboardForm.controls["PanelTypeID"].reset();
+    this.incentiveDashboardForm.controls["PanelLocation"].reset();
+    this.incentiveDashboardForm.controls["CentralStationID"].reset();
   }
   selectEvent(item) {
     console.log(item.customerID)
@@ -1170,7 +1194,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
     this.id = selectedCustomerid;
-    //this.incentiveDashboardForm.get("CustomerID").setValue(this.id);
+    this.incentiveDashboardForm.get("CustomerID").setValue(this.customer);
 
     this.modalService.dismissAll();
 

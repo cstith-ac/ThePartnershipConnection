@@ -154,6 +154,10 @@ export class AuthService {
     }
   }
 
+  isEmployeeWithIncentiveAccess() {
+    console.log('isEmployeeWithIncentiveAccess was called')
+  }
+
   isTestUser() {
     const user: any = JSON.parse(localStorage.getItem('user'));
     if(user.username === 'testuser@alarmfundingassociates.com') {

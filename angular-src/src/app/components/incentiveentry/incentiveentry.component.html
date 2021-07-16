@@ -5,7 +5,7 @@
                 <div class="row" *ngFor="let item of installCompanyList">
                     <h1 class="incentive-header">Incentive Entry | </h1>
                     <span *ngIf="installCompanyList.length &lt; 2; else multipleCompanyNameBlock">
-                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}}</p>
+                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyList()"></i></p>
                     </span>
                     <ng-template #multipleCompanyNameBlock>
                         <select name="" id="">
