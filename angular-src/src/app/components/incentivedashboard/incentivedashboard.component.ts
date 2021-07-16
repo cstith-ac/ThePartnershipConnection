@@ -21,6 +21,7 @@ import { ListRecurringItems } from 'src/app/models/listrecurringitems';
 import { ListMultiples } from 'src/app/models/listmultiples';
 import { ListMaterialItems } from '../../models/listmaterialitems';
 import { ListLaborItems } from 'src/app/models/listlaboritems';
+import { CustomerSearchMatch } from 'src/app/models/customersearchmatch';
 import { AuthService } from '../../services/auth.service';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -30,6 +31,8 @@ import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, mergeAll, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -40,6 +43,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   @Input() incentiveEntryOutput:[];
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
 
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild('customerRef') customerElement: ElementRef;
   @ViewChild('siteRef') siteElement: ElementRef;
   @ViewChild('systemRef') systemElement: ElementRef;
 
@@ -69,6 +74,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   userEmailAddress: '';
 
   customer_Number;
+  customerNumber;
   companyName;
   partnerCode;
   installCompanyID;
@@ -92,6 +98,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   incentive_Add_Equipment: Incentive_Add_Equipment[];
   listLaborItems: ListLaborItems[];
   incentive_Add_Labor: Incentive_Add_Labor[];
+  customersearchmatch :CustomerSearchMatch[];
+  results: any[] = [];
 
   dashboardSelectForLocalStorage = new IncentiveDashboard;
 
@@ -578,7 +586,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    this.onChanges();
+    //this.onChanges();
+    //this.onChangeCustomerNumber();
 
     // this.recurringItemEntryForm = this.fb.group({})
 
@@ -601,10 +610,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  onChanges():void {}
-
-  ngAfterContentInit():void {}
-
   ngAfterViewChecked() {
     //If there's a recurring, materials and equipment, and labor total in the service that's available...
     //then display in the total in the recurring, materials and equipment, and labor inputs
@@ -616,7 +621,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].updateValueAndValidity();
 
-        this.onChanges();
+        //this.onChanges();
       }
 
       if(!isNaN(parseFloat(this.equipmentAndMaterials))) {
@@ -872,6 +877,216 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.authToken = token;
   }
 
+  public placeholderq: string = 'Type a customer number...';
+  public keyword = 'customerNumber';
+  public historyHeading: string = 'Recently selected';
+
+  getServerResponse(event){
+    console.log(parseInt(event))
+    console.log(this.incentiveDashboardForm.controls["CustomerID"])
+    this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+    .pipe(debounceTime(1000),distinctUntilChanged(),filter(x => typeof x === 'string'))
+    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch('1116-1417')
+    .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+    .subscribe(response => {
+      console.log(response)
+      this.results = response;
+      let obj = response.find(e => e.customerName === e.customerName)
+      for(var i = 0; i < response.length; i++) {
+        console.log(response[i].customerID)
+        var x = response[i].customerID;
+        this.id = response[i].customerID;
+        this.customerNumber = response[i].customerNumber;
+        this.customer = response[i].customerName; //this is clearing the site entry when used with ngModel
+        this.routeService.getListSitesForCustomer(x).subscribe(
+          res => {
+            //console.log(res);
+            this.listsitesforcustomer = res;
+            for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+              console.log(this.listsitesforcustomer[i])
+              this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
+
+              this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+                res => {
+                  console.log(res)
+                  this.listSystemsForSite = res;
+                })
+            }
+          }
+        )
+      }
+    }
+      )
+    )
+
+    // var optionSelection;
+    // this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+    //   .pipe(debounceTime(1000))
+    //   .subscribe(data => {
+    //     if(optionSelection !== this.incentiveDashboardForm.controls["CustomerID"].value) {
+    //       this.routeService.getCustomerSearchMatch(data).subscribe(response => {
+    //         this.results = response
+    //       })
+    //     }
+    //   })
+  }
+  searchCleared(){
+    console.log('searchCleared');
+    this.results = [];
+    this.incentiveDashboardForm.controls["CustomerSiteID"].reset();
+    this.incentiveDashboardForm.controls["CustomerSystemID"].reset();
+  }
+  selectEvent(item) {
+    console.log(item.customerID)
+    //console.log(this.customerElement.nativeElement) //undefined
+    //this.customerElement.nativeElement.innerHTML = this.customerSiteName
+    // here we can write code for doing something with selected item
+    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
+    this.siteElement.nativeElement.focus()
+  }
+  onChangeSearch(val: string) {
+    // here we can fetch data from remote location here
+    // And reassign the 'data' which is binded to 'data' property.
+    // this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+    // .pipe(debounceTime(1000),distinctUntilChanged())
+    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+    // .subscribe(response => {
+    //   console.log(response)
+    //   this.results = response;
+    //   // let obj = response.find(e => e.customerName === e.customerName)
+    //   for(var i = 0; i < response.length; i++) {
+    //     console.log(response[i].customerID)
+    //     var x = response[i].customerID;
+    //     this.routeService.getListSitesForCustomer(x).subscribe(
+    //       res => {
+    //         //console.log(res);
+    //         this.listsitesforcustomer = res;
+    //         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+    //           console.log(this.listsitesforcustomer[i])
+
+              
+
+      
+    //         }
+    //       }
+    //     )
+    //   }
+    // }
+    //   )
+    // )
+  }
+  onFocused(e){
+    // here we can write our code for doing something when input is focused
+  }
+
+  // onChangeCustomerNumber(e){
+  //   // fromEvent(this.filter.nativeElement, 'keyup')
+  //   //   .pipe(
+  //   //     debounceTime(1000),
+  //   //     map((event: Event) => (<HTMLInputElement>event.target).value),
+  //   //     map(value => this.routeService.getCustomerSearchMatch(value)),
+  //   //     mergeAll(),
+  //   //   ).subscribe((data) => {
+        
+  //   //   })
+
+  //   this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+  //   .pipe(debounceTime(1000),distinctUntilChanged())
+  //   .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+  //   .subscribe(response => {
+  //     console.log(response)
+  //     this.results = response;
+  //     // let obj = response.find(e => e.customerName === e.customerName)
+  //     for(var i = 0; i < response.length; i++) {
+  //       console.log(response[i].customerID)
+  //       var x = response[i].customerID;
+  //       this.id = response[i].customerID;
+  //     }
+  //     this.routeService.getListSitesForCustomer(this.id).subscribe(
+  //       res => {
+  //         //console.log(res);
+  //         this.listsitesforcustomer = res;
+  //         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+  //           console.log(this.listsitesforcustomer[i])
+
+            
+
+    
+  //         }
+  //       }
+  //     )
+  //   }
+  //     )
+  //   )
+  // }
+
+  // onChangeCustomerNumber(e){
+  //   // fromEvent(this.filter.nativeElement, 'keyup')
+  //   //   .pipe(
+  //   //     debounceTime(1000),
+  //   //     map((event: Event) => (<HTMLInputElement>event.target).value),
+  //   //     map(value => this.routeService.getCustomerSearchMatch(value)),
+  //   //     mergeAll(),
+  //   //   ).subscribe((data) => {
+        
+  //   //   })
+
+  //   this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+  //   .pipe(debounceTime(1000),distinctUntilChanged())
+  //   .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+  //   .subscribe(response => {
+  //     console.log(response)
+  //     this.results = response;
+  //     // let obj = response.find(e => e.customerName === e.customerName)
+  //     for(var i = 0; i < response.length; i++) {
+  //       console.log(response[i].customerID)
+  //       var x = response[i].customerID;
+  //       this.routeService.getListSitesForCustomer(x).subscribe(
+  //         res => {
+  //           //console.log(res);
+  //           this.listsitesforcustomer = res;
+  //           for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+  //             console.log(this.listsitesforcustomer[i])
+
+  //             console.log(e.target.options[e.target.options.selectedIndex].text)
+  //     this.customerSiteName = e.target.options[e.target.options.selectedIndex].text
+
+  //     this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+  //       res => {
+  //         //console.log(res)
+  //         this.listSystemsForSite = res;
+
+  //         for(var i = 0; i < this.listSystemsForSite.length; i ++) {
+  //           console.log(this.listSystemsForSite[i].customer_System_id)
+  //           //Get Customer_system_id for dbo.CustomerSystemInfoGet
+  //           //this.customer_System_id = e.target.value;
+  //           this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+  //           this.systemTypeID = this.listSystemsForSite[i].systemType;
+  //           this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+            
+  //           this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+  //             res => {
+  //               console.log(res)
+  //               this.alarmAccount = res.accountNumber;
+  //               this.systemTypeID = res.systemType;
+  //               this.panelTypeID = res.panelType;
+  //               this.panelLocation = res.panelLocation;
+  //               this.centralStationID = res.centralStationID;
+  //               this.additionalInfo = res.additionalInfo;
+  //             }
+  //           )
+  //         }
+  //       }
+  //     )
+  //           }
+  //         }
+  //       )
+  //     }
+  //   }
+  //     )
+  //   )
+  // }
+
   //filter cancelled customers or by customerStatus (active or cancel)
   onItemChangeToInclude(value) {
     //console.log("Include cancelled customers: ", value)
@@ -976,6 +1191,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   onChangeSite(e){
     //focus System
     this.systemElement.nativeElement.focus()
+    console.log(e.target.value)
 
     for(var i = 0; i < this.listsitesforcustomer.length; i++) {
       // console.log(this.listsitesforcustomer[i].customer_Site_id)

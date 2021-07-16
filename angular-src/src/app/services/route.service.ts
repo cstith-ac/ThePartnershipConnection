@@ -16,6 +16,7 @@ import { Customer_Document_ADD } from '../models/customerdocumentadd';
 import { ResetPassword } from '../models/resetpassword';
 import { SummaryUpdate } from '../models/summaryupdate';
 import { Incentive_ADD_Finish } from '../models/incentiveaddfinish';
+import { CustomerSearchMatch } from '../models/customersearchmatch';
 
 @Injectable({
   providedIn: 'root'
@@ -434,6 +435,15 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
     };
     return this.http.get<any>(`${this.baseUrl}/api/ListLaborItems/`, httpOptions);
+  }
+
+  getCustomerSearchMatch(id: string): Observable<CustomerSearchMatch[]> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    console.log(`calling api with %c${id}`, 'font-weight:bold');
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchMatch/`+ id, httpOptions);
   }
 
   getCustomerSearchList(): Observable<any> {

@@ -169,3 +169,31 @@ header, .row {
   color:red;
   /* height: calc(1.5em + 1.3rem) !important; */
 }
+
+/*SAMPLE AUTOSUGGEST*/
+/* .customer-list {
+  width: 50%;
+  list-style: none;
+  border: 1px solid #ccc;
+  border-top: none;
+  position: absolute;
+  left: 25%;
+  max-height: calc(50% - 15px);
+  overflow-y: auto;
+  background: #fff;
+}*/
+.customer-select-list {
+  cursor: pointer;
+  padding: 5px 10px;
+}
+/*.customer-name {
+  display: inline-block;
+  position: absolute;
+}
+.customer-select-list:hover {
+  background: #c0c0c0;
+  color: #fff;
+} */
+.ng-autocomplete {
+  width: 280px;
+}

@@ -82,7 +82,7 @@ import { FilterSitePipe } from './_helpers/filter-site.pipe';
 import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
-
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 @NgModule({
   declarations: [
@@ -167,7 +167,8 @@ import { IncentiveDashboardTestComponent } from './components/incentive-dashboar
     }),
     NgbModule,
     GridModule,
-    ExcelModule
+    ExcelModule,
+    AutocompleteLibModule
   ],
   providers: [ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
   bootstrap: [AppComponent]

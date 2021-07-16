@@ -16,12 +16,72 @@
                         <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
-                            <input 
+                            <!-- <input 
                                 type="text"
                                 class="form-control col-sm-5 fullWidthInput" 
                                 [(ngModel)]="customer" 
                                 formControlName="CustomerID"
+                            > -->
+                            <!-- <input 
+                                #filter
+                                type="text"
+                                class="form-control col-sm-5 fullWidthInput" 
+                                [(ngModel)]="customer" 
+                                formControlName="CustomerID"
+                                (change)="onChangeCustomerNumber($event)"
+                                placeholder="Type a customer number..."
+                            > -->
+                            <!-- <ng-template let-results>
+                                {{results.customerName}}
+                            </ng-template> -->
+                            <!-- <ul class="customer-list">
+                                <li class="customer-select-list" *ngFor="let result of results">
+                                    <p class="customer-name">
+                                        {{ result.customerName }} - {{ result.customerNumber }}
+                                    </p>
+                                </li>
+                            </ul> -->
+                            <!-- <kendo-autocomplete
+                                [(data)]="results"
+                                formControlName="CustomerID"
+                                [placeholder]="'Type a customer number...'"
+                                [suggest]="true" 
+                                [(ngModel)]="customer"
+                                [filterable]="true"
+                                class="form-control col-sm-5 fullWidthInput"
+                                (change)="onChangeCustomerNumber($event)"
+                                textField="customerName"
+                                [valueField]="customerName"
                             >
+                                <ng-template kendoAutoCompleteItemTemplate let-results>{{results.customerName}}</ng-template>
+                            </kendo-autocomplete> -->
+                            <div class="ng-autocomplete">
+                                <ng-autocomplete
+                                    #customerRef
+                                    [data]="results"
+                                    formControlName="CustomerID"
+                                    
+                                    [searchKeyword]="keyword"
+                                    (selected)='selectEvent($event)'
+                                    (inputChanged)='getServerResponse($event)' (inputFocused)='onFocused($event)' 
+                                    (inputCleared)="searchCleared()"
+                                    [itemTemplate]="itemTemplate"
+                                    historyIdentifier="results"
+                                    [notFoundTemplate]="notFoundTemplate"
+                                    [placeholder]="'Type a customer number...'"
+                                >
+                                </ng-autocomplete>
+
+                                <ng-template #itemTemplate let-item>
+                                    <a [innerHTML]="item.customerName"></a>
+                                    <a [innerHTML]="item.customerNumber"></a>
+                                </ng-template>
+
+                                <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="notFound"></div>
+                                </ng-template>
+                            </div>
+                        
                             <span class="ml-2" (click)="openSearchCustomerModal(content)">
                                 <i class="fas fa-search"></i>
                             </span>
