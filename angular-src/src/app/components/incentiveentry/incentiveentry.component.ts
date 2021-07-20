@@ -5,11 +5,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { IncentiveEntry } from '../../models/incentiveentry';
 import { InstallCompanyList } from '../../models/installcompanylist';
+import { InstallCompanyList2 } from 'src/app/models/installcompanylist2';
 import { CheckBoxIndex } from '../../models/checkboxindex';
 import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
 @Component({
@@ -29,6 +31,7 @@ export class IncentiveentryComponent implements OnInit {
 
   incentiveEntry: IncentiveEntry[];
   installCompanyList: InstallCompanyList[];
+  installCompanyList2: InstallCompanyList2[];
   checkBoxIndex: CheckBoxIndex[];
   checkBoxIncompatible: CheckBoxIncompatible[];
   checkBoxAutoInsertList: CheckBoxAutoInsertList[];
@@ -37,6 +40,7 @@ export class IncentiveentryComponent implements OnInit {
   installCompanyID;
   companyName;
   partnerCode;
+  closeResult = '';
 
   invoiceNumber;
   invoiceDate;
@@ -66,6 +70,16 @@ export class IncentiveentryComponent implements OnInit {
   selected1=-1; //remove once fixed
   //selected1=12; //value of 11 auto-populates checkbox
 
+  //pagination
+  searchTerm: string;
+  page = 1;
+  pageSize = 25;
+  collectionSize: number;
+  allInstallCompanyList2: InstallCompanyList2[];
+  clickedID;
+  clickedCompanyName;
+  clickedPartnerCode;
+
   constructor(
     private currencyPipe: CurrencyPipe,
     private routeService: RouteService,
@@ -73,7 +87,8 @@ export class IncentiveentryComponent implements OnInit {
     private incentiveEntryService: IncentiveEntryService,
     private router: Router,
     public fb: FormBuilder,
-    private el: ElementRef
+    private el: ElementRef,
+    private modalService: NgbModal
   ) {
     this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID'));
     console.log(this.installCompanyID)
@@ -108,7 +123,7 @@ export class IncentiveentryComponent implements OnInit {
         const n = 'n';
         const times = 30;
         for(let i=13;i<=times;i++){
-          console.log(i);
+          //console.log(i);
           n.split(',')
           //this.selectedForCheckBoxAutoInsert.push(i)
           this.selectedForCheckBoxAutoInsert.push(n.repeat(1))
@@ -224,22 +239,41 @@ export class IncentiveentryComponent implements OnInit {
       //console.log('your logged in')
     }
 
-    this.routeService.getInstallCompanyList().subscribe(
-      res => {
-        // console.log(res.status)
-        this.installCompanyList = res;
+    // this.routeService.getInstallCompanyList().subscribe(
+    //   res => {
+    //     // console.log(res.status)
+    //     this.installCompanyList = res;
         
-        for(var i = 0;i < this.installCompanyList.length; i++) {
+    //     for(var i = 0;i < this.installCompanyList.length; i++) {
 
-          this.installCompanyID = this.installCompanyList[i].installCompanyID;
-          localStorage.setItem('installCompanyID',this.installCompanyID);
+    //       this.installCompanyID = this.installCompanyList[i].installCompanyID;
+    //       localStorage.setItem('installCompanyID',this.installCompanyID);
 
-          this.companyName = this.installCompanyList[i].companyName;
+    //       this.companyName = this.installCompanyList[i].companyName;
+    //       localStorage.setItem('companyName',this.companyName);
+
+    //       this.partnerCode = this.installCompanyList[i].partnerCode;
+    //       localStorage.setItem('partnerCode',this.partnerCode);
+
+    //     }
+    //   }
+    // )
+
+    this.routeService.getInstallCompanyList2().subscribe(
+      res => {
+        console.log(res[0])
+        this.installCompanyList2 = res;
+        this.collectionSize = res.length;
+        this.allInstallCompanyList2 = this.installCompanyList2;
+        
+
+        for(var i = 0; i < this.installCompanyList2.length; i++) {
+          this.installCompanyID = this.installCompanyList2[0].installCompanyID;
+          localStorage.setItem('installCompanyID', this.installCompanyID);
+          this.companyName = this.installCompanyList2[0].companyName;
           localStorage.setItem('companyName',this.companyName);
-
-          this.partnerCode = this.installCompanyList[i].partnerCode;
+          this.partnerCode = this.installCompanyList2[0].partnerCode;
           localStorage.setItem('partnerCode',this.partnerCode);
-
         }
       }
     )
@@ -558,11 +592,73 @@ export class IncentiveentryComponent implements OnInit {
     }
   }
 
-  openInstallCompanyList() {
+  openInstallCompanyListModal(installCompanyListContent) {
     //open a modal with a list containing InstallCompanyList
     //select an item from the InstallCompanyList
     //this will update the incentive entry companyName and partnerCode
     console.log('openInstallCompanyList')
+    this.modalService.open(installCompanyListContent, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log(result)
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  // onClickNewDefaultSelection(e) {
+  //   //console.log(e.target.id)
+  //   console.log(parseInt(e.target.id))
+  // }
+  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
+    //console.log(e.target.id)
+    console.log(this.clickedID=installCompanyID);
+
+    this.clickedID=installCompanyID;
+    this.clickedCompanyName=companyName;
+    this.clickedPartnerCode=partnerCode;
+
+    this.installCompanyID = this.clickedID;
+    this.companyName = this.clickedCompanyName;
+    this.partnerCode = this.clickedPartnerCode;
+
+    localStorage.setItem('installCompanyID',this.installCompanyID);
+    localStorage.setItem('companyName',this.companyName);
+    localStorage.setItem('partnerCode',this.partnerCode);
+
+    this.modalService.dismissAll();
+    this.searchTerm='';
+  }
+
+  search(value: string): void {
+    this.installCompanyList2 = this.allInstallCompanyList2.filter((val) => 
+    val.companyName.toLowerCase().includes(value));
+    this.collectionSize = this.installCompanyList2.length;
+    //console.log(this.collectionSize)
+  }
+
+  // clearSearchTerm() {
+  //   this.searchTerm='';
+  // }
+
+  // getPageSymbol(current: number) {
+  //   return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'][current - 1];
+  // }
+  getPageSymbol(current: number) {
+    // let x = this.allInstallCompanyList2.map(e=>e.companyName);
+    // console.log(x)
+    return ['A', 'B', 'C', 'D', 'E', 'F', 'G'][current - 1];
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }

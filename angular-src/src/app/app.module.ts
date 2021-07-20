@@ -17,6 +17,7 @@ import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FilterPipe } from './_helpers/filter.pipe';
+import { ListFilterPipe } from './_helpers/listFilterPipe';
 import { PointerStyleDirective } from './_helpers/pointer-style.directive';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
@@ -140,6 +141,7 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     FilterSitePipe,
     FilterCentralStationPipe,
     IncentiveDashboardTestComponent,
+    ListFilterPipe
     //CustomerTestComponent
   ],
   imports: [

@@ -74,7 +74,7 @@
         </div>
     </div>
     <div id="alarm_Account"></div>
-    <div class="table-responsive padding-botom10">
+    <div class="table-responsive padding-bottom10">
         <table class="table align-items-center table-borderless">
             <thead class="systemInfo-bg">
                 <tr>
@@ -92,7 +92,8 @@
                 <tr class="system-info-collection"></tr>
                 <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)" [style.padding-left]="'1.5rem'">{{ item.alarm_Account }} <br> 
                     <span *ngIf="item?.featureMessage?.length > 0" [style.color]="'red'" [style.fontWeight]="'900'" class="pr-2">{{ item.featureMessage }}</span>
-                    <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span></td>
+                    <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span>
+                </td>
                 <td>{{ item.alarm_Company_Code }}</td>
                 <td>{{ item.system_Code }}</td>
                 <td>{{ item.contract_Start_Date }}</td>

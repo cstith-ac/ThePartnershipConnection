@@ -17,7 +17,16 @@
       <div class="list-group list-group-flush">
         <a [routerLink]="['/login']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="!authService.loggedIn()">Login</a>
         
-        <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner()" (click)="removeDashboardData()">Partner View</a>
+        <span *ngIf="authService.loggedIn() && authService.isPartner()">
+          <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Partner View</a>
+        </span>
+        <!-- <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Partner View</a> -->
+
+        <span *ngIf="authService.loggedIn() && authService.isEmployee()">
+          <a [routerLink]="['/incentive-entry']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && !authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Incentive Entry</a>
+        </span>
+        
+        <hr>
 
         <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Recent Customers</a>
         <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Customer Care View</a>

@@ -147,6 +147,7 @@ export class AuthService {
 
   isPartner() {
     const user: any = JSON.parse(localStorage.getItem('user'));
+    //Partner = 5
     if(user.afaRole === 5) {
       return true;
     } else {
@@ -155,7 +156,14 @@ export class AuthService {
   }
 
   isEmployeeWithIncentiveAccess() {
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    //Partner = 5, Employee = 9, Super Admin = 19, Admin = 14
     console.log('isEmployeeWithIncentiveAccess was called')
+    if(user.afaRole === 5 || user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   isTestUser() {

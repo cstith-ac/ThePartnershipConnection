@@ -10,7 +10,7 @@ export class PartnerGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      if(this.authService.isPartner())
+      if(this.authService.isPartner() || this.authService.isEmployeeWithIncentiveAccess)
       return true;
       else
       this.router.navigate(['/dashboard']);

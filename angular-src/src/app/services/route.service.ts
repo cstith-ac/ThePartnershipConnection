@@ -542,6 +542,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/InstallCompanyList/`, httpOptions);
   }
 
+  getInstallCompanyList2(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/InstallCompanyList2/`, httpOptions);
+  }
+
   getCheckBoxIncompatible(): Observable<any> {
     this.loadToken();
     let httpOptions = { 

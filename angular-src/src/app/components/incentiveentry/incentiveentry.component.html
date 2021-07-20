@@ -2,19 +2,129 @@
     <div class="card-body">
         <div class="row ml-0">
             <div class="col-md-12">
-                <div class="row" *ngFor="let item of installCompanyList">
+                <div class="row">
                     <h1 class="incentive-header">Incentive Entry | </h1>
-                    <span *ngIf="installCompanyList.length &lt; 2; else multipleCompanyNameBlock">
-                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyList()"></i></p>
+                    <!-- <span *ngIf="installCompanyList.length &lt; 2; else multipleCompanyNameBlock">
+                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p>
+                    </span> -->
+                    <span >
+                        <p class="company">{{ companyName }} - {{ partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p>
                     </span>
-                    <ng-template #multipleCompanyNameBlock>
+                    <ng-template #installCompanyListContent let-modal>
+                        <div class="modal-header">
+                            <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+                                <span aria-label="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row ml-0">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6 pl-0">
+                                                    <h1 class="install-company-list-header">Please choose a partner
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-inline">
+                                        Search by typing a Company Name:
+                                        <input 
+                                            type="text" 
+                                            class="form-control ml-2" 
+                                            name="searchTerm" 
+                                            [(ngModel)]="searchTerm" 
+                                            (input)="search($event.target.value)">
+                                    </div>
+                                    <!-- <button [hidden]="!searchTerm"  (click)="clearSearchTerm()">Clear</button> -->
+                                    <!-- <form>
+                                        <div class="form-group form-inline">
+                                            Search PARTNER CODE:
+                                            <input type="text" class="form-control ml-2" name="searchTerm" [(ngModel)]="searchTerm" (input)="search($event.target.value">
+                                        </div>
+                                    </form> -->
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-borderless">
+                                            <thead>
+                                                <th scope="col">Company Name</th>
+                                                <th scope="col">Partner Code</th>
+                                                <th scope="col"></th>
+                                                <!-- <th scope="col">Install Company ID</th> -->
+                                                <!-- <th scope="col">Default Selection</th> -->
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of installCompanyList2 | listFilter: searchTerm | slice: (page-1) * pageSize: page * pageSize; index as i">
+                                                    <!-- <th scope="row">{{ (page -1) * pageSize + i + 1 }}</th> -->
+                                                    <!-- <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection($event)">{{ item.companyName }}</td> -->
+                                                    <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection(item.installCompanyID,item.companyName,item.partnerCode)">{{ item.companyName }}</td>
+                                                    <td>{{ item.partnerCode }}</td>
+                                                    <!-- <td>{{ item.installCompanyID }}</td> -->
+                                                    <!-- <td>{{ item.defaultSelection }}</td> -->
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <ngb-pagination 
+                                            [collectionSize]="collectionSize" 
+                                            [(page)]="page" 
+                                            [maxSize]="5" 
+                                            [boundaryLinks]="true"
+                                            [pageSize]="pageSize" 
+                                            class="d-flex justify-content-center">
+                                        </ngb-pagination>
+                                        <!-- <ngb-pagination 
+                                            [collectionSize]="collectionSize" 
+                                            [(page)]="page" 
+                                            aria-label="Custom pagination">
+                                            <ng-template ngbPaginationPrevious>Prev</ng-template>
+                                            <ng-template ngbPaginationNext>Next</ng-template>
+                                            <ng-template ngbPaginationNumber let-p>{{ getPageSymbol(p) }}</ng-template>
+                                        </ngb-pagination> -->
+                                    </div>
+                    
+                                    <!-- <section>
+                                        <header class="recurring-header-bg">
+                                            <div class="col">
+                                                <span class="align-middle">Company Name</span>
+                                            </div>
+                                            <div class="col">
+                                              <span class="align-middle">Partner Code</span>  
+                                            </div>
+                                            <div class="col">
+                                              <span class="align-middle">Install Company ID</span>
+                                            </div>
+                                            <div class="col">
+                                              <span class="align-middle">Default Selection</span>
+                                            </div>
+                                            
+                                            <div class="col"></div>
+                                            <div class="col"></div>
+                                        </header>
+                                        <div class="row-entry-padding" *ngFor="let item of installCompanyList2; let i=index" >
+                                            <ul>
+                                                <li>{{ item.companyName }}</li>
+                                                <li>{{ item.partnerCode }}</li>
+                                                <li>{{ item.installCompanyID }}</li>
+                                                <li>{{ item.defaultSelection }}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" value="Submit" class="btn btn-submit">
+                                        </div>
+                                    </section> -->
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <!-- <ng-template #multipleCompanyNameBlock>
                         <select name="" id="">
                             <option value="">Company one</option>
                             <option value="">Company two</option>
                             <option value="">Company three</option>
                             <option value="">Company four</option>
                         </select>
-                    </ng-template>
+                    </ng-template> -->
                 </div>
             </div>
         </div>
