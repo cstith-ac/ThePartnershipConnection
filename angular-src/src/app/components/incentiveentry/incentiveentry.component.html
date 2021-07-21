@@ -36,7 +36,8 @@
                                             class="form-control ml-2" 
                                             name="searchTerm" 
                                             [(ngModel)]="searchTerm" 
-                                            (input)="search($event.target.value)">
+                                            (input)="search($event.target.value)"
+                                        >
                                     </div>
                                     <!-- <button [hidden]="!searchTerm"  (click)="clearSearchTerm()">Clear</button> -->
                                     <!-- <form>
@@ -300,7 +301,7 @@
                 </div> 
             </ng-container>
             
-            <div class="row" >
+            <div class="row mt-1 mb-4">
                 <div class="col-md-4"></div>
                 <div class="col-md-4 offset-md-4">
                     <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(incentiveEntryForm)" [disabled]="!incentiveEntryForm.valid">Start Incentive</button>
@@ -501,7 +502,7 @@
 </div>
 <footer class="footer">
     <div class="ml-5 mr-5">
-      <div class="row pb-3">
+      <div class="row pb-3 pt-5">
         <div class="col-md-3">
           <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
         </div>

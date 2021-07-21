@@ -632,22 +632,21 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   search(value: string): void {
+    console.log(value)
     this.installCompanyList2 = this.allInstallCompanyList2.filter((val) => 
     val.companyName.toLowerCase().includes(value));
     this.collectionSize = this.installCompanyList2.length;
-    //console.log(this.collectionSize)
   }
 
-  // clearSearchTerm() {
-  //   this.searchTerm='';
-  // }
+  checkIfNotFound(e) {
+    // if(this.installCompanyList2.length==0) {
+    //   console.log('nothing found')
+    // }
+    //if(this.searchTerm)
+    console.log('nothing found')
+  }
 
-  // getPageSymbol(current: number) {
-  //   return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'][current - 1];
-  // }
   getPageSymbol(current: number) {
-    // let x = this.allInstallCompanyList2.map(e=>e.companyName);
-    // console.log(x)
     return ['A', 'B', 'C', 'D', 'E', 'F', 'G'][current - 1];
   }
 

@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { NgxMaskModule } from 'ngx-mask';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -10,9 +14,9 @@ import { AuthGuard } from '../app/guards/auth.guard';
 import { AdminGuard } from '../app/guards/admin.guard';
 import { EmployeeGuard } from '../app/guards/employee.guard';
 import { UnsavedchangesGuard } from './guards/unsavedchanges.guard';
-import { NgxMaskModule } from 'ngx-mask';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgxPaginationModule } from 'ngx-pagination';
+// import { NgxMaskModule } from 'ngx-mask';
+// import { NgxSpinnerModule } from 'ngx-spinner';
+// import { NgxPaginationModule } from 'ngx-pagination';
 import { PhonePipe } from './_helpers/phone.pipe';
 import { SortPipe } from './_helpers/sort.pipe';
 import { FilterPipeModule } from 'ngx-filter-pipe';
@@ -83,7 +87,7 @@ import { FilterSitePipe } from './_helpers/filter-site.pipe';
 import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+// import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 @NgModule({
   declarations: [

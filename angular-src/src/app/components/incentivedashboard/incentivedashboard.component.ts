@@ -906,6 +906,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               console.log(this.listsitesforcustomer[i])
               this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
 
+               //set customerSiteName for ngbTooltip, SiteName + Address_1
+              let customerSiteName = this.listsitesforcustomer[i].siteName;
+              let address_1 = this.listsitesforcustomer[i].address_1;
+              this.customerSiteName = customerSiteName + ' - ' + address_1;
+
               this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
                 res => {
                   console.log(res)
@@ -933,6 +938,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             }
           }
         )
+        //set state for CustomerSiteID as valid
+        this.incentiveDashboardForm.get("CustomerSiteID").setValidators(null);
+        this.incentiveDashboardForm.get("CustomerSiteID").updateValueAndValidity(); 
       }
     }
       )
@@ -952,6 +960,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   searchCleared(){
     console.log('searchCleared');
     this.results = [];
+
+    // this.listsitesforcustomer = [];
+    // this.listSystemsForSite = [];
+    
+    // this.id = "";
+    // this.customer = "";
+    // this.customer_Site_id = "";
+    // this.customerSiteName = "";
+    // this.customer_System_id = "";
+    // this.systemName = "";
+
+    this.incentiveDashboardForm.controls["CustomerID"].reset();
     this.incentiveDashboardForm.controls["CustomerSiteID"].reset();
     this.incentiveDashboardForm.controls["CustomerSystemID"].reset();
     this.incentiveDashboardForm.controls["AlarmAccount"].reset();
@@ -965,7 +985,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //console.log(this.customerElement.nativeElement) //undefined
     //this.customerElement.nativeElement.innerHTML = this.customerSiteName
     // here we can write code for doing something with selected item
-    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
+    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
+    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customerNumber+ " - " +this.customer)
     this.siteElement.nativeElement.focus()
   }
   onChangeSearch(val: string) {

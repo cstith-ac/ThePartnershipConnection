@@ -60,10 +60,11 @@
                                     #customerRef
                                     [data]="results"
                                     formControlName="CustomerID"
-                                    
+                                    [(ngbTooltip)]="customer"
                                     [searchKeyword]="keyword"
                                     (selected)='selectEvent($event)'
-                                    (inputChanged)='getServerResponse($event)' (inputFocused)='onFocused($event)' 
+                                    (inputChanged)='getServerResponse($event)' 
+                                    (inputFocused)='onFocused($event)' 
                                     (inputCleared)="searchCleared()"
                                     [itemTemplate]="itemTemplate"
                                     historyIdentifier="results"
@@ -106,6 +107,7 @@
                                 <div class="dropdown">
                                     <select 
                                         #siteRef
+                                        [(ngbTooltip)]="customerSiteName"
                                         formControlName="CustomerSiteID" 
                                         class="form-control col-sm-12 fullWidthSelect" 
                                         [(ngModel)]="siteName"
