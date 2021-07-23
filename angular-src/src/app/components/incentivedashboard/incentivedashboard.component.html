@@ -1285,7 +1285,16 @@
                                       </div>
                                     </div>
                                     <div class="col">
-                                      <input 
+                                        <kendo-numerictextbox
+                                            format="c2"
+                                            placeholder="$0.00"
+                                            formControlName="Total"
+                                            [spinners]="false"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
+                                            [attr.disabled]="true"
+                                        ></kendo-numerictextbox>
+                                      <!-- <input 
                                         type="text"
                                         class="form-control"
                                         formControlName="Total"
@@ -1293,9 +1302,8 @@
                                         mask="separator.2" 
                                         thousandSeparator=","
                                         prefix="$"
-                                        
                                         [attr.disabled]="true"
-                                      >
+                                      > -->
                                     </div>
                                     <div class="col">
                                         <button class="btn btn-add" type="button" (click)="addNewItem()">
@@ -1540,7 +1548,7 @@
                     </div>
                     <div class="col">
                         <span class="align-middle">
-                           Cost per Cost
+                           Cost per Hour
                         </span>
                     </div>
                     <div class="col">
@@ -1579,7 +1587,7 @@
                                         type="text" 
                                         formControlName="Quantity"
                                         class="form-control"
-                                        
+                                        min="0"
                                     >
                                 </div>
                                 <div class="col">
@@ -1603,7 +1611,7 @@
                                     ></kendo-numerictextbox>
                                 </div>
                                 <div class="col">
-                                    <input 
+                                    <!-- <input 
                                         type="text"
                                         class="form-control"
                                         formControlName="Total" 
@@ -1611,7 +1619,16 @@
                                         prefix="$"
                                         
                                         [attr.disabled]="true"
-                                    >
+                                    > -->
+                                    <kendo-numerictextbox
+                                        format="c2"
+                                        placeholder="$0.00"
+                                        formControlName="Total"
+                                        [spinners]="false"
+                                        [style.height]="'calc(1.5em + 1.3rem)'"
+                                        [style.width]="'80%'"
+                                        [attr.disabled]="true"
+                                    ></kendo-numerictextbox>
                                 </div>
                                 <div class="col">
                                     <button class="btn btn-add" type="button" (click)="addNewLaborChargesItem()">

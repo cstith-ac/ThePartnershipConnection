@@ -73,6 +73,7 @@ namespace WebAPI.Models
         public virtual DbSet<CustomerSearchMatch> GetCustomerSearchMatches { get; set; }
         public virtual DbSet<InstallCompanyList2> GetInstallCompanyList2s { get; set; }
         public virtual DbSet<PartnerCallToActionButton> GetPartnerCallToActionButtons { get; set; }
+        public virtual DbSet<TPCCollectionsCallToActionButton> GetTPCCollectionsCallToActionButtons { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -486,6 +487,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<PartnerCallToActionButton>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<TPCCollectionsCallToActionButton>(entity =>
             {
                 entity.HasNoKey();
             });

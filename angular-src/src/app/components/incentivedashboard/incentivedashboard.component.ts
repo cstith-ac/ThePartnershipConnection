@@ -406,9 +406,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object 
 
+    this.routeService.getListRecurringItems().subscribe(
+      res => {
+        this.listRecurringItems = res;
+      }
+    )
+
+    this.routeService.getListMultiples().subscribe(
+      res => {
+        this.listMultiples = res;
+      }
+    )
+
     this.routeService.getListMaterialItems().subscribe(
       res => {
         this.listMatItems = res;
+      }
+    )
+
+    this.routeService.getListLaborItems().subscribe(
+      res => {
+        this.listLaborItems = res;
       }
     )
 
@@ -465,18 +483,63 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         console.log(sumMappedDefaultAmounts); // number
         // localStorage.setItem("totalEquipMatCalc", JSON.stringify(sumMappedDefaultAmounts));
         
+        // this.totalSumRecurring = sumMappedDefaultAmounts;
+        // this.totalSumLaborCharges = sumMappedDefaultAmounts;
+
         this.totalSumEquipMat = sumMappedDefaultAmounts;
         this.equipmentAndMaterials = sumMappedDefaultAmounts
 
-      this.incentiveEquipMatEntryForm = this.fb.group({
-        entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
-      });
+        let fakeRecurringData = [{
+          ItemID: ["", Validators.required],
+          Description: ["", Validators.required],
+          BillCycle: ["", Validators.required],
+          RMR: ["", Validators.required],
+          // PassThrough: ["", Validators.required],
+          PassThrough: [this.passThrough, Validators.required],
+          BillingStartDate: ["", Validators.required],
+          Add2Item: [0],
+          Multiple: ["", Validators.required],
+          Total: ["", Validators.required]
+        }];
 
+        let fakeLaborChargesData = [{
+          ItemID: ["", Validators.required],
+          Description: ["", Validators.required],
+          Quantity: ["", Validators.required],
+          Cost: ["", Validators.required],
+          Total: ["", Validators.required]
+        }];
+
+        this.incentiveRecurringEntryForm = this.fb.group({
+          entryRowsRecurring: this.fb.array(fakeRecurringData.map(datumRecurring => this.generateRecurringDatumFormGroup(datumRecurring)))
+        })
+
+        this.incentiveEquipMatEntryForm = this.fb.group({
+          entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
+        })
+        
+        this.incentiveLaborChargesEntryForm = this.fb.group({
+          entryRowsLaborCharges: this.fb.array(fakeLaborChargesData.map(datumLabor => this.generateLaborChargesDatumFormGroup(datumLabor)))
+        })
+
+
+        console.log(this.incentiveRecurringEntryForm.get('entryRowsRecurring').value)
       console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
+      console.log(this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges').value)
+
+      this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
+      this.recurringValueChanges$.subscribe(
+        entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
+      );
 
       this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
       this.equipMatValueChanges$.subscribe(
         entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
+      );
+
+      this.laborChargesValueChanges$ = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].valueChanges;
+      this.laborChargesValueChanges$.subscribe(
+        entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
       );
     });
 
@@ -494,6 +557,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   entryRowsRecurring: this.fb.array([this.initEntryRow()])
     // });
 
+    this.incentiveRecurringEntryForm = this.fb.group({
+      entryRowsRecurring: this.fb.group({
+        ItemID: ["", Validators.required],
+        Description: ["", Validators.required],
+        BillCycle: ["", Validators.required],
+        RMR: ["", Validators.required],
+        // PassThrough: ["", Validators.required],
+        PassThrough: [this.passThrough, Validators.required],
+        BillingStartDate: ["", Validators.required],
+        Add2Item: [0],
+        Multiple: ["", Validators.required],
+        Total: ["", Validators.required]
+      })
+    })
+
     this.incentiveEquipMatEntryForm = this.fb.group({
       entryRowsEquipMat: this.fb.group({
         ItemID: ["", Validators.required],
@@ -504,9 +582,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       })
     });
 
-    // this.incentiveLaborChargesEntryForm = this.fb.group({
-    //   entryRowsLaborCharges: this.fb.array([this.initLaborChargesEntryRow()])
-    // });
+    this.incentiveLaborChargesEntryForm = this.fb.group({
+      entryRowsLaborCharges: this.fb.group({
+        ItemID: ["", Validators.required],
+        Description: ["", Validators.required],
+        Quantity: ["", Validators.required],
+        Cost: ["", Validators.required],
+        Total: ["", Validators.required]
+      })
+    });
 
     this.incentiveDashboardForm = this.fb.group({
       UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
@@ -547,26 +631,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       PartnerComments: [""] //@PartnerComments
     });
 
-    // this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
-    // this.recurringValueChanges$.subscribe(
-    //   entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
-    // );
+    this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
+    this.recurringValueChanges$.subscribe(
+      entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
+    );
 
     this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
     this.equipMatValueChanges$.subscribe(
       entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
     );
 
-    // this.laborChargesValueChanges$ = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].valueChanges;
-    // this.laborChargesValueChanges$.subscribe(
-    //   entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
-    // );
+    this.laborChargesValueChanges$ = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].valueChanges;
+    this.laborChargesValueChanges$.subscribe(
+      entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
+    );
 
-    this.routeService.getListRecurringItems().subscribe(
-      res => {
-        this.listRecurringItems = res;
-      }
-    )
+    // this.routeService.getListRecurringItems().subscribe(
+    //   res => {
+    //     this.listRecurringItems = res;
+    //   }
+    // )
 
     this.routeService.getListMultiples().subscribe(
       res => {
@@ -580,11 +664,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   }
     // )
 
-    this.routeService.getListLaborItems().subscribe(
-      res => {
-        this.listLaborItems = res;
-      }
-    )
+    // this.routeService.getListLaborItems().subscribe(
+    //   res => {
+    //     this.listLaborItems = res;
+    //   }
+    // )
 
     //this.onChanges();
     //this.onChangeCustomerNumber();
@@ -681,11 +765,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
   ngOnDestroy():void {
     console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
-    //this.recurringValueChanges$.unsubscribe();
-    //this.laborChargesValueChanges$.unsubscribe();
+    this.recurringValueChanges$.unsubscribe();
+    this.laborChargesValueChanges$.unsubscribe();
     this.equipMatValueChanges$.unsubscribe();
   }
 
+  //Recurring
+  private generateRecurringDatumFormGroup(datumRecurring) {
+    return this.fb.group({
+      ItemID: this.fb.control(datumRecurring.itemID),
+      Description: this.fb.control(datumRecurring.itemDescription),
+      BillCycle: this.fb.control(datumRecurring.billCycle),
+      RMR: this.fb.control(datumRecurring.rmr),
+      // PassThrough: this.fb.control(),
+      PassThrough: this.fb.control(datumRecurring.passThrough),
+      BillingStartDate: this.fb.control(datumRecurring.billStartDate),
+      Add2Item: this.fb.control(0),
+      Multiple: this.fb.control(datumRecurring.multiple),
+      Total: this.fb.control((datumRecurring.rmr - datumRecurring.passThrough)*datumRecurring.multiple)
+    })
+  }
+  //Equip & Mat
   private generateDatumFormGroup(datum) {
     return this.fb.group({
       ItemID: this.fb.control(datum.itemID),
@@ -695,21 +795,31 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Total: this.fb.control(this.quantity * datum.defaultAmount)
     })
   }
-
-  initEntryRow() {
+  //Labor
+  private generateLaborChargesDatumFormGroup(datumLabor) {
     return this.fb.group({
-      ItemID: ["", Validators.required],
-      Description: ["", Validators.required],
-      BillCycle: ["", Validators.required],
-      RMR: ["", Validators.required],
-      // PassThrough: ["", Validators.required],
-      PassThrough: [this.passThrough, Validators.required],
-      BillingStartDate: ["", Validators.required],
-      Add2Item: [0],
-      Multiple: ["", Validators.required],
-      Total: ["", Validators.required]
+      ItemID: this.fb.control(datumLabor.itemID),
+      Description: this.fb.control(datumLabor.itemDescription),
+      Quantity: this.fb.control(1),
+      Cost: this.fb.control(datumLabor.defaultAmount ),
+      Total: this.fb.control(this.quantity * datumLabor.defaultAmount)
     })
   }
+
+  // initEntryRow() {
+  //   return this.fb.group({
+  //     ItemID: ["", Validators.required],
+  //     Description: ["", Validators.required],
+  //     BillCycle: ["", Validators.required],
+  //     RMR: ["", Validators.required],
+  //     // PassThrough: ["", Validators.required],
+  //     PassThrough: [this.passThrough, Validators.required],
+  //     BillingStartDate: ["", Validators.required],
+  //     Add2Item: [0],
+  //     Multiple: ["", Validators.required],
+  //     Total: ["", Validators.required]
+  //   })
+  // }
 
   // initEquipMatEntryRow() {
   //   return this.fb.group({
@@ -721,17 +831,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //   })
   // }
 
-  initLaborChargesEntryRow() {
-    return this.fb.group({
-      ItemID: ["", Validators.required],
-      Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
-      Total: ["", Validators.required]
-    })
-  }
+  // initLaborChargesEntryRow() {
+  //   return this.fb.group({
+  //     ItemID: ["", Validators.required],
+  //     Description: ["", Validators.required],
+  //     Quantity: ["", Validators.required],
+  //     Cost: ["", Validators.required],
+  //     Total: ["", Validators.required]
+  //   })
+  // }
 
-  private updateTotalRecurring(entryRowsRecurring:any) {
+  updateTotalRecurring(entryRowsRecurring:any) {
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRowsRecurring'];
     this.totalSumRecurring=0;
 
@@ -751,27 +861,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   } 
 
-  private updateTotalLaborCharges(entryRowsLaborCharges:any) {
-    console.log('updateTotalLaborCharges was called')
-    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
-    this.totalSumLaborCharges=0;
-
-    for(let i in entryRowsLaborCharges) {
-      let totalLaborChargesCalculation = entryRowsLaborCharges[i].Total = (entryRowsLaborCharges[i].Quantity * entryRowsLaborCharges[i].Cost)
-      
-      control
-      .at(+i)
-      .get('Total')
-      .setValue(totalLaborChargesCalculation,{
-        onlySelf:true,
-        emitEvent:false
-      });
-      this.totalSumLaborCharges += totalLaborChargesCalculation;
-
-      localStorage.setItem('totalLaborChargesCalc',this.totalSumLaborCharges.toString());
-    }
-  }
-
    updateTotalEquipMat(entryRowsEquipMat:any) {
     console.log('updateTotalEquipMat was called')
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
@@ -790,6 +879,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.totalSumEquipMat += totalEquipMatCalculation;
 
       localStorage.setItem('totalEquipMatCalc',this.totalSumEquipMat.toString());
+    }
+  }
+
+  updateTotalLaborCharges(entryRowsLaborCharges:any) {
+    console.log('updateTotalLaborCharges was called')
+    const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
+    this.totalSumLaborCharges=0;
+
+    for(let i in entryRowsLaborCharges) {
+      let totalLaborChargesCalculation = entryRowsLaborCharges[i].Total = (entryRowsLaborCharges[i].Quantity * entryRowsLaborCharges[i].Cost)
+      
+      control
+      .at(+i)
+      .get('Total')
+      .setValue(totalLaborChargesCalculation,{
+        onlySelf:true,
+        emitEvent:false
+      });
+      this.totalSumLaborCharges += totalLaborChargesCalculation;
+
+      localStorage.setItem('totalLaborChargesCalc',this.totalSumLaborCharges.toString());
     }
   }
 
@@ -961,15 +1071,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log('searchCleared');
     this.results = [];
 
-    // this.listsitesforcustomer = [];
-    // this.listSystemsForSite = [];
+    this.listsitesforcustomer = [];
+    this.listSystemsForSite = [];
     
-    // this.id = "";
-    // this.customer = "";
-    // this.customer_Site_id = "";
-    // this.customerSiteName = "";
-    // this.customer_System_id = "";
-    // this.systemName = "";
+    this.id = "";
+    this.customer = "";
+    this.customer_Site_id = "";
+    this.customerSiteName = "";
+    this.customer_System_id = "";
+    this.systemName = "";
 
     this.incentiveDashboardForm.controls["CustomerID"].reset();
     this.incentiveDashboardForm.controls["CustomerSiteID"].reset();
@@ -1213,7 +1323,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     let selectedCustomerid = customer_id;
     let selectedCustomerNumber = customer_Number;
 
-    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
+    this.customer = selectedCustomerNumber+' - '+selectedCustomerName;
     this.id = selectedCustomerid;
     this.incentiveDashboardForm.get("CustomerID").setValue(this.customer);
 
@@ -1224,7 +1334,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        //console.log(res);
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
           console.log(this.listsitesforcustomer[i])
@@ -4178,7 +4287,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   getItemName(e:any,i:number) {
-    let currentID = e.target.value;
+    //let currentID = e.target.value;
 
     setTimeout(() => {
 
@@ -4205,20 +4314,35 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onRecurringSubmit(form: FormGroup) {
-    console.log(form.value.Total)
+    //console.log(form.value.Total)
     
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRowsRecurring'];
     
     this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
     
     // this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalRecurringCalc);
-    //this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumRecurring);
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumRecurring);
 
     this.recurring=this.totalSumRecurring;
 
-    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0]))
+    localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.get('entryRowsRecurring').value))
     
     this.modalService.dismissAll()
+  }
+
+  initEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      BillCycle: ["", Validators.required],
+      RMR: ["", Validators.required],
+      // PassThrough: ["", Validators.required],
+      PassThrough: [this.passThrough, Validators.required],
+      BillingStartDate: ["", Validators.required],
+      Add2Item: [0],
+      Multiple: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
   }
 
   addNewItem():void {
@@ -4230,6 +4354,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(i > 0) {
       const control = (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
     .removeAt(i);
+    }
+
+    if(i == 0) {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsRecurring');
+      controlArray.at(i).get('ItemID').setValue('');
+      controlArray.at(i).get('Description').setValue('');
+      controlArray.at(i).get('BillCycle').setValue('');
+      controlArray.at(i).get('RMR').setValue('');
+      controlArray.at(i).get('PassThrough').setValue(this.passThrough);
+      controlArray.at(i).get('BillingStartDate').setValue('');
+      controlArray.at(i).get('Add2Item').setValue(0);
+      controlArray.at(i).get('Multiple').setValue('');
+      controlArray.at(i).get('Total').setValue('');
     }
 
     localStorage.removeItem("recurringentry");
@@ -4348,8 +4485,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   getLaborChargesItemName(e:any,i:number) {
     //get the description from listrecurringitems based on the selected ItemID
-    console.log(e.target.value)//returns 'index: item_id', as a string
-    let currentID = e.target.value;
+    //console.log(e.target.value)//returns 'index: item_id', as a string
+    //let currentID = e.target.value;
     setTimeout(() => {
         const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(element => {
           const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
@@ -4371,13 +4508,23 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
 
-    // this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumLaborCharges);
+    this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumLaborCharges);
 
     this.laborCharges=this.totalSumLaborCharges;
 
-    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0]));
+    localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges').value));
     
     this.modalService.dismissAll();
+  }
+
+  initLaborChargesEntryRow() {
+    return this.fb.group({
+      ItemID: ["", Validators.required],
+      Description: ["", Validators.required],
+      Quantity: ["", Validators.required],
+      Cost: ["", Validators.required],
+      Total: ["", Validators.required]
+    })
   }
 
   addNewLaborChargesItem():void {
@@ -4392,6 +4539,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
     .removeAt(i);
     }
+
+    if(i == 0) {
+      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsLaborCharges');
+      controlArray.at(i).get('ItemID').setValue('');
+      controlArray.at(i).get('Description').setValue('');
+      controlArray.at(i).get('Quantity').setValue('');
+      controlArray.at(i).get('Cost').setValue('');
+      controlArray.at(i).get('Total').setValue('');
+    }
+
     // const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
     // .removeAt(i);
     // (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
