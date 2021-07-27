@@ -154,6 +154,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   systemTypeID: string;
   customerSystemId: number;
   alarmAccount: string;
+  systemType;
   systemCode: string;
   site: '';
   system: '';
@@ -281,7 +282,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   itemDescription2:string;
   defaultAmount2:number;
 
-  foo;
+  //foo;
   target;
 
   constructor(
@@ -473,7 +474,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //   console.log(data[i])
         // }
         localStorage.setItem('equipmatentry', JSON.stringify(data));
-        this.foo = data;
+        // this.foo = data;
         let mappedDefaultAmounts = data.map(a => a.defaultAmount);
         console.log(mappedDefaultAmounts);
         //get sum from mappedDefaultAmounts
@@ -773,16 +774,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //Recurring
   private generateRecurringDatumFormGroup(datumRecurring) {
     return this.fb.group({
-      ItemID: this.fb.control(datumRecurring.itemID),
+      // ItemID: this.fb.control(datumRecurring.itemID),
+      ItemID: this.fb.control(0),
       Description: this.fb.control(datumRecurring.itemDescription),
       BillCycle: this.fb.control(datumRecurring.billCycle),
-      RMR: this.fb.control(datumRecurring.rmr),
-      // PassThrough: this.fb.control(),
-      PassThrough: this.fb.control(datumRecurring.passThrough),
+      // RMR: this.fb.control(datumRecurring.rmr),
+      RMR: this.fb.control(0),
+      // PassThrough: this.fb.control(datumRecurring.passThrough),
+      PassThrough: this.fb.control(0),
       BillingStartDate: this.fb.control(datumRecurring.billStartDate),
       Add2Item: this.fb.control(0),
-      Multiple: this.fb.control(datumRecurring.multiple),
-      Total: this.fb.control((datumRecurring.rmr - datumRecurring.passThrough)*datumRecurring.multiple)
+      // Multiple: this.fb.control(datumRecurring.multiple),
+      Multiple: this.fb.control(0),
+      // Total: this.fb.control((datumRecurring.rmr - datumRecurring.passThrough)*datumRecurring.multiple)
+      Total: this.fb.control(0)
     })
   }
   //Equip & Mat
@@ -798,11 +803,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //Labor
   private generateLaborChargesDatumFormGroup(datumLabor) {
     return this.fb.group({
-      ItemID: this.fb.control(datumLabor.itemID),
+      // ItemID: this.fb.control(datumLabor.itemID),
+      ItemID: this.fb.control(0),
       Description: this.fb.control(datumLabor.itemDescription),
       Quantity: this.fb.control(1),
-      Cost: this.fb.control(datumLabor.defaultAmount ),
-      Total: this.fb.control(this.quantity * datumLabor.defaultAmount)
+      // Cost: this.fb.control(datumLabor.defaultAmount ),
+      Cost: this.fb.control(0),
+      // Total: this.fb.control(this.quantity * datumLabor.defaultAmount)
+      Total: this.fb.control(0)
     })
   }
 
@@ -1826,2070 +1834,2970 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }
           return temp;
         };
-        var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
-        this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
-          result => {
-            //console.log(result)
-            // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
-            this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-              //console.log(element, i);
-              var updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id);
-              console.log(updateEquipMatWithJobID)
-              this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
-                result => {
-                  console.log(result)
-                  //return
-                }
-              )
-            })
-
-            // for(var i = 0; i < this.foo.length; i++) {
-            //   console.log(this.foo[i])
-            //   console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
-            //   var updateEquipMatWithJobID = addToObject(this.foo[i], 'IncentiveID', this.job_id);
-            //   return
-            //   this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
-            //     result => {
-            //       console.log(result)
-            //       return
-            //     }
-            //   )
-            // }
-            var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id); 
-            this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
-              result => {
-                console.log(result);
-                if(this.file_name) {
-                  console.log(this.file_name)
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.file_name);
-                    frmData.append('file_size', this.file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Invoice');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                    // frmData.append("file_data", this.myFiles[0]);
-                    for(var i = 0; i < this.myFiles.length; i++) {
-                      console.log(this.myFiles[i])
-                      frmData.append("file_data", this.myFiles[i]);
-                    }
-                    // perform http request for each file
-                    //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                      }
-                    )
-                      console.log(frmData)
-                }
-                if(this.subscriber_file_name) {
-                  //console.log(this.myFiles[1])
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.subscriber_file_name);
-                    frmData.append('file_size', this.subscriber_file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Subscriber Form');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                      // frmData.append("file_data", this.myFiles[1]);
-                      for(var i = 0; i < this.myFiles.length; i++) {
-                        console.log(this.myFiles[i])
-                        frmData.append("file_data", this.myFiles[i]);
-                      }
-                      // perform http request for each file
-                      //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                      }
-                    )
-                      console.log(frmData)
-                }
-                if(this.site_visit_file_name) {
-                  console.log(this.myFiles[2])
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.site_visit_file_name);
-                    frmData.append('file_size', this.site_visit_file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Site Visit');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                      // frmData.append("file_data", this.myFiles[2]);
-                      for(var i = 0; i < this.myFiles.length; i++) {
-                        console.log(this.myFiles[i])
-                        frmData.append("file_data", this.myFiles[i]);
-                      }
-                      // perform http request for each file
-                      //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                      }
-                    )
-                      console.log(frmData)
-                }
-                if(this.other_Document1_file_name) {
-                  console.log(this.myFiles[3])
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.other_Document1_file_name);
-                    frmData.append('file_size', this.other_Document1_file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Other Doc1');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                      // frmData.append("file_data", this.myFiles[3]);
-                      for(var i = 0; i < this.myFiles.length; i++) {
-                        console.log(this.myFiles[i])
-                        frmData.append("file_data", this.myFiles[i]);
-                      }
-                      // perform http request for each file
-                      //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                      }
-                    )
-                      console.log(frmData)
-                }
-                if(this.other_Document2_file_name) {
-                  console.log(this.myFiles[4])
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.other_Document2_file_name);
-                    frmData.append('file_size', this.other_Document2_file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Other Doc 2');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                      // frmData.append("file_data", this.myFiles[4]);
-                      for(var i = 0; i < this.myFiles.length; i++) {
-                        console.log(this.myFiles[i])
-                        frmData.append("file_data", this.myFiles[i]);
-                      }
-                      // perform http request for each file
-                      //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                      }
-                    )
-                      console.log(frmData)
-                }
-                if(this.contract_file_name) {
-                  console.log(this.myFiles[5])
-                    let frmData = new FormData();
-
-                    // 37 = Sandbox, 6 = Production
-                    frmData.append('company_id','37');
-
-                    // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-                    frmData.append('customer_id', this.id);
-
-                    frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-                    //frmData.append('customer_site_id',this.customerSiteId);
-                    
-                    frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-                    //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-                    frmData.append('job_id', this.job_id);
-                    //frmData.append('job_id', '19');
-                    frmData.append('security_level', this.security_level);
-
-                    //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-                    frmData.append('file_name', this.contract_file_name);
-                    frmData.append('file_size', this.contract_file_size);
-                    frmData.append('upload_date', this.invoiceDate);
-                    frmData.append('document_ext', '*Contracts');
-                    frmData.append('user_code', 'PPC');
-                    //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-                    frmData.append('user_description', 'Contract');
-                    frmData.append('reference1', null);
-                    frmData.append('reference2', null);
-                    frmData.append('reference3', null);
-                    frmData.append('reference4', null);
-                      // frmData.append("file_data", this.myFiles[5]);
-                      for(var i = 0; i < this.myFiles.length; i++) {
-                        console.log(this.myFiles[i])
-                        frmData.append("file_data", this.myFiles[i]);
-                      }
-                      // perform http request for each file
-                      //frmData.append('@file_data', this.myFiles[i]);
-                    frmData.append('document_id', '1');
-
-                    console.log(this.job_id)
-                    // Display the key/value pairs
-                    console.log(Object.entries(frmData));//returns an empty array!
-                    var options = {content: frmData};
-
-                    console.log(frmData);
-                    console.log(this.job_id);
-                    const headers = new HttpHeaders();
-                    headers.append('Content-Type', 'multipart/form-data');
-                    headers.append('Authorization','Bearer ' + this.loadToken());
-                    headers.append('Accept', 'application/json');
-                    this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-                      headers: headers,
-                      responseType: 'text'
-                    }).subscribe(
-                      data => {
-                        console.log(data);
-                        //return
-                      }
-                    )
-                      console.log(frmData)
-                }
-                var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-                updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-                updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-                updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-                updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-                this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+       // var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
+        this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
+          var updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
+          console.log(updateRecurringWithJobID)
+          this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
+            result => {
+              this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+                //console.log(element, i);
+                var updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id);
+                console.log(updateEquipMatWithJobID)
+                this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
                   result => {
-                    console.log('Finished!... ');
-
-                        localStorage.removeItem('installCompanyID');
-                        localStorage.removeItem('totalRecurringCalc');
-                        localStorage.removeItem('totalEquipMatCalc');
-                        localStorage.removeItem('totalLaborChargesCalc');
-                        localStorage.removeItem('invoiceDate');
-                        localStorage.removeItem('invoiceNumber');
-                        localStorage.removeItem('invoiceTotal');
-                        localStorage.removeItem('recurringentry');
-                        localStorage.removeItem('equipmatentry');
-                        localStorage.removeItem('laborchargesentry');
-                        localStorage.removeItem('invoiceName');
-                        localStorage.removeItem('invoiceFileSize');
-                        localStorage.removeItem('invoice');
-                        localStorage.removeItem('subscriberForm');
-                        localStorage.removeItem('subscriberFormName');
-                        localStorage.removeItem('siteVisit');
-                        localStorage.removeItem('siteVisitName');
-                        localStorage.removeItem('otherDocument1');
-                        localStorage.removeItem('otherDocument1Name');
-                        localStorage.removeItem('contract');
-                        localStorage.removeItem('contractName');
-                        localStorage.removeItem('otherDocument2');
-                        localStorage.removeItem('otherDocument2Name');
-                        localStorage.removeItem('contractDate');
-                        localStorage.removeItem('contractTerm');
-                        localStorage.removeItem('serviceIncluded');
-                        localStorage.removeItem('customerId');
-                        localStorage.removeItem('customerName');
-                        localStorage.removeItem('customerSiteName');
-                        localStorage.removeItem('customerSystemInformation');
-                        localStorage.removeItem('alarmAccount');
-                        localStorage.removeItem('systemType');
-                        localStorage.removeItem('panelType');
-                        localStorage.removeItem('panelLocation');
-                        localStorage.removeItem('centralStationID');
-                        localStorage.removeItem('customerSiteId');
-                        localStorage.removeItem('renewal');
-                        localStorage.removeItem('partnerTaxAmount');
-                        localStorage.removeItem('additionalInfo');
-                        localStorage.removeItem('partnerComments');
-                        localStorage.removeItem('signalsTested');
-                        localStorage.removeItem('testObject');
-                        localStorage.removeItem('checkBoxAutoInsertList');
-
-                        this.router.navigate(['incentive-entry/']);
-                  }
-                )
-                return
-              }
-            )
-
-
-            // var updateEquipMatWithJobID = addToObject(this.foo, 'IncentiveID', this.job_id);
-            // this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+                    console.log(result)
+                    //return
+                    //var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id); 
+                    this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(l => {
+                      var updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
+                      console.log(updateLaborChargesWithJobID)
+                      this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+                        result => {
+                          debugger
+                          console.log(result);
+                          if(this.file_name) {
+                            console.log(this.file_name)
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.file_name);
+                              frmData.append('file_size', this.file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Invoice');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                              // frmData.append("file_data", this.myFiles[0]);
+                              for(var i = 0; i < this.myFiles.length; i++) {
+                                console.log(this.myFiles[i])
+                                frmData.append("file_data", this.myFiles[i]);
+                              }
+                              // perform http request for each file
+                              //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+          
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          if(this.subscriber_file_name) {
+                            //console.log(this.myFiles[1])
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.subscriber_file_name);
+                              frmData.append('file_size', this.subscriber_file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Subscriber Form');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                                // frmData.append("file_data", this.myFiles[1]);
+                                for(var i = 0; i < this.myFiles.length; i++) {
+                                  console.log(this.myFiles[i])
+                                  frmData.append("file_data", this.myFiles[i]);
+                                }
+                                // perform http request for each file
+                                //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          if(this.site_visit_file_name) {
+                            console.log(this.myFiles[2])
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.site_visit_file_name);
+                              frmData.append('file_size', this.site_visit_file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Site Visit');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                                // frmData.append("file_data", this.myFiles[2]);
+                                for(var i = 0; i < this.myFiles.length; i++) {
+                                  console.log(this.myFiles[i])
+                                  frmData.append("file_data", this.myFiles[i]);
+                                }
+                                // perform http request for each file
+                                //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          if(this.other_Document1_file_name) {
+                            console.log(this.myFiles[3])
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.other_Document1_file_name);
+                              frmData.append('file_size', this.other_Document1_file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Other Doc1');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                                // frmData.append("file_data", this.myFiles[3]);
+                                for(var i = 0; i < this.myFiles.length; i++) {
+                                  console.log(this.myFiles[i])
+                                  frmData.append("file_data", this.myFiles[i]);
+                                }
+                                // perform http request for each file
+                                //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          if(this.other_Document2_file_name) {
+                            console.log(this.myFiles[4])
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.other_Document2_file_name);
+                              frmData.append('file_size', this.other_Document2_file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Other Doc 2');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                                // frmData.append("file_data", this.myFiles[4]);
+                                for(var i = 0; i < this.myFiles.length; i++) {
+                                  console.log(this.myFiles[i])
+                                  frmData.append("file_data", this.myFiles[i]);
+                                }
+                                // perform http request for each file
+                                //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          if(this.contract_file_name) {
+                            console.log(this.myFiles[5])
+                              let frmData = new FormData();
+          
+                              // 37 = Sandbox, 6 = Production
+                              frmData.append('company_id','37');
+          
+                              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+                              frmData.append('customer_id', this.id);
+          
+                              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+                              //frmData.append('customer_site_id',this.customerSiteId);
+                              
+                              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+                              //frmData.append('customer_system_id', this.customerSystemId.toString());
+          
+                              frmData.append('job_id', this.job_id);
+                              //frmData.append('job_id', '19');
+                              frmData.append('security_level', this.security_level);
+          
+                              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+                              frmData.append('file_name', this.contract_file_name);
+                              frmData.append('file_size', this.contract_file_size);
+                              frmData.append('upload_date', this.invoiceDate);
+                              frmData.append('document_ext', '*Contracts');
+                              frmData.append('user_code', 'PPC');
+                              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+                              frmData.append('user_description', 'Contract');
+                              frmData.append('reference1', null);
+                              frmData.append('reference2', null);
+                              frmData.append('reference3', null);
+                              frmData.append('reference4', null);
+                                // frmData.append("file_data", this.myFiles[5]);
+                                for(var i = 0; i < this.myFiles.length; i++) {
+                                  console.log(this.myFiles[i])
+                                  frmData.append("file_data", this.myFiles[i]);
+                                }
+                                // perform http request for each file
+                                //frmData.append('@file_data', this.myFiles[i]);
+                              frmData.append('document_id', '1');
+          
+                              console.log(this.job_id)
+                              // Display the key/value pairs
+                              console.log(Object.entries(frmData));//returns an empty array!
+                              var options = {content: frmData};
+          
+                              console.log(frmData);
+                              console.log(this.job_id);
+                              const headers = new HttpHeaders();
+                              headers.append('Content-Type', 'multipart/form-data');
+                              headers.append('Authorization','Bearer ' + this.loadToken());
+                              headers.append('Accept', 'application/json');
+                              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                                headers: headers,
+                                responseType: 'text'
+                              }).subscribe(
+                                data => {
+                                  console.log(data);
+                                  //return
+                                }
+                              )
+                                console.log(frmData)
+                          }
+                          var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+                          updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+                          updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+                          updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+                          updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+                          this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+                            result => {
+                              console.log('Finished!... ');
+          
+                                  //localStorage.removeItem('installCompanyID');
+                                  localStorage.removeItem('totalRecurringCalc');
+                                  localStorage.removeItem('totalEquipMatCalc');
+                                  localStorage.removeItem('totalLaborChargesCalc');
+                                  localStorage.removeItem('invoiceDate');
+                                  localStorage.removeItem('invoiceNumber');
+                                  localStorage.removeItem('invoiceTotal');
+                                  localStorage.removeItem('recurringentry');
+                                  localStorage.removeItem('equipmatentry');
+                                  localStorage.removeItem('laborchargesentry');
+                                  localStorage.removeItem('invoiceName');
+                                  localStorage.removeItem('invoiceFileSize');
+                                  localStorage.removeItem('invoice');
+                                  localStorage.removeItem('subscriberForm');
+                                  localStorage.removeItem('subscriberFormName');
+                                  localStorage.removeItem('siteVisit');
+                                  localStorage.removeItem('siteVisitName');
+                                  localStorage.removeItem('otherDocument1');
+                                  localStorage.removeItem('otherDocument1Name');
+                                  localStorage.removeItem('contract');
+                                  localStorage.removeItem('contractName');
+                                  localStorage.removeItem('otherDocument2');
+                                  localStorage.removeItem('otherDocument2Name');
+                                  localStorage.removeItem('contractDate');
+                                  localStorage.removeItem('contractTerm');
+                                  localStorage.removeItem('serviceIncluded');
+                                  localStorage.removeItem('customerId');
+                                  localStorage.removeItem('customerName');
+                                  localStorage.removeItem('customerSiteName');
+                                  localStorage.removeItem('customerSystemInformation');
+                                  localStorage.removeItem('alarmAccount');
+                                  localStorage.removeItem('systemType');
+                                  localStorage.removeItem('panelType');
+                                  localStorage.removeItem('panelLocation');
+                                  localStorage.removeItem('centralStationID');
+                                  localStorage.removeItem('customerSiteId');
+                                  localStorage.removeItem('renewal');
+                                  localStorage.removeItem('partnerTaxAmount');
+                                  localStorage.removeItem('additionalInfo');
+                                  localStorage.removeItem('partnerComments');
+                                  localStorage.removeItem('signalsTested');
+                                  localStorage.removeItem('testObject');
+                                  localStorage.removeItem('checkBoxAutoInsertList');
+                                  localStorage.removeItem('results');
+          
+                                  this.router.navigate(['incentive-entry/']);
+                            }
+                          )
+                          return
+                        }
+                      )
+                    })
+            // this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
             //   result => {
-            //     // console.log(this.foo)
-            //     // console.log(updateEquipMatWithJobID)
-            //     // console.log(result)
-            //     //return
-            //     // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
-            //     // this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
-            //     //   result => {
-            //     //     console.log(result); //this shows a new object with 0 or null values!
+            //     console.log(result);
+            //     if(this.file_name) {
+            //       console.log(this.file_name)
+            //         let frmData = new FormData();
 
-            //     //     // if(this.file_name || this.subscriber_file_name || this.site_visit_file_name || this.other_Document1_file_name || this.other_Document2_file_name || this.contract_file_name) {
-            //     //     //   for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //     console.log(this.myFiles[i])
-            //     //     //     let selectedfile = this.myFiles[i]
-            //     //     //     console.log(selectedfile)
-            //     //     //   }
-            //     //     // }
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
 
-            //     //     // if(this.file_name) {
-            //     //     //   console.log(this.file_name)
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.file_name);
-            //     //     //     frmData.append('file_size', this.file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Invoice');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //     // frmData.append("file_data", this.myFiles[0]);
-            //     //     //     for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //       console.log(this.myFiles[i])
-            //     //     //       frmData.append("file_data", this.myFiles[i]);
-            //     //     //     }
-            //     //     //     // perform http request for each file
-            //     //     //     //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
 
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // if(this.subscriber_file_name) {
-            //     //     //   //console.log(this.myFiles[1])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.subscriber_file_name);
-            //     //     //     frmData.append('file_size', this.subscriber_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Subscriber Form');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       // frmData.append("file_data", this.myFiles[1]);
-            //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //         console.log(this.myFiles[i])
-            //     //     //         frmData.append("file_data", this.myFiles[i]);
-            //     //     //       }
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // if(this.site_visit_file_name) {
-            //     //     //   console.log(this.myFiles[2])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.site_visit_file_name);
-            //     //     //     frmData.append('file_size', this.site_visit_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Site Visit');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       // frmData.append("file_data", this.myFiles[2]);
-            //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //         console.log(this.myFiles[i])
-            //     //     //         frmData.append("file_data", this.myFiles[i]);
-            //     //     //       }
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // if(this.other_Document1_file_name) {
-            //     //     //   console.log(this.myFiles[3])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.other_Document1_file_name);
-            //     //     //     frmData.append('file_size', this.other_Document1_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Other Doc1');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       // frmData.append("file_data", this.myFiles[3]);
-            //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //         console.log(this.myFiles[i])
-            //     //     //         frmData.append("file_data", this.myFiles[i]);
-            //     //     //       }
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // if(this.other_Document2_file_name) {
-            //     //     //   console.log(this.myFiles[4])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.other_Document2_file_name);
-            //     //     //     frmData.append('file_size', this.other_Document2_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Other Doc 2');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       // frmData.append("file_data", this.myFiles[4]);
-            //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //         console.log(this.myFiles[i])
-            //     //     //         frmData.append("file_data", this.myFiles[i]);
-            //     //     //       }
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // if(this.contract_file_name) {
-            //     //     //   console.log(this.myFiles[5])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.contract_file_name);
-            //     //     //     frmData.append('file_size', this.contract_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Contract');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       // frmData.append("file_data", this.myFiles[5]);
-            //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
-            //     //     //         console.log(this.myFiles[i])
-            //     //     //         frmData.append("file_data", this.myFiles[i]);
-            //     //     //       }
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //         //return
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
-            //     //     // var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //     // updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //     // updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //     // updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //     // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //     // this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //     //   result => {
-            //     //     //     console.log('Finished!... ');
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            //     //     //     localStorage.removeItem('installCompanyID');
-            //     //     //     localStorage.removeItem('totalRecurringCalc');
-            //     //     //     localStorage.removeItem('totalEquipMatCalc');
-            //     //     //     localStorage.removeItem('totalLaborChargesCalc');
-            //     //     //     localStorage.removeItem('invoiceDate');
-            //     //     //     localStorage.removeItem('invoiceNumber');
-            //     //     //     localStorage.removeItem('invoiceTotal');
-            //     //     //     localStorage.removeItem('recurringentry');
-            //     //     //     localStorage.removeItem('equipmatentry');
-            //     //     //     localStorage.removeItem('laborchargesentry');
-            //     //     //     localStorage.removeItem('invoiceName');
-            //     //     //     localStorage.removeItem('invoiceFileSize');
-            //     //     //     localStorage.removeItem('invoice');
-            //     //     //     localStorage.removeItem('subscriberForm');
-            //     //     //     localStorage.removeItem('subscriberFormName');
-            //     //     //     localStorage.removeItem('siteVisit');
-            //     //     //     localStorage.removeItem('siteVisitName');
-            //     //     //     localStorage.removeItem('otherDocument1');
-            //     //     //     localStorage.removeItem('otherDocument1Name');
-            //     //     //     localStorage.removeItem('contract');
-            //     //     //     localStorage.removeItem('contractName');
-            //     //     //     localStorage.removeItem('otherDocument2');
-            //     //     //     localStorage.removeItem('otherDocument2Name');
-            //     //     //     localStorage.removeItem('contractDate');
-            //     //     //     localStorage.removeItem('contractTerm');
-            //     //     //     localStorage.removeItem('serviceIncluded');
-            //     //     //     localStorage.removeItem('customerId');
-            //     //     //     localStorage.removeItem('customerName');
-            //     //     //     localStorage.removeItem('customerSiteName');
-            //     //     //     localStorage.removeItem('customerSystemInformation');
-            //     //     //     localStorage.removeItem('alarmAccount');
-            //     //     //     localStorage.removeItem('systemType');
-            //     //     //     localStorage.removeItem('panelType');
-            //     //     //     localStorage.removeItem('panelLocation');
-            //     //     //     localStorage.removeItem('centralStationID');
-            //     //     //     localStorage.removeItem('customerSiteId');
-            //     //     //     localStorage.removeItem('renewal');
-            //     //     //     localStorage.removeItem('partnerTaxAmount');
-            //     //     //     localStorage.removeItem('additionalInfo');
-            //     //     //     localStorage.removeItem('partnerComments');
-            //     //     //     localStorage.removeItem('signalsTested');
-            //     //     //     localStorage.removeItem('testObject');
-            //     //     //     localStorage.removeItem('checkBoxAutoInsertList');
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
 
-            //     //     //     this.router.navigate(['incentive-entry/']);
-            //     //     //     //this.incentiveDashboardForm.reset();
-            //     //     //   }
-            //     //     // )
-            //     //     return
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.file_name);
+            //         frmData.append('file_size', this.file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Invoice');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //         // frmData.append("file_data", this.myFiles[0]);
+            //         for(var i = 0; i < this.myFiles.length; i++) {
+            //           console.log(this.myFiles[i])
+            //           frmData.append("file_data", this.myFiles[i]);
+            //         }
+            //         // perform http request for each file
+            //         //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
 
-            //     //     if(this.file_name) {
-            //     //       console.log(this.file_name)
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.file_name);
-            //     //         frmData.append('file_size', this.file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Invoice');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //         // frmData.append("file_data", this.myFiles[0]);
-            //     //         for(var i = 0; i < this.myFiles.length; i++) {
-            //     //           console.log(this.myFiles[i])
-            //     //           frmData.append("file_data", this.myFiles[i]);
-            //     //         }
-            //     //         // perform http request for each file
-            //     //         //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
 
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     if(this.subscriber_file_name) {
-            //     //       //console.log(this.myFiles[1])
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.subscriber_file_name);
-            //     //         frmData.append('file_size', this.subscriber_file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Subscriber Form');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //           // frmData.append("file_data", this.myFiles[1]);
-            //     //           for(var i = 0; i < this.myFiles.length; i++) {
-            //     //             console.log(this.myFiles[i])
-            //     //             frmData.append("file_data", this.myFiles[i]);
-            //     //           }
-            //     //           // perform http request for each file
-            //     //           //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     if(this.site_visit_file_name) {
-            //     //       console.log(this.myFiles[2])
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.site_visit_file_name);
-            //     //         frmData.append('file_size', this.site_visit_file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Site Visit');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //           // frmData.append("file_data", this.myFiles[2]);
-            //     //           for(var i = 0; i < this.myFiles.length; i++) {
-            //     //             console.log(this.myFiles[i])
-            //     //             frmData.append("file_data", this.myFiles[i]);
-            //     //           }
-            //     //           // perform http request for each file
-            //     //           //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     if(this.other_Document1_file_name) {
-            //     //       console.log(this.myFiles[3])
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.other_Document1_file_name);
-            //     //         frmData.append('file_size', this.other_Document1_file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Other Doc1');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //           // frmData.append("file_data", this.myFiles[3]);
-            //     //           for(var i = 0; i < this.myFiles.length; i++) {
-            //     //             console.log(this.myFiles[i])
-            //     //             frmData.append("file_data", this.myFiles[i]);
-            //     //           }
-            //     //           // perform http request for each file
-            //     //           //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     if(this.other_Document2_file_name) {
-            //     //       console.log(this.myFiles[4])
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.other_Document2_file_name);
-            //     //         frmData.append('file_size', this.other_Document2_file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Other Doc 2');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //           // frmData.append("file_data", this.myFiles[4]);
-            //     //           for(var i = 0; i < this.myFiles.length; i++) {
-            //     //             console.log(this.myFiles[i])
-            //     //             frmData.append("file_data", this.myFiles[i]);
-            //     //           }
-            //     //           // perform http request for each file
-            //     //           //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     if(this.contract_file_name) {
-            //     //       console.log(this.myFiles[5])
-            //     //         let frmData = new FormData();
-  
-            //     //         // 37 = Sandbox, 6 = Production
-            //     //         frmData.append('company_id','37');
-  
-            //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //         frmData.append('customer_id', this.id);
-  
-            //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //         //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //         frmData.append('job_id', this.job_id);
-            //     //         //frmData.append('job_id', '19');
-            //     //         frmData.append('security_level', this.security_level);
-  
-            //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //         frmData.append('file_name', this.contract_file_name);
-            //     //         frmData.append('file_size', this.contract_file_size);
-            //     //         frmData.append('upload_date', this.invoiceDate);
-            //     //         frmData.append('document_ext', '*Contracts');
-            //     //         frmData.append('user_code', 'PPC');
-            //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //         frmData.append('user_description', 'Contract');
-            //     //         frmData.append('reference1', null);
-            //     //         frmData.append('reference2', null);
-            //     //         frmData.append('reference3', null);
-            //     //         frmData.append('reference4', null);
-            //     //           // frmData.append("file_data", this.myFiles[5]);
-            //     //           for(var i = 0; i < this.myFiles.length; i++) {
-            //     //             console.log(this.myFiles[i])
-            //     //             frmData.append("file_data", this.myFiles[i]);
-            //     //           }
-            //     //           // perform http request for each file
-            //     //           //frmData.append('@file_data', this.myFiles[i]);
-            //     //         frmData.append('document_id', '1');
-  
-            //     //         console.log(this.job_id)
-            //     //         // Display the key/value pairs
-            //     //         console.log(Object.entries(frmData));//returns an empty array!
-            //     //         var options = {content: frmData};
-  
-            //     //         console.log(frmData);
-            //     //         console.log(this.job_id);
-            //     //         const headers = new HttpHeaders();
-            //     //         headers.append('Content-Type', 'multipart/form-data');
-            //     //         headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //         headers.append('Accept', 'application/json');
-            //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //           headers: headers,
-            //     //           responseType: 'text'
-            //     //         }).subscribe(
-            //     //           data => {
-            //     //             console.log(data);
-            //     //             //return
-            //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //               result => {
-            //     //                 console.log('Finished!... ');
-  
-            //     //                 localStorage.removeItem('installCompanyID');
-            //     //                 localStorage.removeItem('totalRecurringCalc');
-            //     //                 localStorage.removeItem('totalEquipMatCalc');
-            //     //                 localStorage.removeItem('totalLaborChargesCalc');
-            //     //                 localStorage.removeItem('invoiceDate');
-            //     //                 localStorage.removeItem('invoiceNumber');
-            //     //                 localStorage.removeItem('invoiceTotal');
-            //     //                 localStorage.removeItem('recurringentry');
-            //     //                 localStorage.removeItem('equipmatentry');
-            //     //                 localStorage.removeItem('laborchargesentry');
-            //     //                 localStorage.removeItem('invoiceName');
-            //     //                 localStorage.removeItem('invoiceFileSize');
-            //     //                 localStorage.removeItem('invoice');
-            //     //                 localStorage.removeItem('subscriberForm');
-            //     //                 localStorage.removeItem('subscriberFormName');
-            //     //                 localStorage.removeItem('siteVisit');
-            //     //                 localStorage.removeItem('siteVisitName');
-            //     //                 localStorage.removeItem('otherDocument1');
-            //     //                 localStorage.removeItem('otherDocument1Name');
-            //     //                 localStorage.removeItem('contract');
-            //     //                 localStorage.removeItem('contractName');
-            //     //                 localStorage.removeItem('otherDocument2');
-            //     //                 localStorage.removeItem('otherDocument2Name');
-            //     //                 localStorage.removeItem('contractDate');
-            //     //                 localStorage.removeItem('contractTerm');
-            //     //                 localStorage.removeItem('serviceIncluded');
-            //     //                 localStorage.removeItem('customerId');
-            //     //                 localStorage.removeItem('customerName');
-            //     //                 localStorage.removeItem('customerSiteName');
-            //     //                 localStorage.removeItem('customerSystemInformation');
-            //     //                 localStorage.removeItem('alarmAccount');
-            //     //                 localStorage.removeItem('systemType');
-            //     //                 localStorage.removeItem('panelType');
-            //     //                 localStorage.removeItem('panelLocation');
-            //     //                 localStorage.removeItem('centralStationID');
-            //     //                 localStorage.removeItem('customerSiteId');
-            //     //                 localStorage.removeItem('renewal');
-            //     //                 localStorage.removeItem('partnerTaxAmount');
-            //     //                 localStorage.removeItem('additionalInfo');
-            //     //                 localStorage.removeItem('partnerComments');
-            //     //                 localStorage.removeItem('signalsTested');
-            //     //                 localStorage.removeItem('testObject');
-  
-            //     //                 this.router.navigate(['incentive-entry/']);
-            //     //                 //this.incentiveDashboardForm.reset();
-            //     //               }
-            //     //             )
-            //     //           }
-            //     //         )
-            //     //           console.log(frmData)
-            //     //     }
-            //     //     // if(this.myFiles[6]) {
-            //     //     //   console.log(this.myFiles[6])
-            //     //     //     let frmData = new FormData();
-  
-            //     //     //     // 37 = Sandbox, 6 = Production
-            //     //     //     frmData.append('company_id','37');
-  
-            //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //     frmData.append('customer_id', this.id);
-  
-            //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
-                        
-            //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
-  
-            //     //     //     frmData.append('job_id', this.job_id);
-            //     //     //     //frmData.append('job_id', '19');
-            //     //     //     frmData.append('security_level', this.security_level);
-  
-            //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //     frmData.append('file_name', this.other_Document2_file_name);
-            //     //     //     frmData.append('file_size', this.other_Document2_file_size);
-            //     //     //     frmData.append('upload_date', this.invoiceDate);
-            //     //     //     frmData.append('document_ext', '*Contracts');
-            //     //     //     frmData.append('user_code', 'PPC');
-            //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //     frmData.append('user_description', 'Invoice');
-            //     //     //     frmData.append('reference1', null);
-            //     //     //     frmData.append('reference2', null);
-            //     //     //     frmData.append('reference3', null);
-            //     //     //     frmData.append('reference4', null);
-            //     //     //       frmData.append("file_data", this.myFiles[6]);
-            //     //     //       // perform http request for each file
-            //     //     //       //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //     frmData.append('document_id', '1');
-  
-            //     //     //     console.log(this.job_id)
-            //     //     //     // Display the key/value pairs
-            //     //     //     console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //     var options = {content: frmData};
-  
-            //     //     //     console.log(frmData);
-            //     //     //     console.log(this.job_id);
-            //     //     //     const headers = new HttpHeaders();
-            //     //     //     headers.append('Content-Type', 'multipart/form-data');
-            //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //     headers.append('Accept', 'application/json');
-            //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //       headers: headers,
-            //     //     //       responseType: 'text'
-            //     //     //     }).subscribe(
-            //     //     //       data => {
-            //     //     //         console.log(data);
-            //     //     //         //return
-            //     //     //         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //     //         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //     //         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //     //         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //     //         updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //     //         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //     //           result => {
-            //     //     //             console.log('Finished!... ');
-  
-            //     //     //             localStorage.removeItem('installCompanyID');
-            //     //     //             localStorage.removeItem('totalRecurringCalc');
-            //     //     //             localStorage.removeItem('totalEquipMatCalc');
-            //     //     //             localStorage.removeItem('totalLaborChargesCalc');
-            //     //     //             localStorage.removeItem('invoiceDate');
-            //     //     //             localStorage.removeItem('invoiceNumber');
-            //     //     //             localStorage.removeItem('invoiceTotal');
-            //     //     //             localStorage.removeItem('recurringentry');
-            //     //     //             localStorage.removeItem('equipmatentry');
-            //     //     //             localStorage.removeItem('laborchargesentry');
-            //     //     //             localStorage.removeItem('invoiceName');
-            //     //     //             localStorage.removeItem('invoiceFileSize');
-            //     //     //             localStorage.removeItem('invoice');
-            //     //     //             localStorage.removeItem('subscriberForm');
-            //     //     //             localStorage.removeItem('subscriberFormName');
-            //     //     //             localStorage.removeItem('siteVisit');
-            //     //     //             localStorage.removeItem('siteVisitName');
-            //     //     //             localStorage.removeItem('otherDocument1');
-            //     //     //             localStorage.removeItem('otherDocument1Name');
-            //     //     //             localStorage.removeItem('contract');
-            //     //     //             localStorage.removeItem('contractName');
-            //     //     //             localStorage.removeItem('otherDocument2');
-            //     //     //             localStorage.removeItem('otherDocument2Name');
-            //     //     //             localStorage.removeItem('contractDate');
-            //     //     //             localStorage.removeItem('contractTerm');
-            //     //     //             localStorage.removeItem('serviceIncluded');
-            //     //     //             localStorage.removeItem('customerId');
-            //     //     //             localStorage.removeItem('customerName');
-            //     //     //             localStorage.removeItem('customerSiteName');
-            //     //     //             localStorage.removeItem('customerSystemInformation');
-            //     //     //             localStorage.removeItem('alarmAccount');
-            //     //     //             localStorage.removeItem('systemType');
-            //     //     //             localStorage.removeItem('panelType');
-            //     //     //             localStorage.removeItem('panelLocation');
-            //     //     //             localStorage.removeItem('centralStationID');
-            //     //     //             localStorage.removeItem('customerSiteId');
-            //     //     //             localStorage.removeItem('renewal');
-            //     //     //             localStorage.removeItem('partnerTaxAmount');
-            //     //     //             localStorage.removeItem('additionalInfo');
-            //     //     //             localStorage.removeItem('partnerComments');
-            //     //     //             localStorage.removeItem('signalsTested');
-            //     //     //             localStorage.removeItem('testObject');
-  
-            //     //     //             this.router.navigate(['incentive-entry/']);
-            //     //     //             //this.incentiveDashboardForm.reset();
-            //     //     //           }
-            //     //     //         )
-            //     //     //       }
-            //     //     //     )
-            //     //     //       console.log(frmData)
-            //     //     // }
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
 
-            //     //     //return
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     if(this.subscriber_file_name) {
+            //       //console.log(this.myFiles[1])
+            //         let frmData = new FormData();
 
-            //     //     // for (var i = 0; i < this.myFiles.length; i++) {
-            //     //     //   let frmData = new FormData();
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
 
-            //     //     //   // 37 = Sandbox, 6 = Production
-            //     //     //   frmData.append('company_id','37');
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
 
-            //     //     //   // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            //     //     //   frmData.append('customer_id', this.id);
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            //     //     //   frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //     //     //   //frmData.append('customer_site_id',this.customerSiteId);
-                      
-            //     //     //   frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //     //     //   //frmData.append('customer_system_id', this.customerSystemId.toString());
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
 
-            //     //     //   frmData.append('job_id', this.job_id);
-            //     //     //   //frmData.append('job_id', '19');
-            //     //     //   frmData.append('security_level', this.security_level);
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.subscriber_file_name);
+            //         frmData.append('file_size', this.subscriber_file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Subscriber Form');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //           // frmData.append("file_data", this.myFiles[1]);
+            //           for(var i = 0; i < this.myFiles.length; i++) {
+            //             console.log(this.myFiles[i])
+            //             frmData.append("file_data", this.myFiles[i]);
+            //           }
+            //           // perform http request for each file
+            //           //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
 
-            //     //     //   //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            //     //     //   frmData.append('file_name', this.file_name);
-            //     //     //   frmData.append('file_size', this.file_size);
-            //     //     //   frmData.append('upload_date', this.invoiceDate);
-            //     //     //   frmData.append('document_ext', '*Contracts');
-            //     //     //   frmData.append('user_code', 'PPC');
-            //     //     //   //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            //     //     //   frmData.append('user_description', 'Invoice');
-            //     //     //   frmData.append('reference1', null);
-            //     //     //   frmData.append('reference2', null);
-            //     //     //   frmData.append('reference3', null);
-            //     //     //   frmData.append('reference4', null);
-            //     //     //     frmData.append("file_data", this.myFiles[i]);
-            //     //     //     // perform http request for each file
-            //     //     //     //frmData.append('@file_data', this.myFiles[i]);
-            //     //     //   frmData.append('document_id', '1');
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
 
-            //     //     //   console.log(this.job_id)
-            //     //     //   // Display the key/value pairs
-            //     //     //   console.log(Object.entries(frmData));//returns an empty array!
-            //     //     //   var options = {content: frmData};
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     if(this.site_visit_file_name) {
+            //       console.log(this.myFiles[2])
+            //         let frmData = new FormData();
 
-            //     //     //   console.log(frmData);
-            //     //     //   console.log(this.job_id);
-            //     //     //   const headers = new HttpHeaders();
-            //     //     //   headers.append('Content-Type', 'multipart/form-data');
-            //     //     //   headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     //   headers.append('Accept', 'application/json');
-            //     //     //   this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //     headers: headers,
-            //     //     //     responseType: 'text'
-            //     //     //   }).subscribe(
-            //     //     //     data => {
-            //     //     //       console.log(data);
-            //     //     //       return
-            //     //     //       var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //     //       updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //     //       updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //     //       updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //     //       updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //     //       this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //     //         result => {
-            //     //     //           console.log('Finished!... ');
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
 
-            //     //     //           localStorage.removeItem('installCompanyID');
-            //     //     //           localStorage.removeItem('totalRecurringCalc');
-            //     //     //           localStorage.removeItem('totalEquipMatCalc');
-            //     //     //           localStorage.removeItem('totalLaborChargesCalc');
-            //     //     //           localStorage.removeItem('invoiceDate');
-            //     //     //           localStorage.removeItem('invoiceNumber');
-            //     //     //           localStorage.removeItem('invoiceTotal');
-            //     //     //           localStorage.removeItem('recurringentry');
-            //     //     //           localStorage.removeItem('equipmatentry');
-            //     //     //           localStorage.removeItem('laborchargesentry');
-            //     //     //           localStorage.removeItem('invoiceName');
-            //     //     //           localStorage.removeItem('invoiceFileSize');
-            //     //     //           localStorage.removeItem('invoice');
-            //     //     //           localStorage.removeItem('subscriberForm');
-            //     //     //           localStorage.removeItem('subscriberFormName');
-            //     //     //           localStorage.removeItem('siteVisit');
-            //     //     //           localStorage.removeItem('siteVisitName');
-            //     //     //           localStorage.removeItem('otherDocument1');
-            //     //     //           localStorage.removeItem('otherDocument1Name');
-            //     //     //           localStorage.removeItem('contract');
-            //     //     //           localStorage.removeItem('contractName');
-            //     //     //           localStorage.removeItem('otherDocument2');
-            //     //     //           localStorage.removeItem('otherDocument2Name');
-            //     //     //           localStorage.removeItem('contractDate');
-            //     //     //           localStorage.removeItem('contractTerm');
-            //     //     //           localStorage.removeItem('serviceIncluded');
-            //     //     //           localStorage.removeItem('customerId');
-            //     //     //           localStorage.removeItem('customerName');
-            //     //     //           localStorage.removeItem('customerSiteName');
-            //     //     //           localStorage.removeItem('customerSystemInformation');
-            //     //     //           localStorage.removeItem('alarmAccount');
-            //     //     //           localStorage.removeItem('systemType');
-            //     //     //           localStorage.removeItem('panelType');
-            //     //     //           localStorage.removeItem('panelLocation');
-            //     //     //           localStorage.removeItem('centralStationID');
-            //     //     //           localStorage.removeItem('customerSiteId');
-            //     //     //           localStorage.removeItem('renewal');
-            //     //     //           localStorage.removeItem('partnerTaxAmount');
-            //     //     //           localStorage.removeItem('additionalInfo');
-            //     //     //           localStorage.removeItem('partnerComments');
-            //     //     //           localStorage.removeItem('signalsTested');
-            //     //     //           localStorage.removeItem('testObject');
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
 
-            //     //     //           this.router.navigate(['incentive-entry/']);
-            //     //     //           //this.incentiveDashboardForm.reset();
-            //     //     //         }
-            //     //     //       )
-            //     //     //     }
-            //     //     //   )
-            //     //     //     console.log(frmData)
-            //     //     // }
-            //     //     // //frmData.append('@file_data', this.myFiles[i]);
-            //     //     // frmData.append('document_id', '1');
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            //     //     // console.log(this.job_id)
-            //     //     // // Display the key/value pairs
-            //     //     // console.log(Object.entries(frmData));//returns an empty array!
-            //     //     // var options = {content: frmData};
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
 
-            //     //     // console.log(frmData);
-            //     //     // console.log(this.job_id);
-            //     //     // const headers = new HttpHeaders();
-            //     //     // headers.append('Content-Type', 'multipart/form-data');
-            //     //     // headers.append('Authorization','Bearer ' + this.loadToken());
-            //     //     // headers.append('Accept', 'application/json');
-            //     //     // this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            //     //     //   headers: headers,
-            //     //     //   responseType: 'text'
-            //     //     // }).subscribe(
-            //     //     //   data => {
-            //     //     //     console.log(data);
-            //     //     //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-            //     //     //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-            //     //     //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-            //     //     //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-            //     //     //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-            //     //     //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-            //     //     //       result => {
-            //     //     //         console.log('Finished!... ');
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.site_visit_file_name);
+            //         frmData.append('file_size', this.site_visit_file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Site Visit');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //           // frmData.append("file_data", this.myFiles[2]);
+            //           for(var i = 0; i < this.myFiles.length; i++) {
+            //             console.log(this.myFiles[i])
+            //             frmData.append("file_data", this.myFiles[i]);
+            //           }
+            //           // perform http request for each file
+            //           //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
 
-            //     //     //         localStorage.removeItem('installCompanyID');
-            //     //     //         localStorage.removeItem('totalRecurringCalc');
-            //     //     //         localStorage.removeItem('totalEquipMatCalc');
-            //     //     //         localStorage.removeItem('totalLaborChargesCalc');
-            //     //     //         localStorage.removeItem('invoiceDate');
-            //     //     //         localStorage.removeItem('invoiceNumber');
-            //     //     //         localStorage.removeItem('invoiceTotal');
-            //     //     //         localStorage.removeItem('recurringentry');
-            //     //     //         localStorage.removeItem('equipmatentry');
-            //     //     //         localStorage.removeItem('laborchargesentry');
-            //     //     //         localStorage.removeItem('invoiceName');
-            //     //     //         localStorage.removeItem('invoiceFileSize');
-            //     //     //         localStorage.removeItem('invoice');
-            //     //     //         localStorage.removeItem('subscriberForm');
-            //     //     //         localStorage.removeItem('subscriberFormName');
-            //     //     //         localStorage.removeItem('siteVisit');
-            //     //     //         localStorage.removeItem('siteVisitName');
-            //     //     //         localStorage.removeItem('otherDocument1');
-            //     //     //         localStorage.removeItem('otherDocument1Name');
-            //     //     //         localStorage.removeItem('contract');
-            //     //     //         localStorage.removeItem('contractName');
-            //     //     //         localStorage.removeItem('otherDocument2');
-            //     //     //         localStorage.removeItem('otherDocument2Name');
-            //     //     //         localStorage.removeItem('contractDate');
-            //     //     //         localStorage.removeItem('contractTerm');
-            //     //     //         localStorage.removeItem('serviceIncluded');
-            //     //     //         localStorage.removeItem('customerId');
-            //     //     //         localStorage.removeItem('customerName');
-            //     //     //         localStorage.removeItem('customerSiteName');
-            //     //     //         localStorage.removeItem('customerSystemInformation');
-            //     //     //         localStorage.removeItem('alarmAccount');
-            //     //     //         localStorage.removeItem('systemType');
-            //     //     //         localStorage.removeItem('panelType');
-            //     //     //         localStorage.removeItem('panelLocation');
-            //     //     //         localStorage.removeItem('centralStationID');
-            //     //     //         localStorage.removeItem('customerSiteId');
-            //     //     //         localStorage.removeItem('renewal');
-            //     //     //         localStorage.removeItem('partnerTaxAmount');
-            //     //     //         localStorage.removeItem('additionalInfo');
-            //     //     //         localStorage.removeItem('partnerComments');
-            //     //     //         localStorage.removeItem('signalsTested');
-            //     //     //         localStorage.removeItem('testObject');
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
 
-            //     //     //         this.router.navigate(['incentive-entry/']);
-            //     //     //         //this.incentiveDashboardForm.reset();
-            //     //     //       }
-            //     //     //     )
-            //     //     //   }
-            //     //     // )
-            //     //   }
-            //     // )
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     if(this.other_Document1_file_name) {
+            //       console.log(this.myFiles[3])
+            //         let frmData = new FormData();
+
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
+
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
+
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
+
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.other_Document1_file_name);
+            //         frmData.append('file_size', this.other_Document1_file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Other Doc1');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //           // frmData.append("file_data", this.myFiles[3]);
+            //           for(var i = 0; i < this.myFiles.length; i++) {
+            //             console.log(this.myFiles[i])
+            //             frmData.append("file_data", this.myFiles[i]);
+            //           }
+            //           // perform http request for each file
+            //           //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
+
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
+
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     if(this.other_Document2_file_name) {
+            //       console.log(this.myFiles[4])
+            //         let frmData = new FormData();
+
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
+
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
+
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
+
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.other_Document2_file_name);
+            //         frmData.append('file_size', this.other_Document2_file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Other Doc 2');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //           // frmData.append("file_data", this.myFiles[4]);
+            //           for(var i = 0; i < this.myFiles.length; i++) {
+            //             console.log(this.myFiles[i])
+            //             frmData.append("file_data", this.myFiles[i]);
+            //           }
+            //           // perform http request for each file
+            //           //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
+
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
+
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     if(this.contract_file_name) {
+            //       console.log(this.myFiles[5])
+            //         let frmData = new FormData();
+
+            //         // 37 = Sandbox, 6 = Production
+            //         frmData.append('company_id','37');
+
+            //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //         frmData.append('customer_id', this.id);
+
+            //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+            //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+            //         frmData.append('job_id', this.job_id);
+            //         //frmData.append('job_id', '19');
+            //         frmData.append('security_level', this.security_level);
+
+            //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //         frmData.append('file_name', this.contract_file_name);
+            //         frmData.append('file_size', this.contract_file_size);
+            //         frmData.append('upload_date', this.invoiceDate);
+            //         frmData.append('document_ext', '*Contracts');
+            //         frmData.append('user_code', 'PPC');
+            //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //         frmData.append('user_description', 'Contract');
+            //         frmData.append('reference1', null);
+            //         frmData.append('reference2', null);
+            //         frmData.append('reference3', null);
+            //         frmData.append('reference4', null);
+            //           // frmData.append("file_data", this.myFiles[5]);
+            //           for(var i = 0; i < this.myFiles.length; i++) {
+            //             console.log(this.myFiles[i])
+            //             frmData.append("file_data", this.myFiles[i]);
+            //           }
+            //           // perform http request for each file
+            //           //frmData.append('@file_data', this.myFiles[i]);
+            //         frmData.append('document_id', '1');
+
+            //         console.log(this.job_id)
+            //         // Display the key/value pairs
+            //         console.log(Object.entries(frmData));//returns an empty array!
+            //         var options = {content: frmData};
+
+            //         console.log(frmData);
+            //         console.log(this.job_id);
+            //         const headers = new HttpHeaders();
+            //         headers.append('Content-Type', 'multipart/form-data');
+            //         headers.append('Authorization','Bearer ' + this.loadToken());
+            //         headers.append('Accept', 'application/json');
+            //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //           headers: headers,
+            //           responseType: 'text'
+            //         }).subscribe(
+            //           data => {
+            //             console.log(data);
+            //             //return
+            //           }
+            //         )
+            //           console.log(frmData)
+            //     }
+            //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+            //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+            //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+            //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+            //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+            //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+            //       result => {
+            //         console.log('Finished!... ');
+
+            //             localStorage.removeItem('installCompanyID');
+            //             localStorage.removeItem('totalRecurringCalc');
+            //             localStorage.removeItem('totalEquipMatCalc');
+            //             localStorage.removeItem('totalLaborChargesCalc');
+            //             localStorage.removeItem('invoiceDate');
+            //             localStorage.removeItem('invoiceNumber');
+            //             localStorage.removeItem('invoiceTotal');
+            //             localStorage.removeItem('recurringentry');
+            //             localStorage.removeItem('equipmatentry');
+            //             localStorage.removeItem('laborchargesentry');
+            //             localStorage.removeItem('invoiceName');
+            //             localStorage.removeItem('invoiceFileSize');
+            //             localStorage.removeItem('invoice');
+            //             localStorage.removeItem('subscriberForm');
+            //             localStorage.removeItem('subscriberFormName');
+            //             localStorage.removeItem('siteVisit');
+            //             localStorage.removeItem('siteVisitName');
+            //             localStorage.removeItem('otherDocument1');
+            //             localStorage.removeItem('otherDocument1Name');
+            //             localStorage.removeItem('contract');
+            //             localStorage.removeItem('contractName');
+            //             localStorage.removeItem('otherDocument2');
+            //             localStorage.removeItem('otherDocument2Name');
+            //             localStorage.removeItem('contractDate');
+            //             localStorage.removeItem('contractTerm');
+            //             localStorage.removeItem('serviceIncluded');
+            //             localStorage.removeItem('customerId');
+            //             localStorage.removeItem('customerName');
+            //             localStorage.removeItem('customerSiteName');
+            //             localStorage.removeItem('customerSystemInformation');
+            //             localStorage.removeItem('alarmAccount');
+            //             localStorage.removeItem('systemType');
+            //             localStorage.removeItem('panelType');
+            //             localStorage.removeItem('panelLocation');
+            //             localStorage.removeItem('centralStationID');
+            //             localStorage.removeItem('customerSiteId');
+            //             localStorage.removeItem('renewal');
+            //             localStorage.removeItem('partnerTaxAmount');
+            //             localStorage.removeItem('additionalInfo');
+            //             localStorage.removeItem('partnerComments');
+            //             localStorage.removeItem('signalsTested');
+            //             localStorage.removeItem('testObject');
+            //             localStorage.removeItem('checkBoxAutoInsertList');
+            //             localStorage.removeItem('results');
+
+            //             this.router.navigate(['incentive-entry/']);
+            //       }
+            //     )
+            //     return
             //   }
             // )
-          }
-        )
+                  }
+                )
+              })
+            }
+          )
+        })
+        // this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
+        //   result => {
+        //     //console.log(result)
+        //     // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
+        //     this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+        //       //console.log(element, i);
+        //       var updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id);
+        //       console.log(updateEquipMatWithJobID)
+        //       this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+        //         result => {
+        //           console.log(result)
+        //           //return
+        //         }
+        //       )
+        //     })
+
+        //     // for(var i = 0; i < this.foo.length; i++) {
+        //     //   console.log(this.foo[i])
+        //     //   console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
+        //     //   var updateEquipMatWithJobID = addToObject(this.foo[i], 'IncentiveID', this.job_id);
+        //     //   return
+        //     //   this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+        //     //     result => {
+        //     //       console.log(result)
+        //     //       return
+        //     //     }
+        //     //   )
+        //     // }
+        //     // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id); 
+        //     // this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+        //     //   result => {
+        //     //     console.log(result);
+        //     //     if(this.file_name) {
+        //     //       console.log(this.file_name)
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.file_name);
+        //     //         frmData.append('file_size', this.file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Invoice');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //         // frmData.append("file_data", this.myFiles[0]);
+        //     //         for(var i = 0; i < this.myFiles.length; i++) {
+        //     //           console.log(this.myFiles[i])
+        //     //           frmData.append("file_data", this.myFiles[i]);
+        //     //         }
+        //     //         // perform http request for each file
+        //     //         //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     if(this.subscriber_file_name) {
+        //     //       //console.log(this.myFiles[1])
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.subscriber_file_name);
+        //     //         frmData.append('file_size', this.subscriber_file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Subscriber Form');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //           // frmData.append("file_data", this.myFiles[1]);
+        //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //             console.log(this.myFiles[i])
+        //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //           }
+        //     //           // perform http request for each file
+        //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     if(this.site_visit_file_name) {
+        //     //       console.log(this.myFiles[2])
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.site_visit_file_name);
+        //     //         frmData.append('file_size', this.site_visit_file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Site Visit');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //           // frmData.append("file_data", this.myFiles[2]);
+        //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //             console.log(this.myFiles[i])
+        //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //           }
+        //     //           // perform http request for each file
+        //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     if(this.other_Document1_file_name) {
+        //     //       console.log(this.myFiles[3])
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.other_Document1_file_name);
+        //     //         frmData.append('file_size', this.other_Document1_file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Other Doc1');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //           // frmData.append("file_data", this.myFiles[3]);
+        //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //             console.log(this.myFiles[i])
+        //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //           }
+        //     //           // perform http request for each file
+        //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     if(this.other_Document2_file_name) {
+        //     //       console.log(this.myFiles[4])
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.other_Document2_file_name);
+        //     //         frmData.append('file_size', this.other_Document2_file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Other Doc 2');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //           // frmData.append("file_data", this.myFiles[4]);
+        //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //             console.log(this.myFiles[i])
+        //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //           }
+        //     //           // perform http request for each file
+        //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     if(this.contract_file_name) {
+        //     //       console.log(this.myFiles[5])
+        //     //         let frmData = new FormData();
+
+        //     //         // 37 = Sandbox, 6 = Production
+        //     //         frmData.append('company_id','37');
+
+        //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //         frmData.append('customer_id', this.id);
+
+        //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                    
+        //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //         frmData.append('job_id', this.job_id);
+        //     //         //frmData.append('job_id', '19');
+        //     //         frmData.append('security_level', this.security_level);
+
+        //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //         frmData.append('file_name', this.contract_file_name);
+        //     //         frmData.append('file_size', this.contract_file_size);
+        //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //         frmData.append('document_ext', '*Contracts');
+        //     //         frmData.append('user_code', 'PPC');
+        //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //         frmData.append('user_description', 'Contract');
+        //     //         frmData.append('reference1', null);
+        //     //         frmData.append('reference2', null);
+        //     //         frmData.append('reference3', null);
+        //     //         frmData.append('reference4', null);
+        //     //           // frmData.append("file_data", this.myFiles[5]);
+        //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //             console.log(this.myFiles[i])
+        //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //           }
+        //     //           // perform http request for each file
+        //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //         frmData.append('document_id', '1');
+
+        //     //         console.log(this.job_id)
+        //     //         // Display the key/value pairs
+        //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //         var options = {content: frmData};
+
+        //     //         console.log(frmData);
+        //     //         console.log(this.job_id);
+        //     //         const headers = new HttpHeaders();
+        //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //         headers.append('Accept', 'application/json');
+        //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //           headers: headers,
+        //     //           responseType: 'text'
+        //     //         }).subscribe(
+        //     //           data => {
+        //     //             console.log(data);
+        //     //             //return
+        //     //           }
+        //     //         )
+        //     //           console.log(frmData)
+        //     //     }
+        //     //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //       result => {
+        //     //         console.log('Finished!... ');
+
+        //     //             localStorage.removeItem('installCompanyID');
+        //     //             localStorage.removeItem('totalRecurringCalc');
+        //     //             localStorage.removeItem('totalEquipMatCalc');
+        //     //             localStorage.removeItem('totalLaborChargesCalc');
+        //     //             localStorage.removeItem('invoiceDate');
+        //     //             localStorage.removeItem('invoiceNumber');
+        //     //             localStorage.removeItem('invoiceTotal');
+        //     //             localStorage.removeItem('recurringentry');
+        //     //             localStorage.removeItem('equipmatentry');
+        //     //             localStorage.removeItem('laborchargesentry');
+        //     //             localStorage.removeItem('invoiceName');
+        //     //             localStorage.removeItem('invoiceFileSize');
+        //     //             localStorage.removeItem('invoice');
+        //     //             localStorage.removeItem('subscriberForm');
+        //     //             localStorage.removeItem('subscriberFormName');
+        //     //             localStorage.removeItem('siteVisit');
+        //     //             localStorage.removeItem('siteVisitName');
+        //     //             localStorage.removeItem('otherDocument1');
+        //     //             localStorage.removeItem('otherDocument1Name');
+        //     //             localStorage.removeItem('contract');
+        //     //             localStorage.removeItem('contractName');
+        //     //             localStorage.removeItem('otherDocument2');
+        //     //             localStorage.removeItem('otherDocument2Name');
+        //     //             localStorage.removeItem('contractDate');
+        //     //             localStorage.removeItem('contractTerm');
+        //     //             localStorage.removeItem('serviceIncluded');
+        //     //             localStorage.removeItem('customerId');
+        //     //             localStorage.removeItem('customerName');
+        //     //             localStorage.removeItem('customerSiteName');
+        //     //             localStorage.removeItem('customerSystemInformation');
+        //     //             localStorage.removeItem('alarmAccount');
+        //     //             localStorage.removeItem('systemType');
+        //     //             localStorage.removeItem('panelType');
+        //     //             localStorage.removeItem('panelLocation');
+        //     //             localStorage.removeItem('centralStationID');
+        //     //             localStorage.removeItem('customerSiteId');
+        //     //             localStorage.removeItem('renewal');
+        //     //             localStorage.removeItem('partnerTaxAmount');
+        //     //             localStorage.removeItem('additionalInfo');
+        //     //             localStorage.removeItem('partnerComments');
+        //     //             localStorage.removeItem('signalsTested');
+        //     //             localStorage.removeItem('testObject');
+        //     //             localStorage.removeItem('checkBoxAutoInsertList');
+        //     //             localStorage.removeItem('results');
+
+        //     //             this.router.navigate(['incentive-entry/']);
+        //     //       }
+        //     //     )
+        //     //     return
+        //     //   }
+        //     // )
+
+
+        //     // var updateEquipMatWithJobID = addToObject(this.foo, 'IncentiveID', this.job_id);
+        //     // this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+        //     //   result => {
+        //     //     // console.log(this.foo)
+        //     //     // console.log(updateEquipMatWithJobID)
+        //     //     // console.log(result)
+        //     //     //return
+        //     //     // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
+        //     //     // this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+        //     //     //   result => {
+        //     //     //     console.log(result); //this shows a new object with 0 or null values!
+
+        //     //     //     // if(this.file_name || this.subscriber_file_name || this.site_visit_file_name || this.other_Document1_file_name || this.other_Document2_file_name || this.contract_file_name) {
+        //     //     //     //   for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //     console.log(this.myFiles[i])
+        //     //     //     //     let selectedfile = this.myFiles[i]
+        //     //     //     //     console.log(selectedfile)
+        //     //     //     //   }
+        //     //     //     // }
+
+        //     //     //     // if(this.file_name) {
+        //     //     //     //   console.log(this.file_name)
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.file_name);
+        //     //     //     //     frmData.append('file_size', this.file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Invoice');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //     // frmData.append("file_data", this.myFiles[0]);
+        //     //     //     //     for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //       console.log(this.myFiles[i])
+        //     //     //     //       frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //     }
+        //     //     //     //     // perform http request for each file
+        //     //     //     //     //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // if(this.subscriber_file_name) {
+        //     //     //     //   //console.log(this.myFiles[1])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.subscriber_file_name);
+        //     //     //     //     frmData.append('file_size', this.subscriber_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Subscriber Form');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       // frmData.append("file_data", this.myFiles[1]);
+        //     //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //         console.log(this.myFiles[i])
+        //     //     //     //         frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //       }
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // if(this.site_visit_file_name) {
+        //     //     //     //   console.log(this.myFiles[2])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.site_visit_file_name);
+        //     //     //     //     frmData.append('file_size', this.site_visit_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Site Visit');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       // frmData.append("file_data", this.myFiles[2]);
+        //     //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //         console.log(this.myFiles[i])
+        //     //     //     //         frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //       }
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // if(this.other_Document1_file_name) {
+        //     //     //     //   console.log(this.myFiles[3])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.other_Document1_file_name);
+        //     //     //     //     frmData.append('file_size', this.other_Document1_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Other Doc1');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       // frmData.append("file_data", this.myFiles[3]);
+        //     //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //         console.log(this.myFiles[i])
+        //     //     //     //         frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //       }
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // if(this.other_Document2_file_name) {
+        //     //     //     //   console.log(this.myFiles[4])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.other_Document2_file_name);
+        //     //     //     //     frmData.append('file_size', this.other_Document2_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Other Doc 2');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       // frmData.append("file_data", this.myFiles[4]);
+        //     //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //         console.log(this.myFiles[i])
+        //     //     //     //         frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //       }
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // if(this.contract_file_name) {
+        //     //     //     //   console.log(this.myFiles[5])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.contract_file_name);
+        //     //     //     //     frmData.append('file_size', this.contract_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Contract');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       // frmData.append("file_data", this.myFiles[5]);
+        //     //     //     //       for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //         console.log(this.myFiles[i])
+        //     //     //     //         frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //       }
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //         //return
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+        //     //     //     // var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //     // updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //     // updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //     // updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //     // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //     // this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //     //   result => {
+        //     //     //     //     console.log('Finished!... ');
+
+        //     //     //     //     localStorage.removeItem('installCompanyID');
+        //     //     //     //     localStorage.removeItem('totalRecurringCalc');
+        //     //     //     //     localStorage.removeItem('totalEquipMatCalc');
+        //     //     //     //     localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //     //     localStorage.removeItem('invoiceDate');
+        //     //     //     //     localStorage.removeItem('invoiceNumber');
+        //     //     //     //     localStorage.removeItem('invoiceTotal');
+        //     //     //     //     localStorage.removeItem('recurringentry');
+        //     //     //     //     localStorage.removeItem('equipmatentry');
+        //     //     //     //     localStorage.removeItem('laborchargesentry');
+        //     //     //     //     localStorage.removeItem('invoiceName');
+        //     //     //     //     localStorage.removeItem('invoiceFileSize');
+        //     //     //     //     localStorage.removeItem('invoice');
+        //     //     //     //     localStorage.removeItem('subscriberForm');
+        //     //     //     //     localStorage.removeItem('subscriberFormName');
+        //     //     //     //     localStorage.removeItem('siteVisit');
+        //     //     //     //     localStorage.removeItem('siteVisitName');
+        //     //     //     //     localStorage.removeItem('otherDocument1');
+        //     //     //     //     localStorage.removeItem('otherDocument1Name');
+        //     //     //     //     localStorage.removeItem('contract');
+        //     //     //     //     localStorage.removeItem('contractName');
+        //     //     //     //     localStorage.removeItem('otherDocument2');
+        //     //     //     //     localStorage.removeItem('otherDocument2Name');
+        //     //     //     //     localStorage.removeItem('contractDate');
+        //     //     //     //     localStorage.removeItem('contractTerm');
+        //     //     //     //     localStorage.removeItem('serviceIncluded');
+        //     //     //     //     localStorage.removeItem('customerId');
+        //     //     //     //     localStorage.removeItem('customerName');
+        //     //     //     //     localStorage.removeItem('customerSiteName');
+        //     //     //     //     localStorage.removeItem('customerSystemInformation');
+        //     //     //     //     localStorage.removeItem('alarmAccount');
+        //     //     //     //     localStorage.removeItem('systemType');
+        //     //     //     //     localStorage.removeItem('panelType');
+        //     //     //     //     localStorage.removeItem('panelLocation');
+        //     //     //     //     localStorage.removeItem('centralStationID');
+        //     //     //     //     localStorage.removeItem('customerSiteId');
+        //     //     //     //     localStorage.removeItem('renewal');
+        //     //     //     //     localStorage.removeItem('partnerTaxAmount');
+        //     //     //     //     localStorage.removeItem('additionalInfo');
+        //     //     //     //     localStorage.removeItem('partnerComments');
+        //     //     //     //     localStorage.removeItem('signalsTested');
+        //     //     //     //     localStorage.removeItem('testObject');
+        //     //     //     //     localStorage.removeItem('checkBoxAutoInsertList');
+
+        //     //     //     //     this.router.navigate(['incentive-entry/']);
+        //     //     //     //     //this.incentiveDashboardForm.reset();
+        //     //     //     //   }
+        //     //     //     // )
+        //     //     //     return
+
+        //     //     //     if(this.file_name) {
+        //     //     //       console.log(this.file_name)
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.file_name);
+        //     //     //         frmData.append('file_size', this.file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Invoice');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //         // frmData.append("file_data", this.myFiles[0]);
+        //     //     //         for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //           console.log(this.myFiles[i])
+        //     //     //           frmData.append("file_data", this.myFiles[i]);
+        //     //     //         }
+        //     //     //         // perform http request for each file
+        //     //     //         //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     if(this.subscriber_file_name) {
+        //     //     //       //console.log(this.myFiles[1])
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.subscriber_file_name);
+        //     //     //         frmData.append('file_size', this.subscriber_file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Subscriber Form');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //           // frmData.append("file_data", this.myFiles[1]);
+        //     //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //             console.log(this.myFiles[i])
+        //     //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //     //           }
+        //     //     //           // perform http request for each file
+        //     //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     if(this.site_visit_file_name) {
+        //     //     //       console.log(this.myFiles[2])
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.site_visit_file_name);
+        //     //     //         frmData.append('file_size', this.site_visit_file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Site Visit');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //           // frmData.append("file_data", this.myFiles[2]);
+        //     //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //             console.log(this.myFiles[i])
+        //     //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //     //           }
+        //     //     //           // perform http request for each file
+        //     //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     if(this.other_Document1_file_name) {
+        //     //     //       console.log(this.myFiles[3])
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.other_Document1_file_name);
+        //     //     //         frmData.append('file_size', this.other_Document1_file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Other Doc1');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //           // frmData.append("file_data", this.myFiles[3]);
+        //     //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //             console.log(this.myFiles[i])
+        //     //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //     //           }
+        //     //     //           // perform http request for each file
+        //     //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     if(this.other_Document2_file_name) {
+        //     //     //       console.log(this.myFiles[4])
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.other_Document2_file_name);
+        //     //     //         frmData.append('file_size', this.other_Document2_file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Other Doc 2');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //           // frmData.append("file_data", this.myFiles[4]);
+        //     //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //             console.log(this.myFiles[i])
+        //     //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //     //           }
+        //     //     //           // perform http request for each file
+        //     //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     if(this.contract_file_name) {
+        //     //     //       console.log(this.myFiles[5])
+        //     //     //         let frmData = new FormData();
+  
+        //     //     //         // 37 = Sandbox, 6 = Production
+        //     //     //         frmData.append('company_id','37');
+  
+        //     //     //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //         frmData.append('customer_id', this.id);
+  
+        //     //     //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //         //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //         frmData.append('job_id', this.job_id);
+        //     //     //         //frmData.append('job_id', '19');
+        //     //     //         frmData.append('security_level', this.security_level);
+  
+        //     //     //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //         frmData.append('file_name', this.contract_file_name);
+        //     //     //         frmData.append('file_size', this.contract_file_size);
+        //     //     //         frmData.append('upload_date', this.invoiceDate);
+        //     //     //         frmData.append('document_ext', '*Contracts');
+        //     //     //         frmData.append('user_code', 'PPC');
+        //     //     //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //         frmData.append('user_description', 'Contract');
+        //     //     //         frmData.append('reference1', null);
+        //     //     //         frmData.append('reference2', null);
+        //     //     //         frmData.append('reference3', null);
+        //     //     //         frmData.append('reference4', null);
+        //     //     //           // frmData.append("file_data", this.myFiles[5]);
+        //     //     //           for(var i = 0; i < this.myFiles.length; i++) {
+        //     //     //             console.log(this.myFiles[i])
+        //     //     //             frmData.append("file_data", this.myFiles[i]);
+        //     //     //           }
+        //     //     //           // perform http request for each file
+        //     //     //           //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //         frmData.append('document_id', '1');
+  
+        //     //     //         console.log(this.job_id)
+        //     //     //         // Display the key/value pairs
+        //     //     //         console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //         var options = {content: frmData};
+  
+        //     //     //         console.log(frmData);
+        //     //     //         console.log(this.job_id);
+        //     //     //         const headers = new HttpHeaders();
+        //     //     //         headers.append('Content-Type', 'multipart/form-data');
+        //     //     //         headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //         headers.append('Accept', 'application/json');
+        //     //     //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //           headers: headers,
+        //     //     //           responseType: 'text'
+        //     //     //         }).subscribe(
+        //     //     //           data => {
+        //     //     //             console.log(data);
+        //     //     //             //return
+        //     //     //             var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //             updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //             updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //             updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //             updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //             this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //               result => {
+        //     //     //                 console.log('Finished!... ');
+  
+        //     //     //                 localStorage.removeItem('installCompanyID');
+        //     //     //                 localStorage.removeItem('totalRecurringCalc');
+        //     //     //                 localStorage.removeItem('totalEquipMatCalc');
+        //     //     //                 localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //                 localStorage.removeItem('invoiceDate');
+        //     //     //                 localStorage.removeItem('invoiceNumber');
+        //     //     //                 localStorage.removeItem('invoiceTotal');
+        //     //     //                 localStorage.removeItem('recurringentry');
+        //     //     //                 localStorage.removeItem('equipmatentry');
+        //     //     //                 localStorage.removeItem('laborchargesentry');
+        //     //     //                 localStorage.removeItem('invoiceName');
+        //     //     //                 localStorage.removeItem('invoiceFileSize');
+        //     //     //                 localStorage.removeItem('invoice');
+        //     //     //                 localStorage.removeItem('subscriberForm');
+        //     //     //                 localStorage.removeItem('subscriberFormName');
+        //     //     //                 localStorage.removeItem('siteVisit');
+        //     //     //                 localStorage.removeItem('siteVisitName');
+        //     //     //                 localStorage.removeItem('otherDocument1');
+        //     //     //                 localStorage.removeItem('otherDocument1Name');
+        //     //     //                 localStorage.removeItem('contract');
+        //     //     //                 localStorage.removeItem('contractName');
+        //     //     //                 localStorage.removeItem('otherDocument2');
+        //     //     //                 localStorage.removeItem('otherDocument2Name');
+        //     //     //                 localStorage.removeItem('contractDate');
+        //     //     //                 localStorage.removeItem('contractTerm');
+        //     //     //                 localStorage.removeItem('serviceIncluded');
+        //     //     //                 localStorage.removeItem('customerId');
+        //     //     //                 localStorage.removeItem('customerName');
+        //     //     //                 localStorage.removeItem('customerSiteName');
+        //     //     //                 localStorage.removeItem('customerSystemInformation');
+        //     //     //                 localStorage.removeItem('alarmAccount');
+        //     //     //                 localStorage.removeItem('systemType');
+        //     //     //                 localStorage.removeItem('panelType');
+        //     //     //                 localStorage.removeItem('panelLocation');
+        //     //     //                 localStorage.removeItem('centralStationID');
+        //     //     //                 localStorage.removeItem('customerSiteId');
+        //     //     //                 localStorage.removeItem('renewal');
+        //     //     //                 localStorage.removeItem('partnerTaxAmount');
+        //     //     //                 localStorage.removeItem('additionalInfo');
+        //     //     //                 localStorage.removeItem('partnerComments');
+        //     //     //                 localStorage.removeItem('signalsTested');
+        //     //     //                 localStorage.removeItem('testObject');
+  
+        //     //     //                 this.router.navigate(['incentive-entry/']);
+        //     //     //                 //this.incentiveDashboardForm.reset();
+        //     //     //               }
+        //     //     //             )
+        //     //     //           }
+        //     //     //         )
+        //     //     //           console.log(frmData)
+        //     //     //     }
+        //     //     //     // if(this.myFiles[6]) {
+        //     //     //     //   console.log(this.myFiles[6])
+        //     //     //     //     let frmData = new FormData();
+  
+        //     //     //     //     // 37 = Sandbox, 6 = Production
+        //     //     //     //     frmData.append('company_id','37');
+  
+        //     //     //     //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //     frmData.append('customer_id', this.id);
+  
+        //     //     //     //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //     //frmData.append('customer_site_id',this.customerSiteId);
+                        
+        //     //     //     //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+        //     //     //     //     frmData.append('job_id', this.job_id);
+        //     //     //     //     //frmData.append('job_id', '19');
+        //     //     //     //     frmData.append('security_level', this.security_level);
+  
+        //     //     //     //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //     frmData.append('file_name', this.other_Document2_file_name);
+        //     //     //     //     frmData.append('file_size', this.other_Document2_file_size);
+        //     //     //     //     frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //     frmData.append('document_ext', '*Contracts');
+        //     //     //     //     frmData.append('user_code', 'PPC');
+        //     //     //     //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //     frmData.append('user_description', 'Invoice');
+        //     //     //     //     frmData.append('reference1', null);
+        //     //     //     //     frmData.append('reference2', null);
+        //     //     //     //     frmData.append('reference3', null);
+        //     //     //     //     frmData.append('reference4', null);
+        //     //     //     //       frmData.append("file_data", this.myFiles[6]);
+        //     //     //     //       // perform http request for each file
+        //     //     //     //       //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //     frmData.append('document_id', '1');
+  
+        //     //     //     //     console.log(this.job_id)
+        //     //     //     //     // Display the key/value pairs
+        //     //     //     //     console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //     var options = {content: frmData};
+  
+        //     //     //     //     console.log(frmData);
+        //     //     //     //     console.log(this.job_id);
+        //     //     //     //     const headers = new HttpHeaders();
+        //     //     //     //     headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //     headers.append('Accept', 'application/json');
+        //     //     //     //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //       headers: headers,
+        //     //     //     //       responseType: 'text'
+        //     //     //     //     }).subscribe(
+        //     //     //     //       data => {
+        //     //     //     //         console.log(data);
+        //     //     //     //         //return
+        //     //     //     //         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //     //         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //     //         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //     //         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //     //         updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //     //         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //     //           result => {
+        //     //     //     //             console.log('Finished!... ');
+  
+        //     //     //     //             localStorage.removeItem('installCompanyID');
+        //     //     //     //             localStorage.removeItem('totalRecurringCalc');
+        //     //     //     //             localStorage.removeItem('totalEquipMatCalc');
+        //     //     //     //             localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //     //             localStorage.removeItem('invoiceDate');
+        //     //     //     //             localStorage.removeItem('invoiceNumber');
+        //     //     //     //             localStorage.removeItem('invoiceTotal');
+        //     //     //     //             localStorage.removeItem('recurringentry');
+        //     //     //     //             localStorage.removeItem('equipmatentry');
+        //     //     //     //             localStorage.removeItem('laborchargesentry');
+        //     //     //     //             localStorage.removeItem('invoiceName');
+        //     //     //     //             localStorage.removeItem('invoiceFileSize');
+        //     //     //     //             localStorage.removeItem('invoice');
+        //     //     //     //             localStorage.removeItem('subscriberForm');
+        //     //     //     //             localStorage.removeItem('subscriberFormName');
+        //     //     //     //             localStorage.removeItem('siteVisit');
+        //     //     //     //             localStorage.removeItem('siteVisitName');
+        //     //     //     //             localStorage.removeItem('otherDocument1');
+        //     //     //     //             localStorage.removeItem('otherDocument1Name');
+        //     //     //     //             localStorage.removeItem('contract');
+        //     //     //     //             localStorage.removeItem('contractName');
+        //     //     //     //             localStorage.removeItem('otherDocument2');
+        //     //     //     //             localStorage.removeItem('otherDocument2Name');
+        //     //     //     //             localStorage.removeItem('contractDate');
+        //     //     //     //             localStorage.removeItem('contractTerm');
+        //     //     //     //             localStorage.removeItem('serviceIncluded');
+        //     //     //     //             localStorage.removeItem('customerId');
+        //     //     //     //             localStorage.removeItem('customerName');
+        //     //     //     //             localStorage.removeItem('customerSiteName');
+        //     //     //     //             localStorage.removeItem('customerSystemInformation');
+        //     //     //     //             localStorage.removeItem('alarmAccount');
+        //     //     //     //             localStorage.removeItem('systemType');
+        //     //     //     //             localStorage.removeItem('panelType');
+        //     //     //     //             localStorage.removeItem('panelLocation');
+        //     //     //     //             localStorage.removeItem('centralStationID');
+        //     //     //     //             localStorage.removeItem('customerSiteId');
+        //     //     //     //             localStorage.removeItem('renewal');
+        //     //     //     //             localStorage.removeItem('partnerTaxAmount');
+        //     //     //     //             localStorage.removeItem('additionalInfo');
+        //     //     //     //             localStorage.removeItem('partnerComments');
+        //     //     //     //             localStorage.removeItem('signalsTested');
+        //     //     //     //             localStorage.removeItem('testObject');
+  
+        //     //     //     //             this.router.navigate(['incentive-entry/']);
+        //     //     //     //             //this.incentiveDashboardForm.reset();
+        //     //     //     //           }
+        //     //     //     //         )
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //       console.log(frmData)
+        //     //     //     // }
+
+        //     //     //     //return
+
+        //     //     //     // for (var i = 0; i < this.myFiles.length; i++) {
+        //     //     //     //   let frmData = new FormData();
+
+        //     //     //     //   // 37 = Sandbox, 6 = Production
+        //     //     //     //   frmData.append('company_id','37');
+
+        //     //     //     //   // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     //     //     //   frmData.append('customer_id', this.id);
+
+        //     //     //     //   frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //     //     //   //frmData.append('customer_site_id',this.customerSiteId);
+                      
+        //     //     //     //   frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //     //     //   //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     //     //     //   frmData.append('job_id', this.job_id);
+        //     //     //     //   //frmData.append('job_id', '19');
+        //     //     //     //   frmData.append('security_level', this.security_level);
+
+        //     //     //     //   //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     //     //     //   frmData.append('file_name', this.file_name);
+        //     //     //     //   frmData.append('file_size', this.file_size);
+        //     //     //     //   frmData.append('upload_date', this.invoiceDate);
+        //     //     //     //   frmData.append('document_ext', '*Contracts');
+        //     //     //     //   frmData.append('user_code', 'PPC');
+        //     //     //     //   //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     //     //     //   frmData.append('user_description', 'Invoice');
+        //     //     //     //   frmData.append('reference1', null);
+        //     //     //     //   frmData.append('reference2', null);
+        //     //     //     //   frmData.append('reference3', null);
+        //     //     //     //   frmData.append('reference4', null);
+        //     //     //     //     frmData.append("file_data", this.myFiles[i]);
+        //     //     //     //     // perform http request for each file
+        //     //     //     //     //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     //   frmData.append('document_id', '1');
+
+        //     //     //     //   console.log(this.job_id)
+        //     //     //     //   // Display the key/value pairs
+        //     //     //     //   console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     //   var options = {content: frmData};
+
+        //     //     //     //   console.log(frmData);
+        //     //     //     //   console.log(this.job_id);
+        //     //     //     //   const headers = new HttpHeaders();
+        //     //     //     //   headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     //   headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     //   headers.append('Accept', 'application/json');
+        //     //     //     //   this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //     headers: headers,
+        //     //     //     //     responseType: 'text'
+        //     //     //     //   }).subscribe(
+        //     //     //     //     data => {
+        //     //     //     //       console.log(data);
+        //     //     //     //       return
+        //     //     //     //       var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //     //       updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //     //       updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //     //       updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //     //       updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //     //       this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //     //         result => {
+        //     //     //     //           console.log('Finished!... ');
+
+        //     //     //     //           localStorage.removeItem('installCompanyID');
+        //     //     //     //           localStorage.removeItem('totalRecurringCalc');
+        //     //     //     //           localStorage.removeItem('totalEquipMatCalc');
+        //     //     //     //           localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //     //           localStorage.removeItem('invoiceDate');
+        //     //     //     //           localStorage.removeItem('invoiceNumber');
+        //     //     //     //           localStorage.removeItem('invoiceTotal');
+        //     //     //     //           localStorage.removeItem('recurringentry');
+        //     //     //     //           localStorage.removeItem('equipmatentry');
+        //     //     //     //           localStorage.removeItem('laborchargesentry');
+        //     //     //     //           localStorage.removeItem('invoiceName');
+        //     //     //     //           localStorage.removeItem('invoiceFileSize');
+        //     //     //     //           localStorage.removeItem('invoice');
+        //     //     //     //           localStorage.removeItem('subscriberForm');
+        //     //     //     //           localStorage.removeItem('subscriberFormName');
+        //     //     //     //           localStorage.removeItem('siteVisit');
+        //     //     //     //           localStorage.removeItem('siteVisitName');
+        //     //     //     //           localStorage.removeItem('otherDocument1');
+        //     //     //     //           localStorage.removeItem('otherDocument1Name');
+        //     //     //     //           localStorage.removeItem('contract');
+        //     //     //     //           localStorage.removeItem('contractName');
+        //     //     //     //           localStorage.removeItem('otherDocument2');
+        //     //     //     //           localStorage.removeItem('otherDocument2Name');
+        //     //     //     //           localStorage.removeItem('contractDate');
+        //     //     //     //           localStorage.removeItem('contractTerm');
+        //     //     //     //           localStorage.removeItem('serviceIncluded');
+        //     //     //     //           localStorage.removeItem('customerId');
+        //     //     //     //           localStorage.removeItem('customerName');
+        //     //     //     //           localStorage.removeItem('customerSiteName');
+        //     //     //     //           localStorage.removeItem('customerSystemInformation');
+        //     //     //     //           localStorage.removeItem('alarmAccount');
+        //     //     //     //           localStorage.removeItem('systemType');
+        //     //     //     //           localStorage.removeItem('panelType');
+        //     //     //     //           localStorage.removeItem('panelLocation');
+        //     //     //     //           localStorage.removeItem('centralStationID');
+        //     //     //     //           localStorage.removeItem('customerSiteId');
+        //     //     //     //           localStorage.removeItem('renewal');
+        //     //     //     //           localStorage.removeItem('partnerTaxAmount');
+        //     //     //     //           localStorage.removeItem('additionalInfo');
+        //     //     //     //           localStorage.removeItem('partnerComments');
+        //     //     //     //           localStorage.removeItem('signalsTested');
+        //     //     //     //           localStorage.removeItem('testObject');
+
+        //     //     //     //           this.router.navigate(['incentive-entry/']);
+        //     //     //     //           //this.incentiveDashboardForm.reset();
+        //     //     //     //         }
+        //     //     //     //       )
+        //     //     //     //     }
+        //     //     //     //   )
+        //     //     //     //     console.log(frmData)
+        //     //     //     // }
+        //     //     //     // //frmData.append('@file_data', this.myFiles[i]);
+        //     //     //     // frmData.append('document_id', '1');
+
+        //     //     //     // console.log(this.job_id)
+        //     //     //     // // Display the key/value pairs
+        //     //     //     // console.log(Object.entries(frmData));//returns an empty array!
+        //     //     //     // var options = {content: frmData};
+
+        //     //     //     // console.log(frmData);
+        //     //     //     // console.log(this.job_id);
+        //     //     //     // const headers = new HttpHeaders();
+        //     //     //     // headers.append('Content-Type', 'multipart/form-data');
+        //     //     //     // headers.append('Authorization','Bearer ' + this.loadToken());
+        //     //     //     // headers.append('Accept', 'application/json');
+        //     //     //     // this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     //     //     //   headers: headers,
+        //     //     //     //   responseType: 'text'
+        //     //     //     // }).subscribe(
+        //     //     //     //   data => {
+        //     //     //     //     console.log(data);
+        //     //     //     //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+        //     //     //     //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+        //     //     //     //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+        //     //     //     //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+        //     //     //     //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        //     //     //     //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+        //     //     //     //       result => {
+        //     //     //     //         console.log('Finished!... ');
+
+        //     //     //     //         localStorage.removeItem('installCompanyID');
+        //     //     //     //         localStorage.removeItem('totalRecurringCalc');
+        //     //     //     //         localStorage.removeItem('totalEquipMatCalc');
+        //     //     //     //         localStorage.removeItem('totalLaborChargesCalc');
+        //     //     //     //         localStorage.removeItem('invoiceDate');
+        //     //     //     //         localStorage.removeItem('invoiceNumber');
+        //     //     //     //         localStorage.removeItem('invoiceTotal');
+        //     //     //     //         localStorage.removeItem('recurringentry');
+        //     //     //     //         localStorage.removeItem('equipmatentry');
+        //     //     //     //         localStorage.removeItem('laborchargesentry');
+        //     //     //     //         localStorage.removeItem('invoiceName');
+        //     //     //     //         localStorage.removeItem('invoiceFileSize');
+        //     //     //     //         localStorage.removeItem('invoice');
+        //     //     //     //         localStorage.removeItem('subscriberForm');
+        //     //     //     //         localStorage.removeItem('subscriberFormName');
+        //     //     //     //         localStorage.removeItem('siteVisit');
+        //     //     //     //         localStorage.removeItem('siteVisitName');
+        //     //     //     //         localStorage.removeItem('otherDocument1');
+        //     //     //     //         localStorage.removeItem('otherDocument1Name');
+        //     //     //     //         localStorage.removeItem('contract');
+        //     //     //     //         localStorage.removeItem('contractName');
+        //     //     //     //         localStorage.removeItem('otherDocument2');
+        //     //     //     //         localStorage.removeItem('otherDocument2Name');
+        //     //     //     //         localStorage.removeItem('contractDate');
+        //     //     //     //         localStorage.removeItem('contractTerm');
+        //     //     //     //         localStorage.removeItem('serviceIncluded');
+        //     //     //     //         localStorage.removeItem('customerId');
+        //     //     //     //         localStorage.removeItem('customerName');
+        //     //     //     //         localStorage.removeItem('customerSiteName');
+        //     //     //     //         localStorage.removeItem('customerSystemInformation');
+        //     //     //     //         localStorage.removeItem('alarmAccount');
+        //     //     //     //         localStorage.removeItem('systemType');
+        //     //     //     //         localStorage.removeItem('panelType');
+        //     //     //     //         localStorage.removeItem('panelLocation');
+        //     //     //     //         localStorage.removeItem('centralStationID');
+        //     //     //     //         localStorage.removeItem('customerSiteId');
+        //     //     //     //         localStorage.removeItem('renewal');
+        //     //     //     //         localStorage.removeItem('partnerTaxAmount');
+        //     //     //     //         localStorage.removeItem('additionalInfo');
+        //     //     //     //         localStorage.removeItem('partnerComments');
+        //     //     //     //         localStorage.removeItem('signalsTested');
+        //     //     //     //         localStorage.removeItem('testObject');
+
+        //     //     //     //         this.router.navigate(['incentive-entry/']);
+        //     //     //     //         //this.incentiveDashboardForm.reset();
+        //     //     //     //       }
+        //     //     //     //     )
+        //     //     //     //   }
+        //     //     //     // )
+        //     //     //   }
+        //     //     // )
+        //     //   }
+        //     // )
+        //   }
+        // )
       }
     )
 
-    let getRecurringService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveRecurringInfo);
-    let recurringItemID = getRecurringService.ItemID;
-    let recurringDescription = getRecurringService.Description;
-    let recurringBillCycle = getRecurringService.BillCycle;
-    let recurringRMR = getRecurringService.RMR;
-    let recurringPassThrough = getRecurringService.PassThrough;
-    let recurringBillingStartDate = getRecurringService.BillingStartDate;
-    let recurringMultiple = getRecurringService.Multiple;
-    let recurringAdd2Item = getRecurringService.Add2Item;
-    let recurringTotal = getRecurringService.Total;
+    // let getRecurringService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveRecurringInfo);
+    // let recurringItemID = getRecurringService.ItemID;
+    // let recurringDescription = getRecurringService.Description;
+    // let recurringBillCycle = getRecurringService.BillCycle;
+    // let recurringRMR = getRecurringService.RMR;
+    // let recurringPassThrough = getRecurringService.PassThrough;
+    // let recurringBillingStartDate = getRecurringService.BillingStartDate;
+    // let recurringMultiple = getRecurringService.Multiple;
+    // let recurringAdd2Item = getRecurringService.Add2Item;
+    // let recurringTotal = getRecurringService.Total;
 
-    let getEquipMatService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveEquipMatInfo);
-    let equipMatItemID = getEquipMatService.ItemID;
-    let equipMatDescription = getEquipMatService.Description;
-    let equipMatQuantity = getEquipMatService.Quantity;
-    let equipMatCost = getEquipMatService.Cost;
+    // let getEquipMatService = Object.assign({}, ...this.incentiveEntryService.sharedIncentiveEquipMatInfo);
+    // let equipMatItemID = getEquipMatService.ItemID;
+    // let equipMatDescription = getEquipMatService.Description;
+    // let equipMatQuantity = getEquipMatService.Quantity;
+    // let equipMatCost = getEquipMatService.Cost;
 
-    var addToObject = function (obj, key, value) {
+    // var addToObject = function (obj, key, value) {
 
-      // Create a temp object and index variable
-      var temp = {};
-      var i = 0;
+    //   // Create a temp object and index variable
+    //   var temp = {};
+    //   var i = 0;
 
-      // Loop through the original object
-      for (var prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
+    //   // Loop through the original object
+    //   for (var prop in obj) {
+    //     if (obj.hasOwnProperty(prop)) {
 
-          // If the indexes match, add the new item
-          if (i === key && value) {
-            temp[key] = value;
-          }
+    //       // If the indexes match, add the new item
+    //       if (i === key && value) {
+    //         temp[key] = value;
+    //       }
 
-          // Add the current item in the loop to the temp obj
-          temp[prop] = obj[prop];
+    //       // Add the current item in the loop to the temp obj
+    //       temp[prop] = obj[prop];
 
-          // Increase the count
-          i++;
+    //       // Increase the count
+    //       i++;
 
-        }
-      }
+    //     }
+    //   }
 
-      // If no index, add to the end
-      if (key && value) {
-        temp[key] = value;
-      }
+    //   // If no index, add to the end
+    //   if (key && value) {
+    //     temp[key] = value;
+    //   }
 
-      return temp;
+    //   return temp;
 
-    };
+    // };
 
-    //check localstorage for the key recurringentry
-    if(localStorage.getItem("recurringentry")) {
-      console.log('there is a recurringentry item in localstorage')
-      this.recurringFromLocalStorage = JSON.parse(localStorage.getItem("recurringentry"));
-      console.log(this.recurringFromLocalStorage);
-    }
-    if(!localStorage.getItem("recurringentry")) {
-      console.log('there is not a recurringentry item in localstorage')
-      this.recurringFromLocalStorage = [];
-      console.log(this.recurringFromLocalStorage);
-    }
-
-    // var updateRecurringWithJobID = addToObject({"ItemID":335,
-    // "Description":"test",
-    // "BillCycle":"monthly",
-    // "RMR":"4",
-    // "PassThrough":"2",
-    // "BillingStartDate":"2021-05-13",
-    // "Add2Item":1,
-    // "Multiple":25,
-    // "Total":"50"}, 'IncentiveID', 19);
-
-    // if(this.incentiveEntryService.sharedIncentiveRecurringInfo[0] === []) {
-    //   var updateRecurringWithJobID = addToObject(this.recurringFromLocalStorage, 'IncentiveID', 19);
-    // } else {
-    //   var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
+    // //check localstorage for the key recurringentry
+    // if(localStorage.getItem("recurringentry")) {
+    //   console.log('there is a recurringentry item in localstorage')
+    //   this.recurringFromLocalStorage = JSON.parse(localStorage.getItem("recurringentry"));
+    //   console.log(this.recurringFromLocalStorage);
     // }
-    //if there is an item in localstorage, get this...
-    // var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
-    var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
-    //console.log(updateRecurringWithJobID)//object includes jobid
+    // if(!localStorage.getItem("recurringentry")) {
+    //   console.log('there is not a recurringentry item in localstorage')
+    //   this.recurringFromLocalStorage = [];
+    //   console.log(this.recurringFromLocalStorage);
+    // }
 
-    // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
-    var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
-    //console.log(updateEquipMatWithJobID)//object includes jobid
+    // // var updateRecurringWithJobID = addToObject({"ItemID":335,
+    // // "Description":"test",
+    // // "BillCycle":"monthly",
+    // // "RMR":"4",
+    // // "PassThrough":"2",
+    // // "BillingStartDate":"2021-05-13",
+    // // "Add2Item":1,
+    // // "Multiple":25,
+    // // "Total":"50"}, 'IncentiveID', 19);
 
-    // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
-    var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
-    //console.log(updateLaborChargesWithJobID)//object includes jobid
+    // // if(this.incentiveEntryService.sharedIncentiveRecurringInfo[0] === []) {
+    // //   var updateRecurringWithJobID = addToObject(this.recurringFromLocalStorage, 'IncentiveID', 19);
+    // // } else {
+    // //   var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
+    // // }
+    // //if there is an item in localstorage, get this...
+    // // var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', 19);
+    // var updateRecurringWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveRecurringInfo[0], 'IncentiveID', this.job_id);
+    // //console.log(updateRecurringWithJobID)//object includes jobid
 
-    var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-    // updateIncentiveAddFinishWithJobID.incentiveID = 19;
-    updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-    updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
-    // updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
-    // updateIncentiveAddFinishWithJobID.serviceChecked = this.serviceIncluded;
-    updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-    updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-    console.log(updateIncentiveAddFinishWithJobID)//pass this to the request
+    // // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', 19);
+    // var updateEquipMatWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveEquipMatInfo[0], 'IncentiveID', this.job_id);
+    // //console.log(updateEquipMatWithJobID)//object includes jobid
 
-    this.updateRecurringStoredProc = {
-      ...this.updateRecurringWithJobID
-    }
-    this.updateEquipMatStoredProc = {
-      ...this.updateEquipMatWithJobID
-    }
-    this.updateLaborChargesStoredProc = {
-      ...this.updateLaborChargesWithJobID
-    }
+    // // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', 19);
+    // var updateLaborChargesWithJobID = addToObject(this.incentiveEntryService.sharedIncentiveLaborChargesInfo[0], 'IncentiveID', this.job_id);
+    // //console.log(updateLaborChargesWithJobID)//object includes jobid
+
+    // var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+    // // updateIncentiveAddFinishWithJobID.incentiveID = 19;
+    // updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+    // updateIncentiveAddFinishWithJobID.partnerTaxAmount = 19;
+    // // updateIncentiveAddFinishWithJobID.serviceChecked = 'y';
+    // // updateIncentiveAddFinishWithJobID.serviceChecked = this.serviceIncluded;
+    // updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+    // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+    // console.log(updateIncentiveAddFinishWithJobID)//pass this to the request
+
+    // this.updateRecurringStoredProc = {
+    //   ...this.updateRecurringWithJobID
+    // }
+    // this.updateEquipMatStoredProc = {
+    //   ...this.updateEquipMatWithJobID
+    // }
+    // this.updateLaborChargesStoredProc = {
+    //   ...this.updateLaborChargesWithJobID
+    // }
     //console.log(this.incentiveEntryService.sharedIncentiveRecurringInfo[0]);
     //console.log(this.updateRecurringStoredProc)
 
@@ -4318,7 +5226,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRowsRecurring'];
     
-    this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
+    // this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
     
     // this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalRecurringCalc);
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumRecurring);
@@ -4422,7 +5330,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
     //push values to the incentive component
     //not working. will use in the ngOnDestroy
-    this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
+    // this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
 
@@ -4506,7 +5414,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //console.log(form.value.Total)
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
     
-    this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
+    // this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumLaborCharges);
 

@@ -14,6 +14,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class PartnerdashboardComponent implements OnInit {
   customer3glisting: Customer3GListing[];
+  user;
+  firstName;
 
   page = 1;
   count = 0;
@@ -32,6 +34,16 @@ export class PartnerdashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.authService.getProfile().subscribe(
+      res => {
+        this.user = res;
+        this.firstName = this.user.firstName
+      },
+      err => {
+        console.log(err);
+      }
+    )
+
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');

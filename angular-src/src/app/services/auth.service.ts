@@ -157,9 +157,9 @@ export class AuthService {
 
   isEmployeeWithIncentiveAccess() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    //Partner = 5, Employee = 9, Super Admin = 19, Admin = 14
+    //Partner = 5, Employee = 9, Super Admin = 19, Admin = 14, Employee with Incentive Entry Access = 10
     console.log('isEmployeeWithIncentiveAccess was called')
-    if(user.afaRole === 5 || user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14) {
+    if(user.afaRole === 5 || user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14 || user.afaRole === 10) {
       return true;
     } else {
       return false;

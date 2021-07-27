@@ -152,6 +152,7 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('signalsTested');
     localStorage.removeItem('siteName');
     localStorage.removeItem('checkBoxAutoInsertList');
+    localStorage.removeItem('results');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',
