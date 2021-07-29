@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 declare var $: any;
 
@@ -108,6 +108,10 @@ export class LoginComponent implements OnInit {
     //     this.router.navigate(['/login']);
     //   }
     // });
+  }
+
+  onNavigateToDashboard() {
+    console.log('gotodashboard')
   }
 
 }

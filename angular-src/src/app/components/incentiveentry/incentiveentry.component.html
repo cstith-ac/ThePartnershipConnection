@@ -4,9 +4,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <h1 class="incentive-header">Incentive Entry | </h1>
-                    <!-- <span *ngIf="installCompanyList.length &lt; 2; else multipleCompanyNameBlock">
-                        <p class="company">{{ item.companyName }} - {{ item.partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p>
-                    </span> -->
+                    
                     <span >
                         <p class="company">{{ companyName }} - {{ partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p>
                     </span>
@@ -39,30 +37,21 @@
                                             (input)="search($event.target.value)"
                                         >
                                     </div>
-                                    <!-- <button [hidden]="!searchTerm"  (click)="clearSearchTerm()">Clear</button> -->
-                                    <!-- <form>
-                                        <div class="form-group form-inline">
-                                            Search PARTNER CODE:
-                                            <input type="text" class="form-control ml-2" name="searchTerm" [(ngModel)]="searchTerm" (input)="search($event.target.value">
-                                        </div>
-                                    </form> -->
+                                    
                                     <div class="table-responsive">
                                         <table class="table align-items-center table-borderless">
                                             <thead>
                                                 <th scope="col">Company Name</th>
                                                 <th scope="col">Partner Code</th>
                                                 <th scope="col"></th>
-                                                <!-- <th scope="col">Install Company ID</th> -->
-                                                <!-- <th scope="col">Default Selection</th> -->
+                                                
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let item of installCompanyList2 | listFilter: searchTerm | slice: (page-1) * pageSize: page * pageSize; index as i">
-                                                    <!-- <th scope="row">{{ (page -1) * pageSize + i + 1 }}</th> -->
-                                                    <!-- <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection($event)">{{ item.companyName }}</td> -->
+                                                    
                                                     <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection(item.installCompanyID,item.companyName,item.partnerCode)">{{ item.companyName }}</td>
                                                     <td>{{ item.partnerCode }}</td>
-                                                    <!-- <td>{{ item.installCompanyID }}</td> -->
-                                                    <!-- <td>{{ item.defaultSelection }}</td> -->
+                                                   
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -74,58 +63,15 @@
                                             [pageSize]="pageSize" 
                                             class="d-flex justify-content-center">
                                         </ngb-pagination>
-                                        <!-- <ngb-pagination 
-                                            [collectionSize]="collectionSize" 
-                                            [(page)]="page" 
-                                            aria-label="Custom pagination">
-                                            <ng-template ngbPaginationPrevious>Prev</ng-template>
-                                            <ng-template ngbPaginationNext>Next</ng-template>
-                                            <ng-template ngbPaginationNumber let-p>{{ getPageSymbol(p) }}</ng-template>
-                                        </ngb-pagination> -->
+                                        
                                     </div>
                     
-                                    <!-- <section>
-                                        <header class="recurring-header-bg">
-                                            <div class="col">
-                                                <span class="align-middle">Company Name</span>
-                                            </div>
-                                            <div class="col">
-                                              <span class="align-middle">Partner Code</span>  
-                                            </div>
-                                            <div class="col">
-                                              <span class="align-middle">Install Company ID</span>
-                                            </div>
-                                            <div class="col">
-                                              <span class="align-middle">Default Selection</span>
-                                            </div>
-                                            
-                                            <div class="col"></div>
-                                            <div class="col"></div>
-                                        </header>
-                                        <div class="row-entry-padding" *ngFor="let item of installCompanyList2; let i=index" >
-                                            <ul>
-                                                <li>{{ item.companyName }}</li>
-                                                <li>{{ item.partnerCode }}</li>
-                                                <li>{{ item.installCompanyID }}</li>
-                                                <li>{{ item.defaultSelection }}</li>
-                                            </ul>
-                                        </div>
-                                        <div class="col">
-                                            <input type="submit" value="Submit" class="btn btn-submit">
-                                        </div>
-                                    </section> -->
+                                    
                                 </div>
                             </div>
                         </div>
                     </ng-template>
-                    <!-- <ng-template #multipleCompanyNameBlock>
-                        <select name="" id="">
-                            <option value="">Company one</option>
-                            <option value="">Company two</option>
-                            <option value="">Company three</option>
-                            <option value="">Company four</option>
-                        </select>
-                    </ng-template> -->
+                    
                 </div>
             </div>
         </div>
@@ -205,16 +151,7 @@
                                     [style.margin-bottom]="'0px'"
                                 >
                             </div>
-                            <!-- <div *ngIf="box.id&gt;2 && box.id&lt;=6 && box.id&#8800;=7">
-                                <label>{{box.checkBoxName}}</label>
-                                <input 
-                                    type="checkbox" 
-                                    name="{{box.id}}" 
-                                    [value]="box.id"
-                                    (change)="onChangeClientVisit($event)"
-                                    class="form-check-populate"
-                                >
-                            </div> -->
+                            
                             <div *ngIf="box.id&gt;2 && box.id&lt;=6">
                                 <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
                                 <input 
@@ -251,52 +188,11 @@
                         </div>          
                     </div>
                     
-                    <!-- <div class="flexp entryColumn2">
-                        <div class="form-group flexc1"  *ngFor="let box of checkBoxIndex; let i=index">
-                            <p>one</p>
-                            <div *ngIf="box.id&gt;6 && box.id&lt;11">
-                                <label>{{box.checkBoxName}}</label>
-                                <input 
-                                    type="checkbox" 
-                                    name="{{box.id}}" 
-                                    [value]="box.id"
-                                    (change)="onChangeClientVisit($event)"
-                                    class="form-check-populate"
-                                    [disabled]="box.id&gt;7"
-                                >
-                            </div>
-                        </div>   
-                    </div> -->
+                    
                   
                     <div class="flexp entryColumn3" >
-                        <!-- <div class="form-group flexc btn-group mt-3 mb-3" *ngFor="let box of checkBoxIndex; let i=index">
-                            <div *ngIf="box.id&gt;10 ">
-                                <label>{{box.checkBoxName}}</label>
-                            <input 
-                                type="checkbox"
-                                class="form-check-input"
-                                [value]="box.id"
-                                name="{{box.id}}"
-                                (change)="onChangeClientVisit($event)"
-                                [checked]="selected1 === i"
-                                (change)="selected1 = i"
-                            >
-                            </div>
-                            
-                        </div> -->
                         
-                        <!-- <div *ngIf="box.id==12">
-                            <div class="form-group btn-group mt-3 mb-3">
-                                <label>{{box.checkBoxName}}</label>
-                                <input 
-                                    type="checkbox"
-                                    class="form-check-input"
-                                    [value]="box.id"
-                                    name="{{box.id}}"
-                                    (change)="onChangeClientVisit($event)"
-                                >
-                            </div>
-                        </div> -->
+                       
                     </div>
                 </div> 
             </ng-container>
@@ -304,200 +200,10 @@
             <div class="row mt-1 mb-4">
                 <div class="col-md-4"></div>
                 <div class="col-md-4 offset-md-4">
-                    <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(incentiveEntryForm)" [disabled]="!incentiveEntryForm.valid">Start Incentive</button>
+                    <button type="submit" class="btn btn-secondary btn-block" (click)="onSubmit(incentiveEntryForm)" [disabled]="!incentiveEntryForm.valid"><i class="fas fa-plus pr-2"></i>Start Incentive</button>
                 </div>
             </div>
         </form>
-        
-        <!-- <div class="row ml-0">
-            <div class="col-md-12">
-                <div class="row" *ngFor="let item of installCompanyList">
-                    <h1 class="incentive-header">Incentive Entry | <span class="company">{{ item.companyName }} - {{ item.partnerCode}}</span></h1>
-                </div>
-            </div>
-        </div> -->
-        <!-- <form [formGroup]="incentiveEntryForm" (ngSubmit)="onSubmit(incentiveEntryForm)" #IncentiveInfo="ngForm" *ngFor="let c of checkBoxIndex">
-            <div class="row form-inline mt-5 mb-5">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="mr-2">Invoice #</label>
-                        <input
-                            formControlName="InvoiceNumber"
-                            [(ngModel)]="invoiceNumber" 
-                            type="text" 
-                            class="form-control"
-                        >
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="mr-2">Invoice Date</label>
-                        <input
-                            formControlName="InvoiceDate"
-                            [(ngModel)]="invoiceDate" 
-                            type="date" 
-                            class="form-control"
-                        >
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="mr-2">Invoice Total</label>
-                        <input
-                            formControlName="InvoiceTotal"
-                            [(ngModel)]="invoiceTotal"
-                            type="text" 
-                            class="form-control"
-                            (blur)="transformAmount($event)"
-                        >
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="col-sm-8">Was service performed as part of this incentive?</label>
-                        Yes<input type="checkbox" class="mr-2 ml-2">
-                        No<input type="checkbox" class="mr-2 ml-2">
-                    </div>
-                </div>
-            </div>
-            <div class="row form-inline mt-5 mb-5 align-items-start">
-                <div class="col-md-4">
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Client Visit</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="ClientVisit"
-                            class="form-check-input"
-                            [value]="c.id"
-                            (change)="onChangeClientVisit($event)"
-                            [id]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Adoption Visit</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="AdoptionVisit"
-                            class="form-check-input"
-                            [id]="c.id"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Landline To Cell</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="LandlineToCell"
-                            class="form-check-input"
-                            [id]="c.id"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Contract Resign</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="ContractResign"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Reprogram</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="Reprogram"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>LTE Upgrade</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="LteUpgrade"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Add New RMR or Service</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="AddNewRMRorService"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Pick Up</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="PickUp"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>New Site</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="NewSite"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>System Transfer</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="SystemTransfer"
-                            class="form-check-input"
-                            [value]="c.id"
-                        >
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <p>Customer Enrolled in Autopay?</p>
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>Credit Card</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="CreditCardAutoPay"
-                            class="form-check-input"
-                            (change)="onChangeCC($event)"
-                            [value]="c.id"
-                        >
-                    </div>
-                    <div class="form-group btn-group mt-3 mb-3">
-                        <label>ACH</label>
-                        <input 
-                            type="checkbox"
-                            formControlName="ACHAutopay"
-                            class="form-check-input"
-                            (change)="onChangeACH($event)"
-                            [value]="c.id"
-                        >
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4 offset-md-4">
-                    <button type="submit" class="btn btn-primary btn-light-blue btn-block" (click)="onSubmit(IncentiveInfo.value)">Start Incentive</button>
-                </div>
-            </div>
-        </form>  -->
     </div>
 </div>
 <footer class="footer">

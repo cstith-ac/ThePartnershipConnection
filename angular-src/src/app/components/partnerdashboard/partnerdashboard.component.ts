@@ -16,6 +16,10 @@ export class PartnerdashboardComponent implements OnInit {
   customer3glisting: Customer3GListing[];
   user;
   firstName;
+  value=10;
+  threegConversionValue=78;
+  progress="10%";
+  threegConversionprogress="78%";
 
   page = 1;
   count = 0;

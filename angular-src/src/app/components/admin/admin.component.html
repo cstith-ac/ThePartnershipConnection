@@ -15,14 +15,6 @@
                             <li class="list-group-item">Only an admin or super admin can access this dashboard.</li>
                             <li class="list-group-item">Click the Edit User Password button to update a password</li>
                         </ul>
-                        <!-- <h3>Directions</h3>
-                        <ul class="list-group">
-                          <li class="list-group-item">Click on the table</li>
-                          <li class="list-group-item">Use your left arrow key to scroll left <i class="fas fa-arrow-left"></i></li>
-                          <li class="list-group-item">Use your right arrow key to scroll right <i class="fas fa-arrow-right"></i></li>
-                          <li class="list-group-item">Use your up arrow key to scroll up <i class="fas fa-arrow-up"></i></li>
-                          <li class="list-group-item">Use your down arrow key to scroll down <i class="fas fa-arrow-down"></i></li>
-                        </ul> -->
                     </div>
                 </div>
                 
@@ -43,9 +35,9 @@
                           </select> -->
                         </div>
                       </div>
-                      <div class="mt-2">
+                      <!-- <div class="mt-2">
                         <input type="text" class="form-control" placeholder="Search">
-                      </div>
+                      </div> -->
                     </div>
                     
                       
@@ -88,7 +80,7 @@
                                 <button class="btn btn-primary" (click)="editCurrentUser(item.id)">
                                   <i class="fa fa-pencil pr-2"></i>Edit User Password
                                 </button>
-                                <button class="btn btn-danger" (click)="deleteCurrentUser(item.id)" disabled>
+                                <button class="btn btn-danger float-right" (click)="deleteCurrentUser(item.id)" disabled>
                                   <i class="fa fa-trash pr-2"></i>Delete User
                                 </button>
                               </td>

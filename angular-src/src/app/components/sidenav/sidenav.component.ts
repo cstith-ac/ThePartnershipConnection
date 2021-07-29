@@ -95,6 +95,9 @@ export class SidenavComponent implements OnInit {
     //     $('.testUserHide').hide()
     //   }, 1)
     // }
+    this.currentUser$.subscribe(res => {
+      console.log(res)
+    })
 
   }
 
@@ -221,6 +224,7 @@ export class SidenavComponent implements OnInit {
   }
 
   removeDashboardData() {
+    $("#wrapper").toggleClass("toggled");
     localStorage.removeItem('installCompanyID');
     localStorage.removeItem('totalRecurringCalc');
     localStorage.removeItem('totalEquipMatCalc');
@@ -254,6 +258,10 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('additionalInfo');
     localStorage.removeItem('partnerComments');
     localStorage.removeItem('signalsTested');
+  }
+
+  automaticallyCloseNav() {
+    $("#wrapper").toggleClass("toggled");
   }
 
 }

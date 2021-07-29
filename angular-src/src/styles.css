@@ -1,10 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* a, p, li, label, input, option, span, pre, button {
+/*Fonts*/
+a, p, li, label, input, option, span, pre, button {
     font-family: 'Source Sans Pro', sans-serif !important;
 }
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Sans Pro Black', sans-serif !important;
+    font-family: 'Source Sans Pro', sans-serif !important;
 }
 
 @font-face {
@@ -58,7 +59,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @font-face {
-    font-family: 'Source Sans Pro SemiBold';
+    font-family: 'SourceSansProSemiBold';
     src: url(assets/fonts/SourceSansPro-SemiBold.ttf)
 }
 
@@ -131,4 +132,9 @@ h1, h2, h3, h4, h5, h6 {
 @font-face {
     font-family: 'Charlevoix Pro Thin';
     src: url(assets/fonts/CharlevoixPro-Thin.otf)
-} */
+}
+
+/*Colors*/
+.primary-050 {
+    color: #e3f1fa
+}

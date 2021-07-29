@@ -28,15 +28,19 @@
         
         <hr>
 
-        <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Recent Customers</a>
-        <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Customer Care View</a>
-        <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Service View</a>
-        <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Collections View</a>
-        <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()" disabled>Admin</a>
+        <a [routerLink]="['/recent-customers']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()" (click)="automaticallyCloseNav()">Recent Customers</a>
+
+        <a [routerLink]="['/dashboard']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()" (click)="automaticallyCloseNav()">Customer Care View</a>
+        
+        <a [routerLink]="['/service-view']" routerLinkActive="active" class="list-group-item list-group-item-action disable-anchor-tag" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Service View</a>
+
+        <a [routerLink]="['/collections-view']" routerLinkActive="active" class="list-group-item list-group-item-action disable-anchor-tag" *ngIf="authService.loggedIn() && authService.isEmployee() || authService.loggedIn() && authService.isAdminOrSuperAdmin()">Collections View</a>
+
+        <a [routerLink]="['/admin']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()" (click)="automaticallyCloseNav()" disabled>Admin</a>
       </div>
       <hr>
       <div class="list-group list-group-flush">
-        <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()">Register</a>
+        <a [routerLink]="['/register']" routerLinkActive="active"  class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isAdminOrSuperAdmin()" (click)="automaticallyCloseNav()">Register</a>
       </div>
       <div class="list-group list-group-flush" [ngStyle]="{position: 'absolute',bottom:'0'}">
         <ul>

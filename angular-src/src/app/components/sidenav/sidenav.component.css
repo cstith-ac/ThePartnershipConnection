@@ -2,6 +2,10 @@ body {
     overflow-x: hidden;
   }
 
+  .disable-anchor-tag {
+    pointer-events: none;
+  }
+
   .list-group-item {
     border: 0px solid #e9ecef00;
   }

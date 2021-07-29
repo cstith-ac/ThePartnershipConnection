@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <h1 class="incentive-header">Incentive Entry | 
-                        <span class="company">{{ companyName }} - {{ partnerCode }}</span>
+                        <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
                     </h1>
                 </div>
             </div>
@@ -170,7 +170,7 @@
                         </div>
 
                         <div class="form-group form-inline">
-                            <p class="text-danger">Verify System Information!</p>
+                            <p class="text-error">Verify System Information!</p>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Account #</label>
@@ -622,10 +622,13 @@
                                       <button class="btn btn-success">Add/View Comments</button>
                                       <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
                                     </div> -->
-                                    <button type="reset" class="btn btn-danger" (click)="reset()">Reset</button>
-                                    <button type="button" class="btn btn-success btn-light-green" (click)="openAddViewCommentsModal(comments)">Add/View Comments</button>
-                                    <!-- <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)">Submit Incentive</button> -->
-                                    <button type="button" class="btn btn-primary btn-light-blue" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button>
+                                    <button type="reset" class="btn btn-error" (click)="reset()">Reset</button>
+                                    <button type="button" class="btn btn-light-blue" (click)="openAddViewCommentsModal(comments)"><i class="fas fa-plus pr-2"></i>Add/View Comments</button>
+
+                                    <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
+
+                                    <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid">Submit Incentive</button>
+                                    
                                   </div>
                             </div>
                         </div>
