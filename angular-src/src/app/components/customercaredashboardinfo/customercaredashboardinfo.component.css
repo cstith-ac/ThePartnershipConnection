@@ -1,6 +1,7 @@
 .ratingValueText0 {
     color: #000;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem;
 }
 .ratingValueBg0 {
     background-color: #AFF1EE;
@@ -8,7 +9,8 @@
 
 .ratingValueText1 {
     color: #D8D1D2;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem;
 }
 .ratingValueBg1 {
     background-color: #D8354B;
@@ -16,7 +18,8 @@
 
 .ratingValueText2 {
     color: #E6E991 !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem;
 }
 .ratingValueBg2 {
     background-color: #3580D8;
@@ -24,7 +27,8 @@
 
 .ratingValueText3 {
     color: #FE0E3F;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem;
 }
 .ratingValueBg3 {
     background-color: #40D835;
@@ -32,4 +36,7 @@
 .underlineDashed {
     text-decoration: underline;
     text-decoration-style:dashed;
+}
+.btn {
+    font-weight: 500;
 }

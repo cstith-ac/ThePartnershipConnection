@@ -23,7 +23,7 @@ export class PartnerwindowComponent implements OnInit {
     private route: Router
   ) { 
     this.route.events.subscribe(value => {
-      console.log('current route: ', route.url.toString())
+      //console.log('current route: ', route.url.toString())
       this.removePartnerNameFromNav = route.url.toString();
 
       if(route.url.toString() == "/incentive-dashboard") {
@@ -51,28 +51,13 @@ export class PartnerwindowComponent implements OnInit {
         }
       )
     }
-    // if(this.removePartnerNameFromNav == "/incentive-entry"){
-    //   setTimeout(() => {
-    //     //console.log(this.elementRef.nativeElement)
-    //     this.elementRef.nativeElement.style.display = 'none';
-    //   }, 1)
-    // }
-    // if(this.removePartnerNameFromNav == "/incentive-dashboard"){
-    //   setTimeout(() => {
-    //     //console.log(this.elementRef.nativeElement)
-    //     this.elementRef.nativeElement.style.display = 'none';
-    //   }, 1)
-    // }
 
     if(this.authService.isEmployeeWithIncentiveAccess()){
-      //if(this.router.url)
-      console.log(this.route.url)
-      
+      console.log(this.route.url)     
     }
 
     if(this.authService.isPartner()) {
       setTimeout(() => {
-        //console.log(this.elementRef.nativeElement)
         this.elementRef.nativeElement.style.display = 'none';
       }, 1)
     }

@@ -80,6 +80,7 @@ namespace WebAPI.Controllers
                     RMRAtSite = s.RMRAtSite,
                     RMRAtSystem = s.RMRAtSystem
                 }).ToList();
+
                 return Lst;
             }
         }

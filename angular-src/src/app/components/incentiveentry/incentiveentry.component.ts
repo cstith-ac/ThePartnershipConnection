@@ -105,6 +105,8 @@ export class IncentiveentryComponent implements OnInit {
     //   console.log('Array is empty!')
     // }
 
+    $("#wrapper").addClass("toggled");
+
     if(this.selectedForCheckBoxAutoInsert.length === 0) {
       setTimeout(() => {
         this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ClientVisit').value.value)
@@ -188,42 +190,6 @@ export class IncentiveentryComponent implements OnInit {
       },1000);
     }
 
-    // setTimeout(() => {
-    //   // this.selectedForCheckBoxAutoInsert.push(374)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ClientVisit').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('AdoptionVisit').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('LandlineToCell').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ContractResign').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('Reprogram').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('LteUpgrade').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('AddNewRMRorService').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('PickUp').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('NewSite').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('SystemTransfer').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('CreditCardAutoPay').value.value)
-    //   this.selectedForCheckBoxAutoInsert.push(this.incentiveEntryForm.get('ACHAutopay').value.value);
-    //   //this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
-    //   const n = 'n';
-    //   const times = 30;
-    //   for(let i=13;i<=times;i++){
-    //     console.log(i);
-    //     n.split(',');
-    //     this.selectedForCheckBoxAutoInsert.push(n.repeat(1))
-    //   }
-    //   this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
-
-    //   let myTag = this.el.nativeElement.querySelector('.entryColumn2');
-    //   $('.entryColumn2').eq(2).remove();
-    //   $('.entryColumn2').eq(3).remove();
-    //   $('.entryColumn3').eq(1).remove();
-    //   $('.entryColumn3').eq(2).remove();
-    //   $('.entryColumn3').eq(3).remove();
-    //   $('.entryColumn3').eq(4).remove();
-    //   $('.entryColumn3').eq(5).remove();
-
-    //   this.incentiveEntryForm.controls['PickUp'].disable();
-    // },1000);
-
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -238,26 +204,6 @@ export class IncentiveentryComponent implements OnInit {
     } else {
       //console.log('your logged in')
     }
-
-    // this.routeService.getInstallCompanyList().subscribe(
-    //   res => {
-    //     // console.log(res.status)
-    //     this.installCompanyList = res;
-        
-    //     for(var i = 0;i < this.installCompanyList.length; i++) {
-
-    //       this.installCompanyID = this.installCompanyList[i].installCompanyID;
-    //       localStorage.setItem('installCompanyID',this.installCompanyID);
-
-    //       this.companyName = this.installCompanyList[i].companyName;
-    //       localStorage.setItem('companyName',this.companyName);
-
-    //       this.partnerCode = this.installCompanyList[i].partnerCode;
-    //       localStorage.setItem('partnerCode',this.partnerCode);
-
-    //     }
-    //   }
-    // )
 
     this.routeService.getInstallCompanyList2().subscribe(
       res => {
@@ -305,16 +251,6 @@ export class IncentiveentryComponent implements OnInit {
       ServiceIncluded: ["n", Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
-      // ClientVisit:  [false],
-      // AdoptionVisit: [false],
-      // LandlineToCell:  [false],
-      // ContractResign:  [false],
-      // Reprogram:  [false],
-      // LteUpgrade:  [false],
-      // AddNewRMRorService: [false],
-      // PickUp: [false],
-      // NewSite:  [false],
-      // SystemTransfer:  [false],
       ClientVisit:  [{value:'n', disabled:false, checked:false}],
       AdoptionVisit: [{value:'n', disabled:false, checked:false}],
       LandlineToCell:  [{value:'n', disabled:false, checked:false}],
@@ -327,9 +263,6 @@ export class IncentiveentryComponent implements OnInit {
       SystemTransfer:  [{value:'n', disabled:true, checked:false}],
       CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
       ACHAutopay: [{value:'n', disabled:true, checked:false}],
-      // CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
-      // ACHAutopay: [{value:'n', disabled:true, checked:false}],
-      // checkArray:this.fb.array([])
     })
   }
 
@@ -339,10 +272,6 @@ export class IncentiveentryComponent implements OnInit {
     element.target.value = this.invoiceTotal;
   }
 
-  // routeToIncentiveDashboard() {
-  //   this.router.navigate(["/incentive-dashboard"]);
-  // }
-
   get f() { 
     return this.incentiveEntryForm.controls; 
   }
@@ -351,80 +280,14 @@ export class IncentiveentryComponent implements OnInit {
 
     this.submitted = true;
 
-    //this.routeService.postCheckboxAutoInsertList
-
-    // console.log(this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
     localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
     localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
     localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
 
-
-    //Submit to stored proc dbo.CheckBoxAutoInsertList or store the values in localstorage and retrieve these values on the dashboard to populate inputs
-    // this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
-    //this.selectedForCheckBoxAutoInsert.push(JSON.parse(localStorage.getItem("installCompanyID")));
     this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))
     console.log(this.selectedForCheckBoxAutoInsert);
     localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
-
-    // this.routeService.postCheckboxAutoInsertList(JSON.stringify(this.selectedForCheckBoxAutoInsert)).subscribe(
-    //   res => {
-    //     console.log(res);
-    //     localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(res));
-
-    //   }
-    // )
-    // let obj = {}
-    // this.selectedForCheckBoxAutoInsert.forEach(item => console.log(item))
-
-    //send something like this...
-    //comment to test incentive-dashboard-test
-  //   this.routeService.postCheckboxAutoInsertList({
-  //     "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
-  //     "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
-  //     "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
-  //     "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
-  //     "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
-  //     "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
-  //     "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
-  //     "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
-  //     "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
-  //     "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
-  //     "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
-  //     "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
-  //     "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
-  //     "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
-  //     "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
-  //     "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
-  //     "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
-  //     "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
-  //     "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
-  //     "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
-  //     "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
-  //     "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
-  //     "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
-  //     "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
-  //     "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
-  //     "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
-  //     "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
-  //     "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
-  //     "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
-  //     "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
-  //     //"InstallCompanyID": this.selectedForCheckBoxAutoInsert[30]
-  //     "InstallCompanyID": this.installCompanyID
-  // }).subscribe(
-  //     res => {
-  //       console.log(res);// object
-  //       let mappedDefaultAmounts = res.map(a => a.defaultAmount);
-  //       console.log(mappedDefaultAmounts);
-  //       // get sum from mappedDefaultAmounts
-  //       let sumMappedDefaultAmounts = mappedDefaultAmounts.reduce(function(a,b) {return a + b; }, 0);
-  //       console.log(sumMappedDefaultAmounts); // number
-  //       localStorage.setItem("totalEquipMatCalc", JSON.stringify(sumMappedDefaultAmounts));
-        
-  //       localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(res));
-  //     }
-  //   )
 
     //return
     this.router.navigate(["/incentive-dashboard"]);
@@ -432,11 +295,6 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   disableOther(e) {
-    // this.checkBoxIndex.forEach(x => {
-    //   if (x.value !== chk.value) {
-    //     x.checked = !x.checked;
-    //   }
-    // });
     if(e.target.value !== 11) {
       console.log(e.target.value)
     }

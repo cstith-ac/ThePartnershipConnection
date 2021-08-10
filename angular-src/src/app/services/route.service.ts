@@ -17,6 +17,7 @@ import { ResetPassword } from '../models/resetpassword';
 import { SummaryUpdate } from '../models/summaryupdate';
 import { Incentive_ADD_Finish } from '../models/incentiveaddfinish';
 import { CustomerSearchMatch } from '../models/customersearchmatch';
+import { PartnerAddNote } from '../models/partneraddnote';
 
 @Injectable({
   providedIn: 'root'
@@ -379,6 +380,50 @@ export class RouteService {
       })
     };
     return this.http.get<any>(`${this.baseUrl}/api/TPCCollectionsCallToActionButton`, httpOptions);
+  }
+
+  getPartnerLandingPage() {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerLandingPage`, httpOptions);
+  }
+
+  postPartnerAddNote(partnerAddNote: PartnerAddNote): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.post<any>(`${this.baseUrl}/api/PartnerAddNote`, partnerAddNote, httpOptions);
+  }
+
+  getCancelQueueList(): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CancelQueueList`, httpOptions);
+  }
+
+  getCancelQueueSiteList(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CancelQueueSiteList/`+ id, httpOptions);
   }
 
   getCheckBoxIndex(): Observable<any> {

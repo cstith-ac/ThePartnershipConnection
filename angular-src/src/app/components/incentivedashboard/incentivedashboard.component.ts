@@ -25,7 +25,6 @@ import { CustomerSearchMatch } from 'src/app/models/customersearchmatch';
 import { AuthService } from '../../services/auth.service';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
@@ -33,6 +32,7 @@ import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, mergeAll, filter } from 'rxjs/operators';
+declare var $: any;
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -335,6 +335,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     } else {
       //console.log('your logged in')
     }
+
+    $("#wrapper").addClass("toggled");
 
     this.companyName = localStorage.getItem('companyName');
     this.partnerCode = localStorage.getItem('partnerCode');

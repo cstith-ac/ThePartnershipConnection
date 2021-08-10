@@ -49,6 +49,8 @@ import { IncentiverecurringComponent } from './components/incentiverecurring/inc
 import { IncentiveequipmatComponent } from './components/incentiveequipmat/incentiveequipmat.component';
 import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
+import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
+import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -190,6 +192,16 @@ const routes: Routes = [
     component: Customer3glistingComponent,
     canActivate: [AuthGuard, PartnerGuard],
     //canDeactivate: [UnsavedchangesGuard]
+  },
+  {
+    path: 'call-to-action-listing',
+    component: CalltoactionlistingComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'cancel-queue-list',
+    component: CancelqueuelistComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'incentive-entry',

@@ -1,0 +1,228 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h5 class="headline-5 high-emphasis">Cancel List</h5>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th scope="col">Customer #</th>
+                  <th scope="col">Customer Name</th>
+                  <th scope="col">RMR</th>
+                  <th scope="col">Reason for Cancel</th>
+                  <th scope="col">Effective Date</th>
+                  <th scope="col">Cancellation Type</th>
+                  <th scope="col">Balance of Contract</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let list of cancelQueueList; index as i">
+                  <td id="{{ list.cancel_Queue_Id }}" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
+                  <td>{{ list.customer_Name }}</td>
+                  <td>{{ list.cancelledRMR | currency }}</td>
+                  <td>{{ list.rmR_Reason_Code }}</td>
+                  <td>{{ list.effective_Date | date }}</td>
+                  <td>{{ list.full_Cancel }}</td>
+                  <td>{{ list.balance_Of_Contract | currency }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: white">Please Wait...</p>  
+  </ngx-spinner>
+
+<!-- Cancel Queue List Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12">
+                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-md-6" *ngFor="let site of cancelQueueSiteList">
+                                <!-- <p>
+                                    <span class="col-md-6 pl-0">Balance Of Contract: {{ site.balance_Of_Contract | currency }}</span>
+                                    <span class="col-md-6 pl-0">Customer #: {{ customer_Number }}</span>
+                                    <span class="col-md-6">Customer Name: {{ customer_Name }}</span>
+                                    Balance Of Contract: {{ site.balance_Of_Contract }} | Business Name: {{ site.business_Name }}
+                                </p> -->
+                                <p> 
+                                    <span class="subtitle-2">Customer #: </span> 
+                                    <span class="body-2">{{ customer_Number }}</span></p>
+                                <p>
+                                    <span class="subtitle-2">Customer Name: </span>
+                                    <span class="body-2"> {{ customer_Name }}</span>
+                                    
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Reason for cancellation: </span>
+                                    <span class="body-2">{{ rmR_Reason_Code }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Cancelled RMR: </span>
+                                    <span class="body-2">{{ cancelledRMR | currency }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Balance of Contract: </span>
+                                    <span class="body-2">{{ site.balance_Of_Contract | currency }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Notice provided on: </span>
+                                    <span class="body-2">{{ notice_Date | date }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Cancellation effective: </span>
+                                    <span class="body-2">{{ effective_Date | date }}</span>
+                                    
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Phone #: </span>
+                                    <span class="body-2">{{ site.primaryPhone }}</span>
+                                      <span *ngIf="site.alternatePhone">
+                                        <span class="subtitle-2">| Alternate Phone:</span>  
+                                        <span class="body-2">{{ site.alternatePhone }}</span>     
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="subtitle-2">Email: </span>
+                                    <span class="body-2">{{ e_Mail }}</span>
+                                   
+                                </p>
+                                <p>
+                                    <span class="subtitle-2"></span>
+                                    <span class="body-2">{{ site.address_1 }}</span>
+                                    
+                                </p>
+                                <p *ngIf="site.address_2">
+                                    <span class="subtitle-2">Address 2: </span>
+                                    <span class="body-2">{{ site.address_2 }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2"></span>
+                                    <span class="body-2">{{ site.city }}, {{ site.state }} {{ site.zipCode }}</span>
+                                    
+                                </p> 
+                                <p>
+                                    <span class="subtitle-2">Cancellation Type: </span>
+                                    <span class="body-2">{{ full_Cancel }}</span>
+                                     
+                                </p>
+                                <p>
+                                    <span class="subtitle-2"> Business Name: </span>
+                                    <span class="body-2">{{ site.business_Name }}</span>
+                                    
+                                </p>
+                                <p>
+                                    <span class="subtitle-2"></span>
+                                    <span class="body-2">{{ site.address_1 }},</span>
+                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }},</span> 
+                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
+                                     
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <button type="submit" class="btn btn-secondary" (click)="onOpenMemo()">Memo</button>
+                                </div>
+                                
+                                <div class="card mt-5">
+                                    <!-- <div class="card-header"></div> -->
+                                    <div class="card-body">
+                                        <p class="subtitle-2">Customer's Comment</p>
+                                        <p class="body-2">{{ memo }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      <!-- <form [formGroup]="cancelQueueListForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMemo(cancelQueueListForm)"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form> -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Memo Modal -->
+<div class="modal fade" id="memoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12">
+                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                      <form [formGroup]="cancelQueueListForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMemo(cancelQueueListForm)"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

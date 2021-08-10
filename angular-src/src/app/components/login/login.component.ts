@@ -112,6 +112,9 @@ export class LoginComponent implements OnInit {
 
   onNavigateToDashboard() {
     console.log('gotodashboard')
+    // if(this.authService.isTestUser) {
+    //   this.router.navigate(['/forbidden'])
+    // }
   }
 
 }

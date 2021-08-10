@@ -622,12 +622,12 @@
                                       <button class="btn btn-success">Add/View Comments</button>
                                       <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
                                     </div> -->
-                                    <button type="reset" class="btn btn-error" (click)="reset()">Reset</button>
-                                    <button type="button" class="btn btn-light-blue" (click)="openAddViewCommentsModal(comments)"><i class="fas fa-plus pr-2"></i>Add/View Comments</button>
+                                    <button type="reset" class="btn btn-error" (click)="reset()"><i class="fas fa-redo pr-2"></i>Reset</button>
+                                    <button type="button" class="btn btn-light-blue" (click)="openAddViewCommentsModal(comments)"><i class="far fa-eye pr-2"></i>Add/View Comments</button>
 
                                     <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
 
-                                    <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid">Submit Incentive</button>
+                                    <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Incentive</button>
                                     
                                   </div>
                             </div>

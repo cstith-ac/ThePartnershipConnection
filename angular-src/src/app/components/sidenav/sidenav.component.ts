@@ -96,7 +96,7 @@ export class SidenavComponent implements OnInit {
     //   }, 1)
     // }
     this.currentUser$.subscribe(res => {
-      console.log(res)
+      //console.log(res)
     })
 
   }

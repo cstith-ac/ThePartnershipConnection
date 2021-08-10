@@ -74,6 +74,10 @@ namespace WebAPI.Models
         public virtual DbSet<InstallCompanyList2> GetInstallCompanyList2s { get; set; }
         public virtual DbSet<PartnerCallToActionButton> GetPartnerCallToActionButtons { get; set; }
         public virtual DbSet<TPCCollectionsCallToActionButton> GetTPCCollectionsCallToActionButtons { get; set; }
+        public virtual DbSet<PartnerLandingPage> GetPartnerLandingPages { get; set; }
+        public virtual DbSet<PartnerAddNote> GetPartnerAddNotes { get; set; }
+        public virtual DbSet<CancelQueueList> GetCancelQueueLists { get; set; }
+        public virtual DbSet<CancelQueueSiteList> GetCancelQueueSiteLists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -492,6 +496,26 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<TPCCollectionsCallToActionButton>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerLandingPage>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerAddNote>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CancelQueueList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CancelQueueSiteList>(entity =>
             {
                 entity.HasNoKey();
             });

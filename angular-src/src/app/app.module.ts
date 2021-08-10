@@ -86,6 +86,8 @@ import { IncentivelaborchargesComponent } from './components/incentivelaborcharg
 import { FilterSitePipe } from './_helpers/filter-site.pipe';
 import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
+import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
+import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
@@ -145,7 +147,9 @@ import { IncentiveDashboardTestComponent } from './components/incentive-dashboar
     FilterSitePipe,
     FilterCentralStationPipe,
     IncentiveDashboardTestComponent,
-    ListFilterPipe
+    ListFilterPipe,
+    CalltoactionlistingComponent,
+    CancelqueuelistComponent
     //CustomerTestComponent
   ],
   imports: [

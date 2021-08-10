@@ -1,0 +1,87 @@
+.container {
+    max-width: 1385px;
+}
+.btn-secondary {
+    background-color: #5abd78;
+    color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 4px 5px rgb(0 0 0 / 14%), 0px 1px 10px rgb(0 0 0 / 12%), 0px 2px 4px rgb(0 0 0 / 20%);
+    border-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+    line-height: 16px;
+    font-size: 15px;
+}
+.btn-secondary:active {
+    background-color: #28904b;
+    color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 4px 5px rgb(0 0 0 / 14%), 0px 1px 10px rgb(0 0 0 / 12%), 0px 2px 4px rgb(0 0 0 / 20%);
+    border-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+    line-height: 16px;
+    font-size: 15px;
+}
+.btn-cta {
+    white-space: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+}
+.card {
+    border-radius: 0.875rem;
+    border: 1px solid rgba(0,0,0,0.12);
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
+}
+.high-emphasis {
+    color: rgba(0,0,0,0.87);
+}
+.medium-emphasis {
+    color: rgba(0,0,0,0.6);
+}
+.overline {
+    font-family: 'SourceSansPro-SemiBold', sans-serif !important;
+    font-size: 0.688rem;
+    line-height: 16px;
+    line-height: 116%;
+    letter-spacing: 0.094rem;
+}
+.headline-5 {
+    font-family: 'SourceSansPro', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.5rem;
+    line-height: 24px;
+    letter-spacing: 0.011rem;
+}
+.headline-6 {
+    font-family: 'SourceSansPro', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.009rem;
+}
+.body-2 {
+    font-family: 'SourceSansPro-SemiBold', sans-serif !important;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 400;
+    font-style: normal;
+}
+.subtitle-2 {
+    font-family: 'SourceSansPro-SemiBold', sans-serif !important;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 0.938rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.006rem;
+}
+.text-error {
+    color: #ca5856;
+}
+.mark {
+    background-color: #FDFF7A;
+}

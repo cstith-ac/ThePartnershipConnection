@@ -56,11 +56,14 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
   ngOnInit() {
     this.spinnerService.show();
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 2000)
+    // setTimeout(() => {
+    //   this.spinnerService.hide();
+    // }, 2000)
     this.routeService.getCustomerCareDashboardInfo().subscribe(
       res => {
+        if(res) {
+          this.spinnerService.hide();
+        }
         this.dashboardinfo = res;
         this.lastServiceTicketId = this.dashboardinfo.map(x => x.lastServiceTicketID);
         //console.log(this.lastServiceTicketId);

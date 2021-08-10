@@ -4,10 +4,11 @@
             <div class="col-md-12">
                 <div class="row">
                     <h1 class="incentive-header">Incentive Entry | </h1>
-                    
-                    <span >
-                        <p class="company">{{ companyName }} - {{ partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p>
+                    <span>
+                        <!-- <p class="company">{{ companyName }} - {{ partnerCode}} <i class="pl-3 fas fa-search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i></p> -->
+                        <p class="pl-2 marginTop-12 text-error company">{{ companyName }} - {{ partnerCode}}</p>
                     </span>
+                    <i class="pl-3 fas fa-search text-error search" (click)="openInstallCompanyListModal(installCompanyListContent)"></i>
                     <ng-template #installCompanyListContent let-modal>
                         <div class="modal-header">
                             <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
@@ -151,7 +152,6 @@
                                     [style.margin-bottom]="'0px'"
                                 >
                             </div>
-                            
                             <div *ngIf="box.id&gt;2 && box.id&lt;=6">
                                 <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
                                 <input 
@@ -187,13 +187,6 @@
                             </div>
                         </div>          
                     </div>
-                    
-                    
-                  
-                    <div class="flexp entryColumn3" >
-                        
-                       
-                    </div>
                 </div> 
             </ng-container>
             
@@ -218,14 +211,6 @@
         <div class="col-md-8">
           <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
         </div>
-        <!-- <div class="col-sm-12">
-          <h2 class="">The Partnership Connection</h2>
-        </div> -->
       </div>
-      <!-- <div class="row">
-        <div class="col-sm-12">
-          <p class="">powered by Alarm Connections</p>
-        </div>
-      </div> -->
     </div>
   </footer>

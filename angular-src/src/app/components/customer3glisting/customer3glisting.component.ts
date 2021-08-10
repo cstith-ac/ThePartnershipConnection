@@ -57,6 +57,8 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   ngOnInit() {
+    $("#wrapper").addClass("toggled");
+
     // document.getElementById('dateTime').innerText = new Date().toDateString()
     const workbook = new Workbook({
       sheets:[
@@ -86,12 +88,15 @@ export class Customer3glistingComponent implements OnInit {
     //this.dateTime = new Date().toDateString();
     //console.log(typeof(this.dateTime))
     this.spinnerService.show();
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 8000)
+    // setTimeout(() => {
+    //   this.spinnerService.hide();
+    // }, 8000)
 
     this.routeService.getCustomer3GListing().subscribe(
       res => {
+        if(res) {
+          this.spinnerService.hide()
+        }
         this.gridData = res;
         //this.customer3gListing = res;
 

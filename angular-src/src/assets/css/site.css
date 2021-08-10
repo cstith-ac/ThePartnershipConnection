@@ -83,6 +83,8 @@ a.navbar-brand {
     margin-left: 14rem;
     margin-bottom: 1rem;
     background-color: #1919AF;
+    font-weight: 500 !important;
+    letter-spacing: 1.25px;
 }
 
 .special-flag-text {
@@ -100,7 +102,9 @@ a.navbar-brand {
 
 #customerRating {
     padding: 20px 10px;
-    font-weight:700;
+    font-weight: bolder;
+    letter-spacing: 1.55px;
+    line-height: 16px;
 }
 
 .afa-text-red {
@@ -287,9 +291,9 @@ p {
 }
 
 #afa-btn-primary {
-    border-color: #1919AF;
-    background-color: #1919AF;
-    margin: 0px 20px 20px 20px;
+    border-color: #1b5eac;
+    background-color: #1b5eac;
+    font-size: 0.938rem;
 }
 
 
@@ -345,6 +349,8 @@ p {
 
 .rmr-text {
     font-size: 1.5rem;
+    letter-spacing: 0.18px;
+    line-height: 16px;
 }
 
 .guarantee-status-text {

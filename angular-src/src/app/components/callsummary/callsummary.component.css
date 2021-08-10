@@ -21,6 +21,11 @@ textarea.ng-invalid.ng-touched{
 ::ng-deep .toast-header {
     color: #ff0101;
 }
+.btn {
+    font-weight: 500;
+    letter-spacing: 1.25px;
+    /* line-height: 16px; */
+  }
 .update-btn {
     border-radius: 30px;
     margin-top: 1rem;

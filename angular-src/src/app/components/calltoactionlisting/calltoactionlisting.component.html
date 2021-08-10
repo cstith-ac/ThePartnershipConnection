@@ -1,0 +1,243 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <h5 class="high-emphasis headline-5 mb-4">Your Call to Action</h5>
+            <p class="medium-emphasis overline mark">The following customers are critically past due! Please help us in bringing them back to current.</p>
+            <p class="medium-emphasis overline text-error mark">Any feedback or questions please reply to click the memo button for that customer Thank you!</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6" *ngFor="let partnerCallToActionButton of partnerCallToActionButton">
+            <div class="card mb-3">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="ls-1 high-emphasis headline-5">{{ partnerCallToActionButton.customer_Number }} {{ partnerCallToActionButton.customer_Name }}</h5>
+                            <!-- <span> {{ partnerCallToActionButton.customer_Id}}</span> -->
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <!-- <span [(ngbTooltip)]="memo" (click)="onOpenMemoModal()">
+                                <i class="fas fa-plus pr-2"></i>Memo
+                            </span> -->
+                            <button type="submit" id="{{ partnerCallToActionButton.customer_Id }}" class="btn btn-secondary btn-block ml-3 float-right btn-cta" [(ngbTooltip)]="memo" (click)="onOpenMemoModal(partnerCallToActionButton.customer_Id)">
+                              <i class="fas fa-plus pr-2"></i>Memo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="body-2 high-emphasis">Has a total <span class="subtitle-2">RMR of {{ partnerCallToActionButton.totalRMR | currency }}</span> and is {{ partnerCallToActionButton.collectionQueue }} with a current balance of <span class="subtitle-2 text-error">{{ partnerCallToActionButton.totalBalance | currency }}</span></p>
+                            <p class="body-2 high-emphasis">Payment Type: {{ partnerCallToActionButton.usesAutoPay }}</p>
+                            <p class="body-2 high-emphasis">{{ partnerCallToActionButton.emailAddress }}, {{ partnerCallToActionButton.phoneContact }}</p>
+                            <p class="body-2 high-emphasis">Bill Address on File: {{ partnerCallToActionButton.addressOnFile }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h5 class="ls-1 mb-1 cancellations-header high-emphasis">Row 1</h5>
+                    </div> 
+                    <div class="col text-right">
+                      <i class="fas fa-arrow-right"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="col-xs-6">
+                        <p class="overline text-uppercase medium-emphasis">Cancellation Notices</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p class="subtitle-2">4 Customers</p>
+                          </div>
+                          <div class="col-md-6">
+                            <p class="subtitle-2 text-right">Last 7 Days</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 divider-verticle">
+                      <div class="col-xs-6">
+                        <p class="overline text-uppercase medium-emphasis">Highest Priority Retention</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p>Bob Smith</p>
+                          </div>
+                          <div class="col-md-6">
+                            <p class="text-right">$176 RMR</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      <h5 class="ls-1 mb-1 cancellations-header high-emphasis">Row 2</h5>
+                    </div> 
+                    <div class="col text-right">
+                      <i class="fas fa-arrow-right"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="col-xs-6">
+                        <p class="overline text-uppercase medium-emphasis">Cancellation Notices</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p class="subtitle-2">4 Customers</p>
+                          </div>
+                          <div class="col-md-6">
+                            <p class="subtitle-2 text-right">Last 7 Days</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 divider-verticle">
+                      <div class="col-xs-6">
+                        <p class="overline text-uppercase medium-emphasis">Highest Priority Retention</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p>Bob Smith</p>
+                          </div>
+                          <div class="col-md-6">
+                            <p class="text-right">$176 RMR</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: white">Please Wait...</p>  
+</ngx-spinner>
+
+<!-- Memo Modal -->
+<div class="modal fade" id="memoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-900">
+      <div class="modal-content">
+          <div class="modal-header pb-0 pl-2">
+              <div class="col-md-12">
+                  <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body pt-0">
+              <div class="card p-3">
+                  <div class="card-body p-0">
+                    <form [formGroup]="callToActionListingMemoForm">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <!-- <div class="form-group">
+                            <label class="col-form-label headline-6 medium-emphasis">Email Address</label>
+                            <input 
+                              type="text"
+                              formControlName="EmailAddress"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="d-block headline-6 medium-emphasis">Note Type</label>
+                            <div class="dropdown">
+                              <select 
+                                formControlName="NoteType"
+                                class="form-control"
+                                >
+                                <option value="ServiceTicketID">Service</option>
+                                <option value="IncentiveID">Incentive</option>
+                                <option value="CancelQueueID">Cancel</option>
+                                <option value="CustomerID">Collections</option>
+                                <option value="CustomerID">General</option>
+                                <option value="CustomerSystemID">3G</option>
+                                <option value="ProspectID">Sales</option>
+                              </select>
+                            </div>
+                          </div> -->
+                          <div class="form-group">
+                            <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                            <textarea 
+                              formControlName="Memo"
+                              class="form-control" 
+                              cols="30" 
+                              rows="10">
+                            </textarea>
+                          </div>
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">ServiceTicketID</label>
+                            <input 
+                              type="text"
+                              formControlName="ServiceTicketID"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">CustomerID</label>
+                            <input 
+                              type="text"
+                              formControlName="CustomerID"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">IncentiveID</label>
+                            <input 
+                              type="text"
+                              formControlName="IncentiveID"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">CancelQueueID</label>
+                            <input 
+                              type="text"
+                              formControlName="CancelQueueID"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">ProspectID</label>
+                            <input 
+                              type="text"
+                              formControlName="ProspectID"
+                              class="form-control">
+                          </div> -->
+                          <!-- <div class="form-group">
+                            <label class="col-form-label">CustomerSystemID</label>
+                            <input 
+                              type="text"
+                              formControlName="CustomerSystemID"
+                              class="form-control">
+                          </div> -->
+                          <div class="row">
+                            <div class="col-md-12">
+                              <button type="submit" class="btn btn-secondary" (click)="onSubmitMemo(callToActionListingMemoForm)"><i class="fas fa-plus pr-2"></i>Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <!-- <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+          </div>
+      </div>
+  </div>
+</div>

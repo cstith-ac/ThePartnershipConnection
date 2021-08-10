@@ -25,10 +25,35 @@
     border: 1px solid rgba(0,0,0,0.12);
     filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
+.card-header {
+    padding: 1.5rem 1.5rem;
+}
 .card-header-ac {
     padding: 0 1.5rem 0 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, .05);
     margin-bottom:0;
+}
+.blur {
+    -webkit-filter: blur;
+    filter: blur(4px);
+}
+.overlay-text {
+    position: absolute;
+    left: 0;
+    top: 350px;
+    right: 0; 
+    bottom: 0;
+    z-index: 1;
+    opacity: .7;
+}
+.paddingTop-1-5 {
+    padding-top: 1.5rem;
+}
+.paddingTop-14px {
+    padding-top: 0.875rem !important;
+}
+.paddingBottom-14px {
+    padding-bottom: 0.875rem !important;
 }
 .btn-secondary {
     background-color: #5abd78;
@@ -137,8 +162,36 @@
     letter-spacing: 1.5px;
     color: rgba(0,0,0,0.87);
 }
-.progress-bar {
+.arrow {
+    color: rgba(65, 65, 65, 1);
+}
+.progress {
+    background-color: rgba(90,189,120,0.24);
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
+    border-radius: 1px;
+}
+/* .progress-bar {
     background-color: #ca5856;
+} */
+/* ::ng-deep .progress-bar {
+    background-color: #ca5856 !important;
+} */
+  /**************************
+  Green = less than 10% - #5ABD78
+  Yellow = 10 to 15% - #FDFF7A
+  Red = over 15% - #CA5856
+  ****************************/
+::ng-deep div.bg-success {
+    background-color: #5ABD78!important;
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14)); 
+}
+::ng-deep div.bg-warning {
+    background-color: #FDFF7A!important; 
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
+}
+::ng-deep div.bg-danger {
+    background-color: #CA5856!important; 
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 .subtitle-1 {
     font-family: 'SourceSansPro-SemiBold', sans-serif;
@@ -154,7 +207,7 @@
     font-style: normal;
     font-size: 0.938rem;
     line-height: 1.5rem;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.006rem;
 }
 .caption {
     font-size: 0.813rem;
@@ -170,8 +223,16 @@
     font-size: 1.25rem;
     letter-spacing: 0.15px;
 }
+.headline-5 {
+    font-family: 'SourceSansPro', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.5rem;
+    line-height: 24px;
+    letter-spacing: 0.011rem;
+}
 .high-emphasis {
-    color: rgba(0,0,0,0.7);
+    color: rgba(0,0,0,0.87);
 }
 .medium-emphasis {
     color: rgba(0,0,0,0.6);
@@ -194,4 +255,151 @@
     line-height: 20px;
     font-weight: 400;
     font-style: normal;
+}
+.btn-cta {
+    white-space: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+}
+
+/* Galaxy Fold */
+/* Portrait */
+@media screen 
+    and (device-width: 653px)
+    and (device-height: 280px) {
+        .btn-cta {
+            margin: 1rem 0;
+        }
+        .order-sm-2 {
+            order: 1;
+        }
+    }
+
+/* Surface Duo */
+/* Landscape */
+@media screen 
+    and (device-width: 720px)
+    and (device-height: 540px)
+    and (orientation: landscape) {
+        .btn-cta {
+            margin: 1rem 0;
+        }
+        .order-sm-2 {
+            order: 1;
+        }
+    }
+
+
+@media screen 
+    and (device-width: 320px)
+    and (device-height: 568px) {
+        .btn-cta {
+            margin: 1rem 0;
+        }
+    }
+
+@media screen 
+    and (device-width: 280px)
+    and (device-height: 653px)
+    and (orientation: portrait) {
+        .btn-cta {
+            margin: 1rem 0;
+        }
+}
+
+/* ----------- Google Pixel ----------- */
+
+/* Landscape */
+@media screen 
+  and (device-width: 360px) 
+  and (device-height: 640px) 
+  and (-webkit-device-pixel-ratio: 3) 
+  and (orientation: landscape) {
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* ----------- Google Pixel 2 ----------- */
+/* Landscape */
+@media only screen and (device-width: 731px) and (orientation: landscape) { 
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* ----------- iPad Pro 12.9" ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* ----------- iPad 3, 4 and Pro 9.7" ----------- */
+
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) { 
+    .btn-cta {
+        margin: 1rem 0;
+    }
+}
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) { 
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 736px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) { 
+    .order-sm-2 {
+        order: 1;
+    }
+}
+
+/* iPhone X */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    .btn-cta {
+        margin: 1rem 0;
+    }
 }

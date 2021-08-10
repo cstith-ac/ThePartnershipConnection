@@ -7,8 +7,8 @@
             <div class="row">
                 <div class="col-md-8">
                     <p>
-                        #<span #systemInfoCustomerNumber id="systemInfoCustomerNumber" style="margin-right:5%">{{ systemInfo.customerNumber }}</span>&nbsp;&nbsp;
-                        <span id="systemInfoCustomerName" style="margin-right:5%">{{ systemInfo.customerName }}</span>&nbsp;&nbsp;
+                        #<span #systemInfoCustomerNumber id="systemInfoCustomerNumber">{{ systemInfo.customerNumber }}</span>&nbsp;&nbsp;
+                        <span id="systemInfoCustomerName">{{ systemInfo.customerName }}</span>&nbsp;&nbsp;
                     </p>
     
                     <div class="col-sm-3 pl-0" *ngIf="systemInfo.customerRatingValue === 0; else elseBlock">
@@ -39,8 +39,8 @@
                         <!-- There was an error. Please contact an administrator -->
                     </ng-template>
     
-                    <p>
-                        Account #<span id="alarmAccount" style="margin-right:1rem">{{systemInfo.alarmAccount}}</span>&nbsp;&nbsp;
+                    <p class="alarmAccount">
+                        Account #<span id="alarmAccount">{{systemInfo.alarmAccount}}</span>&nbsp;&nbsp;
 
                         <span *ngIf="systemInfo.featureMessage === '3G'" else non3GBlock>
                             <!-- Open Feature Message Modal -->
@@ -51,7 +51,7 @@
                         </ng-template>
                         <!-- <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span> -->
                     </p>
-                    <p>
+                    <p class="monitoredBy">
                         <span class="afa-text-dark-blue">
                             Monitored by <span id="monitoredBy">{{systemInfo.monitoredBy}}</span>
                         </span>

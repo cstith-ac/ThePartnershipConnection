@@ -1,21 +1,20 @@
 <!--NEFF-BEGIN NEW LAYOUT-->
 <div class="header bg-gradient-partner-dashboard bg-dashboard pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
-    
   </div>
 </div>
-<div class="container-fluid mt--7">
+<div class="container-fluid mt--7" *ngFor="let item of partnerLandingPage">
   <div class="row">
-    <div class="col-xl-4">
+    <div class="col-xl-4 order-2">
       <div class="card">
-        <div class="card-header bg-transparent">
+        <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="ls-1 mb-1 mt-1 conversion-header high-emphasis" (click)="routeToCustomer3GList()">3G Conversion</h5>
-              <p class="mb-0 conversion-text medium-emphasis">87 upgrades last month</p>
+              <h5 class="ls-1 mb-1 mt-1 headline-5 high-emphasis" (click)="routeToCustomer3GList()">3G Conversion</h5>
+              <p class="mb-0 conversion-text medium-emphasis">{{  item.upgradesLastMonth }} upgrades last month</p>
             </div>
             <div class="col text-right mb-3">
-              <i class="fas fa-arrow-right" (click)="routeToCustomer3GList()"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToCustomer3GList()"></i>
             </div>
           </div>
         </div>
@@ -27,63 +26,114 @@
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <span class="caption medium-emphasis">972 systems upgraded</span>
+              <span class="caption medium-emphasis">{{ item.lifeTimeUpgrades }} systems upgraded</span>
             </div>
             <div class="col-md-6">
-              <span class="float-right high-emphasis">78%</span>
+              <span class="body-2 float-right high-emphasis">{{ item.progressPercent }}%</span>
             </div>
           </div>
-          <p>
+          <p *ngIf="(item.progressPercent < 10)">
             <ngb-progressbar 
               type="success" 
               [(value)]="threegConversionValue"
-              [striped]="true"
+              [striped]="false"
               [(ngbTooltip)]="threegConversionprogress"
-              ></ngb-progressbar>
+              tooltipClass="transparent-tooltip"
+            ></ngb-progressbar>
           </p>
-          <div class="row">
-            <div class="col-md-12 pt-2 pb0">
-              <h6 class="conversion-headline medium-emphasis">AT&amp;T</h6>
-            </div>
+          <p *ngIf="(item.progressPercent === 10) || (item.progressPercent === 11) || (item.progressPercent === 12) || (item.progressPercent === 13) || (item.progressPercent === 14) || (item.progressPercent === 15)">
+            <ngb-progressbar 
+              type="warning" 
+              [(value)]="threegConversionValue"
+              [striped]="false"
+              [(ngbTooltip)]="threegConversionprogress"
+              tooltipClass="transparent-tooltip"
+            ></ngb-progressbar>
+          </p>
+          <p *ngIf="item.progressPercent > 15">
+            <ngb-progressbar 
+              type="danger" 
+              [(value)]="threegConversionValue"
+              [striped]="false"
+              [(ngbTooltip)]="threegConversionprogress"
+              tooltipClass="transparent-tooltip"
+            ></ngb-progressbar>
+          </p>
 
-            <!-- <div class="col-md-6">
+            <!-- <ngb-progressbar 
+              ([type])="getBackgroundColor(item.progressPercent)" 
+              [showValue]="true"
+              [(value)]="threegConversionValue"
+              [striped]="false"
+              [(ngbTooltip)]="threegConversionprogress"
+              tooltipClass="transparent-tooltip"
+            ></ngb-progressbar> -->
+            <!-- <ngb-progressbar 
+              type="getBackgroundColor(item)" 
+              [(value)]="threegConversionValue"
+              [striped]="false"
+              [(ngbTooltip)]="threegConversionprogress"
+              tooltipClass="transparent-tooltip"
+            ></ngb-progressbar> -->
+          
+          <div class="row">
+            <div class="col-md-12 pb0 paddingTop-1-5">
               <h6 class="conversion-headline medium-emphasis">AT&amp;T</h6>
-                <p class="conversion-headline high-emphasis">8 mo</p>
-                <p class="medium-emphasis divider-horizontal">Until Sunset</p>
-                <h6 class="conversion-headline medium-emphasis">Verizon</h6>
-                <p class="conversion-headline high-emphasis">8 mo</p>
-                <p class="medium-emphasis divider-horizontal">Until Sunset</p>
             </div>
-            <div class="col-md-6">
-              <p class="invisible">!</p>
-                <p class="conversion-headline high-emphasis">232</p>
-                <p class="medium-emphasis divider-horizontal">Systems Left</p>
-                <p class="invisible">!</p>
-                <p class="conversion-headline high-emphasis">232</p>
-                <p class="medium-emphasis divider-horizontal">Systems Left</p>
-            </div> -->
           </div>
           <div class="row">
-            <div class="col-md-12 pt0 pb-1">
+            <div class="col-sm-6 pt-2 pb-0">
               <span class="conversion-headline high-emphasis">8 mo</span>
-              <span class="conversion-headline high-emphasis float-right">232</span>
+            </div>
+            <div class="col-xs-6 pt-2 pb-0">
+              <span class="conversion-headline high-emphasis float-right">204</span>
             </div>
           </div>
           <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">Until Sunset</span>
-              <span class="medium-emspanhasis float-right">Systems Left</span>
+            <div class="col-sm-6 pt-0 pb-1">
+                <span class="medium-emphasis">Until Sunset</span>
+            </div>
+            <div class="col-xs-6 pt-0 pb-1">
+                <span class="medium-emphasis float-right">Systems Left</span>
             </div>
           </div>
+          <!-- <div class="row">
+            <div class="col-md-12 pt0 pb-1">
+              <span class="conversion-headline high-emphasis">8 mo</span>
+              <span class="conversion-headline high-emphasis float-right">{{ item.attCount }}</span>
+            </div>
+          </div> -->
+          <!-- <div class="row divider-horizontal">
+            <div class="col-md-12 pt-2 pb-1">
+              <span class="medium-emphasis">Until Sunset</span>
+              <span class="medium-emphasis float-right">Systems Left</span>
+            </div>
+          </div> -->
           <div class="row">
-            <div class="col-md-12 pt-2 pb0">
+            <div class="col-md-12 pb0 paddingTop-1-5">
               <span class="conversion-headline medium-emphasis">Verizon</span>
             </div>
           </div>
           <div class="row">
+            <div class="col-sm-6 pt-2 pb-0">
+              <span class="conversion-headline high-emphasis">8 mo</span>
+            </div>
+            <div class="col-xs-6 pt-2 pb-0">
+              <span class="conversion-headline high-emphasis float-right">204</span>
+            </div>
+          </div>
+          <div class="row divider-horizontal">
+            <div class="col-sm-6 pt-0 pb-1">
+                <span class="medium-emphasis">Until Sunset</span>
+            </div>
+            <div class="col-xs-6 pt-0 pb-1">
+                <span class="medium-emphasis float-right">Systems Left</span>
+            </div>
+          </div>
+          <!-- <div class="row">
             <div class="col-md-12 pt0 pb-1">
               <span class="conversion-headline high-emphasis">8 mo</span>
-              <span class="conversion-headline high-emphasis float-right">232</span>
+              <span class="conversion-headline high-emphasis float-right">{{ item.verizonCount }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -91,11 +141,11 @@
               <span class="medium-emphasis">Until Sunset</span>
               <span class="medium-emphasis float-right">Systems Left</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
-    <div class="col-xl-8 mb-5 mb-xl-0">
+    <div class="col-xl-8 mb-5 mb-xl-0 order-1 order-sm-2">
       <div class="card bg-transparent  mb-3 shadow-none border-0">
         <div class="card-header-ac bg-transparent">
           <div class="row align-items-center">
@@ -106,13 +156,13 @@
         </div>
       </div>
       <div class="card mb-3">
-        <div class="card-header bg-transparent">
+        <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="ls-1 mb-1 cancellations-header high-emphasis">Pending Cancellations</h5>
+              <h5 class="ls-1 mb-1 headline-5 high-emphasis" (click)="routeToCancelQueueList()">Pending Cancellations</h5>
             </div> 
             <div class="col text-right">
-              <i class="fas fa-arrow-right"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToCancelQueueList()"></i>
             </div>
           </div>
         </div>
@@ -122,10 +172,10 @@
               <div class="col-xs-6">
                 <p class="overline text-uppercase medium-emphasis">Cancellation Notices</p>
                 <div class="row">
-                  <div class="col-md-6">
-                    <p class="subtitle-2">4 Customers</p>
+                  <div class="col-md-6 col-sm-6 col-6">
+                    <p class="subtitle-2">{{ item.pendingCancels7days }} Customers</p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-sm-6 col-6">
                     <p class="subtitle-2 text-right">Last 7 Days</p>
                   </div>
                 </div>
@@ -135,11 +185,11 @@
               <div class="col-xs-6">
                 <p class="overline text-uppercase medium-emphasis">Highest Priority Retention</p>
                 <div class="row">
-                  <div class="col-md-6">
-                    <p>Bob Smith</p>
+                  <div class="col-md-6 col-sm-6 col-6">
+                    <p>{{ item.highRMRCancelPerson }}</p>
                   </div>
-                  <div class="col-md-6">
-                    <p class="text-right">$176 RMR</p>
+                  <div class="col-md-6 col-sm-6 col-6">
+                    <p class="text-right">${{ item.highRMRCancelValue }} RMR</p>
                   </div>
                 </div>
               </div>
@@ -148,14 +198,16 @@
         </div>
       </div>
       <div class="card ">
-        <div class="card-header bg-transparent">
-          <div class="row align-items-center">
+        <div class="card-header bg-transparent border-bottom-0">
+          <div class="row align-items-center pt-3">
             <div class="col">
-              <h5 class="d-inline-block m-0 m-auto ls-1 mb-1 aging-header">Aging</h5>
-              <button type="submit" class="btn btn-secondary ml-3 float-right"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
+              <h5 class="d-inline-block m-0 m-auto ls-1 mb-1 headline-5">Aging</h5>
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-secondary btn-block ml-3 float-right btn-cta" (click)="routeToCallToActionListing()"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right"></i>
+              <i class="fas fa-arrow-right arrow"></i>
             </div>
           </div>
         </div>
@@ -163,289 +215,290 @@
           <div class="row">
             <div class="col-md-6">
               <div class="col-xs-6">
-                <!-- <p class="overline text-uppercase medium-emphasis">120 Days Overdue</p> -->
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis">120 Days Overdue</p>
-                    <p class="subtitle-1">20 Customers</p>
+                    <p class="subtitle-1">{{ item.over120Count }} Customers</p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis text-right">Balance Due</p>
-                    <p class="text-right">$2,560</p>
+                    <p class="text-right">${{ item.over120Value }}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-md-6 divider-verticle">
               <div class="col-xs-6">
-                <!-- <p class="overline text-uppercase medium-emphasis">90 Days Overdue</p> -->
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis">90 Days Overdue</p>
-                    <p class="subtitle-1">20 Customers</p>
+                    <p class="subtitle-1">{{ item.over90Count }} Customers</p>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis text-right">Balance Due</p>
-                    <p class="text-right">$2,560</p>
+                    <p class="text-right">${{ item.over90Value }}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-6">
-              <div class="col-xs-6">
-                <p class="overline text-uppercase">120 Days Overdue</p>
-                <p>20 Customers</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="overline text-uppercase caption">Balance Due</p>
-                <p>$2,560</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-6">
-                <p class="overline text-uppercase">90 Days Overdue</p>
-                <p>20 Customers</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="overline text-uppercase caption">Balance Due</p>
-                <p>$2,560</p>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
   </div>
-  <div class="row mt-5">
+  <div class="row mt-3">
     <div class="col-xl-3 mb-5 mb-xl-0">
       <div class="card">
-        <div class="card-header border-0">
+        <div class="card-header paddingBottom-14px border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="mb-1 mt-1 incentives-header" (click)="routeToIncentiveEntry()">Incentives</h5>
+              <h5 class="mb-1 mt-1 headline-5" (click)="routeToIncentiveEntry()">Incentives</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right" (click)="routeToIncentiveEntry()"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToIncentiveEntry()"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body paddingTop-14px">
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">In Progress</span>
-              <span class="high-emphasis float-right body-2">$2,587</span>
+              <span class="high-emphasis float-right body-2">${{ item.invoicesInProcessValue }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">{{ item.invoicesInProcess }}</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">On Hold</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">${{ item.invoicesOnHoldValue }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">{{ item.invoicesOnHold }}</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Approved</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">${{ item.invoicesApproved30daysValue }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">{{ item.invoicesApproved30days }}</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Paid</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">${{ item.invoicesPaid30daysValue }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">{{ item.invoicesPaid30days }}</span>
             </div>
           </div>
-          <div class="row float-right pt-2 pb-1">
+          <div class="row float-right pt-4 pb-1">
             <button class="btn btn-secondary" (click)="routeToIncentiveEntry()"><i class="fas fa-plus pr-2"></i>Create</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-3">
+    <div class="col-xl-3 mb-5">
       <div class="card">
-        <div class="card-header border-0">
+        <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="mb-1 mt-1 incentives-header">Service</h5>
+              <h5 class="mb-1 mt-1 headline-5">Service</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right"></i>
+              <i class="fas fa-arrow-right arrow"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body paddingTop-14px">
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Tickets Pending</span>
-              <span class="medium-emphasis float-right">4</span>
+              <span class="body-2 high-emphasis float-right">4</span>
             </div>
           </div>
           <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
+            <div class="col-md-12 pt-2 pb-4">
             </div>
           </div>
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Invoices On Hold</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Invoices Approved</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="high-emphasis float-right">9</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Invoices Paid</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
-          </div>
+          </div> -->
         </div>
         
       </div>
     </div>
-    <div class="col-xl-3">
+    <div class="col-xl-3 mb-5">
+      <!-- <div class="row">
+        <div class="col-md-12 bg-dark overlay-text">
+          <p class="overlay-text text-center under-construction">Under Construction</p>
+          <p class="overlay-text text-center content-coming">Content Coming Soon</p>
+        </div>
+      </div> -->
       <div class="card">
-        <div class="card-header border-0">
+        <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class=" mb-1 mt-1 incentives-header">Sales Leads</h5>
+              <h5 class=" mb-1 mt-1 headline-5">Sales Leads</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right"></i>
+              <i class="fas fa-arrow-right arrow"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body paddingTop-14px blur">
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">In Progress</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">On Hold</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Approved</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Paid</span>
-              <span class="medium-emphasis float-right">$2,587</span>
+              <span class="body-2 high-emphasis float-right">$2,587</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 30 Days</span>
-              <span class="medium-emphasis float-right">9</span>
+              <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-3">
+    <div class="col-xl-3 mb-5">
       
       <div class="card">
-        <div class="card-header border-0">
+        <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="mb-1 mt-1 incentives-header">Attrition</h5>
+              <h5 class="mb-1 mt-1 headline-5">Attrition</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right"></i>
+              <i class="fas fa-arrow-right arrow"></i>
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body paddingTop-14px">
           <div class="row">
-            <div class="col-md-12 pt-2 pb-1">
+            <div class="col-md-12 pt-2 pb-4">
               <span class="subtitle-2 medium-emphasis text-uppercase">Last Month</span>
-              <span class="medium-emphasis float-right">18%</span>
+              <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth }}%</span>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
-              <p>
+              <p  *ngIf="(item.attritionLastMonth < 10)">
                 <ngb-progressbar 
                   type="success"
-                  [(value)]="value"
-                  [striped]="true"
-                  [(ngbTooltip)]="progress"
-                  ></ngb-progressbar>
+                  [(value)]="attritionValue"
+                  [striped]="false"
+                  [(ngbTooltip)]="attritionProgress"
+                  tooltipClass="transparent-tooltip"
+                ></ngb-progressbar>
+              </p>
+              <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
+                <ngb-progressbar 
+                  type="warning"
+                  [(value)]="attritionValue"
+                  [striped]="false"
+                  [(ngbTooltip)]="attritionProgress"
+                  tooltipClass="transparent-tooltip"
+                ></ngb-progressbar>
+              </p>
+              <p *ngIf="item.attritionLastMonth > 15">
+                <ngb-progressbar 
+                  type="danger"
+                  [(value)]="attritionValue"
+                  [striped]="false"
+                  [(ngbTooltip)]="attritionProgress"
+                  tooltipClass="transparent-tooltip"
+                ></ngb-progressbar>
               </p>
             </div>
           </div>
@@ -453,25 +506,25 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 6 Months</span>
-              <span class="medium-emphasis float-right">XX%</span>
+              <span class="body-2 high-emphasis float-right">XX%</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis float-right">X</span>
+              <span class="caption high-emphasis float-right">{{ item.attritionLast6Months }}</span>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 12 Months</span>
-              <span class="medium-emphasis float-right">XX%</span>
+              <span class="body-2 high-emphasis float-right">XX%</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">XX</span>
-              <span class="medium-emphasis float-right">X</span>
+              <span class="body-2 high-emphasis">XX</span>
+              <span class="caption high-emphasis float-right">{{ item.attritionLast12Months }}</span>
             </div>
           </div>
         </div>
@@ -480,6 +533,9 @@
   </div>
 </div>
 <!--NEFF-END NEW LAYOUT---->
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: white">Please Wait...</p>  
+</ngx-spinner>
 
 <!-- <div class="ml-4 mr-4">
   <div class="row card-deck">
