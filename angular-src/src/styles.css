@@ -153,6 +153,7 @@ h1, h2, h3, h4, h5, h6 {
 .dark-brand-blue {
     color: rgba(35, 3, 106, 1);
 }
+
 /*Tooltip*/
 .transparent-tooltip .tooltip-inner {
     font-family: 'SourceSansPro-SemiBold', sans-serif !important;

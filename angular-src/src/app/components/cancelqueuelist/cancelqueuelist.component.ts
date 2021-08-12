@@ -29,6 +29,7 @@ export class CancelqueuelistComponent implements OnInit {
   effective_Date;
   e_Mail;
   full_Cancel;
+  clicked = false;//disables button after click
   // full;
   // partial;
 
@@ -123,5 +124,9 @@ export class CancelqueuelistComponent implements OnInit {
       },
       error => console.log('error: ', error)
     )
+  }
+
+  onChangeBusinessName(e) {
+    console.log('name changed to: '+e.target)
   }
 }

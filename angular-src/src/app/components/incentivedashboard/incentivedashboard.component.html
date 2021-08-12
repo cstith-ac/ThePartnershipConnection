@@ -165,7 +165,13 @@
                             <span class="ml-2" #systemSearchIcon (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <input type="checkbox" class="form-control form-check-input ml-3" [(ngModel)]="newSystem" formControlName="NewSystem">
+                            <input 
+                                type="checkbox" 
+                                class="form-control form-check-input ml-3" 
+                                [(ngModel)]="newSystem" 
+                                formControlName="NewSystem"
+                                (change)="onNewSystemCheckedUnchecked($event)"
+                            >
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                         </div>
 
@@ -412,6 +418,8 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                             formControlName="PartnerTaxAmount"
+                                            (change)="getPartnerTaxAmount($event)"
+                                            [(ngbTooltip)]="taxToolTip"
                                         ></kendo-numerictextbox>
                                         <!-- <input
                                             type="text" 

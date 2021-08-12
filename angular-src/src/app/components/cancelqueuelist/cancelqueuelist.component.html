@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-md-12">
-            <h5 class="headline-5 high-emphasis">Cancel List</h5>
+            <h5 class="headline-5 high-emphasis">Pending Cancellation List</h5>
         </div>
     </div>
     <div class="row mt-5">
@@ -104,7 +104,9 @@
                                 </p>
                                 <p>
                                     <span class="subtitle-2">Email: </span>
-                                    <span class="body-2">{{ e_Mail }}</span>
+                                    <span class="body-2">
+                                        <a href="mailto:{{e_Mail}}">{{ e_Mail }}</a>
+                                    </span>
                                    
                                 </p>
                                 <p>
@@ -127,31 +129,73 @@
                                     <span class="body-2">{{ full_Cancel }}</span>
                                      
                                 </p>
-                                <p>
+                                <!-- <p>
                                     <span class="subtitle-2"> Business Name: </span>
                                     <span class="body-2">{{ site.business_Name }}</span>
-                                    
-                                </p>
-                                <p>
+                                    <span class="body-2">{{ site.address_1 }},</span>
+                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }},</span> 
+                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
+                                </p> -->
+                                <!-- <p>
                                     <span class="subtitle-2"></span>
                                     <span class="body-2">{{ site.address_1 }},</span>
                                      <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }},</span> 
                                      <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
                                      
-                                </p>
+                                </p> -->
                             </div>
                             <div class="col-md-6">
                                 <div>
-                                    <button type="submit" class="btn btn-secondary" (click)="onOpenMemo()">Memo</button>
+                                    <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
                                 </div>
                                 
                                 <div class="card mt-5">
                                     <!-- <div class="card-header"></div> -->
                                     <div class="card-body">
                                         <p class="subtitle-2">Customer's Comment</p>
-                                        <p class="body-2">{{ memo }}</p>
+                                        <!-- <p class="body-2">{{ memo }}</p> -->
+                                        <p *ngIf="memo === ''; else noCommentBlock" class="body-2">There are no comments available for this customer.</p>
+                                        <ng-template #noCommentBlock>
+                                            <p class="body-2">{{ memo }}</p>
+                                        </ng-template>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div ngbDropdown class="d-inline-block">
+                                    <!-- <kendo-dropdownlist
+                                        [data]="cancelQueueSiteList"
+                                        [textField]="'business_Name'"
+                                        [valueField]="'cancel_Queue_Site_Id'"
+                                        (change)="onChangeBusinessName($event)"
+                                    >
+                                    </kendo-dropdownlist> -->
+                                    <label class="d-block">Business Name:</label>
+                                    <select class="form-control form-control-md" id="callSummarySiteSelect" style="height: calc(1.5em + 1.3rem);" >
+                                        <option *ngFor="let site of cancelQueueSiteList" value="{{ site.cancel_Queue_Site_Id }}" [ngValue]="site.cancel_Queue_Site_Id" (change)="onChangeBusinessName($event)">
+                                            <span class="body-2">{{ site.business_Name }} </span>
+                                            <span class="body-2">{{ site.address_1 }}, </span>
+                                            <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }}, </span> 
+                                            <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
+                                        </option>
+                                    </select>
+                                    <!-- <button class="btn btn-outline-primary dark-brand-blue" id="dropdownBasic1" ngbDropdownToggle (change)="onChangeBusinessName($event)">Business Name: </button> -->
+                                    <!-- <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngFor="let site of cancelQueueSiteList">
+                                      <button ngbDropdownItem><span class="body-2">{{ site.business_Name }} </span>
+                                        <span class="body-2">{{ site.address_1 }},</span>
+                                         <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }}, </span> 
+                                         <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span> </button>
+                                    </div> -->
+                                </div>
+                                <!-- <p>
+                                    <span class="subtitle-2"> Business Name: </span>
+                                    <span class="body-2">{{ site.business_Name }} </span>
+                                    <span class="body-2">{{ site.address_1 }},</span>
+                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }}, </span> 
+                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
+                                </p> -->
                             </div>
                         </div>
                       <!-- <form [formGroup]="cancelQueueListForm">
@@ -212,7 +256,7 @@
                             </div>
                             <div class="row">
                               <div class="col-md-12">
-                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMemo(cancelQueueListForm)"><i class="fas fa-plus pr-2"></i>Submit</button>
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMemo(cancelQueueListForm);clicked = true;" [disabled]="clicked"><i class="fas fa-plus pr-2"></i>Submit</button>
                               </div>
                             </div>
                           </div>

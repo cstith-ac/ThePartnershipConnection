@@ -78,6 +78,7 @@ namespace WebAPI.Models
         public virtual DbSet<PartnerAddNote> GetPartnerAddNotes { get; set; }
         public virtual DbSet<CancelQueueList> GetCancelQueueLists { get; set; }
         public virtual DbSet<CancelQueueSiteList> GetCancelQueueSiteLists { get; set; }
+        public virtual DbSet<PartnerInvoiceListing> GetPartnerInvoiceListings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -516,6 +517,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<CancelQueueSiteList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerInvoiceListing>(entity =>
             {
                 entity.HasNoKey();
             });

@@ -150,6 +150,7 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('customerSiteId');
     localStorage.removeItem('renewal');
     localStorage.removeItem('tax');
+    localStorage.removeItem('partnerTaxAmount');
     localStorage.removeItem('additionalInfo');
     localStorage.removeItem('partnerComments');
     localStorage.removeItem('signalsTested');
