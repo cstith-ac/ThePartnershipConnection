@@ -381,8 +381,10 @@
                                     <label class="col-sm-7 col-form-label pl-0">Invoice Date</label>
                                     <div class="input-group d-flex justify-content-center">
                                         <input 
-                                            type="date" class="form-control col-sm-12" 
-                                            [(ngModel)]="invoiceDate" formControlName="PartnerInvoiceDate">
+                                            type="date" 
+                                            class="form-control col-sm-12" 
+                                            [(ngModel)]="invoiceDate" formControlName="PartnerInvoiceDate"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -418,7 +420,7 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                             formControlName="PartnerTaxAmount"
-                                            (change)="getPartnerTaxAmount($event)"
+                                            (keyup)="getPartnerTaxAmount($event)"
                                             [(ngbTooltip)]="taxToolTip"
                                         ></kendo-numerictextbox>
                                         <!-- <input
@@ -1330,7 +1332,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <input type="submit" value="Submit" class="btn btn-submit">
+                            <input type="submit" value="Submit/Save" class="btn btn-submit">
                         </div>
                         <p>Total is: ${{ totalSumRecurring }}</p>
                     </form>
@@ -1491,7 +1493,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <input type="submit" value="Submit" class="btn btn-submit">
+                        <input type="submit" value="Submit/Save" class="btn btn-submit">
                     </div>
                     <p>Total is: ${{ totalSumEquipMat }}</p>
                 </form>
@@ -1658,7 +1660,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <input type="submit" value="Submit" class="btn btn-submit">
+                        <input type="submit" value="Submit/Save" class="btn btn-submit">
                     </div>
                     <p>Total is: ${{ totalSumLaborCharges }}</p>
                 </form>

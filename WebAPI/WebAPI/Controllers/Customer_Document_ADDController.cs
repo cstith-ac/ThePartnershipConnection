@@ -27,21 +27,49 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertCustomer_Document_ADDResult([FromForm] Customer_Document_ADD customer_Document_ADDED)
         {
-            var reqFile = Request.Form.Files.First();
+            //var reqFile = Request.Form.Files.First();
 
-            using (Stream stream = reqFile.OpenReadStream())
+            //using (Stream stream = reqFile.OpenReadStream())
+            //{
+            //    using (var binaryReader = new BinaryReader(stream))
+            //    {
+            //        var fileContent = binaryReader.ReadBytes((int)stream.Length);
+            //        customer_Document_ADDED.file_data = fileContent;
+            //        var result = await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED);
+            //        return Ok(result);
+            //    }
+            //}
+
+            //for (var i = 0; i < Request.Form.Files.Count; i++)
+            //{
+            //    var reqFile=i;
+            //    using (Stream stream = reqFile.OpenReadStream())
+            //    {
+            //        using (var binaryReader = new BinaryReader(stream))
+            //        {
+            //            var fileContent = binaryReader.ReadBytes((int)stream.Length);
+            //            customer_Document_ADDED.file_data = fileContent;
+            //        }
+            //    }
+            //}
+
+            foreach (var reqFile in Request.Form.Files)
             {
-                using (var binaryReader = new BinaryReader(stream))
+                for (int i = 0; i < reqFile.Length; i++)
                 {
-                    var fileContent = binaryReader.ReadBytes((int)stream.Length);
-                    customer_Document_ADDED.file_data = fileContent;
-                    var result = await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED);
-                    return Ok(result);
-                    //return new ObjectResult(result);
+                    using (Stream stream = reqFile.OpenReadStream())
+                    {
+                        using (var binaryReader = new BinaryReader(stream))
+                        {
+                            var fileContent = binaryReader.ReadBytes((int)stream.Length);
+                            customer_Document_ADDED.file_data = fileContent;
+                        }
+                    }
                 }
+               
             }
-
-            //return Ok(await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED));
+            var result = await _repository.InsertCustomer_Document_ADDResult(customer_Document_ADDED);
+            return Ok(result);
         }
 
         //[HttpPost]

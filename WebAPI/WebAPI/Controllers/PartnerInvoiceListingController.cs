@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
                 var f = 0;
 
                 //var result = await db.GetPartnerInvoiceListings.FromSqlRaw("EXEC dbo.PartnerInvoiceListing @EmailAddress = '" + c + "'  @Filter = 0").ToListAsync();
-                var result = await db.GetPartnerInvoiceListings.FromSqlRaw("EXEC dbo.PartnerInvoiceListing @EmailAddress = 'aprilm@palmettosecuritysystems.com', @Filter = 0").ToListAsync();
+                var result = await db.GetPartnerInvoiceListings.FromSqlRaw("EXEC dbo.PartnerInvoiceListing @EmailAddress = '" + c + "', @Filter = '" + f + "' ").ToListAsync();
 
                 List<PartnerInvoiceListing> Lst = result.Select(s => new PartnerInvoiceListing
                 {
@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
                     CreditDate = s.CreditDate,
                     RelevantMemo = s.RelevantMemo,
                     RelevantComment = s.RelevantComment,
-                    RepeatOrder = s.RepeatOrder
+                    ReportOrder = s.ReportOrder
                 }).ToList();
 
                 return Lst;

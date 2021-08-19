@@ -113,11 +113,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   isSystemSelectionFirst: boolean = false;
   isRemoveDropdown: boolean = true;
   isRemoveSystemDropdown: boolean = true;
-  serviceIncluded:'';
-  renewalMonths='12';
+  serviceIncluded: '';
+  renewalMonths = '12';
   customer_Site_id: any;
   // customer_System_id:number;
-  customer_System_id:any;
+  customer_System_id: any;
   systemName: string;
   panel_Type_Id: number;
   panelName: string;
@@ -197,6 +197,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   invoiceNumber;
   invoiceDate;
   invoiceTotal;
+  // partnerTaxAmount=0;
   partnerTaxAmount=0;
   recurring;
   equipmentAndMaterials;
@@ -241,7 +242,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   other_Document1_file_extension;
 
   other_Document2_file_extension;
-  myFiles:string [] = [];
+  // myFiles:string [] = [];
+  myFiles = {
+    Invoice: "",
+    SubForm: "",
+    SiteVisit: "",
+    Other1: "",
+    Other2: "",
+    Contract: ""
+  };
 
   showInvoiceFile: boolean = true;
   showSubscriberFormFile: boolean = true;
@@ -346,9 +355,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
     this.invoiceTotal = parseFloat(localStorage.getItem('invoiceTotal'));
-    if(localStorage.getItem('partnerTaxAmount')) {
-      this.partnerTaxAmount = parseFloat(localStorage.getItem('partnerTaxAmount'))
-    }
+    // if(localStorage.getItem('partnerTaxAmount')) {
+    //   this.partnerTaxAmount = parseFloat(localStorage.getItem('partnerTaxAmount'))
+    // }
 
     // //Get Files from local storage if page is refreshed
     this.invoiceFile = localStorage.getItem("invoice");
@@ -492,6 +501,29 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }).subscribe(
       (data: any[]) => {
         console.log(data) //object returned
+        if(data.length==0) {
+          console.log('the data is empty')
+          let fakeEquipMat = [{
+            ItemID: ["", Validators.required],
+            Description: ["", Validators.required],
+            Quantity: ["", Validators.required],
+            Cost: ["", Validators.required],
+            Total: [0, Validators.required]
+          }];
+          this.incentiveEquipMatEntryForm = this.fb.group({
+            //if there is no data entered from the incentive entry, populate fake data
+            entryRowsEquipMat: this.fb.array(fakeEquipMat.map(datum => this.generateFakeDatumFormGroup(datum)))
+  
+            // entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
+          });
+        } else {
+          console.log('there is data present')
+          this.incentiveEquipMatEntryForm = this.fb.group({
+            //if there is data present from the incentive entry, populate real data
+  
+            entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
+          })
+        }
         // data.forEach(x => {
         //   localStorage.setItem('equipmatentry',x);
         // })
@@ -529,6 +561,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           Total: ["", Validators.required]
         }];
 
+        // let fakeEquipMat = [{
+        //   ItemID: ["", Validators.required],
+        //   Description: ["", Validators.required],
+        //   Quantity: ["", Validators.required],
+        //   Cost: ["", Validators.required],
+        //   Total: ["", Validators.required]
+        // }];
+
         let fakeLaborChargesData = [{
           ItemID: ["", Validators.required],
           Description: ["", Validators.required],
@@ -541,9 +581,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           entryRowsRecurring: this.fb.array(fakeRecurringData.map(datumRecurring => this.generateRecurringDatumFormGroup(datumRecurring)))
         })
 
-        this.incentiveEquipMatEntryForm = this.fb.group({
-          entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
-        })
+        // this.incentiveEquipMatEntryForm = this.fb.group({
+        //   //if there is no data entered from the incentive entry, populate fake data
+        //   //entryRowsEquipMat: this.fb.array(fakeEquipMat.map(datum => this.generateDatumFormGroup(datum)))
+
+        //   entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
+        // })
         
         this.incentiveLaborChargesEntryForm = this.fb.group({
           entryRowsLaborCharges: this.fb.array(fakeLaborChargesData.map(datumLabor => this.generateLaborChargesDatumFormGroup(datumLabor)))
@@ -791,6 +834,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
 
+      //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0);
+
       // if there's a page refresh, re-populate fields with previously entered values
       this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));
       //this.partnerTaxAmount = parseInt(localStorage.getItem("partnerTaxAmount"));
@@ -820,25 +865,32 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onNewSystemCheckedUnchecked(e) {
 
-    //   //   this.incentiveDashboardForm.get('CustomerSystemID').valueChanges.subscribe(val => {
-  //   //     console.log(val);
-  //   //   })
+    // this.incentiveDashboardForm.get('NewSystem').valueChanges.subscribe(val => {
+    //   console.log(val);
+    // })
+    // this.incentiveDashboardForm.get('CustomerSystemID').valueChanges.subscribe(val => {
+    //   console.log(val);
+    // })
 
     if(e.target.checked) {
       console.log('the input is checked')
       // the CustomerSystemID should get a value of 1
-      // this.incentiveDashboardForm.controls["CustomerSystemID"].setValue(1)
-      // // validate this field
-      // this.incentiveDashboardForm.get("CustomerSystemID").setValidators(null);
-      // this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
+      this.incentiveDashboardForm.controls["CustomerSystemID"].setValue(1)
+      // validate this field
+      this.incentiveDashboardForm.get("CustomerSystemID").setValidators(null);
+      this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
+
+      this.incentiveDashboardForm.controls['CustomerSystemID'].disable();
     }
     if(!e.target.checked) {
       console.log('the input is unchecked')
       // the SystemID should not get a value
-      // this.incentiveDashboardForm.controls["CustomerSystemID"].setValue('')
-      // // if there is a value present, then remove the value and invalidate the field
-      // this.incentiveDashboardForm.get("CustomerSystemID").setValidators(null);
-      // this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
+      this.incentiveDashboardForm.controls["CustomerSystemID"].setValue('')
+      // if there is a value present, then remove the value and invalidate the field
+      this.incentiveDashboardForm.get("CustomerSystemID").setValidators(null);
+      this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
+
+      this.incentiveDashboardForm.controls['CustomerSystemID'].enable();
     }
   }
 
@@ -862,6 +914,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
   //Equip & Mat
+  private generateFakeDatumFormGroup(datum) {
+    return this.fb.group({
+      ItemID: this.fb.control(datum.itemID),
+      Description: this.fb.control(datum.itemDescription),
+      Quantity: this.fb.control(1),
+      Cost: this.fb.control(datum.defaultAmount ),
+      // Total: this.fb.control(this.quantity * datum.defaultAmount)
+      Total: this.fb.control(0)
+    })
+  }
   private generateDatumFormGroup(datum) {
     return this.fb.group({
       ItemID: this.fb.control(datum.itemID),
@@ -869,6 +931,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Quantity: this.fb.control(1),
       Cost: this.fb.control(datum.defaultAmount ),
       Total: this.fb.control(this.quantity * datum.defaultAmount)
+      //Total: this.fb.control(0)
     })
   }
   //Labor
@@ -905,7 +968,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   } 
 
-   updateTotalEquipMat(entryRowsEquipMat:any) {
+  updateTotalEquipMat(entryRowsEquipMat:any) {
     console.log('updateTotalEquipMat was called')
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
     this.totalSumEquipMat=0;
@@ -1006,16 +1069,38 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   getPartnerTaxAmount(e) {
+    // console.log(this.incentiveDashboardForm.get('PartnerTaxAmount').value)
+    // console.log(typeof e.target.value)
+ 
     let newPartnerTaxAmount = e.target.value;
     console.log(newPartnerTaxAmount)
-    localStorage.setItem("partnerTaxAmount", newPartnerTaxAmount);
+    //localStorage.setItem("partnerTaxAmount", newPartnerTaxAmount);
 
-    this.partnerTaxAmount = this.incentiveDashboardForm.controls["PartnerTaxAmount"].value;
+    this.partnerTaxAmount = parseFloat(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value);
+    console.log(typeof this.partnerTaxAmount)
 
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + parseFloat(newPartnerTaxAmount));
   }
 
   getContractDate(e) {
+    console.log(e.target.value)//this is the contract date format in the form
+   
+    let todaysDate = new Date();
+    let todaysDateString = e.target.value;
+
+    todaysDateString = todaysDate.getFullYear() + '-' + ('0' + (todaysDate.getMonth()+1)).slice(-2) + '-' + ('0' + todaysDate.getDate()).slice(-2);
+
+    console.log('Today is: '+ todaysDateString) //this is today's date
+
+    // let dateObj = new Date();
+    // let month = dateObj.getUTCMonth() + 1;
+    // let day = dateObj.getUTCDate();
+    // let year = dateObj.getUTCFullYear();
+    // let todaysdate = year + "-" + month + "-" + day;
+
+    if(todaysDateString !== e.target.value) {
+      console.log('the selected date : '+ e.target.value + ' does not equal today\'s date: ' + todaysDateString)
+    }
     let newContractDate = e.target.value;
     localStorage.setItem("contractDate", newContractDate);
   }
@@ -1182,6 +1267,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   )
     // )
   }
+
   onFocused(e){
     // here we can write our code for doing something when input is focused
   }
@@ -1610,26 +1696,27 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           )
         })
 
-        if(this.file_name) {
-          console.log(this.file_name)
+        setTimeout(() => {
+          if(this.file_name) {
+            console.log(this.file_name)
             let frmData = new FormData();
-
+  
             // 37 = Sandbox, 6 = Production
             frmData.append('company_id','37');
-
+  
             // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
             frmData.append('customer_id', this.id);
-
+  
             frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
             //frmData.append('customer_site_id',this.customerSiteId);
             
             frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
             //frmData.append('customer_system_id', this.customerSystemId.toString());
-
+  
             frmData.append('job_id', this.job_id);
             //frmData.append('job_id', '19');
             frmData.append('security_level', this.security_level);
-
+  
             //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
             frmData.append('file_name', this.file_name);
             frmData.append('file_size', this.file_size);
@@ -1642,39 +1729,38 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('reference2', null);
             frmData.append('reference3', null);
             frmData.append('reference4', null);
-            // frmData.append("file_data", this.myFiles[0]);
-            for(var i = 0; i < this.myFiles.length; i++) {
-              console.log(this.myFiles[i])
-              frmData.append("file_data", this.myFiles[i]);
-            }
+            frmData.append("file_data", this.myFiles.Invoice);
             // perform http request for each file
             //frmData.append('@file_data', this.myFiles[i]);
             frmData.append('document_id', '1');
-
+  
             console.log(this.job_id)
             // Display the key/value pairs
             console.log(Object.entries(frmData));//returns an empty array!
             var options = {content: frmData};
-
+  
             console.log(frmData);
             console.log(this.job_id);
             const headers = new HttpHeaders();
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Authorization','Bearer ' + this.loadToken());
             headers.append('Accept', 'application/json');
-
+  
             this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
               headers: headers,
               responseType: 'text'
             }).subscribe(
               data => {
-                console.log(data);
+                console.log({i:0,data});
               }
             )
               console.log(frmData)
-        }
-        if(this.subscriber_file_name) {
-          //console.log(this.myFiles[1])
+          }
+        }, 3000);
+
+        setTimeout(() => {
+          if(this.subscriber_file_name) {
+            //console.log(this.myFiles[1])
             let frmData = new FormData();
 
             // 37 = Sandbox, 6 = Production
@@ -1705,13 +1791,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('reference2', null);
             frmData.append('reference3', null);
             frmData.append('reference4', null);
-              // frmData.append("file_data", this.myFiles[1]);
-              for(var i = 0; i < this.myFiles.length; i++) {
-                console.log(this.myFiles[i])
-                frmData.append("file_data", this.myFiles[i]);
-              }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
+            frmData.append("file_data", this.myFiles.SubForm);
+            // for(var i = 0; i < this.myFiles.length; i++) {
+            //   console.log(this.myFiles[i])
+            //   frmData.append("subscriber_file_data", this.myFiles[i]);
+            // }
+            // perform http request for each file
+            //frmData.append('@file_data', this.myFiles[i]);
             frmData.append('document_id', '1');
 
             console.log(this.job_id)
@@ -1730,260 +1816,647 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               responseType: 'text'
             }).subscribe(
               data => {
-                console.log(data);
+                console.log({i:1,data});
               }
             )
               console.log(frmData)
-        }
-        if(this.site_visit_file_name) {
-          console.log(this.myFiles[2])
-            let frmData = new FormData();
+          }
+        }, 3000);
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        setTimeout(() => {
+          if(this.site_visit_file_name) {
+            console.log(this.myFiles[2])
+              let frmData = new FormData();
+  
+              // 37 = Sandbox, 6 = Production
+              frmData.append('company_id','37');
+  
+              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+              frmData.append('customer_id', this.id);
+  
+              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+              //frmData.append('customer_site_id',this.customerSiteId);
+              
+              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+              //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+              frmData.append('job_id', this.job_id);
+              //frmData.append('job_id', '19');
+              frmData.append('security_level', this.security_level);
+  
+              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+              frmData.append('file_name', this.site_visit_file_name);
+              frmData.append('file_size', this.site_visit_file_size);
+              frmData.append('upload_date', this.invoiceDate);
+              frmData.append('document_ext', '*Contracts');
+              frmData.append('user_code', 'PPC');
+              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+              frmData.append('user_description', 'Site Visit');
+              frmData.append('reference1', null);
+              frmData.append('reference2', null);
+              frmData.append('reference3', null);
+              frmData.append('reference4', null);
+              frmData.append("file_data", this.myFiles.SiteVisit);
+                // for(var i = 0; i < this.myFiles.length; i++) {
+                //   console.log(this.myFiles[i])
+                //   frmData.append("file_data", this.myFiles[i]);
+                // }
+                // perform http request for each file
+                //frmData.append('@file_data', this.myFiles[i]);
+              frmData.append('document_id', '1');
+  
+              console.log(this.job_id)
+              // Display the key/value pairs
+              console.log(Object.entries(frmData));//returns an empty array!
+              var options = {content: frmData};
+  
+              console.log(frmData);
+              console.log(this.job_id);
+              const headers = new HttpHeaders();
+              headers.append('Content-Type', 'multipart/form-data');
+              headers.append('Authorization','Bearer ' + this.loadToken());
+              headers.append('Accept', 'application/json');
+              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                headers: headers,
+                responseType: 'text'
+              }).subscribe(
+                data => {
+                  console.log({i:2,data});
+                }
+              )
+                console.log(frmData)
+          }
+        }, 3000);
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        setTimeout(() => {
+          if(this.other_Document1_file_name) {
+            console.log(this.myFiles[3])
+              let frmData = new FormData();
+  
+              // 37 = Sandbox, 6 = Production
+              frmData.append('company_id','37');
+  
+              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+              frmData.append('customer_id', this.id);
+  
+              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+              //frmData.append('customer_site_id',this.customerSiteId);
+              
+              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+              //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+              frmData.append('job_id', this.job_id);
+              //frmData.append('job_id', '19');
+              frmData.append('security_level', this.security_level);
+  
+              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+              frmData.append('file_name', this.other_Document1_file_name);
+              frmData.append('file_size', this.other_Document1_file_size);
+              frmData.append('upload_date', this.invoiceDate);
+              frmData.append('document_ext', '*Contracts');
+              frmData.append('user_code', 'PPC');
+              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+              frmData.append('user_description', 'Other Doc1');
+              frmData.append('reference1', null);
+              frmData.append('reference2', null);
+              frmData.append('reference3', null);
+              frmData.append('reference4', null);
+              frmData.append("file_data", this.myFiles.Other1);
+                // for(var i = 0; i < this.myFiles.length; i++) {
+                //   console.log(this.myFiles[i])
+                //   frmData.append("file_data", this.myFiles[i]);
+                // }
+                // perform http request for each file
+                //frmData.append('@file_data', this.myFiles[i]);
+              frmData.append('document_id', '1');
+  
+              console.log(this.job_id)
+              // Display the key/value pairs
+              console.log(Object.entries(frmData));//returns an empty array!
+              var options = {content: frmData};
+  
+              console.log(frmData);
+              console.log(this.job_id);
+              const headers = new HttpHeaders();
+              headers.append('Content-Type', 'multipart/form-data');
+              headers.append('Authorization','Bearer ' + this.loadToken());
+              headers.append('Accept', 'application/json');
+              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                headers: headers,
+                responseType: 'text'
+              }).subscribe(
+                data => {
+                  console.log({i:3,data});
+                }
+              )
+                console.log(frmData)
+          }
+        }, 3000);
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
+        setTimeout(() => {
+          if(this.other_Document2_file_name) {
+            console.log(this.myFiles[4])
+              let frmData = new FormData();
+  
+              // 37 = Sandbox, 6 = Production
+              frmData.append('company_id','37');
+  
+              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+              frmData.append('customer_id', this.id);
+  
+              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+              //frmData.append('customer_site_id',this.customerSiteId);
+              
+              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+              //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+              frmData.append('job_id', this.job_id);
+              //frmData.append('job_id', '19');
+              frmData.append('security_level', this.security_level);
+  
+              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+              frmData.append('file_name', this.other_Document2_file_name);
+              frmData.append('file_size', this.other_Document2_file_size);
+              frmData.append('upload_date', this.invoiceDate);
+              frmData.append('document_ext', '*Contracts');
+              frmData.append('user_code', 'PPC');
+              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+              frmData.append('user_description', 'Other Doc 2');
+              frmData.append('reference1', null);
+              frmData.append('reference2', null);
+              frmData.append('reference3', null);
+              frmData.append('reference4', null);
+              frmData.append("file_data", this.myFiles.Other2);
+                // for(var i = 0; i < this.myFiles.length; i++) {
+                //   console.log(this.myFiles[i])
+                //   frmData.append("file_data", this.myFiles[i]);
+                // }
+                // perform http request for each file
+                //frmData.append('@file_data', this.myFiles[i]);
+              frmData.append('document_id', '1');
+  
+              console.log(this.job_id)
+              // Display the key/value pairs
+              console.log(Object.entries(frmData));//returns an empty array!
+              var options = {content: frmData};
+  
+              console.log(frmData);
+              console.log(this.job_id);
+              const headers = new HttpHeaders();
+              headers.append('Content-Type', 'multipart/form-data');
+              headers.append('Authorization','Bearer ' + this.loadToken());
+              headers.append('Accept', 'application/json');
+              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                headers: headers,
+                responseType: 'text'
+              }).subscribe(
+                data => {
+                  console.log({i:4,data});
+                }
+              )
+                console.log(frmData)
+          }
+        }, 3000);
+
+        setTimeout(() => {
+          if(this.contract_file_name) {
+            console.log(this.myFiles[5])
+              let frmData = new FormData();
+  
+              // 37 = Sandbox, 6 = Production
+              frmData.append('company_id','37');
+  
+              // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+              frmData.append('customer_id', this.id);
+  
+              frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+              //frmData.append('customer_site_id',this.customerSiteId);
+              
+              frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+              //frmData.append('customer_system_id', this.customerSystemId.toString());
+  
+              frmData.append('job_id', this.job_id);
+              //frmData.append('job_id', '19');
+              frmData.append('security_level', this.security_level);
+  
+              //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+              frmData.append('file_name', this.contract_file_name);
+              frmData.append('file_size', this.contract_file_size);
+              frmData.append('upload_date', this.invoiceDate);
+              frmData.append('document_ext', '*Contracts');
+              frmData.append('user_code', 'PPC');
+              //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+              frmData.append('user_description', 'Contract');
+              frmData.append('reference1', null);
+              frmData.append('reference2', null);
+              frmData.append('reference3', null);
+              frmData.append('reference4', null);
+              frmData.append("file_data", this.myFiles.Contract);
+                // for(var i = 0; i < this.myFiles.length; i++) {
+                //   console.log(this.myFiles[i])
+                //   frmData.append("file_data", this.myFiles[i]);
+                // }
+                // perform http request for each file
+                //frmData.append('@file_data', this.myFiles[i]);
+              frmData.append('document_id', '1');
+  
+              console.log(this.job_id)
+              // Display the key/value pairs
+              console.log(Object.entries(frmData));//returns an empty array!
+              var options = {content: frmData};
+  
+              console.log(frmData);
+              console.log(this.job_id);
+              const headers = new HttpHeaders();
+              headers.append('Content-Type', 'multipart/form-data');
+              headers.append('Authorization','Bearer ' + this.loadToken());
+              headers.append('Accept', 'application/json');
+              this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+                headers: headers,
+                responseType: 'text'
+              }).subscribe(
+                data => {
+                  console.log({i:5,data});
+                }
+              )
+                console.log(frmData)
+          }
+        }, 3000);
+
+        // if(this.file_name) {
+        //   console.log(this.file_name)
+        //   let frmData = new FormData();
+
+        //   // 37 = Sandbox, 6 = Production
+        //   frmData.append('company_id','37');
+
+        //   // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //   frmData.append('customer_id', this.id);
+
+        //   frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //   //frmData.append('customer_site_id',this.customerSiteId);
+          
+        //   frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //   //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //   frmData.append('job_id', this.job_id);
+        //   //frmData.append('job_id', '19');
+        //   frmData.append('security_level', this.security_level);
+
+        //   //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //   frmData.append('file_name', this.file_name);
+        //   frmData.append('file_size', this.file_size);
+        //   frmData.append('upload_date', this.invoiceDate);
+        //   frmData.append('document_ext', '*Contracts');
+        //   frmData.append('user_code', 'PPC');
+        //   //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //   frmData.append('user_description', 'Invoice');
+        //   frmData.append('reference1', null);
+        //   frmData.append('reference2', null);
+        //   frmData.append('reference3', null);
+        //   frmData.append('reference4', null);
+        //   // frmData.append("file_data", this.myFiles[0]);
+        //   for(var i = 0; i < this.myFiles.length; i++) {
+        //     console.log(this.myFiles[i])
+        //     frmData.append("file_data", this.myFiles[i]);
+        //   }
+        //   // perform http request for each file
+        //   //frmData.append('@file_data', this.myFiles[i]);
+        //   frmData.append('document_id', '1');
+
+        //   console.log(this.job_id)
+        //   // Display the key/value pairs
+        //   console.log(Object.entries(frmData));//returns an empty array!
+        //   var options = {content: frmData};
+
+        //   console.log(frmData);
+        //   console.log(this.job_id);
+        //   const headers = new HttpHeaders();
+        //   headers.append('Content-Type', 'multipart/form-data');
+        //   headers.append('Authorization','Bearer ' + this.loadToken());
+        //   headers.append('Accept', 'application/json');
+
+        //   this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //     headers: headers,
+        //     responseType: 'text'
+        //   }).subscribe(
+        //     data => {
+        //       console.log(data);
+        //     }
+        //   )
+        //     console.log(frmData)
+        // }
+        // if(this.subscriber_file_name) {
+        //   //console.log(this.myFiles[1])
+        //     let frmData = new FormData();
+
+        //     // 37 = Sandbox, 6 = Production
+        //     frmData.append('company_id','37');
+
+        //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     frmData.append('customer_id', this.id);
+
+        //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //frmData.append('customer_site_id',this.customerSiteId);
             
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        //     frmData.append('job_id', this.job_id);
+        //     //frmData.append('job_id', '19');
+        //     frmData.append('security_level', this.security_level);
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.site_visit_file_name);
-            frmData.append('file_size', this.site_visit_file_size);
-            frmData.append('upload_date', this.invoiceDate);
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Site Visit');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-              // frmData.append("file_data", this.myFiles[2]);
-              for(var i = 0; i < this.myFiles.length; i++) {
-                console.log(this.myFiles[i])
-                frmData.append("file_data", this.myFiles[i]);
-              }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     frmData.append('file_name', this.subscriber_file_name);
+        //     frmData.append('file_size', this.subscriber_file_size);
+        //     frmData.append('upload_date', this.invoiceDate);
+        //     frmData.append('document_ext', '*Contracts');
+        //     frmData.append('user_code', 'PPC');
+        //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     frmData.append('user_description', 'Subscriber Form');
+        //     frmData.append('reference1', null);
+        //     frmData.append('reference2', null);
+        //     frmData.append('reference3', null);
+        //     frmData.append('reference4', null);
+        //       // frmData.append("file_data", this.myFiles[1]);
+        //       for(var i = 0; i < this.myFiles.length; i++) {
+        //         console.log(this.myFiles[i])
+        //         frmData.append("file_data", this.myFiles[i]);
+        //       }
+        //       // perform http request for each file
+        //       //frmData.append('@file_data', this.myFiles[i]);
+        //     frmData.append('document_id', '1');
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        //     console.log(this.job_id)
+        //     // Display the key/value pairs
+        //     console.log(Object.entries(frmData));//returns an empty array!
+        //     var options = {content: frmData};
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'text'
-            }).subscribe(
-              data => {
-                console.log(data);
-              }
-            )
-              console.log(frmData)
-        }
-        if(this.other_Document1_file_name) {
-          console.log(this.myFiles[3])
-            let frmData = new FormData();
+        //     console.log(frmData);
+        //     console.log(this.job_id);
+        //     const headers = new HttpHeaders();
+        //     headers.append('Content-Type', 'multipart/form-data');
+        //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     headers.append('Accept', 'application/json');
+        //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //       headers: headers,
+        //       responseType: 'text'
+        //     }).subscribe(
+        //       data => {
+        //         console.log(data);
+        //       }
+        //     )
+        //       console.log(frmData)
+        // }
+        // if(this.site_visit_file_name) {
+        //   console.log(this.myFiles[2])
+        //     let frmData = new FormData();
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        //     // 37 = Sandbox, 6 = Production
+        //     frmData.append('company_id','37');
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     frmData.append('customer_id', this.id);
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
+        //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //frmData.append('customer_site_id',this.customerSiteId);
             
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        //     frmData.append('job_id', this.job_id);
+        //     //frmData.append('job_id', '19');
+        //     frmData.append('security_level', this.security_level);
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.other_Document1_file_name);
-            frmData.append('file_size', this.other_Document1_file_size);
-            frmData.append('upload_date', this.invoiceDate);
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Other Doc1');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-              // frmData.append("file_data", this.myFiles[3]);
-              for(var i = 0; i < this.myFiles.length; i++) {
-                console.log(this.myFiles[i])
-                frmData.append("file_data", this.myFiles[i]);
-              }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     frmData.append('file_name', this.site_visit_file_name);
+        //     frmData.append('file_size', this.site_visit_file_size);
+        //     frmData.append('upload_date', this.invoiceDate);
+        //     frmData.append('document_ext', '*Contracts');
+        //     frmData.append('user_code', 'PPC');
+        //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     frmData.append('user_description', 'Site Visit');
+        //     frmData.append('reference1', null);
+        //     frmData.append('reference2', null);
+        //     frmData.append('reference3', null);
+        //     frmData.append('reference4', null);
+        //       // frmData.append("file_data", this.myFiles[2]);
+        //       for(var i = 0; i < this.myFiles.length; i++) {
+        //         console.log(this.myFiles[i])
+        //         frmData.append("file_data", this.myFiles[i]);
+        //       }
+        //       // perform http request for each file
+        //       //frmData.append('@file_data', this.myFiles[i]);
+        //     frmData.append('document_id', '1');
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        //     console.log(this.job_id)
+        //     // Display the key/value pairs
+        //     console.log(Object.entries(frmData));//returns an empty array!
+        //     var options = {content: frmData};
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'text'
-            }).subscribe(
-              data => {
-                console.log(data);
-              }
-            )
-              console.log(frmData)
-        }
-        if(this.other_Document2_file_name) {
-          console.log(this.myFiles[4])
-            let frmData = new FormData();
+        //     console.log(frmData);
+        //     console.log(this.job_id);
+        //     const headers = new HttpHeaders();
+        //     headers.append('Content-Type', 'multipart/form-data');
+        //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     headers.append('Accept', 'application/json');
+        //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //       headers: headers,
+        //       responseType: 'text'
+        //     }).subscribe(
+        //       data => {
+        //         console.log(data);
+        //       }
+        //     )
+        //       console.log(frmData)
+        // }
+        // if(this.other_Document1_file_name) {
+        //   console.log(this.myFiles[3])
+        //     let frmData = new FormData();
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        //     // 37 = Sandbox, 6 = Production
+        //     frmData.append('company_id','37');
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     frmData.append('customer_id', this.id);
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
+        //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //frmData.append('customer_site_id',this.customerSiteId);
             
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        //     frmData.append('job_id', this.job_id);
+        //     //frmData.append('job_id', '19');
+        //     frmData.append('security_level', this.security_level);
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.other_Document2_file_name);
-            frmData.append('file_size', this.other_Document2_file_size);
-            frmData.append('upload_date', this.invoiceDate);
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Other Doc 2');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-              // frmData.append("file_data", this.myFiles[4]);
-              for(var i = 0; i < this.myFiles.length; i++) {
-                console.log(this.myFiles[i])
-                frmData.append("file_data", this.myFiles[i]);
-              }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     frmData.append('file_name', this.other_Document1_file_name);
+        //     frmData.append('file_size', this.other_Document1_file_size);
+        //     frmData.append('upload_date', this.invoiceDate);
+        //     frmData.append('document_ext', '*Contracts');
+        //     frmData.append('user_code', 'PPC');
+        //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     frmData.append('user_description', 'Other Doc1');
+        //     frmData.append('reference1', null);
+        //     frmData.append('reference2', null);
+        //     frmData.append('reference3', null);
+        //     frmData.append('reference4', null);
+        //       // frmData.append("file_data", this.myFiles[3]);
+        //       for(var i = 0; i < this.myFiles.length; i++) {
+        //         console.log(this.myFiles[i])
+        //         frmData.append("file_data", this.myFiles[i]);
+        //       }
+        //       // perform http request for each file
+        //       //frmData.append('@file_data', this.myFiles[i]);
+        //     frmData.append('document_id', '1');
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        //     console.log(this.job_id)
+        //     // Display the key/value pairs
+        //     console.log(Object.entries(frmData));//returns an empty array!
+        //     var options = {content: frmData};
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'text'
-            }).subscribe(
-              data => {
-                console.log(data);
-              }
-            )
-              console.log(frmData)
-        }
-        if(this.contract_file_name) {
-          console.log(this.myFiles[5])
-            let frmData = new FormData();
+        //     console.log(frmData);
+        //     console.log(this.job_id);
+        //     const headers = new HttpHeaders();
+        //     headers.append('Content-Type', 'multipart/form-data');
+        //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     headers.append('Accept', 'application/json');
+        //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //       headers: headers,
+        //       responseType: 'text'
+        //     }).subscribe(
+        //       data => {
+        //         console.log(data);
+        //       }
+        //     )
+        //       console.log(frmData)
+        // }
+        // if(this.other_Document2_file_name) {
+        //   console.log(this.myFiles[4])
+        //     let frmData = new FormData();
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        //     // 37 = Sandbox, 6 = Production
+        //     frmData.append('company_id','37');
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     frmData.append('customer_id', this.id);
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
+        //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //frmData.append('customer_site_id',this.customerSiteId);
             
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //frmData.append('customer_system_id', this.customerSystemId.toString());
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        //     frmData.append('job_id', this.job_id);
+        //     //frmData.append('job_id', '19');
+        //     frmData.append('security_level', this.security_level);
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.contract_file_name);
-            frmData.append('file_size', this.contract_file_size);
-            frmData.append('upload_date', this.invoiceDate);
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Contract');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-              // frmData.append("file_data", this.myFiles[5]);
-              for(var i = 0; i < this.myFiles.length; i++) {
-                console.log(this.myFiles[i])
-                frmData.append("file_data", this.myFiles[i]);
-              }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     frmData.append('file_name', this.other_Document2_file_name);
+        //     frmData.append('file_size', this.other_Document2_file_size);
+        //     frmData.append('upload_date', this.invoiceDate);
+        //     frmData.append('document_ext', '*Contracts');
+        //     frmData.append('user_code', 'PPC');
+        //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     frmData.append('user_description', 'Other Doc 2');
+        //     frmData.append('reference1', null);
+        //     frmData.append('reference2', null);
+        //     frmData.append('reference3', null);
+        //     frmData.append('reference4', null);
+        //       // frmData.append("file_data", this.myFiles[4]);
+        //       for(var i = 0; i < this.myFiles.length; i++) {
+        //         console.log(this.myFiles[i])
+        //         frmData.append("file_data", this.myFiles[i]);
+        //       }
+        //       // perform http request for each file
+        //       //frmData.append('@file_data', this.myFiles[i]);
+        //     frmData.append('document_id', '1');
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        //     console.log(this.job_id)
+        //     // Display the key/value pairs
+        //     console.log(Object.entries(frmData));//returns an empty array!
+        //     var options = {content: frmData};
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'text'
-            }).subscribe(
-              data => {
-                console.log(data);
-                //return
-              }
-            )
-              console.log(frmData)
-        }
+        //     console.log(frmData);
+        //     console.log(this.job_id);
+        //     const headers = new HttpHeaders();
+        //     headers.append('Content-Type', 'multipart/form-data');
+        //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     headers.append('Accept', 'application/json');
+        //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //       headers: headers,
+        //       responseType: 'text'
+        //     }).subscribe(
+        //       data => {
+        //         console.log(data);
+        //       }
+        //     )
+        //       console.log(frmData)
+        // }
+        // if(this.contract_file_name) {
+        //   console.log(this.myFiles[5])
+        //     let frmData = new FormData();
+
+        //     // 37 = Sandbox, 6 = Production
+        //     frmData.append('company_id','37');
+
+        //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        //     frmData.append('customer_id', this.id);
+
+        //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //     //frmData.append('customer_site_id',this.customerSiteId);
+            
+        //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+        //     frmData.append('job_id', this.job_id);
+        //     //frmData.append('job_id', '19');
+        //     frmData.append('security_level', this.security_level);
+
+        //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        //     frmData.append('file_name', this.contract_file_name);
+        //     frmData.append('file_size', this.contract_file_size);
+        //     frmData.append('upload_date', this.invoiceDate);
+        //     frmData.append('document_ext', '*Contracts');
+        //     frmData.append('user_code', 'PPC');
+        //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        //     frmData.append('user_description', 'Contract');
+        //     frmData.append('reference1', null);
+        //     frmData.append('reference2', null);
+        //     frmData.append('reference3', null);
+        //     frmData.append('reference4', null);
+        //       // frmData.append("file_data", this.myFiles[5]);
+        //       for(var i = 0; i < this.myFiles.length; i++) {
+        //         console.log(this.myFiles[i])
+        //         frmData.append("file_data", this.myFiles[i]);
+        //       }
+        //       // perform http request for each file
+        //       //frmData.append('@file_data', this.myFiles[i]);
+        //     frmData.append('document_id', '1');
+
+        //     console.log(this.job_id)
+        //     // Display the key/value pairs
+        //     console.log(Object.entries(frmData));//returns an empty array!
+        //     var options = {content: frmData};
+
+        //     console.log(frmData);
+        //     console.log(this.job_id);
+        //     const headers = new HttpHeaders();
+        //     headers.append('Content-Type', 'multipart/form-data');
+        //     headers.append('Authorization','Bearer ' + this.loadToken());
+        //     headers.append('Accept', 'application/json');
+        //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+        //       headers: headers,
+        //       responseType: 'text'
+        //     }).subscribe(
+        //       data => {
+        //         console.log(data);
+        //         //return
+        //       }
+        //     )
+        //       console.log(frmData)
+        // }
         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
@@ -2053,6 +2526,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
   }
 
+  getFileData(e) {
+    console.log(e);
+    // get index for each file
+    // parameters 0 - 6
+  }
+
   //Test Invoice file upload
   getFileDetails(e) {
     console.log(e);
@@ -2085,7 +2564,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.setItem('invoiceFileSize',this.file_size);
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      //this.myFiles.push(e.target.files[i]);
+      this.myFiles.Invoice = e.target.files[i];
     }
   }
 
@@ -2115,7 +2595,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       console.log(this.subscriber_file_size)
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      //this.myFiles.push(e.target.files[i]);
+      this.myFiles.SubForm = e.target.files[i];
     }
   }
 
@@ -2144,12 +2625,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.site_visit_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      // this.myFiles.push(e.target.files[i]);
+      this.myFiles.SiteVisit = e.target.files[i];
     }
   }
 
    //Test Other Document 1 Form file upload
-   getOtherDocument1FileDetails(e) {
+  getOtherDocument1FileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
@@ -2173,7 +2655,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.other_Document1_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      // this.myFiles.push(e.target.files[i]);
+      this.myFiles.Other1 = e.target.files[i];
     }
   }
 
@@ -2202,7 +2685,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.contract_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      // this.myFiles.push(e.target.files[i]);
+      this.myFiles.Contract = e.target.files[i];
     }
   }
 
@@ -2231,53 +2715,44 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.other_Document2_file_size = e.target.files[i].size;
       //this.invoiceDate = e.target.files[i].lastModified;
 
-      this.myFiles.push(e.target.files[i]);
+      // this.myFiles.push(e.target.files[i]);
+      this.myFiles.Other2 = e.target.files[i];
     }
   }
 
   removeInvoiceFile(){
-    // console.log('remove this file')
     localStorage.removeItem('invoiceName');
     localStorage.removeItem('invoice');
     this.divInvoice.nativeElement.value = '';
     this.showInvoiceFile = false;
-    this.myFiles.pop();
   }
 
   removeSubscriberFormFile() {
-    // console.log('remove this file')
     localStorage.removeItem('subscriberFormName');
     localStorage.removeItem('subscriberForm');
     this.divSubscriberForm.nativeElement.value = '';
     this.showSubscriberFormFile = false;
-    this.myFiles.pop();
   }
 
   removeSiteVisitFile() {
-    // console.log('remove this file')
     localStorage.removeItem('siteVisitName');
     localStorage.removeItem('siteVisit');
     this.divSiteVisit.nativeElement.value = '';
     this.showSiteVisitFile = false;
-    this.myFiles.pop();
   }
 
   removeOtherDocument1File() {
-    // console.log('remove this file')
     localStorage.removeItem('otherDocument1Name');
     localStorage.removeItem('otherDocument1');
     this.divOtherDocument1.nativeElement.value = '';
     this.showOtherDocument1File = false;
-    this.myFiles.pop();
   }
 
   removeContractFile() {
-    // console.log('remove this file')
     localStorage.removeItem('contractName');
     localStorage.removeItem('contract');
     this.divContract.nativeElement.value = '';
     this.showContractFile = false;
-    this.myFiles.pop();
   }
 
   removeOtherDocument2File() {
@@ -2285,7 +2760,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.removeItem('otherDocument2');
     this.divOtherDocument2.nativeElement.value = '';
     this.showOtherDocument2File = false;
-    this.myFiles.pop();
   }
 
   getLineItemSubtotal() {

@@ -360,7 +360,7 @@ export class RouteService {
     );
   }
 
-  getPartnerCallToActionButton() {
+  getPartnerCallToActionButton(): Observable<any> {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
@@ -371,7 +371,7 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerCallToActionButton`, httpOptions);
   }
 
-  getTPCCollectionsCallToActionButton() {
+  getTPCCollectionsCallToActionButton(): Observable<any> {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
@@ -382,7 +382,18 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/TPCCollectionsCallToActionButton`, httpOptions);
   }
 
-  getPartnerLandingPage() {
+  getPartnerInvoiceListing(): Observable<any> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerInvoiceListing`, httpOptions);
+  }
+
+  getPartnerLandingPage(): Observable<any> {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({

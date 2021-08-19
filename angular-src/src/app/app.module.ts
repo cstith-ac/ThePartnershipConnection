@@ -88,6 +88,7 @@ import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
 import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
+import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
@@ -149,7 +150,8 @@ import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelque
     IncentiveDashboardTestComponent,
     ListFilterPipe,
     CalltoactionlistingComponent,
-    CancelqueuelistComponent
+    CancelqueuelistComponent,
+    PartnerinvoicelistingComponent
     //CustomerTestComponent
   ],
   imports: [

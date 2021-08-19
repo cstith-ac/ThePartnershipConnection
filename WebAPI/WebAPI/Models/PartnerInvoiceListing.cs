@@ -31,6 +31,6 @@ namespace WebAPI.Models
         public string CreditDate { get; set; }
         public string RelevantMemo { get; set; }
         public string RelevantComment { get; set; }
-        public string RepeatOrder { get; set; }
+        public int ReportOrder { get; set; }
     }
 }

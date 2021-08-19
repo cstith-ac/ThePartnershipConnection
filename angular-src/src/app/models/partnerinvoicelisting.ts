@@ -1,0 +1,27 @@
+export class PartnerInvoiceListing {
+    ticketID: number;
+    incentiveID: number;
+    vendorInvoiceNumber: string;
+    invoiceAmount: string;
+    invoiceDate: string;
+    approvedAmount: string;
+    dateEntered: string;
+    ticketNumber: string;
+    customer_Number: string;
+    customer_Name: string;
+    problem_Code: string;
+    resolvedNotClosed: string;
+    determination: string;
+    determinedOn: string;
+    heldReason: string;
+    apInvoiceNumber: string;
+    apInvoiceAmount: string;
+    checkNumber: string;
+    checkDate: string;
+    amountPaid: string;
+    creditAmount: string;
+    creditDate: string;
+    relevantMemo: string;
+    relevantComment: string;
+    reportOrder: number;
+}

@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { PartnerLandingPage } from 'src/app/models/partnerlandingpage';
+import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
@@ -57,6 +59,7 @@ export class PartnerdashboardComponent implements OnInit {
   //       "attritionLast12Months": 0
   //   }
   // ]; //use this to test
+  partnerInvoiceListing: PartnerInvoiceListing[];
   user;
   firstName;
   // attritionValue=10;
@@ -67,6 +70,10 @@ export class PartnerdashboardComponent implements OnInit {
   threegConversionValue;
   // threegConversionprogress="78%";
   threegConversionprogress;
+  showPendingCancellationList = "Show Pending Cancellation List";
+  showPartnerInvoiceListing = "Show Partner Invoice Listing";
+  createAnInvoice = "Create an invoice";
+  closeResult = '';
 
   page = 1;
   count = 0;
@@ -74,6 +81,8 @@ export class PartnerdashboardComponent implements OnInit {
   tableSizes = [5,10,15,25,50,100,150,200];
 
   id:string;
+  pageSize=10;
+
 
   constructor(
     private spinnerService: NgxSpinnerService,
@@ -81,6 +90,7 @@ export class PartnerdashboardComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
+    private modalService: NgbModal,
     public jwtHelper: JwtHelperService
   ) { }
 
@@ -88,6 +98,13 @@ export class PartnerdashboardComponent implements OnInit {
     // if(this.authService.isTestUser) {
     //   this.router.navigate(['/forbidden'])
     // }
+    if(this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.router.navigate(["login"]);
+    } else {
+      //console.log('your logged in')
+    }
 
     $("#wrapper").addClass("toggled");
 
@@ -137,14 +154,6 @@ export class PartnerdashboardComponent implements OnInit {
         }
       }
     )
-
-    if(this.jwtHelper.isTokenExpired()) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      this.router.navigate(["login"]);
-    } else {
-      //console.log('your logged in')
-    }
   }
 
   getBackgroundColor(progressPercent) {
@@ -178,6 +187,70 @@ export class PartnerdashboardComponent implements OnInit {
     //     this.customer3glisting = res;
     //   }
     // )
+  }
+
+  // openPartnerInvoiceListingModal() {
+  //   $("#partnerInvoiceListingModal").modal("show");
+
+  //   this.spinnerService.show();
+
+  //   this.routeService.getPartnerInvoiceListing().subscribe(
+  //     res => {
+  //       if(res) {
+  //         this.spinnerService.hide()
+  //       }
+        
+  //       this.partnerInvoiceListing = [].concat(res);
+        
+  //     }
+  //   )
+  // }
+
+  openPartnerInvoiceListingModal(content) {
+    this.modalService.open(content, 
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class',
+      });
+
+      this.spinnerService.show();
+
+      this.routeService.getPartnerInvoiceListing().subscribe(
+        res => {
+          if(res) {
+            this.spinnerService.hide()
+          }
+          this.partnerInvoiceListing = [].concat(res);
+          // for(var i = 0; i < this.partnerInvoiceListing.length; i++) {
+          //   this.incentiveID = this.partnerInvoiceListing[i].incentiveID
+          // }
+          // this.partnerInvoiceListing.forEach((x) => {
+          //   this.incentiveID = x.incentiveID
+          // })
+          
+        }
+      )
+  }
+
+  routeToPartnerInvoiceListing() {
+    this.router.navigate(["/partner-invoice-listing/"]);
+  }
+
+  onOpenNoteModal(incentiveID:number) {
+    //$("#memoModal").modal("show");
+    console.log(incentiveID)
+    // this.customer_Id = customer_Id;
+    // this.callToActionListingMemoForm.controls["CustomerID"].setValue(this.customer_Id);
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   routeToIncentiveEntry() {

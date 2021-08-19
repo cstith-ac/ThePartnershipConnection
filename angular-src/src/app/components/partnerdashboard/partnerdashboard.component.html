@@ -97,18 +97,6 @@
                 <span class="medium-emphasis float-right">Systems Left</span>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-12 pt0 pb-1">
-              <span class="conversion-headline high-emphasis">8 mo</span>
-              <span class="conversion-headline high-emphasis float-right">{{ item.attCount }}</span>
-            </div>
-          </div> -->
-          <!-- <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">Until Sunset</span>
-              <span class="medium-emphasis float-right">Systems Left</span>
-            </div>
-          </div> -->
           <div class="row">
             <div class="col-md-12 pb0 paddingTop-1-5">
               <span class="conversion-headline medium-emphasis">Verizon</span>
@@ -130,18 +118,6 @@
                 <span class="medium-emphasis float-right">Systems Left</span>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-12 pt0 pb-1">
-              <span class="conversion-headline high-emphasis">8 mo</span>
-              <span class="conversion-headline high-emphasis float-right">{{ item.verizonCount }}</span>
-            </div>
-          </div>
-          <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">Until Sunset</span>
-              <span class="medium-emphasis float-right">Systems Left</span>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -159,10 +135,10 @@
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="ls-1 mb-1 headline-5 high-emphasis" (click)="routeToCancelQueueList()">Pending Cancellations</h5>
+              <h5 class="ls-1 mb-1 headline-5 high-emphasis" (click)="routeToCancelQueueList()" [(ngbTooltip)]="showPendingCancellationList">Pending Cancellations</h5>
             </div> 
             <div class="col text-right">
-              <i class="fas fa-arrow-right arrow" (click)="routeToCancelQueueList()"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToCancelQueueList()" [(ngbTooltip)]="showPendingCancellationList"></i>
             </div>
           </div>
         </div>
@@ -252,11 +228,17 @@
         <div class="card-header paddingBottom-14px border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="mb-1 mt-1 headline-5" (click)="routeToIncentiveEntry()">Incentives</h5>
+              <h5 class="mb-1 mt-1 headline-5" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing">Incentives</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right arrow" (click)="routeToIncentiveEntry()"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing"></i>
             </div>
+            <!-- <div class="col">
+              <h5 class="mb-1 mt-1 headline-5" (click)="openPartnerInvoiceListingModal(content)" [(ngbTooltip)]="showPartnerInvoiceListing">Incentives</h5>
+            </div>
+            <div class="col text-right">
+              <i class="fas fa-arrow-right arrow" (click)="openPartnerInvoiceListingModal(content)" [(ngbTooltip)]="showPartnerInvoiceListing"></i>
+            </div> -->
           </div>
         </div>
         <div class="card-body paddingTop-14px">
@@ -310,7 +292,7 @@
             </div>
           </div>
           <div class="row float-right pt-4 pb-1">
-            <button class="btn btn-secondary" (click)="routeToIncentiveEntry()"><i class="fas fa-plus pr-2"></i>Create</button>
+            <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" ><i class="fas fa-plus pr-2"></i>Create</button>
           </div>
         </div>
       </div>
@@ -337,56 +319,11 @@
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-4">
             </div>
-          </div>
-
-          <!-- <div class="row">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="subtitle-2 medium-emphasis">Invoices On Hold</span>
-              <span class="body-2 high-emphasis float-right">$2,587</span>
-            </div>
-          </div>
-          <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="caption high-emphasis float-right">9</span>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="subtitle-2 medium-emphasis">Invoices Approved</span>
-              <span class="high-emphasis float-right">$2,587</span>
-            </div>
-          </div>
-          <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">Last 30 Days</span>
-              <span class="high-emphasis float-right">9</span>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="subtitle-2 medium-emphasis">Invoices Paid</span>
-              <span class="body-2 high-emphasis float-right">$2,587</span>
-            </div>
-          </div>
-          <div class="row divider-horizontal">
-            <div class="col-md-12 pt-2 pb-1">
-              <span class="medium-emphasis">Last 30 Days</span>
-              <span class="caption high-emphasis float-right">9</span>
-            </div>
-          </div> -->
+          </div>        
         </div>
-        
       </div>
     </div>
     <div class="col-xl-3 mb-5">
-      <!-- <div class="row">
-        <div class="col-md-12 bg-dark overlay-text">
-          <p class="overlay-text text-center under-construction">Under Construction</p>
-          <p class="overlay-text text-center content-coming">Content Coming Soon</p>
-        </div>
-      </div> -->
       <div class="card">
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
@@ -536,6 +473,142 @@
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>
+
+<!-- Partner Invoice Listing Modal -->
+<!-- <div class="modal fade" id="partnerInvoiceListingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-900">
+      <div class="modal-content">
+          <div class="modal-header">
+              <div class="col-md-12">
+                  <p>Ticket Note</p>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <div class="card">
+              <div class="card-header border-0 paddingBottom-14px">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h5 class="mb-1 mt-1 headline-5">Partner Invoice Listing</h5>
+                  </div>
+                  <div class="col text-right">
+                    <i class="fas fa-arrow-right arrow"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body paddingTop-14px">
+                <div class="row">
+                  <div class="col-md-12 pt-2 pb-4">
+                    <table class="table table-responsive">
+                      <thead>
+                        <tr>
+                          <th scope="col">IncentiveID</th>
+                          <th scope="col">Your Invoice #</th>
+                          <th scope="col">Invoice Date</th>
+                          <th scope="col">Invoice Amount</th>
+                          <th scope="col">Customer Number</th>
+                          <th scope="col">Customer Name</th>
+                          <th scope="col">Alarm Connections #</th>
+                          <th scope="col">Entered into the System</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Approved Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let invoice of partnerInvoiceListing">
+                          <td scope="row" id="{{ invoice.incentiveID }}">{{ invoice.incentiveID }}</td>
+                          <td>{{ invoice.vendorInvoiceNumber }}</td>
+                          <td>{{ invoice.invoiceDate }}</td>
+                          <td>{{ invoice.invoiceAmount }}</td>
+                          <td>{{ invoice.customer_Number }}</td>
+                          <td>{{ invoice.customer_Name }}</td>
+                          <td>{{ invoice.ticketNumber }}</td>
+                          <td>{{ invoice.dateEntered }}</td>
+                          <td>{{ invoice.determination }}</td>
+                          <td>{{ invoice.approvedAmount }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button id="" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div> -->
+
+<ng-template #content>
+  <div class="modal-header">
+      <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+          <span aria-label="true">&times;</span>
+      </button> -->
+  </div>
+  <div class="modal-body">
+      <div class="card">
+        <div class="card-header border-0 paddingBottom-14px">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="mb-1 mt-1 headline-5">Partner Invoice Listing</h5>
+            </div>
+            <div class="col text-right">
+              <i class="fas fa-arrow-right arrow"></i>
+            </div>
+          </div>
+        </div>
+        <div class="card-body paddingTop-14px">
+          <div class="row">
+            <div class="col-md-12 pt-2 pb-4">
+              <table class="table table-responsive">
+                <thead>
+                  <tr class="d-flex">
+                    <!-- <th scope="col">IncentiveID</th> -->
+                    <th scope="col" class="col-1">Your Invoice #</th>
+                    <th scope="col" class="col-1">Invoice Date</th>
+                    <th scope="col" class="col-1">Invoice Amount</th>
+                    <th scope="col" class="col-1">Customer #</th>
+                    <th scope="col" class="col-2">Customer Name</th>
+                    <th scope="col" class="col-2">Alarm Connections #</th>
+                    <th scope="col" class="col-1">Date Entered</th>
+                    <th scope="col" class="col-2">Status</th>
+                    <th scope="col" class="col-1">Approved Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="d-flex" *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                    <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
+                    <td class="col-1" (click)="onOpenNoteModal(item.incentiveID)">{{ item.vendorInvoiceNumber }}</td>
+                    <td class="col-1">{{ item.invoiceDate }}</td>
+                    <td class="col-1">${{ item.invoiceAmount }}</td>
+                    <td class="col-1">{{ item.customer_Number }}</td>
+                    <td class="col-2">{{ item.customer_Name }}</td>
+                    <td class="col-2">{{ item.ticketNumber }}</td>
+                    <td class="col-1">{{ item.dateEntered }}</td>
+                    <td class="col-2">{{ item.determination }}</td>
+                    <td class="col-1">${{ item.approvedAmount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                    [collectionSize]="partnerInvoiceListing?.length"
+                    [(page)]="page" 
+                    [maxSize]="5" 
+                    [rotate]="true" 
+                    [ellipses]="false" 
+                    [boundaryLinks]="true"
+                    class="d-flex justify-content-center mt-5">
+                  </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</ng-template>
 
 <!-- <div class="ml-4 mr-4">
   <div class="row card-deck">

@@ -51,6 +51,7 @@ import { IncentivelaborchargesComponent } from './components/incentivelaborcharg
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
 import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
+import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -201,6 +202,11 @@ const routes: Routes = [
   {
     path: 'cancel-queue-list',
     component: CancelqueuelistComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'partner-invoice-listing',
+    component: PartnerinvoicelistingComponent,
     canActivate: [AuthGuard, PartnerGuard]
   },
   {
