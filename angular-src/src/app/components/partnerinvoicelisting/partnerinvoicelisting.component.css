@@ -78,3 +78,12 @@
     line-height: 1.5rem;
     letter-spacing: 0.006rem;
 }
+::ng-deep .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    border-color: #23036A;
+    background-color: #23036A;
+}
+.border-invoice-status {
+    border: 1px solid rgb(33,33,33,0.08);
+}

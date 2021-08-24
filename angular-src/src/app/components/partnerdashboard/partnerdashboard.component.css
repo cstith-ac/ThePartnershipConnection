@@ -165,14 +165,31 @@
 .arrow {
     color: rgba(65, 65, 65, 1);
 }
-.progress {
+::ng-deep .progress {
     background-color: rgba(90,189,120,0.24);
     filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
     border-radius: 1px;
+    height: 12px;
 }
-/* .progress-bar {
-    background-color: #ca5856;
-} */
+::ng-deep .progress-bar .ng-star-inserted {
+    color: #797979 !important;
+}
+::ng-deep .bg-success.progress-bar .ng-star-inserted {
+    color: #fff !important;
+    font-size: 0.623rem;
+    font-family: 'SourceSansPro', sans-serif;
+    font-style: normal;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+}
+::ng-deep .bg-custom.progress-bar .ng-star-inserted {
+    color: #fff !important;
+    font-size: 0.623rem;
+    font-family: 'SourceSansPro', sans-serif;
+    font-style: normal;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+}
 /* ::ng-deep .progress-bar {
     background-color: #ca5856 !important;
 } */
@@ -184,6 +201,10 @@
 ::ng-deep div.bg-success {
     background-color: #5ABD78!important;
     filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14)); 
+}
+::ng-deep div.bg-custom {
+    background-color: #23036A !important; 
+    filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 ::ng-deep div.bg-warning {
     background-color: #FDFF7A!important; 

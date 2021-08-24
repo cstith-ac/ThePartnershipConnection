@@ -385,6 +385,9 @@ p {
 #maxWidth-900 {
     max-width: 900px;
 }
+#maxWidth-1160 {
+    max-width: 1160px;
+}
 
 .tabs {
     max-width: 640px;

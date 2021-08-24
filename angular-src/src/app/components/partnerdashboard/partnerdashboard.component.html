@@ -35,6 +35,7 @@
           <p *ngIf="(item.progressPercent < 10)">
             <ngb-progressbar 
               type="success" 
+              [showValue]="true"
               [(value)]="threegConversionValue"
               [striped]="false"
               [(ngbTooltip)]="threegConversionprogress"
@@ -43,7 +44,8 @@
           </p>
           <p *ngIf="(item.progressPercent === 10) || (item.progressPercent === 11) || (item.progressPercent === 12) || (item.progressPercent === 13) || (item.progressPercent === 14) || (item.progressPercent === 15)">
             <ngb-progressbar 
-              type="warning" 
+              type="custom" 
+              [showValue]="true"
               [(value)]="threegConversionValue"
               [striped]="false"
               [(ngbTooltip)]="threegConversionprogress"
@@ -53,6 +55,7 @@
           <p *ngIf="item.progressPercent > 15">
             <ngb-progressbar 
               type="danger" 
+              [showValue]="true"
               [(value)]="threegConversionValue"
               [striped]="false"
               [(ngbTooltip)]="threegConversionprogress"
@@ -83,10 +86,10 @@
           </div>
           <div class="row">
             <div class="col-sm-6 pt-2 pb-0">
-              <span class="conversion-headline high-emphasis">8 mo</span>
+              <span class="conversion-headline high-emphasis">{{ monthDiffAtt }} mo</span>
             </div>
             <div class="col-xs-6 pt-2 pb-0">
-              <span class="conversion-headline high-emphasis float-right">204</span>
+              <span class="conversion-headline high-emphasis float-right">{{ item.attCount }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -104,10 +107,10 @@
           </div>
           <div class="row">
             <div class="col-sm-6 pt-2 pb-0">
-              <span class="conversion-headline high-emphasis">8 mo</span>
+              <span class="conversion-headline high-emphasis">{{ monthDiffVerizon }} mo</span>
             </div>
             <div class="col-xs-6 pt-2 pb-0">
-              <span class="conversion-headline high-emphasis float-right">204</span>
+              <span class="conversion-headline high-emphasis float-right">{{ item.verizonCount }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -165,7 +168,7 @@
                     <p>{{ item.highRMRCancelPerson }}</p>
                   </div>
                   <div class="col-md-6 col-sm-6 col-6">
-                    <p class="text-right">${{ item.highRMRCancelValue }} RMR</p>
+                    <p class="text-right">{{ item.highRMRCancelValue | currency }} RMR</p>
                   </div>
                 </div>
               </div>
@@ -227,10 +230,10 @@
       <div class="card">
         <div class="card-header paddingBottom-14px border-0">
           <div class="row align-items-center">
-            <div class="col">
-              <h5 class="mb-1 mt-1 headline-5" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing">Incentives</h5>
+            <div class="col-10">
+              <h5 class="mb-1 mt-1 headline-5" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing">Invoices &amp; Incentives</h5>
             </div>
-            <div class="col text-right">
+            <div class="col-2 text-right">
               <i class="fas fa-arrow-right arrow" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing"></i>
             </div>
             <!-- <div class="col">
@@ -292,7 +295,8 @@
             </div>
           </div>
           <div class="row float-right pt-4 pb-1">
-            <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" ><i class="fas fa-plus pr-2"></i>Create</button>
+            <!-- <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" ><i class="fas fa-plus pr-2"></i>Create</button> -->
+            <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Create</button>
           </div>
         </div>
       </div>
@@ -313,7 +317,7 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Tickets Pending</span>
-              <span class="body-2 high-emphasis float-right">4</span>
+              <span class="body-2 high-emphasis float-right">{{ item.serviceTicketsPending }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -389,7 +393,6 @@
       </div>
     </div>
     <div class="col-xl-3 mb-5">
-      
       <div class="card">
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
@@ -405,14 +408,15 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-4">
               <span class="subtitle-2 medium-emphasis text-uppercase">Last Month</span>
-              <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth }}%</span>
+              <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth | number: '1.0-0' }}%</span>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <p  *ngIf="(item.attritionLastMonth < 10)">
                 <ngb-progressbar 
-                  type="success"
+                  type="danger"
+                  [showValue]="true"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"
@@ -422,6 +426,7 @@
               <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
                 <ngb-progressbar 
                   type="warning"
+                  [showValue]="true"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"
@@ -430,11 +435,13 @@
               </p>
               <p *ngIf="item.attritionLastMonth > 15">
                 <ngb-progressbar 
-                  type="danger"
+                  type="success"
+                  [showValue]="true"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"
                   tooltipClass="transparent-tooltip"
+                  [max]=30
                 ></ngb-progressbar>
               </p>
             </div>
@@ -443,25 +450,25 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 6 Months</span>
-              <span class="body-2 high-emphasis float-right">XX%</span>
+              <span class="body-2 high-emphasis float-right">{{ item.attritionLast6Months.toFixed(1) }}%</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="caption high-emphasis float-right">{{ item.attritionLast6Months }}</span>
+              <!-- <span class="caption high-emphasis float-right">{{ item.attritionLast6Months }}</span> -->
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Last 12 Months</span>
-              <span class="body-2 high-emphasis float-right">XX%</span>
+              <span class="body-2 high-emphasis float-right">{{ item.attritionLast12Months.toFixed(1) }}%</span>
             </div>
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <span class="body-2 high-emphasis">XX</span>
-              <span class="caption high-emphasis float-right">{{ item.attritionLast12Months }}</span>
+              <!-- <span class="body-2 high-emphasis">XX</span>
+              <span class="caption high-emphasis float-right">{{ item.attritionLast12Months }}</span> -->
             </div>
           </div>
         </div>
@@ -603,6 +610,68 @@
                     [boundaryLinks]="true"
                     class="d-flex justify-content-center mt-5">
                   </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</ng-template>
+
+<ng-template #comingSoon>
+  <div class="modal-header">
+      <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+          <span aria-label="true">&times;</span>
+      </button> -->
+  </div>
+  <div class="modal-body">
+      <div class="card">
+        <div class="card-header border-0 paddingBottom-14px">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="mb-1 mt-1 text-center headline-5">Incentive Entry Coming Soon</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body paddingTop-14px">
+          <div class="row">
+            <div class="col-md-12 pt-2 pb-4">
+              <!-- <table class="table table-responsive">
+                <thead>
+                  <tr class="d-flex">
+                    <th scope="col" class="col-1">Your Invoice #</th>
+                    <th scope="col" class="col-1">Invoice Date</th>
+                    <th scope="col" class="col-1">Invoice Amount</th>
+                    <th scope="col" class="col-1">Customer #</th>
+                    <th scope="col" class="col-2">Customer Name</th>
+                    <th scope="col" class="col-2">Alarm Connections #</th>
+                    <th scope="col" class="col-1">Date Entered</th>
+                    <th scope="col" class="col-2">Status</th>
+                    <th scope="col" class="col-1">Approved Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="d-flex" *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                    <td class="col-1" (click)="onOpenNoteModal(item.incentiveID)">{{ item.vendorInvoiceNumber }}</td>
+                    <td class="col-1">{{ item.invoiceDate }}</td>
+                    <td class="col-1">${{ item.invoiceAmount }}</td>
+                    <td class="col-1">{{ item.customer_Number }}</td>
+                    <td class="col-2">{{ item.customer_Name }}</td>
+                    <td class="col-2">{{ item.ticketNumber }}</td>
+                    <td class="col-1">{{ item.dateEntered }}</td>
+                    <td class="col-2">{{ item.determination }}</td>
+                    <td class="col-1">${{ item.approvedAmount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                    [collectionSize]="partnerInvoiceListing?.length"
+                    [(page)]="page" 
+                    [maxSize]="5" 
+                    [rotate]="true" 
+                    [ellipses]="false" 
+                    [boundaryLinks]="true"
+                    class="d-flex justify-content-center mt-5">
+              </ngb-pagination> -->
             </div>
           </div>
         </div>

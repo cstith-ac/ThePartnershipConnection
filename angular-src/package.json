@@ -1,6 +1,6 @@
 {
   "name": "angular-src",
-  "version": "1.1.23",
+  "version": "1.1.24",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
@@ -51,6 +51,7 @@
     "jquery": "^3.5.1",
     "jquery-ui-dist": "^1.12.1",
     "libphonenumber-js": "^1.9.10",
+    "moment": "^2.29.1",
     "ng-flash-messages": "^0.3.0",
     "ngx-filter-pipe": "^2.1.2",
     "ngx-mask": "^11.1.4",

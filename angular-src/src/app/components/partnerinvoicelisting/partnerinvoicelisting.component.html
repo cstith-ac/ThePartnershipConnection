@@ -24,7 +24,7 @@
                 <tbody>
                     <tr *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                       <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
-                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.incentiveID)">{{ item.vendorInvoiceNumber }}</td>
+                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.incentiveID, item.vendorInvoiceNumber, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.determination, item.relevantMemo, item.customer_Number, item.customer_Name, item.relevantComment)">{{ item.vendorInvoiceNumber }}</td>
                       <td>{{ item.invoiceDate }}</td>
                       <td>${{ item.invoiceAmount }}</td>
                       <td>{{ item.customer_Number }}</td>
@@ -32,7 +32,11 @@
                       <td>{{ item.ticketNumber }}</td>
                       <td>{{ item.dateEntered }}</td>
                       <td>{{ item.determination }}</td>
-                      <td>${{ item.approvedAmount }}</td>
+                      <td *ngIf="item.approvedAmount === 'On Hold' || item.approvedAmount === 'Pending'; else dollarAmountAvailBlock">{{ item.approvedAmount }}</td>
+                      <ng-template #dollarAmountAvailBlock>
+                        <td>${{ item.approvedAmount }}</td>
+                      </ng-template>
+                      <!-- <td>${{ item.approvedAmount }}</td> -->
                     </tr>
                   </tbody>
             </table>
@@ -55,7 +59,7 @@
 
 <!-- Partner Invoice Listing Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" id="maxWidth-900">
+    <div class="modal-dialog" id="maxWidth-1160">
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-12">
@@ -67,110 +71,86 @@
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">
-                    <div class="card-body p-0">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6" *ngFor="let item of partnerInvoiceListing">
-                                <p>{{ item.incentiveID }}</p>
-                                <!-- <p> 
-                                    <span class="subtitle-2">Customer #: </span> 
-                                    <span class="body-2">{{ customer_Number }}</span></p>
-                                <p>
-                                    <span class="subtitle-2">Customer Name: </span>
-                                    <span class="body-2"> {{ customer_Name }}</span>
-                                    
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Your Invoice #</span> 
                                 </p>
                                 <p>
-                                    <span class="subtitle-2">Reason for cancellation: </span>
-                                    <span class="body-2">{{ rmR_Reason_Code }}</span>
-                                     
+                                    <span class="body-2">{{ vendorInvoiceNumber }}</span>
                                 </p>
+                                <p>Alarm Connections Reference </p>
                                 <p>
-                                    <span class="subtitle-2">Cancelled RMR: </span>
-                                    <span class="body-2">{{ cancelledRMR | currency }}</span>
-                                     
+                                    <span>Approved Amount {{ approvedAmount }}</span>
+                                    <span>Hold Reason {{ heldReason }}</span>
                                 </p>
-                                <p>
-                                    <span class="subtitle-2">Balance of Contract: </span>
-                                    <span class="body-2">{{ site.balance_Of_Contract | currency }}</span>
-                                     
-                                </p>
-                                <p>
-                                    <span class="subtitle-2">Notice provided on: </span>
-                                    <span class="body-2">{{ notice_Date | date }}</span>
-                                     
-                                </p>
-                                <p>
-                                    <span class="subtitle-2">Cancellation effective: </span>
-                                    <span class="body-2">{{ effective_Date | date }}</span>
-                                    
-                                </p>
-                                <p>
-                                    <span class="subtitle-2">Phone #: </span>
-                                    <span class="body-2">{{ site.primaryPhone }}</span>
-                                      <span *ngIf="site.alternatePhone">
-                                        <span class="subtitle-2">| Alternate Phone:</span>  
-                                        <span class="body-2">{{ site.alternatePhone }}</span>     
-                                    </span>
-                                </p>
-                                <p>
-                                    <span class="subtitle-2">Email: </span>
-                                    <span class="body-2">
-                                        <a href="mailto:{{e_Mail}}">{{ e_Mail }}</a>
-                                    </span>
-                                   
-                                </p>
-                                <p>
-                                    <span class="subtitle-2"></span>
-                                    <span class="body-2">{{ site.address_1 }}</span>
-                                    
-                                </p>
-                                <p *ngIf="site.address_2">
-                                    <span class="subtitle-2">Address 2: </span>
-                                    <span class="body-2">{{ site.address_2 }}</span>
-                                     
-                                </p>
-                                <p>
-                                    <span class="subtitle-2"></span>
-                                    <span class="body-2">{{ site.city }}, {{ site.state }} {{ site.zipCode }}</span>
-                                    
-                                </p> 
-                                <p>
-                                    <span class="subtitle-2">Cancellation Type: </span>
-                                    <span class="body-2">{{ full_Cancel }}</span>
-                                     
-                                </p> -->
                             </div>
-                            <div class="col-md-6">
-                                <div>
-                                    <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
-                                </div>
-                                
-                                <!-- <div class="card mt-5">
-                                    <div class="card-body">
-                                        <p class="subtitle-2">Customer's Comment</p>
-                                        <p *ngIf="memo === ''; else noCommentBlock" class="body-2">There are no comments available for this customer.</p>
-                                        <ng-template #noCommentBlock>
-                                            <p class="body-2">{{ memo }}</p>
-                                        </ng-template>
-                                    </div>
-                                </div> -->
+                            <div class="col">
+                                <p>Invoice Date {{ invoiceDate }}</p>
+                                <p>Date Entered {{ dateEntered }}</p>
+                            </div>
+                            <div class="col">
+                                <p>Amount Submitted</p>
+                                <p>Processing Status {{ determination }}</p>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
+                                <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2">There is no incentive available</p>
+                                <ng-template #incentiveIDAvailBlock>
+                                    <button type="submit" class="btn btn-block btn-secondary" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                </ng-template>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-md-12">
-                                <div ngbDropdown class="d-inline-block">
-                                    <label class="d-block">Business Name:</label>
-                                    <select class="form-control form-control-md" id="callSummarySiteSelect" style="height: calc(1.5em + 1.3rem);" >
-                                        <option *ngFor="let site of cancelQueueSiteList" value="{{ site.cancel_Queue_Site_Id }}" [ngValue]="site.cancel_Queue_Site_Id" (change)="onChangeBusinessName($event)">
-                                            <span class="body-2">{{ site.business_Name }} </span>
-                                            <span class="body-2">{{ site.address_1 }}, </span>
-                                            <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }}, </span> 
-                                            <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
-                                        </option>
-                                    </select>
+                        <div class="row border-invoice-status">
+                            <div class="col">
+                                <p>Check Number</p>
+                                <p>Credit Amount Taken</p>
+                            </div>
+                            <div class="col">
+                                <p>Check Date</p>
+                                <p>Credit Date</p>
+                            </div>
+                            <div class="col">
+                                <p>Amount Paid</p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col border-invoice-status mr-1 rounded">
+                                <p>Customer Information</p>
+                                <p>
+                                    <span>{{ customer_Number }}</span> -
+                                    <span>{{ customer_Name }}</span>
+                                </p>
+                                <p>1234 Main Street</p>
+                                <p>York, PA 17327</p>
+                                <p>CS Account #</p>
+                                <p>ST123-1221</p>
+                            </div>
+                            <div class="col border-invoice-status ml-1 rounded">
+                                <div class="tabs mt-3" id="padding0">
+                                    <div class="tab-button-outer">
+                                        <ul id="tab-button">
+                                            <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Comments</a></li>
+                                            <li class="menu" (click)="toggleShow('tab-2')"><a href="#tab02">Memo</a></li>
+                                        </ul>
+                                    </div>
+                            
+                                    <div class="tabs-stage" [ngSwitch]="activeTab">
+                                        <div id="tab-1" *ngSwitchCase="'tab-1'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
+                                          <pre id="relevantComment">
+                                            {{ relevantComment }}
+                                          </pre>
+                                        </div>
+                                        <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
+                                          <pre id="relevantMemo">
+                                            {{ relevantMemo }}
+                                          </pre>
+                                        </div>
+                                      </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>

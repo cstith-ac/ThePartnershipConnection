@@ -10,6 +10,7 @@ import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
+const moment = require('moment');
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -63,17 +64,24 @@ export class PartnerdashboardComponent implements OnInit {
   user;
   firstName;
   // attritionValue=10;
-  attritionValue;
   // attritionProgress="10%";
-  attritionProgress;
   // threegConversionValue=78;
-  threegConversionValue;
   // threegConversionprogress="78%";
+  attritionValue;
+  attritionProgress;
+  threegConversionValue;
   threegConversionprogress;
   showPendingCancellationList = "Show Pending Cancellation List";
   showPartnerInvoiceListing = "Show Partner Invoice Listing";
   createAnInvoice = "Create an invoice";
   closeResult = '';
+  todaysDate;
+  attSunsetDate;
+  verizonSunsetDate;
+  monthDiffAtt;
+  monthDiffVerizon;
+  // attSunsetDate = new Date("February 22, 2022 00:00:00");
+  // verizonSunsetDate = new Date("November 1, 2022 00:00:00");
 
   page = 1;
   count = 0;
@@ -98,6 +106,8 @@ export class PartnerdashboardComponent implements OnInit {
     // if(this.authService.isTestUser) {
     //   this.router.navigate(['/forbidden'])
     // }
+    this.getMonthDiff();
+
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -140,6 +150,7 @@ export class PartnerdashboardComponent implements OnInit {
         this.partnerLandingPage = res;
         for(var i = 0; i < this.partnerLandingPage.length; i++) {
           console.log(this.partnerLandingPage[i].highRMRCancelPerson);
+          console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
           // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
           // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
           this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
@@ -154,6 +165,17 @@ export class PartnerdashboardComponent implements OnInit {
         }
       }
     )
+  }
+
+  getMonthDiff() {
+    this.todaysDate = moment(moment(), 'DD-MM-YYYY')
+    this.attSunsetDate = moment('22-02-2022', 'DD-MM-YYYY');
+    this.verizonSunsetDate = moment('01-11-2022' ,'DD-MM-YYYY');
+
+    this.monthDiffAtt = this.attSunsetDate.diff(this.todaysDate, 'months');
+    this.monthDiffVerizon = this.verizonSunsetDate.diff(this.todaysDate, 'months');
+    console.log('Month: ' + this.monthDiffAtt);
+    console.log('Month: ' + this.monthDiffVerizon);
   }
 
   getBackgroundColor(progressPercent) {
@@ -230,6 +252,14 @@ export class PartnerdashboardComponent implements OnInit {
           
         }
       )
+  }
+
+  openComingSoonModal(comingSoon) {
+    this.modalService.open(comingSoon,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class'
+      });
   }
 
   routeToPartnerInvoiceListing() {
