@@ -24,7 +24,7 @@
                 <tbody>
                     <tr *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                       <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
-                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.incentiveID, item.vendorInvoiceNumber, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.determination, item.relevantMemo, item.customer_Number, item.customer_Name, item.relevantComment)">{{ item.vendorInvoiceNumber }}</td>
+                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber)">{{ item.vendorInvoiceNumber }}</td>
                       <td>{{ item.invoiceDate }}</td>
                       <td>${{ item.invoiceAmount }}</td>
                       <td>{{ item.customer_Number }}</td>
@@ -80,52 +80,130 @@
                                 <p>
                                     <span class="body-2">{{ vendorInvoiceNumber }}</span>
                                 </p>
-                                <p>Alarm Connections Reference </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Alarm Connections Reference</span> 
+                                </p>
                                 <p>
-                                    <span>Approved Amount {{ approvedAmount }}</span>
-                                    <span>Hold Reason {{ heldReason }}</span>
+                                    <span class="body-2">{{ ticketNumber }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Approved Amount</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ approvedAmount }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Hold Reason</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ heldReason }}</span>
                                 </p>
                             </div>
                             <div class="col">
-                                <p>Invoice Date {{ invoiceDate }}</p>
-                                <p>Date Entered {{ dateEntered }}</p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Invoice Date</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ invoiceDate }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Date Entered</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ dateEntered }}</span>
+                                </p>
                             </div>
                             <div class="col">
-                                <p>Amount Submitted</p>
-                                <p>Processing Status {{ determination }}</p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Amount Submitted</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">${{ invoiceAmount }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Processing Status</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ determination }}</span>
+                                </p>
+                                <!-- <p>Amount Submitted</p>
+                                <p>Processing Status {{ determination }}</p> -->
                             </div>
                             <div class="col">
                                 <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
-                                <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2">There is no incentive available</p>
+                                <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
                                 <ng-template #incentiveIDAvailBlock>
-                                    <button type="submit" class="btn btn-block btn-secondary" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                    <button type="submit" class="btn btn-block btn-secondary mt-4" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
                                 </ng-template>
                             </div>
                         </div>
                         <div class="row border-invoice-status">
                             <div class="col">
-                                <p>Check Number</p>
-                                <p>Credit Amount Taken</p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Check Number</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ checkNumber }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Credit Amount Taken</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ creditAmount }}</span>
+                                </p>
+
+                                <!-- <p>Check Number</p>
+                                <p>Credit Amount Taken</p> -->
                             </div>
                             <div class="col">
-                                <p>Check Date</p>
-                                <p>Credit Date</p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Check Date</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ checkDate }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Credit Date</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ creditDate }}</span>
+                                </p>
+
+                                <!-- <p>Check Date</p>
+                                <p>Credit Date</p> -->
                             </div>
                             <div class="col">
-                                <p>Amount Paid</p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Amount Paid</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ amountPaid }}</span>
+                                </p>
+
+                                <!-- <p>Amount Paid</p> -->
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col border-invoice-status mr-1 rounded">
-                                <p>Customer Information</p>
-                                <p>
-                                    <span>{{ customer_Number }}</span> -
-                                    <span>{{ customer_Name }}</span>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">Customer Information</span>
                                 </p>
-                                <p>1234 Main Street</p>
-                                <p>York, PA 17327</p>
-                                <p>CS Account #</p>
-                                <p>ST123-1221</p>
+                                <p>
+                                    <span class="body-2">{{ customer_Number }} </span>
+                                    <span class="body-2">{{ customer_Name }}</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ address_1 }}</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <span class="subtitle-2">CS Account #</span>
+                                </p>
+                                <p>
+                                    <span class="body-2">????</span>
+                                </p>
                             </div>
                             <div class="col border-invoice-status ml-1 rounded">
                                 <div class="tabs mt-3" id="padding0">

@@ -285,6 +285,36 @@
     text-overflow: ellipsis;
 }
 
+/***SEDONA WEB button***/
+.btn-outline-white:not(:disabled):not(.disabled):active, .btn-outline-white:not(:disabled):not(.disabled).active, .show > .btn-outline-white.dropdown-toggle {
+    color: #fff !important;
+    border-color: #90c5ee !important;
+    background-color: #90c5ee !important;
+}
+.btn-outline-white:hover {
+    color: #fff !important;
+    border-color: #90c5ee !important;
+    background-color: #90c5ee !important;
+}
+.info {
+    border: 1px solid #fdfdfd;
+    border-radius: 50px;
+    padding: 10px 15px;
+}
+.rotate {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.border-radius-50 {
+    border-radius: 50px;
+}
+.pb-8 {
+    padding-bottom: 6rem !important;
+}
+
 /* Galaxy Fold */
 /* Portrait */
 @media screen 

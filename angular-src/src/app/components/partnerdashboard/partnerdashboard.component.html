@@ -1,5 +1,19 @@
 <!--NEFF-BEGIN NEW LAYOUT-->
-<div class="header bg-gradient-partner-dashboard bg-dashboard pb-8 pt-5 pt-md-8">
+<div class="bg-gradient-partner-dashboard">
+  <div class="d-flex flex-column flex-md-row align-items-center p-3">
+    <h5 class="my-0 mr-md-auto font-weight-normal"></h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+      <a class="p-2 text-white" href="mailto:PartnerServices@AlarmConnections.Com">
+        <i class="material-icons mr-1">mail_outline</i>
+      </a>
+      <a class="p-2 text-white" href="#" [(ngbTooltip)]="info">
+        <i class="material-icons mr-1">info_outline</i>
+      </a>
+    </nav>
+    <a class="btn btn-outline-white text-uppercase text-white border-radius-50" href="https://afa.sedonaoffice.com/login.aspx" target="_blank">Sedona Web</a>
+  </div>
+</div>
+<div class="header bg-gradient-partner-dashboard bg-dashboard pb-8">
   <div class="container-fluid">
   </div>
 </div>
@@ -180,13 +194,13 @@
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center pt-3">
             <div class="col">
-              <h5 class="d-inline-block m-0 m-auto ls-1 mb-1 headline-5">Aging</h5>
+              <h5 class="d-inline-block m-0 m-auto ls-1 mb-1 headline-5" (click)="routeToTPCPartnerAgingReport()" [(ngbTooltip)]="showTPCPartnerAgingReport">Aging</h5>
             </div>
             <div class="col">
               <button type="submit" class="btn btn-secondary btn-block ml-3 float-right btn-cta" (click)="routeToCallToActionListing()"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right arrow"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToTPCPartnerAgingReport()" [(ngbTooltip)]="showTPCPartnerAgingReport"></i>
             </div>
           </div>
         </div>
@@ -248,7 +262,7 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">In Progress</span>
-              <span class="high-emphasis float-right body-2">${{ item.invoicesInProcessValue }}</span>
+              <span class="high-emphasis float-right body-2">{{ item.invoicesInProcessValue | currency }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -260,7 +274,7 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">On Hold</span>
-              <span class="body-2 high-emphasis float-right">${{ item.invoicesOnHoldValue }}</span>
+              <span class="body-2 high-emphasis float-right">{{ item.invoicesOnHoldValue | currency }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -272,7 +286,7 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Approved</span>
-              <span class="body-2 high-emphasis float-right">${{ item.invoicesApproved30daysValue }}</span>
+              <span class="body-2 high-emphasis float-right">{{ item.invoicesApproved30daysValue | currency }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -285,7 +299,7 @@
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <span class="subtitle-2 medium-emphasis">Paid</span>
-              <span class="body-2 high-emphasis float-right">${{ item.invoicesPaid30daysValue }}</span>
+              <span class="body-2 high-emphasis float-right">{{ item.invoicesPaid30daysValue | currency }}</span>
             </div>
           </div>
           <div class="row divider-horizontal">
@@ -399,24 +413,25 @@
             <div class="col">
               <h5 class="mb-1 mt-1 headline-5">Attrition</h5>
             </div>
-            <div class="col text-right">
+            <!-- <div class="col text-right">
               <i class="fas fa-arrow-right arrow"></i>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="card-body paddingTop-14px">
           <div class="row">
             <div class="col-md-12 pt-2 pb-4">
               <span class="subtitle-2 medium-emphasis text-uppercase">Last Month</span>
-              <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth | number: '1.0-0' }}%</span>
+              <!-- <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth | number: '1.0-0' }}%</span> -->
+              <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth.toFixed(1) }}%</span>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
               <p  *ngIf="(item.attritionLastMonth < 10)">
                 <ngb-progressbar 
-                  type="danger"
-                  [showValue]="true"
+                  type="success"
+                  [showValue]="false"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"
@@ -426,7 +441,7 @@
               <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
                 <ngb-progressbar 
                   type="warning"
-                  [showValue]="true"
+                  [showValue]="false"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"
@@ -435,8 +450,8 @@
               </p>
               <p *ngIf="item.attritionLastMonth > 15">
                 <ngb-progressbar 
-                  type="success"
-                  [showValue]="true"
+                  type="danger"
+                  [showValue]="false"
                   [(value)]="attritionValue"
                   [striped]="false"
                   [(ngbTooltip)]="attritionProgress"

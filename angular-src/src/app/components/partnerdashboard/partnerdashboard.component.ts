@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
 const moment = require('moment');
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -73,7 +74,9 @@ export class PartnerdashboardComponent implements OnInit {
   threegConversionprogress;
   showPendingCancellationList = "Show Pending Cancellation List";
   showPartnerInvoiceListing = "Show Partner Invoice Listing";
+  showTPCPartnerAgingReport = "Show Customer Aging List";
   createAnInvoice = "Create an invoice";
+  info = "The Partnership Connection, Version: " + environment.appVersion;
   closeResult = '';
   todaysDate;
   attSunsetDate;
@@ -281,6 +284,10 @@ export class PartnerdashboardComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  routeToTPCPartnerAgingReport() {
+    this.router.navigate(["/tpc-partner-aging-report"]);
   }
 
   routeToIncentiveEntry() {

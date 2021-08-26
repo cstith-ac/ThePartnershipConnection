@@ -32,5 +32,11 @@ namespace WebAPI.Models
         public string RelevantMemo { get; set; }
         public string RelevantComment { get; set; }
         public int ReportOrder { get; set; }
+        public string Address_1 { get; set; }
+        public string Address_2 { get; set; }
+        public string Address_3 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
     }
 }

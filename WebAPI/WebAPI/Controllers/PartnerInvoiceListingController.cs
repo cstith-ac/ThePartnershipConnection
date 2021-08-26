@@ -77,7 +77,13 @@ namespace WebAPI.Controllers
                     CreditDate = s.CreditDate,
                     RelevantMemo = s.RelevantMemo,
                     RelevantComment = s.RelevantComment,
-                    ReportOrder = s.ReportOrder
+                    ReportOrder = s.ReportOrder,
+                    Address_1 = s.Address_1,
+                    Address_2 = s.Address_2,
+                    Address_3 = s.Address_3,
+                    City = s.City,
+                    State = s.State,
+                    ZipCode = s.ZipCode
                 }).ToList();
 
                 return Lst;

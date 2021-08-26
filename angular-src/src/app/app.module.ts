@@ -8,6 +8,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { AvatarModule } from 'ngx-avatar'; 
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthGuard } from '../app/guards/auth.guard';
@@ -22,6 +23,7 @@ import { SortPipe } from './_helpers/sort.pipe';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FilterPipe } from './_helpers/filter.pipe';
 import { ListFilterPipe } from './_helpers/listFilterPipe';
+import { Filter90DayPipe } from './_helpers/filter90-day.pipe';
 import { PointerStyleDirective } from './_helpers/pointer-style.directive';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
@@ -89,6 +91,8 @@ import { IncentiveDashboardTestComponent } from './components/incentive-dashboar
 import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
+import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
+
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
@@ -146,12 +150,14 @@ import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisti
     IncentivelaborchargesComponent,
     PointerStyleDirective,
     FilterSitePipe,
+    Filter90DayPipe,
     FilterCentralStationPipe,
     IncentiveDashboardTestComponent,
     ListFilterPipe,
     CalltoactionlistingComponent,
     CancelqueuelistComponent,
-    PartnerinvoicelistingComponent
+    PartnerinvoicelistingComponent,
+    TpcpartneragingreportComponent
     //CustomerTestComponent
   ],
   imports: [
@@ -180,7 +186,8 @@ import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisti
     NgbModule,
     GridModule,
     ExcelModule,
-    AutocompleteLibModule
+    AutocompleteLibModule,
+    AvatarModule
   ],
   providers: [ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
   bootstrap: [AppComponent]

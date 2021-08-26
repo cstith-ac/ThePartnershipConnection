@@ -3,7 +3,7 @@ import { Component, OnInit, ElementRef, ViewChild, Input, EventEmitter, Output, 
 declare var $: any;
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, UrlSegment } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { RouteService } from '../../services/route.service';
 import { PInformation } from 'src/app/models/pinformation';
@@ -96,9 +96,15 @@ export class SidenavComponent implements OnInit {
     //   }, 1)
     // }
     this.currentUser$.subscribe(res => {
-      //console.log(res)
+      // console.log(res.userName)
+      // let user = JSON.stringify(res.userName);
+      // console.log(user)
+      // let firstInitial = String(user).charAt(0).toUpperCase();
+      // console.log(firstInitial)
     })
 
+    // let user = localStorage.getItem('userName');
+    // console.log(user)
   }
 
   ngAfterViewInit() {

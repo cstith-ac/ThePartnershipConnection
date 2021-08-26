@@ -1,2 +1,10 @@
 <!-- {{ currentUser$ | async }} -->
-<span class="username">{{ user.email }}</span>
+<span class="username mr-2">{{ user.email }}</span>
+<ngx-avatar 
+    bgColor="#e7f5ec" 
+    fgColor="#207f40" 
+    size="28" 
+    [name]=firstInitial 
+    value="50%"
+    class="avatar-style">
+</ngx-avatar>

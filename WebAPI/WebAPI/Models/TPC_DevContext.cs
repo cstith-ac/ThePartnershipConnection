@@ -79,6 +79,7 @@ namespace WebAPI.Models
         public virtual DbSet<CancelQueueList> GetCancelQueueLists { get; set; }
         public virtual DbSet<CancelQueueSiteList> GetCancelQueueSiteLists { get; set; }
         public virtual DbSet<PartnerInvoiceListing> GetPartnerInvoiceListings { get; set; }
+        public virtual DbSet<TPCPartnerAgingReport> GetTPCPartnerAgingReports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -522,6 +523,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<PartnerInvoiceListing>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<TPCPartnerAgingReport>(entity =>
             {
                 entity.HasNoKey();
             });

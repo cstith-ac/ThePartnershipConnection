@@ -24,15 +24,30 @@ export class PartnerinvoicelistingComponent implements OnInit {
   tableSizes = [5,10,15,25,50,100,150,200];
   incentiveID;
   vendorInvoiceNumber;
+  invoiceAmount;
   invoiceDate;
   approvedAmount;
   dateEntered;
   heldReason;
+
+  checkNumber;
+  checkDate;
+  amountPaid;
+  creditAmount;
+  creditDate;
+
   determination;
   customer_Number;
   customer_Name;
   relevantMemo;
   relevantComment;
+  address_1;
+  address_2;
+  address_3;
+  city;
+  state;
+  zipCode;
+  ticketNumber;
   activeTab: string = "tab-1"
 
   id:string;
@@ -115,25 +130,38 @@ export class PartnerinvoicelistingComponent implements OnInit {
   }
 
   toggleShow(newTab: string): void {
-    //this.isShown = !this.isShown;
     this.activeTab = newTab;
   }
 
-  onOpenPartnerInvoiceListingModal(incentiveID: number, vendorInvoiceNumber: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string) {
+  onOpenPartnerInvoiceListingModal(incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string) {
     $("#detailsModal").modal("show");
     
     this.incentiveID = incentiveID;
     this.vendorInvoiceNumber = vendorInvoiceNumber;
+    this.invoiceAmount = invoiceAmount;
     this.invoiceDate = invoiceDate;
     this.approvedAmount = approvedAmount;
     this.dateEntered = dateEntered;
     this.heldReason = heldReason;
+    this.checkNumber = checkNumber;
+    this.checkDate = checkDate;
+    this.amountPaid = amountPaid;
+    this.creditAmount = creditAmount;
+    this.creditDate = creditDate;
     this.determination = determination;
     this.customer_Number = customer_Number;
     this.customer_Name = customer_Name;
     this.relevantMemo = relevantMemo;
     this.relevantComment = relevantComment;
-    // console.log(this.incentiveID)
+    this.address_1 = address_1;
+    this.address_2 = address_2;
+    this.address_3 = address_3;
+    this.city = city;
+    this.state = state;
+    this.zipCode = zipCode;
+    this.ticketNumber = ticketNumber;
+    console.log(this.customer_Number)
+    console.log(this.customer_Name)
   }
 
   onOpenMemo() {

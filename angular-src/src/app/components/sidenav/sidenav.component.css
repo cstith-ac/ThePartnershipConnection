@@ -19,6 +19,26 @@ body {
     pointer-events: none;
 }
 
+.navbar-bg {
+  background-color: rgba(35, 3, 106, 1);
+  border-bottom: 2px solid rgba(144,197,238,1);
+}
+.nav-link {
+  color: #525f7f00;
+}
+
+.afa-text-black-50 {
+  color: transparent !important;
+}
+
+#text-logo {
+  color: #E3F1FA !important;
+}
+
+#menu-toggle {
+  color: rgba(144,197,238,1);
+}
+
 .list-group-item {
     border: 0px solid #e9ecef00;
 }

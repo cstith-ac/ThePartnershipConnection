@@ -52,6 +52,7 @@ import { IncentiveDashboardTestComponent } from './components/incentive-dashboar
 import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
+import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -193,6 +194,11 @@ const routes: Routes = [
     component: Customer3glistingComponent,
     canActivate: [AuthGuard, PartnerGuard],
     //canDeactivate: [UnsavedchangesGuard]
+  },
+  {
+    path: 'tpc-partner-aging-report',
+    component: TpcpartneragingreportComponent,
+    canActivate: [AuthGuard, PartnerGuard]
   },
   {
     path: 'call-to-action-listing',

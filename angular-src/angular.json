@@ -36,7 +36,10 @@
               "src/assets/img/forbidden_403.svg",
               "src/web.config",
               "src/assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg",
-              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png"
+              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png",
+              "src/assets/img/logo.png",
+              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.png",
+              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.svg"
             ],
             "styles": [
               {
@@ -72,12 +75,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "4mb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "8mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kb",
+                  "maximumWarning": "8kb",
                   "maximumError": "8kb"
                 }
               ]

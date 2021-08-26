@@ -11,6 +11,7 @@ export class CurrentuserComponent implements OnInit {
 
   currentUser$ = this.currentUserService.data$;
   user:any=Object;
+  firstInitial;
 
   constructor(
     public authService: AuthService,
@@ -20,6 +21,8 @@ export class CurrentuserComponent implements OnInit {
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
+        console.log(this.user.userName.charAt(0).toUpperCase())
+        this.firstInitial = this.user.userName.charAt(0).toUpperCase();
       },
       err => {
         console.log(err);

@@ -29,7 +29,7 @@ namespace WebAPI.Models
         public decimal RMRCancels { get; set; }
         public int PendingCancels7days { get; set; }
         public string HighRMRCancelPerson { get; set; }
-        public int HighRMRCancelValue { get; set; }
+        public Decimal HighRMRCancelValue { get; set; }
         public int ServiceTicketsPending { get; set; }//Service Ticket Pending
         public DateTime OldestInProgress { get; set; }
         //public int ServiceInvoicesOnHold { get; set; }
