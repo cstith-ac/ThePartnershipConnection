@@ -172,4 +172,12 @@ export class PartnerinvoicelistingComponent implements OnInit {
     console.log('add doc')
   }
 
+  openComingSoonModal(comingSoon) {
+    this.modalService.open(comingSoon,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class'
+      });
+  }
+
 }

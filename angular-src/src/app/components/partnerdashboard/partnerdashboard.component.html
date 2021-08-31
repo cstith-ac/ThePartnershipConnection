@@ -215,7 +215,7 @@
                   </div>
                   <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis text-right">Balance Due</p>
-                    <p class="text-right">${{ item.over120Value }}</p>
+                    <p class="text-right">{{ item.over120Value | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -229,7 +229,7 @@
                   </div>
                   <div class="col-md-6 col-6">
                     <p class="overline text-uppercase medium-emphasis text-right">Balance Due</p>
-                    <p class="text-right">${{ item.over90Value }}</p>
+                    <p class="text-right">{{ item.over90Value | currency }}</p>
                   </div>
                 </div>
               </div>
@@ -320,10 +320,10 @@
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="mb-1 mt-1 headline-5">Service</h5>
+              <h5 class="mb-1 mt-1 headline-5" (click)="routeToPartnerServiceListing()" [(ngbTooltip)]="showPartnerServiceListing">Service</h5>
             </div>
             <div class="col text-right">
-              <i class="fas fa-arrow-right arrow"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToPartnerServiceListing()" [(ngbTooltip)]="showPartnerServiceListing"></i>
             </div>
           </div>
         </div>

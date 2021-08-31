@@ -11,6 +11,7 @@ export class Filter90DayPipe implements PipeTransform {
     if(!TPCPartnerAgingReport || !filterText) {
         return TPCPartnerAgingReport;
     }
+    
     return TPCPartnerAgingReport.filter(list => 
         list.filterCategory.toLocaleLowerCase().startsWith((filterText.toLocaleLowerCase())));
 

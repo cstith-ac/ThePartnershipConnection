@@ -414,33 +414,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
-    // this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
-    // this is just giving the total but breaks rows
-    // setTimeout(() => {
-    //   this.foo = localStorage.getItem('totalEquipMatCalc');
-    // this.equipmentAndMaterials = parseFloat(this.foo);
-    // }, 3000);
+
     this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    // if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
-
-    // }
-    // if(this.recurring && this.laborCharges) {
-      
-    // }
-    // if(this.equipmentAndMaterials && this.laborCharges) {
-      
-    // }
-    // if(this.recurring) {
-      
-    // }
-    // if(this.equipmentAndMaterials) {
-      
-    // }
-    // if(this.laborCharges) {
-      
-    // }
-    //this.lineItemSubtotal = this.totalSumRecurring + this.totalSumEquipMat + this.totalSumLaborCharges;
+    
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
     console.log(this.selectedForCheckBoxAutoInsert) //object 
 
@@ -1746,7 +1723,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('file_size', this.file_size);
             frmData.append('upload_date', this.invoiceDate);
             frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
+            frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
             frmData.append('user_description', 'Invoice');
             frmData.append('reference1', null);
@@ -1808,7 +1785,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('file_size', this.subscriber_file_size);
             frmData.append('upload_date', this.invoiceDate);
             frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'PPC');
+            frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
             frmData.append('user_description', 'Subscriber Form');
             frmData.append('reference1', null);
@@ -1873,7 +1850,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               frmData.append('file_size', this.site_visit_file_size);
               frmData.append('upload_date', this.invoiceDate);
               frmData.append('document_ext', '*Contracts');
-              frmData.append('user_code', 'PPC');
+              frmData.append('user_code', 'TPC');
               //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
               frmData.append('user_description', 'Site Visit');
               frmData.append('reference1', null);
@@ -1938,7 +1915,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               frmData.append('file_size', this.other_Document1_file_size);
               frmData.append('upload_date', this.invoiceDate);
               frmData.append('document_ext', '*Contracts');
-              frmData.append('user_code', 'PPC');
+              frmData.append('user_code', 'TPC');
               //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
               frmData.append('user_description', 'Other Doc1');
               frmData.append('reference1', null);
@@ -2003,7 +1980,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               frmData.append('file_size', this.other_Document2_file_size);
               frmData.append('upload_date', this.invoiceDate);
               frmData.append('document_ext', '*Contracts');
-              frmData.append('user_code', 'PPC');
+              frmData.append('user_code', 'TPC');
               //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
               frmData.append('user_description', 'Other Doc 2');
               frmData.append('reference1', null);
@@ -2068,7 +2045,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               frmData.append('file_size', this.contract_file_size);
               frmData.append('upload_date', this.invoiceDate);
               frmData.append('document_ext', '*Contracts');
-              frmData.append('user_code', 'PPC');
+              frmData.append('user_code', 'TPC');
               //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
               frmData.append('user_description', 'Contract');
               frmData.append('reference1', null);

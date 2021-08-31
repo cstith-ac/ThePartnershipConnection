@@ -18,6 +18,10 @@
       [pageSize]="pageSize"
       [groupable]="true"
       [columnMenu]="true"
+      [selectable]="true"
+      (click)="onOpenDetailsModal($event.target.value)"
+      kendoGridSelectBy="customer_System_Id"
+      [selectedKeys]="mySelection"
       #dateTime
     >
     <ng-template kendoGridToolbarTemplate>
@@ -35,7 +39,11 @@
       <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
         <p [innerHTML]="today"></p>
       </ng-template>
-      <kendo-grid-column field="alarm_Account" title="Alarm Account">
+      <kendo-grid-column field="customer_System_Id" title="Customer System Id" [hidden]="true"></kendo-grid-column>
+      <kendo-grid-column 
+        field="alarm_Account" 
+        title="Alarm Account" 
+        [style]="{color: '#ca5856'}">
       </kendo-grid-column>
       <!-- <kendo-grid-column field="alarm_Account" title="Alarms Account">
         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
@@ -46,31 +54,205 @@
       <kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
       <kendo-grid-column field="customerType" title="Customer Type"></kendo-grid-column>
       <kendo-grid-column field="siteName" title="Site Name"></kendo-grid-column>
-      <kendo-grid-column field="site_Number" title="Site Number"></kendo-grid-column>
+      <!-- <kendo-grid-column field="site_Number" title="Site Number"></kendo-grid-column> -->
       <kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
-      <kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column>
+      <!-- <kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column> -->
       <kendo-grid-column field="city" title="City"></kendo-grid-column>
       <kendo-grid-column field="state" title="State"></kendo-grid-column>
       <kendo-grid-column field="zipCode" title="Zip Code"></kendo-grid-column>
-      <kendo-grid-column field="panel_Type_Code" title="Panel Type Code"></kendo-grid-column>
-      <kendo-grid-column field="panel_Location" title="Panel Location"></kendo-grid-column>
-      <kendo-grid-column field="system_Code" title="System Code"></kendo-grid-column>
+      <kendo-grid-column field="panel_Type_Code" title="Panel Type"></kendo-grid-column>
+      <!-- <kendo-grid-column field="panel_Location" title="Panel Location"></kendo-grid-column> -->
+      <kendo-grid-column field="system_Code" title="System Type"></kendo-grid-column>
       <kendo-grid-column field="cellType" title="Cell Type"></kendo-grid-column>
       <kendo-grid-column field="cellGeneration" title="Cell Generation"></kendo-grid-column>
       <kendo-grid-column field="cellModel" title="Cell Model"></kendo-grid-column>
       <kendo-grid-column field="carrier" title="Carrier"></kendo-grid-column>
-      <kendo-grid-column field="offer1" title="Offer 1"></kendo-grid-column>
+      <!-- <kendo-grid-column field="offer1" title="Offer 1"></kendo-grid-column>
       <kendo-grid-column field="offer2" title="Offer 2"></kendo-grid-column>
       <kendo-grid-column field="offer3" title="Offer 3"></kendo-grid-column>
-      <kendo-grid-column field="offer4" title="Offer 4"></kendo-grid-column>
-      <kendo-grid-column field="rmrAtCustomer" title="RMR At Customer"></kendo-grid-column>
-      <kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
-      <kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column>
+      <kendo-grid-column field="offer4" title="Offer 4"></kendo-grid-column> -->
+      <kendo-grid-column field="rmrAtCustomer" title="Customer RMR" format="{0:c}"></kendo-grid-column>
+      <!-- <kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
+      <kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column> -->
     </kendo-grid-column-group>
     <kendo-grid-excel fileName="customer3glisting"></kendo-grid-excel>
     </kendo-grid>
   </div>
 </div>
+
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-1160">
+      <div class="modal-content">
+          <div class="modal-header pb-0 pl-2">
+              <div class="col-md-12">
+                  <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body pt-0">
+              <div class="card p-3">
+                <div class="card-body">
+                  <p>hello world</p>
+                </div>
+                  <!-- <div class="card-body">
+                      <div class="row">
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Your Invoice #</span> 
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ vendorInvoiceNumber }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Alarm Connections Reference</span> 
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ ticketNumber }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Approved Amount</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ approvedAmount }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Hold Reason</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ heldReason }}</span>
+                              </p>
+                          </div>
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Invoice Date</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ invoiceDate }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Date Entered</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ dateEntered }}</span>
+                              </p>
+                          </div>
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Amount Submitted</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">${{ invoiceAmount }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Processing Status</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ determination }}</span>
+                              </p>
+                          </div>
+                          <div class="col">
+                              <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
+                              <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
+                              <ng-template #incentiveIDAvailBlock>
+                                  <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
+                              </ng-template>
+                          </div>
+                      </div>
+                      <div class="row border-invoice-status">
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Check Number</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ checkNumber }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Credit Amount Taken</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ creditAmount }}</span>
+                              </p>
+                          </div>
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Check Date</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ checkDate }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Credit Date</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ creditDate }}</span>
+                              </p>
+                          </div>
+                          <div class="col">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Amount Paid</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ amountPaid }}</span>
+                              </p>
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                          <div class="col border-invoice-status mr-1 rounded">
+                              <p class="mb-0">
+                                  <span class="subtitle-2">Customer Information</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ customer_Number }} </span>
+                                  <span class="body-2">{{ customer_Name }}</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ address_1 }}</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
+                              </p>
+                              <p class="mb-0">
+                                  <span class="subtitle-2">CS Account #</span>
+                              </p>
+                              <p>
+                                  <span class="body-2">ST123-1211</span>
+                              </p>
+                          </div>
+                          <div class="col border-invoice-status ml-1 rounded">
+                              <div class="tabs mt-3" id="padding0">
+                                  <div class="tab-button-outer">
+                                      <ul id="tab-button">
+                                          <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Comments</a></li>
+                                          <li class="menu" (click)="toggleShow('tab-2')"><a href="#tab02">Memo</a></li>
+                                      </ul>
+                                  </div>
+                          
+                                  <div class="tabs-stage" [ngSwitch]="activeTab">
+                                      <div id="tab-1" *ngSwitchCase="'tab-1'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
+                                        <pre id="relevantComment">
+                                          {{ relevantComment }}
+                                        </pre>
+                                      </div>
+                                      <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
+                                        <pre id="relevantMemo">
+                                          {{ relevantMemo }}
+                                        </pre>
+                                      </div>
+                                    </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div> -->
+              </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+  </div>
+</div>

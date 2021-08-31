@@ -29,6 +29,7 @@ import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { CommonModule, CurrencyPipe} from '@angular/common';
 
 import { ValidateService } from '../app/services/validate.service';
@@ -92,6 +93,7 @@ import { CalltoactionlistingComponent } from './components/calltoactionlisting/c
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
+import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -157,13 +159,15 @@ import { TpcpartneragingreportComponent } from './components/tpcpartneragingrepo
     CalltoactionlistingComponent,
     CancelqueuelistComponent,
     PartnerinvoicelistingComponent,
-    TpcpartneragingreportComponent
+    TpcpartneragingreportComponent,
+    PartnerservicelistingComponent
     //CustomerTestComponent
   ],
   imports: [
     DropDownsModule,
     LabelModule,
     InputsModule,
+    ButtonsModule,
     CommonModule,
     FilterPipeModule,
     BrowserModule,

@@ -53,6 +53,7 @@ import { CalltoactionlistingComponent } from './components/calltoactionlisting/c
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
+import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -213,6 +214,11 @@ const routes: Routes = [
   {
     path: 'partner-invoice-listing',
     component: PartnerinvoicelistingComponent,
+    canActivate: [AuthGuard, PartnerGuard]
+  },
+  {
+    path: 'partner-service-list',
+    component: PartnerservicelistingComponent,
     canActivate: [AuthGuard, PartnerGuard]
   },
   {

@@ -46,6 +46,7 @@ export class Customer3glistingComponent implements OnInit {
   public pageSize: number = 5;
   public fileName: string;
   public today = new Date().toDateString();
+  public selectedKeys = [];
 
   @ViewChild("dateTime") dateTimeView: ElementRef;
 
@@ -191,26 +192,26 @@ export class Customer3glistingComponent implements OnInit {
                 { value: "customer_Name" },
                 { value: "customerType" },
                 { value: "siteName" },
-                { value: "site_Number" },
+                // { value: "site_Number" },
                 { value: "address_1" },
-                { value: "address_2" },
+                // { value: "address_2" },
                 { value: "city" },
                 { value: "state" },
                 { value: "zipCode" },
                 { value: "panel_Type_Code" },
-                { value: "panel_Location" },
+                // { value: "panel_Location" },
                 { value: "system_Code" },
                 { value: "cellType" },
                 { value: "cellGeneration" },
                 { value: "cellModel" },
                 { value: "carrier" },
-                { value: "offer1" },
-                { value: "offer2" },
-                { value: "offer3" },
-                { value: "offer4" },
+                // { value: "offer1" },
+                // { value: "offer2" },
+                // { value: "offer3" },
+                // { value: "offer4" },
                 { value: "rMRAtCustomer" },
-                { value: "rMRAtSite" },
-                { value: "rMRAtSystem" }
+                // { value: "rMRAtSite" },
+                // { value: "rMRAtSystem" }
               ]
             },
           ],
@@ -296,5 +297,26 @@ export class Customer3glistingComponent implements OnInit {
       saveAs(dataUrl, "customer3glisting.xlsx");
     })
   }
+
+  public mySelection: number[] = [];
+
+  onOpenDetailsModal(e) {
+    //console.log(this.gridData)
+    $("#detailsModal").modal("show");
+
+    for(var i = 0; i < this.mySelection.length; i++) {
+      console.log(this.mySelection[i])
+      let id=this.mySelection[i]
+    }
+
+    for(var i = 0; i < this.selectedKeys.length; i++) {
+      console.log(this.selectedKeys[i])
+    }
+    
+  }
+
+  // private mySelectionKey(context: RowArgs): string {
+  //   return context.dataItem.ProductName + " " + context.index;
+  // }
   
 }

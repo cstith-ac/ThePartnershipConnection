@@ -21,53 +21,9 @@ import {environment} from '../../../environments/environment';
 export class PartnerdashboardComponent implements OnInit {
   customer3glisting: Customer3GListing[];
   partnerLandingPage: PartnerLandingPage[];
-  // partnerLandingPage=[
-  //   {
-  //       "over30Count": 144,
-  //       "over30Value": 16050.0300,
-  //       "over60Count": 35,
-  //       "over60Value": 3227.6100,
-  //       "over90Count": 21,
-  //       "over90Value": 1408.7200,
-  //       "over120Count": 26,
-  //       "over120Value": 3091.4900,
-  //       "invoicesInProcess": 5,
-  //       "invoicesInProcessValue": 0.0000,
-  //       "invoicesOnHold": 0,
-  //       "invoicesOnHoldValue": 0.0000,
-  //       "invoicesApproved30days": 0,
-  //       "invoicesApproved30daysValue": 0.0000,
-  //       "invoicesPaid30days": 0,
-  //       "invoicesPaid30daysValue": 0.0000,
-  //       "pendingProspects": 44,
-  //       "oldestProspect": "2018-10-16T00:00:00",
-  //       "pendingCancels": 18,
-  //       "rmrCancels": 648.8800,
-  //       "pendingCancels7days": 0,
-  //       "highRMRCancelPerson": "",
-  //       "highRMRCancelValue": 0,
-  //       "serviceTicketsPending": 199,
-  //       "oldestInProgress": "2019-08-06T09:41:55.043",
-  //       "attCount": 206,
-  //       "verizonCount": 150,
-  //       "sprintCount": 0,
-  //       "tMobileCount": 0,
-  //       "unknownCount": 0,
-  //       "upgradesLastMonth": 0,
-  //       "lifeTimeUpgrades": 0,
-  //       "progressPercent": 20,
-  //       "attritionLastMonth": 11,
-  //       "attritionLast6Months": 0,
-  //       "attritionLast12Months": 0
-  //   }
-  // ]; //use this to test
   partnerInvoiceListing: PartnerInvoiceListing[];
   user;
   firstName;
-  // attritionValue=10;
-  // attritionProgress="10%";
-  // threegConversionValue=78;
-  // threegConversionprogress="78%";
   attritionValue;
   attritionProgress;
   threegConversionValue;
@@ -75,6 +31,7 @@ export class PartnerdashboardComponent implements OnInit {
   showPendingCancellationList = "Show Pending Cancellation List";
   showPartnerInvoiceListing = "Show Partner Invoice Listing";
   showTPCPartnerAgingReport = "Show Customer Aging List";
+  showPartnerServiceListing = "Show Partner Service List"
   createAnInvoice = "Create an invoice";
   info = "The Partnership Connection, Version: " + environment.appVersion;
   closeResult = '';
@@ -83,8 +40,6 @@ export class PartnerdashboardComponent implements OnInit {
   verizonSunsetDate;
   monthDiffAtt;
   monthDiffVerizon;
-  // attSunsetDate = new Date("February 22, 2022 00:00:00");
-  // verizonSunsetDate = new Date("November 1, 2022 00:00:00");
 
   page = 1;
   count = 0;
@@ -106,9 +61,6 @@ export class PartnerdashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if(this.authService.isTestUser) {
-    //   this.router.navigate(['/forbidden'])
-    // }
     this.getMonthDiff();
 
     if(this.jwtHelper.isTokenExpired()) {
@@ -214,23 +166,6 @@ export class PartnerdashboardComponent implements OnInit {
     // )
   }
 
-  // openPartnerInvoiceListingModal() {
-  //   $("#partnerInvoiceListingModal").modal("show");
-
-  //   this.spinnerService.show();
-
-  //   this.routeService.getPartnerInvoiceListing().subscribe(
-  //     res => {
-  //       if(res) {
-  //         this.spinnerService.hide()
-  //       }
-        
-  //       this.partnerInvoiceListing = [].concat(res);
-        
-  //     }
-  //   )
-  // }
-
   openPartnerInvoiceListingModal(content) {
     this.modalService.open(content, 
       {
@@ -300,6 +235,10 @@ export class PartnerdashboardComponent implements OnInit {
 
   routeToCancelQueueList() {
     this.router.navigate(["/cancel-queue-list"]);
+  }
+
+  routeToPartnerServiceListing() {
+    this.router.navigate(["/partner-service-list"]);
   }
 
   // onTableDataChange(event) {

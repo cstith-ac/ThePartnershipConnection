@@ -126,14 +126,13 @@
                                 <p>
                                     <span class="body-2">{{ determination }}</span>
                                 </p>
-                                <!-- <p>Amount Submitted</p>
-                                <p>Processing Status {{ determination }}</p> -->
                             </div>
                             <div class="col">
                                 <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
                                 <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
                                 <ng-template #incentiveIDAvailBlock>
-                                    <button type="submit" class="btn btn-block btn-secondary mt-4" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                    <!-- <button type="submit" class="btn btn-block btn-secondary mt-4" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
+                                    <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
                                 </ng-template>
                             </div>
                         </div>
@@ -151,9 +150,6 @@
                                 <p>
                                     <span class="body-2">{{ creditAmount }}</span>
                                 </p>
-
-                                <!-- <p>Check Number</p>
-                                <p>Credit Amount Taken</p> -->
                             </div>
                             <div class="col">
                                 <p class="mb-0">
@@ -168,9 +164,6 @@
                                 <p>
                                     <span class="body-2">{{ creditDate }}</span>
                                 </p>
-
-                                <!-- <p>Check Date</p>
-                                <p>Credit Date</p> -->
                             </div>
                             <div class="col">
                                 <p class="mb-0">
@@ -179,8 +172,6 @@
                                 <p>
                                     <span class="body-2">{{ amountPaid }}</span>
                                 </p>
-
-                                <!-- <p>Amount Paid</p> -->
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -202,7 +193,7 @@
                                     <span class="subtitle-2">CS Account #</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">????</span>
+                                    <span class="body-2">ST123-1211</span>
                                 </p>
                             </div>
                             <div class="col border-invoice-status ml-1 rounded">
@@ -237,3 +228,28 @@
         </div>
     </div>
 </div>
+
+<ng-template #comingSoon>
+    <div class="modal-header">
+        <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button> -->
+    </div>
+    <div class="modal-body">
+        <div class="card">
+          <div class="card-header border-0 paddingBottom-14px">
+            <div class="row align-items-center">
+              <div class="col">
+                <h5 class="mb-1 mt-1 text-center headline-5">Document Upload Coming Soon</h5>
+              </div>
+            </div>
+          </div>
+          <div class="card-body paddingTop-14px">
+            <div class="row">
+              <div class="col-md-12 pt-2 pb-4">
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </ng-template>
