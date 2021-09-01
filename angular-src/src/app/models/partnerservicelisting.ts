@@ -24,7 +24,7 @@ export class PartnerServiceListing {
     systemType: string;
     panelType: string;
     centralStation: string;
-    acContact: string;
+    acContact: string; //Alarm Connections contact
     acContactEmail: string;
     collectionQueue: string;
     cancelStatus: string;
