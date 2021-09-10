@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
@@ -15,6 +16,40 @@ declare var $: any;
 })
 export class Customer3glistingComponent implements OnInit {
   customer3gListing: Customer3GListing[];
+  customer3gListingForm: FormGroup;
+  emailAddress;
+  
+  address_1;
+  address_2;
+  address_3;
+  alarm_Account;
+  carrier;
+  cellGeneration;
+  cellModel;
+  cellType;
+  city;
+  customerEmail;
+  customerPhone;
+  customerType;
+  customer_Name;
+  customer_Number;
+  customer_System_Id;
+  offer1;
+  offer2;
+  offer3;
+  offer4;
+  panel_Location;
+  panel_Type_Code;
+  rmrAtCustomer;
+  rmrAtSite;
+  rmrAtSystem;
+  siteName;
+  sitePhone;
+  site_Number;
+  state_3g;
+  system_Code;
+  zipCode;
+
   public columns: any[] = [
     {field: "Alarm Account"}, 
     {field: "CustomerNumber"}, 
@@ -48,9 +83,12 @@ export class Customer3glistingComponent implements OnInit {
   public today = new Date().toDateString();
   public selectedKeys = [];
 
+  clicked = false;//disables button after click
+
   @ViewChild("dateTime") dateTimeView: ElementRef;
 
   constructor(
+    public fb: FormBuilder,
     private routeService: RouteService,
     private spinnerService: NgxSpinnerService
   ) { 
@@ -107,6 +145,18 @@ export class Customer3glistingComponent implements OnInit {
         });
       }
     )
+
+    this.customer3gListingForm = this.fb.group({
+      EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
+      NoteType: "3G",
+      Memo: "",
+      ServiceTicketID: 1,
+      CustomerID: 1,
+      IncentiveID: 1,
+      CancelQueueID: 1,
+      ProspectID: 1,
+      CustomerSystemID: ""
+    });
   }
 
   load3GList() {
@@ -119,13 +169,7 @@ export class Customer3glistingComponent implements OnInit {
 
   public state: State = {
     skip: 0,
-    take: 5,
-    
-    // Initial filter descriptor
-    // filter: {
-    //   logic: 'and',
-    //   filters: [{ field: 'ProductName', operator: 'contains', value: 'Chef' }]
-    // },
+    take: 5
   };
 
   // public gridData: GridDataResult = process(this.customer3glisting, this.state);
@@ -300,19 +344,89 @@ export class Customer3glistingComponent implements OnInit {
 
   public mySelection: number[] = [];
 
-  onOpenDetailsModal(e) {
-    //console.log(this.gridData)
-    $("#detailsModal").modal("show");
+  onOpenDetails3gModal(e,customer_System_Id: number) {
+    $("#details3gModal").modal("show");
 
-    for(var i = 0; i < this.mySelection.length; i++) {
-      console.log(this.mySelection[i])
-      let id=this.mySelection[i]
-    }
+    this.customer_System_Id = customer_System_Id;
 
-    for(var i = 0; i < this.selectedKeys.length; i++) {
-      console.log(this.selectedKeys[i])
-    }
+    e.selectedRows.forEach((x) => {
+      console.log(x.dataItem.customer_System_Id)
+
+      this.address_1 = x.dataItem.address_1;
+      this.address_2 = x.dataItem.address_2;
+      this.address_3 = x.dataItem.address_3;
+      this.alarm_Account = x.dataItem.alarm_Account;
+      this.carrier = x.dataItem.carrier;
+      this.cellGeneration = x.dataItem.cellGeneration;
+      this.cellModel = x.dataItem.cellModel;
+      this.cellType = x.dataItem.cellType; 
+      this.city = x.dataItem.city;
+      this.customerEmail = x.dataItem.customerEmail;
+      this.customerPhone = x.dataItem.customerPhone;
+      this.customerType = x.dataItem.customerType;
+      this.customer_Name = x.dataItem.customer_Name;
+      this.customer_Number = x.dataItem.customer_Number;
+      this.customer_System_Id = x.dataItem.customer_System_Id;
+      this.offer1 = x.dataItem.offer1;
+      this.offer2 = x.dataItem.offer2;
+      this.offer3 = x.dataItem.offer3;
+      this.offer4 = x.dataItem.offer4;
+      this.panel_Location = x.dataItem.panel_Location;
+      this.panel_Type_Code = x.dataItem.panel_Type_Code;
+      this.rmrAtCustomer = x.dataItem.rmrAtCustomer;
+      this.rmrAtSite = x.dataItem.rmrAtSite;
+      this.rmrAtSystem = x.dataItem.rmrAtSystem;
+      this.siteName = x.dataItem.siteName;
+      this.sitePhone = x.dataItem.sitePhone;
+      this.site_Number = x.dataItem.site_Number;
+      this.state_3g = x.dataItem.state;
+      this.system_Code = x.dataItem.system_Code;
+      this.zipCode = x.dataItem.zipCode;
+    })
+    // for(var i = 0; i < e.selectedRows.length; i++) {
+    //   console.log(e.selectedRows[i].dataItem)
+    // }
+    // for(var i = 0; i < e.selectedRows.length; i++) {
+    //   console.log(e.selectedRows[i].dataItem.customer_System_Id)
+
+    //   this.customer_System_Id = e.selectedRows[i].dataItem.customer_System_Id;
+    //   this.customer_Number = e.selectedRows[i].dataItem.customer_Number;
+    //   this.customer_Name = e.selectedRows[i].dataItem.customer_Name;
+    //   this.customerType = e.selectedRows[i].dataItem.customerType;
+    //   this.rmrAtCustomer = e.selectedRows[i].dataItem.rmrAtCustomer;
+    //   this.siteName = e.selectedRows[i].dataItem.siteName;
+    //   this.address_1 = e.selectedRows[i].dataItem.address_1;
+    //   this.address_2 = e.selectedRows[i].dataItem.address_2;
+    //   this.city = e.selectedRows[i].dataItem.city;
+    //   this.state = e.selectedRows[i].dataItem.state;
+    //   this.zipCode = e.selectedRows[i].dataItem.zipCode;
+    // }
+
+    this.customer3gListingForm.controls["CustomerSystemID"].setValue(this.customer_System_Id);
+
+    // for(var i = 0; i < this.mySelection.length; i++) {
+    //   console.log(this.mySelection[i])
+    //   let id=this.mySelection[i]
+    // }
+
+    // for(var i = 0; i < this.selectedKeys.length; i++) {
+    //   console.log(this.selectedKeys[i])
+    // }
     
+  }
+
+  onOpenMessageModal() {
+    $("#messageModal").modal("show");
+  }
+
+  onSubmit3gListingMessage(form: FormGroup) {
+    //console.log(this.customer3gListingForm.value)
+    this.routeService.postPartnerAddNote(this.customer3gListingForm.value).subscribe(
+      res => {
+        $("#details3gModal").modal("hide");
+        $("#messageModal").modal("hide");
+      }
+    )
   }
 
   // private mySelectionKey(context: RowArgs): string {

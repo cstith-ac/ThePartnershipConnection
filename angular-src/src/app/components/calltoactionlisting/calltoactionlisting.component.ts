@@ -8,6 +8,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { PartnerCallToActionButton } from '../../models/partnercalltoactionbutton';
 declare var $: any;
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-calltoactionlisting',
@@ -28,7 +30,8 @@ export class CalltoactionlistingComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    public jwtHelper: JwtHelperService
+    public jwtHelper: JwtHelperService,
+    private flashMessage: FlashMessagesService
   ) { }
 
   ngOnInit() {
@@ -38,15 +41,23 @@ export class CalltoactionlistingComponent implements OnInit {
     
     this.routeService.getPartnerCallToActionButton().subscribe(
       res => {
-        if(res) {
+        if(res.status === 200) {
           this.spinnerService.hide();
+          this.flashMessage.show('Your requested data is displayed below', {
+            cssClass: 'text-center alert-success',
+            timeout: 5000
+          });
         }
-        this.partnerCallToActionButton = res;
+        console.log(res)
+        console.log(res.body)
+        console.log(res.headers)
+        console.log(res.status)
+        this.partnerCallToActionButton = res.body;
 
         // for(var i = 0; this.partnerCallToActionButton.length;i++) {
         //   console.log(this.partnerCallToActionButton[i].addressOnFile)
         // }
-      }
+      }, (err:HttpErrorResponse)=>{alert('there was an error')}
     )
 
     if(this.jwtHelper.isTokenExpired()) {
@@ -84,6 +95,8 @@ export class CalltoactionlistingComponent implements OnInit {
     this.routeService.postPartnerAddNote(this.callToActionListingMemoForm.value).subscribe(
       res => {
         console.log(res)
+        $("#memoModal").modal("hide");
+        //$("#messageModal").modal("hide");
       },
       error => console.log('error: ', error)
     )

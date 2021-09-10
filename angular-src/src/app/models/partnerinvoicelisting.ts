@@ -30,4 +30,5 @@ export class PartnerInvoiceListing {
     city: string;
     state: string;
     zipCode: string;
+    csAccount: string;
 }

@@ -94,6 +94,7 @@ import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelque
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
+import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -160,7 +161,8 @@ import { PartnerservicelistingComponent } from './components/partnerservicelisti
     CancelqueuelistComponent,
     PartnerinvoicelistingComponent,
     TpcpartneragingreportComponent,
-    PartnerservicelistingComponent
+    PartnerservicelistingComponent,
+    RemovewhitespacesPipe
     //CustomerTestComponent
   ],
   imports: [

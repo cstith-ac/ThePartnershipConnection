@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
@@ -16,12 +17,16 @@ declare var $: any;
 })
 export class PartnerinvoicelistingComponent implements OnInit {
   partnerInvoiceListing: PartnerInvoiceListing[];
+  partnerInvoiceListingForm: FormGroup;
+
+  emailAddress;
   user;
   firstName;
   page = 1;
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
+  ticketID;
   incentiveID;
   vendorInvoiceNumber;
   invoiceAmount;
@@ -48,12 +53,16 @@ export class PartnerinvoicelistingComponent implements OnInit {
   state;
   zipCode;
   ticketNumber;
+  csAccount;
   activeTab: string = "tab-1"
 
   id:string;
   pageSize=10;
 
+  clicked = false;//disables button after click
+
   constructor(
+    public fb: FormBuilder,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     private router: Router,
@@ -127,15 +136,28 @@ export class PartnerinvoicelistingComponent implements OnInit {
         $(target).show();
       });
     });
+
+    this.partnerInvoiceListingForm = this.fb.group({
+      EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
+      NoteType: "Invoice",
+      Memo: "",
+      ServiceTicketID: "",
+      CustomerID: 1,
+      IncentiveID: "",
+      CancelQueueID: 1,
+      ProspectID: 1,
+      CustomerSystemID: 1
+    })
   }
 
   toggleShow(newTab: string): void {
     this.activeTab = newTab;
   }
 
-  onOpenPartnerInvoiceListingModal(incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string) {
+  onOpenPartnerInvoiceListingModal(ticketID: number, incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string, csAccount: string) {
     $("#detailsModal").modal("show");
     
+    this.ticketID = ticketID;
     this.incentiveID = incentiveID;
     this.vendorInvoiceNumber = vendorInvoiceNumber;
     this.invoiceAmount = invoiceAmount;
@@ -151,6 +173,7 @@ export class PartnerinvoicelistingComponent implements OnInit {
     this.determination = determination;
     this.customer_Number = customer_Number;
     this.customer_Name = customer_Name;
+    //this.relevantMemo = relevantMemo.replace(/^\s+|\s+$/g, '');
     this.relevantMemo = relevantMemo;
     this.relevantComment = relevantComment;
     this.address_1 = address_1;
@@ -160,12 +183,37 @@ export class PartnerinvoicelistingComponent implements OnInit {
     this.state = state;
     this.zipCode = zipCode;
     this.ticketNumber = ticketNumber;
-    console.log(this.customer_Number)
-    console.log(this.customer_Name)
+    this.csAccount = csAccount;
+    
+    this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
+    this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
+
+    //this.relevantMemo = relevantMemo.trim()
+    console.log(this.relevantMemo)
+    console.log(this.relevantMemo.trim());
+    console.log(relevantMemo.replace(/^\s+|\s+$/g, ''));
+
+    // for(var i = 0; i < this.partnerInvoiceListing.length; i++) {
+    //   console.log(this.partnerInvoiceListing[0].relevantMemo)
+    //   this.relevantMemo = this.partnerInvoiceListing[i].relevantMemo.trim();
+    // }
   }
 
-  onOpenMemo() {
-    console.log('open memo modal')
+  onOpenMessageModal() {
+    $("#messageModal").modal("show");
+  }
+
+  onSubmitMessage(form: FormGroup) {
+    // console.log(this.partnerInvoiceListingForm.value);
+
+    this.routeService.postPartnerAddNote(this.partnerInvoiceListingForm.value).subscribe(
+      res => {
+        //console.log(res)
+        $("#detailsModal").modal("hide");
+        $("#memoModal").modal("hide");
+      },
+      error => console.log('error: ', error)
+    )
   }
 
   onAddDocument() {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
+        //[EnableCors("AllowCors")]
         //POST : /api/ApplicationUser/Login
         public async Task<IActionResult> Login(LoginModel model)
         {

@@ -71,6 +71,7 @@ namespace WebAPI
                                               //.WithOrigins("https://localhost:44390/")
                                               //.AllowCredentials()
                             .WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
+                            //.WithOrigins("https://www.thepartnershipconnection.com", "https://dev-alarm-connections.pantheonsite.io/current-partners", "http://localhost:4200")
                             .AllowAnyHeader()
                             //.SetIsOriginAllowed(origin => true)
                             .AllowAnyMethod();

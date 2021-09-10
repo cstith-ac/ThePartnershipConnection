@@ -42,6 +42,9 @@ export class AuthService {
   }
 
   authenticateUser(user): Observable<any> {
+    // let httpOptions = { 
+    //   headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response', 'Access-Control-Allow-Origin': '*' }) 
+    // };
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response' }) 
     };

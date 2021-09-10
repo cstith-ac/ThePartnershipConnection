@@ -62,6 +62,7 @@ namespace WebAPI.Controllers
                     Site_Number = s.Site_Number,
                     Address_1 = s.Address_1,
                     Address_2 = s.Address_2,
+                    Address_3 = s.Address_3,
                     City = s.City,
                     State = s.State,
                     ZipCode = s.ZipCode,
@@ -78,7 +79,10 @@ namespace WebAPI.Controllers
                     Offer4 = s.Offer4,
                     RMRAtCustomer = s.RMRAtCustomer,
                     RMRAtSite = s.RMRAtSite,
-                    RMRAtSystem = s.RMRAtSystem
+                    RMRAtSystem = s.RMRAtSystem,
+                    CustomerEmail = s.CustomerEmail,
+                    CustomerPhone = s.CustomerPhone,
+                    SitePhone = s.SitePhone
                 }).ToList();
 
                 return Lst;

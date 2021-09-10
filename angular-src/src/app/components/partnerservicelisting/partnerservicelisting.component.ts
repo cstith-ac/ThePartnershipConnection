@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
@@ -16,11 +17,13 @@ declare var $: any;
 })
 export class PartnerservicelistingComponent implements OnInit {
   partnerServiceListing: PartnerServiceListing[];
+  partnerServiceListingForm: FormGroup;
   page = 1;
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
   pageSize=10;
+  emailAddress;
   service_Ticket_Id;
   ticket_Number;
   creation_Date;
@@ -34,6 +37,7 @@ export class PartnerservicelistingComponent implements OnInit {
   customer_Name;
   customerRMR;
   customer_Since;
+  collectionQueue;
   cancelStatus;
   business_Name;
   comResStatus;
@@ -49,8 +53,12 @@ export class PartnerservicelistingComponent implements OnInit {
   panelType;
   centralStation;
   panel_Location;
+  customerComments;
+
+  clicked = false;//disables button after click
 
   constructor(
+    public fb: FormBuilder,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     private router: Router,
@@ -81,10 +89,22 @@ export class PartnerservicelistingComponent implements OnInit {
       
       this.partnerServiceListing = [].concat(res);
       
+    });
+
+    this.partnerServiceListingForm = this.fb.group({
+      EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
+      NoteType: "Service",
+      Memo: "",
+      ServiceTicketID: "",
+      CustomerID: 1,
+      IncentiveID: 1,
+      CancelQueueID: 1,
+      ProspectID: 1,
+      CustomerSystemID: 1
     })
   }
 
-  onOpenPartnerServiceListingModal(service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string) {
+  onOpenPartnerServiceListingModal(service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
     $("#detailsModal").modal("show");
 
     this.service_Ticket_Id = service_Ticket_Id;
@@ -100,6 +120,7 @@ export class PartnerservicelistingComponent implements OnInit {
     this.customer_Name = customer_Name;
     this.customerRMR = customerRMR;
     this.customer_Since = customer_Since;
+    this.collectionQueue = collectionQueue;
     this.cancelStatus = cancelStatus;
     this.business_Name = business_Name;
     this.comResStatus = comResStatus;
@@ -115,19 +136,26 @@ export class PartnerservicelistingComponent implements OnInit {
     this.panelType = panelType;
     this.centralStation = centralStation;
     this.panel_Location = panel_Location;
+    this.customerComments = customerComments;
 
-    // this.incentiveID = incentiveID;
-
-    console.log(this.service_Ticket_Id);
-    console.log(this.creation_Date);
-    console.log(this.problem_Code);
-    console.log(this.contactName);
-    console.log(this.contactPhone)
+    this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
    
   }
 
-  onOpenMemo() {
-    console.log('open memo modal')
+  onOpenMessageModal() {
+    $("#messageModal").modal("show");
+  }
+
+  onSubmitMessage(form: FormGroup) {
+    // console.log(this.partnerServiceListingForm.value)
+    this.routeService.postPartnerAddNote(this.partnerServiceListingForm.value).subscribe(
+      res => {
+        //console.log(res)
+        $("#detailsModal").modal("hide");
+        $("#memoModal").modal("hide");
+      },
+      error => console.log('error: ', error)
+    )
   }
 
   onAddDocument() {

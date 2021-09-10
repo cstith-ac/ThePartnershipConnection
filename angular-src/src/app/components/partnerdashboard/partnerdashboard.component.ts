@@ -28,10 +28,11 @@ export class PartnerdashboardComponent implements OnInit {
   attritionProgress;
   threegConversionValue;
   threegConversionprogress;
+  show3GListingList = "Show 3G Conversion List";
   showPendingCancellationList = "Show Pending Cancellation List";
   showPartnerInvoiceListing = "Show Partner Invoice Listing";
   showTPCPartnerAgingReport = "Show Customer Aging List";
-  showPartnerServiceListing = "Show Partner Service List"
+  showPartnerServiceListing = "Show Partner Service List";
   createAnInvoice = "Create an invoice";
   info = "The Partnership Connection, Version: " + environment.appVersion;
   closeResult = '';

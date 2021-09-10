@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 declare var $: any;
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private flashMessage: FlashMessagesService) { }
+    private flashMessage: FlashMessagesService,
+    public location: Location) { }
 
   ngOnInit() {
     $(document).ready(function() {
@@ -32,7 +34,18 @@ export class LoginComponent implements OnInit {
               $('#show_hide_password i').addClass( "fa-eye" );
           }
       });
-  });
+    });
+
+    if(this.authService.isEmployee()) {
+      //this.router.navigate(['/dashboard']);
+      console.log('this is a Super Admin')
+      this.onNavigateToCustomerCareDashboard()
+    }
+
+    if(this.authService.isPartner()) {
+      console.log('this is a Partner')
+      this.onNavigateToPartnerDashboard()
+    }
   }
 
   onLoginSubmit() {
@@ -110,11 +123,22 @@ export class LoginComponent implements OnInit {
     // });
   }
 
+  onNavigateToCustomerCareDashboard() {
+    this.router.navigate(['/dashboard'])
+  }
+
+  onNavigateToPartnerDashboard() {
+    this.router.navigate(['/partner-dashboard'])
+  }
+
   onNavigateToDashboard() {
-    console.log('gotodashboard')
-    // if(this.authService.isTestUser) {
-    //   this.router.navigate(['/forbidden'])
+    // if(this.authService.isSuperAdmin) {
+    //   console.log('this is a Super Admin')
     // }
+    // if(this.authService.isPartner) {
+    //   this.router.navigate(['/partner-dashboard'])
+    // }
+    //this.location.back();
   }
 
 }

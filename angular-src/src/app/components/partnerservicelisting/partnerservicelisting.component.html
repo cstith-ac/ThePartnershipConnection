@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of partnerServiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-                        <td id="{{ item.service_Ticket_Id }}" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location)">{{ item.ticket_Number }}</td>
+                        <td id="{{ item.service_Ticket_Id }}" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td>
                         <td>{{ item.status3G }}</td>
                         <td>{{ item.address_1 }}</td>
                         <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
@@ -67,142 +67,285 @@
     <div class="modal-dialog" id="maxWidth-1160">
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
-                <div class="col-md-12">
+                <div class="col-md-12 mb-2">
                     <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> -->
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row margin-bottomNegative120">
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Ticket #</span> 
+                                    <span class="subtitle-2 high-emphasis">Ticket #</span> 
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ ticket_Number }}</span>
+                                    <span class="body-2 medium-emphasis">{{ ticket_Number }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Created On</span>
+                                    <span class="subtitle-2 high-emphasis">Created On</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ creation_Date | date }}</span>
+                                    <span class="body-2 medium-emphasis">{{ creation_Date | date }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Problem</span>
+                                    <span class="subtitle-2 high-emphasis">Problem</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ problem_Code }}</span>
+                                    <span class="body-2 medium-emphasis">{{ problem_Code }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Customer Contact</span>
+                                    <span class="subtitle-2 high-emphasis">Customer Contact</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ customer_Name }}</span>
+                                    <span class="body-2 medium-emphasis">{{ customer_Name }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ sitePhone | phone }}</span>
+                                    <span class="body-2 medium-emphasis">{{ sitePhone | phone }}</span>
                                 </p>
                             </div>
                             <div class="col">
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Alarm Connections Contact</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ acContact }}</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ contactPhone | phone }}</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ acContactEmail }}</span>
-                                </p>
-                                <!-- <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
-                                <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
-                                <ng-template #incentiveIDAvailBlock> -->
-                                    <!-- <button type="submit" class="btn btn-block btn-secondary mt-4" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
-                                    <!-- <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button> -->
-                                <!-- </ng-template> -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="mb-0">
+                                            <span class="subtitle-2 high-emphasis">Alarm Connections Contact</span>
+                                        </p>
+                                        <p>
+                                            <span class="body-2 medium-emphasis">{{ acContact }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="body-2 medium-emphasis">{{ contactPhone | phone }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="body-2 medium-emphasis">
+                                                <a href="mailto:{{ acContactEmail }}">{{ acContactEmail }}</a>
+                                            </span>
+                                        </p>
+                                        <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
+                                        <!-- <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
+                                        
+                                        <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                       
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row border-invoice-status">
-                            <div class="col">
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Customer Information</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ customer_Number }} {{ customer_Name }}</span>
-                                </p>
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Collection Status</span>
-                                </p>
-                                <p>
-                                    <span class="body-2 text-error high-emphasis font-weight-bold">{{ cancelStatus }}</span>
-                                </p>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Customer Information</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ customer_Number }} {{ customer_Name }}</span>
+                                                </p>
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis text-error">{{ collectionQueue }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 text-error medium-emphasis font-weight-bold">{{ cancelStatus }}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">RMR</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ customerRMR | currency }}</span>
+                                                </p>
+                                                <!-- <p class="mb-0">
+                                                    <span class="subtitle-2">Credit Date</span>
+                                                </p> -->
+                                                <p>
+                                                    <!-- <span class="body-2">{{ creditDate }}</span> -->
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Customer Since</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ customer_Since | date }}</span>
+                                                </p>
+                
+                                                <!-- <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis text-error">Pending Cancellation</span>
+                                                </p> -->
+                                                <p>
+                                                    <span class="subtitle-2 text-error high-emphasis font-weight-bold">{{ cancelStatus }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Site Information</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ business_Name }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ comResStatus }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_1 }} </span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_2 }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_3 }}</span>
+                                                    <span class="body-2 medium-emphasis">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                                </p>
+                                                <!-- <p>
+                                                    <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                                </p> -->
+                                                <!-- <p class="mb-0">
+                                                    <span class="subtitle-2">CS Account #</span>
+                                                </p> -->
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ sitePhone | phone }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <p class="mb-0">
-                                    <span class="subtitle-2">RMR</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ customerRMR | currency }}</span>
-                                </p>
-                                <!-- <p class="mb-0">
-                                    <span class="subtitle-2">Credit Date</span>
-                                </p> -->
-                                <p>
-                                    <!-- <span class="body-2">{{ creditDate }}</span> -->
-                                </p>
-                            </div>
-                            <div class="col">
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Customer Since</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">{{ customer_Since | date }}</span>
-                                </p>
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>System Information</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="subtitle-2 high-emphasis text-error">{{ status3G }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">CS Account #</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ customer_Since | date }}</span>
+                                                </p>
+                
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">System Type</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ systemType }}</span>
+                                                </p>
 
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Pending Cancellation</span>
-                                </p>
-                                <p>
-                                    <span class="body-2 text-error high-emphasis font-weight-bold">{{ cancelStatus }}</span>
-                                </p>
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Panel Type</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ panelType }}</span>
+                                                </p>
+
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Central Station</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ centralStation }}</span>
+                                                </p>
+
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Panel Location</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis font-weight-bold">{{ panel_Location }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col border-invoice-status mr-1 rounded">
-                                <p class="mb-0">
-                                    <span class="subtitle-2">Site Information</span>
-                                </p>
-                                <p>
-                                    <!-- <span class="body-2">{{ customer_Number }} </span>
-                                    <span class="body-2">{{ customer_Name }}</span> -->
-                                </p>
-                                <p>
-                                    <!-- <span class="body-2">{{ address_1 }}</span> -->
-                                </p>
-                                <p>
-                                    <!-- <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span> -->
-                                </p>
-                                <p class="mb-0">
-                                    <span class="subtitle-2">CS Account #</span>
-                                </p>
-                                <p>
-                                    <span class="body-2">ST123-1211</span>
-                                </p>
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="subtitle-2 high-emphasis">Problem Description</p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ customerComments }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12 mb-2">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                      <form [formGroup]="partnerServiceListingForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMessage(partnerServiceListingForm);clicked = true;" [disabled]="clicked"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                 </div>
             </div>

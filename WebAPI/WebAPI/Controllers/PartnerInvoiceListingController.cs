@@ -83,7 +83,8 @@ namespace WebAPI.Controllers
                     Address_3 = s.Address_3,
                     City = s.City,
                     State = s.State,
-                    ZipCode = s.ZipCode
+                    ZipCode = s.ZipCode,
+                    CSAccount = s.CSAccount
                 }).ToList();
 
                 return Lst;

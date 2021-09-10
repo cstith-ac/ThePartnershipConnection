@@ -24,11 +24,11 @@
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
-              <h5 class="ls-1 mb-1 mt-1 headline-5 high-emphasis" (click)="routeToCustomer3GList()">3G Conversion</h5>
+              <h5 class="ls-1 mb-1 mt-1 headline-5 high-emphasis" (click)="routeToCustomer3GList()" [(ngbTooltip)]="show3GListingList">3G Conversion</h5>
               <p class="mb-0 conversion-text medium-emphasis">{{  item.upgradesLastMonth }} upgrades last month</p>
             </div>
             <div class="col text-right mb-3">
-              <i class="fas fa-arrow-right arrow" (click)="routeToCustomer3GList()"></i>
+              <i class="fas fa-arrow-right arrow" (click)="routeToCustomer3GList()" [(ngbTooltip)]="show3GListingList"></i>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
           </div>
           <p *ngIf="(item.progressPercent < 10)">
             <ngb-progressbar 
-              type="success" 
+              type="custom" 
               [showValue]="true"
               [(value)]="threegConversionValue"
               [striped]="false"
@@ -68,7 +68,7 @@
           </p>
           <p *ngIf="item.progressPercent > 15">
             <ngb-progressbar 
-              type="danger" 
+              type="custom" 
               [showValue]="true"
               [(value)]="threegConversionValue"
               [striped]="false"
@@ -405,6 +405,9 @@
               <span class="caption high-emphasis float-right">9</span>
             </div>
           </div>
+        </div>
+        <div class="bg-text">
+          <p>Coming Soon</p>
         </div>
       </div>
     </div>

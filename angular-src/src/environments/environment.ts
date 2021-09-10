@@ -5,9 +5,20 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:63052',
-  // appVersion: require('../../package.json').version + '-dev'
   appVersion: require('../../../angular-src/package.json').version + '-dev'
 };
+
+// export const environment = {
+//   production: true,
+//   baseUrl: 'https://thepartnershipconnectionapi.azurewebsites.net',
+//   appVersion: require('../../../angular-src/package.json').version
+// };
+
+// export const environment = {
+//   production: true,
+//   baseUrl: 'https://thepartnershipconnectionapi-staging.azurewebsites.net',
+//   appVersion: require('../../../angular-src/package.json').version
+// };
 
 /*
  * For easier debugging in development mode, you can import the following file

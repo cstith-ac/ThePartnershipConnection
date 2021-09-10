@@ -24,7 +24,7 @@
                 <tbody>
                     <tr *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                       <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
-                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber)">{{ item.vendorInvoiceNumber }}</td>
+                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.ticketID, item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber, item.csAccount)">{{ item.vendorInvoiceNumber }}</td>
                       <td>{{ item.invoiceDate }}</td>
                       <td>${{ item.invoiceAmount }}</td>
                       <td>{{ item.customer_Number }}</td>
@@ -62,12 +62,15 @@
     <div class="modal-dialog" id="maxWidth-1160">
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
-                <div class="col-md-12">
+                <div class="col-md-12 mb-2">
                     <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> -->
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">
@@ -75,60 +78,60 @@
                         <div class="row">
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Your Invoice #</span> 
+                                    <span class="subtitle-2 high-emphasis">Your Invoice #</span> 
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ vendorInvoiceNumber }}</span>
+                                    <span class="body-2 medium-emphasis">{{ vendorInvoiceNumber }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Alarm Connections Reference</span> 
+                                    <span class="subtitle-2 high-emphasis">Alarm Connections Reference</span> 
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ ticketNumber }}</span>
+                                    <span class="body-2 medium-emphasis">{{ ticketNumber }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Approved Amount</span>
+                                    <span class="subtitle-2 high-emphasis">Approved Amount</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ approvedAmount }}</span>
+                                    <span class="body-2 medium-emphasis">{{ approvedAmount | currency }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Hold Reason</span>
+                                    <span class="subtitle-2 high-emphasis">Hold Reason</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ heldReason }}</span>
+                                    <span class="body-2 medium-emphasis">{{ heldReason }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Invoice Date</span>
+                                    <span class="subtitle-2 high-emphasis">Invoice Date</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ invoiceDate }}</span>
+                                    <span class="body-2 medium-emphasis">{{ invoiceDate }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Date Entered</span>
+                                    <span class="subtitle-2 high-emphasis">Date Entered</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ dateEntered }}</span>
+                                    <span class="body-2 medium-emphasis">{{ dateEntered }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Amount Submitted</span>
+                                    <span class="subtitle-2 high-emphasis">Amount Submitted</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">${{ invoiceAmount }}</span>
+                                    <span class="body-2 medium-emphasis">${{ invoiceAmount }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Processing Status</span>
+                                    <span class="subtitle-2 high-emphasis">Processing Status</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ determination }}</span>
+                                    <span class="body-2 medium-emphasis">{{ determination }}</span>
                                 </p>
                             </div>
                             <div class="col">
-                                <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
+                                <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
                                 <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
                                 <ng-template #incentiveIDAvailBlock>
                                     <!-- <button type="submit" class="btn btn-block btn-secondary mt-4" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
@@ -139,61 +142,61 @@
                         <div class="row border-invoice-status">
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Check Number</span>
+                                    <span class="subtitle-2 high-emphasis">Check Number</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ checkNumber }}</span>
+                                    <span class="body-2 medium-emphasis">{{ checkNumber }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Credit Amount Taken</span>
+                                    <span class="subtitle-2 high-emphasis">Credit Amount Taken</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ creditAmount }}</span>
+                                    <span class="body-2 medium-emphasis">{{ creditAmount }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Check Date</span>
+                                    <span class="subtitle-2 high-emphasis">Check Date</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ checkDate }}</span>
+                                    <span class="body-2 medium-emphasis">{{ checkDate }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Credit Date</span>
+                                    <span class="subtitle-2 high-emphasis">Credit Date</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ creditDate }}</span>
+                                    <span class="body-2 medium-emphasis">{{ creditDate }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Amount Paid</span>
+                                    <span class="subtitle-2 high-emphasis">Amount Paid</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ amountPaid }}</span>
+                                    <span class="body-2 medium-emphasis">{{ amountPaid }}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col border-invoice-status mr-1 rounded">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Customer Information</span>
+                                    <span class="subtitle-2 high-emphasis">Customer Information</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ customer_Number }} </span>
-                                    <span class="body-2">{{ customer_Name }}</span>
+                                    <span class="body-2 medium-emphasis">{{ customer_Number }} </span>
+                                    <span class="body-2 medium-emphasis">{{ customer_Name }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ address_1 }}</span>
+                                    <span class="body-2 medium-emphasis">{{ address_1 }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                    <span class="body-2 medium-emphasis">{{ city }}, {{ state }} {{ zipCode }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2">CS Account #</span>
+                                    <span class="subtitle-2 high-emphasis">CS Account #</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">ST123-1211</span>
+                                    <span class="body-2 medium-emphasis">{{ csAccount }}</span>
                                 </p>
                             </div>
                             <div class="col border-invoice-status ml-1 rounded">
@@ -210,16 +213,65 @@
                                           <pre id="relevantComment">
                                             {{ relevantComment }}
                                           </pre>
+                                          <!-- <pre [innerHTML]="relevantComment" id="relevantComment"></pre> -->
                                         </div>
                                         <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
                                           <pre id="relevantMemo">
                                             {{ relevantMemo }}
                                           </pre>
+                                          <!-- <pre [innerHTML]="relevantMemo" id="relevantMemo"></pre> -->
                                         </div>
                                       </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Memo Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12 mb-2">
+                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                      <form [formGroup]="partnerInvoiceListingForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMessage(partnerInvoiceListingForm);clicked = true;" [disabled]="clicked"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                 </div>
             </div>

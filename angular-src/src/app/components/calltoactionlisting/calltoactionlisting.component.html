@@ -12,7 +12,9 @@
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h5 class="ls-1 high-emphasis headline-5">{{ partnerCallToActionButton.customer_Number }} {{ partnerCallToActionButton.customer_Name }}</h5>
+                            <h5 class="ls-1 high-emphasis headline-5">
+                              <span class="mr-4">{{ partnerCallToActionButton.customer_Number }}</span>
+                              <span>{{ partnerCallToActionButton.customer_Name }}</span></h5>
                             <!-- <span> {{ partnerCallToActionButton.customer_Id}}</span> -->
                         </div>
                         <div class="col-md-4 text-right">
@@ -28,9 +30,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="body-2 high-emphasis">Has a total <span class="subtitle-2">RMR of {{ partnerCallToActionButton.totalRMR | currency }}</span> and is {{ partnerCallToActionButton.collectionQueue }} with a current balance of <span class="subtitle-2 text-error">{{ partnerCallToActionButton.totalBalance | currency }}</span></p>
+                            <p class="body-2 high-emphasis">Has a total <span class="subtitle-2">RMR of {{ partnerCallToActionButton.totalRMR | currency }}</span> and is {{ partnerCallToActionButton.collectionQueue }} with a current balance of <span class="subtitle-2 text-error underline">{{ partnerCallToActionButton.totalBalance | currency }}</span></p>
                             <p class="body-2 high-emphasis">Payment Type: {{ partnerCallToActionButton.usesAutoPay }}</p>
-                            <p class="body-2 high-emphasis">{{ partnerCallToActionButton.emailAddress }}, {{ partnerCallToActionButton.phoneContact }}</p>
+                            <p class="body-2 high-emphasis">
+                              <span *ngIf="partnerCallToActionButton.emailAddress === 'No Email on File'; else elseEmailOnFileBlock">{{ partnerCallToActionButton.emailAddress }}</span>,
+                              <ng-template #elseEmailOnFileBlock>
+                                <a href="mailto:{{ partnerCallToActionButton.emailAddress }}" class="underline">{{ partnerCallToActionButton.emailAddress }}</a>
+                              </ng-template>
+                              {{ partnerCallToActionButton.phoneContact }}</p>
                             <p class="body-2 high-emphasis">Bill Address on File: {{ partnerCallToActionButton.addressOnFile }}</p>
                         </div>
                     </div>

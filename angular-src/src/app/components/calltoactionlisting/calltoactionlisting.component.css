@@ -48,6 +48,9 @@
     line-height: 116%;
     letter-spacing: 0.094rem;
 }
+.underline {
+    text-decoration: underline;
+}
 .headline-5 {
     font-family: 'SourceSansPro', sans-serif;
     font-weight: 600;

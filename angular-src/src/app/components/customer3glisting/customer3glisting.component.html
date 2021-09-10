@@ -19,7 +19,7 @@
       [groupable]="true"
       [columnMenu]="true"
       [selectable]="true"
-      (click)="onOpenDetailsModal($event.target.value)"
+      (selectionChange)="onOpenDetails3gModal($event, customer_System_Id)"
       kendoGridSelectBy="customer_System_Id"
       [selectedKeys]="mySelection"
       #dateTime
@@ -84,175 +84,315 @@
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>
 
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="details3gModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" id="maxWidth-1160">
       <div class="modal-content">
           <div class="modal-header pb-0 pl-2">
-              <div class="col-md-12">
-                  <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+              <div class="col-md-12 mb-2">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
               </div>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
           </div>
           <div class="modal-body pt-0">
               <div class="card p-3">
-                <div class="card-body">
-                  <p>hello world</p>
-                </div>
-                  <!-- <div class="card-body">
+                  <div class="card-body">
                       <div class="row">
                           <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Your Invoice #</span> 
+                              <p >
+                                  <span class="body-2 medium-emphasis mr-2">{{ customer_Number }}</span> 
+                                  <span class="body-2 medium-emphasis">{{ customer_Name }}</span>
                               </p>
                               <p>
-                                  <span class="body-2">{{ vendorInvoiceNumber }}</span>
+                                  <span class="body-2 medium-emphasis">{{ customerType }}</span>
                               </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Alarm Connections Reference</span> 
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ ticketNumber }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Approved Amount</span>
+                              <p >
+                                  <span class="body-2 medium-emphasis">{{ customerPhone | phone }}</span> 
                               </p>
                               <p>
-                                  <span class="body-2">{{ approvedAmount }}</span>
+                                  <span class="body-2">
+                                      <a href="mailto:{{customerEmail}}">{{ customerEmail }}</a>
+                                    </span>
                               </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Hold Reason</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ heldReason }}</span>
-                              </p>
+                              
+                              
                           </div>
                           <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Invoice Date</span>
+                              <p >
+                                  <span class="subtitle-2 high-emphasis">Customer RMR </span>
+                                  <span class="body-2 medium-emphasis">{{ rmrAtCustomer  | currency }}</span>
                               </p>
-                              <p>
-                                  <span class="body-2">{{ invoiceDate }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Date Entered</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ dateEntered }}</span>
-                              </p>
+                             
                           </div>
                           <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Amount Submitted</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">${{ invoiceAmount }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Processing Status</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ determination }}</span>
-                              </p>
+                              <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
                           </div>
-                          <div class="col">
-                              <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMemo()"><i class="fas fa-plus pr-2"></i>Message</button>
-                              <p *ngIf="incentiveID === 0; else incentiveIDAvailBlock" class="body-2 mt-4">There is no incentive available</p>
-                              <ng-template #incentiveIDAvailBlock>
-                                  <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
-                              </ng-template>
-                          </div>
+                          
                       </div>
-                      <div class="row border-invoice-status">
-                          <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Check Number</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ checkNumber }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Credit Amount Taken</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ creditAmount }}</span>
-                              </p>
+                      <div class="row mt-2">
+                          <div class="col-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p >
+                                                    <span class="body-2 medium-emphasis">{{ siteName }}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p >
+                                                    <span class="body-2 medium-emphasis">{{ sitePhone | phone }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_1 }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p >
+                                                    <span class="body-2 medium-emphasis">{{ address_2 }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_3 }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <!-- <p>
+                                                    <span class="body-2">{{ city }}, {{ state_3g }}, {{ zipCode}}</span>
+                                                </p> -->
+                                                <p> 
+                                                    <span class="body-2 medium-emphasis">{{ city }}, </span>
+                                                    <span class="body-2 medium-emphasis mr-2">{{ state_3g }}</span>
+                                                    <span class="body-2 medium-emphasis">{{ zipCode }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                           </div>
                           <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Check Date</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ checkDate }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Credit Date</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ creditDate }}</span>
-                              </p>
+                            <div class="card height-22-5vh">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>Offer 1</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p >
+                                                <span class="body-2 medium-emphasis">{{ offer1 }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                           </div>
                           <div class="col">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Amount Paid</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ amountPaid }}</span>
-                              </p>
+                            <div class="card height-22-5vh">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>Offer 2</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p >
+                                                <span class="body-2 medium-emphasis">{{ offer2 }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                           </div>
                       </div>
                       <div class="row mt-2">
-                          <div class="col border-invoice-status mr-1 rounded">
-                              <p class="mb-0">
-                                  <span class="subtitle-2">Customer Information</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ customer_Number }} </span>
-                                  <span class="body-2">{{ customer_Name }}</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ address_1 }}</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
-                              </p>
-                              <p class="mb-0">
-                                  <span class="subtitle-2">CS Account #</span>
-                              </p>
-                              <p>
-                                  <span class="body-2">ST123-1211</span>
-                              </p>
-                          </div>
-                          <div class="col border-invoice-status ml-1 rounded">
-                              <div class="tabs mt-3" id="padding0">
-                                  <div class="tab-button-outer">
-                                      <ul id="tab-button">
-                                          <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Comments</a></li>
-                                          <li class="menu" (click)="toggleShow('tab-2')"><a href="#tab02">Memo</a></li>
-                                      </ul>
-                                  </div>
-                          
-                                  <div class="tabs-stage" [ngSwitch]="activeTab">
-                                      <div id="tab-1" *ngSwitchCase="'tab-1'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
-                                        <pre id="relevantComment">
-                                          {{ relevantComment }}
-                                        </pre>
-                                      </div>
-                                      <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'0.5em 0em 7.5em'">
-                                        <pre id="relevantMemo">
-                                          {{ relevantMemo }}
-                                        </pre>
-                                      </div>
+                          <div class="col">
+                              <div class="card height-30vh">
+                                  <!-- <div class="card-header"></div> -->
+                                  <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>System Information</p>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>
+                                                <span class="subtitle-2 high-emphasis">CS Account # </span>
+                                                <span class="body-2 medium-emphasis">{{ alarm_Account }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>
+                                                <span class="subtitle-2 high-emphasis">Panel Type </span>
+                                                <span class="body-2 medium-emphasis">{{ panel_Type_Code }}</span>
+                                            </p>
+                                            <!-- <p class="body-2 high-emphasis">{{ panel_Type_Code }}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>
+                                                <span class="subtitle-2 high-emphasis">System Type </span>
+                                                <span class="body-2 medium-emphasis">{{ system_Code }}</span>
+                                            </p>
+                                            <!-- <p class="body-2 high-emphasis">{{ system_Code }}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>
+                                                <span class="subtitle-2 high-emphasis">Panel Location </span>
+                                                <span class="body-2 medium-emphasis">{{ panel_Location }}</span>
+                                            </p>
+                                            <!-- <p class="body-2 high-emphasis">{{ panel_Location }}</p> -->
+                                        </div>
+                                    </div>
+                                  </div>
                               </div>
                           </div>
+                          <div class="col">
+                            <div class="card height-30vh">
+                                <!-- <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>3G Information</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>3G Information</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="subtitle-2 high-emphasis">Carrier  </span>
+                                                <span class="body-2 medium-emphasis">{{ carrier }}</span>
+                                            <!-- <p>Carrier</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="subtitle-2 high-emphasis">Cell Model  </span>
+                                            <span class="body-2 medium-emphasis">{{ cellModel }}</span>
+                                            <!-- <p>Cell Model</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="subtitle-2 high-emphasis">Cell Generation  </span>
+                                            <span class="body-2 medium-emphasis">{{ cellGeneration }}</span>
+                                            <!-- <p>Cell Generation</p> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card height-30vh">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>Offer 3</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p >
+                                                <span class="body-2 medium-emphasis">{{ offer3 }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card height-30vh">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p>Offer 4</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p >
+                                                <span class="body-2 medium-emphasis">{{ offer4 }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
                       </div>
-                  </div> -->
+                  </div>
               </div>
           </div>
           <div class="modal-footer">
           </div>
       </div>
   </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12 mb-2">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                      <form [formGroup]="customer3gListingForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmit3gListingMessage(customer3gListingForm);clicked = true;" [disabled]="clicked"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>

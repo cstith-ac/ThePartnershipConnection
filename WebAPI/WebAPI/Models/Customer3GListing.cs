@@ -16,6 +16,7 @@ namespace WebAPI.Models
         public string Site_Number { get; set; }
         public string Address_1 { get; set; }
         public string Address_2 { get; set; }
+        public string Address_3 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
@@ -33,5 +34,8 @@ namespace WebAPI.Models
         public decimal RMRAtCustomer { get; set; }
         public decimal RMRAtSite { get; set; }
         public decimal RMRAtSystem { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerPhone { get; set; }
+        public string SitePhone { get; set; }
     }
 }

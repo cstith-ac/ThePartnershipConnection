@@ -18,7 +18,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Email">
+                                    <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Email" id="username">
                                 </div>
                                 
                             </div>
@@ -27,7 +27,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Password">
+                                    <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Password" id="password">
                                     <div class="input-group-addon show-hide-password">
                                         <a href=""> <i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
                                     </div>
@@ -42,9 +42,10 @@
             </div>
         </div>
         <ng-template #showAlreadyLoggedIn>
-            <a [routerLink]="['/partner-dashboard']" class="btn btn-secondary mx-auto mt-5" (click)="onNavigateToDashboard()">Go to the Dashboard</a>
+            <!-- <a  class="btn btn-secondary mx-auto mt-5" (click)="onNavigateToDashboard()">Go to the Dashboard</a> -->
             <!-- <p>You are already logged in.</p>
             <p>Please make a selection from the nav menu</p> -->
+            <p>You will be redirected to the dashboard.</p>
         </ng-template>
     <!-- </div> -->
     

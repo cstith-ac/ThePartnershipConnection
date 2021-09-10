@@ -27,13 +27,16 @@ export class TpcpartneragingreportComponent implements OnInit {
   @ViewChild('onClickAllCustomersElement') onClickAllCustomersElement: ElementRef;
 
   tpcPartnerAgingReport: TPCPartnerAgingReport[];
-  public displayArr:any[] = []
+  public displayArr:any[] = [];
+  tpcPartnerAgingReportForm: FormGroup;
 
   page = 1;
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
   pageSize=10;
+
+  userEmailAddress;
 
   customer_Id;
   customer_Number;
@@ -73,6 +76,7 @@ export class TpcpartneragingreportComponent implements OnInit {
   public value=5;
 
   agingListForm: FormGroup;
+  clicked = false;//disables button after click
 
   constructor(
     public fb: FormBuilder,
@@ -152,10 +156,24 @@ export class TpcpartneragingreportComponent implements OnInit {
           
           // val.filterCategory.toLowerCase().includes('120') || val.filterCategory.toLowerCase().includes('high'))
 
-          val.filterCategory.toLowerCase().includes('over 120, high rmr') || val.filterCategory.toLowerCase().includes('over 120') || val.filterCategory.toLowerCase().includes('over 90'))
+          val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
+          val.filterCategory.toLowerCase().includes('over 120') || 
+          val.filterCategory.toLowerCase().includes('over 90'))
           this.collectionSize = this.tpcPartnerAgingReport.length;
       }
     )
+
+    this.tpcPartnerAgingReportForm = this.fb.group({
+      EmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email,
+      NoteType: "Collections",
+      Memo: "",
+      ServiceTicketID: 1,
+      CustomerID: "",
+      IncentiveID: 1,
+      CancelQueueID: 1,
+      ProspectID: 1,
+      CustomerSystemID: 1
+    })
 
   }
 
@@ -192,10 +210,25 @@ export class TpcpartneragingreportComponent implements OnInit {
     if(this.commercialAccount == 'N') {
       this.commercialAccount = 'Residential'
     }
+
+    this.tpcPartnerAgingReportForm.controls["CustomerID"].setValue(this.customer_Id);
   }
 
-  onSubmitMessage() {
-    console.log('submit message');
+  onOpenMessageModal() {
+    $("#messageModal").modal("show");
+  }
+
+  onSubmitMessage(form: FormGroup) {
+    // console.log(this.tpcPartnerAgingReportForm.value);
+
+    this.routeService.postPartnerAddNote(this.tpcPartnerAgingReportForm.value).subscribe(
+      res => {
+        //console.log(res)
+        $("#detailsModal").modal("hide");
+        $("#memoModal").modal("hide");
+      },
+      error => console.log('error: ', error)
+    )
   }
 
   onClick120Day(value: string) {
@@ -569,6 +602,10 @@ export class TpcpartneragingreportComponent implements OnInit {
       )
 
       this.agingListForm.controls['minimumAmountDue'].setValue(5)
+  }
+
+  onChangeResetMinAmtDue() {
+    console.log('changed')
   }
 
   openComingSoonModal(comingSoon) {

@@ -8,6 +8,7 @@ export class Customer3GListing {
     site_Number: string;
     address_1: string;
     address_2: string;
+    address_3: string;
     city: string;
     state: string;
     zipCode: string;
@@ -25,4 +26,7 @@ export class Customer3GListing {
     rmrAtCustomer: number;
     rmrAtSite: number;
     rmrAtSystem: number;
+    customerEmail: string;
+    customerPhone: string;
+    sitePhone: string;
 }

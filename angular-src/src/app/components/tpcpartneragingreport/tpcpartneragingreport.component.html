@@ -172,7 +172,6 @@
             <form [formGroup]="agingListForm">
                 <div class="form-inline">
                     <label class="high-emphasis subtitle-2 mr-2">Minimum Amount Due</label>
-                    <!-- <input type="number" formControlName="minimumAmountDue" class="ml-2"> -->
                     <kendo-numerictextbox
                             format="c2"
                             [value]="value"
@@ -242,12 +241,15 @@
     <div class="modal-dialog" id="maxWidth-1560">
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
-                <div class="col-md-12">
+                <div class="col-md-12 mb-2">
                     <!-- <h2 class="modal-title text" id="exampleModalLabel">Message</h2> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> -->
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">
@@ -255,49 +257,49 @@
                         <div class="row">
                             <div class="col-1">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">#{{ customer_Number }}</span> 
+                                    <span class="subtitle-2 high-emphasis">#{{ customer_Number }}</span> 
                                 </p>
                                
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">{{ customer_Name }}</span>
+                                    <span class="subtitle-2 high-emphasis">{{ customer_Name }}</span>
                                 </p>
                                 
                             </div>
 
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Monthly RMR</span>
+                                    <span class="subtitle-2 high-emphasis">Monthly RMR</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ activeRMR | currency }}</span>
+                                    <span class="body-2 medium-emphasis">{{ activeRMR | currency }}</span>
                                 </p>
                             </div>
 
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Customer Since</span>
+                                    <span class="subtitle-2 high-emphasis">Customer Since</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ customerSince }}</span>
+                                    <span class="body-2 medium-emphasis">{{ customerSince }}</span>
                                 </p>
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">Last Payment</span>
+                                    <span class="subtitle-2 high-emphasis">Last Payment</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ lastPayAmount | currency }} on {{ lastPay }}</span>
+                                    <span class="body-2 medium-emphasis">{{ lastPayAmount | currency }} on {{ lastPay }}</span>
                                 </p>
                                 
                             </div>
                             <div class="col">
                                 <p class="mb-0">
-                                    <span class="subtitle-2">{{ commercialAccount }}</span>
+                                    <span class="subtitle-2 high-emphasis">{{ commercialAccount }}</span>
                                 </p>
                                 <p class="mb-0">
-                                    <span class="subtitle-2 text-error">{{ guaranteeStatus }}</span>
+                                    <span class="high-emphasis subtitle-2 text-error">{{ guaranteeStatus }}</span>
                                 </p>
                                 
                             </div>
@@ -306,128 +308,176 @@
                         <div class="row">
                             <div class="col">
                                 <p>
-                                    <span class="subtitle-2 mr-2">Past Due Balance</span>
-                                    <span class="body-2 text-error">{{ pastDue | currency }}</span>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Past Due Balance</span>
+                                    <span class="body-2 text-error medium-emphasis">{{ pastDue | currency }}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <p>
-                                    <span class="subtitle-2 mr-2">Collection Status</span>
-                                    <span class="body-2">{{ collectionQueue }}</span>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Collection Status</span>
+                                    <span class="body-2 medium-emphasis">{{ collectionQueue }}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <p>
-                                    <span class="subtitle-2 mr-2">Total Balance</span>
-                                    <span class="body-2">{{ bal_Current | currency }}</span>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Total Balance</span>
+                                    <span class="body-2 medium-emphasis">{{ bal_Current | currency }}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-4 border-aging-report">
-                                
                                 <p>
-                                    <span class="body-2">{{ address_1 }}</span>
+                                    <span class="body-2 medium-emphasis">{{ address_1 }}</span>
                                 </p>
                                 
                                 <p>
-                                    <span class="body-2">{{ address_2 }}</span>
+                                    <span class="body-2 medium-emphasis">{{ address_2 }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ address_3 }}</span>
+                                    <span class="body-2 medium-emphasis">{{ address_3 }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                    <span class="body-2 medium-emphasis">{{ city }}, {{ state }} {{ zipCode }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ emailAddress }}</span>
+                                    <span class="body-2 medium-emphasis">
+                                        <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+                                    </span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ primaryPhone | phone }}</span>
+                                    <span class="body-2 medium-emphasis">{{ primaryPhone | phone }}</span>
                                 </p>
                                 <p>
-                                    <span class="body-2">{{ alternatePhone | phone }}</span>
+                                    <span class="body-2 medium-emphasis">{{ alternatePhone | phone }}</span>
                                 </p>
                             </div>
                             <div class="col-8">
                                 <div class="row">
                                     <div class="col-md-3 offset-md-10 mb-2">
-                                        <button type="submit" class="btn btn-secondary text-uppercase" (click)="onSubmitMessage()"><i class="fas fa-plus pr-2"></i>Message</button>
+                                        <button type="submit" class="btn btn-secondary text-uppercase" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
                                     </div>
                                 </div>
                                 
                                 <div class="row border-aging-report">
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">Current</span>
+                                            <span class="subtitle-2 high-emphasis">Current</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$0.00</span>
+                                            <span class="body-2 medium-emphasis">$0.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">1-30 Days</span>
+                                            <span class="subtitle-2 high-emphasis">1-30 Days</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$35.00</span>
+                                            <span class="body-2 medium-emphasis">$35.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">31-60 Days</span>
+                                            <span class="subtitle-2 high-emphasis">31-60 Days</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$0.00</span>
+                                            <span class="body-2 medium-emphasis">$0.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">61-90 Days</span>
+                                            <span class="subtitle-2 high-emphasis">61-90 Days</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$35.00</span>
+                                            <span class="body-2 medium-emphasis">$35.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">91-120 Days</span>
+                                            <span class="subtitle-2 high-emphasis">91-120 Days</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$20.00</span>
+                                            <span class="body-2 medium-emphasis">$20.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">Over 120</span>
+                                            <span class="subtitle-2 high-emphasis">Over 120</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$20.00</span>
+                                            <span class="body-2 medium-emphasis">$20.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">Avail Credit</span>
+                                            <span class="subtitle-2 high-emphasis">Avail Credit</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$0.00</span>
+                                            <span class="body-2 medium-emphasis">$0.00</span>
                                         </p>
                                     </div>
                                     <div class="col">
                                         <p class="mb-0">
-                                            <span class="subtitle-2">Avail Cash</span>
+                                            <span class="subtitle-2 high-emphasis">Avail Cash</span>
                                         </p>
                                         <p>
-                                            <span class="body-2">$0.00</span>
+                                            <span class="body-2 medium-emphasis">$0.00</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Memo Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-0 pl-2">
+                <div class="col-md-12 mb-2">
+                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card p-3">
+                    <div class="card-body p-0">
+                      <form [formGroup]="tpcPartnerAgingReportForm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="col-form-label headline-6 medium-emphasis">Memo</label>
+                              <textarea 
+                                formControlName="Memo"
+                                class="form-control" 
+                                cols="30" 
+                                rows="10">
+                              </textarea>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <button type="submit" class="btn btn-secondary" (click)="onSubmitMessage(tpcPartnerAgingReportForm);clicked = true;" [disabled]="clicked"><i class="fas fa-plus pr-2"></i>Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                 </div>
             </div>

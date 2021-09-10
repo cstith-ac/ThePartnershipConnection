@@ -87,3 +87,9 @@
 .border-invoice-status {
     border: 1px solid rgb(33,33,33,0.08);
 }
+
+#relevantComment, #relevantMemo {
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    padding: 5px 15px;
+}
