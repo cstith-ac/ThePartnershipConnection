@@ -16,45 +16,6 @@
                         <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
-                            <!-- <input 
-                                type="text"
-                                class="form-control col-sm-5 fullWidthInput" 
-                                [(ngModel)]="customer" 
-                                formControlName="CustomerID"
-                            > -->
-                            <!-- <input 
-                                #filter
-                                type="text"
-                                class="form-control col-sm-5 fullWidthInput" 
-                                [(ngModel)]="customer" 
-                                formControlName="CustomerID"
-                                (change)="onChangeCustomerNumber($event)"
-                                placeholder="Type a customer number..."
-                            > -->
-                            <!-- <ng-template let-results>
-                                {{results.customerName}}
-                            </ng-template> -->
-                            <!-- <ul class="customer-list">
-                                <li class="customer-select-list" *ngFor="let result of results">
-                                    <p class="customer-name">
-                                        {{ result.customerName }} - {{ result.customerNumber }}
-                                    </p>
-                                </li>
-                            </ul> -->
-                            <!-- <kendo-autocomplete
-                                [(data)]="results"
-                                formControlName="CustomerID"
-                                [placeholder]="'Type a customer number...'"
-                                [suggest]="true" 
-                                [(ngModel)]="customer"
-                                [filterable]="true"
-                                class="form-control col-sm-5 fullWidthInput"
-                                (change)="onChangeCustomerNumber($event)"
-                                textField="customerName"
-                                [valueField]="customerName"
-                            >
-                                <ng-template kendoAutoCompleteItemTemplate let-results>{{results.customerName}}</ng-template>
-                            </kendo-autocomplete> -->
                             <div class="ng-autocomplete">
                                 <ng-autocomplete
                                     #customerRef
@@ -257,13 +218,16 @@
                                         class="form-control col-sm-6" 
                                         [(ngModel)]="invoiceUpload" 
                                         formControlName="InvoiceUpload"
-                                        (change)="getFileDetails($event)"
+                                        (change)="getInvoiceFileDetails($event)"
                                     >
                                 </div>
                                 <div class="form-group" *ngIf="showInvoiceFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
                                     <p class="mb-0 ml-4 uploaded-file" #invoice>{{file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeInvoiceFile()"></i>
+                                    <i 
+                                        class="pl-3 far fa-trash-alt text-danger" 
+                                        (click)="removeInvoiceFile()"
+                                    ></i>
                                 </div>
                             </div>
 
@@ -335,7 +299,6 @@
                                 </div>
                                 <div class="form-group" *ngIf="showContractFile">
                                     <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <!-- <p class="mb-0 ml-4 uploaded-file" #contract>{{contractUpload}}</p> -->
                                     <p class="mb-0 ml-4 uploaded-file" #contract>{{contract_file_name}}</p>
                                     <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
                                 </div>
@@ -398,15 +361,6 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                         ></kendo-numerictextbox>
-                                        <!-- <input
-                                            placeholder="$0.00"
-                                            mask="separator.2" 
-                                            thousandSeparator=","
-                                            prefix="$"
-                                            type="text" 
-                                            class="form-control col-sm-8" 
-                                            [(ngModel)]="invoiceTotal"
-                                            formControlName="InvoiceTotal"> -->
                                     </div>
                                 </div>
                             </div>
@@ -424,18 +378,6 @@
                                             [min]="0"
                                             [(ngbTooltip)]="taxToolTip"
                                         ></kendo-numerictextbox>
-                                        <!-- <input
-                                            type="text" 
-                                            [value]="tax"
-                                            class="form-control col-sm-10"
-                                            formControlName="Tax"
-                                            [(ngModel)]="tax"
-                                            placeholder="$0.00"
-                                            mask="separator.2" 
-                                            thousandSeparator=","
-                                            prefix="$"
-                                            (keyup)="getTax($event)"
-                                        > -->
                                     </div>
                                 </div>
                             </div>
@@ -443,12 +385,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
-                                    <!-- <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToRecurring()"></i></label> -->
                                     <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <!-- <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div> -->
                                         <kendo-numerictextbox
                                             format="c2"
                                             [value]="totalSumRecurring"
@@ -456,41 +394,11 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                         ></kendo-numerictextbox>
-                                        <!-- <input 
-                                            type="text" 
-                                            class="form-control col-sm-6" 
-                                            formControlName="Recurring"
-                                            placeholder="$0.00"
-                                            [(ngModel)]="totalRecurringCalc"
-                                        > -->
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <!-- <div class="col-sm-4">
-                                        <label class="col-form-label pl-0 col-sm-9">Equipment &amp; Materials</label>
-                                    </div>
-                                    <div class="col-sm-4 pl-0 pr-0">
-                                        <span>(Enter Line Items)</span>
-                                        <i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <input 
-                                            type="text" 
-                                            class="form-control col-sm-6" 
-                                            formControlName="EquipmentAndMaterials"
-                                            placeholder="$0.00"
-                                        >
-                                    </div> -->
-                                    <!-- <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToEquipMaterials()"></i></label> -->
                                     <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <!-- <input 
-                                            type="text" 
-                                            class="form-control col-sm-6" 
-                                            formControlName="EquipmentAndMaterials"
-                                            placeholder="$0.00"
-                                            [(ngModel)]="totalEquipMatCalc"
-                                        > -->
                                         <kendo-numerictextbox
                                             format="c2"
                                             [value]="totalSumEquipMat"
@@ -501,19 +409,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <!-- <label class="col-form-label pl-0 col-sm-6">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="routeToLaborCharges()"></i></label> -->
                                     <label class="col-form-label pl-0 col-sm-6">Labor Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openLaborChargesModal(laborcharges)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <!-- <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div> -->
-                                        <!-- <input 
-                                            type="text" 
-                                            class="form-control col-sm-6"  
-                                            formControlName="LaborCharges"
-                                            placeholder="$0.00"
-                                            [(ngModel)]="totalLaborChargesCalc"
-                                        > -->
                                         <kendo-numerictextbox
                                             format="c2"
                                             [value]="totalSumLaborCharges"
@@ -533,13 +430,6 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                         ></kendo-numerictextbox>
-                                        <!-- <input 
-                                            type="text" 
-                                            class="form-control col-sm-6" 
-                                            formControlName="LineItemSubtotal"
-                                            placeholder="$0.00"
-                                            [attr.disabled]="true"
-                                        > -->
                                     </div>
                                 </div>
                             </div>
@@ -577,32 +467,6 @@
                                         >Mo
                                     </div>
                                 </div>
-                                <!-- <div class="form-group form-inline">
-                                    <label class="col-sm-3 col-form-label">Start Date</label>
-                                    <input 
-                                        type="date" 
-                                        class="form-control col-sm-5" 
-                                        [(ngModel)]="startDate" formControlName="ContractDate"
-                                        (change)="getContractDate($event)"    
-                                    >
-                                </div>
-                                <div class="form-group form-inline">
-                                    <label class="col-sm-2 col-form-label">Term</label>
-                                    <input 
-                                        type="number" 
-                                        class="form-control col-sm-2 mr-3"
-                                        [(ngModel)]="contractTerm" formControlName="ContractTerm"
-                                        (keyup)="getContractTerm($event)"
-                                    >Mo
-
-                                    <label class="col-sm-3 col-form-label">Renewal</label>
-                                    <input 
-                                        type="number"
-                                        class="form-control col-sm-2 mr-3"
-                                        [(ngModel)]="renewal" formControlName="RenewalMonths"
-                                        (keyup)="getRenewal($event)"
-                                    >Mo
-                                </div> -->
                                 <div class="shadow">
                                     <div class="form-group form-inline form-check mb-0">
                                         <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
@@ -619,15 +483,6 @@
                                         </label>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group form-inline form-check">
-                                    <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
-                                    <input type="checkbox" class="form-control form-check-input" [(ngModel)]="signalsTested" formControlName="SignalsTested">
-                                </div>
-                                <div class="form-group form-inline">
-                                    <label class="col-sm-10 col-form-label">
-                                        <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
-                                    </label>
-                                </div> -->
                                 <div class="col-md-12 offset-md-0">
                                     <!-- <div class="row d-flex justify-content-between">
                                       <button class="btn btn-success">Add/View Comments</button>

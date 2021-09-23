@@ -31,6 +31,7 @@ import { LabelModule } from '@progress/kendo-angular-label';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { CommonModule, CurrencyPipe} from '@angular/common';
+import { UploadModule } from '@progress/kendo-angular-upload';
 
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
@@ -95,6 +96,8 @@ import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisti
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
+import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpage/partnerconnsplashpage.component';
+
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -162,7 +165,8 @@ import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
     PartnerinvoicelistingComponent,
     TpcpartneragingreportComponent,
     PartnerservicelistingComponent,
-    RemovewhitespacesPipe
+    RemovewhitespacesPipe,
+    PartnerconnsplashpageComponent
     //CustomerTestComponent
   ],
   imports: [
@@ -192,6 +196,7 @@ import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
     NgbModule,
     GridModule,
     ExcelModule,
+    UploadModule,
     AutocompleteLibModule,
     AvatarModule
   ],

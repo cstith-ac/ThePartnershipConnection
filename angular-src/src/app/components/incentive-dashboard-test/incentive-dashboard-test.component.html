@@ -1,4 +1,45 @@
 <form [formGroup]="incentiveDashboardTestForm">
+
+    <!--CUSTOMER-->
+    <div class="form-group form-inline">
+        <label class="col-sm-2 col-form-label">Customer</label>
+        <div class="ng-autocomplete">
+            <ng-autocomplete
+                #customerRef
+                [data]="results"
+                formControlName="CustomerID"
+                [(ngbTooltip)]="customer"
+                [searchKeyword]="keyword"
+                (selected)='selectEvent($event)'
+                (inputChanged)='getServerResponse($event)' 
+                (inputFocused)='onFocused($event)' 
+                (inputCleared)="searchCleared()"
+                [itemTemplate]="itemTemplate"
+                historyIdentifier="results"
+                [notFoundTemplate]="notFoundTemplate"
+                [placeholder]="'Type a customer number...'"
+            >
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item.customerName"></a>
+                <a [innerHTML]="item.customerNumber"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+                <div [innerHTML]="notFound"></div>
+            </ng-template>
+        </div>
+    
+        <span class="ml-2" (click)="openSearchCustomerModal(content)">
+            <i class="fas fa-search"></i>
+        </span>
+        <span class="pl-4" (click)="routeToNewCustomer()">
+            <i class="fas fa-plus-circle"></i>
+            New Customer
+        </span>
+    </div>
+
     <div class="form-group form-inline">
         <label>Customer</label>
         <input 
@@ -182,105 +223,3 @@
     </div>
 </ng-template>
 <br>
-<!-- <header class="equipmat-header-bg">
-    <div class="col">
-        <span class="align-middle">
-            Item
-        </span>
-    </div>
-    <div class="col">
-        <span class="align-middle">
-            Description
-        </span>
-    </div>
-    <div class="col">
-        <span class="align-middle">
-            Quantity
-        </span>
-    </div>
-    <div class="col">
-        <span class="align-middle">
-            Cost
-        </span>
-    </div>
-    <div class="col">
-        <span class="align-middle">
-            Total
-        </span>
-    </div>
-    <div class="col"></div>
-    <div class="col"></div>
-</header>
-<form *ngIf="incentiveEquipMatEntryForm" [formGroup]="incentiveEquipMatEntryForm">
-    <div formArrayName="entryRowsEquipMat">
-        <div class="row-entry-padding" *ngFor="let entryRow of incentiveEquipMatEntryForm.controls.entryRowsEquipMat['controls']; let i = index">
-            <div [formGroupName]="i">
-                <div class="row">
-                    <div class="col">
-                        <div class="dropdown">
-                            <select 
-                                formControlName="ItemID" class="form-control" 
-                                (change)="getEquipMatItemName($event,i)"
-                                name="something_{{i}}"
-                            >
-                                <option *ngFor="let item of listMatItems" value="{{item.item_id}}" [ngValue]="item.item_id">{{ item.itemCode }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            formControlName="Description" 
-                            name="something_{{i}}"
-                        >
-                    </div>
-                    <div class="col">
-                        <input 
-                            type="number" 
-                            formControlName="Quantity"
-                            class="form-control"
-                            
-                        >
-                    </div>
-                    <div class="col">
-                        <kendo-numerictextbox
-                            format="c2"
-                            placeholder="$0.00"
-                            formControlName="Cost"
-                            [spinners]="false"
-                            [style.height]="'calc(1.5em + 1.3rem)'"
-                            [style.width]="'80%'"
-                        ></kendo-numerictextbox>
-                    </div>
-                    <div class="col">
-                        <kendo-numerictextbox
-                            format="c2"
-                            placeholder="$0.00"
-                            formControlName="Total"
-                            [spinners]="false"
-                            [style.height]="'calc(1.5em + 1.3rem)'"
-                            [style.width]="'80%'"
-                            [attr.disabled]="true"
-                        ></kendo-numerictextbox>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-add" type="button"(click)="addNewEquipMatItem()">
-                            <i class="fas fa-plus pr-1"></i>Add
-                        </button>
-                    </div>
-                    
-                    <div class="col">
-                        <button class="btn btn-add" type="button" (click)="removeNewEquipMatItem(i)">
-                            <i class="fas fa-minus pr-1"></i>Remove
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <input type="submit" value="Submit" class="btn btn-submit">
-    </div>
-    <p>Total is: ${{ totalSumEquipMat }}</p>
-</form> -->

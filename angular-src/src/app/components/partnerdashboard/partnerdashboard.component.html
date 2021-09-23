@@ -7,7 +7,7 @@
         <i class="material-icons mr-1">mail_outline</i>
       </a>
       <a class="p-2 text-white" href="#" [(ngbTooltip)]="info">
-        <i class="material-icons mr-1">info_outline</i>
+        <i class="material-icons mr-1" (click)="openAppSettingsModal($event)">info_outline</i>
       </a>
     </nav>
     <a class="btn btn-outline-white text-uppercase text-white border-radius-50" href="https://afa.sedonaoffice.com/login.aspx" target="_blank">Sedona Web</a>
@@ -443,6 +443,16 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p>
+              <!-- <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11.4984) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
+                <ngb-progressbar 
+                  type="warning"
+                  [showValue]="false"
+                  [(value)]="attritionValue"
+                  [striped]="false"
+                  [(ngbTooltip)]="attritionProgress"
+                  tooltipClass="transparent-tooltip"
+                ></ngb-progressbar>
+              </p> -->
               <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
                 <ngb-progressbar 
                   type="warning"
@@ -501,74 +511,9 @@
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>
 
-<!-- Partner Invoice Listing Modal -->
-<!-- <div class="modal fade" id="partnerInvoiceListingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" id="maxWidth-900">
-      <div class="modal-content">
-          <div class="modal-header">
-              <div class="col-md-12">
-                  <p>Ticket Note</p>
-              </div>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-            <div class="card">
-              <div class="card-header border-0 paddingBottom-14px">
-                <div class="row align-items-center">
-                  <div class="col">
-                    <h5 class="mb-1 mt-1 headline-5">Partner Invoice Listing</h5>
-                  </div>
-                  <div class="col text-right">
-                    <i class="fas fa-arrow-right arrow"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body paddingTop-14px">
-                <div class="row">
-                  <div class="col-md-12 pt-2 pb-4">
-                    <table class="table table-responsive">
-                      <thead>
-                        <tr>
-                          <th scope="col">IncentiveID</th>
-                          <th scope="col">Your Invoice #</th>
-                          <th scope="col">Invoice Date</th>
-                          <th scope="col">Invoice Amount</th>
-                          <th scope="col">Customer Number</th>
-                          <th scope="col">Customer Name</th>
-                          <th scope="col">Alarm Connections #</th>
-                          <th scope="col">Entered into the System</th>
-                          <th scope="col">Status</th>
-                          <th scope="col">Approved Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let invoice of partnerInvoiceListing">
-                          <td scope="row" id="{{ invoice.incentiveID }}">{{ invoice.incentiveID }}</td>
-                          <td>{{ invoice.vendorInvoiceNumber }}</td>
-                          <td>{{ invoice.invoiceDate }}</td>
-                          <td>{{ invoice.invoiceAmount }}</td>
-                          <td>{{ invoice.customer_Number }}</td>
-                          <td>{{ invoice.customer_Name }}</td>
-                          <td>{{ invoice.ticketNumber }}</td>
-                          <td>{{ invoice.dateEntered }}</td>
-                          <td>{{ invoice.determination }}</td>
-                          <td>{{ invoice.approvedAmount }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-              <button id="" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-      </div>
-  </div>
-</div> -->
+<div *ngIf="showSplash">
+  <app-partnerconnsplashpage></app-partnerconnsplashpage>
+</div>
 
 <ng-template #content>
   <div class="modal-header">
@@ -698,156 +643,3 @@
       </div>
   </div>
 </ng-template>
-
-<!-- <div class="ml-4 mr-4">
-  <div class="row card-deck">
-      <div class="card">
-          <div class="card-body d-flex flex-column">
-              <h2 class="card-title text-success">Customers with 3G Systems</h2>
-              <div class="row">
-                  <div class="col-md-8">
-                      <p class="card-text text-primary">AT&amp;T: 232 systems to go. Customers lose connectivity in 8 months!</p>
-                      <p class="card-text text-primary">Verizon: 166 systems to go. Customers lose connectivity in 16 months!</p>
-                  </div>
-                  <div class="col-md-4 align-self-end text-right">
-                      <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block" (click)="routeToCustomer3GList()">View All 3G Customers</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="card">
-          <div class="card-body d-flex flex-column">
-              <h2 class="card-title text-success">Prospects</h2>
-              <div class="row">
-                  <div class="col-md-8">
-                      <p class="card-text text-primary">38 Pending prospects</p>
-                      <p class="card-text text-primary">The oldest is from 10-16-2018</p>
-                  </div>
-                  <div class="col-md-4 align-self-end text-right">
-                      <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block">View Prospects</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="card">
-          <div class="card-body d-flex flex-column">
-              <h2 class="card-title text-success">Attrition Summary</h2>
-              <div class="row">
-                  <div class="col-md-8"></div>
-                  <div class="col-md-4 align-self-end text-right">
-  
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="row card-deck">
-      <div class="card mt-3 mb-3">
-          <div class="card-body d-flex flex-column">
-              <h2 class="card-title text-success">Incentives</h2>
-              <div class="row">
-                  <div class="col-md-8">
-                      <p class="card-text text-primary">12 Incentives Approved this Month</p>
-                      <p class="card-text text-primary">9 Incentives are in Process</p>
-                      <p class="card-text text-primary">
-                          <span class="text-danger font-weight-bold">!</span> 4 Incentives are on Hold
-                      </p>
-                      </div>
-                      <div class="col-md-4 align-self-end text-right">
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn mb-2 btn-block" style="cursor: pointer;" (click)="routeToIncentiveEntry()">Create an Incentive</button>
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block">View Incentives</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="card mt-3 mb-3">
-              <div class="card-body d-flex flex-column">
-                  <h2 class="card-title text-success">Pending Cancels</h2>
-                  <div class="row">
-                      <div class="col-md-8">
-                          <p class="card-text text-primary">There are 56 people with pending cancellations.</p>
-                          <p class="card-text text-primary">They have a combined RMR of $1,868.93</p>
-                      </div>
-                      <div class="col-md-4 align-self-end text-right">
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block">View the Cancels</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div>
-              <div>
-  
-              </div>
-          </div>
-      </div>
-      <div class="row card-deck">
-          <div class="card">
-              <div class="card-body d-flex flex-column">
-                  <h2 class="card-title text-success">Service Requests</h2>
-                  <div class="row">
-                      <div class="col-md-8">
-                          <p class="card-text text-primary">160 Service Requests pending.</p>
-                          <p class="card-text text-primary">0 Service Invoices on hold.</p>
-                          <p class="card-text text-primary">0 Service Invoices awaiting approval.</p>
-                      </div>
-                      <div class="col-md-4 align-self-end text-right">
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn mb-2 btn-block">Create a Request</button>
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block">View Requests</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-body d-flex flex-column">
-                  <h2 class="card-title text-success">Aging Summary</h2>
-                  <div class="row">
-                      <div class="col-md-8">
-                          <div class="row ml-0">
-                              <p class="card-text pr-3 text-primary">Over 30 Days</p>
-                              <p class="card-text pr-3 text-primary">122</p>
-                              <p class="card-text text-primary">$9,249.46</p>
-                          </div>
-                          <div class="row ml-0">
-                              <p class="card-text pr-3 text-primary">Over 60 Days</p>
-                              <p class="card-text pr-3 text-primary">50</p>
-                              <p class="card-text text-primary">$4,049.76</p>
-                          </div>
-                          <div class="row ml-0">
-                              <p class="card-text pr-3 text-warning">Over 90 Days</p>
-                              <p class="card-text pr-3 text-warning">25</p>
-                              <p class="card-text text-warning">$1,948.22</p>
-                          </div>
-                          <div class="row ml-0">
-                              <p class="card-text pr-3 text-danger">Over 120 Days</p>
-                              <p class="card-text pr-3 text-danger">26</p>
-                              <p class="card-text text-danger">$3,387.54</p>
-                          </div>
-                      </div>
-                      <div class="col-md-4 align-self-end text-right">
-                          <button class="btn btn-primary flex-column partner-dashbrd-btn btn-block">View Aging</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div>
-              <div>
-  
-              </div>
-          </div>
-      </div>
-</div>
-<footer class="footer">
-  <div class="ml-5 mr-5">
-    <div class="row">
-      <div class="col-md-3">
-        <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
-      </div>
-      <div class="col-md-1">
-        <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
-      </div>
-      <div class="col-md-8">
-        <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">
-      </div>
-    </div>
-  </div>
-</footer> -->

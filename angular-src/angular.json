@@ -39,13 +39,17 @@
               "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png",
               "src/assets/img/logo.png",
               "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.png",
-              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.svg"
+              "src/assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.svg",
+              "src/assets/img/navigation.png",
+              "src/assets/img/submit.png",
+              "src/assets/img/message.png"
             ],
             "styles": [
               {
                 "input": "node_modules/@progress/kendo-theme-bootstrap/dist/all.css"
               },
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bs-stepper/dist/css/bs-stepper.min.css",
               "src/styles.css",
               "src/assets/css/argon.css",
               "src/assets/css/nucleo.css",

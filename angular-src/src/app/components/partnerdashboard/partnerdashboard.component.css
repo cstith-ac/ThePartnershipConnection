@@ -468,3 +468,25 @@
         margin: 1rem 0;
     }
 }
+
+
+/* ----------- Non-Retina Screens ----------- */
+@media screen 
+  and (min-width: 576px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+    .order-sm-2 {
+        order: 2;
+    }
+}
+
+/* ----------- Retina Screens ----------- */
+@media screen 
+  and (min-width: 576px)  
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (min-resolution: 192dpi) { 
+    .order-sm-2 {
+        order: 2;
+    }
+}
+
+

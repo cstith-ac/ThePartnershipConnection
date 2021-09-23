@@ -24,7 +24,7 @@
       [selectedKeys]="mySelection"
       #dateTime
     >
-    <ng-template kendoGridToolbarTemplate>
+    <ng-template kendoGridToolbarTemplate *ngIf="exportToExcel === 1">
       <button 
         type="button" 
         kendoGridExcelCommand 
@@ -37,7 +37,7 @@
       [autoSize]="true"
       #dateTime>
       <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-        <p [innerHTML]="today"></p>
+        <p [innerHTML]="today" class="mb-0"></p>
       </ng-template>
       <kendo-grid-column field="customer_System_Id" title="Customer System Id" [hidden]="true"></kendo-grid-column>
       <kendo-grid-column 

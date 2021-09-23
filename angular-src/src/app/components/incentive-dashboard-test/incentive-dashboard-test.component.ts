@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, ElementRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, mergeAll, filter } from 'rxjs/operators';
 import { ListMaterialItems } from '../../models/listmaterialitems';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { CustomerSearchList } from '../../models/customersearchlist';
@@ -23,79 +25,19 @@ import { Incentive_Add_Equipment } from 'src/app/models/incentiveaddequipment';
   templateUrl: './incentive-dashboard-test.component.html',
   styleUrls: ['./incentive-dashboard-test.component.css']
 })
-export class IncentiveDashboardTestComponent implements OnInit {
+export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild('customerRef') customerElement: ElementRef;
+  @ViewChild('siteRef') siteElement: ElementRef;
+  @ViewChild('systemRef') systemElement: ElementRef;
+
+  @ViewChild("customerSearchIcon") divCustomerSearchIcon: ElementRef;
+  
   incentiveEquipMatEntryForm: FormGroup;
 
   selectIncentiveDashboardTestForm: FormGroup;
   incentiveDashboardTestForm: FormGroup;
-
-  customers = [
-    {
-      "id": 1,
-      "name": "Gary Payton"
-    },
-    {
-      "id": 2,
-      "name": "Betty White"
-    },
-    {
-      "id": 3,
-      "name": "Greg Street"
-    },
-    {
-      "id": 4,
-      "name": "Reggie Noble"
-    },
-    {
-      "id": 5,
-      "name": "Jose Conseco"
-    }
-  ];
-  sites = [
-    {
-      "id": 1,
-      "name": "Philadelphia, PA"
-    },
-    {
-      "id": 2,
-      "name": "Dallas, TX"
-    },
-    {
-      "id": 3,
-      "name": "Nashville, TN"
-    },
-    {
-      "id": 4,
-      "name": "New Castle, DE"
-    },
-    {
-      "id": 5,
-      "name": "Denver, CO"
-    }
-  ];
-  systems = [
-    {
-      "id": 1,
-      "name": "Business"
-    },
-    {
-      "id": 2,
-      "name": "Information Technology"
-    },
-    {
-      "id": 3,
-      "name": "Operations"
-    },
-    {
-      "id": 4,
-      "name": "Community Relations"
-    },
-    {
-      "id": 5,
-      "name": "Promotions"
-    }
-  ]
 
   authToken: any;
   user:any=Object;
@@ -118,8 +60,16 @@ export class IncentiveDashboardTestComponent implements OnInit {
   searchValue:string;
   id;
   customer;
+  results: any[] = [];
+  customerNumber;
+  customer_Site_id;
+  customerSiteName;
+
+
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
@@ -197,76 +147,154 @@ export class IncentiveDashboardTestComponent implements OnInit {
       ServiceIncluded: localStorage.getItem('serviceIncluded'), //@ServiceInclude
       SignalsTested: ["", Validators.required],
       PartnerComments: [""] //@PartnerComments
-    });
-
-    this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
-    console.log(this.selectedForCheckBoxAutoInsert) //object
-
-    this.routeService.postCheckboxAutoInsertList({
-      "CheckBoxStatus1": this.selectedForCheckBoxAutoInsert[0],
-      "CheckBoxStatus2": this.selectedForCheckBoxAutoInsert[1],
-      "CheckBoxStatus3": this.selectedForCheckBoxAutoInsert[2],
-      "CheckBoxStatus4": this.selectedForCheckBoxAutoInsert[3],
-      "CheckBoxStatus5": this.selectedForCheckBoxAutoInsert[4],
-      "CheckBoxStatus6": this.selectedForCheckBoxAutoInsert[5],
-      "CheckBoxStatus7": this.selectedForCheckBoxAutoInsert[6],
-      "CheckBoxStatus8": this.selectedForCheckBoxAutoInsert[7],
-      "CheckBoxStatus9": this.selectedForCheckBoxAutoInsert[8],
-      "CheckBoxStatus10": this.selectedForCheckBoxAutoInsert[9],
-      "CheckBoxStatus11": this.selectedForCheckBoxAutoInsert[10],
-      "CheckBoxStatus12": this.selectedForCheckBoxAutoInsert[11],
-      "CheckBoxStatus13": this.selectedForCheckBoxAutoInsert[12],
-      "CheckBoxStatus14": this.selectedForCheckBoxAutoInsert[13],
-      "CheckBoxStatus15": this.selectedForCheckBoxAutoInsert[14],
-      "CheckBoxStatus16": this.selectedForCheckBoxAutoInsert[15],
-      "CheckBoxStatus17": this.selectedForCheckBoxAutoInsert[16],
-      "CheckBoxStatus18": this.selectedForCheckBoxAutoInsert[17],
-      "CheckBoxStatus19": this.selectedForCheckBoxAutoInsert[18],
-      "CheckBoxStatus20": this.selectedForCheckBoxAutoInsert[19],
-      "CheckBoxStatus21": this.selectedForCheckBoxAutoInsert[20],
-      "CheckBoxStatus22": this.selectedForCheckBoxAutoInsert[21],
-      "CheckBoxStatus23": this.selectedForCheckBoxAutoInsert[22],
-      "CheckBoxStatus24": this.selectedForCheckBoxAutoInsert[23],
-      "CheckBoxStatus25": this.selectedForCheckBoxAutoInsert[24],
-      "CheckBoxStatus26": this.selectedForCheckBoxAutoInsert[25],
-      "CheckBoxStatus27": this.selectedForCheckBoxAutoInsert[26],
-      "CheckBoxStatus28": this.selectedForCheckBoxAutoInsert[27],
-      "CheckBoxStatus29": this.selectedForCheckBoxAutoInsert[28],
-      "CheckBoxStatus30": this.selectedForCheckBoxAutoInsert[29],
-      //"InstallCompanyID": this.installCompanyID
-    }).subscribe((data: any[]) => {
-      localStorage.setItem('equipmatentry', JSON.stringify(data));
-
-        let mappedDefaultAmounts = data.map(a => a.defaultAmount);
-        console.log(mappedDefaultAmounts);
-        //get sum from mappedDefaultAmounts
-        let sumMappedDefaultAmounts = mappedDefaultAmounts.reduce(function(a,b) {
-          return a + b
-        },0)
-        console.log(sumMappedDefaultAmounts); // number
-        this.totalSumEquipMat = sumMappedDefaultAmounts
-
-        this.equipmentAndMaterials = sumMappedDefaultAmounts
-
-      this.incentiveEquipMatEntryForm = this.fb.group({
-        entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
-      });
-
-      console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
-
-      this.equipMatValueChanges$ = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].valueChanges;
-      this.equipMatValueChanges$.subscribe(
-        entryRowsEquipMat => this.updateTotalEquipMat(entryRowsEquipMat)
-      );
-    });
-
-    this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
-    this.lineItemSubtotal = this.equipmentAndMaterials;
+    }); 
   }
 
-  public selectedCustomer: { name: string, id: number };
-  public selectedSite: { name: string, id: number };
-  public selectedSystem: { name: string, id: number };
+  ngOnDestroy():void {
+    console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
+    //this.recurringValueChanges$.unsubscribe();
+    //this.laborChargesValueChanges$.unsubscribe();
+    //this.equipMatValueChanges$.unsubscribe();
+  }
+
+  public placeholderq: string = 'Type a customer number...';
+  public keyword = 'customerNumber';
+
+  getServerResponse(event){
+    console.log(parseInt(event))
+    console.log(this.incentiveDashboardTestForm.controls["CustomerID"])
+    this.incentiveDashboardTestForm.controls["CustomerID"].valueChanges
+    .pipe(debounceTime(1000),distinctUntilChanged(),filter(x => typeof x === 'string'))
+    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch('1116-1417')
+    .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+    .subscribe(response => {
+      console.log(response)
+      this.results = response;
+      let obj = response.find(e => e.customerName === e.customerName)
+      for(var i = 0; i < response.length; i++) {
+        console.log(response[i].customerID)
+        var x = response[i].customerID;
+        this.id = response[i].customerID;
+        this.customerNumber = response[i].customerNumber;
+        this.customer = response[i].customerName; //this is clearing the site entry when used with ngModel
+        this.routeService.getListSitesForCustomer(x).subscribe(
+          res => {
+            //console.log(res);
+            this.listsitesforcustomer = res;
+            for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+              console.log(this.listsitesforcustomer[i])
+              this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
+
+               //set customerSiteName for ngbTooltip, SiteName + Address_1
+              let customerSiteName = this.listsitesforcustomer[i].siteName;
+              let address_1 = this.listsitesforcustomer[i].address_1;
+              this.customerSiteName = customerSiteName + ' - ' + address_1;
+
+              // this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+              //   res => {
+              //     console.log(res)
+              //     this.listSystemsForSite = res;
+
+              //     for(var i = 0; i < this.listSystemsForSite.length; i++) {
+              //       console.log(this.listSystemsForSite[i].customer_System_id)
+
+              //       this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+              //       this.systemTypeID = this.listSystemsForSite[i].systemType;
+              //       this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+
+              //       this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+              //         res => {
+              //           this.alarmAccount = res.accountNumber;
+              //           this.systemTypeID = res.systemType;
+              //           this.panelTypeID = res.panelType;
+              //           this.panelLocation = res.panelLocation;
+              //           this.centralStationID = res.centralStationID;
+              //           this.additionalInfo = res.additionalInfo;
+              //         }
+              //       )
+              //     }
+              // })
+            }
+          }
+        )
+        //set state for CustomerSiteID as valid
+        //this.incentiveDashboardTestForm.get("CustomerSiteID").setValidators(null);
+        //this.incentiveDashboardTestForm.get("CustomerSiteID").updateValueAndValidity(); 
+      }
+    }
+      )
+    )
+  }
+
+  searchCleared(){
+    console.log('searchCleared');
+    // this.results = [];
+
+    // this.listsitesforcustomer = [];
+    // this.listSystemsForSite = [];
+    
+    // this.id = "";
+    // this.customer = "";
+    // this.customer_Site_id = "";
+    // this.customerSiteName = "";
+    // this.customer_System_id = "";
+    // this.systemName = "";
+
+    // this.incentiveDashboardTestForm.controls["CustomerID"].reset();
+    // this.incentiveDashboardTestForm.controls["CustomerSiteID"].reset();
+    // this.incentiveDashboardTestForm.controls["CustomerSystemID"].reset();
+    // this.incentiveDashboardTestForm.controls["AlarmAccount"].reset();
+    // this.incentiveDashboardTestForm.controls["SystemTypeID"].reset();
+    // this.incentiveDashboardTestForm.controls["PanelTypeID"].reset();
+    // this.incentiveDashboardTestForm.controls["PanelLocation"].reset();
+    // this.incentiveDashboardTestForm.controls["CentralStationID"].reset();
+  }
+
+  selectEvent(item) {
+    console.log(item.customerID)
+    //console.log(this.customerElement.nativeElement) //undefined
+    //this.customerElement.nativeElement.innerHTML = this.customerSiteName
+    // here we can write code for doing something with selected item
+    // this.incentiveDashboardTestForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
+    this.incentiveDashboardTestForm.controls["CustomerID"].setValue(this.customerNumber+ " - " +this.customer)
+    //this.siteElement.nativeElement.focus()
+  }
+
+  onChangeSearch(val: string) {
+    // here we can fetch data from remote location here
+    // And reassign the 'data' which is binded to 'data' property.
+    // this.incentiveDashboardTestForm.controls["CustomerID"].valueChanges
+    // .pipe(debounceTime(1000),distinctUntilChanged())
+    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+    // .subscribe(response => {
+    //   console.log(response)
+    //   this.results = response;
+    //   // let obj = response.find(e => e.customerName === e.customerName)
+    //   for(var i = 0; i < response.length; i++) {
+    //     console.log(response[i].customerID)
+    //     var x = response[i].customerID;
+    //     this.routeService.getListSitesForCustomer(x).subscribe(
+    //       res => {
+    //         //console.log(res);
+    //         this.listsitesforcustomer = res;
+    //         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+    //           console.log(this.listsitesforcustomer[i])
+
+              
+
+      
+    //         }
+    //       }
+    //     )
+    //   }
+    // }
+    //   )
+    // )
+  }
+
+  onFocused(e){
+    // here we can write our code for doing something when input is focused
+  }
 
   openSearchCustomerModal(content) {
     //bring up a modal
@@ -305,94 +333,10 @@ export class IncentiveDashboardTestComponent implements OnInit {
     )
   }
 
-  private generateDatumFormGroup(datum) {
-    return this.fb.group({
-      ItemID: this.fb.control(datum.itemID),
-      Description: this.fb.control(datum.itemDescription),
-      Quantity: this.fb.control(1),
-      Cost: this.fb.control(datum.defaultAmount ),
-      Total: this.fb.control(1 * datum.defaultAmount)
-    })
+  routeToNewCustomer() {
+    console.log('routeToNewCustomer was clicked from incentive dashboard test')
   }
 
-  getEquipMatItemName(e:any,i:number) {
-    setTimeout(() => {
-
-      const getItemID = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-        console.log(element, i);
-
-        const result = this.listMatItems.filter(x => x.item_id == element.ItemID);
-
-        console.log(result)
-        var string;
-        result.forEach(function(e) {
-          string = e.itemName.toString();//extract string from returned array
-        });
-        const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-        controlArray.at(i).get('Description').setValue(string);
-
-      })
-      }, 4);
-  }
-
-   updateTotalEquipMat(entryRowsEquipMat:any) {
-    const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
-    this.totalSumEquipMat=0;
-
-    for(let i in entryRowsEquipMat) {
-      console.log(i)
-      let totalEquipMatCalculation = entryRowsEquipMat[i].Total = (entryRowsEquipMat[i].Quantity * entryRowsEquipMat[i].Cost)
-      
-      control
-      .at(+i)
-      .get('Total')
-      .setValue(totalEquipMatCalculation,{
-        onlySelf:true,
-        emitEvent:false
-      });
-      this.totalSumEquipMat += totalEquipMatCalculation;
-
-      localStorage.setItem('totalEquipMatCalc',this.totalSumEquipMat.toString());
-    }
-  }
-
-  initEquipMatEntryRow() {
-    return this.fb.group({
-      ItemID: ["", Validators.required],
-      Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
-      Total: ["", Validators.required]
-    })
-  }
-
-  addNewEquipMatItem():void {
-    (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-    .push(this.initEquipMatEntryRow());
-  }
-
-  removeNewEquipMatItem(i: number) {
-    if(i > 0) {
-      const control = (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-    .removeAt(i);
-    }
-
-    if(i == 0) {
-      const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlArray.at(i).get('ItemID').setValue('');
-      controlArray.at(i).get('Description').setValue('');
-      controlArray.at(i).get('Quantity').setValue('');
-      controlArray.at(i).get('Cost').setValue('');
-      controlArray.at(i).get('Total').setValue('');
-    }
-
-    localStorage.removeItem("equipmatentry");
-    localStorage.removeItem("totalEquipMatCalc");
-  }
-
-  onCustomerChange(value) {
-    console.log(value);
-  }
 
   onSiteChange(value) {
     console.log(value);

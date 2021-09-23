@@ -1,0 +1,174 @@
+<div
+  class="app-splash-screen"
+  [ngStyle]="{ 
+    left: windowWidth, 
+    opacity: opacityChange,
+    transition: splashTransition
+  }"
+  *ngIf="showSplash"
+>
+  <div class="app-splash-inner">
+    <div class="app-logo"></div>
+    <div class="row">
+        <div class="col">
+            <h1 class="headline-1 high-emphasis">Welcome to The Partnership Connection!</h1>
+        </div>
+        
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="caption medium-emphasis"><i>Your online resource for everything regarding your base.</i></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="body-2 medium-emphasis">This guide provides a reference for the sections currently available. If you prefer to explore on your own, here are some things to keep in mind.</p>
+        </div>
+    </div>
+    <div id="stepper1" #stepper1 class="bs-stepper">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#test-l-1">
+            <button class="step-trigger">
+              <span class="bs-stepper-circle medium-emphasis text-white">1</span>
+              <span class="bs-stepper-label high-emphasis subtitle-2">Live Information</span>
+            </button>
+          </div>
+          <div class="line"></div>
+          <div class="step" data-target="#test-l-2">
+            <button class="step-trigger">
+              <span class="bs-stepper-circle medium-emphasis text-white">2</span>
+              <span class="bs-stepper-label high-emphasis subtitle-2">Navigation</span>
+            </button>
+          </div>
+          <div class="line"></div>
+          <div class="step" data-target="#test-l-3">
+            <button class="step-trigger">
+              <span class="bs-stepper-circle medium-emphasis text-white">3</span>
+              <span class="bs-stepper-label high-emphasis subtitle-2">Sending a Message</span>
+            </button>
+          </div>
+          <div class="line"></div>
+          <div class="step" data-target="#test-l-4">
+            <button class="step-trigger">
+              <span class="bs-stepper-circle medium-emphasis text-white">4</span>
+              <span class="bs-stepper-label high-emphasis subtitle-2">Finally...</span>
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <form (ngSubmit)="onSubmit()">
+            <div id="test-l-1" class="content">
+                <!-- <h5 class="headline-5 high-emphasis">Live Information</h5>   -->
+                <p class="body-2 medium-emphasis">Unless otherwise noted, the information displayed is in real time!</p>  
+              <button (click)="next()" class="btn btn-secondary">Next</button>
+            </div>
+            <div id="test-l-2" class="content">
+                <!-- <h5 class="headline-5 high-emphasis">Navigation</h5> -->
+                <p class="body-2 medium-emphasis">If a section has a <span class="arrow"><i class="fas fa-arrow-right arrow"></i></span> in the upper right-hand corner, you can get additional information by clicking on the <span class="arrow"><i class="fas fa-arrow-right arrow"></i></span>.</p>
+                <p class="body-2 medium-emphasis">Once you are inside, clicking on any line item opens a window showing details about that line.</p>  
+                <p class="body-2 medium-emphasis">Example:</p>
+                <img src="../../../assets/img/navigation.png" alt="">
+              <button (click)="next()" class="btn btn-secondary d-block mt-3">Next</button>
+            </div>
+            <div id="test-l-3" class="content">
+                <!-- <h5 class="headline-5 high-emphasis">Sending a Message</h5> -->
+                <p class="body-2 medium-emphasis">In the detail of any line item (see above), you will find <span><img src="../../../assets/img/message.png" alt=""></span>.</p>
+                <p class="body-2 medium-emphasis">Clicking the message button brings up a window. Here you can type a note that will be entered into the customer’s account AND generate an email alert for the Alarm Connections team.</p>
+                <p class="body-2 medium-emphasis">Examples of notes that might be entered are:</p>
+                <ul class="list-group list-unstyled">
+                    <li class="list-item body-2 medium-emphasis">3G - “This system has already been upgraded to 3G using the Alula Bat Connect.”</li>
+                    <li class="list-item body-2 medium-emphasis">Aging - “Called customer and they are sending a payment of $100 on Friday. Let me know if you do not receive it.”</li>
+                </ul>
+                <p class="body-2 medium-emphasis mt-2">Once you complete your note, click <span><img src="../../../assets/img/submit.png" alt=""></span> and the note is added to the SedonaOffice system as well as sent to the Alarm Connections department(s) associated with that area.</p>
+              <button (click)="next()" class="btn btn-secondary">Next</button>
+            </div>
+            <div id="test-l-4" class="content text-center">
+                <!-- <h5 class="headline-5 high-emphasis">Finally…</h5> -->
+                <p class="body-2 medium-emphasis">This portal is a work in progress, so keep your eyes open for new and exciting features!</p>
+                <p class="body-2 medium-emphasis">We strive to ensure that the information provided is timely and accurate. If you find anything that you feel is incorrect, please inform your RSM so they can forward the issue for research.</p>
+                <p class="body-2 medium-emphasis">If you would like a more detailed tour of the portal, please click the link below.</p>
+              <div class="row mt-3" *ngIf="!isAppLoader">
+                <div class="col">
+                    <button class="btn btn-secondary btn-lg btn-block" (click)="onClickStartTour()">Start Tour</button>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="!isAppLoader">
+                <div class="col text-center">
+                    <input 
+                        type="checkbox" 
+                        class="mr-2" 
+                        (change)="onChangeDontShowAgain($event)">
+                    <label class="form-check-label body-2 medium-emphasis">Don't Show Me This Screen Again</label>
+                </div>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    <!-- <div class="app-label">
+        <div class="row">
+            <div class="col">
+                <h1 class="headline-1 high-emphasis">Welcome to The Partnership Connection!</h1>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="caption medium-emphasis"><i>Your online resource for everything regarding your base.</i></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="body-2 medium-emphasis">This guide provides a reference for the sections currently available. If you prefer to explore on your own, here are some things to keep in mind.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5 class="headline-5 high-emphasis">Live Information</h5>
+                <p class="body-2 medium-emphasis">Unless otherwise noted, the information displayed is in real time!</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5 class="headline-5 high-emphasis">Navigation</h5>
+                <p class="body-2 medium-emphasis">If a section has a <span class="arrow"><i class="fas fa-arrow-right arrow"></i></span> in the upper right-hand corner, you can get additional information by clicking on the <span class="arrow"><i class="fas fa-arrow-right arrow"></i></span>.</p>
+                <p class="body-2 medium-emphasis">Once you are inside, clicking on any line item opens a window showing details about that line.</p>
+            </div>
+        </div>
+        <p class="body-2 medium-emphasis">Example:</p>
+        <div class="row">
+            <div class="col">
+                <h5 class="headline-5 high-emphasis">Sending a Message</h5>
+                <p class="body-2 medium-emphasis">In the detail of any line item (see above), you will find <span>GIF</span>.</p>
+                <p class="body-2 medium-emphasis">Clicking the message button brings up a window. Here you can type a note that will be entered into the customer’s account AND generate an email alert for the Alarm Connections team.</p>
+                <p class="body-2 medium-emphasis">Examples of notes that might be entered are:</p>
+                <ul class="list-group list-unstyled">
+                    <li class="list-item body-2 medium-emphasis">3G - “This system has already been upgraded to 3G using the Alula Bat Connect.”</li>
+                    <li class="list-item body-2 medium-emphasis">Aging - “Called customer and they are sending a payment of $100 on Friday. Let me know if you do not receive it.”</li>
+                </ul>
+                <p class="body-2 medium-emphasis">Once you complete your note, click <span>GIF</span> and the note is added to the SedonaOffice system as well as sent to the Alarm Connections department(s) associated with that area.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5 class="headline-5 high-emphasis">Finally…</h5>
+                <p class="body-2 medium-emphasis">This portal is a work in progress, so keep your eyes open for new and exciting features!</p>
+                <p class="body-2 medium-emphasis">We strive to ensure that the information provided is timely and accurate. If you find anything that you feel is incorrect, please inform your RSM so they can forward the issue for research.</p>
+                <p class="body-2 medium-emphasis">If you would like a more detailed tour of the portal, please click the link below.</p>
+            </div>
+        </div>
+        <div class="row mt-3" *ngIf="!isAppLoader">
+            <div class="col">
+                <button class="btn btn-secondary btn-lg btn-block" (click)="onClickStartTour()">Start Tour</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="!isAppLoader">
+            <div class="col text-center">
+                <input type="checkbox" class="mr-2" (click)="onDontShowAgainClick()">
+                <label class="form-check-label body-2 medium-emphasis">Don't Show Me This Screen Again</label>
+            </div>
+        </div>
+    </div> -->
+    <div class="app-loader" *ngIf="isAppLoader"></div>
+  </div>
+</div>

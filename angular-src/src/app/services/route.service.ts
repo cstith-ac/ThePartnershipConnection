@@ -627,10 +627,15 @@ export class RouteService {
     return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
   }
 
-  postIncentive_ADD_Finish(params:any): Observable<any> {
+  postIncentive_ADD_Finish(params:any): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json', 
+        'Accept': 'application/json', 
+        'Authorization':'Bearer ' + this.authToken 
+      }),
+      observe: 'response' as 'body' 
     };
     return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish',params, httpOptions);
   }

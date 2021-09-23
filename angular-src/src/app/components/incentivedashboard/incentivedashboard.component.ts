@@ -26,6 +26,7 @@ import { AuthService } from '../../services/auth.service';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
@@ -243,7 +244,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   other_Document1_file_extension;
 
   other_Document2_file_extension;
-  // myFiles:string [] = [];
+  //myFiles:string [] = [];
   myFiles = {
     Invoice: "",
     SubForm: "",
@@ -262,6 +263,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   columns: string[];
   public mySelection: string[] = [];
+
+  selectedInvoiceFile;
+  selectedSiteVisitFile;
+  selectedContractFile;
+  selectedSubscriberFile;
+  selectedOtherDocument1File;
+  selectedOtherDocument2File;
 
   recurringValueChanges$;
   equipMatValueChanges$;
@@ -306,6 +314,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
     private spinnerService: NgxSpinnerService,
+    private flashMessage: FlashMessagesService,
     private modalService: NgbModal,
     public fb: FormBuilder,
     private httpService: HttpClient,
@@ -479,23 +488,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //"InstallCompanyID": this.installCompanyID
     }).subscribe(
       (data: any[]) => {
-        console.log(data) //object returned
-        if(data.length==0) {
+        console.log(data) 
+        if(data === undefined || data.length === 0) {
           console.log('the data is empty')
           let fakeEquipMat = [{
-            ItemID: ["", Validators.required],
+            // ItemID: ["", Validators.required],
+            // Description: ["", Validators.required],
+            // Quantity: ["", Validators.required],
+            // Cost: ["", Validators.required],
+            // Total: [0, Validators.required]
+            ItemID: [0, Validators.required],
             Description: ["", Validators.required],
-            Quantity: ["", Validators.required],
-            Cost: ["", Validators.required],
+            Quantity: [1, Validators.required],
+            Cost: [0, Validators.required],
             Total: [0, Validators.required]
           }];
           this.incentiveEquipMatEntryForm = this.fb.group({
             //if there is no data entered from the incentive entry, populate fake data
             entryRowsEquipMat: this.fb.array(fakeEquipMat.map(datum => this.generateFakeDatumFormGroup(datum)))
-  
             // entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
           });
-        } else {
+          //debugger
+        } else if(data.length > 0) {
           console.log('there is data present')
           this.incentiveEquipMatEntryForm = this.fb.group({
             //if there is data present from the incentive entry, populate real data
@@ -895,11 +909,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //Equip & Mat
   private generateFakeDatumFormGroup(datum) {
     return this.fb.group({
-      ItemID: this.fb.control(datum.itemID),
+      // ItemID: this.fb.control(datum.itemID),
+      // Description: this.fb.control(datum.itemDescription),
+      // Quantity: this.fb.control(1),
+      // Cost: this.fb.control(datum.defaultAmount ),
+      // Total: this.fb.control(0)
+      ItemID: this.fb.control(0),
       Description: this.fb.control(datum.itemDescription),
       Quantity: this.fb.control(1),
-      Cost: this.fb.control(datum.defaultAmount ),
-      // Total: this.fb.control(this.quantity * datum.defaultAmount)
+      Cost: this.fb.control(0),
       Total: this.fb.control(0)
     })
   }
@@ -1729,7 +1747,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           frmData.append('reference2', null);
           frmData.append('reference3', null);
           frmData.append('reference4', null);
-          frmData.append("file_data", this.myFiles.Invoice);
+          frmData.append("file_data", this.selectedInvoiceFile);
+          //frmData.append("file_data", this.myFiles.Invoice);
           // perform http request for each file
           //frmData.append('@file_data', this.myFiles[i]);
           frmData.append('document_id', '1');
@@ -1752,69 +1771,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }).subscribe(
             data => {
               console.log({i:0,data});
-            }
-          )
-            console.log(frmData)
-        }
-
-        if(this.subscriber_file_name) {
-          //console.log(this.myFiles[1])
-          let frmData = new FormData();
-
-          // 37 = Sandbox, 6 = Production
-          frmData.append('company_id','37');
-
-          // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-          frmData.append('customer_id', this.id);
-
-          frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-          //frmData.append('customer_site_id',this.customerSiteId);
-          
-          frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-          //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-          frmData.append('job_id', this.job_id);
-          //frmData.append('job_id', '19');
-          frmData.append('security_level', this.security_level);
-
-          //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-          frmData.append('file_name', this.subscriber_file_name);
-          frmData.append('file_size', this.subscriber_file_size);
-          frmData.append('upload_date', this.invoiceDate);
-          frmData.append('document_ext', '*Contracts');
-          frmData.append('user_code', 'TPC');
-          //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-          frmData.append('user_description', 'Subscriber Form');
-          frmData.append('reference1', null);
-          frmData.append('reference2', null);
-          frmData.append('reference3', null);
-          frmData.append('reference4', null);
-          frmData.append("file_data", this.myFiles.SubForm);
-          // for(var i = 0; i < this.myFiles.length; i++) {
-          //   console.log(this.myFiles[i])
-          //   frmData.append("subscriber_file_data", this.myFiles[i]);
-          // }
-          // perform http request for each file
-          //frmData.append('@file_data', this.myFiles[i]);
-          frmData.append('document_id', '1');
-
-          console.log(this.job_id)
-          // Display the key/value pairs
-          console.log(Object.entries(frmData));//returns an empty array!
-          var options = {content: frmData};
-
-          console.log(frmData);
-          console.log(this.job_id);
-          const headers = new HttpHeaders();
-          headers.append('Content-Type', 'multipart/form-data');
-          headers.append('Authorization','Bearer ' + this.loadToken());
-          headers.append('Accept', 'application/json');
-          this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            headers: headers,
-            responseType: 'text'
-          }).subscribe(
-            data => {
-              console.log({i:1,data});
             }
           )
             console.log(frmData)
@@ -1852,7 +1808,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('reference2', null);
             frmData.append('reference3', null);
             frmData.append('reference4', null);
-            frmData.append("file_data", this.myFiles.SiteVisit);
+            frmData.append("file_data", this.selectedSiteVisitFile);
+            // frmData.append("file_data", this.myFiles.SiteVisit);
               // for(var i = 0; i < this.myFiles.length; i++) {
               //   console.log(this.myFiles[i])
               //   frmData.append("file_data", this.myFiles[i]);
@@ -1881,6 +1838,134 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               }
             )
               console.log(frmData)
+        }
+
+        if(this.contract_file_name) {
+          console.log(this.myFiles[5])
+            let frmData = new FormData();
+
+            // 37 = Sandbox, 6 = Production
+            frmData.append('company_id','37');
+
+            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            frmData.append('customer_id', this.id);
+
+            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //frmData.append('customer_site_id',this.customerSiteId);
+            
+            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+            frmData.append('job_id', this.job_id);
+            //frmData.append('job_id', '19');
+            frmData.append('security_level', this.security_level);
+
+            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            frmData.append('file_name', this.contract_file_name);
+            frmData.append('file_size', this.contract_file_size);
+            frmData.append('upload_date', this.invoiceDate);
+            frmData.append('document_ext', '*Contracts');
+            frmData.append('user_code', 'TPC');
+            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            frmData.append('user_description', 'Contract');
+            frmData.append('reference1', null);
+            frmData.append('reference2', null);
+            frmData.append('reference3', null);
+            frmData.append('reference4', null);
+            frmData.append("file_data", this.selectedContractFile);
+            // frmData.append("file_data", this.myFiles.Contract);
+              // for(var i = 0; i < this.myFiles.length; i++) {
+              //   console.log(this.myFiles[i])
+              //   frmData.append("file_data", this.myFiles[i]);
+              // }
+              // perform http request for each file
+              //frmData.append('@file_data', this.myFiles[i]);
+            frmData.append('document_id', '1');
+
+            console.log(this.job_id)
+            // Display the key/value pairs
+            console.log(Object.entries(frmData));//returns an empty array!
+            var options = {content: frmData};
+
+            console.log(frmData);
+            console.log(this.job_id);
+            const headers = new HttpHeaders();
+            headers.append('Content-Type', 'multipart/form-data');
+            headers.append('Authorization','Bearer ' + this.loadToken());
+            headers.append('Accept', 'application/json');
+            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+              headers: headers,
+              responseType: 'text'
+            }).subscribe(
+              data => {
+                console.log({i:5,data});
+              }
+            )
+              console.log(frmData)
+        }
+
+        if(this.subscriber_file_name) {
+          //console.log(this.myFiles[1])
+          let frmData = new FormData();
+
+          // 37 = Sandbox, 6 = Production
+          frmData.append('company_id','37');
+
+          // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+          frmData.append('customer_id', this.id);
+
+          frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+          //frmData.append('customer_site_id',this.customerSiteId);
+          
+          frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+          //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+          frmData.append('job_id', this.job_id);
+          //frmData.append('job_id', '19');
+          frmData.append('security_level', this.security_level);
+
+          //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+          frmData.append('file_name', this.subscriber_file_name);
+          frmData.append('file_size', this.subscriber_file_size);
+          frmData.append('upload_date', this.invoiceDate);
+          frmData.append('document_ext', '*Contracts');
+          frmData.append('user_code', 'TPC');
+          //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+          frmData.append('user_description', 'Subscriber Form');
+          frmData.append('reference1', null);
+          frmData.append('reference2', null);
+          frmData.append('reference3', null);
+          frmData.append('reference4', null);
+          frmData.append("file_data", this.selectedSubscriberFile);
+          // frmData.append("file_data", this.myFiles.SubForm);
+          // for(var i = 0; i < this.myFiles.length; i++) {
+          //   console.log(this.myFiles[i])
+          //   frmData.append("subscriber_file_data", this.myFiles[i]);
+          // }
+          // perform http request for each file
+          //frmData.append('@file_data', this.myFiles[i]);
+          frmData.append('document_id', '1');
+
+          console.log(this.job_id)
+          // Display the key/value pairs
+          console.log(Object.entries(frmData));//returns an empty array!
+          var options = {content: frmData};
+
+          console.log(frmData);
+          console.log(this.job_id);
+          const headers = new HttpHeaders();
+          headers.append('Content-Type', 'multipart/form-data');
+          headers.append('Authorization','Bearer ' + this.loadToken());
+          headers.append('Accept', 'application/json');
+          this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            headers: headers,
+            responseType: 'text'
+          }).subscribe(
+            data => {
+              console.log({i:1,data});
+            }
+          )
+            console.log(frmData)
         }
 
         if(this.other_Document1_file_name) {
@@ -1915,7 +2000,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('reference2', null);
             frmData.append('reference3', null);
             frmData.append('reference4', null);
-            frmData.append("file_data", this.myFiles.Other1);
+            frmData.append("file_data", this.selectedOtherDocument1File);
+            // frmData.append("file_data", this.myFiles.Other1);
               // for(var i = 0; i < this.myFiles.length; i++) {
               //   console.log(this.myFiles[i])
               //   frmData.append("file_data", this.myFiles[i]);
@@ -1978,7 +2064,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             frmData.append('reference2', null);
             frmData.append('reference3', null);
             frmData.append('reference4', null);
-            frmData.append("file_data", this.myFiles.Other2);
+            frmData.append("file_data", this.selectedOtherDocument2File);
+            // frmData.append("file_data", this.myFiles.Other2);
               // for(var i = 0; i < this.myFiles.length; i++) {
               //   console.log(this.myFiles[i])
               //   frmData.append("file_data", this.myFiles[i]);
@@ -2009,69 +2096,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               console.log(frmData)
         }
 
-        if(this.contract_file_name) {
-          console.log(this.myFiles[5])
-            let frmData = new FormData();
-
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
-
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
-
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
-            
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
-
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.contract_file_name);
-            frmData.append('file_size', this.contract_file_size);
-            frmData.append('upload_date', this.invoiceDate);
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'TPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Contract');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-            frmData.append("file_data", this.myFiles.Contract);
-              // for(var i = 0; i < this.myFiles.length; i++) {
-              //   console.log(this.myFiles[i])
-              //   frmData.append("file_data", this.myFiles[i]);
-              // }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
-
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
-
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'text'
-            }).subscribe(
-              data => {
-                console.log({i:5,data});
-              }
-            )
-              console.log(frmData)
-        }
-
         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
@@ -2079,10 +2103,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
           result => {
-            console.log('Finished!... ');
+            if(result.status === 200) {
+              console.log('Finished!... ');
 
-            this.spinnerService.hide()
-            return;
+              this.spinnerService.hide();
+              this.flashMessage.show('Your invoice has been submitted successfully', {
+                cssClass: 'text-center alert-success',
+                timeout: 5000
+              });
+            }
+            // console.log('Finished!... ');
+
+            // this.spinnerService.hide()
+
             //localStorage.removeItem('installCompanyID');
             localStorage.removeItem('totalRecurringCalc');
             localStorage.removeItem('totalEquipMatCalc');
@@ -2128,7 +2161,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             localStorage.removeItem('checkBoxAutoInsertList');
             localStorage.removeItem('results');
 
-            this.router.navigate(['incentive-entry/']);
+            //this.router.navigate(['incentive-entry/']);
+          }, (err:HttpErrorResponse) => {
+            alert('There was an error')
+            this.spinnerService.hide();
           }
         )
        
@@ -2148,12 +2184,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   //Test Invoice file upload
-  getFileDetails(e) {
-    console.log(e);
+  getInvoiceFileDetails(e) {
+    //console.log(e);
     //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
+
+      this.selectedInvoiceFile = e.target.files[0];
 
       //upload to localstorage
       const reader = new FileReader();
@@ -2184,42 +2222,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  //Test Subscriber Form file upload
-  getSubscriberFileDetails(e) {
-    //console.log(e.target.files);
-    for (var i = 0; i < e.target.files.length; i++) {
-      //push the files to the array
-      console.log(e.target.files[i]);
-      //upload to localstorage
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        localStorage.setItem("subscriberForm", reader.result as string);
-        this.showSubscriberFormFile = true;
-      });
-
-      reader.readAsDataURL(e.target.files[i]);
-
-      //get the file name
-      this.subscriber_file_name = e.target.files[i].name;
-      //this.subscriber_file_name = 'subscriberForm';
-      localStorage.setItem('subscriberFormName', this.subscriber_file_name);
-      //this.divSubscriberForm.nativeElement.innerHTML = this.subscriber_file_name;
-      //get the file size
-      this.subscriber_file_size = e.target.files[i].size;
-      console.log(this.subscriber_file_size)
-      //this.invoiceDate = e.target.files[i].lastModified;
-
-      //this.myFiles.push(e.target.files[i]);
-      this.myFiles.SubForm = e.target.files[i];
-    }
-  }
-
   //Test Site Visit Form file upload
   getSiteVisitFileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
+      this.selectedSiteVisitFile = e.target.files[i];
 
       //upload to localstorage
       const reader = new FileReader();
@@ -2245,41 +2253,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-   //Test Other Document 1 Form file upload
-  getOtherDocument1FileDetails(e) {
-    for (var i = 0; i < e.target.files.length; i++) {
-      //push the files to the array
-      console.log(e.target.files[i]);
-
-      //upload to localstorage
-      const reader = new FileReader();
-
-      reader.addEventListener("load", () => {
-        localStorage.setItem("otherDocument1", reader.result as string);
-        this.showOtherDocument1File = true;
-      });
-
-      reader.readAsDataURL(e.target.files[i]);
-
-      //get the file name
-      this.other_Document1_file_name = e.target.files[i].name;
-      //this.other_Document1_file_name = 'otherDocument1';
-      localStorage.setItem('otherDocument1Name', this.other_Document1_file_name);
-      //this.divOtherDocument1.nativeElement.innerHTML = this.other_Document1_file_name;
-      //get the file size
-      this.other_Document1_file_size = e.target.files[i].size;
-      //this.invoiceDate = e.target.files[i].lastModified;
-
-      // this.myFiles.push(e.target.files[i]);
-      this.myFiles.Other1 = e.target.files[i];
-    }
-  }
-
   //Test Contract Form file upload
   getContractFileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
+      this.selectedContractFile = e.target.files[i];
 
       //upload to localstorage
       const reader = new FileReader();
@@ -2305,11 +2284,75 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
+  //Test Subscriber Form file upload
+  getSubscriberFileDetails(e) {
+    //console.log(e.target.files);
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+      this.selectedSubscriberFile = e.target.files[i];
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        localStorage.setItem("subscriberForm", reader.result as string);
+        this.showSubscriberFormFile = true;
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      this.subscriber_file_name = e.target.files[i].name;
+      //this.subscriber_file_name = 'subscriberForm';
+      localStorage.setItem('subscriberFormName', this.subscriber_file_name);
+      //this.divSubscriberForm.nativeElement.innerHTML = this.subscriber_file_name;
+      //get the file size
+      this.subscriber_file_size = e.target.files[i].size;
+      console.log(this.subscriber_file_size)
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      //this.myFiles.push(e.target.files[i]);
+      this.myFiles.SubForm = e.target.files[i];
+    }
+  }
+
+   //Test Other Document 1 Form file upload
+  getOtherDocument1FileDetails(e) {
+    for (var i = 0; i < e.target.files.length; i++) {
+      //push the files to the array
+      console.log(e.target.files[i]);
+      this.selectedOtherDocument1File = e.target.files[i]
+
+      //upload to localstorage
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        localStorage.setItem("otherDocument1", reader.result as string);
+        this.showOtherDocument1File = true;
+      });
+
+      reader.readAsDataURL(e.target.files[i]);
+
+      //get the file name
+      this.other_Document1_file_name = e.target.files[i].name;
+      //this.other_Document1_file_name = 'otherDocument1';
+      localStorage.setItem('otherDocument1Name', this.other_Document1_file_name);
+      //this.divOtherDocument1.nativeElement.innerHTML = this.other_Document1_file_name;
+      //get the file size
+      this.other_Document1_file_size = e.target.files[i].size;
+      //this.invoiceDate = e.target.files[i].lastModified;
+
+      // this.myFiles.push(e.target.files[i]);
+      this.myFiles.Other1 = e.target.files[i];
+    }
+  }
+
   //Test Other Document 2 Form file upload
   getOtherDocument2FileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
+      this.selectedOtherDocument2File = e.target.files[i];
 
       //upload to localstorage
       const reader = new FileReader();
@@ -2338,43 +2381,68 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   removeInvoiceFile(){
     localStorage.removeItem('invoiceName');
     localStorage.removeItem('invoice');
-    this.divInvoice.nativeElement.value = '';
+    // this.divInvoice.nativeElement.value = '<p></p>';
     this.showInvoiceFile = false;
-  }
+    this.invoiceUpload = '';
+    this.incentiveDashboardForm.get('InvoiceUpload').reset();
 
-  removeSubscriberFormFile() {
-    localStorage.removeItem('subscriberFormName');
-    localStorage.removeItem('subscriberForm');
-    this.divSubscriberForm.nativeElement.value = '';
-    this.showSubscriberFormFile = false;
+    this.selectedInvoiceFile = {};
+
   }
 
   removeSiteVisitFile() {
     localStorage.removeItem('siteVisitName');
     localStorage.removeItem('siteVisit');
-    this.divSiteVisit.nativeElement.value = '';
+    // this.divSiteVisit.nativeElement.value = '';
     this.showSiteVisitFile = false;
-  }
+    this.siteVisitUpload = '';
+    this.incentiveDashboardForm.get('SiteVisitUpload').reset();
 
-  removeOtherDocument1File() {
-    localStorage.removeItem('otherDocument1Name');
-    localStorage.removeItem('otherDocument1');
-    this.divOtherDocument1.nativeElement.value = '';
-    this.showOtherDocument1File = false;
+    this.selectedSiteVisitFile = {};
   }
 
   removeContractFile() {
     localStorage.removeItem('contractName');
     localStorage.removeItem('contract');
-    this.divContract.nativeElement.value = '';
+    // this.divContract.nativeElement.value = '';
     this.showContractFile = false;
+    this.contractUpload = '';
+    this.incentiveDashboardForm.get('ContractUpload').reset();
+
+    this.selectedContractFile = {};
+  }
+
+  removeSubscriberFormFile() {
+    localStorage.removeItem('subscriberFormName');
+    localStorage.removeItem('subscriberForm');
+    // this.divSubscriberForm.nativeElement.value = '';
+    this.showSubscriberFormFile = false;
+    this.subscriberFormUpload = '';
+    this.incentiveDashboardForm.get('subscriberFormUpload').reset();
+
+    this.selectedSubscriberFile = {};
+  }
+
+  removeOtherDocument1File() {
+    localStorage.removeItem('otherDocument1Name');
+    localStorage.removeItem('otherDocument1');
+    // this.divOtherDocument1.nativeElement.value = '';
+    this.showOtherDocument1File = false;
+    this.otherDocument1Upload = '';
+    this.incentiveDashboardForm.get('otherDocument1Upload').reset();
+
+    this.selectedOtherDocument1File = {};
   }
 
   removeOtherDocument2File() {
     localStorage.removeItem('otherDocument2Name');
     localStorage.removeItem('otherDocument2');
-    this.divOtherDocument2.nativeElement.value = '';
+    // this.divOtherDocument2.nativeElement.value = '';
     this.showOtherDocument2File = false;
+    this.otherDocument2Upload = '';
+    this.incentiveDashboardForm.get('otherDocument2Upload').reset();
+
+    this.selectedOtherDocument2File = {};
   }
 
   getLineItemSubtotal() {

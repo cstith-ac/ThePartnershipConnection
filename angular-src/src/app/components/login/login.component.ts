@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
     public location: Location) { }
 
   ngOnInit() {
+    //this.onDeterminePrevUrl();
+
     $(document).ready(function() {
       $("#show_hide_password a").on('click', function(event) {
           event.preventDefault();
@@ -47,6 +49,15 @@ export class LoginComponent implements OnInit {
       this.onNavigateToPartnerDashboard()
     }
   }
+
+  // onDeterminePrevUrl(){
+  //   console.log('onDeterminePrevUrl was called')
+  //   let oldUrl = document.referrer;
+  //   if(oldUrl === 'https://dev-alarm-connections.pantheonsite.io/current-partners/') {
+  //     this.router.navigate(['/partner-dashboard'])
+  //     console.log(oldUrl)
+  //   }
+  // }
 
   onLoginSubmit() {
     const user = {

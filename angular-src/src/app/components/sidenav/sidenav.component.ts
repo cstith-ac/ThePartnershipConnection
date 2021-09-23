@@ -12,7 +12,7 @@ import { ContactList } from 'src/app/models/contactlist';
 import { ContactListAdditional } from 'src/app/models/contactlistadditional';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
 import { UserService } from 'src/app/services/user.service';
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sidenav',
@@ -37,6 +37,10 @@ export class SidenavComponent implements OnInit {
 
   currentUser$ = this.currentUserService.data$;
 
+  baseUrl = environment.baseUrl;
+
+  // showSplash=true;
+
   constructor(
     private currentUserService: UserService,
     private spinnerService: NgxSpinnerService,
@@ -47,6 +51,7 @@ export class SidenavComponent implements OnInit {
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
+    // this.showSplash;
 
     this.currentUserService.getCurrentUser();
     //console.log(this.currentUser$);
@@ -113,6 +118,29 @@ export class SidenavComponent implements OnInit {
 
   onLogoutClick() {
     this.authService.logout();
+
+    const user: any = JSON.parse(localStorage.getItem('user'));
+    console.log(user.afaRole);
+    if(user.afaRole == 5) {
+      // if live
+      if(location.hostname === 'www.thepartnershipconnection.com') {
+        window.location.href = 'https://www.alarmconnections.com/current-partners/'
+      }
+      // if test from alarm connections staging
+      if(location.hostname === 'partnercon-test-staging.azurewebsites.net') {
+        // window.location.href = 'https://dev-alarm-connections.pantheonsite.io/'
+        window.location.href = 'https://partnercon-test-staging.azurewebsites.net' 
+      }
+      // if test from localhost
+      if(location.hostname === 'localhost') {
+        //window.location.href = 'https://dev-alarm-connections.pantheonsite.io/' 
+        this.router.navigate(['/login']);
+      }
+    } else if(user.afaRole == 19 || user.afaRole == 14 || user.afaRole == 9) {
+      this.router.navigate(['/login']);
+    }
+    //return false;
+
     //implementing this workaround until the JS in the auth service is fixed
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -163,12 +191,20 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('siteName');
     localStorage.removeItem('checkBoxAutoInsertList');
     localStorage.removeItem('results');
+    localStorage.removeItem('removeSplash');
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',
       timeout: 3000
     });
-    this.router.navigate(['/login']);
+
+    // const user: any = JSON.parse(localStorage.getItem('user'));
+    // console.log(user.afaRole);
+    // if(user.afaRole == 5) {
+    //   window.location.href = 'https://www.alarmconnections.com/current-partners/'
+    // } else if(user.afaRole == 19) {
+    //   this.router.navigate(['/login']);
+    // }
     return false;
   }
 

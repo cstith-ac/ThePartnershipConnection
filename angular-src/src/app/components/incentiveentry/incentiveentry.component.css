@@ -115,7 +115,7 @@ https://stackoverflow.com/questions/279421/can-you-style-an-html-radio-button-to
 *****/
 input[type="radio"]{
     appearance: none;
-    border: 1px solid #000;
+    border: 1px solid #cad1d7;
     width: 15px;
     height: 15px;
     content: none;
@@ -126,19 +126,22 @@ input[type="radio"]{
  
 input[type="radio"]:checked {
    appearance: none;
+   border: 1px solid #000;
    outline: none;
    padding: 0;
    content: none;
-   border: none;
+   /* border: none; */
 }
  
 input[type="radio"]:checked::before{
    position: absolute;
    color: green !important;
    content: "\00A0\2713\00A0" !important;
-   border: 1px solid #d3d3d3;
+   /* border: 1px solid #d3d3d3; */
+   border: 0 solid #d3d3d3;
    font-weight: bolder;
-   font-size: 10px;
+   font-size: 20px;
+   top: 7px;
 }
 .footer {
     padding: 0;

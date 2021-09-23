@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
 const moment = require('moment');
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -50,6 +50,7 @@ export class PartnerdashboardComponent implements OnInit {
   id:string;
   pageSize=10;
 
+  showSplash=true;
 
   constructor(
     private spinnerService: NgxSpinnerService,
@@ -62,6 +63,8 @@ export class PartnerdashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.showSplash;
+    
     this.getMonthDiff();
 
     if(this.jwtHelper.isTokenExpired()) {
@@ -121,6 +124,16 @@ export class PartnerdashboardComponent implements OnInit {
         }
       }
     )
+  }
+
+  openAppSettingsModal(e) {
+    e.preventDefault();
+    console.log('openAppSettingsModal was called')
+
+    // open a modal
+    // display checkboxes, currently selected value checked and other available value
+    // update change in localstorage
+    // Show directions again if don't show directions again checkbox was checked 
   }
 
   getMonthDiff() {

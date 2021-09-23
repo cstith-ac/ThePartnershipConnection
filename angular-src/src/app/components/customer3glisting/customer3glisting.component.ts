@@ -50,6 +50,8 @@ export class Customer3glistingComponent implements OnInit {
   system_Code;
   zipCode;
 
+  exportToExcel = 1; // Show Export to Excel button = 1 (Yes), Hide Export to Excel button = 0 (No)
+
   public columns: any[] = [
     {field: "Alarm Account"}, 
     {field: "CustomerNumber"}, 
@@ -130,6 +132,9 @@ export class Customer3glistingComponent implements OnInit {
     // setTimeout(() => {
     //   this.spinnerService.hide();
     // }, 8000)
+
+    // Query permission for exportToExcel
+    // Update
 
     this.routeService.getCustomer3GListing().subscribe(
       res => {
