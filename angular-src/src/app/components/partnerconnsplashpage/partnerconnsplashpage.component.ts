@@ -41,11 +41,7 @@ export class PartnerconnsplashpageComponent implements OnInit {
       if(localStorage.getItem('removeSplash') === '1') {
         this.showSplash=false;
       }
-      // document.getElementById("test-l-1").scrollIntoView({
-      //   behavior: "smooth",
-      //   block: "center",
-      //   inline: "nearest"
-      // });
+
       this.scroller.scrollToAnchor("test-l-1");
       this.stepper = new Stepper(document.querySelector('#stepper1'), {
         linear: false,
@@ -54,43 +50,6 @@ export class PartnerconnsplashpageComponent implements OnInit {
     }, 400);
     
   }
-    // setTimeout(() => {
-    //   let transitionStyle = "";
-    //   switch (this.animationType) {
-    //     case SplashAnimationType.SlideLeft:
-    //       this.windowWidth = "-" + window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.SlideRight:
-    //       this.windowWidth = window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.FadeOut:
-    //       transitionStyle = "opacity " + this.animationDuration + "s";
-    //       this.opacityChange = 0;
-    //   }
-
-    //   this.splashTransition = transitionStyle;
-
-    //   setTimeout(() => {
-    //     this.showSplash = !this.showSplash;
-    //   }, this.animationDuration * 6000);
-    // }, this.duration * 6000);
-  //}
-
-  // ngAfterViewInit() {
-  //   setTimeout(() => {
-  //     document.getElementById("test-l-1").scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "start",
-  //       inline: "nearest"
-  //     });
-  //     this.stepper = new Stepper(document.querySelector('#stepper1'), {
-  //       linear: false,
-  //       animation: true
-  //     })  
-  //   }, 400);
-  // }
 
   onChangeDontShowAgain(e) {
     if(e.currentTarget.checked == true) {
@@ -104,59 +63,13 @@ export class PartnerconnsplashpageComponent implements OnInit {
     }
     //return
     this.onDetectRemoveSplashPage();
-
-    // setTimeout(() => {
-    //   let transitionStyle = "";
-    //   switch (this.animationType) {
-    //     case SplashAnimationType.SlideLeft:
-    //       this.windowWidth = "-" + window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.SlideRight:
-    //       this.windowWidth = window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.FadeOut:
-    //       transitionStyle = "opacity " + this.animationDuration + "s";
-    //       this.opacityChange = 0;
-    //   }
-
-    //   this.splashTransition = transitionStyle;
-
-    //   setTimeout(() => {
-    //     this.showSplash = !this.showSplash;
-    //   }, this.animationDuration * 1000);
-    // }, this.duration * 1000);
   }
 
   onClickStartTour() {
     this.onDetectRemoveSplashPage();
-    // setTimeout(() => {
-    //   let transitionStyle = "";
-    //   switch (this.animationType) {
-    //     case SplashAnimationType.SlideLeft:
-    //       this.windowWidth = "-" + window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.SlideRight:
-    //       this.windowWidth = window.innerWidth + "px";
-    //       transitionStyle = "left " + this.animationDuration + "s";
-    //       break;
-    //     case SplashAnimationType.FadeOut:
-    //       transitionStyle = "opacity " + this.animationDuration + "s";
-    //       this.opacityChange = 0;
-    //   }
-
-    //   this.splashTransition = transitionStyle;
-
-    //   setTimeout(() => {
-    //     this.showSplash = !this.showSplash;
-    //   }, this.animationDuration * 1000);
-    // }, this.duration * 1000);
   }
 
   onDetectRemoveSplashPage() {
-    // console.log('hi')
     this.isAppLoader = true;
     setTimeout(() => {
       let transitionStyle = "";

@@ -7,7 +7,11 @@ import { process, State } from '@progress/kendo-data-query';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
+import { PermissionsService } from 'src/app/services/permissions.service';
+import { AuthService } from 'src/app/services/auth.service';
 declare var $: any;
+import { mergeMap, switchMap } from 'rxjs/operators';
+import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
 
 @Component({
   selector: 'app-customer3glisting',
@@ -50,7 +54,9 @@ export class Customer3glistingComponent implements OnInit {
   system_Code;
   zipCode;
 
-  exportToExcel = 1; // Show Export to Excel button = 1 (Yes), Hide Export to Excel button = 0 (No)
+  userName;
+  permissionsUserMap: PermissionsUserMap[];
+  hide3GExcelExport: boolean = false;
 
   public columns: any[] = [
     {field: "Alarm Account"}, 
@@ -92,7 +98,9 @@ export class Customer3glistingComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     private routeService: RouteService,
-    private spinnerService: NgxSpinnerService
+    private spinnerService: NgxSpinnerService,
+    private authService: AuthService,
+    public permissionService: PermissionsService
   ) { 
     this.gridData = this.customer3gListing;
   }
@@ -134,7 +142,21 @@ export class Customer3glistingComponent implements OnInit {
     // }, 8000)
 
     // Query permission for exportToExcel
-    // Update
+    // use SwitchMap to get profile then permissions user map
+    this.authService.getProfile().pipe(
+      mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+    ).subscribe(data => {
+      console.log(data)
+      this.permissionsUserMap = data;
+
+      //show/hide card or card and button base on hasPermission value of Y or N
+      for(let i = 0; i < this.permissionsUserMap.length; i++) {
+        if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hide3GExcelExport = true;
+        }
+      }
+    })
 
     this.routeService.getCustomer3GListing().subscribe(
       res => {

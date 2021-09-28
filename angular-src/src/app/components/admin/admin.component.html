@@ -45,19 +45,9 @@
                       <table class="table">
                           <thead>
                             <tr>
-                              <!-- <th scope="col">ID</th> -->
                               <th scope="col">Username</th>
-                              <!-- <th scope="col">email</th>
-                              <th scope="col">phoneNumber</th> -->
                               <th scope="col">firstName</th>
                               <th scope="col">lastName</th>
-                              <!-- <th scope="col">altEmail</th>
-                              <th scope="col">cellPhoneNumber1</th> -->
-                              <!-- <th scope="col">afauserLink</th> -->
-                              <!-- <th scope="col">createdBy</th>
-                              <th scope="col">creationDate</th> -->
-                              <!-- <th scope="col">afaemployee</th>
-                              <th scope="col">afaRole</th> -->
                               <th scope="col"></th>
                             </tr>
                           </thead>
@@ -65,22 +55,16 @@
                             <tr *ngFor="let item of allUsers">
                               <!-- <th scope="row">{{item.id}}</th> -->
                               <td>{{ item.userName }}</td>
-                              <!-- <td>{{ item.email }}</td>
-                              <td>{{ item.phoneNumber }}</td> -->
                               <td>{{ item.firstName }}</td>
                               <td>{{ item.lastName }}</td>
-                              <!-- <td>{{ item.altEmail }}</td>
-                              <td>{{ item.cellPhoneNumber1 }}</td> -->
-                              <!-- <td>{{ item.afauserLink }}</td> -->
-                              <!-- <td>{{ item.createdBy }}</td>
-                              <td>{{ item.creationDate }}</td> -->
-                              <!-- <td>{{ item.afaemployee }}</td>
-                              <td>{{ item.afaRole }}</td> -->
                               <td>
                                 <button class="btn btn-primary" (click)="editCurrentUser(item.id)">
                                   <i class="fa fa-pencil pr-2"></i>Edit User Password
                                 </button>
-                                <button class="btn btn-danger float-right" (click)="deleteCurrentUser(item.id)" disabled>
+                                <button class="btn btn-primary" (click)="editCurrentUserSettings($event,item.id, item.userName)">
+                                  <i class="fa fa-pencil pr-2"></i>Edit User Settings
+                                </button>
+                                <button class="btn btn-error" (click)="deleteCurrentUserModal($event,item.id)">
                                   <i class="fa fa-trash pr-2"></i>Delete User
                                 </button>
                               </td>
@@ -103,3 +87,272 @@
     </div>
 </div>
 
+<!--Settings Modal-->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-1160">
+      <div class="modal-content">
+          <div class="modal-header pb-0 pl-2">
+              <div class="col-md-12 mb-2">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+          </div>
+          <div class="modal-body pt-0">
+              <div class="card p-3">
+                  <div class="card-body">
+                      <div class="row">
+                          <!-- <div class="col">
+                             <p>Settings</p>
+                          </div> -->
+                          <div class="col-md-12">
+                            <form>
+                              <div class="form-group card" *ngFor="let item of aspNetPermissions; let i=index">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">{{ item.permissionToolTip }}</p>
+                                  </div>
+                                  <!-- <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input 
+                                        type="checkbox" 
+                                        (change)="onChangeAccessFor3GConv($event)" 
+                                        [value]="item.permissionName"
+                                        [checked]="item.hasPermission">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div> -->
+                                </div>
+                              </div>
+                            </form>
+                            <form>
+                              <div class="form-group card" *ngFor="let item of permissionsUserMap; let i=index">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">{{ item.permissionToolTip }}</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input 
+                                        type="checkbox" 
+                                        (change)="onChangeAccessFor3GConv($event)" 
+                                        [value]="item.permissionName"
+                                        [checked]="item.hasPermission">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Able to Export 3G List to Excel</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAbleToExport3G($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access for Pending Cancellation Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessForPendingCancel($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to Aging Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToAgingCard($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to the Aging Call to Action Report</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToAgingCallToAction($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to the Invoices & Incentives Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToInvIncentive($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Able to Create an Invoice</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAbleToCreateInvoice($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to the Service Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToServiceCard($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to the Sales Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToSalesCard($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access to the Attrition Card</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAccessToAttritionCard($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div> -->
+                            </form>
+                            <!-- <form class="mt-2">
+                              <h5 class="headline-5 text-error">Delete user</h5>
+                              <p>Once you delete this user, there is no going back. Please be certain</p>
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Delete This User</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input 
+                                        type="checkbox" 
+                                        (change)="deleteCurrentUser($event)" 
+                                        [value]="id" 
+                                        value="{{ id }}"
+                                        [checked]="">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </form> -->
+                          </div>
+                          <div class="col">
+                              <button type="submit" class="btn btn-block btn-secondary" (click)="onSaveSettings()"><i class="fas fa-plus pr-2"></i>Save</button>
+                          </div>                      
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+  </div>
+</div>
+
+<!--Delete User Modal-->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-1160">
+      <div class="modal-content">
+          <div class="modal-header pb-0 pl-2">
+              <div class="col-md-12 mb-2">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+          </div>
+          <div class="modal-body pt-0">
+              <div class="card p-3">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="headline-5 text-error">Delete user</h5>
+                              <p class="body-2 high-emphasis">Once you delete this user, there is no going back. Please be certain</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                          <form class="mt-2" [formGroup]="deleteCurrentUserForm">
+                            <div class="form-group card">
+                              <div class="row p-1">
+                                <div class="col">
+                                  <p class="d-inline">Delete This User</p>
+                                </div>
+                                <div class="col">
+                                  <label class="switch float-right mb-0">
+                                    <input 
+                                      type="checkbox" 
+                                      value="id"
+                                      formControlName="deleteCurrentUser"
+                                      >
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col">
+                                <button 
+                                  type="submit" 
+                                  class="btn btn-error" 
+                                  (click)="onSaveDeleteUser(id);clicked = true;"
+                                  [disabled]="clicked"
+                                  ><i class="fa fa-trash pr-2"></i>Delete this user</button>
+                            </div>
+                          </form>
+                        </div>                      
+                    </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+  </div>
+</div>

@@ -69,3 +69,4 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\stat
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.dll
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.pdb
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.genruntimeconfig.cache
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-staging - Web Deploy\profile.arm.json

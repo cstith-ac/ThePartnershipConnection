@@ -9,9 +9,12 @@ import { PartnerLandingPage } from 'src/app/models/partnerlandingpage';
 import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { PermissionsService } from 'src/app/services/permissions.service';
 declare var $: any;
 const moment = require('moment');
 import { environment } from '../../../environments/environment';
+import { mergeMap, switchMap } from 'rxjs/operators';
+import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -52,14 +55,29 @@ export class PartnerdashboardComponent implements OnInit {
 
   showSplash=true;
 
+  userName;
+  permissionsUserMap: PermissionsUserMap[];
+
+  hide3GConversion: boolean = false;
+  hidePendingCancellations: boolean = false;
+  hideAging: boolean = false;
+  hideAgingCTA: boolean = false;
+  hideInvoices: boolean = false;
+  hideService: boolean = false;
+  hideSales: boolean = false;
+  hideAttrition: boolean = false;
+  hide3GExcelExport: boolean = false;
+  hideCreateInvoice: boolean = false;
+
   constructor(
+    public jwtHelper: JwtHelperService,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
-    private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    private modalService: NgbModal,
-    public jwtHelper: JwtHelperService
+    public permissionService: PermissionsService,
+    private router: Router,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -78,16 +96,84 @@ export class PartnerdashboardComponent implements OnInit {
     $("#wrapper").addClass("toggled");
 
     this.spinnerService.show();
+
+    // use SwitchMap to get profile then permissions user map
+    this.authService.getProfile().pipe(
+      mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+    ).subscribe(data => {
+      console.log(data)
+      this.permissionsUserMap = data;
+
+      //show/hide card or card and button base on hasPermission value of Y or N
+      for(let i = 0; i < this.permissionsUserMap.length; i++) {
+        // console.log(this.permissionsUserMap[i])
+        // console.log(this.permissionsUserMap[i].permissionName)
+        // console.log(this.permissionsUserMap[i].hasPermission)
+        if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hide3GConversion = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hidePendingCancellations = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideAging = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideAgingCTA = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideInvoices = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideService = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideSales = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideAttrition = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hide3GExcelExport = true;
+        }
+        if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
+          console.log('this works')
+          this.hideCreateInvoice = true;
+        }
+      }
+    })
+
     
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        this.firstName = this.user.firstName
+        this.firstName = this.user.firstName;
+        this.userName = this.user.userName;
       },
       err => {
         console.log(err);
       }
     )
+
+    // // populate the dashboard 
+    // // values based on hasPermission, show/hide card or card and button
+    // setTimeout(() => {
+    //   this.permissionService.getPermissionsUserMap(this.userName).subscribe(
+    //     res => {
+    //       this.permissionsUserMap = res;
+    //     }
+    //   )  
+    // }, 400);
+    
 
     /**Begin Test Progress Bar */
     // this.partnerLandingPage;

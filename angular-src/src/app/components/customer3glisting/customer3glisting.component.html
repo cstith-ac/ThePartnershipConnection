@@ -24,7 +24,7 @@
       [selectedKeys]="mySelection"
       #dateTime
     >
-    <ng-template kendoGridToolbarTemplate *ngIf="exportToExcel === 1">
+    <ng-template kendoGridToolbarTemplate *ngIf="hide3GExcelExport == true">
       <button 
         type="button" 
         kendoGridExcelCommand 
@@ -32,6 +32,9 @@
       >Export to Excel
       </button>
     </ng-template>
+    <ng-template kendoGridToolbarTemplate *ngIf="hide3GExcelExport == false">
+        <p>You don't have permission to view this feature</p>
+      </ng-template>
     <kendo-grid-column-group 
       [title]="today"
       [autoSize]="true"
@@ -84,6 +87,7 @@
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>
 
+<!-- 3G Details Modal -->
 <div class="modal fade" id="details3gModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" id="maxWidth-1160">
       <div class="modal-content">
@@ -184,8 +188,8 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="col">
-                            <div class="card height-22-5vh">
+                          <div class="col d-flex align-items-stretch">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
@@ -202,8 +206,8 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="col">
-                            <div class="card height-22-5vh">
+                          <div class="col d-flex align-items-stretch">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
@@ -222,8 +226,8 @@
                           </div>
                       </div>
                       <div class="row mt-2">
-                          <div class="col">
-                              <div class="card height-30vh">
+                          <div class="col d-flex align-items-stretch">
+                              <div class="card">
                                   <!-- <div class="card-header"></div> -->
                                   <div class="card-body">
                                     <div class="row">
@@ -269,15 +273,8 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col">
-                            <div class="card height-30vh">
-                                <!-- <div class="card-header">
-                                    <div class="row">
-                                        <div class="col">
-                                            <p>3G Information</p>
-                                        </div>
-                                    </div>
-                                </div> -->
+                          <div class="col d-flex align-items-stretch">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
@@ -308,8 +305,8 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="col">
-                            <div class="card height-30vh">
+                          <div class="col d-flex align-items-stretch">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
@@ -326,8 +323,8 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="col">
-                            <div class="card height-30vh">
+                          <div class="col d-flex align-items-stretch">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">

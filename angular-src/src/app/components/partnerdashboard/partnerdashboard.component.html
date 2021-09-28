@@ -20,7 +20,7 @@
 <div class="container-fluid mt--7" *ngFor="let item of partnerLandingPage">
   <div class="row">
     <div class="col-xl-4 order-2">
-      <div class="card">
+      <div class="card" *ngIf="hide3GConversion == true">
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
@@ -137,6 +137,9 @@
           </div>
         </div>
       </div>
+      <div class="card" *ngIf="hide3GConversion == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
     </div>
     <div class="col-xl-8 mb-5 mb-xl-0 order-1 order-sm-2">
       <div class="card bg-transparent  mb-3 shadow-none border-0">
@@ -148,7 +151,7 @@
           </div>
         </div>
       </div>
-      <div class="card mb-3">
+      <div class="card mb-3" *ngIf="hidePendingCancellations == true">
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center">
             <div class="col">
@@ -190,14 +193,20 @@
           </div>
         </div>
       </div>
-      <div class="card ">
+      <div class="card mb-3" *ngIf="hidePendingCancellations == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
+      <div class="card" *ngIf="hideAging == true">
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center pt-3">
             <div class="col">
               <h5 class="d-inline-block m-0 m-auto ls-1 mb-1 headline-5" (click)="routeToTPCPartnerAgingReport()" [(ngbTooltip)]="showTPCPartnerAgingReport">Aging</h5>
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-secondary btn-block ml-3 float-right btn-cta" (click)="routeToCallToActionListing()"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
+              <button type="submit" class="btn btn-secondary btn-block ml-3 float-right btn-cta" (click)="routeToCallToActionListing()" *ngIf="hideAgingCTA == true"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
+              <span *ngIf="hideAgingCTA == false">
+                <p>You don't have permission to view this feature.</p>
+              </span>
             </div>
             <div class="col text-right">
               <i class="fas fa-arrow-right arrow" (click)="routeToTPCPartnerAgingReport()" [(ngbTooltip)]="showTPCPartnerAgingReport"></i>
@@ -237,11 +246,14 @@
           </div>
         </div>
       </div>
+      <div class="card" *ngIf="hideAging == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
     </div>
   </div>
   <div class="row mt-3">
     <div class="col-xl-3 mb-5 mb-xl-0">
-      <div class="card">
+      <div class="card" *ngIf="hideInvoices == true">
         <div class="card-header paddingBottom-14px border-0">
           <div class="row align-items-center">
             <div class="col-10">
@@ -310,13 +322,19 @@
           </div>
           <div class="row float-right pt-4 pb-1">
             <!-- <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" ><i class="fas fa-plus pr-2"></i>Create</button> -->
-            <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Create</button>
+            <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button>
+            <span *ngIf="hideCreateInvoice == false">
+              <p>You don't have permission to create an invoice</p>
+            </span>
           </div>
         </div>
       </div>
+      <div class="card" *ngIf="hideInvoices == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
     </div>
     <div class="col-xl-3 mb-5">
-      <div class="card">
+      <div class="card" *ngIf="hideService == true">
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
@@ -342,9 +360,12 @@
           </div>        
         </div>
       </div>
+      <div class="card" *ngIf="hideService == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
     </div>
     <div class="col-xl-3 mb-5">
-      <div class="card">
+      <div class="card" *ngIf="hideSales == true">
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
@@ -410,9 +431,12 @@
           <p>Coming Soon</p>
         </div>
       </div>
+      <div class="card" *ngIf="hideSales == false">
+        <p>You don't have permission to view this area.</p>
+      </div>
     </div>
     <div class="col-xl-3 mb-5">
-      <div class="card">
+      <div class="card" *ngIf="hideAttrition == true">
         <div class="card-header border-0 paddingBottom-14px">
           <div class="row align-items-center">
             <div class="col">
@@ -453,7 +477,7 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p> -->
-              <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
+              <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth % 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
                 <ngb-progressbar 
                   type="warning"
                   [showValue]="false"
@@ -502,6 +526,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="card" *ngIf="hideAttrition == false">
+        <p>You don't have permission to view this area.</p>
       </div>
     </div>
   </div>

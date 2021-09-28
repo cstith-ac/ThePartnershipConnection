@@ -133,13 +133,6 @@ export class RouteService {
     };
     return this.http.get<any>(this.baseUrl + '/api/Customer3GListing', httpOptions).pipe(
       catchError(this.errorHandler)
-      // map((data: any[]) => {
-      //   data.map(
-      //     (item:any) => {
-      //       console.log(item)
-      //     }
-      //   )
-      // })
     )
   }
 

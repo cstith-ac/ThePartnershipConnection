@@ -2,11 +2,11 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false,
-  baseUrl: 'http://localhost:63052',
-  appVersion: require('../../../angular-src/package.json').version + '-dev'
-};
+// export const environment = {
+//   production: false,
+//   baseUrl: 'http://localhost:63052',
+//   appVersion: require('../../../angular-src/package.json').version + '-dev'
+// };
 
 // export const environment = {
 //   production: true,
@@ -14,11 +14,11 @@ export const environment = {
 //   appVersion: require('../../../angular-src/package.json').version
 // };
 
-// export const environment = {
-//   production: true,
-//   baseUrl: 'https://thepartnershipconnectionapi-staging.azurewebsites.net',
-//   appVersion: require('../../../angular-src/package.json').version
-// };
+export const environment = {
+  production: true,
+  baseUrl: 'https://thepartnershipconnectionapi-staging.azurewebsites.net',
+  appVersion: require('../../../angular-src/package.json').version
+};
 
 /*
  * For easier debugging in development mode, you can import the following file

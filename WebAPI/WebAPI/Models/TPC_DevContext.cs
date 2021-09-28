@@ -82,6 +82,9 @@ namespace WebAPI.Models
         public virtual DbSet<TPCPartnerAgingReport> GetTPCPartnerAgingReports { get; set; }
         public virtual DbSet<AgingBucketNames> GetAgingBucketNames { get; set; }
         public virtual DbSet<PartnerServiceListing> GetPartnerServiceListings { get; set; }
+        public virtual DbSet<PermissionsUserMap> GetPermissionsUserMaps { get; set; }
+        public virtual DbSet<PermissionAdd> InsertPermissionAddResult { get; set; }
+        public virtual DbSet<PermissionDelete> InsertPermissionDeleteResult { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -188,7 +191,7 @@ namespace WebAPI.Models
 
                 entity.ToTable("ASPNetPermissions");
 
-                entity.Property(e => e.Afaonly).HasColumnName("AFAOnly");
+                entity.Property(e => e.AFAonly).HasColumnName("AFAOnly");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
@@ -543,6 +546,21 @@ namespace WebAPI.Models
             {
                 entity.HasNoKey();
             });
+
+            modelBuilder.Entity<PermissionsUserMap>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PermissionAdd>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PermissionDelete>(entity =>
+            {
+                entity.HasNoKey();
+            });  
 
             OnModelCreatingPartial(modelBuilder);
         }

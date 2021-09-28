@@ -187,3 +187,6 @@
         line-height: 16px;
         font-size: 15px;
     }
+    .bs-stepper .line {
+        background-color: rgba(33, 33, 33, 0.08);
+    }
