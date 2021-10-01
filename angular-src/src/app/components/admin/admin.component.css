@@ -61,6 +61,44 @@ border-radius: 34px;
 border-radius: 50%;
 }
 
+.noPermission {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+    
+.noPermission:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+.noPermission.round {
+    border-radius: 34px;
+}
+        
+.noPermission.round:before {
+    border-radius: 50%;
+}
+
+input:checked + .noPermission:before {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+    }
+
+
 .btn-secondary {
     background-color: #5abd78;
     color: #fff;

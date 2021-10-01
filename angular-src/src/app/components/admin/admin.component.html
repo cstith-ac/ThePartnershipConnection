@@ -102,55 +102,95 @@
               <div class="card p-3">
                   <div class="card-body">
                       <div class="row">
-                          <!-- <div class="col">
-                             <p>Settings</p>
-                          </div> -->
                           <div class="col-md-12">
-                            <form>
-                              <div class="form-group card" *ngFor="let item of aspNetPermissions; let i=index">
-                                <div class="row p-1">
-                                  <div class="col">
-                                    <p class="d-inline">{{ item.permissionToolTip }}</p>
-                                  </div>
-                                  <!-- <div class="col">
-                                    <label class="switch float-right mb-0">
-                                      <input 
-                                        type="checkbox" 
-                                        (change)="onChangeAccessFor3GConv($event)" 
-                                        [value]="item.permissionName"
-                                        [checked]="item.hasPermission">
-                                      <span class="slider round"></span>
-                                    </label>
-                                  </div> -->
-                                </div>
-                              </div>
-                            </form>
-                            <form>
+                            <h5 class="headline-5">Permissions for {{ userName }}</h5>
+                            <p class="body-2 high-emphasis text-error">You must click SAVE in order for your settings to take effect.</p>
+                            <form [formGroup]="permissionForm">
                               <div class="form-group card" *ngFor="let item of permissionsUserMap; let i=index">
                                 <div class="row p-1">
                                   <div class="col">
-                                    <p class="d-inline">{{ item.permissionToolTip }}</p>
+                                    <p class="d-inline">{{ item.permissionToolTip }} {{ item.hasPermission }}</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <!-- <input 
+                                        #permissionToggle
+                                        id="permissionToggle"
+                                        type="checkbox" 
+                                        (change)="onChangePermission($event)" 
+                                        [value]="item.permissionName"
+                                        [checked]="item.hasPermission">
+                                      <span class="slider round"></span> -->
+                                      <input 
+                                        #permissionToggle
+                                        id="permissionToggle"
+                                        formControlName="HasPermission"
+                                        type="checkbox" 
+                                        (change)="onChangePermission($event,i)" 
+                                        [value]="item.permissionName"
+                                        >
+                                      <!-- <ng-container *ngIf="item.hasPermission === 'Y'">
+                                        <span [ngClass]="{'input:checked,input:focus + slider round': item.hasPermission === 'Y'}"></span>
+                                      </ng-container>
+                                      <ng-container *ngIf="item.hasPermission === 'N'">
+                                        <span [ngClass]="{'slider round': item.hasPermission === 'N'}"></span>
+                                      </ng-container> -->
+
+                                      <!-- <span *ngIf="item.hasPermission === 'Y'" [ngClass]="'slider round'">Y</span>
+                                      <span *ngIf="item.hasPermission != 'Y'" [ngClass]="'noPermission round'">N</span> -->
+
+                                      <!-- <span class="slider round"></span> -->
+
+                                      <span class="slider round" *ngIf="item.hasPermission === 'Y'"></span>
+                                      <span class="noPermission round" *ngIf="item.hasPermission != 'Y'"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          <div class="col">
+                              <button type="submit" class="btn btn-block btn-secondary" (click)="onSaveSettings()"><i class="fas fa-plus pr-2"></i>Save</button>
+                          </div>                      
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+  </div>
+</div>
+
+<!--begin test-->
+<!-- <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" id="maxWidth-1160">
+      <div class="modal-content">
+          <div class="modal-header pb-0 pl-2">
+              <div class="col-md-12 mb-2">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+          </div>
+          <div class="modal-body pt-0">
+              <div class="card p-3">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col-md-12">    
+                            <form>                        
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Access for 3G Conversion Card</p>
                                   </div>
                                   <div class="col">
                                     <label class="switch float-right mb-0">
                                       <input 
                                         type="checkbox" 
                                         (change)="onChangeAccessFor3GConv($event)" 
-                                        [value]="item.permissionName"
-                                        [checked]="item.hasPermission">
-                                      <span class="slider round"></span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- <div class="form-group card">
-                                <div class="row p-1">
-                                  <div class="col">
-                                    <p class="d-inline">Able to Export 3G List to Excel</p>
-                                  </div>
-                                  <div class="col">
-                                    <label class="switch float-right mb-0">
-                                      <input type="checkbox" (change)="onChangeAbleToExport3G($event)">
+                                        [(ngModel)]="selected1"
+                                        [ngModelOptions]="{standalone: true}">
                                       <span class="slider round"></span>
                                     </label>
                                   </div>
@@ -159,11 +199,15 @@
                               <div class="form-group card">
                                 <div class="row p-1">
                                   <div class="col">
-                                    <p class="d-inline">Access for Pending Cancellation Card</p>
+                                    <p class="d-inline">Access for Pending Cancellations Card</p>
                                   </div>
                                   <div class="col">
                                     <label class="switch float-right mb-0">
-                                      <input type="checkbox" (change)="onChangeAccessForPendingCancel($event)">
+                                      <input 
+                                        type="checkbox" 
+                                        (change)="onChangeAccessForPendingCancel($event)"
+                                        [(ngModel)]="selected2"
+                                        [ngModelOptions]="{standalone: true}">
                                       <span class="slider round"></span>
                                     </label>
                                   </div>
@@ -211,19 +255,6 @@
                               <div class="form-group card">
                                 <div class="row p-1">
                                   <div class="col">
-                                    <p class="d-inline">Able to Create an Invoice</p>
-                                  </div>
-                                  <div class="col">
-                                    <label class="switch float-right mb-0">
-                                      <input type="checkbox" (change)="onChangeAbleToCreateInvoice($event)">
-                                      <span class="slider round"></span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="form-group card">
-                                <div class="row p-1">
-                                  <div class="col">
                                     <p class="d-inline">Access to the Service Card</p>
                                   </div>
                                   <div class="col">
@@ -259,30 +290,34 @@
                                     </label>
                                   </div>
                                 </div>
-                              </div> -->
-                            </form>
-                            <!-- <form class="mt-2">
-                              <h5 class="headline-5 text-error">Delete user</h5>
-                              <p>Once you delete this user, there is no going back. Please be certain</p>
+                              </div>
                               <div class="form-group card">
                                 <div class="row p-1">
                                   <div class="col">
-                                    <p class="d-inline">Delete This User</p>
+                                    <p class="d-inline">Able to Export 3G List to Excel</p>
                                   </div>
                                   <div class="col">
                                     <label class="switch float-right mb-0">
-                                      <input 
-                                        type="checkbox" 
-                                        (change)="deleteCurrentUser($event)" 
-                                        [value]="id" 
-                                        value="{{ id }}"
-                                        [checked]="">
+                                      <input type="checkbox" (change)="onChangeAbleToExport3G($event)">
                                       <span class="slider round"></span>
                                     </label>
                                   </div>
                                 </div>
                               </div>
-                            </form> -->
+                              <div class="form-group card">
+                                <div class="row p-1">
+                                  <div class="col">
+                                    <p class="d-inline">Able to Create an Invoice</p>
+                                  </div>
+                                  <div class="col">
+                                    <label class="switch float-right mb-0">
+                                      <input type="checkbox" (change)="onChangeAbleToCreateInvoice($event)">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
                           </div>
                           <div class="col">
                               <button type="submit" class="btn btn-block btn-secondary" (click)="onSaveSettings()"><i class="fas fa-plus pr-2"></i>Save</button>
@@ -295,7 +330,8 @@
           </div>
       </div>
   </div>
-</div>
+</div> -->
+<!--end test-->
 
 <!--Delete User Modal-->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
