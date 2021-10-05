@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
@@ -18,6 +18,8 @@ declare var $: any;
 })
 export class AdminComponent implements OnInit {
   @ViewChild("permissionToggle") permissionToggle: ElementRef;
+  // @ViewChild("inputs") inputs:ElementRef;
+  @ViewChild("inputs") inputs:ElementRef;
 
   allUsers: AspNetUsers[];
   aspNetPermissions: ASPNetPermissions[];
@@ -25,21 +27,39 @@ export class AdminComponent implements OnInit {
   //permissionsUserMap: PermissionsUserMap[];
   deleteCurrentUserForm: FormGroup;
   permissionForm: FormGroup;
+
+  page = 1;
+  count = 0;
+  tableSize = 5;
+  tableSizes = [5,10,15,25,50,100,150,200];
+  pageSize=10;
+  public value=5;
+  
   id;
   userName;
   isChecked:boolean;
   permissionsUserMap=[];
   clicked = false;//disables button after click
-  selected1: boolean = false;
-  selected2: boolean = false;
-  selected3: boolean = false;
-  selected4: boolean = false;
-  selected5: boolean = false;
-  selected6: boolean = false;
-  selected7: boolean = false;
-  selected8: boolean = false;
-  selected9: boolean = false;
-  selected10: boolean = false;
+  // selected1: boolean = false;
+  selected1: number = 0;
+  selected2: number = 0;
+  selected3: number = 0;
+  selected4: number = 0;
+  selected5: number = 0;
+  selected6: number = 0;
+  selected7: number = 0;
+  selected8: number = 0;
+  selected9: number = 0;
+  selected10: number = 0;
+  // selected2: boolean = false;
+  // selected3: boolean = false;
+  // selected4: boolean = false;
+  // selected5: boolean = false;
+  // selected6: boolean = false;
+  // selected7: boolean = false;
+  // selected8: boolean = false;
+  // selected9: boolean = false;
+  // selected10: boolean = false;
   is3gConversion;
   isPendingCancellations;
 
@@ -49,7 +69,8 @@ export class AdminComponent implements OnInit {
     public routeService: RouteService,
     public permissionService: PermissionsService,
     public jwtHelper: JwtHelperService,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private el: ElementRef
   ) { }
 
   ngOnInit() {
@@ -66,11 +87,19 @@ export class AdminComponent implements OnInit {
     this.routeService.getAllUsers().subscribe(
       res => {
         this.allUsers = res;
+
+        //ES6 version
+        this.allUsers.sort((a, b) => a.firstName.localeCompare(b.firstName))
+        // this.allUsers.sort(function(a,b) {
+        //   if(a.firstName < b.firstName) { return -1; }
+        //   if(a.firstName > b.firstName) { return 1; }
+        //   return 0;
+        // })
       }
     ) 
 
     this.permissionForm = this.fb.group({
-      HasPermission: FormControl
+      HasPermission: ['Yes']
     })
 
     this.deleteCurrentUserForm = this.fb.group({
@@ -116,73 +145,73 @@ export class AdminComponent implements OnInit {
         for(let i = 0; i < this.permissionsUserMap.length;i++) {
 
           if(this.permissionsUserMap[0].hasPermission === 'Y') {
-            this.selected1 = true
+            this.selected1 = 1
           }
           if(this.permissionsUserMap[0].hasPermission === 'N') {
-            this.selected1 = false
+            this.selected1 = 0
           }
 
           if(this.permissionsUserMap[1].hasPermission === 'Y') {
-            this.selected2 = true
+            this.selected2 = 1
           }
           if(this.permissionsUserMap[1].hasPermission === 'N') {
-            this.selected2 = false
+            this.selected2 = 0
           }
 
           if(this.permissionsUserMap[2].hasPermission === 'Y') {
-            this.selected3 = true
+            this.selected3 = 1
           }
           if(this.permissionsUserMap[2].hasPermission === 'N') {
-            this.selected3 = false
+            this.selected3 = 0
           }
 
           if(this.permissionsUserMap[3].hasPermission === 'Y') {
-            this.selected4 = true
+            this.selected4 = 1
           }
           if(this.permissionsUserMap[3].hasPermission === 'N') {
-            this.selected4 = false
+            this.selected4 = 0
           }
 
           if(this.permissionsUserMap[4].hasPermission === 'Y') {
-            this.selected5 = true
+            this.selected5 = 1
           }
           if(this.permissionsUserMap[4].hasPermission === 'N') {
-            this.selected5 = false
+            this.selected5 = 0
           }
           
           if(this.permissionsUserMap[5].hasPermission === 'Y') {
-            this.selected6 = true
+            this.selected6 = 1
           }
           if(this.permissionsUserMap[5].hasPermission === 'N') {
-            this.selected6 = false
+            this.selected6 = 0
           }
 
           if(this.permissionsUserMap[6].hasPermission === 'Y') {
-            this.selected7 = true
+            this.selected7 = 1
           }
           if(this.permissionsUserMap[6].hasPermission === 'N') {
-            this.selected7 = false
+            this.selected7 = 0
           }
 
           if(this.permissionsUserMap[7].hasPermission === 'Y') {
-            this.selected8 = true
+            this.selected8 = 1
           }
           if(this.permissionsUserMap[7].hasPermission === 'N') {
-            this.selected8 = false
+            this.selected8 = 0
           }
 
           if(this.permissionsUserMap[8].hasPermission === 'Y') {
-            this.selected9 = true
+            this.selected9 = 1
           }
           if(this.permissionsUserMap[8].hasPermission === 'N') {
-            this.selected9 = false
+            this.selected9 = 0
           }
 
           if(this.permissionsUserMap[9].hasPermission === 'Y') {
-            this.selected10 = true
+            this.selected10 = 1
           }
           if(this.permissionsUserMap[9].hasPermission === 'N') {
-            this.selected10 = false
+            this.selected10 = 0
           }
         }
       } 
@@ -196,20 +225,38 @@ export class AdminComponent implements OnInit {
     console.log(e)
   }
 
+  toggle(e) {
+    console.log(e.target)
+  }
+
   onChangePermission(e,i) {
     e.target.innerHTML = e;
     // console.log(e.currentTarget.checked)
     // console.log(e.currentTarget.value)
     console.log(e.currentTarget.value, i)
-    if(e.currentTarget.checked) {
-      let permissionNameVal = e.currentTarget.value;
+    if(e.currentTarget.value === 'N') {
+      let permissionIDVal = i+1;
       //console.log(permissionNameVal + ' value is true')
       let permissionObj = {
         userName : this.userName,
-        permissionID: 0,
-        permissionName: permissionNameVal
+        permissionID: permissionIDVal,
+        permissionName: ''
       }
-      //return
+      this.inputs.nativeElement.classList.remove('noPermission')
+      this.inputs.nativeElement.classList.add('slider')
+      // console.log(permissionObj)
+      // document.getElementById("myElement").classList.add('slider')
+      // document.getElementById("myElement").classList.remove('noPermission')
+      this.permissionForm.controls['HasPermission'].setValue('Y')
+      //remove noPermission class, add slider class
+      // let myTag = this.el.nativeElement.querySelector('span');
+      // console.log(myTag)
+      // myTag.classList.remove('noPermission')
+      // myTag.classList.add('slider');
+      // $(".foo").addClass("slider");
+      // $(".foo").removeClass("noPermission");
+
+      return
       //parameters are UserName, PermissionID, and PermissionName
       this.permissionService.postPermissionAdd(permissionObj).subscribe(
         res => {
@@ -217,15 +264,16 @@ export class AdminComponent implements OnInit {
         }
       )
     }
-    if(!e.currentTarget.checked) {
-      let permissionNameVal = e.currentTarget.value;
+    if(e.currentTarget.value === 'Y') {
+      let permissionIDVal = i+1;
       //console.log(permissionNameVal + ' value is false')
       let permissionObj = {
         userName : this.userName,
-        permissionID: 0,
-        permissionName: permissionNameVal
+        permissionID: permissionIDVal,
+        permissionName: ''
       }
-      //return
+      console.log(permissionObj)
+      return
       //parameters are UserName, PermissionID, and PermissionName
       this.permissionService.postPermissionDelete(permissionObj).subscribe(
         res => {
@@ -236,50 +284,376 @@ export class AdminComponent implements OnInit {
   }
 
   onChangeAccessFor3GConv(e) {
-    console.log(e.currentTarget.checked)
-  }
-
-  onChangeAbleToExport3G(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    // if(this.selected1 === 1) {
+    //   console.log('delete')
+    // }
+    // if(this.selected1 === 0) {
+    //   console.log('add')
+    // }
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessForPendingCancel(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToAgingCard(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToAgingCallToAction(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToInvIncentive(e) {
-    console.log(e.currentTarget.checked)
-  }
-
-  onChangeAbleToCreateInvoice(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToServiceCard(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToSalesCard(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onChangeAccessToAttritionCard(e) {
-    console.log(e.currentTarget.checked)
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+  }
+
+  onChangeAbleToExport3G(e) {
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+  }
+
+  onChangeAbleToCreateInvoice(e) {
+    //console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      console.log('add')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionAdd(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
+    if(e.currentTarget.checked === false) {
+      console.log('delete')
+      console.log(e.target.value)
+      let id=e.target.value;
+      let permissionObj = {
+        userName : this.userName,
+        permissionID: parseInt(id),
+        permissionName: ''
+      }
+      console.log(permissionObj)
+      this.permissionService.postPermissionDelete(permissionObj).subscribe(
+        res => {
+          console.log(res)
+        }
+      )
+    }
   }
 
   onSaveSettings() {
     console.log('onSaveSettings was called');
 
     $("#settingsModal").modal("hide");
-    location.reload();
+    //location.reload();
   }
 
   onSaveDeleteUser(id:number) {

@@ -62,7 +62,10 @@ export class PartnerconnsplashpageComponent implements OnInit {
       localStorage.removeItem('removeSplash');
     }
     //return
-    this.onDetectRemoveSplashPage();
+    setTimeout(() => {
+      this.onDetectRemoveSplashPage();  
+    }, 1000);
+    
   }
 
   onClickStartTour() {

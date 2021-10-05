@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+declare var $: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,8 @@ export class DashboardComponent implements OnInit {
     } else {
       console.log('your logged in')
     }
+    
+    $("#wrapper").addClass("toggled");
   }
 
 }
