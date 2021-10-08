@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Controller</Controller_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>thepartnershipconnectionapi-staging - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>ThePartnershipConnectionAPI - Web Deploy</NameOfLastUsedPublishProfile>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

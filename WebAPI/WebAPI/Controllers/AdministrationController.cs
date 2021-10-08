@@ -63,6 +63,7 @@ namespace WebAPI.Controllers
             user.AfaEmployee = model.AfaEmployee;
             user.AfaRole = model.AfaRole;
             user.PasswordHash = model.PasswordHash;
+            user.RemoveSplash = model.RemoveSplash;
 
             var result = await _userManager.UpdateAsync(user);
             _context.Users.Update(user);

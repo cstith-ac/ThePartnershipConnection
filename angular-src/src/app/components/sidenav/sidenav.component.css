@@ -21,7 +21,8 @@ body {
 
 .navbar-bg {
   background-color: rgba(35, 3, 106, 1);
-  border-bottom: 2px solid rgba(144,197,238,1);
+  /* border-bottom: 2px solid rgba(144,197,238,1); */
+  border-bottom: 2px solid rgba(35,3,106,1);
 }
 .nav-link {
   color: #525f7f00;

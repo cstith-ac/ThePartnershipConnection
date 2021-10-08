@@ -2161,7 +2161,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             localStorage.removeItem('checkBoxAutoInsertList');
             localStorage.removeItem('results');
 
-            //this.router.navigate(['incentive-entry/']);
+            this.router.navigate(['incentive-entry/']);
           }, (err:HttpErrorResponse) => {
             alert('There was an error')
             this.spinnerService.hide();

@@ -321,11 +321,11 @@
             </div>
           </div>
           <div class="row float-right pt-4 pb-1">
-            <!-- <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" ><i class="fas fa-plus pr-2"></i>Create</button> -->
-            <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button>
-            <span *ngIf="hideCreateInvoice == false">
+            <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button>
+            <!-- <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button> -->
+            <!-- <span *ngIf="hideCreateInvoice == false">
               <p>You don't have permission to create an invoice</p>
-            </span>
+            </span> -->
           </div>
         </div>
       </div>
@@ -457,6 +457,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 pt-2 pb-1">
+              <span class="goal"></span>
               <p  *ngIf="(item.attritionLastMonth < 10)">
                 <ngb-progressbar 
                   type="success"

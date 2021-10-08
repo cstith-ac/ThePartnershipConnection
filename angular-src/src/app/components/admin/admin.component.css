@@ -189,4 +189,9 @@ input:checked + .noPermission:before {
     color: rgba(227,241,250,1);
     border-color: #ca5856;
 }
+.instructions {
+    border: 1px solid rgba(0, 0, 0, .05);
+    border-radius: .375rem;
+    background-color: ghostwhite;
+}
   

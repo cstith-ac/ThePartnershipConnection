@@ -58,11 +58,15 @@
                             <td>{{ item.firstName }}</td>
                             <td>{{ item.lastName }}</td>
                             <td class="float-right">
-                              <button class="btn btn-primary" (click)="editCurrentUser(item.id)">
-                                <i class="fa fa-pencil pr-2"></i>Edit User Password
+                              <button 
+                                class="btn btn-primary" 
+                                (click)="editCurrentUserPassword(item.id)">
+                                <i class="fa fa-key pr-2"></i>Edit User Password
                               </button>
-                              <button class="btn btn-primary" (click)="editCurrentUserSettings($event,item.id, item.userName)">
-                                <i class="fa fa-pencil pr-2"></i>Edit User Settings
+                              <button 
+                                class="btn btn-primary" 
+                                (click)="editCurrentUserPermissions($event,item.id, item.userName)">
+                                <i class="fa fa-lock pr-2"></i>Edit User Permissions
                               </button>
                               <button class="btn btn-error" (click)="deleteCurrentUserModal($event,item.id)">
                                 <i class="fa fa-trash pr-2"></i>Delete User
@@ -112,6 +116,13 @@
         <div class="modal-body pt-0">
             <div class="card p-3">
                 <div class="card-body">
+                  <div class="row">
+                    <div class="col mb-3 instructions">
+                      <h2 class="subtitle-2">Instructions</h2>
+                      <p class="body-2">Toggle Left to Hide</p>
+                      <p class="body-2">Toggle Right to Show</p>
+                    </div>
+                  </div>
                     <div class="row">
                         <div class="col-md-12">    
                           <form>                        
@@ -295,6 +306,24 @@
                                 </div>
                               </div>
                             </div>
+                            <!-- <div class="form-group card">
+                              <div class="row p-1">
+                                <div class="col">
+                                  <p class="d-inline">Show Instructions</p>
+                                </div>
+                                <div class="col">
+                                  <label class="switch float-right mb-0">
+                                    <input 
+                                      type="checkbox"
+                                      (change)="onChangeShowInstructions($event)"
+                                      value="0"
+                                      [(ngModel)]="removeSplash"
+                                      [ngModelOptions]="{standalone: true}">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div> -->
                           </form>
                         </div>
                         <div class="col">

@@ -23,6 +23,8 @@ export class ProfileComponent implements OnInit {
   u: "";
   closeResult = '';
   currentUserSettings: string;
+  removeSplashTextValue;
+
   afaUserSettings = [
     {
       id: 19,
@@ -72,6 +74,13 @@ export class ProfileComponent implements OnInit {
       res => {
         this.user = res;
         this.userProfile = res;
+        console.log(this.user.removeSplash)
+        if(this.user.removeSplash === 0) {
+          this.removeSplashTextValue = 'You are showing instructions'
+        }
+        if(this.user.removeSplash === 1) {
+          this.removeSplashTextValue = 'You are not showing instructions'
+        }
       },
       err => {
         console.log(err);

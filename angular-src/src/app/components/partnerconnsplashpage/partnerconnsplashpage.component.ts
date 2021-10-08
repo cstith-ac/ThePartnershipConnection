@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import { ViewportScroller } from "@angular/common";
 import { SplashAnimationType } from './splash-animation-type';
 import Stepper from 'bs-stepper';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-partnerconnsplashpage',
@@ -18,6 +21,10 @@ export class PartnerconnsplashpageComponent implements OnInit {
   showSplash = true;
 
   isAppLoader = false;
+  removeSplashForm: FormGroup;
+  id: number;
+  user:any=Object;
+  removeSplash:number;
 
   @Input() animationDuration: number = 0.5;
   @Input() duration: number = 3;
@@ -32,10 +39,49 @@ export class PartnerconnsplashpageComponent implements OnInit {
   }
 
   constructor(
-    private scroller: ViewportScroller
+    private scroller: ViewportScroller,
+    private authService: AuthService,
+    private fb: FormBuilder
   ){}
 
   ngOnInit() {
+    //only show instructions on initial page load
+    if(localStorage.getItem('InstructionsShown')) {
+      this.onDetectRemoveSplashPage();
+    }
+
+    this.authService.getProfile().subscribe(
+      res => {
+        console.log(res)
+        this.user = res;
+        // console.log(this.user.removeSplash)
+        // this.removeSplashDBVal = this.user.removeSplash
+        if(this.user.removeSplash === 0) {
+          this.removeSplash = 0
+        }
+        if(this.user.removeSplash === 1) {
+          this.removeSplash = 1
+        }
+      }
+    )
+
+    this.authService.getProfile()
+      .pipe(first())
+      .subscribe(x => this.removeSplashForm.patchValue(x)  
+    );
+    
+    this.removeSplashForm = this.fb.group({
+      id: "",
+      userName: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      cellPhoneNumber1: "",
+      altEmail: "",
+      afauserLink: "",
+      removeSplash: ""
+    })
     
     setTimeout(() => {
       if(localStorage.getItem('removeSplash') === '1') {
@@ -51,17 +97,42 @@ export class PartnerconnsplashpageComponent implements OnInit {
     
   }
 
-  onChangeDontShowAgain(e) {
+  onChangeDontShowAgain(e,form:FormGroup) {
     if(e.currentTarget.checked == true) {
       console.log(e.currentTarget.checked + ' is value')
       localStorage.setItem('removeSplash','1');
+      //update RemoveSplash to equal 1
+      let currentVal = e.currentTarget.checked
+      currentVal = 1
+      console.log('don\'t show instructions or value 1')
+      this.removeSplash = currentVal
+      this.removeSplashForm.controls['removeSplash'].setValue(this.removeSplash)
+      
     }
     if(e.currentTarget.checked == false) {
       console.log(e.currentTarget.checked + ' is value')
       //localStorage.setItem('removeSplash','0');
       localStorage.removeItem('removeSplash');
+      //update RemoveSplash to equal 0
+      let currentVal = e.currentTarget.checked
+      currentVal = 0
+      console.log('show instructions or value 0')
+      this.removeSplash = currentVal
+      this.removeSplashForm.controls['removeSplash'].setValue(this.removeSplash)
     }
-    //return
+    // console.log('Email: ', form.value.email)
+    // console.log('First name: ', form.value.firstName)
+    // console.log('Last name: ', form.value.lastName)
+    // console.log('Phone number: ', form.value.phoneNumber)
+    // console.log('Cell: ', form.value.cellPhoneNumber1)
+    // console.log('Alt email: ', form.value.altEmail)
+    // console.log('Remove Splash: ', form.value.removeSplash)
+
+    this.authService.updateUserProfile(this.removeSplashForm.value).subscribe(
+      result => {
+        console.log(result)
+      }
+    )
     setTimeout(() => {
       this.onDetectRemoveSplashPage();  
     }, 1000);
@@ -70,6 +141,7 @@ export class PartnerconnsplashpageComponent implements OnInit {
 
   onClickStartTour() {
     this.onDetectRemoveSplashPage();
+    localStorage.setItem('InstructionsShown','yes');
   }
 
   onDetectRemoveSplashPage() {

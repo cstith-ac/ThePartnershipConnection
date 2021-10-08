@@ -23,5 +23,6 @@ namespace WebAPI.Models
 
         [PersonalData]
         public string CellPhoneNumber1 { get; set; }
+        public int RemoveSplash { get; set; }
     }
 }

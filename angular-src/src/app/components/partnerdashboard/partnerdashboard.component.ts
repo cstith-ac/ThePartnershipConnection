@@ -81,7 +81,15 @@ export class PartnerdashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.showSplash;
+    // if(localStorage.getItem('removeSplash') === '1') {
+    //   this.showSplash = false;
+    // } else {
+    //   this.showSplash;
+    // }
+
+    if(localStorage.getItem('InstructionsShown')) {
+      this.showSplash = false;
+    }
     
     this.getMonthDiff();
 
@@ -101,7 +109,7 @@ export class PartnerdashboardComponent implements OnInit {
     this.authService.getProfile().pipe(
       mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
     ).subscribe(data => {
-      console.log(data)
+      //console.log(data)
       this.permissionsUserMap = data;
 
       //show/hide card or card and button base on hasPermission value of Y or N
@@ -110,43 +118,33 @@ export class PartnerdashboardComponent implements OnInit {
         // console.log(this.permissionsUserMap[i].permissionName)
         // console.log(this.permissionsUserMap[i].hasPermission)
         if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hide3GConversion = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hidePendingCancellations = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideAging = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideAgingCTA = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideInvoices = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideService = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideSales = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideAttrition = true;
         }
         if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hide3GExcelExport = true;
         }
         if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
           this.hideCreateInvoice = true;
         }
       }
@@ -194,8 +192,8 @@ export class PartnerdashboardComponent implements OnInit {
         }
         this.partnerLandingPage = res;
         for(var i = 0; i < this.partnerLandingPage.length; i++) {
-          console.log(this.partnerLandingPage[i].highRMRCancelPerson);
-          console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
+          // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
+          // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
           // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
           // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
           this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
@@ -229,8 +227,8 @@ export class PartnerdashboardComponent implements OnInit {
 
     this.monthDiffAtt = this.attSunsetDate.diff(this.todaysDate, 'months');
     this.monthDiffVerizon = this.verizonSunsetDate.diff(this.todaysDate, 'months');
-    console.log('Month: ' + this.monthDiffAtt);
-    console.log('Month: ' + this.monthDiffVerizon);
+    // console.log('Month: ' + this.monthDiffAtt);
+    // console.log('Month: ' + this.monthDiffVerizon);
   }
 
   getBackgroundColor(progressPercent) {

@@ -68,11 +68,21 @@ export class RegisterComponent implements OnInit {
   afaEmployee = [
     {
       id: 1,
-      isAFAEmployee: "yes"
+      isAFAEmployee: "Yes"
     },
     {
       id: 2,
-      isAFAEmployee: "no"
+      isAFAEmployee: "No"
+    }
+  ];
+  removeSplash = [
+    {
+      id: 0,
+      isRemoveSplash: "No"
+    },
+    {
+      id: 1,
+      isRemoveSplash: "Yes"
     }
   ]
   password: String;
@@ -95,6 +105,7 @@ export class RegisterComponent implements OnInit {
         afauserLink: ["", Validators.required],
         afaRole: ["", Validators.required],
         afaEmployee: ["", Validators.required],
+        removeSplash: ["", Validators.required],
         password: ["", [Validators.required, Validators.minLength(6)]],
         confirmPassword: ["", Validators.required]
       },
@@ -126,11 +137,12 @@ export class RegisterComponent implements OnInit {
           afaRoleAdminOnly: this.afaRoleAdminOnly,
           afaRole: this.afaRole,
           afaEmployee: this.afaEmployee,
+          removeSplash: this.removeSplash,
           password: this.password
     }
 
-    //console.log(this.registerForm.value)
-
+    // console.log(this.registerForm.value)
+    // return
     this.authService.registerUser(this.registerForm.value).subscribe(data => {
         if(data.succeeded) {
           this.flashMessage.show('You are now registered and can log in', {cssClass:'alert-success', timeout: 6000});

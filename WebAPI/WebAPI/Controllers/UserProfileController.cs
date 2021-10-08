@@ -44,7 +44,8 @@ namespace WebAPI.Controllers
                 user.CellPhoneNumber1,
                 user.AfauserLink,
                 user.AfaEmployee,
-                user.AfaRole
+                user.AfaRole,
+                user.RemoveSplash
             };
         }
 
@@ -92,6 +93,7 @@ namespace WebAPI.Controllers
             user.PhoneNumber = model.PhoneNumber;
             user.AltEmail = model.AltEmail;
             user.CellPhoneNumber1 = model.CellPhoneNumber1;
+            user.RemoveSplash = model.RemoveSplash;
 
             var result = await _userManager.UpdateAsync(user);
             _context.Users.Update(user);
@@ -106,7 +108,8 @@ namespace WebAPI.Controllers
                 user.Email,
                 user.PhoneNumber,
                 user.AltEmail,
-                user.CellPhoneNumber1
+                user.CellPhoneNumber1,
+                user.RemoveSplash
             });
         }
 

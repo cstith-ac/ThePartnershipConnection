@@ -249,6 +249,7 @@ export class IncentiveentryComponent implements OnInit {
       InvoiceDate: ["", Validators.required],
       InvoiceTotal: ["", Validators.required],
       ServiceIncluded: ["n", Validators.required],
+      // ServiceIncluded: [{value:"n", checked:true},Validators.required],
       CompanyName: this.companyName,
       PartnerCode: this.partnerCode,
       ClientVisit:  [{value:'n', disabled:false, checked:false}],
@@ -264,6 +265,9 @@ export class IncentiveentryComponent implements OnInit {
       CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
       ACHAutopay: [{value:'n', disabled:true, checked:false}],
     })
+
+    //this.incentiveEntryForm.controls['ServiceIncluded'].setValue(true)
+    //console.log(this.incentiveEntryForm.controls['ServiceIncluded'].value)
   }
 
   transformAmount(element) {

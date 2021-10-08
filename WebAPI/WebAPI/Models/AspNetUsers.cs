@@ -37,6 +37,7 @@ namespace WebAPI.Models
         public DateTime CreationDate { get; set; }
         public int Afaemployee { get; set; }
         public int Afarole { get; set; }
+        public int RemoveSplash { get; set; }
 
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }

@@ -51,6 +51,7 @@ export class AdminComponent implements OnInit {
   selected8: number = 0;
   selected9: number = 0;
   selected10: number = 0;
+  removeSplash: boolean = true;
   // selected2: boolean = false;
   // selected3: boolean = false;
   // selected4: boolean = false;
@@ -90,6 +91,7 @@ export class AdminComponent implements OnInit {
 
         //ES6 version
         this.allUsers.sort((a, b) => a.firstName.localeCompare(b.firstName))
+
         // this.allUsers.sort(function(a,b) {
         //   if(a.firstName < b.firstName) { return -1; }
         //   if(a.firstName > b.firstName) { return 1; }
@@ -107,11 +109,11 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  editCurrentUser(id:number) {
+  editCurrentUserPassword(id:number) {
     this.router.navigate(['admin-edit/'+ id])
   }
 
-  editCurrentUserSettings(e, id:number, userName:string) {
+  editCurrentUserPermissions(e, id:number, userName:string) {
     // console.log(id)
     // console.log(userName)
    
@@ -646,6 +648,23 @@ export class AdminComponent implements OnInit {
           console.log(res)
         }
       )
+    }
+  }
+
+  onChangeShowInstructions(e) {
+    // console.log(e.target.value)
+    // console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked === true) {
+      //Show instructions? Yes
+      console.log(e.currentTarget.checked)
+      console.log('show instructions or value 0')
+      this.removeSplash = true
+    }
+    if(e.currentTarget.checked === false) {
+      //Show instructions? No
+      console.log(e.currentTarget.checked)
+      console.log('don\'t show instructions or value 1')
+      this.removeSplash = false
     }
   }
 

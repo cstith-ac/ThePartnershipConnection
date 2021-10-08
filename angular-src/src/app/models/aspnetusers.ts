@@ -23,4 +23,5 @@ export class AspNetUsers {
     creationDate: Date;
     afaemployee: number;
     afaRole: number;
+    removeSplash: number;
 }

@@ -179,6 +179,21 @@
 .arrow {
     color: rgba(65, 65, 65, 1);
 }
+.goal {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #5ABD78;
+    margin-left: 30%;
+    font-size: 0.5rem;
+}
+.goal:before {
+    content: '';
+}
+.goal:after {
+    content: '';
+}
 ::ng-deep .progress {
     background-color: rgba(90,189,120,0.24);
     filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));

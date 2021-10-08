@@ -23,4 +23,5 @@ export class UserProfile {
     creationDate: Date;
     afaemployee: number;
     afaRole: number;
+    removeSplash: number;
 }

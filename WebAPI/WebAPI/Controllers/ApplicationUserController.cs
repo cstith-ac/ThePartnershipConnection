@@ -43,7 +43,8 @@ namespace WebAPI.Controllers
                 UserName = model.UserName,
                 AfauserLink = model.AfauserLink,
                 AfaRole = model.AfaRole,
-                AfaEmployee = model.AfaEmployee
+                AfaEmployee = model.AfaEmployee,
+                RemoveSplash = model.RemoveSplash
             };
 
             try
@@ -78,7 +79,8 @@ namespace WebAPI.Controllers
                     {
                         new Claim("UserID", user.Id.ToString()),
                         new Claim("AfaRole", user.AfaRole.ToString()),
-                        new Claim("AfauserLink", user.AfauserLink)
+                        new Claim("AfauserLink", user.AfauserLink),
+                        new Claim("RemoveSplash", user.RemoveSplash.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddDays(1),
                     //Expires = DateTime.UtcNow.AddMinutes(1),//testing purposes ONLY!
@@ -98,6 +100,7 @@ namespace WebAPI.Controllers
                     AfauserLink = user.AfauserLink,
                     AfaRole = user.AfaRole,
                     AfaEmployee = user.AfaEmployee,
+                    RemoveSplash = user.RemoveSplash,
                     Token = token
                 }); //these will return in a JSON object after successful login
             }

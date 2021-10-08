@@ -45,6 +45,8 @@ namespace WebAPI.Models
 
         public int AfaRole { get; set; }
 
+        public int RemoveSplash { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
         //public virtual int ReferenceID { get; private set; }
