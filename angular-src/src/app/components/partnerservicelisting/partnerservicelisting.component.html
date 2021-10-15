@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of partnerServiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-                        <td id="{{ item.service_Ticket_Id }}" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td>
+                        <td id="{{ item.service_Ticket_Id }}" class="hyperlink" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td>
                         <td>{{ item.status3G }}</td>
                         <td>{{ item.address_1 }}</td>
                         <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
@@ -130,7 +130,7 @@
                                         </p>
                                         <p>
                                             <span class="body-2 medium-emphasis">
-                                                <a href="mailto:{{ acContactEmail }}">{{ acContactEmail }}</a>
+                                                <a href="mailto:{{ acContactEmail }}" class="hyperlink">{{ acContactEmail }}</a>
                                             </span>
                                         </p>
                                         <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>

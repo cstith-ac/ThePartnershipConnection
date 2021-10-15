@@ -2,19 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { PartnerLandingPage } from 'src/app/models/partnerlandingpage';
 import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { PermissionsService } from 'src/app/services/permissions.service';
 declare var $: any;
 const moment = require('moment');
 import { environment } from '../../../environments/environment';
 import { mergeMap, switchMap } from 'rxjs/operators';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-partnerdashboard',
@@ -76,6 +78,7 @@ export class PartnerdashboardComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     public permissionService: PermissionsService,
+    private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal
   ) { }
@@ -186,11 +189,15 @@ export class PartnerdashboardComponent implements OnInit {
 
     this.routeService.getPartnerLandingPage().subscribe(
       res => {
-        // console.log(res)
-        if(res) {
-          this.spinnerService.hide()
+        
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          this.flashMessage.show('Your requested data is displayed below', {
+            cssClass: 'text-center alert-success',
+            timeout: 5000
+          });
         }
-        this.partnerLandingPage = res;
+        this.partnerLandingPage = res.body;
         for(var i = 0; i < this.partnerLandingPage.length; i++) {
           // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
           // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
@@ -206,6 +213,8 @@ export class PartnerdashboardComponent implements OnInit {
             console.log("nothing here")
           }
         }
+      }, (err: HttpErrorResponse) => {
+        alert('there was an error')
       }
     )
   }
@@ -236,32 +245,11 @@ export class PartnerdashboardComponent implements OnInit {
     if(this.threegConversionprogress<10){
       return 'success'
     }
-    // console.log(item.progressPercent)
-    // if(item.progressPercent < 10) {
-    //   backgroundColor = '#5ABD78'
-    // }
-    // if(item.progressPercent > 10 && item.progressPercent < 15) {
-    //   backgroundColor = 'turquoise'
-    // }
-    // if(item.progressPercent > 15) {
-    //   backgroundColor = 'gold'
-    // }
   }
 
   routeToCustomer3GList() {
     console.log('route')
     this.router.navigate(["/customer-3g-listing/"]);
-
-    // this.spinnerService.show();
-    // setTimeout(() => {
-    //   this.spinnerService.hide();
-    // }, 30000)
-
-    // this.routeService.getCustomer3GListing().subscribe(
-    //   res => {
-    //     this.customer3glisting = res;
-    //   }
-    // )
   }
 
   openPartnerInvoiceListingModal(content) {

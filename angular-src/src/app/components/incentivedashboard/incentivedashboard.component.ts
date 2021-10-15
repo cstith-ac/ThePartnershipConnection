@@ -353,6 +353,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('customerName');
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
+      localStorage.removeItem('InstructionsShown');
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
@@ -365,6 +366,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.installCompanyID = localStorage.getItem('installCompanyID');
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
+    //this.invoiceDate = new Date().toISOString().slice(0, 19).replace('T',' ') // get today's date 
+    //this.invoiceDate = '2021-10-13 14:51:16.323';
     this.invoiceTotal = parseFloat(localStorage.getItem('invoiceTotal'));
     // if(localStorage.getItem('partnerTaxAmount')) {
     //   this.partnerTaxAmount = parseFloat(localStorage.getItem('partnerTaxAmount'))
@@ -421,10 +424,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.contractTerm = localStorage.getItem("contractTerm");
     this.renewal = localStorage.getItem("renewal");
 
-    this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
+    //this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
+    this.recurring = 0.00;
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
 
-    this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
+    //this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
+    this.laborCharges = 0.00
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
@@ -1075,6 +1080,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.partnerTaxAmount = parseFloat(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value);
     console.log(typeof this.partnerTaxAmount)
+    var twoPlacedFloat = parseFloat(newPartnerTaxAmount).toFixed(2);
+    console.log(typeof newPartnerTaxAmount)//string
+    console.log(twoPlacedFloat)
 
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + parseFloat(newPartnerTaxAmount));
 
@@ -1249,7 +1257,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //this.customerElement.nativeElement.innerHTML = this.customerSiteName
     // here we can write code for doing something with selected item
     // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
-    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customerNumber+ " - " +this.customer)
+    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customerNumber + " - " + this.customer)
     this.siteElement.nativeElement.focus()
   }
 
@@ -1642,23 +1650,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.spinnerService.show();
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
+    // switchmap, concatmap
     this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
       result => {
         //returns the job id
         this.job_id = result;
-
-        //check if Status of Recurring, Equipment, and/or Labor is invalid
-        //if valid, form needs to get passed
-        //if invalid, skip to Customer_Document_ADD
-        // if(this.incentiveRecurringEntryForm.status==="VALID"){
-
-        // }
-        // if(this.incentiveEquipMatEntryForm.status==="VALID"){
-          
-        // }
-        // if(this.incentiveLaborChargesEntryForm.status==="VALID"){
-          
-        // }
 
         var addToObject = function (obj, key, value) {
           // Create a temp object and index variable
@@ -1738,7 +1734,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
           frmData.append('file_name', this.file_name);
           frmData.append('file_size', this.file_size);
-          frmData.append('upload_date', this.invoiceDate);
+          // frmData.append('upload_date', this.invoiceDate);
+          frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date 
           frmData.append('document_ext', '*Contracts');
           frmData.append('user_code', 'TPC');
           //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -1767,10 +1764,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
           this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
             headers: headers,
-            responseType: 'text'
+            responseType: 'json',
+            observe: 'response'
           }).subscribe(
             data => {
               console.log({i:0,data});
+              console.log(data.body)
+              console.log(data.headers)
+              console.log(data.status)
+              if(data.status === 200) {
+                this.flashMessage.show('Your Invoice was uploaded successfully', {
+                  cssClass: 'text-center alert-success',
+                  timeout: 5000
+                })
+              }
+              // display progress bar to indicate the status to the user
+              // if status is 200, stop showing the progress bar and go to the next document
+              // if status is 500, show an error to the user
+            }, (err: HttpErrorResponse) => {
+              alert(err + ' there was a problem with your Invoice file upload')
             }
           )
             console.log(frmData)
@@ -1799,7 +1811,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
             frmData.append('file_name', this.site_visit_file_name);
             frmData.append('file_size', this.site_visit_file_size);
-            frmData.append('upload_date', this.invoiceDate);
+            // frmData.append('upload_date', this.invoiceDate);
+            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
             frmData.append('document_ext', '*Contracts');
             frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -1829,12 +1842,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Authorization','Bearer ' + this.loadToken());
             headers.append('Accept', 'application/json');
+
             this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
               headers: headers,
-              responseType: 'text'
+              responseType: 'json',
+              observe: 'response'
             }).subscribe(
               data => {
                 console.log({i:2,data});
+                console.log(data.body)
+                console.log(data.headers)
+                console.log(data.status)
+                if(data.status === 200) {
+                  this.flashMessage.show('Your Site Visit was uploaded successfully', {
+                    cssClass: 'text-center alert-success',
+                    timeout: 5000
+                  })
+                }
+              }, (err: HttpErrorResponse) => {
+                alert(err + ' there was a problem with your Site Visit file upload')
               }
             )
               console.log(frmData)
@@ -1863,7 +1889,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
             frmData.append('file_name', this.contract_file_name);
             frmData.append('file_size', this.contract_file_size);
-            frmData.append('upload_date', this.invoiceDate);
+            // frmData.append('upload_date', this.invoiceDate);
+            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
             frmData.append('document_ext', '*Contracts');
             frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -1895,10 +1922,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             headers.append('Accept', 'application/json');
             this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
               headers: headers,
-              responseType: 'text'
+              responseType: 'json',
+              observe: 'response'
             }).subscribe(
               data => {
                 console.log({i:5,data});
+                console.log(data.body)
+                console.log(data.headers)
+                console.log(data.status)
+                if(data.status === 200) {
+                  this.flashMessage.show('Your Contract was uploaded successfully', {
+                    cssClass: 'text-center alert-success',
+                    timeout: 5000
+                  })
+                }
+                // display progress bar to indicate the status to the user
+                // if status is 200, stop showing the progress bar and go to the next document
+                // if status is 500, show an error to the user
+              }, (err: HttpErrorResponse) => {
+                alert(err + ' there was a problem with your Contract file upload')
               }
             )
               console.log(frmData)
@@ -1927,7 +1969,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
           frmData.append('file_name', this.subscriber_file_name);
           frmData.append('file_size', this.subscriber_file_size);
-          frmData.append('upload_date', this.invoiceDate);
+          // frmData.append('upload_date', this.invoiceDate);
+          frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
           frmData.append('document_ext', '*Contracts');
           frmData.append('user_code', 'TPC');
           //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -1957,12 +2000,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           headers.append('Content-Type', 'multipart/form-data');
           headers.append('Authorization','Bearer ' + this.loadToken());
           headers.append('Accept', 'application/json');
+
           this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
             headers: headers,
-            responseType: 'text'
+            responseType: 'json',
+            observe: 'response'
           }).subscribe(
             data => {
               console.log({i:1,data});
+              console.log(data.body)
+              console.log(data.headers)
+              console.log(data.status)
+              if(data.status === 200) {
+                this.flashMessage.show('Your Subscriber Form was uploaded successfully', {
+                  cssClass: 'text-center alert-success',
+                  timeout: 5000
+                })
+              }
+              // display progress bar to indicate the status to the user
+              // if status is 200, stop showing the progress bar and go to the next document
+              // if status is 500, show an error to the user
+            }, (err: HttpErrorResponse) => {
+              alert(err + ' there was a problem with your Subscriber Form file upload')
             }
           )
             console.log(frmData)
@@ -1991,7 +2050,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
             frmData.append('file_name', this.other_Document1_file_name);
             frmData.append('file_size', this.other_Document1_file_size);
-            frmData.append('upload_date', this.invoiceDate);
+            // frmData.append('upload_date', this.invoiceDate);
+            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
             frmData.append('document_ext', '*Contracts');
             frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -2021,12 +2081,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Authorization','Bearer ' + this.loadToken());
             headers.append('Accept', 'application/json');
+
             this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
               headers: headers,
-              responseType: 'text'
+              responseType: 'json',
+              observe: 'response'
             }).subscribe(
               data => {
                 console.log({i:3,data});
+                console.log(data.body)
+              console.log(data.headers)
+              console.log(data.status)
+              if(data.status === 200) {
+                this.flashMessage.show('Your Other Doc1 was uploaded successfully', {
+                  cssClass: 'text-center alert-success',
+                  timeout: 5000
+                })
+              }
+              // display progress bar to indicate the status to the user
+              // if status is 200, stop showing the progress bar and go to the next document
+              // if status is 500, show an error to the user
+              }, (err: HttpErrorResponse) => {
+                alert(err + ' there was a problem with your Other Doc1 file upload')
               }
             )
               console.log(frmData)
@@ -2055,7 +2131,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
             frmData.append('file_name', this.other_Document2_file_name);
             frmData.append('file_size', this.other_Document2_file_size);
-            frmData.append('upload_date', this.invoiceDate);
+            // frmData.append('upload_date', this.invoiceDate);
+            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
             frmData.append('document_ext', '*Contracts');
             frmData.append('user_code', 'TPC');
             //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
@@ -2085,12 +2162,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Authorization','Bearer ' + this.loadToken());
             headers.append('Accept', 'application/json');
+
             this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
               headers: headers,
-              responseType: 'text'
+              responseType: 'json',
+              observe: 'response'
             }).subscribe(
               data => {
                 console.log({i:4,data});
+                console.log(data.body)
+                console.log(data.headers)
+                console.log(data.status)
+                if(data.status === 200) {
+                  this.flashMessage.show('Your Other Doc 2 was uploaded successfully', {
+                    cssClass: 'text-center alert-success',
+                    timeout: 5000
+                  })
+                }
+                // display progress bar to indicate the status to the user
+                // if status is 200, stop showing the progress bar and go to the next document
+                // if status is 500, show an error to the user
+              }, (err: HttpErrorResponse) => {
+                alert(err + ' there was a problem with your Other Doc 2 file upload')
               }
             )
               console.log(frmData)
@@ -2161,9 +2254,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             localStorage.removeItem('checkBoxAutoInsertList');
             localStorage.removeItem('results');
 
+            return
+
             this.router.navigate(['incentive-entry/']);
           }, (err:HttpErrorResponse) => {
             alert('There was an error')
+            console.log(err)
             this.spinnerService.hide();
           }
         )
@@ -2185,12 +2281,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //Test Invoice file upload
   getInvoiceFileDetails(e) {
-    //console.log(e);
-    //console.log(e.target.files);
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-
       this.selectedInvoiceFile = e.target.files[0];
 
       //upload to localstorage
@@ -2198,7 +2291,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       reader.addEventListener("load", () => {
         //console.log(reader.result);
-        localStorage.setItem("invoice", reader.result as string);
+        //localStorage.setItem("invoice", reader.result as string);
         this.showInvoiceFile = true;
       });
 
@@ -2227,13 +2320,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-      this.selectedSiteVisitFile = e.target.files[i];
+      this.selectedSiteVisitFile = e.target.files[0];
 
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        localStorage.setItem("siteVisit", reader.result as string);
+        //localStorage.setItem("siteVisit", reader.result as string);
         this.showSiteVisitFile = true;
       });
 
@@ -2258,13 +2351,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-      this.selectedContractFile = e.target.files[i];
+      this.selectedContractFile = e.target.files[0];
 
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        localStorage.setItem("contract", reader.result as string);
+        //localStorage.setItem("contract", reader.result as string);
         this.showContractFile = true;
       });
 
@@ -2290,12 +2383,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-      this.selectedSubscriberFile = e.target.files[i];
+      this.selectedSubscriberFile = e.target.files[0];
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        localStorage.setItem("subscriberForm", reader.result as string);
+        //localStorage.setItem("subscriberForm", reader.result as string);
         this.showSubscriberFormFile = true;
       });
 
@@ -2321,13 +2414,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-      this.selectedOtherDocument1File = e.target.files[i]
+      this.selectedOtherDocument1File = e.target.files[0]
 
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        localStorage.setItem("otherDocument1", reader.result as string);
+        //localStorage.setItem("otherDocument1", reader.result as string);
         this.showOtherDocument1File = true;
       });
 
@@ -2352,13 +2445,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
       console.log(e.target.files[i]);
-      this.selectedOtherDocument2File = e.target.files[i];
+      this.selectedOtherDocument2File = e.target.files[0];
 
       //upload to localstorage
       const reader = new FileReader();
 
       reader.addEventListener("load", () => {
-        localStorage.setItem("otherDocument2", reader.result as string);
+        //localStorage.setItem("otherDocument2", reader.result as string);
         this.showOtherDocument2File = true;
       });
 

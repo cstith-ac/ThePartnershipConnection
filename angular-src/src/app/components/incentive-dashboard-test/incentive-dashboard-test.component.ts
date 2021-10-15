@@ -190,6 +190,8 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
               let address_1 = this.listsitesforcustomer[i].address_1;
               this.customerSiteName = customerSiteName + ' - ' + address_1;
 
+              this.routeService.getListSystemsForSite(this.customer_Site_id)
+
               // this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
               //   res => {
               //     console.log(res)
@@ -228,68 +230,15 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
 
   searchCleared(){
     console.log('searchCleared');
-    // this.results = [];
-
-    // this.listsitesforcustomer = [];
-    // this.listSystemsForSite = [];
-    
-    // this.id = "";
-    // this.customer = "";
-    // this.customer_Site_id = "";
-    // this.customerSiteName = "";
-    // this.customer_System_id = "";
-    // this.systemName = "";
-
-    // this.incentiveDashboardTestForm.controls["CustomerID"].reset();
-    // this.incentiveDashboardTestForm.controls["CustomerSiteID"].reset();
-    // this.incentiveDashboardTestForm.controls["CustomerSystemID"].reset();
-    // this.incentiveDashboardTestForm.controls["AlarmAccount"].reset();
-    // this.incentiveDashboardTestForm.controls["SystemTypeID"].reset();
-    // this.incentiveDashboardTestForm.controls["PanelTypeID"].reset();
-    // this.incentiveDashboardTestForm.controls["PanelLocation"].reset();
-    // this.incentiveDashboardTestForm.controls["CentralStationID"].reset();
   }
 
   selectEvent(item) {
     console.log(item.customerID)
-    //console.log(this.customerElement.nativeElement) //undefined
-    //this.customerElement.nativeElement.innerHTML = this.customerSiteName
-    // here we can write code for doing something with selected item
-    // this.incentiveDashboardTestForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
     this.incentiveDashboardTestForm.controls["CustomerID"].setValue(this.customerNumber+ " - " +this.customer)
-    //this.siteElement.nativeElement.focus()
   }
 
   onChangeSearch(val: string) {
-    // here we can fetch data from remote location here
-    // And reassign the 'data' which is binded to 'data' property.
-    // this.incentiveDashboardTestForm.controls["CustomerID"].valueChanges
-    // .pipe(debounceTime(1000),distinctUntilChanged())
-    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
-    // .subscribe(response => {
-    //   console.log(response)
-    //   this.results = response;
-    //   // let obj = response.find(e => e.customerName === e.customerName)
-    //   for(var i = 0; i < response.length; i++) {
-    //     console.log(response[i].customerID)
-    //     var x = response[i].customerID;
-    //     this.routeService.getListSitesForCustomer(x).subscribe(
-    //       res => {
-    //         //console.log(res);
-    //         this.listsitesforcustomer = res;
-    //         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-    //           console.log(this.listsitesforcustomer[i])
-
-              
-
-      
-    //         }
-    //       }
-    //     )
-    //   }
-    // }
-    //   )
-    // )
+    
   }
 
   onFocused(e){
@@ -310,6 +259,7 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
     )
   }
 
+  //Select a Customer from modal instead of autocomplete
   selectCustomer(customer_id:number,customer_Name:string) {
     console.log('select')
 
@@ -327,8 +277,23 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
         this.listsitesforcustomer = res;
 
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          console.log(this.listsitesforcustomer[i])
+          console.log(this.listsitesforcustomer[i].customer_Site_id)
+
+          this.incentiveDashboardTestForm.controls["CustomerID"].setValue(this.listsitesforcustomer[i].customer_Site_id)
+          this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id
         }
+
+        //get site
+        this.getSiteAfterCustomer()
+      }
+    )
+  }
+
+  getSiteAfterCustomer() {
+    console.log('get site after customer')
+    this.routeService.getListSitesForCustomer(this.customer_Site_id).subscribe(
+      res => {
+        console.log(res)
       }
     )
   }

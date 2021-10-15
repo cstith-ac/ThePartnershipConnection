@@ -57,7 +57,9 @@ export class CalltoactionlistingComponent implements OnInit {
         // for(var i = 0; this.partnerCallToActionButton.length;i++) {
         //   console.log(this.partnerCallToActionButton[i].addressOnFile)
         // }
-      }, (err:HttpErrorResponse)=>{alert('there was an error')}
+      }, (err:HttpErrorResponse) => {
+        alert('there was an error')
+      }
     )
 
     if(this.jwtHelper.isTokenExpired()) {

@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
-import { AspNetUsers } from '../../models/aspnetusers';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { AspNetUsers } from '../../models/aspnetusers';
 import { ASPNetPermissions } from 'src/app/models/aspnetpermissions';
 import { AspnetPermissionsMap } from 'src/app/models/aspnetpermissionsmap';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
@@ -677,6 +677,13 @@ export class AdminComponent implements OnInit {
 
   onSaveDeleteUser(id:number) {
     console.log(this.id);
+    //return
+    this.routeService.deleteUser(id).subscribe(
+      res => {
+        console.log(res);
+      }
+    )
+    $("#deleteUserModal").modal("hide");
   }
 
 }

@@ -28,6 +28,10 @@ namespace WebAPI.Repository
             var incentiveIDParam = new SqlParameter("@IncentiveID", incentive_Add_Finish.IncentiveID);
 
             var partnerTaxAmountParam = new SqlParameter("@PartnerTaxAmount", incentive_Add_Finish.PartnerTaxAmount);
+            if (partnerTaxAmountParam.Value is string)
+            {
+                throw new System.Exception("PartnerTaxAmount is a string!");
+            }
 
             var serviceCheckedParam = new SqlParameter("@ServiceChecked", incentive_Add_Finish.ServiceChecked);
 

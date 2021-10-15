@@ -3,15 +3,18 @@ import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { IncentiveEntry } from '../../models/incentiveentry';
 import { InstallCompanyList } from '../../models/installcompanylist';
 import { InstallCompanyList2 } from 'src/app/models/installcompanylist2';
 import { CheckBoxIndex } from '../../models/checkboxindex';
 import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
+import { PartnerServiceListingExtended } from 'src/app/models/partnerservicelistingextended';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -35,6 +38,7 @@ export class IncentiveentryComponent implements OnInit {
   checkBoxIndex: CheckBoxIndex[];
   checkBoxIncompatible: CheckBoxIncompatible[];
   checkBoxAutoInsertList: CheckBoxAutoInsertList[];
+  partnerServiceListingExtended: PartnerServiceListingExtended[];
   incentiveEntryForm: FormGroup;
   submitted = false;
   installCompanyID;
@@ -80,8 +84,16 @@ export class IncentiveentryComponent implements OnInit {
   clickedCompanyName;
   clickedPartnerCode;
 
+  customer_Id;
+  customer_Site_Id;
+  customer_System_Id;
+  ticket_Number;
+  results: any[] = [];
+  filterCategory;
+
   constructor(
     private currencyPipe: CurrencyPipe,
+    private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
     private incentiveEntryService: IncentiveEntryService,
@@ -124,7 +136,7 @@ export class IncentiveentryComponent implements OnInit {
         //this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
         const n = 'n';
         const times = 30;
-        for(let i=13;i<=times;i++){
+        for(let i = 13;i <= times; i++){
           //console.log(i);
           n.split(',')
           //this.selectedForCheckBoxAutoInsert.push(i)
@@ -264,6 +276,7 @@ export class IncentiveentryComponent implements OnInit {
       SystemTransfer:  [{value:'n', disabled:true, checked:false}],
       CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
       ACHAutopay: [{value:'n', disabled:true, checked:false}],
+      TicketNumber: this.ticket_Number
     })
 
     //this.incentiveEntryForm.controls['ServiceIncluded'].setValue(true)
@@ -458,7 +471,6 @@ export class IncentiveentryComponent implements OnInit {
     //open a modal with a list containing InstallCompanyList
     //select an item from the InstallCompanyList
     //this will update the incentive entry companyName and partnerCode
-    console.log('openInstallCompanyList')
     this.modalService.open(installCompanyListContent, {
       windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'
@@ -469,17 +481,108 @@ export class IncentiveentryComponent implements OnInit {
     });
   }
 
-  // onClickNewDefaultSelection(e) {
-  //   //console.log(e.target.id)
-  //   console.log(parseInt(e.target.id))
-  // }
-  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
-    //console.log(e.target.id)
-    console.log(this.clickedID=installCompanyID);
+  onChangeGetPartnerServiceListingExt(e) {
+    console.log(e.target.value)
 
-    this.clickedID=installCompanyID;
-    this.clickedCompanyName=companyName;
-    this.clickedPartnerCode=partnerCode;
+    this.routeService.getPartnerServiceListingExtended().subscribe(
+      res => {
+        this.partnerServiceListingExtended = [].concat(res); //object
+
+        this.partnerServiceListingExtended = this.partnerServiceListingExtended.filter((val) => val.ticket_Number)
+        this.collectionSize = this.partnerServiceListingExtended.length;
+      }
+    )
+  }
+
+  // public keyword = 'ticket_Number';
+
+  // getServerResponse(event){
+  //   console.log(parseInt(event))
+  //   console.log(this.incentiveEntryForm.controls["TicketNumber"])
+
+  //   let numbersOnly = (val) => {
+  //     if(typeof(val) === 'number') {
+  //       return val;
+  //     }
+  //   }
+
+  //   this.incentiveEntryForm.controls["TicketNumber"].valueChanges
+  //     .pipe(debounceTime(1000), distinctUntilChanged(), filter(numbersOnly))
+  //     .subscribe(queryField => this.routeService.getPartnerServiceListingExtended().subscribe(
+  //       response => {
+  //         console.log(response)
+  //         this.results = response;
+  //       }
+  //     ))
+  // }
+
+  selectEvent(item) {
+    console.log(item.ticket_Number)
+    this.incentiveEntryForm.controls["TicketNumber"].setValue(this.ticket_Number)
+    //this.siteElement.nativeElement.focus()
+  }
+
+  onFocused(e){
+    // here we can write our code for doing something when input is focused
+  }
+
+  searchCleared(){
+    console.log('searchCleared');
+    this.results = [];
+
+    this.partnerServiceListingExtended = [];
+    
+    this.ticket_Number = "";
+
+    this.incentiveEntryForm.controls["TicketNumber"].reset();
+  }
+
+  openACTicketNumberListModal(acTicketNumberListContent) {
+    this.modalService.open(acTicketNumberListContent, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    this.spinnerService.show();
+
+    this.routeService.getPartnerServiceListingExtended().subscribe(
+      res => {
+        if(res) {
+          this.spinnerService.hide()
+        }
+        this.partnerServiceListingExtended = [].concat(res); //object
+
+        // for(let i = 0; i < this.partnerServiceListingExtended.length; i++) {
+        //   console.log(this.partnerServiceListingExtended[i].customer_Id)
+        //   console.log(this.partnerServiceListingExtended[i].customer_Site_Id)
+        //   console.log(this.partnerServiceListingExtended[i].customer_System_Id)
+        // }
+      }
+    )
+  }
+
+  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number) {
+    this.customer_Id = customer_Id;
+    this.customer_Site_Id = customer_Site_Id;
+    this.customer_System_Id = customer_System_Id;
+    this.ticket_Number = ticket_Number;
+
+    localStorage.setItem("customer_Id", this.customer_Id);
+    localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
+    localStorage.setItem("customer_System_Id", this.customer_System_Id);
+    localStorage.setItem("ticket_Number", this.ticket_Number);
+
+    this.serviceIncluded = "y";
+    localStorage.setItem("serviceIncluded", "y");
+    this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
+
+    this.modalService.dismissAll();
+  }
+
+  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
+    this.clickedID = installCompanyID;
+    this.clickedCompanyName = companyName;
+    this.clickedPartnerCode = partnerCode;
 
     this.installCompanyID = this.clickedID;
     this.companyName = this.clickedCompanyName;
@@ -490,11 +593,42 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem('partnerCode',this.partnerCode);
 
     this.modalService.dismissAll();
-    this.searchTerm='';
+    this.searchTerm = '';
+  }
+
+  onOpenPartnerDetailsModal() {
+    $("#partnerDetails").modal("show");
+  }
+
+  onOpenMessageModal() {
+    $("#messageModal").modal("show");
+  }
+
+  onSubmitMessage(form: FormGroup) {
+    console.log('message')
+    // this.routeService.postPartnerAddNote(this.partnerServiceListingForm.value).subscribe(
+    //   res => {
+    //     //console.log(res)
+    //     $("#detailsModal").modal("hide");
+    //     $("#memoModal").modal("hide");
+    //   },
+    //   error => console.log('error: ', error)
+    // )
+  }
+
+  onAddDocument() {
+    console.log('add doc')
+  }
+
+  openComingSoonModal(comingSoon) {
+    this.modalService.open(comingSoon,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class'
+      });
   }
 
   search(value: string): void {
-    console.log(value)
     this.installCompanyList2 = this.allInstallCompanyList2.filter((val) => 
     val.companyName.toLowerCase().includes(value));
     this.collectionSize = this.installCompanyList2.length;

@@ -35,10 +35,19 @@ namespace WebAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public SiteToSystemList GetSiteToSystemListByID(int id)
+        public async Task<Object> GetSiteToSystemListByID(int id)
         {
-            return db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
+            return await db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID={0}", id).ToListAsync();
         }
+
+        //[HttpGet("{id}")]
+        //[Authorize]
+        //public SiteToSystemList GetSiteToSystemListByID(int id)
+        //{
+        //    //return db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
+        //    return db.GetSiteToSystemLists.FromSqlRaw("EXECUTE [dbo].[SiteToSystemList] @CustomerSiteID={0}", id).ToListAsync().Result.FirstOrDefault();
+        //}
+
         //public async Task<Object> GetSiteToSystemList()
         //{
         //    var sites = new List<SiteToSystemList>();

@@ -1,7 +1,7 @@
 <form [formGroup]="incentiveDashboardTestForm">
 
     <!--CUSTOMER-->
-    <div class="form-group form-inline">
+    <div class="form-group">
         <label class="col-sm-2 col-form-label">Customer</label>
         <div class="ng-autocomplete">
             <ng-autocomplete
@@ -40,7 +40,7 @@
         </span>
     </div>
 
-    <div class="form-group form-inline">
+    <!-- <div class="form-group">
         <label>Customer</label>
         <input 
             type="text"
@@ -51,40 +51,41 @@
         <span class="ml-2" (click)="openSearchCustomerModal(content)">
             <i class="fas fa-search"></i>
         </span>
-        <!-- <kendo-dropdownlist
+        <kendo-dropdownlist
             [data]="customers"
             [value]="selectedCustomer"
             [textField]="'name'"
             [valueField]="'id'"
             (valueChange)="onCustomerChange($event)"
           >
-          </kendo-dropdownlist> -->
+          </kendo-dropdownlist>
         
-    </div>
-    <div class="form-group">
+    </div> -->
+    
+    <!-- <div class="form-group">
         <label>Site</label>
-        <!-- <kendo-dropdownlist
+        <kendo-dropdownlist
             [data]="listsitesforcustomer"
             [value]="customer_Site_id"
             [textField]="'siteName'"
             [valueField]="'customer_Site_id'"
             (valueChange)="onSiteChange($event)"
           >
-          </kendo-dropdownlist> -->
-        
+          </kendo-dropdownlist>
     </div>
+
     <div class="form-group">
         <label>System</label>
-        <!-- <kendo-dropdownlist
+        <kendo-dropdownlist
             [data]="systems"
             [value]="selectedSystem"
             [textField]="'id'"
             [valueField]="'name'"
             (valueChange)="onSystemChange($event)"
           >
-          </kendo-dropdownlist> -->
-        
-    </div>
+          </kendo-dropdownlist>
+    </div> -->
+
 </form>
 <ng-template #content let-modal>
     <div class="modal-header">

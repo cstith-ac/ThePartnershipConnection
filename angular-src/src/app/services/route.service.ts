@@ -32,7 +32,7 @@ export class RouteService {
   incentiveAddRecurring: Incentive_Add_Recurring[] = [];
   incentiveAddEquipment: Incentive_Add_Equipment[] = [];
   incentiveAddLabor: Incentive_Add_Labor[] = [];
-  customerDocumentADD: Customer_Document_ADD[] = [];
+  //customerDocumentADD: Customer_Document_ADD[] = [];
   incentiveAddFinish: Incentive_ADD_Finish[] = [];
 
   baseUrl = environment.baseUrl;
@@ -398,13 +398,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/TPCPartnerAgingReport`, httpOptions);
   }
 
-  getPartnerLandingPage(): Observable<any> {
+  getPartnerLandingPage(): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.authToken
-      })
+      }),
+      observe: 'response' as 'body'
     };
     return this.http.get<any>(`${this.baseUrl}/api/PartnerLandingPage`, httpOptions);
   }
@@ -451,6 +452,17 @@ export class RouteService {
       })
     };
     return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListing`, httpOptions);
+  }
+
+  getPartnerServiceListingExtended(): Observable<any>  {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingExtended`, httpOptions);
   }
 
   getCheckBoxIndex(): Observable<any> {
@@ -612,12 +624,25 @@ export class RouteService {
     return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, params, httpOptions);
   }
 
-  postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<Customer_Document_ADD> {
+  // postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<Customer_Document_ADD> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+  //   };
+  //   return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
+  // }
+
+  postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json', 
+        "Accept": "application/json", 
+        'Authorization':'Bearer ' + this.authToken 
+      }),
+      observe: 'response' as 'body' 
     };
-    return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
   }
 
   postIncentive_ADD_Finish(params:any): Observable<HttpResponse<any>> {

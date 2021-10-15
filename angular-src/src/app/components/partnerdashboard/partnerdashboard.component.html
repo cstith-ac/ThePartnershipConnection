@@ -479,7 +479,7 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p> -->
-              <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth % 11) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
+              <p *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth % 11) || (item.attritionLastMonth === 12) || (item.attritionLastMonth === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
                 <ngb-progressbar 
                   type="warning"
                   [max]="30"

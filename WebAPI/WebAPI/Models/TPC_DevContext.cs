@@ -82,6 +82,7 @@ namespace WebAPI.Models
         public virtual DbSet<TPCPartnerAgingReport> GetTPCPartnerAgingReports { get; set; }
         public virtual DbSet<AgingBucketNames> GetAgingBucketNames { get; set; }
         public virtual DbSet<PartnerServiceListing> GetPartnerServiceListings { get; set; }
+        public virtual DbSet<PartnerServiceListingExtended> GetPartnerServiceListingExtendeds { get; set; }
         public virtual DbSet<PermissionsUserMap> GetPermissionsUserMaps { get; set; }
         public virtual DbSet<PermissionAdd> InsertPermissionAddResult { get; set; }
         public virtual DbSet<PermissionDelete> InsertPermissionDeleteResult { get; set; }
@@ -543,6 +544,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<PartnerServiceListing>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerServiceListingExtended>(entity =>
             {
                 entity.HasNoKey();
             });
