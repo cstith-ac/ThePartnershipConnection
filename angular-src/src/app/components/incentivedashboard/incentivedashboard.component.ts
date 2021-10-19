@@ -32,8 +32,8 @@ import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
-import { fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, mergeAll, filter } from 'rxjs/operators';
+import { fromEvent, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -305,6 +305,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //foo;
   target;
   clicked = false;//disables button after click
+  frmData; // Invoice
+  frmData2; // Site Visit
+  frmData3; // Contract
+  frmData4; // Subscriber Form
+  frmData5; // Other Document 1
+  frmData6; // Other Document 2
 
   constructor(
     private router: Router,
@@ -1650,12 +1656,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.spinnerService.show();
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
-    // switchmap, concatmap
-    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
-      result => {
-        //returns the job id
-        this.job_id = result;
+    // begin switchmap
+   
+    
 
+    var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+    updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+    updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+    updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+    updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+
+    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+      res => {
+        this.job_id=res;
         var addToObject = function (obj, key, value) {
           // Create a temp object and index variable
           var temp = {};
@@ -1679,597 +1692,1559 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }
           return temp;
         };
-       
         this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
-          var updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
-          console.log(updateRecurringWithJobID)
-          this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
-            result => {
-              console.log(result)
-            }
-          )
-        })
-
+          this.updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
+        });
         this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-          var updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id);
-          console.log(updateEquipMatWithJobID)
-          this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
-            result => {
-              console.log(result)
-            }
-          )
-        })
-
+          this.updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id); 
+        });
         this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(l => {
-          var updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
-          console.log(updateLaborChargesWithJobID)
-          this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
-            result => {
-              console.log(result);
-              
-            }
-          )
-        })
+          this.updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
+        });
 
-        if(this.file_name) {
-          console.log(this.file_name)
-          let frmData = new FormData();
+        // INVOICE //
+        this.frmData = new FormData();
+        // 37 = Sandbox, 6 = Production
+        this.frmData.append('company_id','37');
+        this.frmData.append('customer_id', this.id);
 
-          // 37 = Sandbox, 6 = Production
-          frmData.append('company_id','37');
+        this.frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData.append('customer_system_id', this.customerSystemId.toString());
 
-          // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-          frmData.append('customer_id', this.id);
+        this.frmData.append('job_id', this.job_id);
+        //this.frmData.append('job_id', '19');
+        this.frmData.append('security_level', this.security_level);
 
-          frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-          //frmData.append('customer_site_id',this.customerSiteId);
-          
-          frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-          //frmData.append('customer_system_id', this.customerSystemId.toString());
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData.append('file_name', this.file_name);
+        this.frmData.append('file_size', this.file_size);
+        // this.frmData.append('upload_date', this.invoiceDate);
+        this.frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date 
+        this.frmData.append('document_ext', '*Contracts');
+        this.frmData.append('user_code', 'TPC');
+        //this.frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData.append('user_description', 'Invoice');
+        this.frmData.append('reference1', null);
+        this.frmData.append('reference2', null);
+        this.frmData.append('reference3', null);
+        this.frmData.append('reference4', null);
+        this.frmData.append("file_data", this.selectedInvoiceFile);
+        this.frmData.append('document_id', '1');
 
-          frmData.append('job_id', this.job_id);
-          //frmData.append('job_id', '19');
-          frmData.append('security_level', this.security_level);
+        // Display the key/value pairs
+        console.log(Object.entries(this.frmData));//returns an empty array!
+        var options = {content: this.frmData};
 
-          //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-          frmData.append('file_name', this.file_name);
-          frmData.append('file_size', this.file_size);
-          // frmData.append('upload_date', this.invoiceDate);
-          frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date 
-          frmData.append('document_ext', '*Contracts');
-          frmData.append('user_code', 'TPC');
-          //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-          frmData.append('user_description', 'Invoice');
-          frmData.append('reference1', null);
-          frmData.append('reference2', null);
-          frmData.append('reference3', null);
-          frmData.append('reference4', null);
-          frmData.append("file_data", this.selectedInvoiceFile);
-          //frmData.append("file_data", this.myFiles.Invoice);
-          // perform http request for each file
-          //frmData.append('@file_data', this.myFiles[i]);
-          frmData.append('document_id', '1');
+        // SITE VISIT //
+        // 37 = Sandbox, 6 = Production
+        this.frmData2 = new FormData();
+        this.frmData2.append('company_id','37');
 
-          console.log(this.job_id)
-          // Display the key/value pairs
-          console.log(Object.entries(frmData));//returns an empty array!
-          var options = {content: frmData};
+        // this.frmData2.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        this.frmData2.append('customer_id', this.id);
 
-          console.log(frmData);
-          console.log(this.job_id);
-          const headers = new HttpHeaders();
-          headers.append('Content-Type', 'multipart/form-data');
-          headers.append('Authorization','Bearer ' + this.loadToken());
-          headers.append('Accept', 'application/json');
+        this.frmData2.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData2.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData2.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData2.append('customer_system_id', this.customerSystemId.toString());
 
-          this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            headers: headers,
-            responseType: 'json',
-            observe: 'response'
-          }).subscribe(
-            data => {
-              console.log({i:0,data});
-              console.log(data.body)
-              console.log(data.headers)
-              console.log(data.status)
-              if(data.status === 200) {
-                this.flashMessage.show('Your Invoice was uploaded successfully', {
-                  cssClass: 'text-center alert-success',
-                  timeout: 5000
-                })
-              }
-              // display progress bar to indicate the status to the user
-              // if status is 200, stop showing the progress bar and go to the next document
-              // if status is 500, show an error to the user
-            }, (err: HttpErrorResponse) => {
-              alert(err + ' there was a problem with your Invoice file upload')
-            }
-          )
-            console.log(frmData)
-        }
+        this.frmData2.append('job_id', this.job_id);
+        //this.frmData2.append('job_id', '19');
+        this.frmData2.append('security_level', this.security_level);
 
-        if(this.site_visit_file_name) {
-          console.log(this.myFiles[2])
-            let frmData = new FormData();
-
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
-
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
-
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
-            
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
-
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.site_visit_file_name);
-            frmData.append('file_size', this.site_visit_file_size);
-            // frmData.append('upload_date', this.invoiceDate);
-            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'TPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Site Visit');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-            frmData.append("file_data", this.selectedSiteVisitFile);
-            // frmData.append("file_data", this.myFiles.SiteVisit);
-              // for(var i = 0; i < this.myFiles.length; i++) {
-              //   console.log(this.myFiles[i])
-              //   frmData.append("file_data", this.myFiles[i]);
-              // }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
-
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
-
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'json',
-              observe: 'response'
-            }).subscribe(
-              data => {
-                console.log({i:2,data});
-                console.log(data.body)
-                console.log(data.headers)
-                console.log(data.status)
-                if(data.status === 200) {
-                  this.flashMessage.show('Your Site Visit was uploaded successfully', {
-                    cssClass: 'text-center alert-success',
-                    timeout: 5000
-                  })
-                }
-              }, (err: HttpErrorResponse) => {
-                alert(err + ' there was a problem with your Site Visit file upload')
-              }
-            )
-              console.log(frmData)
-        }
-
-        if(this.contract_file_name) {
-          console.log(this.myFiles[5])
-            let frmData = new FormData();
-
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
-
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
-
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
-            
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
-
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.contract_file_name);
-            frmData.append('file_size', this.contract_file_size);
-            // frmData.append('upload_date', this.invoiceDate);
-            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'TPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Contract');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-            frmData.append("file_data", this.selectedContractFile);
-            // frmData.append("file_data", this.myFiles.Contract);
-              // for(var i = 0; i < this.myFiles.length; i++) {
-              //   console.log(this.myFiles[i])
-              //   frmData.append("file_data", this.myFiles[i]);
-              // }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
-
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
-
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'json',
-              observe: 'response'
-            }).subscribe(
-              data => {
-                console.log({i:5,data});
-                console.log(data.body)
-                console.log(data.headers)
-                console.log(data.status)
-                if(data.status === 200) {
-                  this.flashMessage.show('Your Contract was uploaded successfully', {
-                    cssClass: 'text-center alert-success',
-                    timeout: 5000
-                  })
-                }
-                // display progress bar to indicate the status to the user
-                // if status is 200, stop showing the progress bar and go to the next document
-                // if status is 500, show an error to the user
-              }, (err: HttpErrorResponse) => {
-                alert(err + ' there was a problem with your Contract file upload')
-              }
-            )
-              console.log(frmData)
-        }
-
-        if(this.subscriber_file_name) {
-          //console.log(this.myFiles[1])
-          let frmData = new FormData();
-
-          // 37 = Sandbox, 6 = Production
-          frmData.append('company_id','37');
-
-          // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-          frmData.append('customer_id', this.id);
-
-          frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-          //frmData.append('customer_site_id',this.customerSiteId);
-          
-          frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-          //frmData.append('customer_system_id', this.customerSystemId.toString());
-
-          frmData.append('job_id', this.job_id);
-          //frmData.append('job_id', '19');
-          frmData.append('security_level', this.security_level);
-
-          //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-          frmData.append('file_name', this.subscriber_file_name);
-          frmData.append('file_size', this.subscriber_file_size);
-          // frmData.append('upload_date', this.invoiceDate);
-          frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-          frmData.append('document_ext', '*Contracts');
-          frmData.append('user_code', 'TPC');
-          //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-          frmData.append('user_description', 'Subscriber Form');
-          frmData.append('reference1', null);
-          frmData.append('reference2', null);
-          frmData.append('reference3', null);
-          frmData.append('reference4', null);
-          frmData.append("file_data", this.selectedSubscriberFile);
-          // frmData.append("file_data", this.myFiles.SubForm);
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData2.append('file_name', this.site_visit_file_name);
+        this.frmData2.append('file_size', this.site_visit_file_size);
+        // this.frmData2.append('upload_date', this.invoiceDate);
+        this.frmData2.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+        this.frmData2.append('document_ext', '*Contracts');
+        this.frmData2.append('user_code', 'TPC');
+        //this.frmData2.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData2.append('user_description', 'Site Visit');
+        this.frmData2.append('reference1', null);
+        this.frmData2.append('reference2', null);
+        this.frmData2.append('reference3', null);
+        this.frmData2.append('reference4', null);
+        this.frmData2.append("file_data", this.selectedSiteVisitFile);
+        // this.frmData2.append("file_data", this.myFiles.SiteVisit);
           // for(var i = 0; i < this.myFiles.length; i++) {
           //   console.log(this.myFiles[i])
-          //   frmData.append("subscriber_file_data", this.myFiles[i]);
+          //   this.frmData2.append("file_data", this.myFiles[i]);
           // }
           // perform http request for each file
-          //frmData.append('@file_data', this.myFiles[i]);
-          frmData.append('document_id', '1');
+          //this.frmData2.append('@file_data', this.myFiles[i]);
+        this.frmData2.append('document_id', '1');
 
-          console.log(this.job_id)
-          // Display the key/value pairs
-          console.log(Object.entries(frmData));//returns an empty array!
-          var options = {content: frmData};
+        // CONTRACT //
+        // 37 = Sandbox, 6 = Production
+        this.frmData3 = new FormData();
+        this.frmData3.append('company_id','37');
 
-          console.log(frmData);
-          console.log(this.job_id);
-          const headers = new HttpHeaders();
-          headers.append('Content-Type', 'multipart/form-data');
-          headers.append('Authorization','Bearer ' + this.loadToken());
-          headers.append('Accept', 'application/json');
+        // this.frmData3.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        this.frmData3.append('customer_id', this.id);
 
-          this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-            headers: headers,
-            responseType: 'json',
-            observe: 'response'
-          }).subscribe(
-            data => {
-              console.log({i:1,data});
-              console.log(data.body)
-              console.log(data.headers)
-              console.log(data.status)
-              if(data.status === 200) {
-                this.flashMessage.show('Your Subscriber Form was uploaded successfully', {
-                  cssClass: 'text-center alert-success',
-                  timeout: 5000
-                })
-              }
-              // display progress bar to indicate the status to the user
-              // if status is 200, stop showing the progress bar and go to the next document
-              // if status is 500, show an error to the user
-            }, (err: HttpErrorResponse) => {
-              alert(err + ' there was a problem with your Subscriber Form file upload')
-            }
-          )
-            console.log(frmData)
-        }
+        this.frmData3.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData3.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData3.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData3.append('customer_system_id', this.customerSystemId.toString());
 
-        if(this.other_Document1_file_name) {
-          console.log(this.myFiles[3])
-            let frmData = new FormData();
+        this.frmData3.append('job_id', this.job_id);
+        //this.frmData3.append('job_id', '19');
+        this.frmData3.append('security_level', this.security_level);
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData3.append('file_name', this.contract_file_name);
+        this.frmData3.append('file_size', this.contract_file_size);
+        // this.frmData3.append('upload_date', this.invoiceDate);
+        this.frmData3.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+        this.frmData3.append('document_ext', '*Contracts');
+        this.frmData3.append('user_code', 'TPC');
+        //this.frmData3.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData3.append('user_description', 'Contract');
+        this.frmData3.append('reference1', null);
+        this.frmData3.append('reference2', null);
+        this.frmData3.append('reference3', null);
+        this.frmData3.append('reference4', null);
+        this.frmData3.append("file_data", this.selectedContractFile);
+        // this.frmData3.append("file_data", this.myFiles.SiteVisit);
+          // for(var i = 0; i < this.myFiles.length; i++) {
+          //   console.log(this.myFiles[i])
+          //   this.frmData3.append("file_data", this.myFiles[i]);
+          // }
+          // perform http request for each file
+          //this.frmData3.append('@file_data', this.myFiles[i]);
+        this.frmData3.append('document_id', '1');
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        // SUBSCRIBER FORM //
+        // 37 = Sandbox, 6 = Production
+        this.frmData4 = new FormData();
+        this.frmData4.append('company_id','37');
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
-            
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData4.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        this.frmData4.append('customer_id', this.id);
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        this.frmData4.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData4.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData4.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData4.append('customer_system_id', this.customerSystemId.toString());
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.other_Document1_file_name);
-            frmData.append('file_size', this.other_Document1_file_size);
-            // frmData.append('upload_date', this.invoiceDate);
-            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'TPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Other Doc1');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-            frmData.append("file_data", this.selectedOtherDocument1File);
-            // frmData.append("file_data", this.myFiles.Other1);
-              // for(var i = 0; i < this.myFiles.length; i++) {
-              //   console.log(this.myFiles[i])
-              //   frmData.append("file_data", this.myFiles[i]);
-              // }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        this.frmData4.append('job_id', this.job_id);
+        //this.frmData4.append('job_id', '19');
+        this.frmData4.append('security_level', this.security_level);
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData4.append('file_name', this.subscriber_file_name);
+        this.frmData4.append('file_size', this.subscriber_file_size);
+        // this.frmData4.append('upload_date', this.invoiceDate);
+        this.frmData4.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+        this.frmData4.append('document_ext', '*Contracts');
+        this.frmData4.append('user_code', 'TPC');
+        //this.frmData4.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData4.append('user_description', 'Subscriber Form');
+        this.frmData4.append('reference1', null);
+        this.frmData4.append('reference2', null);
+        this.frmData4.append('reference3', null);
+        this.frmData4.append('reference4', null);
+        this.frmData4.append("file_data", this.selectedSubscriberFile);
+        // this.frmData4.append("file_data", this.myFiles.SiteVisit);
+          // for(var i = 0; i < this.myFiles.length; i++) {
+          //   console.log(this.myFiles[i])
+          //   this.frmData4.append("file_data", this.myFiles[i]);
+          // }
+          // perform http request for each file
+          //this.frmData4.append('@file_data', this.myFiles[i]);
+        this.frmData4.append('document_id', '1');
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
+        // OTHER DOCUMENT 1 //
+        // 37 = Sandbox, 6 = Production
+        this.frmData5 = new FormData();
+        this.frmData5.append('company_id','37');
 
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'json',
-              observe: 'response'
-            }).subscribe(
-              data => {
-                console.log({i:3,data});
-                console.log(data.body)
-              console.log(data.headers)
-              console.log(data.status)
-              if(data.status === 200) {
-                this.flashMessage.show('Your Other Doc1 was uploaded successfully', {
-                  cssClass: 'text-center alert-success',
-                  timeout: 5000
-                })
-              }
-              // display progress bar to indicate the status to the user
-              // if status is 200, stop showing the progress bar and go to the next document
-              // if status is 500, show an error to the user
-              }, (err: HttpErrorResponse) => {
-                alert(err + ' there was a problem with your Other Doc1 file upload')
-              }
-            )
-              console.log(frmData)
-        }
+        // this.frmData5.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        this.frmData5.append('customer_id', this.id);
 
-        if(this.other_Document2_file_name) {
-          console.log(this.myFiles[4])
-            let frmData = new FormData();
+        this.frmData5.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData5.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData5.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData5.append('customer_system_id', this.customerSystemId.toString());
 
-            // 37 = Sandbox, 6 = Production
-            frmData.append('company_id','37');
+        this.frmData5.append('job_id', this.job_id);
+        //this.frmData5.append('job_id', '19');
+        this.frmData5.append('security_level', this.security_level);
 
-            // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-            frmData.append('customer_id', this.id);
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData5.append('file_name', this.other_Document1_file_name);
+        this.frmData5.append('file_size', this.other_Document1_file_size);
+        // this.frmData5.append('upload_date', this.invoiceDate);
+        this.frmData5.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+        this.frmData5.append('document_ext', '*Contracts');
+        this.frmData5.append('user_code', 'TPC');
+        //this.frmData5.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData5.append('user_description', 'Other Document 1');
+        this.frmData5.append('reference1', null);
+        this.frmData5.append('reference2', null);
+        this.frmData5.append('reference3', null);
+        this.frmData5.append('reference4', null);
+        this.frmData5.append("file_data", this.selectedOtherDocument1File);
+        // this.frmData5.append("file_data", this.myFiles.SiteVisit);
+          // for(var i = 0; i < this.myFiles.length; i++) {
+          //   console.log(this.myFiles[i])
+          //   this.frmData5.append("file_data", this.myFiles[i]);
+          // }
+          // perform http request for each file
+          //this.frmData5.append('@file_data', this.myFiles[i]);
+        this.frmData5.append('document_id', '1');
 
-            frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-            //frmData.append('customer_site_id',this.customerSiteId);
-            
-            frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-            //frmData.append('customer_system_id', this.customerSystemId.toString());
+        // OTHER DOCUMENT 2 //
+        // 37 = Sandbox, 6 = Production
+        this.frmData6 = new FormData();
+        this.frmData6.append('company_id','37');
 
-            frmData.append('job_id', this.job_id);
-            //frmData.append('job_id', '19');
-            frmData.append('security_level', this.security_level);
+        // this.frmData6.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+        this.frmData6.append('customer_id', this.id);
 
-            //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-            frmData.append('file_name', this.other_Document2_file_name);
-            frmData.append('file_size', this.other_Document2_file_size);
-            // frmData.append('upload_date', this.invoiceDate);
-            frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-            frmData.append('document_ext', '*Contracts');
-            frmData.append('user_code', 'TPC');
-            //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-            frmData.append('user_description', 'Other Doc 2');
-            frmData.append('reference1', null);
-            frmData.append('reference2', null);
-            frmData.append('reference3', null);
-            frmData.append('reference4', null);
-            frmData.append("file_data", this.selectedOtherDocument2File);
-            // frmData.append("file_data", this.myFiles.Other2);
-              // for(var i = 0; i < this.myFiles.length; i++) {
-              //   console.log(this.myFiles[i])
-              //   frmData.append("file_data", this.myFiles[i]);
-              // }
-              // perform http request for each file
-              //frmData.append('@file_data', this.myFiles[i]);
-            frmData.append('document_id', '1');
+        this.frmData6.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        //this.frmData6.append('customer_site_id',this.customerSiteId);
+        
+        this.frmData6.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        //this.frmData6.append('customer_system_id', this.customerSystemId.toString());
 
-            console.log(this.job_id)
-            // Display the key/value pairs
-            console.log(Object.entries(frmData));//returns an empty array!
-            var options = {content: frmData};
+        this.frmData6.append('job_id', this.job_id);
+        //this.frmData6.append('job_id', '19');
+        this.frmData6.append('security_level', this.security_level);
 
-            console.log(frmData);
-            console.log(this.job_id);
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'multipart/form-data');
-            headers.append('Authorization','Bearer ' + this.loadToken());
-            headers.append('Accept', 'application/json');
-
-            this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
-              headers: headers,
-              responseType: 'json',
-              observe: 'response'
-            }).subscribe(
-              data => {
-                console.log({i:4,data});
-                console.log(data.body)
-                console.log(data.headers)
-                console.log(data.status)
-                if(data.status === 200) {
-                  this.flashMessage.show('Your Other Doc 2 was uploaded successfully', {
-                    cssClass: 'text-center alert-success',
-                    timeout: 5000
-                  })
-                }
-                // display progress bar to indicate the status to the user
-                // if status is 200, stop showing the progress bar and go to the next document
-                // if status is 500, show an error to the user
-              }, (err: HttpErrorResponse) => {
-                alert(err + ' there was a problem with your Other Doc 2 file upload')
-              }
-            )
-              console.log(frmData)
-        }
+        //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+        this.frmData6.append('file_name', this.other_Document2_file_name);
+        this.frmData6.append('file_size', this.other_Document2_file_size);
+        // this.frmData6.append('upload_date', this.invoiceDate);
+        this.frmData6.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+        this.frmData6.append('document_ext', '*Contracts');
+        this.frmData6.append('user_code', 'TPC');
+        //this.frmData6.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+        this.frmData6.append('user_description', 'Other Document 2');
+        this.frmData6.append('reference1', null);
+        this.frmData6.append('reference2', null);
+        this.frmData6.append('reference3', null);
+        this.frmData6.append('reference4', null);
+        this.frmData6.append("file_data", this.selectedOtherDocument2File);
+        // this.frmData6.append("file_data", this.myFiles.SiteVisit);
+          // for(var i = 0; i < this.myFiles.length; i++) {
+          //   console.log(this.myFiles[i])
+          //   this.frmData6.append("file_data", this.myFiles[i]);
+          // }
+          // perform http request for each file
+          //this.frmData6.append('@file_data', this.myFiles[i]);
+        this.frmData6.append('document_id', '1');
 
         var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
         updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-        this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
-          result => {
-            if(result.status === 200) {
-              console.log('Finished!... ');
 
-              this.spinnerService.hide();
-              this.flashMessage.show('Your invoice has been submitted successfully', {
-                cssClass: 'text-center alert-success',
-                timeout: 5000
-              });
-            }
-            // console.log('Finished!... ');
-
-            // this.spinnerService.hide()
-
-            //localStorage.removeItem('installCompanyID');
-            localStorage.removeItem('totalRecurringCalc');
-            localStorage.removeItem('totalEquipMatCalc');
-            localStorage.removeItem('totalLaborChargesCalc');
-            localStorage.removeItem('invoiceDate');
-            localStorage.removeItem('invoiceNumber');
-            localStorage.removeItem('invoiceTotal');
-            localStorage.removeItem('recurringentry');
-            localStorage.removeItem('equipmatentry');
-            localStorage.removeItem('laborchargesentry');
-            localStorage.removeItem('invoiceName');
-            localStorage.removeItem('invoiceFileSize');
-            localStorage.removeItem('invoice');
-            localStorage.removeItem('subscriberForm');
-            localStorage.removeItem('subscriberFormName');
-            localStorage.removeItem('siteVisit');
-            localStorage.removeItem('siteVisitName');
-            localStorage.removeItem('otherDocument1');
-            localStorage.removeItem('otherDocument1Name');
-            localStorage.removeItem('contract');
-            localStorage.removeItem('contractName');
-            localStorage.removeItem('otherDocument2');
-            localStorage.removeItem('otherDocument2Name');
-            localStorage.removeItem('contractDate');
-            localStorage.removeItem('contractTerm');
-            localStorage.removeItem('serviceIncluded');
-            localStorage.removeItem('customerId');
-            localStorage.removeItem('customerName');
-            localStorage.removeItem('customerSiteName');
-            localStorage.removeItem('customerSystemInformation');
-            localStorage.removeItem('alarmAccount');
-            localStorage.removeItem('systemType');
-            localStorage.removeItem('panelType');
-            localStorage.removeItem('panelLocation');
-            localStorage.removeItem('centralStationID');
-            localStorage.removeItem('customerSiteId');
-            localStorage.removeItem('renewal');
-            localStorage.removeItem('partnerTaxAmount');
-            localStorage.removeItem('additionalInfo');
-            localStorage.removeItem('partnerComments');
-            localStorage.removeItem('signalsTested');
-            localStorage.removeItem('testObject');
-            localStorage.removeItem('checkBoxAutoInsertList');
-            localStorage.removeItem('results');
-
-            return
-
-            this.router.navigate(['incentive-entry/']);
-          }, (err:HttpErrorResponse) => {
-            alert('There was an error')
-            console.log(err)
-            this.spinnerService.hide();
-          }
-        )
-       
-        return
+        this.routeService.postIncentive_Add_Recurring(this.updateRecurringWithJobID).pipe(
+          switchMap(result => 
+            this.routeService.postIncentive_Add_Equipment(this.updateEquipMatWithJobID)),
+            switchMap(result => 
+              this.routeService.postIncentive_Add_Labor(this.updateLaborChargesWithJobID)),
+              switchMap(result => {
+                // console.log(result)
+                // this.routeService.postCustomerDocumentADD(this.frmData).pipe().subscribe(r => console.log(r.status))
+                if(!this.file_name) {
+                  console.log(this.file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                  //   )
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                    )
+                  )
+                }
+              }),
+              switchMap(result => {
+                if(!this.site_visit_file_name) {
+                  console.log(this.site_visit_file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData2)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData2).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                  //   )
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData2).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                    )
+                  )
+                }
+              }),
+              switchMap(result => {
+                if(!this.contract_file_name) {
+                  console.log(this.contract_file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData3)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData3).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData3).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                    ))
+                  )
+                }
+              }),
+              switchMap(result => {
+                if(!this.subscriber_file_name) {
+                  console.log(this.subscriber_file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData4)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData4).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData4).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                    ))
+                  )
+                }
+              }),
+              switchMap(result => {
+                if(!this.other_Document1_file_name) {
+                  console.log(this.other_Document1_file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData5)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData5).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData5).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                    ))
+                  )
+                }
+              }),
+              switchMap(result => {
+                if(!this.other_Document2_file_name) {
+                  console.log(this.other_Document2_file_name)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData6)
+                  // return this.routeService.postCustomerDocumentADD(this.frmData6).pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
+                  return of(result)
+                } else {
+                  return this.routeService.postCustomerDocumentADD(this.frmData6).pipe(
+                    switchMap(result => 
+                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                    ))
+                  )
+                }
+              }),
+              
         
-      }
+      ).subscribe(res => {
+        console.log(res.status)
+
+        if(res.status === 200) {
+          this.flashMessage.show('Your form was uploaded sucessfully', {
+            cssClass: 'text-center alert-success',
+            timeout: 5000
+          })
+        }
+        console.log('Finished!... ');
+
+        this.spinnerService.hide();
+
+        //localStorage.removeItem('installCompanyID');
+        localStorage.removeItem('totalRecurringCalc');
+        localStorage.removeItem('totalEquipMatCalc');
+        localStorage.removeItem('totalLaborChargesCalc');
+        localStorage.removeItem('invoiceDate');
+        localStorage.removeItem('invoiceNumber');
+        localStorage.removeItem('invoiceTotal');
+        localStorage.removeItem('recurringentry');
+        localStorage.removeItem('equipmatentry');
+        localStorage.removeItem('laborchargesentry');
+        localStorage.removeItem('invoiceName');
+        localStorage.removeItem('invoiceFileSize');
+        localStorage.removeItem('invoice');
+        localStorage.removeItem('subscriberForm');
+        localStorage.removeItem('subscriberFormName');
+        localStorage.removeItem('siteVisit');
+        localStorage.removeItem('siteVisitName');
+        localStorage.removeItem('otherDocument1');
+        localStorage.removeItem('otherDocument1Name');
+        localStorage.removeItem('contract');
+        localStorage.removeItem('contractName');
+        localStorage.removeItem('otherDocument2');
+        localStorage.removeItem('otherDocument2Name');
+        localStorage.removeItem('contractDate');
+        localStorage.removeItem('contractTerm');
+        localStorage.removeItem('serviceIncluded');
+        localStorage.removeItem('customerId');
+        localStorage.removeItem('customerName');
+        localStorage.removeItem('customerSiteName');
+        localStorage.removeItem('customerSystemInformation');
+        localStorage.removeItem('alarmAccount');
+        localStorage.removeItem('systemType');
+        localStorage.removeItem('panelType');
+        localStorage.removeItem('panelLocation');
+        localStorage.removeItem('centralStationID');
+        localStorage.removeItem('customerSiteId');
+        localStorage.removeItem('renewal');
+        localStorage.removeItem('partnerTaxAmount');
+        localStorage.removeItem('additionalInfo');
+        localStorage.removeItem('partnerComments');
+        localStorage.removeItem('signalsTested');
+        localStorage.removeItem('testObject');
+        localStorage.removeItem('checkBoxAutoInsertList');
+        localStorage.removeItem('results');
+
+        //return
+        // this.file_name='';
+        // this.site_visit_file_name='';
+        // this.subscriber_file_name=''
+        // this.contract_file_name='';
+        // this.other_Document1_file_name='';
+        // this.other_Document2_file_name='';
+
+        // this.removeInvoiceFile();
+        // this.removeSiteVisitFile();
+        // this.removeContractFile();
+        // this.removeSubscriberFormFile();
+        // this.removeOtherDocument1File();
+        // this.removeOtherDocument2File();
+        this.router.navigate(['incentive-entry/']); 
+        
+      }, (err: HttpErrorResponse) => {
+        alert(err + ' there was a problem. Please contact an administrator');
+        this.spinnerService.hide();
+      })}
+
+  // end switchmap
+
+            // if(this.file_name) {
+            //   console.log(this.file_name)
+            //   let frmData = new FormData();
+    
+            //   // 37 = Sandbox, 6 = Production
+            //   frmData.append('company_id','37');
+    
+            //   // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //   frmData.append('customer_id', this.id);
+    
+            //   frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //   //frmData.append('customer_site_id',this.customerSiteId);
+              
+            //   frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //   //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //   frmData.append('job_id', this.job_id);
+            //   //frmData.append('job_id', '19');
+            //   frmData.append('security_level', this.security_level);
+    
+            //   //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //   frmData.append('file_name', this.file_name);
+            //   frmData.append('file_size', this.file_size);
+            //   // frmData.append('upload_date', this.invoiceDate);
+            //   frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date 
+            //   frmData.append('document_ext', '*Contracts');
+            //   frmData.append('user_code', 'TPC');
+            //   //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //   frmData.append('user_description', 'Invoice');
+            //   frmData.append('reference1', null);
+            //   frmData.append('reference2', null);
+            //   frmData.append('reference3', null);
+            //   frmData.append('reference4', null);
+            //   frmData.append("file_data", this.selectedInvoiceFile);
+            //   //frmData.append("file_data", this.myFiles.Invoice);
+            //   // perform http request for each file
+            //   //frmData.append('@file_data', this.myFiles[i]);
+            //   frmData.append('document_id', '1');
+    
+            //   console.log(this.job_id)
+            //   // Display the key/value pairs
+            //   console.log(Object.entries(frmData));//returns an empty array!
+            //   var options = {content: frmData};
+    
+            //   console.log(frmData);
+            //   console.log(this.job_id);
+            //   const headers = new HttpHeaders();
+            //   headers.append('Content-Type', 'multipart/form-data');
+            //   headers.append('Authorization','Bearer ' + this.loadToken());
+            //   headers.append('Accept', 'application/json');
+    
+            //   this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //     headers: headers,
+            //     responseType: 'json',
+            //     observe: 'response'
+            //   }).subscribe(
+            //     data => {
+            //       console.log({i:0,data});
+            //       console.log(data.body)
+            //       console.log(data.headers)
+            //       console.log(data.status)
+            //       if(data.status === 200) {
+            //         this.flashMessage.show('Your Invoice was uploaded successfully', {
+            //           cssClass: 'text-center alert-success',
+            //           timeout: 5000
+            //         })
+            //       }
+            //       // display progress bar to indicate the status to the user
+            //       // if status is 200, stop showing the progress bar and go to the next document
+            //       // if status is 500, show an error to the user
+            //     }, (err: HttpErrorResponse) => {
+            //       alert(err + ' there was a problem with your Invoice file upload')
+            //     }
+            //   )
+            //     console.log(frmData)
+            // }
+    
+            // if(this.site_visit_file_name) {
+            //   console.log(this.myFiles[2])
+            //     let frmData = new FormData();
+    
+            //     // 37 = Sandbox, 6 = Production
+            //     frmData.append('company_id','37');
+    
+            //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //     frmData.append('customer_id', this.id);
+    
+            //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //     //frmData.append('customer_site_id',this.customerSiteId);
+                
+            //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //     frmData.append('job_id', this.job_id);
+            //     //frmData.append('job_id', '19');
+            //     frmData.append('security_level', this.security_level);
+    
+            //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //     frmData.append('file_name', this.site_visit_file_name);
+            //     frmData.append('file_size', this.site_visit_file_size);
+            //     // frmData.append('upload_date', this.invoiceDate);
+            //     frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+            //     frmData.append('document_ext', '*Contracts');
+            //     frmData.append('user_code', 'TPC');
+            //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //     frmData.append('user_description', 'Site Visit');
+            //     frmData.append('reference1', null);
+            //     frmData.append('reference2', null);
+            //     frmData.append('reference3', null);
+            //     frmData.append('reference4', null);
+            //     frmData.append("file_data", this.selectedSiteVisitFile);
+            //     // frmData.append("file_data", this.myFiles.SiteVisit);
+            //       // for(var i = 0; i < this.myFiles.length; i++) {
+            //       //   console.log(this.myFiles[i])
+            //       //   frmData.append("file_data", this.myFiles[i]);
+            //       // }
+            //       // perform http request for each file
+            //       //frmData.append('@file_data', this.myFiles[i]);
+            //     frmData.append('document_id', '1');
+    
+            //     console.log(this.job_id)
+            //     // Display the key/value pairs
+            //     console.log(Object.entries(frmData));//returns an empty array!
+            //     var options = {content: frmData};
+    
+            //     console.log(frmData);
+            //     console.log(this.job_id);
+            //     const headers = new HttpHeaders();
+            //     headers.append('Content-Type', 'multipart/form-data');
+            //     headers.append('Authorization','Bearer ' + this.loadToken());
+            //     headers.append('Accept', 'application/json');
+    
+            //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //       headers: headers,
+            //       responseType: 'json',
+            //       observe: 'response'
+            //     }).subscribe(
+            //       data => {
+            //         console.log({i:2,data});
+            //         console.log(data.body)
+            //         console.log(data.headers)
+            //         console.log(data.status)
+            //         if(data.status === 200) {
+            //           this.flashMessage.show('Your Site Visit was uploaded successfully', {
+            //             cssClass: 'text-center alert-success',
+            //             timeout: 5000
+            //           })
+            //         }
+            //       }, (err: HttpErrorResponse) => {
+            //         alert(err + ' there was a problem with your Site Visit file upload')
+            //       }
+            //     )
+            //       console.log(frmData)
+            // }
+    
+            // if(this.contract_file_name) {
+            //   console.log(this.myFiles[5])
+            //     let frmData = new FormData();
+    
+            //     // 37 = Sandbox, 6 = Production
+            //     frmData.append('company_id','37');
+    
+            //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //     frmData.append('customer_id', this.id);
+    
+            //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //     //frmData.append('customer_site_id',this.customerSiteId);
+                
+            //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //     frmData.append('job_id', this.job_id);
+            //     //frmData.append('job_id', '19');
+            //     frmData.append('security_level', this.security_level);
+    
+            //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //     frmData.append('file_name', this.contract_file_name);
+            //     frmData.append('file_size', this.contract_file_size);
+            //     // frmData.append('upload_date', this.invoiceDate);
+            //     frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+            //     frmData.append('document_ext', '*Contracts');
+            //     frmData.append('user_code', 'TPC');
+            //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //     frmData.append('user_description', 'Contract');
+            //     frmData.append('reference1', null);
+            //     frmData.append('reference2', null);
+            //     frmData.append('reference3', null);
+            //     frmData.append('reference4', null);
+            //     frmData.append("file_data", this.selectedContractFile);
+            //     // frmData.append("file_data", this.myFiles.Contract);
+            //       // for(var i = 0; i < this.myFiles.length; i++) {
+            //       //   console.log(this.myFiles[i])
+            //       //   frmData.append("file_data", this.myFiles[i]);
+            //       // }
+            //       // perform http request for each file
+            //       //frmData.append('@file_data', this.myFiles[i]);
+            //     frmData.append('document_id', '1');
+    
+            //     console.log(this.job_id)
+            //     // Display the key/value pairs
+            //     console.log(Object.entries(frmData));//returns an empty array!
+            //     var options = {content: frmData};
+    
+            //     console.log(frmData);
+            //     console.log(this.job_id);
+            //     const headers = new HttpHeaders();
+            //     headers.append('Content-Type', 'multipart/form-data');
+            //     headers.append('Authorization','Bearer ' + this.loadToken());
+            //     headers.append('Accept', 'application/json');
+            //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //       headers: headers,
+            //       responseType: 'json',
+            //       observe: 'response'
+            //     }).subscribe(
+            //       data => {
+            //         console.log({i:5,data});
+            //         console.log(data.body)
+            //         console.log(data.headers)
+            //         console.log(data.status)
+            //         if(data.status === 200) {
+            //           this.flashMessage.show('Your Contract was uploaded successfully', {
+            //             cssClass: 'text-center alert-success',
+            //             timeout: 5000
+            //           })
+            //         }
+            //         // display progress bar to indicate the status to the user
+            //         // if status is 200, stop showing the progress bar and go to the next document
+            //         // if status is 500, show an error to the user
+            //       }, (err: HttpErrorResponse) => {
+            //         alert(err + ' there was a problem with your Contract file upload')
+            //       }
+            //     )
+            //       console.log(frmData)
+            // }
+    
+            // if(this.subscriber_file_name) {
+            //   //console.log(this.myFiles[1])
+            //   let frmData = new FormData();
+    
+            //   // 37 = Sandbox, 6 = Production
+            //   frmData.append('company_id','37');
+    
+            //   // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //   frmData.append('customer_id', this.id);
+    
+            //   frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //   //frmData.append('customer_site_id',this.customerSiteId);
+              
+            //   frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //   //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //   frmData.append('job_id', this.job_id);
+            //   //frmData.append('job_id', '19');
+            //   frmData.append('security_level', this.security_level);
+    
+            //   //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //   frmData.append('file_name', this.subscriber_file_name);
+            //   frmData.append('file_size', this.subscriber_file_size);
+            //   // frmData.append('upload_date', this.invoiceDate);
+            //   frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+            //   frmData.append('document_ext', '*Contracts');
+            //   frmData.append('user_code', 'TPC');
+            //   //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //   frmData.append('user_description', 'Subscriber Form');
+            //   frmData.append('reference1', null);
+            //   frmData.append('reference2', null);
+            //   frmData.append('reference3', null);
+            //   frmData.append('reference4', null);
+            //   frmData.append("file_data", this.selectedSubscriberFile);
+            //   // frmData.append("file_data", this.myFiles.SubForm);
+            //   // for(var i = 0; i < this.myFiles.length; i++) {
+            //   //   console.log(this.myFiles[i])
+            //   //   frmData.append("subscriber_file_data", this.myFiles[i]);
+            //   // }
+            //   // perform http request for each file
+            //   //frmData.append('@file_data', this.myFiles[i]);
+            //   frmData.append('document_id', '1');
+    
+            //   console.log(this.job_id)
+            //   // Display the key/value pairs
+            //   console.log(Object.entries(frmData));//returns an empty array!
+            //   var options = {content: frmData};
+    
+            //   console.log(frmData);
+            //   console.log(this.job_id);
+            //   const headers = new HttpHeaders();
+            //   headers.append('Content-Type', 'multipart/form-data');
+            //   headers.append('Authorization','Bearer ' + this.loadToken());
+            //   headers.append('Accept', 'application/json');
+    
+            //   this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //     headers: headers,
+            //     responseType: 'json',
+            //     observe: 'response'
+            //   }).subscribe(
+            //     data => {
+            //       console.log({i:1,data});
+            //       console.log(data.body)
+            //       console.log(data.headers)
+            //       console.log(data.status)
+            //       if(data.status === 200) {
+            //         this.flashMessage.show('Your Subscriber Form was uploaded successfully', {
+            //           cssClass: 'text-center alert-success',
+            //           timeout: 5000
+            //         })
+            //       }
+            //       // display progress bar to indicate the status to the user
+            //       // if status is 200, stop showing the progress bar and go to the next document
+            //       // if status is 500, show an error to the user
+            //     }, (err: HttpErrorResponse) => {
+            //       alert(err + ' there was a problem with your Subscriber Form file upload')
+            //     }
+            //   )
+            //     console.log(frmData)
+            // }
+    
+            // if(this.other_Document1_file_name) {
+            //   console.log(this.myFiles[3])
+            //     let frmData = new FormData();
+    
+            //     // 37 = Sandbox, 6 = Production
+            //     frmData.append('company_id','37');
+    
+            //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //     frmData.append('customer_id', this.id);
+    
+            //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //     //frmData.append('customer_site_id',this.customerSiteId);
+                
+            //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //     frmData.append('job_id', this.job_id);
+            //     //frmData.append('job_id', '19');
+            //     frmData.append('security_level', this.security_level);
+    
+            //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //     frmData.append('file_name', this.other_Document1_file_name);
+            //     frmData.append('file_size', this.other_Document1_file_size);
+            //     // frmData.append('upload_date', this.invoiceDate);
+            //     frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+            //     frmData.append('document_ext', '*Contracts');
+            //     frmData.append('user_code', 'TPC');
+            //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //     frmData.append('user_description', 'Other Doc1');
+            //     frmData.append('reference1', null);
+            //     frmData.append('reference2', null);
+            //     frmData.append('reference3', null);
+            //     frmData.append('reference4', null);
+            //     frmData.append("file_data", this.selectedOtherDocument1File);
+            //     // frmData.append("file_data", this.myFiles.Other1);
+            //       // for(var i = 0; i < this.myFiles.length; i++) {
+            //       //   console.log(this.myFiles[i])
+            //       //   frmData.append("file_data", this.myFiles[i]);
+            //       // }
+            //       // perform http request for each file
+            //       //frmData.append('@file_data', this.myFiles[i]);
+            //     frmData.append('document_id', '1');
+    
+            //     console.log(this.job_id)
+            //     // Display the key/value pairs
+            //     console.log(Object.entries(frmData));//returns an empty array!
+            //     var options = {content: frmData};
+    
+            //     console.log(frmData);
+            //     console.log(this.job_id);
+            //     const headers = new HttpHeaders();
+            //     headers.append('Content-Type', 'multipart/form-data');
+            //     headers.append('Authorization','Bearer ' + this.loadToken());
+            //     headers.append('Accept', 'application/json');
+    
+            //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //       headers: headers,
+            //       responseType: 'json',
+            //       observe: 'response'
+            //     }).subscribe(
+            //       data => {
+            //         console.log({i:3,data});
+            //         console.log(data.body)
+            //       console.log(data.headers)
+            //       console.log(data.status)
+            //       if(data.status === 200) {
+            //         this.flashMessage.show('Your Other Doc1 was uploaded successfully', {
+            //           cssClass: 'text-center alert-success',
+            //           timeout: 5000
+            //         })
+            //       }
+            //       // display progress bar to indicate the status to the user
+            //       // if status is 200, stop showing the progress bar and go to the next document
+            //       // if status is 500, show an error to the user
+            //       }, (err: HttpErrorResponse) => {
+            //         alert(err + ' there was a problem with your Other Doc1 file upload')
+            //       }
+            //     )
+            //       console.log(frmData)
+            // }
+    
+            // if(this.other_Document2_file_name) {
+            //   console.log(this.myFiles[4])
+            //     let frmData = new FormData();
+    
+            //     // 37 = Sandbox, 6 = Production
+            //     frmData.append('company_id','37');
+    
+            //     // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+            //     frmData.append('customer_id', this.id);
+    
+            //     frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+            //     //frmData.append('customer_site_id',this.customerSiteId);
+                
+            //     frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+            //     //frmData.append('customer_system_id', this.customerSystemId.toString());
+    
+            //     frmData.append('job_id', this.job_id);
+            //     //frmData.append('job_id', '19');
+            //     frmData.append('security_level', this.security_level);
+    
+            //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+            //     frmData.append('file_name', this.other_Document2_file_name);
+            //     frmData.append('file_size', this.other_Document2_file_size);
+            //     // frmData.append('upload_date', this.invoiceDate);
+            //     frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+            //     frmData.append('document_ext', '*Contracts');
+            //     frmData.append('user_code', 'TPC');
+            //     //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+            //     frmData.append('user_description', 'Other Doc 2');
+            //     frmData.append('reference1', null);
+            //     frmData.append('reference2', null);
+            //     frmData.append('reference3', null);
+            //     frmData.append('reference4', null);
+            //     frmData.append("file_data", this.selectedOtherDocument2File);
+            //     // frmData.append("file_data", this.myFiles.Other2);
+            //       // for(var i = 0; i < this.myFiles.length; i++) {
+            //       //   console.log(this.myFiles[i])
+            //       //   frmData.append("file_data", this.myFiles[i]);
+            //       // }
+            //       // perform http request for each file
+            //       //frmData.append('@file_data', this.myFiles[i]);
+            //     frmData.append('document_id', '1');
+    
+            //     console.log(this.job_id)
+            //     // Display the key/value pairs
+            //     console.log(Object.entries(frmData));//returns an empty array!
+            //     var options = {content: frmData};
+    
+            //     console.log(frmData);
+            //     console.log(this.job_id);
+            //     const headers = new HttpHeaders();
+            //     headers.append('Content-Type', 'multipart/form-data');
+            //     headers.append('Authorization','Bearer ' + this.loadToken());
+            //     headers.append('Accept', 'application/json');
+    
+            //     this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+            //       headers: headers,
+            //       responseType: 'json',
+            //       observe: 'response'
+            //     }).subscribe(
+            //       data => {
+            //         console.log({i:4,data});
+            //         console.log(data.body)
+            //         console.log(data.headers)
+            //         console.log(data.status)
+            //         if(data.status === 200) {
+            //           this.flashMessage.show('Your Other Doc 2 was uploaded successfully', {
+            //             cssClass: 'text-center alert-success',
+            //             timeout: 5000
+            //           })
+            //         }
+            //         // display progress bar to indicate the status to the user
+            //         // if status is 200, stop showing the progress bar and go to the next document
+            //         // if status is 500, show an error to the user
+            //       }, (err: HttpErrorResponse) => {
+            //         alert(err + ' there was a problem with your Other Doc 2 file upload')
+            //       }
+            //     )
+            //       console.log(frmData)
+            // }
     )
 
-    return
+    // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
+    //   result => {
+    //     //returns the job id
+    //     this.job_id = result;
+
+    //     var addToObject = function (obj, key, value) {
+    //       // Create a temp object and index variable
+    //       var temp = {};
+    //       var i = 0;
+    //       // Loop through the original object
+    //       for (var prop in obj) {
+    //         if (obj.hasOwnProperty(prop)) {
+    //           // If the indexes match, add the new item
+    //           if (i === key && value) {
+    //             temp[key] = value;
+    //           }
+    //           // Add the current item in the loop to the temp obj
+    //           temp[prop] = obj[prop];
+    //           // Increase the count
+    //           i++;
+    //         }
+    //       }
+    //       // If no index, add to the end
+    //       if (key && value) {
+    //         temp[key] = value;
+    //       }
+    //       return temp;
+    //     };
+       
+    //     this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
+    //       var updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
+    //       console.log(updateRecurringWithJobID)
+    //       this.routeService.postIncentive_Add_Recurring(updateRecurringWithJobID).subscribe(
+    //         result => {
+    //           console.log(result)
+    //         }
+    //       )
+    //     })
+
+    //     this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+    //       var updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id);
+    //       console.log(updateEquipMatWithJobID)
+    //       this.routeService.postIncentive_Add_Equipment(updateEquipMatWithJobID).subscribe(
+    //         result => {
+    //           console.log(result)
+    //         }
+    //       )
+    //     })
+
+    //     this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(l => {
+    //       var updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
+    //       console.log(updateLaborChargesWithJobID)
+    //       this.routeService.postIncentive_Add_Labor(updateLaborChargesWithJobID).subscribe(
+    //         result => {
+    //           console.log(result);
+              
+    //         }
+    //       )
+    //     })
+
+
+
+    //     if(this.file_name) {
+    //       console.log(this.file_name)
+    //       let frmData = new FormData();
+
+    //       // 37 = Sandbox, 6 = Production
+    //       frmData.append('company_id','37');
+
+    //       // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //       frmData.append('customer_id', this.id);
+
+    //       frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //       //frmData.append('customer_site_id',this.customerSiteId);
+          
+    //       frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //       //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //       frmData.append('job_id', this.job_id);
+    //       //frmData.append('job_id', '19');
+    //       frmData.append('security_level', this.security_level);
+
+    //       //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //       frmData.append('file_name', this.file_name);
+    //       frmData.append('file_size', this.file_size);
+    //       // frmData.append('upload_date', this.invoiceDate);
+    //       frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date 
+    //       frmData.append('document_ext', '*Contracts');
+    //       frmData.append('user_code', 'TPC');
+    //       //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //       frmData.append('user_description', 'Invoice');
+    //       frmData.append('reference1', null);
+    //       frmData.append('reference2', null);
+    //       frmData.append('reference3', null);
+    //       frmData.append('reference4', null);
+    //       frmData.append("file_data", this.selectedInvoiceFile);
+    //       //frmData.append("file_data", this.myFiles.Invoice);
+    //       // perform http request for each file
+    //       //frmData.append('@file_data', this.myFiles[i]);
+    //       frmData.append('document_id', '1');
+
+    //       console.log(this.job_id)
+    //       // Display the key/value pairs
+    //       console.log(Object.entries(frmData));//returns an empty array!
+    //       var options = {content: frmData};
+
+    //       console.log(frmData);
+    //       console.log(this.job_id);
+    //       const headers = new HttpHeaders();
+    //       headers.append('Content-Type', 'multipart/form-data');
+    //       headers.append('Authorization','Bearer ' + this.loadToken());
+    //       headers.append('Accept', 'application/json');
+
+    //       this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //         headers: headers,
+    //         responseType: 'json',
+    //         observe: 'response'
+    //       }).subscribe(
+    //         data => {
+    //           console.log({i:0,data});
+    //           console.log(data.body)
+    //           console.log(data.headers)
+    //           console.log(data.status)
+    //           if(data.status === 200) {
+    //             this.flashMessage.show('Your Invoice was uploaded successfully', {
+    //               cssClass: 'text-center alert-success',
+    //               timeout: 5000
+    //             })
+    //           }
+    //           // display progress bar to indicate the status to the user
+    //           // if status is 200, stop showing the progress bar and go to the next document
+    //           // if status is 500, show an error to the user
+    //         }, (err: HttpErrorResponse) => {
+    //           alert(err + ' there was a problem with your Invoice file upload')
+    //         }
+    //       )
+    //         console.log(frmData)
+    //     }
+
+    //     if(this.site_visit_file_name) {
+    //       console.log(this.myFiles[2])
+    //         let frmData = new FormData();
+
+    //         // 37 = Sandbox, 6 = Production
+    //         frmData.append('company_id','37');
+
+    //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //         frmData.append('customer_id', this.id);
+
+    //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //         //frmData.append('customer_site_id',this.customerSiteId);
+            
+    //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //         frmData.append('job_id', this.job_id);
+    //         //frmData.append('job_id', '19');
+    //         frmData.append('security_level', this.security_level);
+
+    //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //         frmData.append('file_name', this.site_visit_file_name);
+    //         frmData.append('file_size', this.site_visit_file_size);
+    //         // frmData.append('upload_date', this.invoiceDate);
+    //         frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+    //         frmData.append('document_ext', '*Contracts');
+    //         frmData.append('user_code', 'TPC');
+    //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //         frmData.append('user_description', 'Site Visit');
+    //         frmData.append('reference1', null);
+    //         frmData.append('reference2', null);
+    //         frmData.append('reference3', null);
+    //         frmData.append('reference4', null);
+    //         frmData.append("file_data", this.selectedSiteVisitFile);
+    //         // frmData.append("file_data", this.myFiles.SiteVisit);
+    //           // for(var i = 0; i < this.myFiles.length; i++) {
+    //           //   console.log(this.myFiles[i])
+    //           //   frmData.append("file_data", this.myFiles[i]);
+    //           // }
+    //           // perform http request for each file
+    //           //frmData.append('@file_data', this.myFiles[i]);
+    //         frmData.append('document_id', '1');
+
+    //         console.log(this.job_id)
+    //         // Display the key/value pairs
+    //         console.log(Object.entries(frmData));//returns an empty array!
+    //         var options = {content: frmData};
+
+    //         console.log(frmData);
+    //         console.log(this.job_id);
+    //         const headers = new HttpHeaders();
+    //         headers.append('Content-Type', 'multipart/form-data');
+    //         headers.append('Authorization','Bearer ' + this.loadToken());
+    //         headers.append('Accept', 'application/json');
+
+    //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //           headers: headers,
+    //           responseType: 'json',
+    //           observe: 'response'
+    //         }).subscribe(
+    //           data => {
+    //             console.log({i:2,data});
+    //             console.log(data.body)
+    //             console.log(data.headers)
+    //             console.log(data.status)
+    //             if(data.status === 200) {
+    //               this.flashMessage.show('Your Site Visit was uploaded successfully', {
+    //                 cssClass: 'text-center alert-success',
+    //                 timeout: 5000
+    //               })
+    //             }
+    //           }, (err: HttpErrorResponse) => {
+    //             alert(err + ' there was a problem with your Site Visit file upload')
+    //           }
+    //         )
+    //           console.log(frmData)
+    //     }
+
+    //     if(this.contract_file_name) {
+    //       console.log(this.myFiles[5])
+    //         let frmData = new FormData();
+
+    //         // 37 = Sandbox, 6 = Production
+    //         frmData.append('company_id','37');
+
+    //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //         frmData.append('customer_id', this.id);
+
+    //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //         //frmData.append('customer_site_id',this.customerSiteId);
+            
+    //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //         frmData.append('job_id', this.job_id);
+    //         //frmData.append('job_id', '19');
+    //         frmData.append('security_level', this.security_level);
+
+    //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //         frmData.append('file_name', this.contract_file_name);
+    //         frmData.append('file_size', this.contract_file_size);
+    //         // frmData.append('upload_date', this.invoiceDate);
+    //         frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+    //         frmData.append('document_ext', '*Contracts');
+    //         frmData.append('user_code', 'TPC');
+    //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //         frmData.append('user_description', 'Contract');
+    //         frmData.append('reference1', null);
+    //         frmData.append('reference2', null);
+    //         frmData.append('reference3', null);
+    //         frmData.append('reference4', null);
+    //         frmData.append("file_data", this.selectedContractFile);
+    //         // frmData.append("file_data", this.myFiles.Contract);
+    //           // for(var i = 0; i < this.myFiles.length; i++) {
+    //           //   console.log(this.myFiles[i])
+    //           //   frmData.append("file_data", this.myFiles[i]);
+    //           // }
+    //           // perform http request for each file
+    //           //frmData.append('@file_data', this.myFiles[i]);
+    //         frmData.append('document_id', '1');
+
+    //         console.log(this.job_id)
+    //         // Display the key/value pairs
+    //         console.log(Object.entries(frmData));//returns an empty array!
+    //         var options = {content: frmData};
+
+    //         console.log(frmData);
+    //         console.log(this.job_id);
+    //         const headers = new HttpHeaders();
+    //         headers.append('Content-Type', 'multipart/form-data');
+    //         headers.append('Authorization','Bearer ' + this.loadToken());
+    //         headers.append('Accept', 'application/json');
+    //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //           headers: headers,
+    //           responseType: 'json',
+    //           observe: 'response'
+    //         }).subscribe(
+    //           data => {
+    //             console.log({i:5,data});
+    //             console.log(data.body)
+    //             console.log(data.headers)
+    //             console.log(data.status)
+    //             if(data.status === 200) {
+    //               this.flashMessage.show('Your Contract was uploaded successfully', {
+    //                 cssClass: 'text-center alert-success',
+    //                 timeout: 5000
+    //               })
+    //             }
+    //             // display progress bar to indicate the status to the user
+    //             // if status is 200, stop showing the progress bar and go to the next document
+    //             // if status is 500, show an error to the user
+    //           }, (err: HttpErrorResponse) => {
+    //             alert(err + ' there was a problem with your Contract file upload')
+    //           }
+    //         )
+    //           console.log(frmData)
+    //     }
+
+    //     if(this.subscriber_file_name) {
+    //       //console.log(this.myFiles[1])
+    //       let frmData = new FormData();
+
+    //       // 37 = Sandbox, 6 = Production
+    //       frmData.append('company_id','37');
+
+    //       // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //       frmData.append('customer_id', this.id);
+
+    //       frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //       //frmData.append('customer_site_id',this.customerSiteId);
+          
+    //       frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //       //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //       frmData.append('job_id', this.job_id);
+    //       //frmData.append('job_id', '19');
+    //       frmData.append('security_level', this.security_level);
+
+    //       //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //       frmData.append('file_name', this.subscriber_file_name);
+    //       frmData.append('file_size', this.subscriber_file_size);
+    //       // frmData.append('upload_date', this.invoiceDate);
+    //       frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+    //       frmData.append('document_ext', '*Contracts');
+    //       frmData.append('user_code', 'TPC');
+    //       //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //       frmData.append('user_description', 'Subscriber Form');
+    //       frmData.append('reference1', null);
+    //       frmData.append('reference2', null);
+    //       frmData.append('reference3', null);
+    //       frmData.append('reference4', null);
+    //       frmData.append("file_data", this.selectedSubscriberFile);
+    //       // frmData.append("file_data", this.myFiles.SubForm);
+    //       // for(var i = 0; i < this.myFiles.length; i++) {
+    //       //   console.log(this.myFiles[i])
+    //       //   frmData.append("subscriber_file_data", this.myFiles[i]);
+    //       // }
+    //       // perform http request for each file
+    //       //frmData.append('@file_data', this.myFiles[i]);
+    //       frmData.append('document_id', '1');
+
+    //       console.log(this.job_id)
+    //       // Display the key/value pairs
+    //       console.log(Object.entries(frmData));//returns an empty array!
+    //       var options = {content: frmData};
+
+    //       console.log(frmData);
+    //       console.log(this.job_id);
+    //       const headers = new HttpHeaders();
+    //       headers.append('Content-Type', 'multipart/form-data');
+    //       headers.append('Authorization','Bearer ' + this.loadToken());
+    //       headers.append('Accept', 'application/json');
+
+    //       this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //         headers: headers,
+    //         responseType: 'json',
+    //         observe: 'response'
+    //       }).subscribe(
+    //         data => {
+    //           console.log({i:1,data});
+    //           console.log(data.body)
+    //           console.log(data.headers)
+    //           console.log(data.status)
+    //           if(data.status === 200) {
+    //             this.flashMessage.show('Your Subscriber Form was uploaded successfully', {
+    //               cssClass: 'text-center alert-success',
+    //               timeout: 5000
+    //             })
+    //           }
+    //           // display progress bar to indicate the status to the user
+    //           // if status is 200, stop showing the progress bar and go to the next document
+    //           // if status is 500, show an error to the user
+    //         }, (err: HttpErrorResponse) => {
+    //           alert(err + ' there was a problem with your Subscriber Form file upload')
+    //         }
+    //       )
+    //         console.log(frmData)
+    //     }
+
+    //     if(this.other_Document1_file_name) {
+    //       console.log(this.myFiles[3])
+    //         let frmData = new FormData();
+
+    //         // 37 = Sandbox, 6 = Production
+    //         frmData.append('company_id','37');
+
+    //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //         frmData.append('customer_id', this.id);
+
+    //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //         //frmData.append('customer_site_id',this.customerSiteId);
+            
+    //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //         frmData.append('job_id', this.job_id);
+    //         //frmData.append('job_id', '19');
+    //         frmData.append('security_level', this.security_level);
+
+    //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //         frmData.append('file_name', this.other_Document1_file_name);
+    //         frmData.append('file_size', this.other_Document1_file_size);
+    //         // frmData.append('upload_date', this.invoiceDate);
+    //         frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+    //         frmData.append('document_ext', '*Contracts');
+    //         frmData.append('user_code', 'TPC');
+    //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //         frmData.append('user_description', 'Other Doc1');
+    //         frmData.append('reference1', null);
+    //         frmData.append('reference2', null);
+    //         frmData.append('reference3', null);
+    //         frmData.append('reference4', null);
+    //         frmData.append("file_data", this.selectedOtherDocument1File);
+    //         // frmData.append("file_data", this.myFiles.Other1);
+    //           // for(var i = 0; i < this.myFiles.length; i++) {
+    //           //   console.log(this.myFiles[i])
+    //           //   frmData.append("file_data", this.myFiles[i]);
+    //           // }
+    //           // perform http request for each file
+    //           //frmData.append('@file_data', this.myFiles[i]);
+    //         frmData.append('document_id', '1');
+
+    //         console.log(this.job_id)
+    //         // Display the key/value pairs
+    //         console.log(Object.entries(frmData));//returns an empty array!
+    //         var options = {content: frmData};
+
+    //         console.log(frmData);
+    //         console.log(this.job_id);
+    //         const headers = new HttpHeaders();
+    //         headers.append('Content-Type', 'multipart/form-data');
+    //         headers.append('Authorization','Bearer ' + this.loadToken());
+    //         headers.append('Accept', 'application/json');
+
+    //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //           headers: headers,
+    //           responseType: 'json',
+    //           observe: 'response'
+    //         }).subscribe(
+    //           data => {
+    //             console.log({i:3,data});
+    //             console.log(data.body)
+    //           console.log(data.headers)
+    //           console.log(data.status)
+    //           if(data.status === 200) {
+    //             this.flashMessage.show('Your Other Doc1 was uploaded successfully', {
+    //               cssClass: 'text-center alert-success',
+    //               timeout: 5000
+    //             })
+    //           }
+    //           // display progress bar to indicate the status to the user
+    //           // if status is 200, stop showing the progress bar and go to the next document
+    //           // if status is 500, show an error to the user
+    //           }, (err: HttpErrorResponse) => {
+    //             alert(err + ' there was a problem with your Other Doc1 file upload')
+    //           }
+    //         )
+    //           console.log(frmData)
+    //     }
+
+    //     if(this.other_Document2_file_name) {
+    //       console.log(this.myFiles[4])
+    //         let frmData = new FormData();
+
+    //         // 37 = Sandbox, 6 = Production
+    //         frmData.append('company_id','37');
+
+    //         // frmData.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
+    //         frmData.append('customer_id', this.id);
+
+    //         frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+    //         //frmData.append('customer_site_id',this.customerSiteId);
+            
+    //         frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+    //         //frmData.append('customer_system_id', this.customerSystemId.toString());
+
+    //         frmData.append('job_id', this.job_id);
+    //         //frmData.append('job_id', '19');
+    //         frmData.append('security_level', this.security_level);
+
+    //         //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
+    //         frmData.append('file_name', this.other_Document2_file_name);
+    //         frmData.append('file_size', this.other_Document2_file_size);
+    //         // frmData.append('upload_date', this.invoiceDate);
+    //         frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
+    //         frmData.append('document_ext', '*Contracts');
+    //         frmData.append('user_code', 'TPC');
+    //         //frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
+    //         frmData.append('user_description', 'Other Doc 2');
+    //         frmData.append('reference1', null);
+    //         frmData.append('reference2', null);
+    //         frmData.append('reference3', null);
+    //         frmData.append('reference4', null);
+    //         frmData.append("file_data", this.selectedOtherDocument2File);
+    //         // frmData.append("file_data", this.myFiles.Other2);
+    //           // for(var i = 0; i < this.myFiles.length; i++) {
+    //           //   console.log(this.myFiles[i])
+    //           //   frmData.append("file_data", this.myFiles[i]);
+    //           // }
+    //           // perform http request for each file
+    //           //frmData.append('@file_data', this.myFiles[i]);
+    //         frmData.append('document_id', '1');
+
+    //         console.log(this.job_id)
+    //         // Display the key/value pairs
+    //         console.log(Object.entries(frmData));//returns an empty array!
+    //         var options = {content: frmData};
+
+    //         console.log(frmData);
+    //         console.log(this.job_id);
+    //         const headers = new HttpHeaders();
+    //         headers.append('Content-Type', 'multipart/form-data');
+    //         headers.append('Authorization','Bearer ' + this.loadToken());
+    //         headers.append('Accept', 'application/json');
+
+    //         this.httpService.post(this.baseUrl + "/api/Customer_Document_ADD", frmData, {
+    //           headers: headers,
+    //           responseType: 'json',
+    //           observe: 'response'
+    //         }).subscribe(
+    //           data => {
+    //             console.log({i:4,data});
+    //             console.log(data.body)
+    //             console.log(data.headers)
+    //             console.log(data.status)
+    //             if(data.status === 200) {
+    //               this.flashMessage.show('Your Other Doc 2 was uploaded successfully', {
+    //                 cssClass: 'text-center alert-success',
+    //                 timeout: 5000
+    //               })
+    //             }
+    //             // display progress bar to indicate the status to the user
+    //             // if status is 200, stop showing the progress bar and go to the next document
+    //             // if status is 500, show an error to the user
+    //           }, (err: HttpErrorResponse) => {
+    //             alert(err + ' there was a problem with your Other Doc 2 file upload')
+    //           }
+    //         )
+    //           console.log(frmData)
+    //     }
+
+    //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
+    //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
+    //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
+    //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
+    //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+    //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).subscribe(
+    //       result => {
+    //         if(result.status === 200) {
+    //           console.log('Finished!... ');
+
+    //           this.spinnerService.hide();
+    //           this.flashMessage.show('Your invoice has been submitted successfully', {
+    //             cssClass: 'text-center alert-success',
+    //             timeout: 5000
+    //           });
+    //         }
+    //         // console.log('Finished!... ');
+
+    //         // this.spinnerService.hide()
+
+    //         //localStorage.removeItem('installCompanyID');
+    //         localStorage.removeItem('totalRecurringCalc');
+    //         localStorage.removeItem('totalEquipMatCalc');
+    //         localStorage.removeItem('totalLaborChargesCalc');
+    //         localStorage.removeItem('invoiceDate');
+    //         localStorage.removeItem('invoiceNumber');
+    //         localStorage.removeItem('invoiceTotal');
+    //         localStorage.removeItem('recurringentry');
+    //         localStorage.removeItem('equipmatentry');
+    //         localStorage.removeItem('laborchargesentry');
+    //         localStorage.removeItem('invoiceName');
+    //         localStorage.removeItem('invoiceFileSize');
+    //         localStorage.removeItem('invoice');
+    //         localStorage.removeItem('subscriberForm');
+    //         localStorage.removeItem('subscriberFormName');
+    //         localStorage.removeItem('siteVisit');
+    //         localStorage.removeItem('siteVisitName');
+    //         localStorage.removeItem('otherDocument1');
+    //         localStorage.removeItem('otherDocument1Name');
+    //         localStorage.removeItem('contract');
+    //         localStorage.removeItem('contractName');
+    //         localStorage.removeItem('otherDocument2');
+    //         localStorage.removeItem('otherDocument2Name');
+    //         localStorage.removeItem('contractDate');
+    //         localStorage.removeItem('contractTerm');
+    //         localStorage.removeItem('serviceIncluded');
+    //         localStorage.removeItem('customerId');
+    //         localStorage.removeItem('customerName');
+    //         localStorage.removeItem('customerSiteName');
+    //         localStorage.removeItem('customerSystemInformation');
+    //         localStorage.removeItem('alarmAccount');
+    //         localStorage.removeItem('systemType');
+    //         localStorage.removeItem('panelType');
+    //         localStorage.removeItem('panelLocation');
+    //         localStorage.removeItem('centralStationID');
+    //         localStorage.removeItem('customerSiteId');
+    //         localStorage.removeItem('renewal');
+    //         localStorage.removeItem('partnerTaxAmount');
+    //         localStorage.removeItem('additionalInfo');
+    //         localStorage.removeItem('partnerComments');
+    //         localStorage.removeItem('signalsTested');
+    //         localStorage.removeItem('testObject');
+    //         localStorage.removeItem('checkBoxAutoInsertList');
+    //         localStorage.removeItem('results');
+
+    //         return
+
+    //         this.router.navigate(['incentive-entry/']);
+    //       }, (err:HttpErrorResponse) => {
+    //         alert('There was an error')
+    //         console.log(err)
+    //         this.spinnerService.hide();
+    //       }
+    //     )
+       
+    //     return
+        
+    //   }
+    // )
     
   }
 

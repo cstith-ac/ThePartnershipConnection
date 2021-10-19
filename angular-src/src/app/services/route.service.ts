@@ -636,10 +636,12 @@ export class RouteService {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 
-        'Content-Type': 'application/json', 
-        "Accept": "application/json", 
+        //'Content-Type': 'multipart/form-data', 
+        'Accept': '*/*',
+        //"Accept": "application/json", 
         'Authorization':'Bearer ' + this.authToken 
       }),
+      responseType:'json' as const,
       observe: 'response' as 'body' 
     };
     return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
