@@ -75,6 +75,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   user:any=Object;
   userEmailAddress: '';
 
+  ticket_Number;
   customer_Number;
   customerNumber; //used for getServerResponse ng-autocomplete
   companyName;
@@ -221,6 +222,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   partnerComments;
 
   customer_id;
+  customer_Name;
+  cust_Numb_Name; // customer_Number + customer_Name
+  business_Name;
+  address_1;
+  bus_Name_Add1; // business name + address_1
+  csAccount;
+  sysType_csAccount; // systemType + csAccount
 
   job_id;
   security_level:any = 2;
@@ -360,6 +368,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('InstructionsShown');
+      localStorage.removeItem('customer_Id');
+      localStorage.removeItem('customer_Site_Id');
+      localStorage.removeItem('customer_System_Id');
+      localStorage.removeItem('ticket_Number');
+      localStorage.removeItem("customer_Number");
+      localStorage.removeItem("customer_Name");
+      localStorage.removeItem("systemType");
+      localStorage.removeItem('csAccount');
+
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
@@ -678,6 +695,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       NewSystem: [""],
       NewCustomer: [""],
       NewSite: [""],
+      TicketNumber: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
       PanelTypeID: ["", Validators.required], //@PanelTypeID
       PanelLocation: [""], //@PanelLocation
@@ -732,23 +750,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     )
 
-    // this.routeService.getListMaterialItems().subscribe(
-    //   res => {
-    //     this.listMatItems = res;
-    //   }
-    // )
-
-    // this.routeService.getListLaborItems().subscribe(
-    //   res => {
-    //     this.listLaborItems = res;
-    //   }
-    // )
-
-    //this.onChanges();
-    //this.onChangeCustomerNumber();
-
-    // this.recurringItemEntryForm = this.fb.group({})
-
     this.routeService.getListSystemTypes().subscribe(
       res => {
         this.listsystemtypes = res;
@@ -766,6 +767,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.listcentralstations = res;
       }
     )
+
+    // If the partner already selected a customer from the Incentive Entry page, get the ticket_Number, customer_Id, customer_Site_Id, and customer_System_Id from localstorage
+    // Convert the values from localstorage from strings to integers
+    // Call the API for Customer, Site, and System
+    if(localStorage.getItem('customer_Id')) {
+      this.customer_id = parseInt(localStorage.getItem('customer_Id'));
+    }
+    if(localStorage.getItem('customer_Site_Id')) {
+      this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+    }
+    if(localStorage.getItem('customer_System_Id')) {
+      this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+    }
+    
+    this.ticket_Number = localStorage.getItem('ticket_Number');
+    this.customer_Number = localStorage.getItem('customer_Number');
+    this.customer_Name = localStorage.getItem('customer_Name');
+    this.business_Name = localStorage.getItem('business_Name');
+    this.address_1 = localStorage.getItem('address_1');
+    this.systemType = localStorage.getItem('systemType');
+    this.csAccount = localStorage.getItem('csAccount');
+    this.alarmAccount = localStorage.getItem('csAccount');
   }
 
   ngAfterViewChecked() {
@@ -774,6 +797,34 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //this.getRecurringFromLocalStorage();
 
     setTimeout(() => {
+
+      this.incentiveDashboardForm.controls["TicketNumber"].setValue(this.ticket_Number);
+
+      this.cust_Numb_Name = this.customer_Number + ' - ' + this.customer_Name;
+      this.bus_Name_Add1 = this.business_Name + ' - ' + this.address_1;
+      this.sysType_csAccount = this.systemType + ' - ' + this.csAccount;
+
+      if(localStorage.getItem("customer_Number") && localStorage.getItem("customer_Name")){
+        this.incentiveDashboardForm.get("CustomerID").setValue(this.cust_Numb_Name);
+      }
+
+      if(localStorage.getItem("business_Name") && localStorage.getItem("address_1")) {
+        this.isSiteSelectionFirst = true;
+        this.isRemoveDropdown = false;
+        this.divSiteSearchIcon.nativeElement.style.display = 'none';
+        this.siteName = this.bus_Name_Add1;
+      }
+
+      if(localStorage.getItem("systemType") && localStorage.getItem("csAccount")) {
+        this.isSystemSelectionFirst = true;
+        this.isRemoveSystemDropdown = false;
+        this.divSystemSearchIcon.nativeElement.style.display = 'none';
+        this.systemCode = this.sysType_csAccount;
+      }
+      if(localStorage.getItem("csAccount")) {
+        this.alarmAccount = this.alarmAccount;
+      }
+
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
@@ -1065,6 +1116,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('totalEquipMatCalc');
+      localStorage.removeItem('customer_Id');
+      localStorage.removeItem('customer_Site_Id');
+      localStorage.removeItem('customer_System_Id');
+      localStorage.removeItem('ticket_Number');
+      localStorage.removeItem('customer_Number');
+      localStorage.removeItem('customer_Name');
+      localStorage.removeItem("business_Name");
+      localStorage.removeItem("address_1");
+      localStorage.removeItem("systemType");
+      localStorage.removeItem("csAccount");
 
       this.router.navigate(['incentive-entry/']);
     }
@@ -1521,7 +1582,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.id = selectedCustomerid;
     this.customerSiteId = selectedCustomerSiteId;
     this.siteName = selectedSiteName;
-    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
+    this.customer = selectedCustomerName + ' - ' + selectedCustomerNumber;
 
     // localStorage.setItem("siteName", this.siteName);
     // localStorage.setItem("customerName", this.customer);
@@ -1575,8 +1636,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.customerSystemId = selectedCustomerSystemId;
     this.alarmAccount = selectedAlarmAccount;
     this.customer_Number = selectedCustomerNumber;
-    this.systemCode = selectedAlarmAccount+' - '+selectedSystemCode;
-    this.customer = selectedCustomerName+' - '+selectedCustomerNumber;
+    this.systemCode = selectedAlarmAccount + ' - ' + selectedSystemCode;
+    this.customer = selectedCustomerName + ' - ' + selectedCustomerNumber;
 
     console.log(selectedCustomerSiteId);
     console.log(selectedAlarmAccount+' - '+selectedSystemCode)
@@ -1629,26 +1690,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
     console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
     console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    console.log('@AdditionalInfo :' +form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    console.log('@AdditionalInfo :' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
     console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
     console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
     console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
     console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
     console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
-    // console.log(form.value.) // @ServiceIncluded NVarChar(2),
     console.log('@ServiceIncluded :' + form.value.ServiceIncluded);
 
     console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
-    // this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
     this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id); //fix for error encountered on 06/23/2021
     this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
     this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
-    // this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(form.value.CentralStationID));
-    //this.incentiveDashboardForm.controls["ContractTerm"].setValue(0); //this was passing a hard-coded zero value
-    // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
     this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
 
     // confirm('Click ok to confirm form submission')
@@ -1657,8 +1713,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     // This gets executed 1st to return the required Job ID for the subsequent HTTP requests
     // begin switchmap
-   
-    
 
     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
@@ -1967,11 +2021,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
-                    )
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                  //   )
+                  // )
                 }
               }),
               switchMap(result => {
@@ -1985,11 +2040,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData2).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
-                    )
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData2)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
+                  //   )
+                  // )
                 }
               }),
               switchMap(result => {
@@ -2003,11 +2059,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData3).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
-                    ))
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData3)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
                 }
               }),
               switchMap(result => {
@@ -2021,11 +2078,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData4).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
-                    ))
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData4)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
                 }
               }),
               switchMap(result => {
@@ -2039,11 +2097,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData5).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
-                    ))
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData5)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
                 }
               }),
               switchMap(result => {
@@ -2057,14 +2116,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   // )
                   return of(result)
                 } else {
-                  return this.routeService.postCustomerDocumentADD(this.frmData6).pipe(
-                    switchMap(result => 
-                      this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
-                    ))
-                  )
+                  return this.routeService.postCustomerDocumentADD(this.frmData6)
+                  // .pipe(
+                  //   switchMap(result => 
+                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
+                  //   ))
+                  // )
                 }
               }),
-              
+              switchMap(result => this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID))
         
       ).subscribe(res => {
         console.log(res.status)

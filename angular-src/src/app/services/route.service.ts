@@ -465,13 +465,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingExtended`, httpOptions);
   }
 
-  getCheckBoxIndex(): Observable<any> {
+  getCheckBoxIndex(): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.authToken
-      })
+      }),
+      observe: 'response' as 'body'
     };
     return this.http.get<any>(`${this.baseUrl}/api/CheckBoxIndex`, httpOptions);
   }
@@ -642,6 +643,7 @@ export class RouteService {
         'Authorization':'Bearer ' + this.authToken 
       }),
       responseType:'json' as const,
+      reportProgress: true,
       observe: 'response' as 'body' 
     };
     return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);

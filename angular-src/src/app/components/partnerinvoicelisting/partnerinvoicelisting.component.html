@@ -24,7 +24,7 @@
                 <tbody>
                     <tr *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                       <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
-                      <td id="{{ item.incentiveID }}" (click)="onOpenPartnerInvoiceListingModal(item.ticketID, item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber, item.csAccount)">{{ item.vendorInvoiceNumber }}</td>
+                      <td id="{{ item.incentiveID }}" class="hyperlink" (click)="onOpenPartnerInvoiceListingModal(item.ticketID, item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber, item.csAccount)">{{ item.vendorInvoiceNumber }}</td>
                       <td>{{ item.invoiceDate }}</td>
                       <td>${{ item.invoiceAmount }}</td>
                       <td>{{ item.customer_Number }}</td>
@@ -32,7 +32,7 @@
                       <td>{{ item.ticketNumber }}</td>
                       <td>{{ item.dateEntered }}</td>
                       <td>{{ item.determination }}</td>
-                      <td *ngIf="item.approvedAmount === 'On Hold' || item.approvedAmount === 'Pending'; else dollarAmountAvailBlock">{{ item.approvedAmount }}</td>
+                      <td *ngIf="item.approvedAmount === 'On Hold' || item.approvedAmount === 'Pending' || item.approvedAmount === 'Denied'; else dollarAmountAvailBlock">{{ item.approvedAmount }}</td>
                       <ng-template #dollarAmountAvailBlock>
                         <td>${{ item.approvedAmount }}</td>
                       </ng-template>

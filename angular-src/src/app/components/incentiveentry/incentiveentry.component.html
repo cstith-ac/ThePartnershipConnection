@@ -101,29 +101,6 @@
                         ></kendo-numerictextbox>
                     </div>
                 </div>
-                <!-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="mr-2">Was service performed as part of this invoice?</label>
-                        Yes
-                        <input 
-                            type="radio" 
-                            class="mr-2 ml-2" 
-                            formControlName="ServiceIncluded"
-                            name="ServiceIncluded"
-                            (change)="onChangeServiceIncluded($event)"
-                            value="y"
-                        >
-                        No
-                        <input 
-                            type="radio" 
-                            class="mr-2 ml-2" 
-                            formControlName="ServiceIncluded"
-                            name="ServiceIncluded"
-                            (change)="onChangeServiceIncluded($event)"
-                            value="n"
-                        >
-                    </div>
-                </div> -->
             </div>
 
             <ng-container>
@@ -177,7 +154,7 @@
                                 >
                             </div>
                         </div>
-                        <div class="mt-5">
+                        <div class="mt-5 d-none">
                             <p class="mb-0">If Service Assigned by Alarm Connections</p>
                             <form class="form-group">
                                 <label class="mr-2">Alarm Connections Ticket #</label>
@@ -244,39 +221,27 @@
                                                 <table class="table align-items-center">
                                                     <thead>
                                                         <th scope="col">Ticket Number</th>
-                                                        <th scope="col">3G Status</th>
-                                                        <th scope="col">Address 1</th>
-                                                        <th scope="col">City, State, Zip</th>
                                                         <th scope="col">Created On</th>
-                                                        <th scope="col">Cancel Status</th>
-                                                        <th scope="col">Problem</th>
-                                                        <!-- <th scope="col">Collections Status</th>
+                                                        <th scope="col">Problem Code</th>
                                                         <th scope="col">Customer Number</th>
                                                         <th scope="col">Customer Name</th>
-                                                        <th scope="col">Customer Contact</th>
-                                                        <th scope="col">Phone #</th>
-                                                        <th scope="col">Customer Contact #</th>
-                                                        <th scope="col">Comments</th> -->
+                                                        <th scope="col">Alarm Account</th>
+                                                        <th scope="col">Address</th>
+                                                        <th scope="col">City, State, Zip</th>
                                                         <th scope="col"></th>
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let item of partnerServiceListingExtended | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">  
-                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number)" class="hyperlink">{{ item.ticket_Number }}</td>
-                                                            <td>{{ item.status3G }}</td>
-                                                            <td>{{ item.address_1 }}</td>
-                                                            <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
+                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number, item.customer_Number, item.customer_Name, item.business_Name, item.address_1, item.systemType, item.csAccount)" class="hyperlink">{{ item.ticket_Number }}</td>
                                                             <td>{{ item.creation_Date | date }}</td>
-                                                            <td>{{ item.cancelStatus }}</td>
                                                             <td>{{ item.problem_Code }}</td>
-                                                            <!-- <td>{{ item.collectionQueue }}</td>
                                                             <td>{{ item.customer_Number }}</td>
                                                             <td>{{ item.customer_Name }}</td>
-                                                            <td>{{ item.contactName }}</td>
-                                                            <td>{{ item.sitePhone | phone }}</td>
-                                                            <td>{{ item.contactPhone | phone }}</td>
-                                                            <td>{{ item.customerComments }}</td> -->
+                                                            <td>{{ item.csAccount }}</td>
+                                                            <td>{{ item.address_1 }} {{ item.address_2 }} {{ item.address_3 }}</td>
+                                                            <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
                                                             <td>
-                                                                <button class="btn btn-secondary" (click)="onOpenPartnerDetailsModal()"><i class="fas fa-search pr-2"></i>More</button>
+                                                                <button class="btn btn-secondary" (click)="onOpenPartnerDetailsModal(item.customer_Id, item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)"><i class="fas fa-search pr-2"></i>More</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -307,7 +272,7 @@
                                             </div>
                                             <div class="modal-body pt-0">
                                                 <div class="card p-3">
-                                                    <!-- <div class="card-body">
+                                                    <div class="card-body">
                                                         <div class="row margin-bottomNegative120">
                                                             <div class="col">
                                                                 <p class="mb-0">
@@ -362,7 +327,8 @@
                                                                             </span>
                                                                         </p>
                                                                         <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
-                                                                        <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                                                        
+                                                                        <!-- <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
                                                                         
                                                                         <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
                                                                     
@@ -515,7 +481,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div> -->
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -649,6 +615,6 @@
     </div>
 </footer>
 
-<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
     <p style="color: white">Please Wait...</p>  
-</ngx-spinner> -->
+</ngx-spinner>

@@ -21,6 +21,7 @@
                                     #customerRef
                                     [data]="results"
                                     formControlName="CustomerID"
+                                    [(ngModel)]="customer"
                                     [(ngbTooltip)]="customer"
                                     [searchKeyword]="keyword"
                                     (selected)='selectEvent($event)'
@@ -44,7 +45,7 @@
                                 </ng-template>
                             </div>
                         
-                            <span class="ml-2" (click)="openSearchCustomerModal(content)">
+                            <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)">
                                 <i class="fas fa-search"></i>
                             </span>
                             <span class="pl-4" (click)="routeToNewCustomer()">
@@ -138,7 +139,7 @@
 
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
-                            <input type="text" class="form-control col-sm-5" placeholder="12345">
+                            <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber">
                         </div>
 
                         <div class="form-group form-inline">
@@ -488,19 +489,22 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 offset-md-0">
-                                    <!-- <div class="row d-flex justify-content-between">
-                                      <button class="btn btn-success">Add/View Comments</button>
-                                      <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
-                                    </div> -->
-                                    <button type="reset" class="btn btn-error" (click)="reset()"><i class="fas fa-redo pr-2"></i>Reset</button>
-                                    <button type="button" class="btn btn-light-blue" (click)="openAddViewCommentsModal(comments)"><i class="far fa-eye pr-2"></i>Add/View Comments</button>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- <div class="row d-flex justify-content-between">
+                                  <button class="btn btn-success">Add/View Comments</button>
+                                  <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
+                                </div> -->
+                                <button type="reset" class="btn btn-error float-right" (click)="reset()"><i class="fas fa-redo pr-2"></i>Reset</button>
+                                <button type="button" class="btn btn-light-blue float-right" (click)="openAddViewCommentsModal(comments)"><i class="far fa-eye pr-2"></i>Add/View Comments</button>
 
-                                    <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
+                                <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
 
-                                    <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Incentive</button>
-                                    
-                                  </div>
+                                <button type="button" class="btn btn-secondary float-right mr-2" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Incentive</button>
                             </div>
                         </div>
                     </div> 
@@ -1002,7 +1006,7 @@
         </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')"><i class="fas fa-save pr-2"></i>Save</button>
     </div>
 </ng-template>
 

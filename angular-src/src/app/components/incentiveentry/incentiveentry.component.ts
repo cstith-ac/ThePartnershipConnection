@@ -12,6 +12,7 @@ import { CheckBoxIndex } from '../../models/checkboxindex';
 import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
 import { PartnerServiceListingExtended } from 'src/app/models/partnerservicelistingextended';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
@@ -77,7 +78,7 @@ export class IncentiveentryComponent implements OnInit {
   //pagination
   searchTerm: string;
   page = 1;
-  pageSize = 25;
+  pageSize = 5;
   collectionSize: number;
   allInstallCompanyList2: InstallCompanyList2[];
   clickedID;
@@ -87,7 +88,36 @@ export class IncentiveentryComponent implements OnInit {
   customer_Id;
   customer_Site_Id;
   customer_System_Id;
+  service_Ticket_Id;
   ticket_Number;
+  creation_Date;
+  problem_Code;
+  contactName;
+  contactPhone;
+  acContact;
+  sitePhone;
+  acContactEmail;
+  customer_Number;
+  customer_Name;
+  customerRMR;
+  customer_Since;
+  collectionQueue;
+  cancelStatus;
+  business_Name;
+  comResStatus;
+  address_1;
+  address_2;
+  address_3;
+  city;
+  state;
+  zipCode;
+  status3G;
+  csAccount;
+  systemType;
+  panelType;
+  centralStation;
+  panel_Location;
+  customerComments;
   results: any[] = [];
   filterCategory;
 
@@ -97,6 +127,7 @@ export class IncentiveentryComponent implements OnInit {
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
     private incentiveEntryService: IncentiveEntryService,
+    private flashMessage: FlashMessagesService,
     private router: Router,
     public fb: FormBuilder,
     private el: ElementRef,
@@ -219,7 +250,7 @@ export class IncentiveentryComponent implements OnInit {
 
     this.routeService.getInstallCompanyList2().subscribe(
       res => {
-        console.log(res[0])
+        // console.log(res[0])
         this.installCompanyList2 = res;
         this.collectionSize = res.length;
         this.allInstallCompanyList2 = this.installCompanyList2;
@@ -236,24 +267,35 @@ export class IncentiveentryComponent implements OnInit {
       }
     )
 
+    this.spinnerService.show();
     this.routeService.getCheckBoxIndex().subscribe(
       res => {
-        res.forEach(e => {
-          this.checkBoxIndex = res;
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          this.flashMessage.show('Your requested data is displayed below', {
+            cssClass: 'text-center alert-success',
+            timeout: 5000
+          });
+        }
+        res.body.forEach(e => {
+          this.checkBoxIndex = res.body;
 
           this.id = e.id;
           this.checkBoxName = e.checkBoxName;
           //this.checked
         })
+      }, err => {
+        console.log(err);
       }
     )
 
     this.routeService.getCheckBoxIncompatible().subscribe(
       res => {
-        this.checkBoxIncompatible=res;
-        res.forEach((x) => 
-          console.log(x))
-      }
+        this.checkBoxIncompatible = res;
+        // res.forEach((x) => 
+        //   console.log(x)
+        //   )
+        }
     )
 
     this.incentiveEntryForm = this.fb.group({
@@ -484,37 +526,33 @@ export class IncentiveentryComponent implements OnInit {
   onChangeGetPartnerServiceListingExt(e) {
     console.log(e.target.value)
 
-    this.routeService.getPartnerServiceListingExtended().subscribe(
-      res => {
-        this.partnerServiceListingExtended = [].concat(res); //object
+    // if the alarm connections ticket # is cleared, reset the service included
+    if(e.target.value === '') {
+      this.serviceIncluded = "n";
+      localStorage.setItem("serviceIncluded", "n");
+      this.incentiveEntryForm.controls["ServiceIncluded"].setValue("n");
 
-        this.partnerServiceListingExtended = this.partnerServiceListingExtended.filter((val) => val.ticket_Number)
-        this.collectionSize = this.partnerServiceListingExtended.length;
-      }
-    )
+      localStorage.removeItem("customer_Id");
+      localStorage.removeItem("customer_Site_Id");
+      localStorage.removeItem("customer_System_Id");
+      localStorage.removeItem("ticket_Number");
+      localStorage.removeItem("customer_Number");
+      localStorage.removeItem("customer_Name");
+      localStorage.removeItem("business_Name");
+      localStorage.removeItem("address_1");
+      localStorage.removeItem("systemType");
+      localStorage.removeItem("csAccount");
+    }
+
+    // this.routeService.getPartnerServiceListingExtended().subscribe(
+    //   res => {
+    //     this.partnerServiceListingExtended = [].concat(res); //object
+
+    //     this.partnerServiceListingExtended = this.partnerServiceListingExtended.filter((val) => val.ticket_Number)
+    //     this.collectionSize = this.partnerServiceListingExtended.length;
+    //   }
+    // )
   }
-
-  // public keyword = 'ticket_Number';
-
-  // getServerResponse(event){
-  //   console.log(parseInt(event))
-  //   console.log(this.incentiveEntryForm.controls["TicketNumber"])
-
-  //   let numbersOnly = (val) => {
-  //     if(typeof(val) === 'number') {
-  //       return val;
-  //     }
-  //   }
-
-  //   this.incentiveEntryForm.controls["TicketNumber"].valueChanges
-  //     .pipe(debounceTime(1000), distinctUntilChanged(), filter(numbersOnly))
-  //     .subscribe(queryField => this.routeService.getPartnerServiceListingExtended().subscribe(
-  //       response => {
-  //         console.log(response)
-  //         this.results = response;
-  //       }
-  //     ))
-  // }
 
   selectEvent(item) {
     console.log(item.ticket_Number)
@@ -561,16 +599,28 @@ export class IncentiveentryComponent implements OnInit {
     )
   }
 
-  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number) {
+  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string) {
     this.customer_Id = customer_Id;
     this.customer_Site_Id = customer_Site_Id;
     this.customer_System_Id = customer_System_Id;
     this.ticket_Number = ticket_Number;
+    this.customer_Number = customer_Number;
+    this.customer_Name = customer_Name;
+    this.business_Name = business_Name;
+    this.address_1 = address_1;
+    this.systemType = systemType;
+    this.csAccount = csAccount;
 
     localStorage.setItem("customer_Id", this.customer_Id);
     localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
     localStorage.setItem("customer_System_Id", this.customer_System_Id);
     localStorage.setItem("ticket_Number", this.ticket_Number);
+    localStorage.setItem("customer_Number", this.customer_Number);
+    localStorage.setItem("customer_Name", this.customer_Name);
+    localStorage.setItem("business_Name", this.business_Name);
+    localStorage.setItem("address_1", this.address_1);
+    localStorage.setItem("systemType", this.systemType);
+    localStorage.setItem("csAccount", this.csAccount);
 
     this.serviceIncluded = "y";
     localStorage.setItem("serviceIncluded", "y");
@@ -596,8 +646,54 @@ export class IncentiveentryComponent implements OnInit {
     this.searchTerm = '';
   }
 
-  onOpenPartnerDetailsModal() {
+  onOpenPartnerDetailsModal(customer_Id: number, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
     $("#partnerDetails").modal("show");
+
+    console.log(customer_Id)
+    console.log(ticket_Number)
+    console.log(creation_Date)
+    console.log(problem_Code)
+    console.log(customer_Number)
+    console.log(customer_Name)
+    console.log(csAccount)
+    console.log(address_1)
+    console.log(address_2)
+    console.log(address_3)
+    console.log(city)
+    console.log(state)
+    console.log(zipCode)
+
+    this.customer_Id = customer_Id;
+    this.service_Ticket_Id = service_Ticket_Id;
+    this.ticket_Number = ticket_Number;
+    this.creation_Date = creation_Date;
+    this.problem_Code = problem_Code;
+    this.contactName = contactName;
+    this.contactPhone = contactPhone;
+    this.acContact = acContact;
+    this.sitePhone = sitePhone;
+    this.acContactEmail = acContactEmail;
+    this.customer_Number = customer_Number;
+    this.customer_Name = customer_Name;
+    this.customerRMR = customerRMR;
+    this.customer_Since = customer_Since;
+    this.collectionQueue = collectionQueue;
+    this.cancelStatus = cancelStatus;
+    this.business_Name = business_Name;
+    this.comResStatus = comResStatus;
+    this.address_1 = address_1;
+    this.address_2 = address_2;
+    this.address_3 = address_3;
+    this.city = city;
+    this.state = state;
+    this.zipCode = zipCode;
+    this.status3G = status3G;
+    this.csAccount = csAccount;
+    this.systemType = systemType;
+    this.panelType = panelType;
+    this.centralStation = centralStation;
+    this.panel_Location = panel_Location;
+    this.customerComments = customerComments;
   }
 
   onOpenMessageModal() {

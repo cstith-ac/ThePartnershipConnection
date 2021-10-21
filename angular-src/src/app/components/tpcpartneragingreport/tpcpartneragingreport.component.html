@@ -123,7 +123,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of tpcPartnerAgingReport | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-                        <td id="{{ item.customer_Id }}" (click)="onOpenPartnerAgingReportModal(item.customer_Id, item.customer_Number, item.customer_Name, item.activeRMR, item.filterCategory, item.customerSince, item.lastPay, item.lastPayAmount, item.pastDue, item.bal_Current, item.totalDue, item.collectionQueue, item.pendingCancellation, item.commercialAccount, item.guaranteeStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.emailAddress, item.primaryPhone, item.alternatePhone )">{{ item.customer_Number }}</td>
+                        <td id="{{ item.customer_Id }}" class="hyperlink" (click)="onOpenPartnerAgingReportModal(item.customer_Id, item.customer_Number, item.customer_Name, item.activeRMR, item.filterCategory, item.customerSince, item.lastPay, item.lastPayAmount, item.pastDue, item.bal_Current, item.totalDue, item.collectionQueue, item.pendingCancellation, item.commercialAccount, item.guaranteeStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.emailAddress, item.primaryPhone, item.alternatePhone )">{{ item.customer_Number }}</td>
                         <td>{{ item.customer_Name }}</td>
                         <td>{{ item.activeRMR | currency }}</td>
                         <td>{{ item.customerSince }}</td>

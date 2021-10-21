@@ -196,7 +196,13 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem('customer_Id');
     localStorage.removeItem('customer_Site_Id');
     localStorage.removeItem('customer_System_Id');
-    localStorage.removeItem('ticket_Number')
+    localStorage.removeItem('ticket_Number');
+    localStorage.removeItem("customer_Number");
+    localStorage.removeItem("customer_Name");
+    localStorage.removeItem("business_Name");
+    localStorage.removeItem("address_1");
+    localStorage.removeItem("systemType");
+    localStorage.removeItem("csAccount");
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

@@ -20,7 +20,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let list of cancelQueueList; index as i">
-                  <td id="{{ list.cancel_Queue_Id }}" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
+                  <td id="{{ list.cancel_Queue_Id }}" class="hyperlink" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
                   <td>{{ list.customer_Name }}</td>
                   <td>{{ list.cancelledRMR | currency }}</td>
                   <td>{{ list.rmR_Reason_Code }}</td>
