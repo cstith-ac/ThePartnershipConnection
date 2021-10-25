@@ -21,7 +21,7 @@
                                     #customerRef
                                     [data]="results"
                                     formControlName="CustomerID"
-                                    [(ngModel)]="customer"
+                                    
                                     [(ngbTooltip)]="customer"
                                     [searchKeyword]="keyword"
                                     (selected)='selectEvent($event)'
@@ -137,10 +137,11 @@
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                         </div>
 
-                        <div class="form-group form-inline">
-                            <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
-                            <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber">
-                        </div>
+                        <!-- <div class="form-group form-inline">
+                            <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label> -->
+                            <!-- <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber"> -->
+                            <!-- <input type="text" class="form-control col-sm-5" placeholder="12345"> -->
+                        <!-- </div> -->
 
                         <div class="form-group form-inline">
                             <p class="text-error">Verify System Information!</p>
@@ -1201,7 +1202,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <input type="submit" value="Submit/Save" class="btn btn-submit">
+                            <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveRecurringEntryForm.invalid">
                         </div>
                         <p>Total is: ${{ totalSumRecurring }}</p>
                     </form>
@@ -1362,7 +1363,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <input type="submit" value="Submit/Save" class="btn btn-submit">
+                        <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveEquipMatEntryForm.invalid">
                     </div>
                     <p>Total is: ${{ totalSumEquipMat }}</p>
                 </form>
@@ -1466,7 +1467,7 @@
                                 </div>
                                 <div class="col">
                                     <input 
-                                        type="text" 
+                                        type="number" 
                                         formControlName="Quantity"
                                         class="form-control"
                                         min="0"
@@ -1529,7 +1530,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <input type="submit" value="Submit/Save" class="btn btn-submit">
+                        <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveLaborChargesEntryForm.invalid">
                     </div>
                     <p>Total is: ${{ totalSumLaborCharges }}</p>
                 </form>

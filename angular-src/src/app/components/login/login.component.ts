@@ -71,6 +71,7 @@ export class LoginComponent implements OnInit {
         //console.log(res.afaRole)
         localStorage.setItem('token', res.token);
         localStorage.setItem('user',  JSON.stringify(res));
+        localStorage.setItem('removeSplash', res.removeSplash)
         this.flashMessage.show('You are now logged in', {
           cssClass: 'alert-success',
           timeout: 5000

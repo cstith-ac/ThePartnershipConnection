@@ -84,11 +84,11 @@ export class PartnerdashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if(localStorage.getItem('removeSplash') === '1') {
-    //   this.showSplash = false;
-    // } else {
-    //   this.showSplash;
-    // }
+    if(localStorage.getItem('removeSplash') === '1') {
+      this.showSplash = false;
+    } else {
+      this.showSplash;
+    }
 
     if(localStorage.getItem('InstructionsShown')) {
       this.showSplash = false;
@@ -199,6 +199,9 @@ export class PartnerdashboardComponent implements OnInit {
         }
         this.partnerLandingPage = res.body;
         for(var i = 0; i < this.partnerLandingPage.length; i++) {
+          console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
+          console.log(this.partnerLandingPage[i].attritionLastMonth)
+          console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
           // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
           // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
           // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion

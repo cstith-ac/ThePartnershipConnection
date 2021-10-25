@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild, ElementRef } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
 import { environment } from '../../../environments/environment';
@@ -27,13 +27,13 @@ import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEventType, HttpEvent } from '@angular/common/http';
 import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 import { fromEvent, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError, map } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -70,6 +70,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   updateRecurringStoredProc;
   updateEquipMatStoredProc;
   updateLaborChargesStoredProc;
+
+  dateString = new Date("1899-12-30");
 
   authToken: any;
   user:any=Object;
@@ -368,14 +370,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('InstructionsShown');
-      localStorage.removeItem('customer_Id');
-      localStorage.removeItem('customer_Site_Id');
-      localStorage.removeItem('customer_System_Id');
-      localStorage.removeItem('ticket_Number');
-      localStorage.removeItem("customer_Number");
-      localStorage.removeItem("customer_Name");
-      localStorage.removeItem("systemType");
-      localStorage.removeItem('csAccount');
+      // localStorage.removeItem('customer_Id');
+      // localStorage.removeItem('customer_Site_Id');
+      // localStorage.removeItem('customer_System_Id');
+      // localStorage.removeItem('ticket_Number');
+      // localStorage.removeItem("customer_Number");
+      // localStorage.removeItem("customer_Name");
+      // localStorage.removeItem("systemType");
+      // localStorage.removeItem('csAccount');
 
       this.router.navigate(["login"]);
     } else {
@@ -389,12 +391,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.installCompanyID = localStorage.getItem('installCompanyID');
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
-    //this.invoiceDate = new Date().toISOString().slice(0, 19).replace('T',' ') // get today's date 
-    //this.invoiceDate = '2021-10-13 14:51:16.323';
     this.invoiceTotal = parseFloat(localStorage.getItem('invoiceTotal'));
-    // if(localStorage.getItem('partnerTaxAmount')) {
-    //   this.partnerTaxAmount = parseFloat(localStorage.getItem('partnerTaxAmount'))
-    // }
 
     // //Get Files from local storage if page is refreshed
     this.invoiceFile = localStorage.getItem("invoice");
@@ -447,11 +444,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.contractTerm = localStorage.getItem("contractTerm");
     this.renewal = localStorage.getItem("renewal");
 
-    //this.recurring = parseInt(localStorage.getItem('totalRecurringCalc'));
     this.recurring = 0.00;
     this.equipmentAndMaterials = parseInt(localStorage.getItem('totalEquipMatCalc'));
 
-    //this.laborCharges = parseInt(localStorage.getItem('totalLaborChargesCalc'));
     this.laborCharges = 0.00
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
@@ -536,7 +531,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             entryRowsEquipMat: this.fb.array(fakeEquipMat.map(datum => this.generateFakeDatumFormGroup(datum)))
             // entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
           });
-          //debugger
         } else if(data.length > 0) {
           console.log('there is data present')
           this.incentiveEquipMatEntryForm = this.fb.group({
@@ -545,13 +539,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
             entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
           })
         }
-        // data.forEach(x => {
-        //   localStorage.setItem('equipmatentry',x);
-        // })
-        // for(var i = 0; i < data.length; i++) {
-        //   localStorage.setItem('equipmatentry', JSON.stringify(data[i]));
-        //   console.log(data[i])
-        // }
         localStorage.setItem('equipmatentry', JSON.stringify(data));
         // this.foo = data;
         let mappedDefaultAmounts = data.map(a => a.defaultAmount);
@@ -695,7 +682,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       NewSystem: [""],
       NewCustomer: [""],
       NewSite: [""],
-      TicketNumber: [""],
+      //TicketNumber: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
       PanelTypeID: ["", Validators.required], //@PanelTypeID
       PanelLocation: [""], //@PanelLocation
@@ -738,12 +725,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       entryRowsLaborCharges => this.updateTotalLaborCharges(entryRowsLaborCharges)
     );
 
-    // this.routeService.getListRecurringItems().subscribe(
-    //   res => {
-    //     this.listRecurringItems = res;
-    //   }
-    // )
-
     this.routeService.getListMultiples().subscribe(
       res => {
         this.listMultiples = res;
@@ -771,24 +752,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // If the partner already selected a customer from the Incentive Entry page, get the ticket_Number, customer_Id, customer_Site_Id, and customer_System_Id from localstorage
     // Convert the values from localstorage from strings to integers
     // Call the API for Customer, Site, and System
-    if(localStorage.getItem('customer_Id')) {
-      this.customer_id = parseInt(localStorage.getItem('customer_Id'));
-    }
-    if(localStorage.getItem('customer_Site_Id')) {
-      this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
-    }
-    if(localStorage.getItem('customer_System_Id')) {
-      this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
-    }
+    // if(localStorage.getItem('customer_Id')) {
+    //   this.customer_id = parseInt(localStorage.getItem('customer_Id'));
+    // }
+    // if(localStorage.getItem('customer_Site_Id')) {
+    //   this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+    // }
+    // if(localStorage.getItem('customer_System_Id')) {
+    //   this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+    // }
     
-    this.ticket_Number = localStorage.getItem('ticket_Number');
-    this.customer_Number = localStorage.getItem('customer_Number');
-    this.customer_Name = localStorage.getItem('customer_Name');
-    this.business_Name = localStorage.getItem('business_Name');
-    this.address_1 = localStorage.getItem('address_1');
-    this.systemType = localStorage.getItem('systemType');
-    this.csAccount = localStorage.getItem('csAccount');
-    this.alarmAccount = localStorage.getItem('csAccount');
+    // this.ticket_Number = localStorage.getItem('ticket_Number');
+    // this.customer_Number = localStorage.getItem('customer_Number');
+    // this.customer_Name = localStorage.getItem('customer_Name');
+    // this.business_Name = localStorage.getItem('business_Name');
+    // this.address_1 = localStorage.getItem('address_1');
+    // this.systemType = localStorage.getItem('systemType');
+    // this.csAccount = localStorage.getItem('csAccount');
+    // this.alarmAccount = localStorage.getItem('csAccount');
+
   }
 
   ngAfterViewChecked() {
@@ -798,39 +780,37 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     setTimeout(() => {
 
-      this.incentiveDashboardForm.controls["TicketNumber"].setValue(this.ticket_Number);
+      // this.incentiveDashboardForm.controls["TicketNumber"].setValue(this.ticket_Number);
 
-      this.cust_Numb_Name = this.customer_Number + ' - ' + this.customer_Name;
-      this.bus_Name_Add1 = this.business_Name + ' - ' + this.address_1;
-      this.sysType_csAccount = this.systemType + ' - ' + this.csAccount;
+      // this.cust_Numb_Name = this.customer_Number + ' - ' + this.customer_Name;
+      // this.bus_Name_Add1 = this.business_Name + ' - ' + this.address_1;
+      // this.sysType_csAccount = this.systemType + ' - ' + this.csAccount;
 
-      if(localStorage.getItem("customer_Number") && localStorage.getItem("customer_Name")){
-        this.incentiveDashboardForm.get("CustomerID").setValue(this.cust_Numb_Name);
-      }
+      // if(localStorage.getItem("customer_Number") && localStorage.getItem("customer_Name")){
+      //   this.incentiveDashboardForm.get("CustomerID").setValue(this.cust_Numb_Name);
+      // }
 
-      if(localStorage.getItem("business_Name") && localStorage.getItem("address_1")) {
-        this.isSiteSelectionFirst = true;
-        this.isRemoveDropdown = false;
-        this.divSiteSearchIcon.nativeElement.style.display = 'none';
-        this.siteName = this.bus_Name_Add1;
-      }
+      // if(localStorage.getItem("business_Name") && localStorage.getItem("address_1")) {
+      //   this.isSiteSelectionFirst = true;
+      //   this.isRemoveDropdown = false;
+      //   this.divSiteSearchIcon.nativeElement.style.display = 'none';
+      //   this.siteName = this.bus_Name_Add1;
+      // }
 
-      if(localStorage.getItem("systemType") && localStorage.getItem("csAccount")) {
-        this.isSystemSelectionFirst = true;
-        this.isRemoveSystemDropdown = false;
-        this.divSystemSearchIcon.nativeElement.style.display = 'none';
-        this.systemCode = this.sysType_csAccount;
-      }
-      if(localStorage.getItem("csAccount")) {
-        this.alarmAccount = this.alarmAccount;
-      }
+      // if(localStorage.getItem("systemType") && localStorage.getItem("csAccount")) {
+      //   this.isSystemSelectionFirst = true;
+      //   this.isRemoveSystemDropdown = false;
+      //   this.divSystemSearchIcon.nativeElement.style.display = 'none';
+      //   this.systemCode = this.sysType_csAccount;
+      // }
+      // if(localStorage.getItem("csAccount")) {
+      //   this.alarmAccount = this.alarmAccount;
+      // }
 
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
         this.incentiveDashboardForm.controls["Recurring"].updateValueAndValidity();
-
-        //this.onChanges();
       }
 
       if(!isNaN(parseFloat(this.equipmentAndMaterials))) {
@@ -888,8 +868,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       if(this.recurring && this.equipmentAndMaterials && this.laborCharges  && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
-
-      //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0);
 
       // if there's a page refresh, re-populate fields with previously entered values
       this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));
@@ -1116,16 +1094,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('totalEquipMatCalc');
-      localStorage.removeItem('customer_Id');
-      localStorage.removeItem('customer_Site_Id');
-      localStorage.removeItem('customer_System_Id');
-      localStorage.removeItem('ticket_Number');
-      localStorage.removeItem('customer_Number');
-      localStorage.removeItem('customer_Name');
-      localStorage.removeItem("business_Name");
-      localStorage.removeItem("address_1");
-      localStorage.removeItem("systemType");
-      localStorage.removeItem("csAccount");
+      // localStorage.removeItem('customer_Id');
+      // localStorage.removeItem('customer_Site_Id');
+      // localStorage.removeItem('customer_System_Id');
+      // localStorage.removeItem('ticket_Number');
+      // localStorage.removeItem('customer_Number');
+      // localStorage.removeItem('customer_Name');
+      // localStorage.removeItem("business_Name");
+      // localStorage.removeItem("address_1");
+      // localStorage.removeItem("systemType");
+      // localStorage.removeItem("csAccount");
 
       this.router.navigate(['incentive-entry/']);
     }
@@ -1438,14 +1416,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   selectCustomer(customer_id:number,customer_Name:string,customer_Number:string) {
     console.log(this.divSiteSearchIcon.nativeElement);
-    this.divSiteSearchIcon.nativeElement.style.display='none';
-    this.divSystemSearchIcon.nativeElement.style.display='none';
+    this.divSiteSearchIcon.nativeElement.style.display = 'none';
+    this.divSystemSearchIcon.nativeElement.style.display = 'none';
 
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     let selectedCustomerNumber = customer_Number;
 
-    this.customer = selectedCustomerNumber+' - '+selectedCustomerName;
+    this.customer = selectedCustomerNumber + ' - ' + selectedCustomerName;
     this.id = selectedCustomerid;
     this.incentiveDashboardForm.get("CustomerID").setValue(this.customer);
 
@@ -1678,6 +1656,24 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
+  // private getEventMessage(event: HttpEvent<any>, file:File) {
+  //   switch(event.type) {
+  //     case HttpEventType.Sent:
+  //       return `Uploading file "${file.name}" of size ${file.size}.`;
+
+  //       case HttpEventType.UploadProgress:
+  //     // Compute and show the % done:
+  //     const percentDone = Math.round(100 * event.loaded / event.total);
+  //     return `File "${file.name}" is ${percentDone}% uploaded.`;
+
+  //   case HttpEventType.Response:
+  //     return `File "${file.name}" was completely uploaded!`;
+
+  //   default:
+  //     return `File "${file.name}" surprising upload event: ${event.type}.`;
+  //   }
+  // }
+
   onSubmit(form: FormGroup) {
     //Incentive_ADD_Start
     console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
@@ -1748,12 +1744,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         };
         this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
           this.updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
+          this.routeService.postIncentive_Add_Recurring(this.updateRecurringWithJobID).subscribe(
+            result => {
+              console.log(result)
+            }
+          )
         });
         this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
           this.updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id); 
+          this.routeService.postIncentive_Add_Equipment(this.updateEquipMatWithJobID).subscribe(
+            result => {
+              console.log(result)
+            }
+          )
         });
         this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(l => {
           this.updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
+          this.routeService.postIncentive_Add_Labor(this.updateLaborChargesWithJobID).subscribe(
+            result => {
+              console.log(result);
+              
+            }
+          )
         });
 
         // INVOICE //
@@ -2022,11 +2034,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   return of(result)
                 } else {
                   return this.routeService.postCustomerDocumentADD(this.frmData)
-                  // .pipe(
-                  //   switchMap(result => 
-                  //     this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID)
-                  //   )
-                  // )
                 }
               }),
               switchMap(result => {
@@ -3675,6 +3682,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Total: ["", Validators.required]
     })
   }
+
+  // Empty strings passing 
+  // initEntryRow() {
+  //   return this.fb.group({
+  //     ItemID: [0, Validators.required],
+  //     Description: [null, Validators.required],
+  //     BillCycle: [null, Validators.required],
+  //     RMR: [0, Validators.required],
+  //     PassThrough: [this.passThrough, Validators.required],
+  //     BillingStartDate: [null, Validators.required],
+  //     Add2Item: [0],
+  //     Multiple: [25, Validators.required],
+  //     Total: [0, Validators.required]
+  //   })
+  // }
 
   addNewItem():void {
     (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
