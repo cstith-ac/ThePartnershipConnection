@@ -16,7 +16,7 @@
                         <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
-                            <div class="ng-autocomplete">
+                            <div class="ng-autocomplete" *ngIf="!customerPreselected">
                                 <ng-autocomplete
                                     #customerRef
                                     [data]="results"
@@ -43,6 +43,13 @@
                                 <ng-template #notFoundTemplate let-notFound>
                                     <div [innerHTML]="notFound"></div>
                                 </ng-template>
+                            </div>
+                            <div *ngIf="customerPreselected">
+                                <input  
+                                type="text"
+                                class="form-control col-sm" 
+                                [(ngModel)]="customer" 
+                                [ngModelOptions]="{standalone: true}">
                             </div>
                         
                             <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)">
@@ -137,11 +144,11 @@
                             <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
                         </div>
 
-                        <!-- <div class="form-group form-inline">
-                            <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label> -->
-                            <!-- <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber"> -->
+                        <div class="form-group form-inline">
+                            <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
+                            <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber">
                             <!-- <input type="text" class="form-control col-sm-5" placeholder="12345"> -->
-                        <!-- </div> -->
+                        </div>
 
                         <div class="form-group form-inline">
                             <p class="text-error">Verify System Information!</p>
@@ -152,7 +159,7 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System Type</label>
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="!systemTypePreselected">
                                 <select 
                                     formControlName="SystemTypeID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="systemTypeID"
@@ -162,13 +169,20 @@
                                     </option>
                                 </select>
                             </div>
+                            <div *ngIf="systemTypePreselected">
+                                <input 
+                                    type="text" 
+                                    class="form-control col-sm" 
+                                    [(ngModel)]="systemTypeID"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
                             <span class="col-sm-4">
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
                             </span>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Panel Type</label>
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="!panelTypePreselected">
                                 <select 
                                     formControlName="PanelTypeID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="panelTypeID"
@@ -178,17 +192,24 @@
                                     </option>
                                 </select>
                             </div>
+                            <div *ngIf="panelTypePreselected">
+                                <input 
+                                    type="text" 
+                                    class="form-control col-sm" 
+                                    [(ngModel)]="panelTypeID"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
                             <span class="col-sm-4">
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
                             </span>
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Panel Location</label>
-                            <input type="text" class="form-control col-sm-5" [(ngModel)]="panelLocation" formControlName="PanelLocation">
+                            <input type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Central Station</label>
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="!centralStationPreselected">
                                 <select 
                                     formControlName="CentralStationID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="centralStationID"
@@ -197,6 +218,13 @@
                                         {{ station.csName }}
                                     </option>
                                 </select>
+                            </div>
+                            <div *ngIf="centralStationPreselected">
+                                <input 
+                                    type="text" 
+                                    class="form-control col-sm" 
+                                    [(ngModel)]="centralStationID"
+                                    [ngModelOptions]="{standalone: true}">
                             </div>
                             <span class="col-sm-4">
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
@@ -491,6 +519,11 @@
                                     </div>
                                 </div>
                                 
+                                <!-- <div class="progress" *ngIf="barWidth!='0%'">
+                                    <span [innerHTML]="barWidth"></span>
+                                    <div class="bar" [style.width]="barWidth"></div>
+                                </div> -->
+
                             </div>
                             
                         </div>
@@ -533,6 +566,7 @@
 
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
     <p style="color: white">Please Wait...</p>  
+    <p style="color: white">Do not close your browser!</p>
 </ngx-spinner>
 
 <ng-template #content let-modal>

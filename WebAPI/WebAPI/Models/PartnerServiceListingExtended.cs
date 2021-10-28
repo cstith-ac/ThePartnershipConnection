@@ -41,5 +41,7 @@ namespace WebAPI.Models
         public int Customer_Id { get; set; }
         public int Customer_Site_Id { get; set; }
         public int Customer_System_Id { get; set; }
+        public int Panel_Type_Id { get; set; }
+        public int Central_Station_ID { get; set; }
     }
 }

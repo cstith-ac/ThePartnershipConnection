@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpEventType } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
@@ -625,14 +625,6 @@ export class RouteService {
     return this.http.post<Incentive_Add_Labor>(`${this.baseUrl}/api/Incentive_Add_Labor`, params, httpOptions);
   }
 
-  // postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<Customer_Document_ADD> {
-  //   this.loadToken();
-  //   let httpOptions = { 
-  //     headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
-  //   };
-  //   return this.http.post<Customer_Document_ADD>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
-  // }
-
   postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
@@ -642,12 +634,31 @@ export class RouteService {
         //"Accept": "application/json", 
         'Authorization':'Bearer ' + this.authToken 
       }),
-      responseType:'json' as const,
+      responseType: 'json' as const,
       reportProgress: true,
       observe: 'response' as 'body' 
     };
-    return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD',customerdocumentadd, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD', customerdocumentadd, httpOptions).pipe(
+      tap(data => console.log(data))
+    );
   }
+
+  /// BEGIN Get document upload status ///
+  // postCustomerDocumentADD(customerdocumentadd: Customer_Document_ADD): Observable<any> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 
+  //       'Accept': '*/*',
+  //       'Authorization':'Bearer ' + this.authToken 
+  //     }),
+  //     responseType:'json' as const,
+  //     reportProgress: true,
+  //     observe: 'events' as 'body'
+  //     // observe: 'response' as 'body' 
+  //   };
+  //   return this.http.post<any>(this.baseUrl + '/api/Customer_Document_ADD', customerdocumentadd, httpOptions);
+  // }
+  /// END Get document upload status ///
 
   postIncentive_ADD_Finish(params:any): Observable<HttpResponse<any>> {
     this.loadToken();

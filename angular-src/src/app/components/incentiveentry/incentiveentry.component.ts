@@ -116,7 +116,9 @@ export class IncentiveentryComponent implements OnInit {
   systemType;
   panelType;
   centralStation;
+  central_Station_ID
   panel_Location;
+  panel_Type_Id;
   customerComments;
   results: any[] = [];
   filterCategory;
@@ -514,7 +516,7 @@ export class IncentiveentryComponent implements OnInit {
     //select an item from the InstallCompanyList
     //this will update the incentive entry companyName and partnerCode
     this.modalService.open(installCompanyListContent, {
-      windowClass: 'my-class',
+      windowClass: 'my-class1250',
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {
       console.log(result)
@@ -577,7 +579,7 @@ export class IncentiveentryComponent implements OnInit {
 
   openACTicketNumberListModal(acTicketNumberListContent) {
     this.modalService.open(acTicketNumberListContent, {
-      windowClass: 'my-class',
+      windowClass: 'my-class1250',
       ariaLabelledBy: 'modal-basic-title'
     });
 
@@ -599,7 +601,7 @@ export class IncentiveentryComponent implements OnInit {
     )
   }
 
-  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string) {
+  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string, panelType: string, panel_Location: string, centralStation: string, panel_Type_Id: number, central_Station_ID: number) {
     this.customer_Id = customer_Id;
     this.customer_Site_Id = customer_Site_Id;
     this.customer_System_Id = customer_System_Id;
@@ -610,6 +612,11 @@ export class IncentiveentryComponent implements OnInit {
     this.address_1 = address_1;
     this.systemType = systemType;
     this.csAccount = csAccount;
+    this.panelType = panelType;
+    this.panel_Location = panel_Location;
+    this.centralStation = centralStation;
+    this.panel_Type_Id = panel_Type_Id;
+    this.central_Station_ID = central_Station_ID;
 
     localStorage.setItem("customer_Id", this.customer_Id);
     localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
@@ -621,6 +628,11 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem("address_1", this.address_1);
     localStorage.setItem("systemType", this.systemType);
     localStorage.setItem("csAccount", this.csAccount);
+    localStorage.setItem("panelType", this.panelType);
+    localStorage.setItem("panel_Location", this.panel_Location);
+    localStorage.setItem("centralStation", this.centralStation);
+    localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
+    localStorage.setItem("central_Station_ID", this.central_Station_ID);
 
     this.serviceIncluded = "y";
     localStorage.setItem("serviceIncluded", "y");

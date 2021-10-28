@@ -83,7 +83,9 @@ namespace WebAPI.Controllers
                     Status3G = s.Status3G,
                     Customer_Id = s.Customer_Id,
                     Customer_Site_Id = s.Customer_Site_Id,
-                    Customer_System_Id = s.Customer_System_Id
+                    Customer_System_Id = s.Customer_System_Id,
+                    Panel_Type_Id = s.Panel_Type_Id,
+                    Central_Station_ID = s.Central_Station_ID
                 }).ToList();
 
                 return Lst;

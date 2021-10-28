@@ -261,9 +261,12 @@ header, .row {
   padding: 0.375rem 1rem;
   font-weight: 400;
   line-height: 1.52857143;
-  color: #495057;
-  border: 1px solid #dde6e9;
-  border-radius: 0.25rem;
+  /*color: #495057;*/
+  /*border: 1px solid #dde6e9; */
+  /*border-radius: 0.25rem;*/
+  color: #8898aa;
+  border: 1px solid #cad1d7;
+  border-radius: .375rem;
 }
   
 .ng-autocomplete ::ng-deep .autocomplete-container ::ng-deep .suggestions-container ::ng-deep .item ::ng-deep .row {
@@ -274,16 +277,26 @@ header, .row {
   border: 0;
 }
 
-/* :host ::ng-deep .ng-autocomplete .ng-autocomplete .autocomplete-container .input-container {
-  font-weight: bold !important;
-  font-size: 16px !important;
-  border: none !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  margin: 0 !important;
-  height: 44px !important;
-  line-height: 44px !important;
-  box-shadow: none !important;
-  color: #fff !important;
-  width: 280px !important;
+/*Progress Bar*/
+/* .progress {
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  position: relative;
+  border: 1px solid #000;
+}
+
+.progress span {
+  margin: 0%;
+  font-size: 40px;
+  font-family: system-ui;
+  position: absolute;
+  color: #c5c5c5;
+}
+
+.bar {
+  background: #24292e;
+  height: inherit;
+  margin: 0%;
+  transition: all 0.5s ease-out ; 
 } */

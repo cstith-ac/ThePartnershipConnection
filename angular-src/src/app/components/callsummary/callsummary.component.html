@@ -67,7 +67,6 @@
                                                     <select formControlName="SystemID" class="form-control form-control-lg" id="callSummarySystemSelect" [ngClass]="{ 'is-invalid': submitted && f.SystemID.errors }">
                                                         <option *ngFor="let system of siteToSystemList" value="{{ system.customerSystemID }}" [ngValue]="system.customerSystemID">
                                                             {{system.alarm_Account}} - {{ system.systemType }}
-                                                            <!-- {{ system.key }} - {{ system.value }} -->
                                                         </option>
                                                     </select>
                                                     <div *ngIf="submitted && f.SystemID.errors" class="invalid-feedback">
@@ -181,16 +180,6 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <!-- <div class="form-group">
-                                                <label class="col-form-label">Customer Call Back Phone</label>
-                                                <input 
-                                                    formControlName="CustomerCallBackPhone" 
-                                                    type="text" class="form-control"
-                                                    [ngClass]="{ 'is-invalid': submitted && f.CustomerCallBackPhone.errors }"
-                                                    [specialCharacters]="[ ' ' ,'-' ,'(', ')' ,'[' ,']' , 'x' ]" 
-                                                    mask="(000) 000-0000 x999">
-                                                <small *ngIf="f.CustomerCallBackPhone.invalid && f.CustomerCallBackPhone.touched" class="text-danger">Phone no is Required(minimum length 10,numbers are only allowed)</small>
-                                            </div> -->
                                             <div class="form-group">
                                                 <label class="col-form-label">Customer Call Back Phone</label>
                                                 <input 

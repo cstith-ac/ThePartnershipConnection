@@ -494,9 +494,9 @@ export class CallsummaryComponent implements OnInit {
         result => {
           // confirm('Click ok to confirm form submission')
 
-          //this.divText.nativeElement.innerHTML = "Update";
+          // this.divText.nativeElement.innerHTML = "Update";
 
-          //or remove the former button and replace with an update button
+          // or remove the former button and replace with an update button
           this.changeToUpdateButton = true;
           this.showSaveButton = false;
 
@@ -505,7 +505,7 @@ export class CallsummaryComponent implements OnInit {
           this.submitted = false;
           this.clicked = false;
           this.enableReset = false;
-          //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
+          // this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
           //this.resetForm(form);
         },
         error => console.log('error: ', error)

@@ -203,6 +203,10 @@ export class SidenavComponent implements OnInit {
     localStorage.removeItem("address_1");
     localStorage.removeItem("systemType");
     localStorage.removeItem("csAccount");
+    localStorage.removeItem("panel_Location");
+    localStorage.removeItem("centralStation");
+    localStorage.removeItem("central_Station_ID");
+    localStorage.removeItem("panel_Type_Id");
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

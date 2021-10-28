@@ -72,6 +72,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   updateLaborChargesStoredProc;
 
   dateString = new Date("1899-12-30");
+  //barWidth: string = "0%";
+  uploadText;
 
   authToken: any;
   user:any=Object;
@@ -118,12 +120,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   isSystemSelectionFirst: boolean = false;
   isRemoveDropdown: boolean = true;
   isRemoveSystemDropdown: boolean = true;
+  customerPreselected: boolean = false;
+  systemTypePreselected: boolean = false;
+  panelTypePreselected: boolean = false;
+  centralStationPreselected: boolean = false;
   serviceIncluded: '';
   renewalMonths = '12';
   customer_Site_id: any;
   // customer_System_id:number;
   customer_System_id: any;
   systemName: string;
+  // panel_Type_Id: number;
   panel_Type_Id: number;
   panelName: string;
 
@@ -168,9 +175,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   newSite: '';
   accountNumber: '';
   // systemType: '';
-  panelTypeID: '';
-  panelLocation: '';
-  centralStationID: '';
+  // panelTypeID: '';
+  panelTypeID;
+  //panelLocation: '';
+  panel_Location;
+  // centralStationID: '';
+  centralStationID;
   // additionalInfo: '';
   // invoiceUpload: '';
   // siteVisitUpload: '';
@@ -370,14 +380,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('InstructionsShown');
-      // localStorage.removeItem('customer_Id');
-      // localStorage.removeItem('customer_Site_Id');
-      // localStorage.removeItem('customer_System_Id');
-      // localStorage.removeItem('ticket_Number');
-      // localStorage.removeItem("customer_Number");
-      // localStorage.removeItem("customer_Name");
-      // localStorage.removeItem("systemType");
-      // localStorage.removeItem('csAccount');
+      localStorage.removeItem('customer_Id');
+      localStorage.removeItem('customer_Site_Id');
+      localStorage.removeItem('customer_System_Id');
+      localStorage.removeItem('ticket_Number');
+      localStorage.removeItem("customer_Number");
+      localStorage.removeItem("customer_Name");
+      localStorage.removeItem("systemType");
+      localStorage.removeItem('csAccount');
+      localStorage.removeItem('panelType');
+      localStorage.removeItem('panel_Location');
+      localStorage.removeItem('centralStation');
 
       this.router.navigate(["login"]);
     } else {
@@ -451,7 +464,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
     this.selectedForCheckBoxAutoInsert = JSON.parse(localStorage.getItem('checkBoxAutoInsertList'));
-    console.log(this.selectedForCheckBoxAutoInsert) //object 
+    //console.log(this.selectedForCheckBoxAutoInsert) //object 
 
     this.routeService.getListRecurringItems().subscribe(
       res => {
@@ -682,13 +695,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       NewSystem: [""],
       NewCustomer: [""],
       NewSite: [""],
-      //TicketNumber: [""],
+      TicketNumber: [""],
       AlarmAccount: ["", Validators.required], //@AlarmAccount
       PanelTypeID: ["", Validators.required], //@PanelTypeID
       PanelLocation: [""], //@PanelLocation
       CentralStationID: ["", Validators.required], //@CentralStationID
       AdditionalInfo: [""], //@AdditionalInfo
-      InvoiceUpload: [""],
+      InvoiceUpload: ["", Validators.required],
       SiteVisitUpload: [""],
       ContractUpload: [""],
       SubscriberFormUpload: [""],
@@ -752,25 +765,28 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // If the partner already selected a customer from the Incentive Entry page, get the ticket_Number, customer_Id, customer_Site_Id, and customer_System_Id from localstorage
     // Convert the values from localstorage from strings to integers
     // Call the API for Customer, Site, and System
-    // if(localStorage.getItem('customer_Id')) {
-    //   this.customer_id = parseInt(localStorage.getItem('customer_Id'));
-    // }
-    // if(localStorage.getItem('customer_Site_Id')) {
-    //   this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
-    // }
-    // if(localStorage.getItem('customer_System_Id')) {
-    //   this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
-    // }
+    if(localStorage.getItem('customer_Id')) {
+      this.customer_id = parseInt(localStorage.getItem('customer_Id'));
+    }
+    if(localStorage.getItem('customer_Site_Id')) {
+      this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+    }
+    if(localStorage.getItem('customer_System_Id')) {
+      this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+    }
     
-    // this.ticket_Number = localStorage.getItem('ticket_Number');
-    // this.customer_Number = localStorage.getItem('customer_Number');
-    // this.customer_Name = localStorage.getItem('customer_Name');
-    // this.business_Name = localStorage.getItem('business_Name');
-    // this.address_1 = localStorage.getItem('address_1');
-    // this.systemType = localStorage.getItem('systemType');
-    // this.csAccount = localStorage.getItem('csAccount');
-    // this.alarmAccount = localStorage.getItem('csAccount');
-
+    this.ticket_Number = localStorage.getItem('ticket_Number');
+    this.customer_Number = localStorage.getItem('customer_Number');
+    this.customer_Name = localStorage.getItem('customer_Name');
+    this.business_Name = localStorage.getItem('business_Name');
+    this.address_1 = localStorage.getItem('address_1');
+    this.systemType = localStorage.getItem('systemType');
+    this.csAccount = localStorage.getItem('csAccount');
+    this.alarmAccount = localStorage.getItem('csAccount');
+    this.systemType = localStorage.getItem('systemType');;
+    this.panelTypeID = localStorage.getItem('panelType');
+    this.panel_Location = localStorage.getItem('panel_Location');
+    this.centralStationID = localStorage.getItem('centralStation');
   }
 
   ngAfterViewChecked() {
@@ -780,32 +796,59 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     setTimeout(() => {
 
-      // this.incentiveDashboardForm.controls["TicketNumber"].setValue(this.ticket_Number);
+      this.incentiveDashboardForm.controls["TicketNumber"].setValue(this.ticket_Number);
 
-      // this.cust_Numb_Name = this.customer_Number + ' - ' + this.customer_Name;
-      // this.bus_Name_Add1 = this.business_Name + ' - ' + this.address_1;
-      // this.sysType_csAccount = this.systemType + ' - ' + this.csAccount;
+      this.cust_Numb_Name = this.customer_Number + ' - ' + this.customer_Name;
+      this.bus_Name_Add1 = this.business_Name + ' - ' + this.address_1;
+      this.sysType_csAccount = this.systemType + ' - ' + this.csAccount;
 
-      // if(localStorage.getItem("customer_Number") && localStorage.getItem("customer_Name")){
-      //   this.incentiveDashboardForm.get("CustomerID").setValue(this.cust_Numb_Name);
-      // }
+      if(localStorage.getItem("customer_Number") && localStorage.getItem("customer_Name")){
+        this.customerPreselected = true;
+        this.customer = this.cust_Numb_Name;
+        this.incentiveDashboardForm.get("CustomerID").setValue(this.customer_id);
+      }
 
-      // if(localStorage.getItem("business_Name") && localStorage.getItem("address_1")) {
-      //   this.isSiteSelectionFirst = true;
-      //   this.isRemoveDropdown = false;
-      //   this.divSiteSearchIcon.nativeElement.style.display = 'none';
-      //   this.siteName = this.bus_Name_Add1;
-      // }
+      if(localStorage.getItem("business_Name") && localStorage.getItem("address_1")) {
+        this.isSiteSelectionFirst = true;
+        this.isRemoveDropdown = false;
+        this.divSiteSearchIcon.nativeElement.style.display = 'none';
+        this.siteName = this.bus_Name_Add1;
+        //set CustomerSiteID
+        //this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
+      }
 
-      // if(localStorage.getItem("systemType") && localStorage.getItem("csAccount")) {
-      //   this.isSystemSelectionFirst = true;
-      //   this.isRemoveSystemDropdown = false;
-      //   this.divSystemSearchIcon.nativeElement.style.display = 'none';
-      //   this.systemCode = this.sysType_csAccount;
-      // }
-      // if(localStorage.getItem("csAccount")) {
-      //   this.alarmAccount = this.alarmAccount;
-      // }
+      if(localStorage.getItem("systemType") && localStorage.getItem("csAccount")) {
+        this.isSystemSelectionFirst = true;
+        this.isRemoveSystemDropdown = false;
+        this.divSystemSearchIcon.nativeElement.style.display = 'none';
+        this.systemCode = this.sysType_csAccount;
+        // set CustomerSystemID
+        //this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+      }
+      if(localStorage.getItem("csAccount")) {
+        this.alarmAccount = this.alarmAccount;
+      }
+
+      if(localStorage.getItem("systemType")) {
+        this.systemTypePreselected = true;
+        this.systemTypeID = this.systemType;
+        // set SystemTypeID (required)
+        this.incentiveDashboardForm.controls["SystemTypeID"].setValue(this.customer_System_id);
+      }
+      
+      if(localStorage.getItem("panelType")) {
+        this.panelTypePreselected = true;
+        this.panelTypeID = this.panelTypeID;
+      }
+
+      if(localStorage.getItem("panel_Location")) {
+        this.panel_Location = this.panel_Location;
+      }
+
+      if(localStorage.getItem("centralStation")) {
+        this.centralStationPreselected = true;
+        this.centralStationID = this.centralStationID;
+      }
 
       if(!isNaN(parseFloat(this.recurring))) {
         this.incentiveDashboardForm.controls["Recurring"].setValue(this.recurring);
@@ -1094,16 +1137,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       localStorage.removeItem('signalsTested');
       localStorage.removeItem('checkBoxAutoInsertList');
       localStorage.removeItem('totalEquipMatCalc');
-      // localStorage.removeItem('customer_Id');
-      // localStorage.removeItem('customer_Site_Id');
-      // localStorage.removeItem('customer_System_Id');
-      // localStorage.removeItem('ticket_Number');
-      // localStorage.removeItem('customer_Number');
-      // localStorage.removeItem('customer_Name');
-      // localStorage.removeItem("business_Name");
-      // localStorage.removeItem("address_1");
-      // localStorage.removeItem("systemType");
-      // localStorage.removeItem("csAccount");
+      localStorage.removeItem('customer_Id');
+      localStorage.removeItem('customer_Site_Id');
+      localStorage.removeItem('customer_System_Id');
+      localStorage.removeItem('ticket_Number');
+      localStorage.removeItem('customer_Number');
+      localStorage.removeItem('customer_Name');
+      localStorage.removeItem("business_Name");
+      localStorage.removeItem("address_1");
+      localStorage.removeItem("systemType");
+      localStorage.removeItem("csAccount");
+      localStorage.removeItem("panelType");
+      localStorage.removeItem("panel_Location");
+      localStorage.removeItem("centralStation");
+      localStorage.removeItem("panel_Type_Id");
+      localStorage.removeItem("central_Station_ID");
 
       this.router.navigate(['incentive-entry/']);
     }
@@ -1242,7 +1290,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                         this.alarmAccount = res.accountNumber;
                         this.systemTypeID = res.systemType;
                         this.panelTypeID = res.panelType;
-                        this.panelLocation = res.panelLocation;
+                        this.panel_Location = res.panelLocation;
                         this.centralStationID = res.centralStationID;
                         this.additionalInfo = res.additionalInfo;
                       }
@@ -1454,7 +1502,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.alarmAccount = '';
       this.systemTypeID ='';
       this.panelTypeID = '';
-      this.panelLocation = '';
+      this.panel_Location = '';
       this.centralStationID = '';
       this.additionalInfo = '';
 
@@ -1483,7 +1531,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                 this.alarmAccount = res.accountNumber;
                 this.systemTypeID = res.systemType;
                 this.panelTypeID = res.panelType;
-                this.panelLocation = res.panelLocation;
+                this.panel_Location = res.panelLocation;
                 this.centralStationID = res.centralStationID;
                 this.additionalInfo = res.additionalInfo;
               }
@@ -1502,7 +1550,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.alarmAccount = '';
       this.systemTypeID ='';
       this.panelTypeID = '';
-      this.panelLocation = '';
+      this.panel_Location = '';
       this.centralStationID = '';
       this.additionalInfo = '';
 
@@ -1520,7 +1568,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.alarmAccount = res.accountNumber;
           this.systemTypeID = res.systemType;
           this.panelTypeID = res.panelType;
-          this.panelLocation = res.panelLocation;
+          this.panel_Location = res.panelLocation;
           this.centralStationID = res.centralStationID;
           this.additionalInfo = res.additionalInfo;
         }
@@ -1676,32 +1724,87 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onSubmit(form: FormGroup) {
     //Incentive_ADD_Start
-    console.log('@UserEmailAddress :' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
-    console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
+    console.log('@UserEmailAddress:' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
+    if(localStorage.getItem('customer_Id')) {
+      this.customer_id = localStorage.getItem('customer_Id');
+      console.log('@CustomerID:' + this.customer_id)
+    } else {
+      console.log('@CustomerID:' + parseInt(this.id)) // @CustomerID Int,
+    }
+    // console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
     //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
-    console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
-    console.log('@CustomerSystemID :' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
-    console.log('@AlarmAccount :' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
-    console.log('@SystemTypeID :' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
-    console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
-    console.log('@PanelLocation :' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
-    console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    console.log('@AdditionalInfo :' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
-    console.log('@PartnerInvoiceNumber :' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
-    console.log('@PartnerInvoiceDate :' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
-    console.log('@ContractDate :' + form.value.ContractDate) // @ContractDate DateTime,
-    console.log('@ContractTerm :' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
-    console.log('@RenewalMonths :' + parseInt(this.renewalMonths));
-    console.log('@ServiceIncluded :' + form.value.ServiceIncluded);
+    if(localStorage.getItem('customer_Site_Id')) {
+      this.customer_Site_id = localStorage.getItem('customer_Site_Id')
+      console.log('@CustomerSiteID:' + this.customer_Site_id)
+    } else {
+      console.log('@CustomerSiteID:' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
+    }
+    // console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
 
-    console.log('@PartnerComments :' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
+    if(localStorage.getItem('customer_System_Id')){
+      this.customer_System_id = localStorage.getItem('customer_System_Id')
+      console.log('@CustomerSystemID:' + this.customer_System_id)
+    } else {
+      console.log('@CustomerSystemID:' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
+    }
+    // console.log('@CustomerSystemID :' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
+    console.log('@AlarmAccount:' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
+    console.log('@SystemTypeID:' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
+    if(localStorage.getItem('panel_Type_Id')) {
+      this.panelTypeID = localStorage.getItem('panel_Type_Id')
+      console.log('@PanelTypeID:' + this.panelTypeID)
+    } else {
+      console.log('@PanelTypeID:' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
+    }
+    // console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
+    console.log('@PanelLocation:' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
+    if(localStorage.getItem('central_Station_ID')) {
+      this.centralStationID = localStorage.getItem('central_Station_ID')
+      console.log('@CentralStationID:' + this.centralStationID)
+    } else {
+      console.log('@CentralStationID:' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+    }
+    // console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+    console.log('@AdditionalInfo:' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    console.log('@PartnerInvoiceNumber:' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
+    console.log('@PartnerInvoiceDate:' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
+    console.log('@ContractDate:' + form.value.ContractDate) // @ContractDate DateTime,
+    console.log('@ContractTerm:' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+    console.log('@RenewalMonths:' + parseInt(this.renewalMonths));
+    console.log('@ServiceIncluded:' + form.value.ServiceIncluded);
+
+    console.log('@PartnerComments:' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
-    this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
-    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id); //fix for error encountered on 06/23/2021
+    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
+    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer_id); //other way breaks if customer pre-selected
+    if(localStorage.getItem('customer_Id')) {
+      this.incentiveDashboardForm.controls["CustomerID"].setValue(parseInt(this.customer_id));
+    } else {
+      this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer_id); //other way breaks if customer pre-selected
+    }
+    if(localStorage.getItem('customer_Site_Id')) {
+      this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(parseInt(this.customer_Site_id))
+    } else {
+      this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
+    }
+    // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
+    if(localStorage.getItem('customer_System_Id')) {
+      this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(parseInt(this.customer_System_id))
+    } else {
+      this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id); //fix for error encountered on 06/23/2021
+    }
+    // this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id); //fix for error encountered on 06/23/2021
     this.incentiveDashboardForm.controls['SystemTypeID'].setValue(parseInt(form.value.SystemTypeID));
-    this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
-    this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id);
+    if(localStorage.getItem('panel_Type_Id')) {
+      this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(this.panelTypeID))
+    } else {
+      this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
+    }
+    // this.incentiveDashboardForm.controls['PanelTypeID'].setValue(parseInt(form.value.PanelTypeID));
+    if(localStorage.getItem('central_Station_ID')) {
+      this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(this.centralStationID))
+    } 
 
     // confirm('Click ok to confirm form submission')
 
@@ -1990,17 +2093,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }
         )
       })),
-      // concatMap(() => this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
-      //   this.updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
-      //   console.log(this.updateRecurringWithJobID)
-      //   return this.routeService.postIncentive_Add_Recurring(this.updateRecurringWithJobID).pipe(
-      //     tap(
-      //       (res)=>{
-      //         console.log(res)
-      //       }
-      //     )
-      //   )
-      // })),
       tap((res) => console.log('Recurring result: ', res)),
       map(() => this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(r => {
         this.updateEquipMatWithJobID = addToObject(r, 'IncentiveID', this.job_id);
@@ -2024,16 +2116,34 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       tap((res) => console.log('Labor result: ', res)),
       switchMap(result => {
         // INVOICE //
-        this.frmData = new FormData();
         // 37 = Sandbox, 6 = Production
+        this.frmData = new FormData();
         this.frmData.append('company_id','37');
-        this.frmData.append('customer_id', this.id);
-
-        this.frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData.append('customer_site_id',this.customerSiteId);
         
-        this.frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData.append('customer_id', this.id);
+        } else {
+          this.frmData.append('customer_id', this.id);
+        }
+
+        // this.frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
+        
+        // this.frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData.append('job_id', this.job_id);
         //this.frmData.append('job_id', '19');
@@ -2069,7 +2179,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           return of(result)
         } else {
           return this.routeService.postCustomerDocumentADD(this.frmData).pipe(
-            map(res => console.log(res.type))
+            map(res => 
+              console.log(res.type)
+            )
+
+            // map(
+            //   event => {
+            //     if (event.type == HttpEventType.UploadProgress) {
+            //       // this.barWidth = Math.round((100 / (event.total || 0) * event.loaded)) + "%";
+            //       this.uploadText = 'Now uploading your invoice...'
+            //     } else if (event.type == HttpEventType.Response) {
+            //       // this.barWidth = "0%";
+            //       this.uploadText = 'Processing...'
+            //     }
+            //   }
+            // )
           )
         }
       }),
@@ -2079,14 +2203,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData2 = new FormData();
         this.frmData2.append('company_id','37');
 
-        // this.frmData2.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-        this.frmData2.append('customer_id', this.id);
+        // this.frmData2.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData2.append('customer_id', this.id);
+        } else {
+          this.frmData2.append('customer_id', this.id);
+        }
 
-        this.frmData2.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData2.append('customer_site_id',this.customerSiteId);
+        // this.frmData2.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData2.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData2.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
         
-        this.frmData2.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData2.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData2.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData2.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData2.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData2.append('job_id', this.job_id);
         //this.frmData2.append('job_id', '19');
@@ -2133,14 +2273,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData3 = new FormData();
         this.frmData3.append('company_id','37');
 
-        // this.frmData3.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-        this.frmData3.append('customer_id', this.id);
+        // this.frmData3.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData3.append('customer_id', this.id);
+        } else {
+          this.frmData3.append('customer_id', this.id);
+        }
 
-        this.frmData3.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData3.append('customer_site_id',this.customerSiteId);
+        // this.frmData3.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData3.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData3.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
         
-        this.frmData3.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData3.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData3.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData3.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData3.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData3.append('job_id', this.job_id);
         //this.frmData3.append('job_id', '19');
@@ -2187,14 +2343,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData4 = new FormData();
         this.frmData4.append('company_id','37');
 
-        // this.frmData4.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-        this.frmData4.append('customer_id', this.id);
+        // this.frmData4.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData4.append('customer_id', this.id);
+        } else {
+          this.frmData4.append('customer_id', this.id);
+        }
 
-        this.frmData4.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData4.append('customer_site_id',this.customerSiteId);
+        // this.frmData4.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData4.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData4.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
         
-        this.frmData4.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData4.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData4.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData4.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData4.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData4.append('job_id', this.job_id);
         //this.frmData4.append('job_id', '19');
@@ -2241,14 +2413,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData5 = new FormData();
         this.frmData5.append('company_id','37');
 
-        // this.frmData5.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-        this.frmData5.append('customer_id', this.id);
+        // this.frmData5.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData5.append('customer_id', this.id);
+        } else {
+          this.frmData5.append('customer_id', this.id);
+        }
 
-        this.frmData5.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData5.append('customer_site_id',this.customerSiteId);
+        // this.frmData5.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData5.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData5.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
         
-        this.frmData5.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData5.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData5.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData5.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData5.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData5.append('job_id', this.job_id);
         //this.frmData5.append('job_id', '19');
@@ -2295,14 +2483,30 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData6 = new FormData();
         this.frmData6.append('company_id','37');
 
-        // this.frmData6.append('customer_id', this.incentiveDashboardForm.get('CustomerID').value);
-        this.frmData6.append('customer_id', this.id);
+        // this.frmData6.append('customer_id', this.id);
+        if(localStorage.getItem('customer_Id')) {
+          this.id = parseInt(localStorage.getItem('customer_Id'));
+          this.frmData6.append('customer_id', this.id);
+        } else {
+          this.frmData6.append('customer_id', this.id);
+        }
 
-        this.frmData6.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        //this.frmData6.append('customer_site_id',this.customerSiteId);
+        // this.frmData6.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        if(localStorage.getItem('customer_Site_Id')) {
+          this.customer_Site_id = parseInt(localStorage.getItem('customer_Site_Id'));
+          this.frmData6.append('customer_site_id', this.customer_Site_id);
+          // this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(this.customer_Site_id)
+        } else {
+          this.frmData6.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
+        }
         
-        this.frmData6.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-        //this.frmData6.append('customer_system_id', this.customerSystemId.toString());
+        // this.frmData6.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        if(localStorage.getItem('customer_System_Id')) {
+          this.customer_System_id = parseInt(localStorage.getItem('customer_System_Id'));
+          this.frmData6.append('customer_system_id', this.customer_System_id);
+        } else {
+          this.frmData6.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
+        }
 
         this.frmData6.append('job_id', this.job_id);
         //this.frmData6.append('job_id', '19');
@@ -2346,7 +2550,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       switchMap(result => 
         this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID).pipe(
         map(res => {
-          debugger
+
           console.log(res.status)
 
           if(res.status === 200) {
@@ -2402,7 +2606,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         localStorage.removeItem('testObject');
         localStorage.removeItem('checkBoxAutoInsertList');
         localStorage.removeItem('results');
-        
+
         this.router.navigate(['incentive-entry/']);
         }, (err: HttpErrorResponse) => {
           alert(err + ' there was a problem. Please contact an administrator');
@@ -2413,364 +2617,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       console.log(res)
     })
 
-    // this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).subscribe(
-    //   res => {
-    //     this.job_id=res;
-    //     var addToObject = function (obj, key, value) {
-    //       // Create a temp object and index variable
-    //       var temp = {};
-    //       var i = 0;
-    //       // Loop through the original object
-    //       for (var prop in obj) {
-    //         if (obj.hasOwnProperty(prop)) {
-    //           // If the indexes match, add the new item
-    //           if (i === key && value) {
-    //             temp[key] = value;
-    //           }
-    //           // Add the current item in the loop to the temp obj
-    //           temp[prop] = obj[prop];
-    //           // Increase the count
-    //           i++;
-    //         }
-    //       }
-    //       // If no index, add to the end
-    //       if (key && value) {
-    //         temp[key] = value;
-    //       }
-    //       return temp;
-    //     };
-    //     this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(r => {
-    //       this.updateRecurringWithJobID = addToObject(r, 'IncentiveID', this.job_id);
-    //       this.routeService.postIncentive_Add_Recurring(this.updateRecurringWithJobID).subscribe(
-    //         result => {
-    //           console.log(result)
-    //         }
-    //       )
-    //     });
-    //     this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-    //       this.updateEquipMatWithJobID = addToObject(element, 'IncentiveID', this.job_id); 
-    //       this.routeService.postIncentive_Add_Equipment(this.updateEquipMatWithJobID).subscribe(
-    //         result => {
-    //           console.log(result)
-    //         }
-    //       )
-    //     });
-    //     this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(l => {
-    //       this.updateLaborChargesWithJobID = addToObject(l, 'IncentiveID', this.job_id);
-    //       this.routeService.postIncentive_Add_Labor(this.updateLaborChargesWithJobID).subscribe(
-    //         result => {
-    //           console.log(result);
-              
-    //         }
-    //       )
-    //     });
-
-    //     // INVOICE //
-    //     this.frmData = new FormData();
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData.append('company_id','37');
-    //     this.frmData.append('customer_id', this.id);
-
-    //     this.frmData.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-
-    //     this.frmData.append('job_id', this.job_id);
-    //     this.frmData.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData.append('file_name', this.file_name);
-    //     this.frmData.append('file_size', this.file_size);
-    //     this.frmData.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' '));
-    //     this.frmData.append('document_ext', '*Contracts');
-    //     this.frmData.append('user_code', 'TPC');
-    //     //this.frmData.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData.append('user_description', 'Invoice');
-    //     this.frmData.append('reference1', null);
-    //     this.frmData.append('reference2', null);
-    //     this.frmData.append('reference3', null);
-    //     this.frmData.append('reference4', null);
-    //     this.frmData.append("file_data", this.selectedInvoiceFile);
-    //     this.frmData.append('document_id', '1');
-
-    //     // Display the key/value pairs
-    //     console.log(Object.entries(this.frmData));//returns an empty array!
-    //     var options = {content: this.frmData};
-
-    //     // SITE VISIT //
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData2 = new FormData();
-    //     this.frmData2.append('company_id','37');
-
-    //     this.frmData2.append('customer_id', this.id);
-
-    //     this.frmData2.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData2.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-
-    //     this.frmData2.append('job_id', this.job_id);
-    //     this.frmData2.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData2.append('file_name', this.site_visit_file_name);
-    //     this.frmData2.append('file_size', this.site_visit_file_size);
-    //     this.frmData2.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); 
-    //     this.frmData2.append('document_ext', '*Contracts');
-    //     this.frmData2.append('user_code', 'TPC');
-    //     //this.frmData2.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData2.append('user_description', 'Site Visit');
-    //     this.frmData2.append('reference1', null);
-    //     this.frmData2.append('reference2', null);
-    //     this.frmData2.append('reference3', null);
-    //     this.frmData2.append('reference4', null);
-    //     this.frmData2.append("file_data", this.selectedSiteVisitFile);
-    //     this.frmData2.append('document_id', '1');
-
-    //     // CONTRACT //
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData3 = new FormData();
-    //     this.frmData3.append('company_id','37');
-
-    //     this.frmData3.append('customer_id', this.id);
-
-    //     this.frmData3.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData3.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-
-    //     this.frmData3.append('job_id', this.job_id);
-    //     //this.frmData3.append('job_id', '19');
-    //     this.frmData3.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData3.append('file_name', this.contract_file_name);
-    //     this.frmData3.append('file_size', this.contract_file_size);
-    //     this.frmData3.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); 
-    //     this.frmData3.append('document_ext', '*Contracts');
-    //     this.frmData3.append('user_code', 'TPC');
-    //     //this.frmData3.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData3.append('user_description', 'Contract');
-    //     this.frmData3.append('reference1', null);
-    //     this.frmData3.append('reference2', null);
-    //     this.frmData3.append('reference3', null);
-    //     this.frmData3.append('reference4', null);
-    //     this.frmData3.append("file_data", this.selectedContractFile);
-    //     this.frmData3.append('document_id', '1');
-
-    //     // SUBSCRIBER FORM //
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData4 = new FormData();
-    //     this.frmData4.append('company_id','37');
-
-    //     this.frmData4.append('customer_id', this.id);
-
-    //     this.frmData4.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData4.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-
-    //     this.frmData4.append('job_id', this.job_id);
-    //     this.frmData4.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData4.append('file_name', this.subscriber_file_name);
-    //     this.frmData4.append('file_size', this.subscriber_file_size);
-    //     this.frmData4.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); 
-    //     this.frmData4.append('document_ext', '*Contracts');
-    //     this.frmData4.append('user_code', 'TPC');
-    //     //this.frmData4.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData4.append('user_description', 'Subscriber Form');
-    //     this.frmData4.append('reference1', null);
-    //     this.frmData4.append('reference2', null);
-    //     this.frmData4.append('reference3', null);
-    //     this.frmData4.append('reference4', null);
-    //     this.frmData4.append("file_data", this.selectedSubscriberFile);
-    //     this.frmData4.append('document_id', '1');
-
-    //     // OTHER DOCUMENT 1 //
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData5 = new FormData();
-    //     this.frmData5.append('company_id','37');
-
-    //     this.frmData5.append('customer_id', this.id);
-
-    //     this.frmData5.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData5.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-
-    //     this.frmData5.append('job_id', this.job_id);
-    //     this.frmData5.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData5.append('file_name', this.other_Document1_file_name);
-    //     this.frmData5.append('file_size', this.other_Document1_file_size);
-    //     this.frmData5.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); 
-    //     this.frmData5.append('document_ext', '*Contracts');
-    //     this.frmData5.append('user_code', 'TPC');
-    //     //this.frmData5.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData5.append('user_description', 'Other Document 1');
-    //     this.frmData5.append('reference1', null);
-    //     this.frmData5.append('reference2', null);
-    //     this.frmData5.append('reference3', null);
-    //     this.frmData5.append('reference4', null);
-    //     this.frmData5.append("file_data", this.selectedOtherDocument1File);
-    //     this.frmData5.append('document_id', '1');
-
-    //     // OTHER DOCUMENT 2 //
-    //     // 37 = Sandbox, 6 = Production
-    //     this.frmData6 = new FormData();
-    //     this.frmData6.append('company_id','37');
-
-    //     this.frmData6.append('customer_id', this.id);
-
-    //     this.frmData6.append('customer_site_id', this.incentiveDashboardForm.get('CustomerSiteID').value);
-        
-    //     this.frmData6.append('customer_system_id', this.incentiveDashboardForm.get('CustomerSystemID').value);
-    //     //this.frmData6.append('customer_system_id', this.customerSystemId.toString());
-
-    //     this.frmData6.append('job_id', this.job_id);
-    //     this.frmData6.append('security_level', this.security_level);
-
-    //     //This should be Invoice, SiteVisit, Contract, SubscriberForm, OtherDocument1, or OtherDocument2
-    //     this.frmData6.append('file_name', this.other_Document2_file_name);
-    //     this.frmData6.append('file_size', this.other_Document2_file_size);
-    //     this.frmData6.append('upload_date', new Date().toISOString().slice(0, 19).replace('T',' ')); // get today's date
-    //     this.frmData6.append('document_ext', '*Contracts');
-    //     this.frmData6.append('user_code', 'TPC');
-    //     //this.frmData6.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-    //     this.frmData6.append('user_description', 'Other Document 2');
-    //     this.frmData6.append('reference1', null);
-    //     this.frmData6.append('reference2', null);
-    //     this.frmData6.append('reference3', null);
-    //     this.frmData6.append('reference4', null);
-    //     this.frmData6.append("file_data", this.selectedOtherDocument2File);
-    //     this.frmData6.append('document_id', '1');
-
-    //     var updateIncentiveAddFinishWithJobID = new Incentive_ADD_Finish();
-    //     updateIncentiveAddFinishWithJobID.incentiveID = this.job_id;
-    //     updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
-    //     updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
-    //     updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
-
-    //     this.routeService.postIncentive_Add_Recurring(this.updateRecurringWithJobID).pipe(
-    //       switchMap(result => 
-    //         this.routeService.postIncentive_Add_Equipment(this.updateEquipMatWithJobID)),
-    //         switchMap(result => 
-    //           this.routeService.postIncentive_Add_Labor(this.updateLaborChargesWithJobID)),
-    //           switchMap(result => {
-    //             if(!this.file_name) {
-    //               console.log(this.file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData)
-    //             }
-    //           }),
-    //           switchMap(result => {
-    //             if(!this.site_visit_file_name) {
-    //               console.log(this.site_visit_file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData2)
-    //             }
-    //           }),
-    //           switchMap(result => {
-    //             if(!this.contract_file_name) {
-    //               console.log(this.contract_file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData3)
-    //             }
-    //           }),
-    //           switchMap(result => {
-    //             if(!this.subscriber_file_name) {
-    //               console.log(this.subscriber_file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData4)
-    //             }
-    //           }),
-    //           switchMap(result => {
-    //             if(!this.other_Document1_file_name) {
-    //               console.log(this.other_Document1_file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData5)
-    //             }
-    //           }),
-    //           switchMap(result => {
-    //             if(!this.other_Document2_file_name) {
-    //               console.log(this.other_Document2_file_name)
-    //               return of(result)
-    //             } else {
-    //               return this.routeService.postCustomerDocumentADD(this.frmData6)
-    //             }
-    //           }),
-    //           switchMap(result => this.routeService.postIncentive_ADD_Finish(updateIncentiveAddFinishWithJobID))
-        
-    //   ).subscribe(res => {
-    //     console.log(res.status)
-
-    //     if(res.status === 200) {
-    //       this.flashMessage.show('Your form was uploaded sucessfully', {
-    //         cssClass: 'text-center alert-success',
-    //         timeout: 5000
-    //       })
-    //     }
-    //     console.log('Finished!... ');
-
-    //     this.spinnerService.hide();
-
-    //     //localStorage.removeItem('installCompanyID');
-    //     localStorage.removeItem('totalRecurringCalc');
-    //     localStorage.removeItem('totalEquipMatCalc');
-    //     localStorage.removeItem('totalLaborChargesCalc');
-    //     localStorage.removeItem('invoiceDate');
-    //     localStorage.removeItem('invoiceNumber');
-    //     localStorage.removeItem('invoiceTotal');
-    //     localStorage.removeItem('recurringentry');
-    //     localStorage.removeItem('equipmatentry');
-    //     localStorage.removeItem('laborchargesentry');
-    //     localStorage.removeItem('invoiceName');
-    //     localStorage.removeItem('invoiceFileSize');
-    //     localStorage.removeItem('invoice');
-    //     localStorage.removeItem('subscriberForm');
-    //     localStorage.removeItem('subscriberFormName');
-    //     localStorage.removeItem('siteVisit');
-    //     localStorage.removeItem('siteVisitName');
-    //     localStorage.removeItem('otherDocument1');
-    //     localStorage.removeItem('otherDocument1Name');
-    //     localStorage.removeItem('contract');
-    //     localStorage.removeItem('contractName');
-    //     localStorage.removeItem('otherDocument2');
-    //     localStorage.removeItem('otherDocument2Name');
-    //     localStorage.removeItem('contractDate');
-    //     localStorage.removeItem('contractTerm');
-    //     localStorage.removeItem('serviceIncluded');
-    //     localStorage.removeItem('customerId');
-    //     localStorage.removeItem('customerName');
-    //     localStorage.removeItem('customerSiteName');
-    //     localStorage.removeItem('customerSystemInformation');
-    //     localStorage.removeItem('alarmAccount');
-    //     localStorage.removeItem('systemType');
-    //     localStorage.removeItem('panelType');
-    //     localStorage.removeItem('panelLocation');
-    //     localStorage.removeItem('centralStationID');
-    //     localStorage.removeItem('customerSiteId');
-    //     localStorage.removeItem('renewal');
-    //     localStorage.removeItem('partnerTaxAmount');
-    //     localStorage.removeItem('additionalInfo');
-    //     localStorage.removeItem('partnerComments');
-    //     localStorage.removeItem('signalsTested');
-    //     localStorage.removeItem('testObject');
-    //     localStorage.removeItem('checkBoxAutoInsertList');
-    //     localStorage.removeItem('results');
-
-    //     this.router.navigate(['incentive-entry/']); 
-        
-    //   }, (err: HttpErrorResponse) => {
-    //     alert(err + ' there was a problem. Please contact an administrator');
-    //     this.spinnerService.hide();
-    //   })} 
-    // )  
-     // end switchmap
   }
 
   getFileData(e) {

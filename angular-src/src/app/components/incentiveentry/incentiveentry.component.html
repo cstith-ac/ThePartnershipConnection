@@ -154,7 +154,7 @@
                                 >
                             </div>
                         </div>
-                        <div class="mt-5 d-none">
+                        <div class="mt-5">
                             <p class="mb-0">If Service Assigned by Alarm Connections</p>
                             <form class="form-group">
                                 <label class="mr-2">Alarm Connections Ticket #</label>
@@ -232,7 +232,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let item of partnerServiceListingExtended | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">  
-                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number, item.customer_Number, item.customer_Name, item.business_Name, item.address_1, item.systemType, item.csAccount)" class="hyperlink">{{ item.ticket_Number }}</td>
+                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number, item.customer_Number, item.customer_Name, item.business_Name, item.address_1, item.systemType, item.csAccount, item.panelType, item.panel_Location, item.centralStation, item.panel_Type_Id, item.central_Station_ID)" class="hyperlink">{{ item.ticket_Number }}</td>
                                                             <td>{{ item.creation_Date | date }}</td>
                                                             <td>{{ item.problem_Code }}</td>
                                                             <td>{{ item.customer_Number }}</td>
@@ -558,9 +558,9 @@
                                     </div>
                                 </ng-template>
 
-                                <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+                                <!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
                                     <p style="color: white">Please Wait...</p>  
-                                </ngx-spinner>
+                                </ngx-spinner> -->
                             </ng-template>
                         </div>
                         <div class="mt-5">

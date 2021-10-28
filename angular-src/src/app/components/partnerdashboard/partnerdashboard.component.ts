@@ -194,7 +194,7 @@ export class PartnerdashboardComponent implements OnInit {
           this.spinnerService.hide();
           this.flashMessage.show('Your requested data is displayed below', {
             cssClass: 'text-center alert-success',
-            timeout: 5000
+            timeout: 2000
           });
         }
         this.partnerLandingPage = res.body;
