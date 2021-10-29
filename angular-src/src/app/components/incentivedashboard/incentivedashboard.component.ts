@@ -53,6 +53,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   @ViewChild("customerSearchIcon") divCustomerSearchIcon: ElementRef;
   @ViewChild("siteSearchIcon") divSiteSearchIcon: ElementRef;
   @ViewChild("systemSearchIcon") divSystemSearchIcon: ElementRef;
+  @ViewChild("newSiteDisplay") divNewSiteDisplay: ElementRef;
+  @ViewChild("newSystemDisplayCheckbox") divNewSystemDisplayCheckbox: ElementRef;
+  @ViewChild("newSystemDisplayLabel") divNewSystemDisplayLabel: ElementRef;
   @ViewChild("invoice") divInvoice: ElementRef;
   @ViewChild("subscriberForm") divSubscriberForm: ElementRef;
   @ViewChild("siteVisit") divSiteVisit: ElementRef;
@@ -812,6 +815,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.isSiteSelectionFirst = true;
         this.isRemoveDropdown = false;
         this.divSiteSearchIcon.nativeElement.style.display = 'none';
+        this.divNewSiteDisplay.nativeElement.style.display = 'none'
         this.siteName = this.bus_Name_Add1;
         //set CustomerSiteID
         //this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
@@ -821,6 +825,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.isSystemSelectionFirst = true;
         this.isRemoveSystemDropdown = false;
         this.divSystemSearchIcon.nativeElement.style.display = 'none';
+        this.divNewSystemDisplayCheckbox.nativeElement.style.display = 'none';
+        this.divNewSystemDisplayLabel.nativeElement.style.display = 'none';
         this.systemCode = this.sysType_csAccount;
         // set CustomerSystemID
         //this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);

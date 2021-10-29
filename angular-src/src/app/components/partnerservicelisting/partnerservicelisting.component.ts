@@ -81,15 +81,25 @@ export class PartnerservicelistingComponent implements OnInit {
 
     this.spinnerService.show();
 
-    this.routeService.getPartnerServiceListing().subscribe(
-    res => {
-      if(res) {
-        this.spinnerService.hide()
+    // this.routeService.getPartnerServiceListing().subscribe(
+    // res => {
+    //   if(res) {
+    //     this.spinnerService.hide()
+    //   }
+      
+    //   this.partnerServiceListing = [].concat(res);
+      
+    // });
+
+    this.routeService.getPartnerServiceListingExtended().subscribe(
+      res => {
+        if(res) {
+          this.spinnerService.hide()
+        }
+
+        this.partnerServiceListing = [].concat(res);
       }
-      
-      this.partnerServiceListing = [].concat(res);
-      
-    });
+    )
 
     this.partnerServiceListingForm = this.fb.group({
       EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,

@@ -52,10 +52,10 @@
                                 [ngModelOptions]="{standalone: true}">
                             </div>
                         
-                            <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)">
+                            <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)" *ngIf="!customerPreselected">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <span class="pl-4" (click)="routeToNewCustomer()">
+                            <span class="pl-4" (click)="routeToNewCustomer()" *ngIf="!customerPreselected">
                                 <i class="fas fa-plus-circle"></i>
                                 New Customer
                             </span>
@@ -95,7 +95,7 @@
                             <span class="ml-2" #siteSearchIcon (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <span class="pl-4" (click)="routeToNewSite()">
+                            <span class="pl-4" #newSiteDisplay (click)="routeToNewSite()">
                                 <i class="fas fa-plus-circle"></i>
                                 New Site
                             </span>
@@ -135,13 +135,14 @@
                                 <i class="fas fa-search"></i>
                             </span>
                             <input 
+                                #newSystemDisplayCheckbox
                                 type="checkbox" 
                                 class="form-control form-check-input ml-3" 
                                 [(ngModel)]="newSystem" 
                                 formControlName="NewSystem"
                                 (change)="onNewSystemCheckedUnchecked($event)"
                             >
-                            <label class="col-sm-2 col-form-label form-check-label">This is a new system</label>
+                            <label class="col-sm-2 col-form-label form-check-label" #newSystemDisplayLabel>This is a new system</label>
                         </div>
 
                         <div class="form-group form-inline">

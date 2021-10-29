@@ -41,6 +41,7 @@ export class IncentiveentryComponent implements OnInit {
   checkBoxAutoInsertList: CheckBoxAutoInsertList[];
   partnerServiceListingExtended: PartnerServiceListingExtended[];
   incentiveEntryForm: FormGroup;
+  incentiveEntryMessageForm: FormGroup;
   submitted = false;
   installCompanyID;
   companyName;
@@ -84,6 +85,7 @@ export class IncentiveentryComponent implements OnInit {
   clickedID;
   clickedCompanyName;
   clickedPartnerCode;
+  clickedMessage;
 
   customer_Id;
   customer_Site_Id;
@@ -321,7 +323,11 @@ export class IncentiveentryComponent implements OnInit {
       CreditCardAutoPay: [{value:'n', disabled:true, checked:false}],
       ACHAutopay: [{value:'n', disabled:true, checked:false}],
       TicketNumber: this.ticket_Number
-    })
+    });
+
+    this.incentiveEntryMessageForm = this.fb.group({
+      Message: ""
+    });
 
     //this.incentiveEntryForm.controls['ServiceIncluded'].setValue(true)
     //console.log(this.incentiveEntryForm.controls['ServiceIncluded'].value)
@@ -712,16 +718,16 @@ export class IncentiveentryComponent implements OnInit {
     $("#messageModal").modal("show");
   }
 
-  onSubmitMessage(form: FormGroup) {
+  onSubmitIncentiveEntryMessage(form: FormGroup) {
     console.log('message')
-    // this.routeService.postPartnerAddNote(this.partnerServiceListingForm.value).subscribe(
-    //   res => {
-    //     //console.log(res)
-    //     $("#detailsModal").modal("hide");
-    //     $("#memoModal").modal("hide");
-    //   },
-    //   error => console.log('error: ', error)
-    // )
+    this.routeService.postPartnerAddNote(this.incentiveEntryMessageForm.value).subscribe(
+      res => {
+        //console.log(res)
+        $("#partnerDetails").modal("hide");
+        $("#messageModal").modal("hide");
+      },
+      error => console.log('error: ', error)
+    )
   }
 
   onAddDocument() {

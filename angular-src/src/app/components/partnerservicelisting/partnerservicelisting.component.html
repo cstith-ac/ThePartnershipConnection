@@ -10,36 +10,38 @@
                 <thead>
                     <tr>
                         <th scope="col">Ticket Number</th>
-                        <th scope="col">3G Status</th>
-                        <th scope="col">Address 1</th>
-                        <th scope="col">City, State, Zip</th>
                         <th scope="col">Created On</th>
-                        <th scope="col">Cancel Status</th>
-                        <th scope="col">Problem</th>
-                        <th scope="col">Collections Status</th>
+                        <th scope="col">Problem Code</th>
+                        <th scope="col">3G Status</th>
+                        <th scope="col">Alarm Account</th>
                         <th scope="col">Customer Number</th>
                         <th scope="col">Customer Name</th>
-                        <th scope="col">Customer Contact</th>
+                        <!-- <th scope="col">Customer Contact</th>
                         <th scope="col">Phone #</th>
-                        <th scope="col">Customer Contact #</th>
+                        <th scope="col">Customer Contact #</th> -->
+                        <th scope="col">Address 1</th>
+                        <th scope="col">City, State, Zip</th>
+                        <th scope="col">Cancel Status</th>
+                        <th scope="col">Collection Status</th>
                         <th scope="col">Comments</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of partnerServiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                         <td id="{{ item.service_Ticket_Id }}" class="hyperlink" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td>
-                        <td>{{ item.status3G }}</td>
-                        <td>{{ item.address_1 }}</td>
-                        <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
                         <td>{{ item.creation_Date | date }}</td>
-                        <td>{{ item.cancelStatus }}</td>
                         <td>{{ item.problem_Code }}</td>
-                        <td>{{ item.collectionQueue }}</td>
+                        <td>{{ item.status3G }}</td>
+                        <td>{{ item.csAccount }}</td>
                         <td>{{ item.customer_Number }}</td>
                         <td>{{ item.customer_Name }}</td>
-                        <td>{{ item.contactName }}</td>
+                        <!-- <td>{{ item.contactName }}</td>
                         <td>{{ item.sitePhone | phone }}</td>
-                        <td>{{ item.contactPhone | phone }}</td>
+                        <td>{{ item.contactPhone | phone }}</td> -->
+                        <td>{{ item.address_1 }}</td>
+                        <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
+                        <td>{{ item.cancelStatus }}</td>
+                        <td>{{ item.collectionQueue }}</td>
                         <td>{{ item.customerComments }}</td>
                     </tr>
                 </tbody>
