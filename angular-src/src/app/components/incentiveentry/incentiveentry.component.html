@@ -163,31 +163,14 @@
                                     [(ngModel)]="ticket_Number" 
                                     [ngModelOptions]="{standalone: true}"
                                     (keyup)="onChangeGetPartnerServiceListingExt($event)"
+                                    disabled
                                 >
-                                    <i class="pl-3 fas fa-search text-error search" (click)="openACTicketNumberListModal(acTicketNumberListContent)"></i>
+                                    <i class="pl-3 fas fa-search text-success search mr-3" (click)="onOpenTicketNumberListModal(acTicketNumberListContent)"></i>
+                                    <i 
+                                    class="pl-3 far fa-trash-alt text-error" 
+                                    (click)="removeTicketNumber()"
+                                ></i>
                             </form>
-
-                            <!-- <label class="col-form-label">Alarm Connections Ticket #</label>
-                            <ng-autocomplete
-                                #ticketNumberRef
-                                [data]="results"
-                                formControlName="TicketNumber"
-                                [searchKeyword]="keyword"
-                                (selected)='selectEvent($event)'
-                                (inputChanged)='getServerResponse($event)'
-                                (inputFocused)='onFocused($event)' 
-                                (inputCleared)="searchCleared()"
-                                historyIdentifier="results"
-                                [notFoundTemplate]="notFoundTemplate"
-                                [placeholder]="'Type a ticket number...'"
-                            ></ng-autocomplete>
-                            <ng-template #itemTemplate let-item>
-                                <a [innerHTML]="item.ticket_Number"></a>
-                            </ng-template>
-
-                            <ng-template #notFoundTemplate let-notFound>
-                                <div [innerHTML]="notFound"></div>
-                            </ng-template> -->
 
                             <ng-template #acTicketNumberListContent let-modal>
                                 <div class="modal-header">
@@ -207,16 +190,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- <div class="form-group form-inline">
-                                                Search by typing a Company Name:
-                                                <input 
-                                                    type="text" 
-                                                    class="form-control ml-2" 
-                                                    name="searchTerm" 
-                                                    [(ngModel)]="searchTerm" 
-                                                    (input)="search($event.target.value)"
-                                                >
-                                            </div> -->
                                             <div class="table-responsive">
                                                 <table class="table align-items-center">
                                                     <thead>
@@ -232,7 +205,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let item of partnerServiceListingExtended | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">  
-                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number, item.customer_Number, item.customer_Name, item.business_Name, item.address_1, item.systemType, item.csAccount, item.panelType, item.panel_Location, item.centralStation, item.panel_Type_Id, item.central_Station_ID)" class="hyperlink">{{ item.ticket_Number }}</td>
+                                                            <td id="{{ item.service_Ticket_Id }}" (click)="onGetCustomerInvoiceInfo(item.customer_Id, item.customer_Site_Id, item.customer_System_Id, item.ticket_Number, item.customer_Number, item.customer_Name, item.business_Name, item.address_1, item.systemType, item.csAccount, item.panelType, item.panel_Location, item.centralStation, item.panel_Type_Id, item.central_Station_ID, item.system_Id)" class="hyperlink">{{ item.ticket_Number }}</td>
                                                             <td>{{ item.creation_Date | date }}</td>
                                                             <td>{{ item.problem_Code }}</td>
                                                             <td>{{ item.customer_Number }}</td>
@@ -241,7 +214,7 @@
                                                             <td>{{ item.address_1 }} {{ item.address_2 }} {{ item.address_3 }}</td>
                                                             <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
                                                             <td>
-                                                                <button class="btn btn-secondary" (click)="onOpenPartnerDetailsModal(item.customer_Id, item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)"><i class="fas fa-search pr-2"></i>More</button>
+                                                                <button class="btn btn-secondary" (click)="onOpenPartnerDetailsModal(partnerDetails,item.customer_Id, item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)"><i class="fas fa-search pr-2"></i>More</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -260,7 +233,7 @@
                                 </div>
 
                                 <!-- Partner Details Modal -->
-                                <div class="modal fade" id="partnerDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <!-- <div class="modal fade" id="partnerDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" id="maxWidth-1160">
                                         <div class="modal-content">
                                             <div class="modal-header pb-0 pl-2">
@@ -279,7 +252,7 @@
                                                                     <span class="subtitle-2 high-emphasis">Ticket #</span> 
                                                                 </p>
                                                                 <p>
-                                                                    <span class="body-2 medium-emphasis">{{ ticket_Number }}</span>
+                                                                    <span class="body-2 medium-emphasis">{{ ticket_NumberDetails }}</span>
                                                                 </p>
                                                             </div>
                                                             <div class="col">
@@ -328,7 +301,7 @@
                                                                         </p>
                                                                         <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
                                                                         
-                                                                        <!-- <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
+                                                                        <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onClickAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button>
                                                                         
                                                                         <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
                                                                     
@@ -488,10 +461,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Message Modal -->
-                                <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <!-- <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" id="maxWidth-900">
                                         <div class="modal-content">
                                             <div class="modal-header pb-0 pl-2">
@@ -531,36 +504,304 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div> -->
+
+                                
+                            </ng-template>
+
+                            <ng-template #partnerDetails let-modal>
+                                <div class="modal-header pb-0 pl-2">
+                                    <!-- <div class="col-md-12 mb-2">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div> -->
+                                    <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+                                        <span aria-label="true">&times;</span>
+                                    </button>
                                 </div>
-
-                                <ng-template #comingSoon>
-                                    <div class="modal-header">
-                                        <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
-                                            <span aria-label="true">&times;</span>
-                                        </button> -->
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card">
-                                        <div class="card-header border-0 paddingBottom-14px">
-                                            <div class="row align-items-center">
-                                            <div class="col">
-                                                <h5 class="mb-1 mt-1 text-center headline-5">Document Upload Coming Soon</h5>
+                                <div class="modal-body pt-0">
+                                    <div class="card p-3">
+                                        <div class="card-body">
+                                            <div class="row margin-bottomNegative185">
+                                                <div class="col">
+                                                    <p class="mb-0">
+                                                        <span class="subtitle-2 high-emphasis">Ticket #</span> 
+                                                    </p>
+                                                    <p>
+                                                        <span class="body-2 medium-emphasis">{{ ticket_NumberDetails }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="mb-0">
+                                                        <span class="subtitle-2 high-emphasis">Created On</span>
+                                                    </p>
+                                                    <p>
+                                                        <span class="body-2 medium-emphasis">{{ creation_Date | date }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="mb-0">
+                                                        <span class="subtitle-2 high-emphasis">Problem</span>
+                                                    </p>
+                                                    <p>
+                                                        <span class="body-2 medium-emphasis">{{ problem_Code }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="mb-0">
+                                                        <span class="subtitle-2 high-emphasis">Customer Contact</span>
+                                                    </p>
+                                                    <p>
+                                                        <span class="body-2 medium-emphasis">{{ customer_Name }}</span>
+                                                    </p>
+                                                    <p>
+                                                        <span class="body-2 medium-emphasis">{{ sitePhone | phone }}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card mt-0">
+                                                        <div class="card-body">
+                                                            <p class="mb-0">
+                                                                <span class="subtitle-2 high-emphasis">Alarm Connections Contact</span>
+                                                            </p>
+                                                            <p>
+                                                                <span class="body-2 medium-emphasis">{{ acContact }}</span>
+                                                            </p>
+                                                            <p>
+                                                                <span class="body-2 medium-emphasis">{{ contactPhone | phone }}</span>
+                                                            </p>
+                                                            <p>
+                                                                <span class="body-2 medium-emphasis">
+                                                                    <a href="mailto:{{ acContactEmail }}" class="hyperlink">{{ acContactEmail }}</a>
+                                                                </span>
+                                                            </p>
+                                                            <button type="submit" class="btn btn-block btn-secondary" (click)="onOpenMessageModal(messageModal)"><i class="fas fa-plus pr-2"></i>Message</button>
+                                                            
+                                                            <!-- <button type="submit" class="btn btn-block btn-secondary mt-4 te" (click)="onClickAddDocument()"><i class="fas fa-plus pr-2"></i>Upload File</button> -->
+                                                            
+                                                            <button class="btn btn-block btn-secondary mt-4" (click)="openComingSoonModal(comingSoon)" ><i class="fas fa-plus pr-2"></i>Upload File</button>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body paddingTop-14px">
                                             <div class="row">
-                                            <div class="col-md-12 pt-2 pb-4">
+                                                <div class="col-sm-8">
+                                                    <div class="card mb-0 ml-0">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-4">
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Customer Information</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ customer_Number }} {{ customer_Name }}</span>
+                                                                    </p>
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis text-error">{{ collectionQueue }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 text-error medium-emphasis font-weight-bold">{{ cancelStatus }}</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">RMR</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ customerRMR | currency }}</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Customer Since</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ customer_Since | date }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="subtitle-2 text-error high-emphasis font-weight-bold">{{ cancelStatus }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>     
                                             </div>
+                                            <div class="row mt-2">
+                                                <div class="col-sm-6">
+                                                    <div class="card ml-0">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Site Information</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ business_Name }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ comResStatus }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ address_1 }} </span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ address_2 }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ address_3 }}</span>
+                                                                        <span class="body-2 medium-emphasis">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ sitePhone | phone }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p>System Information</p>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <p class="subtitle-2 high-emphasis text-error">{{ status3G }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">CS Account #</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ csAccount }}</span>
+                                                                    </p>
+                                    
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">System Type</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ systemType }}</span>
+                                                                    </p>
+
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Panel Type</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ panelType }}</span>
+                                                                    </p>
+
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Central Station</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ centralStation }}</span>
+                                                                    </p>
+
+                                                                    <p class="mb-0">
+                                                                        <span class="subtitle-2 high-emphasis">Panel Location</span>
+                                                                    </p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis font-weight-bold">{{ panel_Location }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="row mt-2">
+                                                <div class="col-lg-12">
+                                                    <div class="card mt-0 ml-0">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="subtitle-2 high-emphasis">Problem Description</p>
+                                                                    <p>
+                                                                        <span class="body-2 medium-emphasis">{{ customerComments }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </ng-template>
+
+                            <ng-template #messageModal let-modal>
+                                <div class="modal-header pb-0 pl-2">
+                                    <!-- <div class="col-md-12 mb-2">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div> -->
+                                    <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+                                        <span aria-label="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body pt-0">
+                                    <div class="card p-3">
+                                        <div class="card-body p-0">
+                                          <form [formGroup]="incentiveEntryMessageForm">
+                                            <div class="row">
+                                              <div class="col-md-12">
+                                                <div class="form-group">
+                                                  <label class="col-form-label headline-6 medium-emphasis">Message</label>
+                                                  <textarea 
+                                                    formControlName="Message"
+                                                    class="form-control" 
+                                                    cols="30" 
+                                                    rows="10">
+                                                  </textarea>
+                                                </div>
+                                                <div class="row">
+                                                  <div class="col-md-12">
+                                                    <button type="submit" class="btn btn-secondary" (click)="onSubmitIncentiveEntryMessage(incentiveEntryMessageForm);clickedMessage = true;" [disabled]="clickedMessage"><i class="fas fa-plus pr-2"></i>Submit</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </ng-template>
+
+                            <ng-template #comingSoon>
+                                <div class="modal-header">
+                                    <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+                                        <span aria-label="true">&times;</span>
+                                    </button> -->
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card">
+                                    <div class="card-header border-0 paddingBottom-14px">
+                                        <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-1 mt-1 text-center headline-5">Document Upload Coming Soon</h5>
                                         </div>
                                         </div>
                                     </div>
-                                </ng-template>
-
-                                <!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
-                                    <p style="color: white">Please Wait...</p>  
-                                </ngx-spinner> -->
+                                    <div class="card-body paddingTop-14px">
+                                        <div class="row">
+                                        <div class="col-md-12 pt-2 pb-4">
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
                             </ng-template>
                         </div>
                         <div class="mt-5">

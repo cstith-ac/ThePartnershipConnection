@@ -92,6 +92,7 @@ export class IncentiveentryComponent implements OnInit {
   customer_System_Id;
   service_Ticket_Id;
   ticket_Number;
+  ticket_NumberDetails;
   creation_Date;
   problem_Code;
   contactName;
@@ -121,6 +122,7 @@ export class IncentiveentryComponent implements OnInit {
   central_Station_ID
   panel_Location;
   panel_Type_Id;
+  system_Id;
   customerComments;
   results: any[] = [];
   filterCategory;
@@ -247,6 +249,8 @@ export class IncentiveentryComponent implements OnInit {
       localStorage.removeItem('invoiceDate');
       localStorage.removeItem('invoiceTotal');
       localStorage.removeItem('siteName');
+      localStorage.removeItem('removeSplash');
+
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
@@ -550,6 +554,11 @@ export class IncentiveentryComponent implements OnInit {
       localStorage.removeItem("address_1");
       localStorage.removeItem("systemType");
       localStorage.removeItem("csAccount");
+      localStorage.removeItem("panelType");
+      localStorage.removeItem("panel_Location");
+      localStorage.removeItem("centralStation");
+      localStorage.removeItem("panel_Type_Id");
+      localStorage.removeItem("central_Station_ID");
     }
 
     // this.routeService.getPartnerServiceListingExtended().subscribe(
@@ -560,6 +569,30 @@ export class IncentiveentryComponent implements OnInit {
     //     this.collectionSize = this.partnerServiceListingExtended.length;
     //   }
     // )
+  }
+
+  removeTicketNumber() {
+    this.ticket_Number = '';
+
+    this.serviceIncluded = "n";
+    localStorage.setItem("serviceIncluded", "n");
+    this.incentiveEntryForm.controls["ServiceIncluded"].setValue("n");
+
+    localStorage.removeItem("customer_Id");
+    localStorage.removeItem("customer_Site_Id");
+    localStorage.removeItem("customer_System_Id");
+    localStorage.removeItem("ticket_Number");
+    localStorage.removeItem("customer_Number");
+    localStorage.removeItem("customer_Name");
+    localStorage.removeItem("business_Name");
+    localStorage.removeItem("address_1");
+    localStorage.removeItem("systemType");
+    localStorage.removeItem("csAccount");
+    localStorage.removeItem("panelType");
+    localStorage.removeItem("panel_Location");
+    localStorage.removeItem("centralStation");
+    localStorage.removeItem("panel_Type_Id");
+    localStorage.removeItem("central_Station_ID");
   }
 
   selectEvent(item) {
@@ -583,9 +616,10 @@ export class IncentiveentryComponent implements OnInit {
     this.incentiveEntryForm.controls["TicketNumber"].reset();
   }
 
-  openACTicketNumberListModal(acTicketNumberListContent) {
+  // Opens the Alarm Connections Ticket # modal
+  onOpenTicketNumberListModal(acTicketNumberListContent) {
     this.modalService.open(acTicketNumberListContent, {
-      windowClass: 'my-class1250',
+      windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'
     });
 
@@ -607,83 +641,16 @@ export class IncentiveentryComponent implements OnInit {
     )
   }
 
-  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string, panelType: string, panel_Location: string, centralStation: string, panel_Type_Id: number, central_Station_ID: number) {
-    this.customer_Id = customer_Id;
-    this.customer_Site_Id = customer_Site_Id;
-    this.customer_System_Id = customer_System_Id;
-    this.ticket_Number = ticket_Number;
-    this.customer_Number = customer_Number;
-    this.customer_Name = customer_Name;
-    this.business_Name = business_Name;
-    this.address_1 = address_1;
-    this.systemType = systemType;
-    this.csAccount = csAccount;
-    this.panelType = panelType;
-    this.panel_Location = panel_Location;
-    this.centralStation = centralStation;
-    this.panel_Type_Id = panel_Type_Id;
-    this.central_Station_ID = central_Station_ID;
-
-    localStorage.setItem("customer_Id", this.customer_Id);
-    localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
-    localStorage.setItem("customer_System_Id", this.customer_System_Id);
-    localStorage.setItem("ticket_Number", this.ticket_Number);
-    localStorage.setItem("customer_Number", this.customer_Number);
-    localStorage.setItem("customer_Name", this.customer_Name);
-    localStorage.setItem("business_Name", this.business_Name);
-    localStorage.setItem("address_1", this.address_1);
-    localStorage.setItem("systemType", this.systemType);
-    localStorage.setItem("csAccount", this.csAccount);
-    localStorage.setItem("panelType", this.panelType);
-    localStorage.setItem("panel_Location", this.panel_Location);
-    localStorage.setItem("centralStation", this.centralStation);
-    localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
-    localStorage.setItem("central_Station_ID", this.central_Station_ID);
-
-    this.serviceIncluded = "y";
-    localStorage.setItem("serviceIncluded", "y");
-    this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
-
-    this.modalService.dismissAll();
-  }
-
-  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
-    this.clickedID = installCompanyID;
-    this.clickedCompanyName = companyName;
-    this.clickedPartnerCode = partnerCode;
-
-    this.installCompanyID = this.clickedID;
-    this.companyName = this.clickedCompanyName;
-    this.partnerCode = this.clickedPartnerCode;
-
-    localStorage.setItem('installCompanyID',this.installCompanyID);
-    localStorage.setItem('companyName',this.companyName);
-    localStorage.setItem('partnerCode',this.partnerCode);
-
-    this.modalService.dismissAll();
-    this.searchTerm = '';
-  }
-
-  onOpenPartnerDetailsModal(customer_Id: number, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
-    $("#partnerDetails").modal("show");
-
-    console.log(customer_Id)
-    console.log(ticket_Number)
-    console.log(creation_Date)
-    console.log(problem_Code)
-    console.log(customer_Number)
-    console.log(customer_Name)
-    console.log(csAccount)
-    console.log(address_1)
-    console.log(address_2)
-    console.log(address_3)
-    console.log(city)
-    console.log(state)
-    console.log(zipCode)
-
+  // Opens the selected Ticket #
+  onOpenPartnerDetailsModal(partnerDetails, customer_Id: number, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
+    this.modalService.open(partnerDetails, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title',
+      //size: 'lg'
+    });
     this.customer_Id = customer_Id;
     this.service_Ticket_Id = service_Ticket_Id;
-    this.ticket_Number = ticket_Number;
+    this.ticket_NumberDetails = ticket_Number;
     this.creation_Date = creation_Date;
     this.problem_Code = problem_Code;
     this.contactName = contactName;
@@ -712,10 +679,111 @@ export class IncentiveentryComponent implements OnInit {
     this.centralStation = centralStation;
     this.panel_Location = panel_Location;
     this.customerComments = customerComments;
+    //this.spinnerService.show();
   }
 
-  onOpenMessageModal() {
-    $("#messageModal").modal("show");
+  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string, panelType: string, panel_Location: string, centralStation: string, panel_Type_Id: number, central_Station_ID: number, system_Id: number) {
+    this.customer_Id = customer_Id;
+    this.customer_Site_Id = customer_Site_Id;
+    this.customer_System_Id = customer_System_Id;
+    this.ticket_Number = ticket_Number;
+    this.customer_Number = customer_Number;
+    this.customer_Name = customer_Name;
+    this.business_Name = business_Name;
+    this.address_1 = address_1;
+    this.systemType = systemType;
+    this.csAccount = csAccount;
+    this.panelType = panelType;
+    this.panel_Location = panel_Location;
+    this.centralStation = centralStation;
+    this.panel_Type_Id = panel_Type_Id;
+    this.central_Station_ID = central_Station_ID;
+    this.system_Id = system_Id;
+
+    localStorage.setItem("customer_Id", this.customer_Id);
+    localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
+    localStorage.setItem("customer_System_Id", this.customer_System_Id);
+    localStorage.setItem("ticket_Number", this.ticket_Number);
+    localStorage.setItem("customer_Number", this.customer_Number);
+    localStorage.setItem("customer_Name", this.customer_Name);
+    localStorage.setItem("business_Name", this.business_Name);
+    localStorage.setItem("address_1", this.address_1);
+    localStorage.setItem("systemType", this.systemType);
+    localStorage.setItem("csAccount", this.csAccount);
+    localStorage.setItem("panelType", this.panelType);
+    localStorage.setItem("panel_Location", this.panel_Location);
+    localStorage.setItem("centralStation", this.centralStation);
+    localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
+    localStorage.setItem("central_Station_ID", this.central_Station_ID);
+    localStorage.setItem("system_Id", this.system_Id);
+
+    this.serviceIncluded = "y";
+    localStorage.setItem("serviceIncluded", "y");
+    this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
+
+    this.modalService.dismissAll();
+  }
+
+  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
+    this.clickedID = installCompanyID;
+    this.clickedCompanyName = companyName;
+    this.clickedPartnerCode = partnerCode;
+
+    this.installCompanyID = this.clickedID;
+    this.companyName = this.clickedCompanyName;
+    this.partnerCode = this.clickedPartnerCode;
+
+    localStorage.setItem('installCompanyID',this.installCompanyID);
+    localStorage.setItem('companyName',this.companyName);
+    localStorage.setItem('partnerCode',this.partnerCode);
+
+    this.modalService.dismissAll();
+    this.searchTerm = '';
+  }
+
+  // onOpenPartnerDetailsModal(customer_Id: number, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
+  //   $("#partnerDetails").modal("show");
+  //   $("#acTicketNumberListContent").modal("hide");
+
+  //   this.customer_Id = customer_Id;
+  //   this.service_Ticket_Id = service_Ticket_Id;
+  //   this.ticket_NumberDetails = ticket_Number;
+  //   this.creation_Date = creation_Date;
+  //   this.problem_Code = problem_Code;
+  //   this.contactName = contactName;
+  //   this.contactPhone = contactPhone;
+  //   this.acContact = acContact;
+  //   this.sitePhone = sitePhone;
+  //   this.acContactEmail = acContactEmail;
+  //   this.customer_Number = customer_Number;
+  //   this.customer_Name = customer_Name;
+  //   this.customerRMR = customerRMR;
+  //   this.customer_Since = customer_Since;
+  //   this.collectionQueue = collectionQueue;
+  //   this.cancelStatus = cancelStatus;
+  //   this.business_Name = business_Name;
+  //   this.comResStatus = comResStatus;
+  //   this.address_1 = address_1;
+  //   this.address_2 = address_2;
+  //   this.address_3 = address_3;
+  //   this.city = city;
+  //   this.state = state;
+  //   this.zipCode = zipCode;
+  //   this.status3G = status3G;
+  //   this.csAccount = csAccount;
+  //   this.systemType = systemType;
+  //   this.panelType = panelType;
+  //   this.centralStation = centralStation;
+  //   this.panel_Location = panel_Location;
+  //   this.customerComments = customerComments;
+  // }
+
+  onOpenMessageModal(messageModal) {
+    this.modalService.open(messageModal, {
+      windowClass: 'my-class1250',
+      ariaLabelledBy: 'modal-basic-title'
+    });
+    //$("#messageModal").modal("show");
   }
 
   onSubmitIncentiveEntryMessage(form: FormGroup) {
@@ -730,7 +798,7 @@ export class IncentiveentryComponent implements OnInit {
     )
   }
 
-  onAddDocument() {
+  onClickAddDocument() {
     console.log('add doc')
   }
 

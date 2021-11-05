@@ -4,12 +4,9 @@
     <div class="border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">
         <div class="col-xs-6" id="afa-brand-padding-right">
-          <!-- <img src="../../../assets/img/AlarmConnections_Logo_Primary(Without_Tag)_RGB.png" id="afa-brand-logo"> -->
           <img src="../../../assets/img/AlarmConnections_Logo_Icon_RGB.png" id="afa-brand-logo">
         </div>
         <div class="col-xs-6" >
-          <!-- <a [routerLink]="['/']" class="logo">Alarm Connections</a>
-           -->
           <a [routerLink]="['/']" class="logo"></a>
         </div>
       </div>
@@ -21,6 +18,10 @@
           <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Partner View</a>
         </span>
         <!-- <a [routerLink]="['/partner-dashboard']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Partner View</a> -->
+
+        <span *ngIf="authService.loggedIn() && authService.isEmployee()">
+          <a [routerLink]="['/partner-view-list']" routerLinkActive="active" class="list-group-item list-group-item-action">Partner View List</a>
+        </span>
 
         <span *ngIf="authService.loggedIn() && authService.isEmployee()">
           <a [routerLink]="['/incentive-entry']" routerLinkActive="active" class="list-group-item list-group-item-action" *ngIf="authService.loggedIn() && !authService.isPartner() || authService.loggedIn() && authService.isEmployeeWithIncentiveAccess" (click)="removeDashboardData()">Incentive Entry</a>
@@ -64,7 +65,6 @@
           <span class="h4 ls-headline5 mb-0 text-white text-uppercase d-none d-lg-inline-block" id="text-logo">The Customer Care Connection</span>
         </span>
         <span *ngIf="authService.loggedIn() && !authService.isEmployee()">
-          <!-- <span class="h4 ls-headline5 mb-0 text-black-50 text-uppercase d-none d-lg-inline-block" id="afa-text-black-50">The Partnership Connection</span> -->
           <span>
             <img src="../../../assets/img/AlarmConnections_Logo_Primary(Without_Tag)WordmarkReversed_RGB.svg" id="afa-logo">
           </span>
@@ -93,9 +93,6 @@
         <flash-messages></flash-messages>
       </div>
       <router-outlet></router-outlet>
-      <!-- <div *ngIf="showSplash">
-        <app-partnerconnsplashpage></app-partnerconnsplashpage>
-      </div> -->
     </div>
     <!-- /#page-content-wrapper -->
   
@@ -164,13 +161,6 @@
                               <small class="dark-blue-text" [style.fontWeight]="'600'">Additional contacts listed after notes</small>
                           </div>
                       </div>
-                      <!--start tabs form customerCareNote-->
-                        <!-- <div class="afa-bg-tan note-padding" *ngFor="let item of partnerInformation">
-                          <span>
-                            <pre>{{ item.customerCareNote }}</pre>
-                          </span>
-                        </div> -->
-
                         <div class="custcare-servicenote-container">
 
                           <div class="tabs margin-top3" id="padding0">
@@ -183,17 +173,11 @@
                       
                               <div class="tabs-stage" [ngSwitch]="activeTab" *ngFor="let item of partnerInformationNew">
                                   <div id="tab-1" *ngSwitchCase="'tab-1'" [style.background-color]="'#f9f9a7'" [style.padding]="'.5em 1em 1em'">
-                                    <!-- <p>
-                                      Critical message text...
-                                    </p> -->
                                     <pre id="criticalMessage">
                                       {{ item.customerCareNote }}
                                       </pre>
                                   </div>
                                   <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'.5em 1em 1em'">
-                                    <!-- <p>
-                                      Last note text...
-                                    </p> -->
                                     <pre id="lastNote">
                                       {{ item.serviceNote }}
                                   </pre>

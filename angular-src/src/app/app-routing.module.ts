@@ -54,6 +54,7 @@ import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelque
 import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisting/partnerinvoicelisting.component';
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
+import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -274,6 +275,11 @@ const routes: Routes = [
   {
     path: 'collections-view',
     component: CollectionsviewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'partner-view-list',
+    component: PartnerviewlistComponent,
     canActivate: [AuthGuard]
   },
   {

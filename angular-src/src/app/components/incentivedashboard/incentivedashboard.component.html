@@ -3,7 +3,7 @@
         <div class="row ml-0">
             <div class="col-md-12">
                 <div class="row">
-                    <h1 class="incentive-header">Incentive Entry | 
+                    <h1 class="incentive-header">Invoice Entry | 
                         <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
                     </h1>
                 </div>
@@ -46,10 +46,11 @@
                             </div>
                             <div *ngIf="customerPreselected">
                                 <input  
-                                type="text"
-                                class="form-control col-sm" 
-                                [(ngModel)]="customer" 
-                                [ngModelOptions]="{standalone: true}">
+                                readonly
+                                    type="text"
+                                    class="form-control col-sm" 
+                                    [(ngModel)]="customer" 
+                                    [ngModelOptions]="{standalone: true}">
                             </div>
                         
                             <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)" *ngIf="!customerPreselected">
@@ -66,6 +67,7 @@
                             <label class="col-sm-2 col-form-label">Site</label>
                             <div *ngIf="isSiteSelectionFirst">
                                 <input 
+                                readonly
                                     type="text" 
                                     class="form-control col-sm-12 fullWidthInput" 
                                     [(ngModel)]="siteName" 
@@ -106,7 +108,8 @@
                             <label class="col-sm-2 col-form-label">System</label>
 
                             <div *ngIf="isSystemSelectionFirst">
-                                <input 
+                                <input
+                                    readonly 
                                     type="text" 
                                     class="form-control col-sm-12 fullWidthInput" 
                                     [(ngModel)]="systemCode" 
@@ -145,9 +148,9 @@
                             <label class="col-sm-2 col-form-label form-check-label" #newSystemDisplayLabel>This is a new system</label>
                         </div>
 
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline" *ngIf="ticket_NumberPreSelected">
                             <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
-                            <input type="text" class="form-control col-sm-5" placeholder="12345" formControlName="TicketNumber">
+                            <input readonly type="text" class="form-control col-sm-5" placeholder="..." formControlName="TicketNumber">
                             <!-- <input type="text" class="form-control col-sm-5" placeholder="12345"> -->
                         </div>
 
@@ -156,7 +159,9 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Account #</label>
-                            <input type="text" class="form-control col-sm-5" [(ngModel)]="alarmAccount" formControlName="AlarmAccount">
+
+                            <input *ngIf="!alarmAccountPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="alarmAccount" formControlName="AlarmAccount">
+                            <input *ngIf="alarmAccountPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="alarmAccount" formControlName="AlarmAccount">
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">System Type</label>
@@ -164,18 +169,25 @@
                                 <select 
                                     formControlName="SystemTypeID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="systemTypeID"
+                                    (change)="onChangeGetSystemType($event)"
                                 >
-                                    <option *ngFor="let list of listsystemtypes" value="{{ list.system_Id }}" [ngValue]="list.system_Id">
+                                    <option 
+                                        *ngFor="let list of listsystemtypes" 
+                                        value="{{ list.system_Id }}" 
+                                        [ngValue]="list.system_Id">
                                         {{ list.systemName }}
                                     </option>
                                 </select>
                             </div>
                             <div *ngIf="systemTypePreselected">
-                                <input 
+                                <input
                                     type="text" 
                                     class="form-control col-sm" 
                                     [(ngModel)]="systemTypeID"
-                                    [ngModelOptions]="{standalone: true}">
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="onChangeSystemType($event)">
+                                <i class="pl-3 far fa-trash-alt text-danger" (click)="onClickRemoveSystemType()"
+                                ></i>
                             </div>
                             <span class="col-sm-4">
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
@@ -187,6 +199,7 @@
                                 <select 
                                     formControlName="PanelTypeID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="panelTypeID"
+                                    (change)="onChangeGetPanelType($event)"
                                 >
                                     <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}" [ngValue]="list.panel_Type_Id">
                                         {{ list.panelName }}
@@ -206,7 +219,8 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Panel Location</label>
-                            <input type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
+                            <input *ngIf="!panelLocationPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
+                            <input *ngIf="panelLocationPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Central Station</label>
@@ -214,6 +228,7 @@
                                 <select 
                                     formControlName="CentralStationID" class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="centralStationID"
+                                    (change)="onChangeGetCentralStation($event)"
                                 >
                                     <option *ngFor="let station of listcentralstations" value="{{ station.centralStationID }}" [ngValue]="station.centralStationID">
                                         {{ station.csName }}
@@ -221,7 +236,7 @@
                                 </select>
                             </div>
                             <div *ngIf="centralStationPreselected">
-                                <input 
+                                <input
                                     type="text" 
                                     class="form-control col-sm" 
                                     [(ngModel)]="centralStationID"
@@ -476,12 +491,13 @@
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-3 col-form-label">Start Date</label>
-                                        <input 
+                                        <!-- <input 
                                             type="date" 
                                             class="form-control col-sm-5" 
                                             [(ngModel)]="startDate" formControlName="ContractDate"
                                             (change)="getContractDate($event)"    
-                                        >
+                                        > -->
+                                        <input type="date" formControlName="ContractDate" class="form-control">
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 col-form-label">Term</label>

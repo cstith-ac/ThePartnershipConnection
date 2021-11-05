@@ -48,17 +48,19 @@ export class CalltoactionlistingComponent implements OnInit {
             timeout: 5000
           });
         }
+        
         console.log(res)
         console.log(res.body)
         console.log(res.headers)
         console.log(res.status)
         this.partnerCallToActionButton = res.body;
 
-        // for(var i = 0; this.partnerCallToActionButton.length;i++) {
-        //   console.log(this.partnerCallToActionButton[i].addressOnFile)
-        // }
-      }, (err:HttpErrorResponse) => {
-        alert('there was an error')
+      }, (err: HttpErrorResponse) => {
+        //alert('there was an error')
+        this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+          cssClass: 'text-center alert-danger',
+          timeout: 5000
+        });
       }
     )
 

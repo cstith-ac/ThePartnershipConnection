@@ -50,6 +50,7 @@ namespace WebAPI.Models
         public virtual DbSet<CustomerContractInfo> GetCustomerContractInfos { get; set; }
         public virtual DbSet<Customer3GListing> GetCustomer3GListings { get; set; }
         public virtual DbSet<ListPanelTypes> GetListPanelTypes { get; set; }
+        public virtual DbSet<ListPanelTypesX> GetListPanelTypesXs { get; set; }
         public virtual DbSet<ListCentralStations> GetListCentralStations { get; set; }
         public virtual DbSet<ListSitesForCustomer> GetListSitesForCustomers { get; set; }
         public virtual DbSet<ListSystemsForSite> GetListSystemsForSites { get; set; }
@@ -86,6 +87,7 @@ namespace WebAPI.Models
         public virtual DbSet<PermissionsUserMap> GetPermissionsUserMaps { get; set; }
         public virtual DbSet<PermissionAdd> InsertPermissionAddResult { get; set; }
         public virtual DbSet<PermissionDelete> InsertPermissionDeleteResult { get; set; }
+        public virtual DbSet<ListPartnerContacts> GetListPartnerContacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -384,6 +386,11 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<ListPanelTypesX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<ListCentralStations>(entity =>
             {
                 entity.HasNoKey();
@@ -566,7 +573,12 @@ namespace WebAPI.Models
             modelBuilder.Entity<PermissionDelete>(entity =>
             {
                 entity.HasNoKey();
-            });  
+            });
+
+            modelBuilder.Entity<ListPartnerContacts>(entity =>
+            {
+                entity.HasNoKey();
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

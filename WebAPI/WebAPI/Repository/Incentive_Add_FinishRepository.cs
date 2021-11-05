@@ -35,15 +35,23 @@ namespace WebAPI.Repository
 
             var serviceCheckedParam = new SqlParameter("@ServiceChecked", incentive_Add_Finish.ServiceChecked);
 
-            var commentsParam = new SqlParameter("@Comments", incentive_Add_Finish.Comments);
+            //var commentsParam = new SqlParameter("@Comments", incentive_Add_Finish.Comments);
+            var serviceTicketNumberParam = new SqlParameter("@ServiceTicketNumber", incentive_Add_Finish.ServiceTicketNumber);
+
+            var customerEmailAddressParam = new SqlParameter("@CustomerEmailAddress", incentive_Add_Finish.CustomerEmailAddress);
+
+            var testParam = new SqlParameter("@Test", 'N');
 
 
             await context.Database.ExecuteSqlRawAsync(
-                "EXECUTE [dbo].[Incentive_Add_Finish] @IncentiveID, @PartnerTaxAmount, @ServiceChecked, @Comments",
+                "EXECUTE [dbo].[Incentive_Add_Finish] @IncentiveID, @PartnerTaxAmount, @ServiceChecked, @ServiceTicketNumber, @CustomerEmailAddress, @Test",
                 incentiveIDParam,
                 partnerTaxAmountParam,
                 serviceCheckedParam,
-                commentsParam);
+                //commentsParam
+                serviceTicketNumberParam,
+                customerEmailAddressParam,
+                testParam);
 
             return incentive_Add_Finish;
         }

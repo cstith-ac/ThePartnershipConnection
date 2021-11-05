@@ -97,6 +97,7 @@ import { TpcpartneragingreportComponent } from './components/tpcpartneragingrepo
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
 import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpage/partnerconnsplashpage.component';
+import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
 
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
@@ -166,7 +167,8 @@ import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpa
     TpcpartneragingreportComponent,
     PartnerservicelistingComponent,
     RemovewhitespacesPipe,
-    PartnerconnsplashpageComponent
+    PartnerconnsplashpageComponent,
+    PartnerviewlistComponent
     //CustomerTestComponent
   ],
   imports: [

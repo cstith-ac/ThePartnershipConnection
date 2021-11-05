@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h5 class="headline-5 high-emphasis">Partner Contacts</h5>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <table class="table table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">Partner Code</th>
+                        <th scope="col">Partner Name</th>
+                        <th scope="col">Sedona Contact Email</th>
+                        <th scope="col">TPC Login Exists</th>
+                        <th scope="col">RM Assigned</th>
+                        <th scope="col">Last Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listPartnerContacts | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                        <!-- <td id="{{ item.service_Ticket_Id }}" class="hyperlink" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td> -->
+                        <td class="hyperlink" (click)="onClickOpenPartnerLandingPage()">{{ item.partnerCode }}</td>
+                        <td>{{ item.partnerName }}</td>
+                        <td>{{ item.sedonaContactEmail }}</td>
+                        <td>{{ item.tpcLoginExists }}</td>
+                        <td>{{ item.rmAssigned }}</td>
+                        <td>{{ item.lastLoginOn }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ngb-pagination
+                [collectionSize]="listPartnerContacts?.length"
+                [(page)]="page" 
+                [maxSize]="5" 
+                [rotate]="true" 
+                [ellipses]="false" 
+                [boundaryLinks]="true"
+                class="d-flex justify-content-center mt-5">
+            </ngb-pagination>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: white">Please Wait...</p>  
+</ngx-spinner>

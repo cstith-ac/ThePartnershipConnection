@@ -35,4 +35,5 @@ export class PartnerServiceListingExtended {
     customer_System_Id: number;
     panel_Type_Id: number;
     central_Station_ID: number;
+    system_Id: number
 }

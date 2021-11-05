@@ -85,7 +85,8 @@ namespace WebAPI.Controllers
                     Customer_Site_Id = s.Customer_Site_Id,
                     Customer_System_Id = s.Customer_System_Id,
                     Panel_Type_Id = s.Panel_Type_Id,
-                    Central_Station_ID = s.Central_Station_ID
+                    Central_Station_ID = s.Central_Station_ID,
+                    System_Id = s.System_Id
                 }).ToList();
 
                 return Lst;
