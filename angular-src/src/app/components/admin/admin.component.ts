@@ -27,6 +27,11 @@ export class AdminComponent implements OnInit {
   //permissionsUserMap: PermissionsUserMap[];
   deleteCurrentUserForm: FormGroup;
   permissionForm: FormGroup;
+  adminUserSearchForm: FormGroup;
+
+  searchTerm: string;
+
+  collectionSize: number;
 
   page = 1;
   count = 0;
@@ -106,6 +111,10 @@ export class AdminComponent implements OnInit {
 
     this.deleteCurrentUserForm = this.fb.group({
       deleteCurrentUser: ["",Validators.required]
+    })
+
+    this.adminUserSearchForm = this.fb.group({
+      SearchTerm: [""]
     })
   }
 
@@ -686,4 +695,49 @@ export class AdminComponent implements OnInit {
     $("#deleteUserModal").modal("hide");
   }
 
+  search(value: string): void {
+    this.allUsers = this.allUsers.filter((val) => 
+    val.userName.toLowerCase().includes(value));
+    this.collectionSize = this.allUsers.length;
+
+    // this.adminUserSearchForm.valueChanges.subscribe(
+    //   res => {
+    //     console.log(res)
+    //   }
+    // )
+  }
+
+  onChangeClearSearch(e){
+    console.log(e.target.value)
+    this.adminUserSearchForm.valueChanges.subscribe(
+      res => {
+        console.log(res)
+      }
+    )
+  }
+
+  clearSearch() {
+    console.log('clearSearch');
+    this.routeService.getAllUsers().subscribe(
+      res => {
+        this.allUsers = res;
+        this.searchTerm = ''
+
+        //ES6 version
+        this.allUsers.sort((a, b) => a.firstName.localeCompare(b.firstName))
+
+        // this.allUsers.sort(function(a,b) {
+        //   if(a.firstName < b.firstName) { return -1; }
+        //   if(a.firstName > b.firstName) { return 1; }
+        //   return 0;
+        // })
+      }
+    )
+    // this.results = [];
+
+  }
+
+  exportToExcel() {
+    console.log('coming soon')
+  }
 }

@@ -5,6 +5,32 @@
         </div>
     </div>
     <div class="row mt-5">
+        <div class="col-md-12 pl-0 mt-2">
+            <form [formGroup]="partnerContactsSearchForm">
+                <div class="form-group">
+                    <div class="d-flex bd-highlight mb-2">
+                        <div class="form-inline float-left pl-3 mr-auto">
+                            <label>Search by typing a Partner Name:</label>
+                            <input 
+                                placeholder="Click clear to reset the list"
+                                type="text" 
+                                class="form-control ml-2" 
+                                name="searchTerm" 
+                                [(ngModel)]="searchTerm" 
+                                formControlName="SearchTerm"
+                                (input)="search($event.target.value)"
+                                (change)="onChangeClearSearch($event)"
+                            >
+                            <div class="bd-highlight pl-3">
+                              <button class="btn btn-primary" (click)="clearSearch()">Clear</button>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-5">
         <div class="col-md-12">
             <table class="table table-striped table-responsive">
                 <thead>
@@ -20,7 +46,7 @@
                 <tbody>
                     <tr *ngFor="let item of listPartnerContacts | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
                         <!-- <td id="{{ item.service_Ticket_Id }}" class="hyperlink" (click)="onOpenPartnerServiceListingModal(item.service_Ticket_Id, item.ticket_Number, item.creation_Date, item.problem_Code, item.contactName, item.contactPhone, item.acContact, item.sitePhone, item.acContactEmail, item.customer_Number, item.customer_Name, item.customerRMR, item.customer_Since, item.collectionQueue, item.cancelStatus, item.business_Name, item.comResStatus, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.status3G, item.csAccount, item.systemType, item.panelType, item.centralStation, item.panel_Location, item.customerComments)">{{ item.ticket_Number }}</td> -->
-                        <td class="hyperlink" (click)="onClickOpenPartnerLandingPage()">{{ item.partnerCode }}</td>
+                        <td class="hyperlink" (click)="onClickOpenPartnerLandingPage(item.partnerCode, item.sedonaContactEmail, item.partnerName)">{{ item.partnerCode }}</td>
                         <td>{{ item.partnerName }}</td>
                         <td>{{ item.sedonaContactEmail }}</td>
                         <td>{{ item.tpcLoginExists }}</td>

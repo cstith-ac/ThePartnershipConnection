@@ -136,6 +136,18 @@ export class RouteService {
     )
   }
 
+  getCustomer3GListingX(id1:string,id2:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/Customer3GListingX/` + id1 + `/` + id2, httpOptions);
+  }
+
   getCustomerCareDashboardInfoById(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
@@ -408,6 +420,18 @@ export class RouteService {
       observe: 'response' as 'body'
     };
     return this.http.get<any>(`${this.baseUrl}/api/PartnerLandingPage`, httpOptions);
+  }
+
+  getPartnerLandingPageX(id1:string,id2:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerLandingPageX/` + id1 + `/` + id2, httpOptions);
   }
 
   postPartnerAddNote(partnerAddNote: PartnerAddNote): Observable<any> {

@@ -25,6 +25,7 @@ namespace WebAPI.Controllers
             _userManager = userManager;
             _context = context;
         }
+
         [HttpGet]
         [Authorize]
         //GET : /api/UserProfile
@@ -48,6 +49,22 @@ namespace WebAPI.Controllers
                 user.RemoveSplash
             };
         }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        // GET: /api/UserProfile/5
+        public async Task<ActionResult<ApplicationUser>> GetUserProfileById(int id)
+        {
+            var user = await _context.ApplicationUsers.FindAsync(id);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
 
         //[HttpPut("{id}")]
         //[Authorize]

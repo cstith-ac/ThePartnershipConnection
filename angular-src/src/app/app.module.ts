@@ -89,6 +89,7 @@ import { IncentiveequipmatComponent } from './components/incentiveequipmat/incen
 import { IncentivelaborchargesComponent } from './components/incentivelaborcharges/incentivelaborcharges.component';
 import { FilterSitePipe } from './_helpers/filter-site.pipe';
 import { FilterCentralStationPipe } from './_helpers/filter-central-station.pipe';
+import { FilterAdminPipe } from './_helpers/filter-admin.pipe';
 import { IncentiveDashboardTestComponent } from './components/incentive-dashboard-test/incentive-dashboard-test.component';
 import { CalltoactionlistingComponent } from './components/calltoactionlisting/calltoactionlisting.component';
 import { CancelqueuelistComponent } from './components/cancelqueuelist/cancelqueuelist.component';
@@ -98,7 +99,6 @@ import { PartnerservicelistingComponent } from './components/partnerservicelisti
 import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
 import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpage/partnerconnsplashpage.component';
 import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
-
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -159,6 +159,7 @@ import { PartnerviewlistComponent } from './components/partnerviewlist/partnervi
     FilterSitePipe,
     Filter90DayPipe,
     FilterCentralStationPipe,
+    FilterAdminPipe,
     IncentiveDashboardTestComponent,
     ListFilterPipe,
     CalltoactionlistingComponent,
@@ -168,7 +169,7 @@ import { PartnerviewlistComponent } from './components/partnerviewlist/partnervi
     PartnerservicelistingComponent,
     RemovewhitespacesPipe,
     PartnerconnsplashpageComponent,
-    PartnerviewlistComponent
+    PartnerviewlistComponent,
     //CustomerTestComponent
   ],
   imports: [

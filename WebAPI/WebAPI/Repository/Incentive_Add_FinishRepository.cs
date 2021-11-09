@@ -28,15 +28,20 @@ namespace WebAPI.Repository
             var incentiveIDParam = new SqlParameter("@IncentiveID", incentive_Add_Finish.IncentiveID);
 
             var partnerTaxAmountParam = new SqlParameter("@PartnerTaxAmount", incentive_Add_Finish.PartnerTaxAmount);
-            if (partnerTaxAmountParam.Value is string)
-            {
-                throw new System.Exception("PartnerTaxAmount is a string!");
-            }
+            //if (partnerTaxAmountParam.Value is string)
+            //{
+            //    throw new System.Exception("PartnerTaxAmount is a string!");
+            //}
 
             var serviceCheckedParam = new SqlParameter("@ServiceChecked", incentive_Add_Finish.ServiceChecked);
 
             //var commentsParam = new SqlParameter("@Comments", incentive_Add_Finish.Comments);
-            var serviceTicketNumberParam = new SqlParameter("@ServiceTicketNumber", incentive_Add_Finish.ServiceTicketNumber);
+            var serviceTicketNumberParam = new SqlParameter("@ServiceTicketNumber", incentive_Add_Finish.ServiceTicketNumber == null ? DBNull.Value : (object)incentive_Add_Finish.ServiceTicketNumber);
+
+            //if (incentive_Add_Finish.ServiceTicketNumber == null)
+            //{
+            //    serviceTicketNumberParam.Value = null;
+            //}
 
             var customerEmailAddressParam = new SqlParameter("@CustomerEmailAddress", incentive_Add_Finish.CustomerEmailAddress);
 

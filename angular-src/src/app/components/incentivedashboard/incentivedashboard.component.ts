@@ -2249,6 +2249,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.partnerTaxAmount = form.value.PartnerTaxAmount;
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         //updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
+        if(this.ticket_Number === null) {
+          updateIncentiveAddFinishWithJobID.serviceTicketNumber = '0'
+        }
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
         updateIncentiveAddFinishWithJobID.test = 'N';
@@ -2700,6 +2703,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         localStorage.removeItem('testObject');
         localStorage.removeItem('checkBoxAutoInsertList');
         localStorage.removeItem('results');
+        localStorage.removeItem('customer_Id');
+        localStorage.removeItem('customer_Site_Id');
+        localStorage.removeItem('customer_System_Id');
+        localStorage.removeItem('ticket_Number');
+        localStorage.removeItem('customer_Number');
+        localStorage.removeItem('customer_Name');
+        localStorage.removeItem('business_Name');
+        localStorage.removeItem('address_1');
+        localStorage.removeItem('csAccount');
+        localStorage.removeItem('panel_Location');
+        localStorage.removeItem('centralStation');
+        localStorage.removeItem('panel_Type_Id');
+        localStorage.removeItem('central_Station_ID');
+        localStorage.removeItem('system_Id');
 
         this.router.navigate(['incentive-entry/']);
         }, (err: HttpErrorResponse) => {

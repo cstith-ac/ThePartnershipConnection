@@ -57,6 +57,8 @@ export class Customer3glistingComponent implements OnInit {
   userName;
   permissionsUserMap: PermissionsUserMap[];
   hide3GExcelExport: boolean = false;
+  sedonaContactEmail;
+  partnerName;
 
   public columns: any[] = [
     {field: "Alarm Account"}, 
@@ -106,6 +108,11 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
+
     $("#wrapper").addClass("toggled");
 
     // document.getElementById('dateTime').innerText = new Date().toDateString()
@@ -127,51 +134,90 @@ export class Customer3glistingComponent implements OnInit {
         }
       ]
     })
-    //console.log(workbook.options.sheets)
     var foo = workbook.options;
-    //console.log(foo.sheets)
     var item = foo.sheets.find(x => x.name)
-    //console.log(item.name)
     var today = item.name;
     console.log(today)
-    //this.dateTime = new Date().toDateString();
-    //console.log(typeof(this.dateTime))
     this.spinnerService.show();
-    // setTimeout(() => {
-    //   this.spinnerService.hide();
-    // }, 8000)
 
+    if(this.sedonaContactEmail) {
+      console.log(this.sedonaContactEmail + ' is the alias user')
+      
+      // use SwitchMap to get profile then permissions user map
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(this.sedonaContactEmail))
+      ).subscribe(data => {
+        console.log(data)
+        this.permissionsUserMap = data;
+
+        //show/hide card or card and button base on hasPermission value of Y or N
+        for(let i = 0; i < this.permissionsUserMap.length; i++) {
+          
+          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GExcelExport = true;
+          }
+        }
+      })
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getCustomer3GListingX(res.userName, this.sedonaContactEmail))
+      ).subscribe(data => {
+        if(data.status === 200) {
+          this.spinnerService.hide();
+          console.log(data.statusText)
+        }
+        this.customer3gListing = data.body
+        this.gridData = data.body
+      })
+    }
+    if(!this.sedonaContactEmail) {
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+      ).subscribe(data => {
+        this.permissionsUserMap = data;
+
+        for(let i = 0; i < this.permissionsUserMap.length; i++) {
+          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            console.log('this works')
+            this.hide3GExcelExport = true;
+          }
+        }
+      })
+      this.routeService.getCustomer3GListing().subscribe(
+        res => {
+          if(res) {
+            this.spinnerService.hide()
+          }
+          this.gridData = res;
+          
+        }
+      )
+    }
     // Query permission for exportToExcel
     // use SwitchMap to get profile then permissions user map
-    this.authService.getProfile().pipe(
-      mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
-    ).subscribe(data => {
-      console.log(data)
-      this.permissionsUserMap = data;
+    // this.authService.getProfile().pipe(
+    //   mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+    // ).subscribe(data => {
+    //   console.log(data)
+    //   this.permissionsUserMap = data;
 
-      //show/hide card or card and button base on hasPermission value of Y or N
-      for(let i = 0; i < this.permissionsUserMap.length; i++) {
-        if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          console.log('this works')
-          this.hide3GExcelExport = true;
-        }
-      }
-    })
+    //   //show/hide card or card and button base on hasPermission value of Y or N
+    //   for(let i = 0; i < this.permissionsUserMap.length; i++) {
+    //     if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       console.log('this works')
+    //       this.hide3GExcelExport = true;
+    //     }
+    //   }
+    // })
 
-    this.routeService.getCustomer3GListing().subscribe(
-      res => {
-        if(res) {
-          this.spinnerService.hide()
-        }
-        this.gridData = res;
-        //this.customer3gListing = res;
-
-        res.forEach(element => {
-          //console.log(element)
-          //var element = element;
-        });
-      }
-    )
+    // this.routeService.getCustomer3GListing().subscribe(
+    //   res => {
+    //     if(res) {
+    //       this.spinnerService.hide()
+    //     }
+    //     this.gridData = res;
+        
+    //   }
+    // )
 
     this.customer3gListingForm = this.fb.group({
       EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,

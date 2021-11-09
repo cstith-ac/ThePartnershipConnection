@@ -7,14 +7,15 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { PartnerLandingPage } from 'src/app/models/partnerlandingpage';
+import { PartnerLandingPageX } from 'src/app/models/partnerlandingpagex';
 import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
 declare var $: any;
 const moment = require('moment');
 import { environment } from '../../../environments/environment';
-import { mergeMap, switchMap } from 'rxjs/operators';
+import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -26,6 +27,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class PartnerdashboardComponent implements OnInit {
   customer3glisting: Customer3GListing[];
   partnerLandingPage: PartnerLandingPage[];
+  partnerLandingPageX: PartnerLandingPageX[];
   partnerInvoiceListing: PartnerInvoiceListing[];
   user;
   firstName;
@@ -70,6 +72,9 @@ export class PartnerdashboardComponent implements OnInit {
   hideAttrition: boolean = false;
   hide3GExcelExport: boolean = false;
   hideCreateInvoice: boolean = false;
+  previousUrl: string;
+  sedonaContactEmail;
+  partnerName;
 
   constructor(
     public jwtHelper: JwtHelperService,
@@ -81,10 +86,34 @@ export class PartnerdashboardComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal
-  ) { }
+  ) { 
+
+    // console.log(router.routerState)
+
+    // router.events
+    // .pipe(filter(event => event instanceof NavigationEnd))
+    // .subscribe((event: NavigationEnd) => {
+    //   console.log('prev:', event.url);
+    //   this.previousUrl = event.url;
+    // });
+  }
 
   ngOnInit() {
-    if(localStorage.getItem('removeSplash') === '1') {
+    this.router.events
+      .pipe(
+        filter((e:any) => e instanceof RoutesRecognized),
+          pairwise()
+      ).subscribe((e: any) => {
+        console.log(e[0].urlAfterRedirects); //string
+        // this.previousUrl = e[0].urlAfterRedirects
+      })
+
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
+
+    if(localStorage.getItem('removeSplash') === '1' || localStorage.getItem('sedonaContactEmail')) {
       this.showSplash = false;
     } else {
       this.showSplash;
@@ -109,49 +138,49 @@ export class PartnerdashboardComponent implements OnInit {
     this.spinnerService.show();
 
     // use SwitchMap to get profile then permissions user map
-    this.authService.getProfile().pipe(
-      mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
-    ).subscribe(data => {
-      //console.log(data)
-      this.permissionsUserMap = data;
+    // this.authService.getProfile().pipe(
+    //   mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+    // ).subscribe(data => {
+    //   //console.log(data)
+    //   this.permissionsUserMap = data;
 
-      //show/hide card or card and button base on hasPermission value of Y or N
-      for(let i = 0; i < this.permissionsUserMap.length; i++) {
-        // console.log(this.permissionsUserMap[i])
-        // console.log(this.permissionsUserMap[i].permissionName)
-        // console.log(this.permissionsUserMap[i].hasPermission)
-        if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hide3GConversion = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hidePendingCancellations = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideAging = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideAgingCTA = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideInvoices = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideService = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideSales = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideAttrition = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hide3GExcelExport = true;
-        }
-        if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
-          this.hideCreateInvoice = true;
-        }
-      }
-    })
+    //   //show/hide card or card and button base on hasPermission value of Y or N
+    //   for(let i = 0; i < this.permissionsUserMap.length; i++) {
+    //     // console.log(this.permissionsUserMap[i])
+    //     // console.log(this.permissionsUserMap[i].permissionName)
+    //     // console.log(this.permissionsUserMap[i].hasPermission)
+    //     if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hide3GConversion = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hidePendingCancellations = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideAging = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideAgingCTA = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideInvoices = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideService = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideSales = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideAttrition = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hide3GExcelExport = true;
+    //     }
+    //     if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
+    //       this.hideCreateInvoice = true;
+    //     }
+    //   }
+    // })
 
     
     this.authService.getProfile().subscribe(
@@ -165,61 +194,156 @@ export class PartnerdashboardComponent implements OnInit {
       }
     )
 
-    // // populate the dashboard 
-    // // values based on hasPermission, show/hide card or card and button
-    // setTimeout(() => {
-    //   this.permissionService.getPermissionsUserMap(this.userName).subscribe(
-    //     res => {
-    //       this.permissionsUserMap = res;
-    //     }
-    //   )  
-    // }, 400);
-    
+    // if the previous route equals partner-view-list, get PartnerLandingPageX 
+    if(this.sedonaContactEmail) {
+      console.log(this.sedonaContactEmail + ' is the alias user')
+      this.userName = this.sedonaContactEmail;
 
-    /**Begin Test Progress Bar */
-    // this.partnerLandingPage;
-    // for(var i = 0;i < this.partnerLandingPage.length;i++) {
-    //   this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
-    //   this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
+      // use SwitchMap to get profile then permissions user map
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(this.sedonaContactEmail))
+      ).subscribe(data => {
+        console.log(data)
+        this.permissionsUserMap = data;
 
-    //   this.attritionValue = this.partnerLandingPage[i].attritionLastMonth;
-    //   this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
-    // }
-    /**End Test Progress Bar*/
-
-    this.routeService.getPartnerLandingPage().subscribe(
-      res => {
-        
-        if(res.status === 200) {
-          this.spinnerService.hide();
-          this.flashMessage.show('Your requested data is displayed below', {
-            cssClass: 'text-center alert-success',
-            timeout: 2000
-          });
-        }
-        this.partnerLandingPage = res.body;
-        for(var i = 0; i < this.partnerLandingPage.length; i++) {
-          console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
-          console.log(this.partnerLandingPage[i].attritionLastMonth)
-          console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
-          // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
-          // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
-          // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
-          // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
-          this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
-          this.attritionValue = this.partnerLandingPage[i].attritionLastMonth;
-
-          this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
-          this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
-
-          if(this.partnerLandingPage[i].highRMRCancelPerson == "") {
-            console.log("nothing here")
+        //show/hide card or card and button base on hasPermission value of Y or N
+        for(let i = 0; i < this.permissionsUserMap.length; i++) {
+          // console.log(this.permissionsUserMap[i])
+          // console.log(this.permissionsUserMap[i].permissionName)
+          // console.log(this.permissionsUserMap[i].hasPermission)
+          if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GConversion = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hidePendingCancellations = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAging = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAgingCTA = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideInvoices = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideService = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideSales = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAttrition = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GExcelExport = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideCreateInvoice = false;
+            //Note: the alarm connections user is not permitted to start a new invoice, so that function would always be hidden for them regardless of security level!
           }
         }
-      }, (err: HttpErrorResponse) => {
-        alert('there was an error')
-      }
-    )
+      })
+
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getPartnerLandingPageX(res.userName, this.sedonaContactEmail))
+        ).subscribe(data => {
+          if(data.status === 200) {
+            this.spinnerService.hide()
+            // this.flashMessage.show('Your requested data is displayed below', {
+            //   cssClass: 'text-center alert-success',
+            //   timeout: 2000
+            // });
+            console.log(data.statusText)
+          }
+          // this.partnerLandingPageX = data.body
+          this.partnerLandingPage = data.body
+          this.firstName = this.sedonaContactEmail // use this or...
+          // this.firstName = this.partnerName;  // use this
+          console.log(data.body)
+          }
+      )
+    } 
+    if(!this.sedonaContactEmail) {
+      // use SwitchMap to get profile then permissions user map
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
+      ).subscribe(data => {
+        //console.log(data)
+        this.permissionsUserMap = data;
+
+        //show/hide card or card and button base on hasPermission value of Y or N
+        for(let i = 0; i < this.permissionsUserMap.length; i++) {
+          // console.log(this.permissionsUserMap[i])
+          // console.log(this.permissionsUserMap[i].permissionName)
+          // console.log(this.permissionsUserMap[i].hasPermission)
+          if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GConversion = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hidePendingCancellations = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAging = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAgingCTA = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideInvoices = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideService = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideSales = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAttrition = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GExcelExport = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideCreateInvoice = true;
+          }
+        }
+      })
+
+      this.routeService.getPartnerLandingPage().subscribe(
+        res => {
+          
+          if(res.status === 200) {
+            this.spinnerService.hide();
+            this.flashMessage.show('Your requested data is displayed below', {
+              cssClass: 'text-center alert-success',
+              timeout: 2000
+            });
+          }
+          this.partnerLandingPage = res.body;
+          for(var i = 0; i < this.partnerLandingPage.length; i++) {
+            console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
+            console.log(this.partnerLandingPage[i].attritionLastMonth)
+            console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
+            // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
+            // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
+            // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
+            // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
+            this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
+            this.attritionValue = this.partnerLandingPage[i].attritionLastMonth;
+  
+            this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
+            this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
+  
+            if(this.partnerLandingPage[i].highRMRCancelPerson == "") {
+              console.log("nothing here")
+            }
+          }
+        }, (err: HttpErrorResponse) => {
+          alert('there was an error')
+        }
+      )
+    }
   }
 
   openAppSettingsModal(e) {

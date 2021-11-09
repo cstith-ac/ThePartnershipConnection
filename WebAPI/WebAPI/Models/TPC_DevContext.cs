@@ -88,6 +88,8 @@ namespace WebAPI.Models
         public virtual DbSet<PermissionAdd> InsertPermissionAddResult { get; set; }
         public virtual DbSet<PermissionDelete> InsertPermissionDeleteResult { get; set; }
         public virtual DbSet<ListPartnerContacts> GetListPartnerContacts { get; set; }
+        public virtual DbSet<PartnerLandingPageX> GetPartnerLandingPageXResult { get; set; }
+        public virtual DbSet<Customer3GListingX> GetCustomer3GListingXResult { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -576,6 +578,16 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<ListPartnerContacts>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerLandingPageX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Customer3GListingX>(entity =>
             {
                 entity.HasNoKey();
             });

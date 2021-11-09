@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ListPartnerContacts } from 'src/app/models/listpartnercontacts';
 import { HttpErrorResponse } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -16,11 +17,18 @@ declare var $: any;
 })
 export class PartnerviewlistComponent implements OnInit {
   listPartnerContacts: ListPartnerContacts[];
+  partnerContactsSearchForm: FormGroup;
   page = 1;
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
   pageSize=10;
+  collectionSize: number;
+
+  partnerCode;
+  sedonaContactEmail;
+  partnerName;
+  searchTerm: string;
 
   constructor(
     private spinnerService: NgxSpinnerService,
@@ -44,6 +52,10 @@ export class PartnerviewlistComponent implements OnInit {
       //console.log('your logged in')
     }
 
+    this.partnerContactsSearchForm = this.fb.group({
+      SearchTerm: [""]
+    })
+
     this.spinnerService.show();
     this.routeService.getListPartnerContacts().subscribe(
       res => {
@@ -55,11 +67,13 @@ export class PartnerviewlistComponent implements OnInit {
           });
         }
 
-        console.log(res)
-        console.log(res.body)
-        console.log(res.headers)
-        console.log(res.status)
+        console.log(res);
+        console.log(res.body);
+        console.log(res.headers);
+        console.log(res.status);
+
         this.listPartnerContacts = res.body;
+        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName))
         
       }, (err: HttpErrorResponse) => {
         this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
@@ -70,8 +84,76 @@ export class PartnerviewlistComponent implements OnInit {
     )
   }
 
-  onClickOpenPartnerLandingPage() {
-    console.log('open Partner Landing Page')
+  onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {
+    this.partnerCode = partnerCode;
+    this.sedonaContactEmail = sedonaContactEmail;
+    this.partnerName = partnerName;
+
+    localStorage.setItem('sedonaContactEmail', this.sedonaContactEmail)
+    localStorage.setItem('partnerName', this.partnerName);
+
+    // for(var i = 0; i < this.listPartnerContacts.length; i++) {
+    //   this.sedonaContactEmail = this.listPartnerContacts[i].sedonaContactEmail;
+    //   console.log(this.listPartnerContacts[0].sedonaContactEmail)
+    // }
+    //return
+    this.router.navigate(['partner-dashboard']);
+    // this.routeService.getPartnerLandingPageX('cstith@alarmconnections.com','hugo@cloudsecurityalarms.com').subscribe(
+    //   res => {
+    //     console.log(res.body)
+    //   }
+    // )
+  }
+
+  search(value: string): void {
+    this.listPartnerContacts = this.listPartnerContacts.filter((val) => 
+      val.partnerName.toLowerCase().includes(value));
+
+    // this.listPartnerContacts = this.listPartnerContacts.filter((val) => 
+    // val.partnerName.toLowerCase().indexOf(value.toLowerCase()) !== 1);
+
+    this.collectionSize = this.listPartnerContacts.length;
+
+    // this.adminUserSearchForm.valueChanges.subscribe(
+    //   res => {
+    //     console.log(res)
+    //   }
+    // )
+  }
+
+  onChangeClearSearch(e){
+    console.log(e.target.value)
+    // this.partnerContactsSearchForm.valueChanges.subscribe(
+    //   res => {
+    //     console.log(res)
+    //   }
+    // )
+    
+    // this.listPartnerContacts.filter((s) => s.partnerName.toLowerCase())
+    // this.collectionSize = this.listPartnerContacts.length
+  }
+
+  clearSearch() {
+    console.log('clearSearch');
+    this.routeService.getListPartnerContacts().subscribe(
+      res => {
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          this.flashMessage.show('Data refreshed', {
+            cssClass: 'text-center alert-success',
+            timeout: 1000
+          });
+        }
+
+        this.listPartnerContacts = res.body;
+        this.searchTerm = ''
+
+        //ES6 version
+        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName))
+      }
+    )
+    // this.results = [];
+
   }
 
 }
