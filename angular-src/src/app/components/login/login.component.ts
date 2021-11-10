@@ -38,15 +38,15 @@ export class LoginComponent implements OnInit {
       });
     });
 
-    if(this.authService.isEmployee()) {
+    if(localStorage.getItem('user')) {
       //this.router.navigate(['/dashboard']);
       console.log('this is a Super Admin')
-      this.onNavigateToCustomerCareDashboard()
-    }
+      //this.onNavigateToCustomerCareDashboard()
+    } 
 
-    if(this.authService.isPartner()) {
+    if(localStorage.getItem('user')) {
       console.log('this is a Partner')
-      this.onNavigateToPartnerDashboard()
+      //this.onNavigateToPartnerDashboard()
     }
   }
 

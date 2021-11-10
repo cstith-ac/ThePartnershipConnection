@@ -53,7 +53,10 @@ export class SidenavComponent implements OnInit {
   ngOnInit() {
     // this.showSplash;
 
-    this.currentUserService.getCurrentUser();
+    if(localStorage.getItem('user')) {
+      this.currentUserService.getCurrentUser();
+    }
+    
     //console.log(this.currentUser$);
     
     $("#menu-toggle").click(function(e) {
@@ -139,75 +142,9 @@ export class SidenavComponent implements OnInit {
     } else if(user.afaRole == 19 || user.afaRole == 14 || user.afaRole == 9) {
       this.router.navigate(['/login']);
     }
-    //return false;
 
     //implementing this workaround until the JS in the auth service is fixed
     localStorage.clear();
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('companyName');
-    // localStorage.removeItem('partnerCode');
-    // localStorage.removeItem('installCompanyID');
-    // localStorage.removeItem('totalRecurringCalc');
-    // localStorage.removeItem('totalEquipMatCalc');
-    // localStorage.removeItem('totalLaborChargesCalc');
-    // localStorage.removeItem('invoiceDate');
-    // localStorage.removeItem('invoiceNumber');
-    // localStorage.removeItem('invoiceTotal');
-    // localStorage.removeItem('recurringentry');
-    // localStorage.removeItem('equipmatentry');
-    // localStorage.removeItem('laborchargesentry');
-    // localStorage.removeItem('invoice');
-    // localStorage.removeItem('subscriberForm');
-    // localStorage.removeItem('subscriberFormName');
-    // localStorage.removeItem('siteVisit');
-    // localStorage.removeItem('siteVisitName');
-    // localStorage.removeItem('otherDocument1');
-    // localStorage.removeItem('otherDocument1Name');
-    // localStorage.removeItem('contract');
-    // localStorage.removeItem('contractName');
-    // localStorage.removeItem('otherDocument2');
-    // localStorage.removeItem('otherDocument2Name');
-    // localStorage.removeItem('invoiceName');
-    // localStorage.removeItem('invoiceFileSize');
-    // localStorage.removeItem('contractDate');
-    // localStorage.removeItem('contractTerm');
-    // localStorage.removeItem('serviceIncluded');
-    // localStorage.removeItem('customerId');
-    // localStorage.removeItem('customerName');
-    // localStorage.removeItem('customerSiteName');
-    // localStorage.removeItem('customerSystemInformation');
-    // localStorage.removeItem('alarmAccount');
-    // localStorage.removeItem('systemType');
-    // localStorage.removeItem('panelType');
-    // localStorage.removeItem('panelLocation');
-    // localStorage.removeItem('centralStationID');
-    // localStorage.removeItem('customerSiteId');
-    // localStorage.removeItem('renewal');
-    // localStorage.removeItem('tax');
-    // localStorage.removeItem('partnerTaxAmount');
-    // localStorage.removeItem('additionalInfo');
-    // localStorage.removeItem('partnerComments');
-    // localStorage.removeItem('signalsTested');
-    // localStorage.removeItem('siteName');
-    // localStorage.removeItem('checkBoxAutoInsertList');
-    // localStorage.removeItem('results');
-    // localStorage.removeItem('removeSplash');
-    // localStorage.removeItem('InstructionsShown');
-    // localStorage.removeItem('customer_Id');
-    // localStorage.removeItem('customer_Site_Id');
-    // localStorage.removeItem('customer_System_Id');
-    // localStorage.removeItem('ticket_Number');
-    // localStorage.removeItem("customer_Number");
-    // localStorage.removeItem("customer_Name");
-    // localStorage.removeItem("business_Name");
-    // localStorage.removeItem("address_1");
-    // localStorage.removeItem("systemType");
-    // localStorage.removeItem("csAccount");
-    // localStorage.removeItem("panel_Location");
-    // localStorage.removeItem("centralStation");
-    // localStorage.removeItem("central_Station_ID");
-    // localStorage.removeItem("panel_Type_Id");
 
     this.flashMessage.show('You are logged out', {
       cssClass:'alert-success',

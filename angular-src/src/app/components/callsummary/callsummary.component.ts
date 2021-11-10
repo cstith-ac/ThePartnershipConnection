@@ -355,31 +355,34 @@ export class CallsummaryComponent implements OnInit {
 
   selectCustToSite(val: any) {
    this.changeSystem(val)
+   debugger
   }
 
   changeSystem(val: any) {
     let id = val;
     //append id to get getCustomerToSiteList
-    this.routeService.getSiteToSystemList(id).subscribe(
-      res => {
-        //if dbo.SiteToSystemList returns a null value, insert 1 as default value
-        if(res === null) {
-          console.log(res)
-          fetch(`http://localhost:63052/api/SiteToSystemList/1`)
-            .then(res => {
-              console.log(res)
-            })
-          
-          this.siteToSystemList = [].concat(res);
-       
-        } else {
-          //console.log(res)
-          this.siteToSystemList = [].concat(res);
+    if(id !== undefined) {
+      this.routeService.getSiteToSystemList(id).subscribe(
+        res => {
+          //if dbo.SiteToSystemList returns a null value, insert 1 as default value
+          if(res === null) {
+            console.log(res)
+            fetch(`http://localhost:63052/api/SiteToSystemList/1`)
+              .then(res => {
+                console.log(res)
+              })
+            
+            this.siteToSystemList = [].concat(res);
+         
+          } else {
+            //console.log(res)
+            this.siteToSystemList = [].concat(res);
+          }
+  
+          //this.siteToSystemList = [].concat(res);
         }
-
-        //this.siteToSystemList = [].concat(res);
-      }
-    )
+      )
+    }
   }
 
   loadToken() {

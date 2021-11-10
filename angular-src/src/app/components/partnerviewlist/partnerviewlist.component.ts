@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouteService } from '../../services/route.service';
@@ -84,6 +84,18 @@ export class PartnerviewlistComponent implements OnInit {
     )
   }
 
+  // ngOnDestroy() {
+  //   // alert(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}`)
+  //   // click ok to proceed or cancel and select another Partner
+  //   if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
+  //     // Save it!
+  //     console.log('Thing was saved to the database.');
+  //   } else {
+  //     // Do nothing!
+  //     console.log('Thing was not saved to the database.');
+  //   }
+  // }
+
   onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {
     this.partnerCode = partnerCode;
     this.sedonaContactEmail = sedonaContactEmail;
@@ -92,12 +104,16 @@ export class PartnerviewlistComponent implements OnInit {
     localStorage.setItem('sedonaContactEmail', this.sedonaContactEmail)
     localStorage.setItem('partnerName', this.partnerName);
 
-    // for(var i = 0; i < this.listPartnerContacts.length; i++) {
-    //   this.sedonaContactEmail = this.listPartnerContacts[i].sedonaContactEmail;
-    //   console.log(this.listPartnerContacts[0].sedonaContactEmail)
-    // }
-    //return
-    this.router.navigate(['partner-dashboard']);
+    if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
+      // Save it!
+      console.log('A user was selected.');
+      this.router.navigate(['partner-dashboard']);
+    } else {
+      // Do nothing!
+      console.log('A user was NOT selected.');
+    }
+
+    // this.router.navigate(['partner-dashboard']);
     // this.routeService.getPartnerLandingPageX('cstith@alarmconnections.com','hugo@cloudsecurityalarms.com').subscribe(
     //   res => {
     //     console.log(res.body)

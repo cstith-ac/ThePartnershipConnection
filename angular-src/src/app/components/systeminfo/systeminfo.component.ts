@@ -38,19 +38,26 @@ export class SysteminfoComponent implements OnInit {
         this.assistantsystems = res;
       }
     )
+    
+    // check if value exists
+    if(this.id) {
+      this.routeService.getCustomerSystemInfo(this.id).subscribe(
+        res => {
+          console.log(res)
+          //this.customerSystemInfo = res;
+        }
+      )
+    }
 
-    this.routeService.getCustomerSystemInfo(this.id).subscribe(
-      res => {
-        console.log(res)
-        //this.customerSystemInfo = res;
-      }
-    )
-
-    this.routeService.getCustomerContractNotesById(this.id).subscribe(
-      res => {
-        console.log(res);
-      }
-    )
+    // check if value exists
+    if(this.id) {
+      this.routeService.getCustomerContractNotesById(this.id).subscribe(
+        res => {
+          console.log(res);
+        }
+      )
+    }
+    
   }
 
   routeToSystem(id) {
