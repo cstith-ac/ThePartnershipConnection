@@ -194,7 +194,12 @@
 .goal:after {
     content: '';
 }
-
+.attritionGoalPercent {
+    color: #5ABD78;
+    font-size: 1rem;
+    margin-left: 29%;
+    margin-bottom: 0;
+}
 ::ng-deep .progress {
     background-color: rgba(90,189,120,0.24);
     filter: drop-shadow(3px 0px 1px rgba(0,0,0,0.2)) drop-shadow(1px 0 2px rgba(0,0,0,0.12)) drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));

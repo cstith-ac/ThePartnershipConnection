@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@ang
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import { RouteService } from '../../services/route.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -11,11 +12,13 @@ import { InstallCompanyList2 } from 'src/app/models/installcompanylist2';
 import { CheckBoxIndex } from '../../models/checkboxindex';
 import { CheckBoxIncompatible } from '../../models/checkboxincompatible';
 import { PartnerServiceListingExtended } from 'src/app/models/partnerservicelistingextended';
+import { PartnerServiceListingExtendedAC } from 'src/app/models/partnerservicelistingextendedac';
 import { IncentiveEntryService } from '../../services/incentive-entry.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -40,6 +43,8 @@ export class IncentiveentryComponent implements OnInit {
   checkBoxIncompatible: CheckBoxIncompatible[];
   checkBoxAutoInsertList: CheckBoxAutoInsertList[];
   partnerServiceListingExtended: PartnerServiceListingExtended[];
+  partnerServiceListingExtendedAC: PartnerServiceListingExtendedAC[];
+
   incentiveEntryForm: FormGroup;
   incentiveEntryMessageForm: FormGroup;
   submitted = false;
@@ -126,8 +131,12 @@ export class IncentiveentryComponent implements OnInit {
   customerComments;
   results: any[] = [];
   filterCategory;
+  currentACUserEmail;
+  currentUserRole;
+  partnerName;
 
   constructor(
+    public authService: AuthService,
     private currencyPipe: CurrencyPipe,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
@@ -292,8 +301,12 @@ export class IncentiveentryComponent implements OnInit {
           this.checkBoxName = e.checkBoxName;
           //this.checked
         })
-      }, err => {
-        console.log(err);
+      }, (err: HttpErrorResponse) => {
+        this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+          cssClass: 'text-center alert-danger',
+          timeout: 5000
+        });
+        this.spinnerService.hide();
       }
     )
 
@@ -625,20 +638,48 @@ export class IncentiveentryComponent implements OnInit {
 
     this.spinnerService.show();
 
-    this.routeService.getPartnerServiceListingExtended().subscribe(
+    this.authService.getProfile().subscribe(
       res => {
-        if(res) {
-          this.spinnerService.hide()
-        }
-        this.partnerServiceListingExtended = [].concat(res); //object
+        console.log(res.email)
+        console.log(res.afaRole)
+        this.currentACUserEmail = res.email;
+        this.currentUserRole = res.afaRole;
 
-        // for(let i = 0; i < this.partnerServiceListingExtended.length; i++) {
-        //   console.log(this.partnerServiceListingExtended[i].customer_Id)
-        //   console.log(this.partnerServiceListingExtended[i].customer_Site_Id)
-        //   console.log(this.partnerServiceListingExtended[i].customer_System_Id)
-        // }
+        if(this.currentUserRole !== 5) {
+          console.log('dbo.PartnerServiceListingExtendedAC')
+          // use this.currentACUserEmail and this.installCompanyID as params for the GET request
+          this.routeService.getPartnerServiceListingExtendedAC(this.currentACUserEmail,this.installCompanyID).subscribe(
+            res => {
+              if(res) {
+                this.spinnerService.hide();
+              }
+              console.log(res.body)
+              this.partnerServiceListingExtendedAC = res.body;
+              // for(let i = 0; i < this.partnerServiceListingExtendedAC.length; i++) {
+              //   console.log(this.partnerServiceListingExtendedAC[i].ticket_Number)
+              // }
+            }
+          )
+        }
+    
+        if(this.currentUserRole == 5) {
+          console.log('dbo.PartnerServiceListingExtended')
+          this.routeService.getPartnerServiceListingExtended().subscribe(
+            res => {
+              if(res) {
+                this.spinnerService.hide()
+              }
+              this.partnerServiceListingExtended = [].concat(res); //object
+            }
+          )
+        }
+      },
+      err => {
+        console.log(err);
       }
     )
+
+    
   }
 
   // Opens the selected Ticket #

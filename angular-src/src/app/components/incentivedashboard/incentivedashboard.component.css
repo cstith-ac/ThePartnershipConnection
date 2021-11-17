@@ -135,7 +135,8 @@
 }
 .shadow {
   border: 1px solid black;
-  margin-bottom: 2.1rem;
+  /* margin-bottom: 2.1rem; */
+  padding: .1rem .8rem;
 }
 
 .fullWidthSelect {
@@ -152,6 +153,9 @@
 }
 .mt-25 {
   margin-top: 25px;
+}
+.mt-1_8 {
+  margin-top: 1.8rem;
 }
 .pl-6 {
   padding-left: 6rem !important;
@@ -207,9 +211,8 @@ header, .row {
 	background-color: #1B5EAC;
 	color: #fff;
 }
-.k-input {
-  color:red;
-  /* height: calc(1.5em + 1.3rem) !important; */
+::ng-deep .k-numerictextbox .k-numeric-wrap .k-input {
+  color: #8898aa;
 }
 
 /*SAMPLE AUTOSUGGEST*/
@@ -248,6 +251,12 @@ header, .row {
 .ng-autocomplete {
   width: 280px;
 }
+.pl-25 {
+  padding-left: 25px;
+}
+.description {
+  width: 320px; /*Use to adjust description width. Will require updates to other fields*/
+}
   
 .ng-autocomplete ::ng-deep .autocomplete-container {
   box-shadow: none;
@@ -275,6 +284,9 @@ header, .row {
   
 .ng-autocomplete ::ng-deep .autocomplete-container ::ng-deep .not-found {
   border: 0;
+}
+.w-54 {
+  width: 54% !important;
 }
 
 /*Progress Bar*/

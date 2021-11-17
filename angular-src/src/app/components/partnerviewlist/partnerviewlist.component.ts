@@ -57,7 +57,14 @@ export class PartnerviewlistComponent implements OnInit {
     })
 
     this.spinnerService.show();
-    this.routeService.getListPartnerContacts().subscribe(
+
+    let params = {
+      "PrimaryOnly": "Y",
+      "RMFilter": 1,
+      "USStateID": 1
+    }
+
+    this.routeService.getListPartnerContacts(params).subscribe(
       res => {
         if(res.status === 200) {
           this.spinnerService.hide();
@@ -66,6 +73,7 @@ export class PartnerviewlistComponent implements OnInit {
             timeout: 1000
           });
         }
+        if(res.status)
 
         console.log(res);
         console.log(res.body);
@@ -80,6 +88,7 @@ export class PartnerviewlistComponent implements OnInit {
           cssClass: 'text-center alert-danger',
           timeout: 5000
         });
+        this.spinnerService.hide();
       }
     )
   }
@@ -111,6 +120,7 @@ export class PartnerviewlistComponent implements OnInit {
     } else {
       // Do nothing!
       console.log('A user was NOT selected.');
+      // show flashmessage, tell the user to please select a user
     }
 
     // this.router.navigate(['partner-dashboard']);
@@ -151,7 +161,12 @@ export class PartnerviewlistComponent implements OnInit {
 
   clearSearch() {
     console.log('clearSearch');
-    this.routeService.getListPartnerContacts().subscribe(
+    let params = {
+      "PrimaryOnly": "Y",
+      "RMFilter": 1,
+      "USStateID": 1
+    }
+    this.routeService.getListPartnerContacts(params).subscribe(
       res => {
         if(res.status === 200) {
           this.spinnerService.hide();

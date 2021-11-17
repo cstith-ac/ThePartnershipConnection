@@ -75,21 +75,28 @@ namespace WebAPI.Models
         public virtual DbSet<InstallCompanyList2> GetInstallCompanyList2s { get; set; }
         public virtual DbSet<PartnerCallToActionButton> GetPartnerCallToActionButtons { get; set; }
         public virtual DbSet<TPCCollectionsCallToActionButton> GetTPCCollectionsCallToActionButtons { get; set; }
+        public virtual DbSet<TPCCollectionsCallToActionButtonX> GetTPCCollectionsCallToActionButtonXs { get; set; }
         public virtual DbSet<PartnerLandingPage> GetPartnerLandingPages { get; set; }
         public virtual DbSet<PartnerAddNote> GetPartnerAddNotes { get; set; }
         public virtual DbSet<CancelQueueList> GetCancelQueueLists { get; set; }
+        public virtual DbSet<CancelQueueListX> GetCancelQueueListXs { get; set; }
         public virtual DbSet<CancelQueueSiteList> GetCancelQueueSiteLists { get; set; }
         public virtual DbSet<PartnerInvoiceListing> GetPartnerInvoiceListings { get; set; }
+        public virtual DbSet<PartnerInvoiceListingX> GetPartnerInvoiceListingXs { get; set; }
         public virtual DbSet<TPCPartnerAgingReport> GetTPCPartnerAgingReports { get; set; }
+        public virtual DbSet<TPCPartnerAgingReportX> GetTPCPartnerAgingReportXs { get; set; }
         public virtual DbSet<AgingBucketNames> GetAgingBucketNames { get; set; }
         public virtual DbSet<PartnerServiceListing> GetPartnerServiceListings { get; set; }
+        public virtual DbSet<PartnerServiceListingX> GetPartnerServiceListingXResult { get; set; }
         public virtual DbSet<PartnerServiceListingExtended> GetPartnerServiceListingExtendeds { get; set; }
+        public virtual DbSet<PartnerServiceListingExtendedAC> GetPartnerServiceListingExtendedACResult { get; set; }
         public virtual DbSet<PermissionsUserMap> GetPermissionsUserMaps { get; set; }
         public virtual DbSet<PermissionAdd> InsertPermissionAddResult { get; set; }
         public virtual DbSet<PermissionDelete> InsertPermissionDeleteResult { get; set; }
         public virtual DbSet<ListPartnerContacts> GetListPartnerContacts { get; set; }
         public virtual DbSet<PartnerLandingPageX> GetPartnerLandingPageXResult { get; set; }
         public virtual DbSet<Customer3GListingX> GetCustomer3GListingXResult { get; set; }
+        public virtual DbSet<TPCStateList> GetTPCStateLists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -517,6 +524,11 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<TPCCollectionsCallToActionButtonX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<PartnerLandingPage>(entity =>
             {
                 entity.HasNoKey();
@@ -532,6 +544,11 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<CancelQueueListX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<CancelQueueSiteList>(entity =>
             {
                 entity.HasNoKey();
@@ -542,7 +559,17 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<PartnerInvoiceListingX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<TPCPartnerAgingReport>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<TPCPartnerAgingReportX>(entity =>
             {
                 entity.HasNoKey();
             });
@@ -557,7 +584,17 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<PartnerServiceListingX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<PartnerServiceListingExtended>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerServiceListingExtendedAC>(entity =>
             {
                 entity.HasNoKey();
             });
@@ -588,6 +625,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<Customer3GListingX>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<TPCStateList>(entity =>
             {
                 entity.HasNoKey();
             });

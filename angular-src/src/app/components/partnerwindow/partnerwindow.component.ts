@@ -39,6 +39,25 @@ export class PartnerwindowComponent implements OnInit {
           this.elementRef.nativeElement.style.display = 'none';
         }, 1)
       }
+
+      if(route.url.toString() == "/partner-view-list") {
+        setTimeout(() => {
+          this.elementRef.nativeElement.style.display = 'none';
+        }, 1);
+      }
+
+      if(route.url.toString() == "/partner-dashboard") {
+        setTimeout(() => {
+          this.elementRef.nativeElement.style.display = 'none';
+        }, 1);
+      }
+
+      if(route.url.toString() == "/partner-service-list") {
+        setTimeout(() => {
+          this.elementRef.nativeElement.style.display = 'none';
+        }, 1);
+      }
+
     })
   }
 

@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
 import { throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { Router, UrlSegment } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
@@ -18,6 +19,7 @@ import { SummaryUpdate } from '../models/summaryupdate';
 import { Incentive_ADD_Finish } from '../models/incentiveaddfinish';
 import { CustomerSearchMatch } from '../models/customersearchmatch';
 import { PartnerAddNote } from '../models/partneraddnote';
+import { PartnerInvoiceListingX } from '../models/partnerinvoicelistingx';
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +36,14 @@ export class RouteService {
   incentiveAddLabor: Incentive_Add_Labor[] = [];
   //customerDocumentADD: Customer_Document_ADD[] = [];
   incentiveAddFinish: Incentive_ADD_Finish[] = [];
+  partnerInvoiceListingX: PartnerInvoiceListingX[] = [];
 
   baseUrl = environment.baseUrl;
 
-  constructor(private http: HttpClient, public jwtHelper: JwtHelperService) { }
+  constructor(
+    private router: Router,
+    private http: HttpClient, 
+    public jwtHelper: JwtHelperService) { }
 
   refreshList() {
     this.loadToken();
@@ -388,6 +394,18 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/TPCCollectionsCallToActionButton`, httpOptions);
   }
 
+  getTPCCollectionsCallToActionButtonX(id1:string,id2:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/TPCCollectionsCallToActionButtonX/` + id1 + `/` + id2, httpOptions);
+  }
+
   getPartnerInvoiceListing(): Observable<any> {
     this.loadToken();
     let httpOptions = {
@@ -399,6 +417,30 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerInvoiceListing`, httpOptions);
   }
 
+  postPartnerInvoiceListingX(partnerInvoiceListingX: PartnerInvoiceListingX): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken 
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.post<any>(`${this.baseUrl}/api/PartnerInvoiceListingX/`, partnerInvoiceListingX, httpOptions);
+  }
+
+  getTPCStateList(): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken 
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/TPCStateList/`, httpOptions);
+  }
+
   getTPCPartnerAgingReport(): Observable<any> {
     this.loadToken();
     let httpOptions = {
@@ -408,6 +450,18 @@ export class RouteService {
       })
     };
     return this.http.get<any>(`${this.baseUrl}/api/TPCPartnerAgingReport`, httpOptions);
+  }
+
+  getTPCPartnerAgingReportX(id1:string,id2:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/TPCPartnerAgingReportX/` + id1 + `/` + id2, httpOptions);
   }
 
   getPartnerLandingPage(): Observable<HttpResponse<any>> {
@@ -456,6 +510,17 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CancelQueueList`, httpOptions);
   }
 
+  getCancelQueueListX(id1:string,id2:string): Observable<any>  {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CancelQueueListX`, httpOptions);
+  }
+
   getCancelQueueSiteList(id: number): Observable<any> {
     this.loadToken();
     let httpOptions = {
@@ -478,6 +543,17 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListing`, httpOptions);
   }
 
+  getPartnerServiceListingX(id1:string,id2:string): Observable<any>  {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingX`, httpOptions);
+  }
+
   getPartnerServiceListingExtended(): Observable<any>  {
     this.loadToken();
     let httpOptions = {
@@ -487,6 +563,18 @@ export class RouteService {
       })
     };
     return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingExtended`, httpOptions);
+  }
+
+  getPartnerServiceListingExtendedAC(id1:string,id2:number): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingExtendedAC/` + id1 + `/` + id2, httpOptions);
   }
 
   getCheckBoxIndex(): Observable<HttpResponse<any>> {
@@ -694,7 +782,74 @@ export class RouteService {
       }),
       observe: 'response' as 'body' 
     };
-    return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish',params, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/Incentive_ADD_Finish', params, httpOptions)
+      .pipe(
+        catchError((err) => {
+          console.log('error caught in service');
+          alert('There may have been a problem with your invoice submission. Please contact invoices@alarmconnections.com to confirm.')
+          console.error(err);
+          localStorage.removeItem('totalRecurringCalc');
+          localStorage.removeItem('totalEquipMatCalc');
+          localStorage.removeItem('totalLaborChargesCalc');
+          localStorage.removeItem('invoiceDate');
+          localStorage.removeItem('invoiceNumber');
+          localStorage.removeItem('invoiceTotal');
+          localStorage.removeItem('recurringentry');
+          localStorage.removeItem('equipmatentry');
+          localStorage.removeItem('laborchargesentry');
+          localStorage.removeItem('invoiceName');
+          localStorage.removeItem('invoiceFileSize');
+          localStorage.removeItem('invoice');
+          localStorage.removeItem('subscriberForm');
+          localStorage.removeItem('subscriberFormName');
+          localStorage.removeItem('siteVisit');
+          localStorage.removeItem('siteVisitName');
+          localStorage.removeItem('otherDocument1');
+          localStorage.removeItem('otherDocument1Name');
+          localStorage.removeItem('contract');
+          localStorage.removeItem('contractName');
+          localStorage.removeItem('otherDocument2');
+          localStorage.removeItem('otherDocument2Name');
+          localStorage.removeItem('contractDate');
+          localStorage.removeItem('contractTerm');
+          localStorage.removeItem('serviceIncluded');
+          localStorage.removeItem('customerId');
+          localStorage.removeItem('customerName');
+          localStorage.removeItem('customerSiteName');
+          localStorage.removeItem('customerSystemInformation');
+          localStorage.removeItem('alarmAccount');
+          localStorage.removeItem('systemType');
+          localStorage.removeItem('panelType');
+          localStorage.removeItem('panelLocation');
+          localStorage.removeItem('centralStationID');
+          localStorage.removeItem('customerSiteId');
+          localStorage.removeItem('renewal');
+          localStorage.removeItem('partnerTaxAmount');
+          localStorage.removeItem('additionalInfo');
+          localStorage.removeItem('partnerComments');
+          localStorage.removeItem('signalsTested');
+          localStorage.removeItem('testObject');
+          localStorage.removeItem('checkBoxAutoInsertList');
+          localStorage.removeItem('results');
+          localStorage.removeItem('customer_Id');
+          localStorage.removeItem('customer_Site_Id');
+          localStorage.removeItem('customer_System_Id');
+          localStorage.removeItem('ticket_Number');
+          localStorage.removeItem('customer_Number');
+          localStorage.removeItem('customer_Name');
+          localStorage.removeItem('business_Name');
+          localStorage.removeItem('address_1');
+          localStorage.removeItem('csAccount');
+          localStorage.removeItem('panel_Location');
+          localStorage.removeItem('centralStation');
+          localStorage.removeItem('panel_Type_Id');
+          localStorage.removeItem('central_Station_ID');
+          localStorage.removeItem('system_Id');
+          this.router.navigate(['incentive-entry'])
+          return throwError(err);
+          
+        })
+      )
   }
 
   getInstallCompanyList(): Observable<any> {
@@ -730,15 +885,16 @@ export class RouteService {
     return this.http.post<any>(this.baseUrl + '/api/CheckboxAutoInsertList',params, httpOptions);
   }
 
-  getListPartnerContacts(): Observable<HttpResponse<any>> {
+  getListPartnerContacts(params:any): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 
-        'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken
       }),
-      observe: 'response' as 'body'
+      observe: 'response' as 'body',
     };
-    return this.http.get<any>(`${this.baseUrl}/api/ListPartnerContacts/`, httpOptions);
+    return this.http.post<any>(`${this.baseUrl}/api/ListPartnerContacts`,params, httpOptions);
   }
 
   loadToken() {
@@ -759,4 +915,6 @@ export class RouteService {
     console.log(errorMessage);
     return throwError(errorMessage);
   }
+
+  // isEmployeeAccessInvoiceEntry() {}
 }

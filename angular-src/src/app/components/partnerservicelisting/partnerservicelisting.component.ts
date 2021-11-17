@@ -55,6 +55,9 @@ export class PartnerservicelistingComponent implements OnInit {
   panel_Location;
   customerComments;
 
+  sedonaContactEmail;
+  partnerName;
+
   clicked = false;//disables button after click
 
   constructor(
@@ -79,19 +82,22 @@ export class PartnerservicelistingComponent implements OnInit {
 
     $("#wrapper").addClass("toggled");
 
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
+
     this.spinnerService.show();
 
-    // this.routeService.getPartnerServiceListing().subscribe(
-    // res => {
-    //   if(res) {
-    //     this.spinnerService.hide()
-    //   }
-      
-    //   this.partnerServiceListing = [].concat(res);
-      
-    // });
-
-    this.routeService.getPartnerServiceListingExtended().subscribe(
+    if(this.sedonaContactEmail) {
+      console.log('get x stored proc')
+      this.routeService.getPartnerServiceListingX(this.sedonaContactEmail, this.partnerName).subscribe(res => {
+        console.log(res)
+      })
+    }
+    if(!this.sedonaContactEmail) {
+      console.log('get regular stored proc')
+      this.routeService.getPartnerServiceListingExtended().subscribe(
       res => {
         if(res) {
           this.spinnerService.hide()
@@ -100,6 +106,17 @@ export class PartnerservicelistingComponent implements OnInit {
         this.partnerServiceListing = [].concat(res);
       }
     )
+    }
+
+    // this.routeService.getPartnerServiceListingExtended().subscribe(
+    //   res => {
+    //     if(res) {
+    //       this.spinnerService.hide()
+    //     }
+
+    //     this.partnerServiceListing = [].concat(res);
+    //   }
+    // )
 
     this.partnerServiceListingForm = this.fb.group({
       EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,

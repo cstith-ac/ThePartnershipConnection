@@ -1,0 +1,35 @@
+export class TPCPartnerAgingReportX {
+    partnerCode: string;
+    customer_Number: string;
+    sortCust: number;
+    customer_Name: string;
+    activeRMR: number;
+    collectionQueue: string;
+    filterCategory: string;
+    customerSince: string;
+    lastPay: string;
+    lastPayAmount: number;
+    pendingCancellation: string;
+    customer_Id: number;
+    bucket_1: number;
+    bucket_2: number;
+    bucket_3: number;
+    bucket_4: number;
+    bucket_5: number;
+    bal_Current: number;
+    availableCredit: number;
+    availableCash: number;
+    totalDue: number;
+    pastDue: number;
+    guaranteeStatus: string;
+    address_1: string;
+    address_2: string;
+    address_3: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    emailAddress: string;
+    primaryPhone: string;
+    alternatePhone: string;
+    commercialAccount: string;
+}

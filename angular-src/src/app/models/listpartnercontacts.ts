@@ -4,5 +4,9 @@ export class ListPartnerContacts {
     sedonaContactEmail: string;
     tpcLoginExists: string;
     rmAssigned: string;
+    rmid: number;
     lastLoginOn: string;
+    role: string;
+    primaryContact: string;
+    usState: string;
 }

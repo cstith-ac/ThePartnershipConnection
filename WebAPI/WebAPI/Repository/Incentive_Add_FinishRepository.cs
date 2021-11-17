@@ -45,7 +45,7 @@ namespace WebAPI.Repository
 
             var customerEmailAddressParam = new SqlParameter("@CustomerEmailAddress", incentive_Add_Finish.CustomerEmailAddress);
 
-            var testParam = new SqlParameter("@Test", 'N');
+            var testParam = new SqlParameter("@Test", incentive_Add_Finish.Test);
 
 
             await context.Database.ExecuteSqlRawAsync(

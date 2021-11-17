@@ -211,8 +211,9 @@ export class PartnerdashboardComponent implements OnInit {
           // console.log(this.permissionsUserMap[i])
           // console.log(this.permissionsUserMap[i].permissionName)
           // console.log(this.permissionsUserMap[i].hasPermission)
+          
           if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
-            this.hide3GConversion = true;
+            this.hide3GConversion = true; 
           }
           if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hidePendingCancellations = true;
@@ -261,6 +262,12 @@ export class PartnerdashboardComponent implements OnInit {
           this.firstName = this.sedonaContactEmail // use this or...
           // this.firstName = this.partnerName;  // use this
           console.log(data.body)
+          },(err:HttpErrorResponse) => {
+            this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+              cssClass: 'text-center alert-danger',
+              timeout: 5000
+            });
+            this.spinnerService.hide();
           }
       )
     } 

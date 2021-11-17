@@ -1232,30 +1232,56 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.setItem("additionalInfo", newAdditionalInfo);
   }
 
+  onChangePartnerTaxAmount(e) {
+    console.log(e)
+    console.log(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value)
+    if(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value == null) {
+      this.partnerTaxAmount = 0;
+      this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0.00)
+    }
+    if(this.partnerTaxAmount == NaN) {
+      this.partnerTaxAmount = 0;
+      this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0.00)
+    }
+  }
+
   getPartnerTaxAmount(e) {
     // console.log(this.incentiveDashboardForm.get('PartnerTaxAmount').value)
     // console.log(typeof e.target.value)
- 
-    let newPartnerTaxAmount = e.target.value;
-    console.log(newPartnerTaxAmount)
-    //localStorage.setItem("partnerTaxAmount", newPartnerTaxAmount);
-
-    this.partnerTaxAmount = parseFloat(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value);
+    //get period(.) on keyboad
+    // if . is pressed, this.partnerTaxAmount = 0.00
+    console.log(e)
+    console.log(e.target.value)
+    console.log(parseFloat(e.target.value))
+    this.partnerTaxAmount = parseFloat(e.target.value)
     console.log(typeof this.partnerTaxAmount)
-    var twoPlacedFloat = parseFloat(newPartnerTaxAmount).toFixed(2);
-    console.log(typeof newPartnerTaxAmount)//string
-    console.log(twoPlacedFloat)
+    // if(e.keyCode == 110) {
+    //   this.partnerTaxAmount = 0.00;
+    //   this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0.00)
+    // }
+ 
+    // let newPartnerTaxAmount = e.target.value;
+    // console.log(newPartnerTaxAmount)
+    // //localStorage.setItem("partnerTaxAmount", newPartnerTaxAmount);
 
-    this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + parseFloat(newPartnerTaxAmount));
+    // this.partnerTaxAmount = parseFloat(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value);
+    // console.log(typeof this.partnerTaxAmount)
+    // var twoPlacedFloat = parseFloat(newPartnerTaxAmount).toFixed(2);
+    // console.log(typeof newPartnerTaxAmount)//string
+    // console.log(twoPlacedFloat)
 
-    if(e.target.value === "" || e.target.value === null) {
-      //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0)
-      console.log('NaN displayed')
-      this.incentiveDashboardForm.patchValue({
-        PartnerTaxAmount: 0
-     });
-     this.partnerTaxAmount=0;
-    }
+    // this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + parseFloat(newPartnerTaxAmount));
+
+    this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
+
+    // if(e.target.value === "" || e.target.value === null) {
+    //   //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0)
+    //   console.log('NaN displayed')
+    //   this.incentiveDashboardForm.patchValue({
+    //     PartnerTaxAmount: 0
+    //  });
+    //  this.partnerTaxAmount=0;
+    // }
   }
 
   resetPartnerTaxAmount(e) {  
@@ -2253,8 +2279,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           updateIncentiveAddFinishWithJobID.serviceTicketNumber = '0'
         }
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        // updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = '';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.file_name) {
           console.log(this.file_name)
@@ -2343,7 +2370,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.site_visit_file_name) {
           console.log(this.site_visit_file_name)
@@ -2416,7 +2443,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.contract_file_name) {
           console.log(this.contract_file_name)
@@ -2468,7 +2495,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.frmData4.append('document_ext', '*Contracts');
         this.frmData4.append('user_code', 'TPC');
         //this.frmData4.append('user_description', this.file_name); // Needs to be Invoice, Site Visit, Contract, Subscriber Form, Other Document 1, or Other Document 2
-        this.frmData4.append('user_description', 'Subscriber Form');
+        // this.frmData4.append('user_description', 'Subscriber Form');
+        this.frmData4.append('user_description', 'Work Order');
         this.frmData4.append('reference1', null);
         this.frmData4.append('reference2', null);
         this.frmData4.append('reference3', null);
@@ -2489,7 +2517,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.subscriber_file_name) {
           console.log(this.subscriber_file_name)
@@ -2562,7 +2590,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.other_Document1_file_name) {
           console.log(this.other_Document1_file_name)
@@ -2635,7 +2663,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.test = 'N';
+        updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
         
         if(!this.other_Document2_file_name) {
           console.log(this.other_Document2_file_name)
@@ -2651,83 +2679,220 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           console.log(res.status)
 
           if(res.status === 200) {
-            this.flashMessage.show('Your invoice was uploaded successfully', {
+            this.flashMessage.show('Your invoice was successfully uploaded', {
               cssClass: 'text-center alert-success',
               timeout: 5000
             })
+            console.log(res.status);
+            
+            this.incentiveDashboardForm.disable();
+
+            this.spinnerService.hide();
+
+            localStorage.removeItem('totalRecurringCalc');
+            localStorage.removeItem('totalEquipMatCalc');
+            localStorage.removeItem('totalLaborChargesCalc');
+            localStorage.removeItem('invoiceDate');
+            localStorage.removeItem('invoiceNumber');
+            localStorage.removeItem('invoiceTotal');
+            localStorage.removeItem('recurringentry');
+            localStorage.removeItem('equipmatentry');
+            localStorage.removeItem('laborchargesentry');
+            localStorage.removeItem('invoiceName');
+            localStorage.removeItem('invoiceFileSize');
+            localStorage.removeItem('invoice');
+            localStorage.removeItem('subscriberForm');
+            localStorage.removeItem('subscriberFormName');
+            localStorage.removeItem('siteVisit');
+            localStorage.removeItem('siteVisitName');
+            localStorage.removeItem('otherDocument1');
+            localStorage.removeItem('otherDocument1Name');
+            localStorage.removeItem('contract');
+            localStorage.removeItem('contractName');
+            localStorage.removeItem('otherDocument2');
+            localStorage.removeItem('otherDocument2Name');
+            localStorage.removeItem('contractDate');
+            localStorage.removeItem('contractTerm');
+            localStorage.removeItem('serviceIncluded');
+            localStorage.removeItem('customerId');
+            localStorage.removeItem('customerName');
+            localStorage.removeItem('customerSiteName');
+            localStorage.removeItem('customerSystemInformation');
+            localStorage.removeItem('alarmAccount');
+            localStorage.removeItem('systemType');
+            localStorage.removeItem('panelType');
+            localStorage.removeItem('panelLocation');
+            localStorage.removeItem('centralStationID');
+            localStorage.removeItem('customerSiteId');
+            localStorage.removeItem('renewal');
+            localStorage.removeItem('partnerTaxAmount');
+            localStorage.removeItem('additionalInfo');
+            localStorage.removeItem('partnerComments');
+            localStorage.removeItem('signalsTested');
+            localStorage.removeItem('testObject');
+            localStorage.removeItem('checkBoxAutoInsertList');
+            localStorage.removeItem('results');
+            localStorage.removeItem('customer_Id');
+            localStorage.removeItem('customer_Site_Id');
+            localStorage.removeItem('customer_System_Id');
+            localStorage.removeItem('ticket_Number');
+            localStorage.removeItem('customer_Number');
+            localStorage.removeItem('customer_Name');
+            localStorage.removeItem('business_Name');
+            localStorage.removeItem('address_1');
+            localStorage.removeItem('csAccount');
+            localStorage.removeItem('panel_Location');
+            localStorage.removeItem('centralStation');
+            localStorage.removeItem('panel_Type_Id');
+            localStorage.removeItem('central_Station_ID');
+            localStorage.removeItem('system_Id');
+
+            setTimeout(() => {
+              this.router.navigate(['incentive-entry/']);  
+            }, 5000);
+
+          } else {
+            this.flashMessage.show('There was a problem with your invoice upload', {
+              cssClass: 'text-center alert-danger',
+              timeout: 5000
+            })
+            console.log(res.status)
+            this.spinnerService.hide();
           }
+          
           console.log('Finished!...');
           this.spinnerService.hide();
 
-        //localStorage.removeItem('installCompanyID');
-        localStorage.removeItem('totalRecurringCalc');
-        localStorage.removeItem('totalEquipMatCalc');
-        localStorage.removeItem('totalLaborChargesCalc');
-        localStorage.removeItem('invoiceDate');
-        localStorage.removeItem('invoiceNumber');
-        localStorage.removeItem('invoiceTotal');
-        localStorage.removeItem('recurringentry');
-        localStorage.removeItem('equipmatentry');
-        localStorage.removeItem('laborchargesentry');
-        localStorage.removeItem('invoiceName');
-        localStorage.removeItem('invoiceFileSize');
-        localStorage.removeItem('invoice');
-        localStorage.removeItem('subscriberForm');
-        localStorage.removeItem('subscriberFormName');
-        localStorage.removeItem('siteVisit');
-        localStorage.removeItem('siteVisitName');
-        localStorage.removeItem('otherDocument1');
-        localStorage.removeItem('otherDocument1Name');
-        localStorage.removeItem('contract');
-        localStorage.removeItem('contractName');
-        localStorage.removeItem('otherDocument2');
-        localStorage.removeItem('otherDocument2Name');
-        localStorage.removeItem('contractDate');
-        localStorage.removeItem('contractTerm');
-        localStorage.removeItem('serviceIncluded');
-        localStorage.removeItem('customerId');
-        localStorage.removeItem('customerName');
-        localStorage.removeItem('customerSiteName');
-        localStorage.removeItem('customerSystemInformation');
-        localStorage.removeItem('alarmAccount');
-        localStorage.removeItem('systemType');
-        localStorage.removeItem('panelType');
-        localStorage.removeItem('panelLocation');
-        localStorage.removeItem('centralStationID');
-        localStorage.removeItem('customerSiteId');
-        localStorage.removeItem('renewal');
-        localStorage.removeItem('partnerTaxAmount');
-        localStorage.removeItem('additionalInfo');
-        localStorage.removeItem('partnerComments');
-        localStorage.removeItem('signalsTested');
-        localStorage.removeItem('testObject');
-        localStorage.removeItem('checkBoxAutoInsertList');
-        localStorage.removeItem('results');
-        localStorage.removeItem('customer_Id');
-        localStorage.removeItem('customer_Site_Id');
-        localStorage.removeItem('customer_System_Id');
-        localStorage.removeItem('ticket_Number');
-        localStorage.removeItem('customer_Number');
-        localStorage.removeItem('customer_Name');
-        localStorage.removeItem('business_Name');
-        localStorage.removeItem('address_1');
-        localStorage.removeItem('csAccount');
-        localStorage.removeItem('panel_Location');
-        localStorage.removeItem('centralStation');
-        localStorage.removeItem('panel_Type_Id');
-        localStorage.removeItem('central_Station_ID');
-        localStorage.removeItem('system_Id');
+          //localStorage.removeItem('installCompanyID');
+          // localStorage.removeItem('totalRecurringCalc');
+          // localStorage.removeItem('totalEquipMatCalc');
+          // localStorage.removeItem('totalLaborChargesCalc');
+          // localStorage.removeItem('invoiceDate');
+          // localStorage.removeItem('invoiceNumber');
+          // localStorage.removeItem('invoiceTotal');
+          // localStorage.removeItem('recurringentry');
+          // localStorage.removeItem('equipmatentry');
+          // localStorage.removeItem('laborchargesentry');
+          // localStorage.removeItem('invoiceName');
+          // localStorage.removeItem('invoiceFileSize');
+          // localStorage.removeItem('invoice');
+          // localStorage.removeItem('subscriberForm');
+          // localStorage.removeItem('subscriberFormName');
+          // localStorage.removeItem('siteVisit');
+          // localStorage.removeItem('siteVisitName');
+          // localStorage.removeItem('otherDocument1');
+          // localStorage.removeItem('otherDocument1Name');
+          // localStorage.removeItem('contract');
+          // localStorage.removeItem('contractName');
+          // localStorage.removeItem('otherDocument2');
+          // localStorage.removeItem('otherDocument2Name');
+          // localStorage.removeItem('contractDate');
+          // localStorage.removeItem('contractTerm');
+          // localStorage.removeItem('serviceIncluded');
+          // localStorage.removeItem('customerId');
+          // localStorage.removeItem('customerName');
+          // localStorage.removeItem('customerSiteName');
+          // localStorage.removeItem('customerSystemInformation');
+          // localStorage.removeItem('alarmAccount');
+          // localStorage.removeItem('systemType');
+          // localStorage.removeItem('panelType');
+          // localStorage.removeItem('panelLocation');
+          // localStorage.removeItem('centralStationID');
+          // localStorage.removeItem('customerSiteId');
+          // localStorage.removeItem('renewal');
+          // localStorage.removeItem('partnerTaxAmount');
+          // localStorage.removeItem('additionalInfo');
+          // localStorage.removeItem('partnerComments');
+          // localStorage.removeItem('signalsTested');
+          // localStorage.removeItem('testObject');
+          // localStorage.removeItem('checkBoxAutoInsertList');
+          // localStorage.removeItem('results');
+          // localStorage.removeItem('customer_Id');
+          // localStorage.removeItem('customer_Site_Id');
+          // localStorage.removeItem('customer_System_Id');
+          // localStorage.removeItem('ticket_Number');
+          // localStorage.removeItem('customer_Number');
+          // localStorage.removeItem('customer_Name');
+          // localStorage.removeItem('business_Name');
+          // localStorage.removeItem('address_1');
+          // localStorage.removeItem('csAccount');
+          // localStorage.removeItem('panel_Location');
+          // localStorage.removeItem('centralStation');
+          // localStorage.removeItem('panel_Type_Id');
+          // localStorage.removeItem('central_Station_ID');
+          // localStorage.removeItem('system_Id');
 
-        this.router.navigate(['incentive-entry/']);
-        }, (err: HttpErrorResponse) => {
-          alert(err + ' there was a problem. Please contact an administrator');
-          this.spinnerService.hide();
-        })
-      ))
-    ).subscribe(res => {
-      console.log(res)
-    })
-
+          // this.router.navigate(['incentive-entry/']);
+          }, (err: HttpErrorResponse) => {
+            alert(err + ' there was a problem. Please contact an administrator');
+            this.flashMessage.show('There may have been a problem with your invoice submission. Please contact invoices@alarmconnections.com to confirm.', {
+              cssClass: 'text-center alert-danger',
+              timeout: 5000
+            });
+            localStorage.removeItem('totalRecurringCalc');
+            localStorage.removeItem('totalEquipMatCalc');
+            localStorage.removeItem('totalLaborChargesCalc');
+            localStorage.removeItem('invoiceDate');
+            localStorage.removeItem('invoiceNumber');
+            localStorage.removeItem('invoiceTotal');
+            localStorage.removeItem('recurringentry');
+            localStorage.removeItem('equipmatentry');
+            localStorage.removeItem('laborchargesentry');
+            localStorage.removeItem('invoiceName');
+            localStorage.removeItem('invoiceFileSize');
+            localStorage.removeItem('invoice');
+            localStorage.removeItem('subscriberForm');
+            localStorage.removeItem('subscriberFormName');
+            localStorage.removeItem('siteVisit');
+            localStorage.removeItem('siteVisitName');
+            localStorage.removeItem('otherDocument1');
+            localStorage.removeItem('otherDocument1Name');
+            localStorage.removeItem('contract');
+            localStorage.removeItem('contractName');
+            localStorage.removeItem('otherDocument2');
+            localStorage.removeItem('otherDocument2Name');
+            localStorage.removeItem('contractDate');
+            localStorage.removeItem('contractTerm');
+            localStorage.removeItem('serviceIncluded');
+            localStorage.removeItem('customerId');
+            localStorage.removeItem('customerName');
+            localStorage.removeItem('customerSiteName');
+            localStorage.removeItem('customerSystemInformation');
+            localStorage.removeItem('alarmAccount');
+            localStorage.removeItem('systemType');
+            localStorage.removeItem('panelType');
+            localStorage.removeItem('panelLocation');
+            localStorage.removeItem('centralStationID');
+            localStorage.removeItem('customerSiteId');
+            localStorage.removeItem('renewal');
+            localStorage.removeItem('partnerTaxAmount');
+            localStorage.removeItem('additionalInfo');
+            localStorage.removeItem('partnerComments');
+            localStorage.removeItem('signalsTested');
+            localStorage.removeItem('testObject');
+            localStorage.removeItem('checkBoxAutoInsertList');
+            localStorage.removeItem('results');
+            localStorage.removeItem('customer_Id');
+            localStorage.removeItem('customer_Site_Id');
+            localStorage.removeItem('customer_System_Id');
+            localStorage.removeItem('ticket_Number');
+            localStorage.removeItem('customer_Number');
+            localStorage.removeItem('customer_Name');
+            localStorage.removeItem('business_Name');
+            localStorage.removeItem('address_1');
+            localStorage.removeItem('csAccount');
+            localStorage.removeItem('panel_Location');
+            localStorage.removeItem('centralStation');
+            localStorage.removeItem('panel_Type_Id');
+            localStorage.removeItem('central_Station_ID');
+            localStorage.removeItem('system_Id');
+            this.spinnerService.hide();
+            this.router.navigate(['incentive-entry/']);
+          })
+        ))
+      ).subscribe(res => {
+        console.log(res)
+      })
   }
 
   getFileData(e) {
@@ -3000,8 +3165,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onSignalsTested(e) {
-    //console.log(e.target.checked);//boolean
-
+    // console.log(e.target.checked);//boolean
+    // console.log(e.target.value)
+    // console.log(e)
+    if(e.target.value == 1) {
+      console.log(e.target.value)
+      // The signals were tested, pass a 'Y'
+      this.signalsTested = 'Y';
+      let newSignalTested = this.incentiveDashboardForm.controls['SignalsTested'].value;
+      console.log(newSignalTested);
+      localStorage.setItem("signalsTested", this.signalsTested);
+    }
+    if(e.target.value == 2) {
+      console.log(e.target.value)
+      // The signals were NOT tested, pass a 'N'
+      this.signalsTested = 'N';
+      let newSignalTested = this.incentiveDashboardForm.controls['SignalsTested'].value;
+      console.log(newSignalTested);
+      localStorage.setItem("signalsTested", this.signalsTested);
+    }
+    return
     if(e.target.checked == true) {
       this.signalsTested = 'y'
     }

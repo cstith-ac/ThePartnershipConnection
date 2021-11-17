@@ -116,6 +116,7 @@ namespace WebAPI
             services.AddScoped<IPartnerAddNoteRepository, PartnerAddNoteRepository>();
             services.AddScoped<IPermissionAddRepository, PermissionAddRepository>();
             services.AddScoped<IPermissionDeleteRepository, PermissionDeleteRepository>();
+            services.AddScoped<IPartnerInvoiceListingXRepository, PartnerInvoiceListingXRepository>();
             //services.AddScoped<IPartnerLandingPageXRepository, PartnerLandingPageXRepository>();
             //services.AddScoped<IPartnerInvoiceListingRepository, PartnerInvoiceListingRepository>();
             //services.AddScoped<ICheckboxAutoInsertListRepository, CheckboxAutoInsertListRepository>();

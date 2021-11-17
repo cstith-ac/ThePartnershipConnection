@@ -1,3 +1,6 @@
+<div class="flashMessage">
+    <flash-messages></flash-messages>
+</div>
 <div class="card">
     <div class="card-body">
         <div class="row ml-0">
@@ -12,7 +15,7 @@
         <form [formGroup]="incentiveDashboardForm" (ngSubmit)="onSubmit(incentiveDashboardForm)">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 mt-1_8">
                         <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
@@ -252,134 +255,139 @@
                         </div>
                     </div>
                     <div class="col-md-7">
-                        <div class="row">
+                        <div class="shadow">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>
+                                        Upload Documents - (An invoice submission is required)
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showInvoiceFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Invoice</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="invoiceUpload" 
+                                            formControlName="InvoiceUpload"
+                                            (change)="getInvoiceFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showInvoiceFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Invoice</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #invoice>{{file_name}}</p>
+                                        <i 
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeInvoiceFile()"
+                                        ></i>
+                                    </div>
+                                </div>
+    
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showSubscriberFormFile">
+                                        <!-- <label class="col-sm-5 col-form-label">Subscriber Form</label> -->
+                                        <label class="col-sm-5 col-form-label">Work Order</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
+                                            (change)="getSubscriberFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showSubscriberFormFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Work Order</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriber_file_name}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showSiteVisitFile">
+                                        <!-- <label class="col-sm-4 col-form-label pl-0">Site Visit</label> -->
+                                        <label class="col-sm-4 col-form-label pl-0">Customer Visit</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
+                                            (change)="getSiteVisitFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showSiteVisitFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Customer Visit</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{site_visit_file_name}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showOtherDocument1File">
+                                        <label class="col-sm-5 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
+                                            (change)="getOtherDocument1FileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showOtherDocument1File">
+                                        <label class="col-sm-4 col-form-label pl-0">Other Document</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{other_Document1_file_name}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-inline mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showContractFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Contract</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="contractUpload" formControlName="ContractUpload"
+                                            (change)="getContractFileDetails($event)"
+                                        >
+                                    </div>
+                                    <div class="form-group" *ngIf="showContractFile">
+                                        <label class="col-sm-4 col-form-label pl-0">Contract</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #contract>{{contract_file_name}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" *ngIf="!showOtherDocument2File">
+                                        <label class="col-sm-5 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3"></i>
+                                        <input 
+                                            type="file" 
+                                            class="form-control col-sm-6" 
+                                            [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
+                                            (change)="getOtherDocument2FileDetails($event)"
+                                        > 
+                                    </div>
+                                    <div class="form-group" *ngIf="showOtherDocument2File">
+                                        <label class="col-sm-4 col-form-label pl-0">Other Document</label>
+                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{other_Document2_file_name}}</p>
+                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
                             <div class="col-md-12">
                                 <h3>
-                                    Upload Documents - (An invoice submission is required)
+                                    Invoice Information
                                 </h3>
                             </div>
                         </div>
-                        <div class="row form-inline mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showInvoiceFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Invoice</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="invoiceUpload" 
-                                        formControlName="InvoiceUpload"
-                                        (change)="getInvoiceFileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="showInvoiceFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #invoice>{{file_name}}</p>
-                                    <i 
-                                        class="pl-3 far fa-trash-alt text-danger" 
-                                        (click)="removeInvoiceFile()"
-                                    ></i>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showSubscriberFormFile">
-                                    <label class="col-sm-5 col-form-label">Subscriber Form</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
-                                        (change)="getSubscriberFileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="showSubscriberFormFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriber_file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-inline mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showSiteVisitFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Site Visit</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
-                                        (change)="getSiteVisitFileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="showSiteVisitFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{site_visit_file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showOtherDocument1File">
-                                    <label class="col-sm-5 col-form-label">Other Document</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
-                                        (change)="getOtherDocument1FileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="showOtherDocument1File">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{other_Document1_file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-inline mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showContractFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Contract</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="contractUpload" formControlName="ContractUpload"
-                                        (change)="getContractFileDetails($event)"
-                                    >
-                                </div>
-                                <div class="form-group" *ngIf="showContractFile">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #contract>{{contract_file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group" *ngIf="!showOtherDocument2File">
-                                    <label class="col-sm-5 col-form-label">Other Document</label>
-                                    <i class="fas fa-upload pr-3"></i>
-                                    <input 
-                                        type="file" 
-                                        class="form-control col-sm-6" 
-                                        [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
-                                        (change)="getOtherDocument2FileDetails($event)"
-                                    > 
-                                </div>
-                                <div class="form-group" *ngIf="showOtherDocument2File">
-                                    <label class="col-sm-4 col-form-label pl-0">Uploaded File</label>
-                                    <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{other_Document2_file_name}}</p>
-                                    <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>
-                                    Incentive Information
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="row form-inline mb-4">
+                        <div class="row form-inline mb-2">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-sm-7 col-form-label pl-0">Invoice #</label>
@@ -411,6 +419,8 @@
                                             [value]="invoiceTotal"
                                             [spinners]="false"
                                             placeholder="$0.00"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
                                         ></kendo-numerictextbox>
                                     </div>
                                 </div>
@@ -420,14 +430,17 @@
                                     <label class="col-sm-3 col-form-label">Tax</label>
                                     <div class="input-group d-flex justify-content-center">
                                         <kendo-numerictextbox
-                                            format="c2"
+                                            format="n2"
                                             [value]="partnerTaxAmount"
                                             [spinners]="false"
                                             placeholder="$0.00"
                                             formControlName="PartnerTaxAmount"
                                             (keyup)="getPartnerTaxAmount($event)"
+                                            (change)="onChangePartnerTaxAmount($event)"
                                             [min]="0"
                                             [(ngbTooltip)]="taxToolTip"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
                                         ></kendo-numerictextbox>
                                     </div>
                                 </div>
@@ -436,7 +449,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label>
+                                    <!-- <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label> -->
+                                    <label class="col-form-label pl-0 col-sm-6">Add RMR (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
                                         <kendo-numerictextbox
                                             format="c2"
@@ -448,7 +462,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label>
+                                    <!-- <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label> -->
+                                    <label class="col-form-label pl-0 col-sm-6">Other Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
                                         <kendo-numerictextbox
                                             format="c2"
@@ -485,7 +500,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="shadow">
+                                <div class="shadow mb-3">
                                     <div class="ml-2 mt-2">
                                         <h3>Contract Terms</h3>
                                     </div>
@@ -519,8 +534,36 @@
                                         >Mo
                                     </div>
                                 </div>
-                                <div class="shadow">
-                                    <div class="form-group form-inline form-check mb-0">
+                                <div class="shadow mb-3">
+                                    <div class="row">
+                                        <div class="col border-right ml-2 pl-3 pr-2">
+                                            <div class="form-group form">
+                                                <label class="mr-3 text-success font-weight-bold">Signals Tested!</label>
+                                                <input 
+                                                    type="radio" 
+                                                    formControlName="SignalsTested" 
+                                                    value="1"
+                                                    (change)="onSignalsTested($event)"
+                                                >
+                                                <br>
+                                                <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col pr-3 pl-2 mr-2">
+                                            <div class="form-group form">
+                                                <label class="mr-3 text-danger font-weight-bold">Not All Signals Tested!</label>
+                                                <input 
+                                                    type="radio" 
+                                                    formControlName="SignalsTested" 
+                                                    value="2"
+                                                    (change)="onSignalsTested($event)"
+                                                >
+                                                <br>
+                                                <small>Please use the comment section to describe the level of signal testing completed.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group form-inline form-check mb-0">
                                         <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
                                         <input 
                                             type="checkbox" class="form-control form-check-input" 
@@ -533,7 +576,7 @@
                                         <label class="col-sm-10 col-form-label">
                                             <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
                                         </label>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 
                                 <!-- <div class="progress" *ngIf="barWidth!='0%'">
@@ -555,7 +598,7 @@
 
                                 <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
 
-                                <button type="button" class="btn btn-secondary float-right mr-2" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Incentive</button>
+                                <button type="button" class="btn btn-secondary float-right mr-2" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
                             </div>
                         </div>
                     </div> 
@@ -1076,7 +1119,7 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6 pl-0">
-                                <h1 class="incentive-header">Incentive Entry
+                                <h1 class="incentive-header">Invoice Entry
                                 </h1>
                             </div>
                             <div class="col-md-6">
@@ -1087,12 +1130,22 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 offset-md-6">
-                                <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                                <span class="font-weight-bold">Customer Site Information: 
+                                    <span class="text-danger">{{ customerSiteName }}</span>
+                                    <span *ngIf="customerPreselected" class="text-danger">
+                                        {{ bus_Name_Add1 }}
+                                    </span>
+                                </span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 offset-md-6">
-                                <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                                <span class="font-weight-bold">Customer System Information: 
+                                    <span class="text-danger">{{ systemName }}</span>
+                                    <span *ngIf="customerPreselected" class="text-danger">
+                                        {{ sysType_csAccount }}
+                                    </span>
+                                </span>
                             </div>
                         </div>
                         <div class="row">
@@ -1255,7 +1308,11 @@
                         <div class="col">
                             <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveRecurringEntryForm.invalid">
                         </div>
-                        <p>Total is: ${{ totalSumRecurring }}</p>
+                        <div class="row pt-2 pl-3">
+                            <div class="col">
+                                <p>Total is: ${{ totalSumRecurring }}</p>
+                            </div>
+                        </div>
                     </form>
                 </section>
             </div>
@@ -1276,7 +1333,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6 pl-0">
-                            <h1 class="incentive-header">Incentive Entry
+                            <h1 class="incentive-header">Invoice Entry
                             </h1>
                         </div>
                         <div class="col-md-6">
@@ -1287,17 +1344,28 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
-                            <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                            <span class="font-weight-bold">Customer Site Information: 
+                                <span class="text-danger">{{ customerSiteName }}</span>
+                                <!--if-->
+                                <span *ngIf="customerPreselected" class="text-danger">
+                                    {{ bus_Name_Add1 }}
+                                </span>
+                            </span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
-                            <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                            <span class="font-weight-bold">Customer System Information: 
+                                <span class="text-danger">{{ systemName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger">
+                                    {{ sysType_csAccount }}
+                                </span>
+                            </span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 pl-0">
-                            <h3 class="incentive-header">Equipment and Materials Entry</h3>
+                            <h3 class="incentive-header">Other Charges Entry</h3>
                         </div>
                     </div>
                 </div>
@@ -1310,9 +1378,9 @@
                             Item
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-sm-3 pl-25">
                         <span class="align-middle">
-                            Description
+                            Description/Part #
                         </span>
                     </div>
                     <div class="col">
@@ -1354,7 +1422,7 @@
                                 <div class="col">
                                     <input 
                                         type="text" 
-                                        class="form-control"
+                                        class="form-control description"
                                         formControlName="Description" 
                                         name="something_{{i}}"
                                     >
@@ -1363,7 +1431,7 @@
                                     <input 
                                         type="number" 
                                         formControlName="Quantity"
-                                        class="form-control"
+                                        class="form-control w-54"
                                         min="0"
                                     >
                                 </div>
@@ -1416,7 +1484,11 @@
                     <div class="col">
                         <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveEquipMatEntryForm.invalid">
                     </div>
-                    <p>Total is: ${{ totalSumEquipMat }}</p>
+                    <div class="row pt-2 pl-3">
+                        <div class="col">
+                            <p>Total is: ${{ totalSumEquipMat }}</p>
+                        </div>
+                    </div>
                 </form>
             </section>
         </div>
@@ -1436,7 +1508,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6 pl-0">
-                            <h1 class="incentive-header">Incentive Entry
+                            <h1 class="incentive-header">Invoice Entry
                             </h1>
                         </div>
                         <div class="col-md-6">
@@ -1447,12 +1519,22 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
-                            <span class="font-weight-bold">Customer Site Information: <span class="text-danger">{{ customerSiteName }}</span></span>
+                            <span class="font-weight-bold">Customer Site Information: 
+                                <span class="text-danger">{{ customerSiteName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger">
+                                    {{ bus_Name_Add1 }}
+                                </span>
+                            </span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
-                            <span class="font-weight-bold">Customer System Information: <span class="text-danger">{{ systemName }}</span></span>
+                            <span class="font-weight-bold">Customer System Information: 
+                                <span class="text-danger">{{ systemName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger">
+                                    {{ sysType_csAccount }}
+                                </span>
+                            </span>
                         </div>
                     </div>
                     <div class="row">
@@ -1470,7 +1552,7 @@
                             Item
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-sm-3 pl-25">
                         <span class="align-middle">
                             Description
                         </span>
@@ -1511,7 +1593,7 @@
                                 <div class="col">
                                     <input 
                                         type="text" 
-                                        class="form-control"
+                                        class="form-control description"
                                         formControlName="Description"
                                         name="something_{{i}}"
                                     >
@@ -1520,7 +1602,7 @@
                                     <input 
                                         type="number" 
                                         formControlName="Quantity"
-                                        class="form-control"
+                                        class="form-control w-54"
                                         min="0"
                                     >
                                 </div>
@@ -1583,7 +1665,11 @@
                     <div class="col">
                         <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveLaborChargesEntryForm.invalid">
                     </div>
-                    <p>Total is: ${{ totalSumLaborCharges }}</p>
+                    <div class="row pt-2 pl-3">
+                        <div class="col">
+                            <p>Total is: ${{ totalSumLaborCharges }}</p>
+                        </div>
+                    </div>
                 </form>
             </section>
         </div>

@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ListPartnerContactsController : ControllerBase
+    public class TPCStateListController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public ListPartnerContactsController(
+        public TPCStateListController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -33,33 +33,21 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize]
-        public async Task<Object> GetListPartnerContacts(ListPartnerContacts listPartnerContacts)
+        public async Task<Object> GetTPCStateLists()
         {
-            var list = new List<ListPartnerContacts>();
+            var list = new List<TPCStateList>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-
-                var primaryOnlyParam = new SqlParameter("@PrimaryOnly", "Y");
-                var rmFilterParam = new SqlParameter("@RMFilter", 1);
-                var usStateIDParam = new SqlParameter("@USStateID", 1);
-
-                var result = await db.GetListPartnerContacts.FromSqlRaw("Execute [dbo].[ListPartnerContacts] @PrimaryOnly, @RMFilter, @USStateID", primaryOnlyParam, rmFilterParam, usStateIDParam).ToListAsync();
-                List<ListPartnerContacts> Lst = result.Select(s => new ListPartnerContacts
+                var result = await db.GetTPCStateLists.FromSqlRaw("exec dbo.TPCStateList").ToListAsync();
+                List<TPCStateList> Lst = result.Select(s => new TPCStateList
                 {
-                    PartnerCode = s.PartnerCode,
-                    PartnerName = s.PartnerName,
-                    SedonaContactEmail = s.SedonaContactEmail,
-                    TPCLoginExists = s.TPCLoginExists,
-                    RMAssigned = s.RMAssigned,
-                    RMID = s.RMID,
-                    LastLoginOn = s.LastLoginOn,
-                    Role = s.Role,
-                    PrimaryContact = s.PrimaryContact,
-                    USState = s.USState
+                    USStateID = s.USStateID,
+                    USStateName = s.USStateName,
+                    USStateAbbr = s.USStateAbbr
                 }).ToList();
 
                 return Lst;
