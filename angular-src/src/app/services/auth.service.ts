@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment';
@@ -41,17 +41,32 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Register', user, httpOptions);
   }
 
-  authenticateUser(user): Observable<any> {
-    // let httpOptions = { 
-    //   headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response', 'Access-Control-Allow-Origin': '*' }) 
-    // };
+  // get the http response
+  // NEW
+  authenticateUser(user): Observable<HttpResponse<any>> {
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response' }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      }),
+      observe:'response' as 'body'
     };
     return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
+  // OLD
+  // authenticateUser(user): Observable<any> {
+  //   // let httpOptions = { 
+  //   //   headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response', 'Access-Control-Allow-Origin': '*' }) 
+  //   // };
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json',observe:'response' }) 
+  //   };
+  //   return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions).pipe(
+  //     catchError(this.errorHandler)
+  //   );
+  // }
 
   getProfile(): Observable<any> {
     this.loadToken();

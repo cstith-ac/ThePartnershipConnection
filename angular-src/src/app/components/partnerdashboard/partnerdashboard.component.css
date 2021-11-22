@@ -196,8 +196,8 @@
 }
 .attritionGoalPercent {
     color: #5ABD78;
-    font-size: 1rem;
-    margin-left: 29%;
+    font-size: .8rem;
+    margin-left: 30%;
     margin-bottom: 0;
 }
 ::ng-deep .progress {

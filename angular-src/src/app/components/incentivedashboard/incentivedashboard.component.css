@@ -255,7 +255,9 @@ header, .row {
   padding-left: 25px;
 }
 .description {
-  width: 320px; /*Use to adjust description width. Will require updates to other fields*/
+  /*Use to adjust description width. Will require updates to other fields*/
+  width: 320px;
+  /* width: 345px; */
 }
   
 .ng-autocomplete ::ng-deep .autocomplete-container {
@@ -287,6 +289,23 @@ header, .row {
 }
 .w-54 {
   width: 54% !important;
+}
+/*Hide 'No File Chosen' text'*/
+/* input[type='file'] {
+  color: transparent;
+} */
+.high-emphasis {
+  color: rgba(0,0,0,0.87);
+}
+.medium-emphasis {
+  color: rgba(0,0,0,0.6);
+}
+.body-2 {
+  font-family: 'SourceSansPro-SemiBold', sans-serif !important;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /*Progress Bar*/

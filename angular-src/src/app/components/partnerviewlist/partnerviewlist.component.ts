@@ -5,9 +5,11 @@ import { RouteService } from '../../services/route.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ListPartnerContacts } from 'src/app/models/listpartnercontacts';
 import { HttpErrorResponse } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { RMListforTPC } from 'src/app/models/rmlistfortpc';
 declare var $: any;
 
 @Component({
@@ -17,6 +19,8 @@ declare var $: any;
 })
 export class PartnerviewlistComponent implements OnInit {
   listPartnerContacts: ListPartnerContacts[];
+  rmListForTPC: RMListforTPC[];
+  partnerViewListFilterForm: FormGroup;
   partnerContactsSearchForm: FormGroup;
   page = 1;
   count = 0;
@@ -30,7 +34,13 @@ export class PartnerviewlistComponent implements OnInit {
   partnerName;
   searchTerm: string;
 
+  rmAssigned;
+  rmid;
+
+  openFilter="Open Filter";
+
   constructor(
+    private modalService: NgbModal,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     public jwtHelper: JwtHelperService,
@@ -51,6 +61,11 @@ export class PartnerviewlistComponent implements OnInit {
     } else {
       //console.log('your logged in')
     }
+
+    this.partnerViewListFilterForm = this.fb.group({
+      FilterRM: [""],
+      FilterState: [""]
+    })
 
     this.partnerContactsSearchForm = this.fb.group({
       SearchTerm: [""]
@@ -91,6 +106,22 @@ export class PartnerviewlistComponent implements OnInit {
         this.spinnerService.hide();
       }
     )
+
+    this.routeService.getRMListforTPC().subscribe(
+      res => {
+        //console.log(res.body);
+        if(res.status === 200) {
+          this.rmListForTPC = res.body;
+          for(let i = 0; i < this.rmListForTPC.length; i++) {
+            console.log(this.rmListForTPC[i].rmAssigned);
+            console.log(this.rmListForTPC[i].rmid);
+
+            // this.rmAssigned = this.rmListForTPC[i].rmAssigned;
+            // this.rmid = this.rmListForTPC[i].rmid;
+          }
+        }
+      }
+    )
   }
 
   // ngOnDestroy() {
@@ -104,6 +135,31 @@ export class PartnerviewlistComponent implements OnInit {
   //     console.log('Thing was not saved to the database.');
   //   }
   // }
+
+  onOpenRMFilterModal(rmAssigned) {
+    // show or hide the list
+    this.modalService.open(rmAssigned,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+  }
+  onOpenStateFilterModal(state) {
+    // show or hide the list
+    this.modalService.open(state,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+  }
+  onChangeFilterRM(e) {
+    console.log(e)
+    console.log(e.target.value)
+  }
+  onChangeFilterState(e) {
+    console.log(e)
+    console.log(e.target.value)
+  }
 
   onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {
     this.partnerCode = partnerCode;
@@ -185,6 +241,14 @@ export class PartnerviewlistComponent implements OnInit {
     )
     // this.results = [];
 
+  }
+
+  onOpenFilterModal(filter){
+    this.modalService.open(filter,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
   }
 
 }

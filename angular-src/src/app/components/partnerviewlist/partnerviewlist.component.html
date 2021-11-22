@@ -1,8 +1,128 @@
 <div class="container">
     <div class="row mt-5">
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
+            <h5 class="headline-5 high-emphasis">Partner Contacts</h5> -->
+            <!-- <i class="fa fa-eye text-success pl-3" (click)="onOpenFilterModal(filter)"></i>
+            <ng-template #filter let-modal>
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">Available Filters</h4>
+                    <button type="button" class="close" aria-label="Close" >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="col">
+                          <ol class="pl-0">
+                              <li>Regional Manager</li>
+                              <li>Contract</li>
+                              <li>Work Order</li>
+                              <li>Other Document</li>
+                              <li>Other Document</li>
+                          </ol>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
+                  </div>
+            </ng-template> -->
+        <!-- </div> -->
+        <div class="col-md-6">
             <h5 class="headline-5 high-emphasis">Partner Contacts</h5>
         </div>
+        <!-- <div class="col-md-6">
+            <h5 class="headline-5 high-emphasis">Filters</h5>
+            <form [formGroup]="partnerViewListFilterForm">
+                <div class="row mt-5 mb-5">
+                    <div class="form-group">
+                        <h5>Regional Manager <i class="fas fa-filter pl-3" (click)="onShowRMFilter()"></i></h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="1"
+                                >
+                                <label class="mr-2">All</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="17"
+                                >
+                                <label class="mr-2">Cara Davidson</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="371"
+                                >
+                                <label class="mr-2">Kevin Keenan</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="448"
+                                >
+                                <label class="mr-2">Colby Monachino</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="449"
+                                >
+                                <label class="mr-2">Joe Monachino</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterRM"
+                                    name="FilterRM"
+                                    (change)="onChangeFilterRM($event)"
+                                    value="436"
+                                >
+                                <label class="mr-2">Taylor Reilly</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <h5>State <i class="fas fa-filter pl-3" (click)="onShowStateFilter()"></i></h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <input 
+                                    type="radio" 
+                                    class="mr-2 ml-2" 
+                                    formControlName="FilterState"
+                                    name="FilterState"
+                                    (change)="onChangeFilterState($event)"
+                                    value="1"
+                                >
+                                <label class="mr-2">All</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div> -->
     </div>
     <div class="row mt-5">
         <div class="col-md-12 pl-0 mt-2">
@@ -39,9 +159,9 @@
                         <th scope="col">Partner Name</th>
                         <th scope="col">Sedona Contact Email</th>
                         <th scope="col">TPC Login Exists</th>
-                        <th scope="col">RM Assigned</th>
+                        <th scope="col">RM Assigned<i class="fas fa-filter pl-3" (click)="onOpenRMFilterModal(rmAssigned)"></i></th>
                         <th scope="col">Last Login</th>
-                        <th scope="col">State</th>
+                        <th scope="col">State<i class="fas fa-filter pl-3" (click)="onOpenStateFilterModal(state)"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +189,287 @@
         </div>
     </div>
 </div>
+
+<ng-template #rmAssigned let-modal>
+    <div class="modal-header">
+        <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button> -->
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="partnerViewListFilterForm">
+                    <div class="row mt-5 mb-5">
+                        <div class="form-group">
+                            <h5>Regional Manager</h5>
+                            <ul class="list-group">
+                                <div class="col">
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="1"
+                                        >
+                                        <label class="mr-2">All</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="17"
+                                        >
+                                        <label class="mr-2">Cara Davidson</label>
+                                    </li>
+                                </div>
+                                <div class="col">
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="371"
+                                        >
+                                        <label class="mr-2">Kevin Keenan</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="448"
+                                        >
+                                        <label class="mr-2">Colby Monachino</label>
+                                    </li>
+                                </div>
+                                <div class="col">
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="449"
+                                        >
+                                        <label class="mr-2">Joe Monachino</label>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <input 
+                                            type="radio" 
+                                            class="mr-2 ml-2" 
+                                            formControlName="FilterRM"
+                                            name="FilterRM"
+                                            (change)="onChangeFilterRM($event)"
+                                            value="436"
+                                        >
+                                        <label class="mr-2">Taylor Reilly</label>
+                                    </li>
+                                </div>
+                                <!-- <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="1"
+                                    >
+                                    <label class="mr-2">All</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="17"
+                                    >
+                                    <label class="mr-2">Cara Davidson</label>
+                                </li> -->
+                                <!-- <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="371"
+                                    >
+                                    <label class="mr-2">Kevin Keenan</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="448"
+                                    >
+                                    <label class="mr-2">Colby Monachino</label>
+                                </li> -->
+                                <!-- <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="449"
+                                    >
+                                    <label class="mr-2">Joe Monachino</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterRM"
+                                        name="FilterRM"
+                                        (change)="onChangeFilterRM($event)"
+                                        value="436"
+                                    >
+                                    <label class="mr-2">Taylor Reilly</label>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+                <!-- <div class="row ml-0">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 pl-0">
+                                <h1 class="install-company-list-header">Please choose a partner
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    Search by typing a Company Name:
+                    <input 
+                        type="text" 
+                        class="form-control ml-2" 
+                        name="searchTerm" 
+                        [(ngModel)]="searchTerm" 
+                        (input)="search($event.target.value)"
+                    >
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-borderless">
+                        <thead>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Partner Code</th>
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of installCompanyList2 | listFilter: searchTerm | slice: (page-1) * pageSize: page * pageSize; index as i">  
+                                <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection(item.installCompanyID,item.companyName,item.partnerCode)">{{ item.companyName }}</td>
+                                <td>{{ item.partnerCode }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ngb-pagination 
+                        [collectionSize]="collectionSize" 
+                        [(page)]="page" 
+                        [maxSize]="5" 
+                        [boundaryLinks]="true"
+                        [pageSize]="pageSize" 
+                        class="d-flex justify-content-center mt-5">
+                    </ngb-pagination> 
+                </div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #state let-modal>
+    <div class="modal-header">
+        <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button> -->
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="partnerViewListFilterForm">
+                    <div class="row mt-5 mb-5">
+                        <div class="form-group">
+                            <h5>State</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input 
+                                        type="radio" 
+                                        class="mr-2 ml-2" 
+                                        formControlName="FilterState"
+                                        name="FilterState"
+                                        (change)="onChangeFilterState($event)"
+                                        value="1"
+                                    >
+                                    <label class="mr-2">All</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+                <!-- <div class="row ml-0">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 pl-0">
+                                <h1 class="install-company-list-header">Please choose a partner
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    Search by typing a Company Name:
+                    <input 
+                        type="text" 
+                        class="form-control ml-2" 
+                        name="searchTerm" 
+                        [(ngModel)]="searchTerm" 
+                        (input)="search($event.target.value)"
+                    >
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-borderless">
+                        <thead>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Partner Code</th>
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of installCompanyList2 | listFilter: searchTerm | slice: (page-1) * pageSize: page * pageSize; index as i">  
+                                <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection(item.installCompanyID,item.companyName,item.partnerCode)">{{ item.companyName }}</td>
+                                <td>{{ item.partnerCode }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ngb-pagination 
+                        [collectionSize]="collectionSize" 
+                        [(page)]="page" 
+                        [maxSize]="5" 
+                        [boundaryLinks]="true"
+                        [pageSize]="pageSize" 
+                        class="d-flex justify-content-center mt-5">
+                    </ngb-pagination> 
+                </div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
 
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
     <p style="color: white">Please Wait...</p>  

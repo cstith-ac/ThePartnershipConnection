@@ -97,6 +97,7 @@ namespace WebAPI.Models
         public virtual DbSet<PartnerLandingPageX> GetPartnerLandingPageXResult { get; set; }
         public virtual DbSet<Customer3GListingX> GetCustomer3GListingXResult { get; set; }
         public virtual DbSet<TPCStateList> GetTPCStateLists { get; set; }
+        public virtual DbSet<RMListforTPC> GetRMListforTPCs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -630,6 +631,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<TPCStateList>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<RMListforTPC>(entity =>
             {
                 entity.HasNoKey();
             });

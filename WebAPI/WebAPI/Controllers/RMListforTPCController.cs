@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TPCStateListController : ControllerBase
+    public class RMListforTPCController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
         TPC_DevContext db = new TPC_DevContext();
 
-        public TPCStateListController(
+        public RMListforTPCController(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             IOptions<ApplicationSettings> appSettings)
@@ -35,21 +35,20 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<Object> GetTPCStateLists()
+        public async Task<Object> GetRMListforTPCs()
         {
-            var list = new List<TPCStateList>();
+            var list = new List<RMListforTPC>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                var result = await db.GetTPCStateLists.FromSqlRaw("exec dbo.TPCStateList").ToListAsync();
+                var result = await db.GetRMListforTPCs.FromSqlRaw("exec dbo.RMListforTPC").ToListAsync();
 
-                List<TPCStateList> Lst = result.Select(s => new TPCStateList
+                List<RMListforTPC> Lst = result.Select(s => new RMListforTPC
                 {
-                    USStateID = s.USStateID,
-                    USStateName = s.USStateName,
-                    USStateAbbr = s.USStateAbbr
+                    RMAssigned = s.RMAssigned,
+                    RMID = s.RMID
                 }).ToList();
 
                 return Lst;

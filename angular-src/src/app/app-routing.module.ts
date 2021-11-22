@@ -280,7 +280,7 @@ const routes: Routes = [
   {
     path: 'partner-view-list',
     component: PartnerviewlistComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, EmployeeGuard]
   },
   {
     path: 'forbidden',

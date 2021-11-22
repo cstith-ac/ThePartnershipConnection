@@ -225,7 +225,7 @@ export class PartnerinvoicelistingComponent implements OnInit {
       {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class'
-      });
+    });
   }
 
 }

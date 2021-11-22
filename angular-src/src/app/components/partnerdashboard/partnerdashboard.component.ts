@@ -211,32 +211,60 @@ export class PartnerdashboardComponent implements OnInit {
           // console.log(this.permissionsUserMap[i])
           // console.log(this.permissionsUserMap[i].permissionName)
           // console.log(this.permissionsUserMap[i].hasPermission)
-          
+
+          //Note: the alarm connections user should be able to view the cards regardless of the partners permission level!
           if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GConversion = true; 
+          }
+          if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'N'){
             this.hide3GConversion = true; 
           }
           if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hidePendingCancellations = true;
           }
+          if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'N'){
+            this.hidePendingCancellations = true;
+          }
           if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideAging = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'N'){
             this.hideAging = true;
           }
           if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hideAgingCTA = true;
           }
+          if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'N'){
+            this.hideAgingCTA = true;
+          }
           if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideInvoices = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'N'){
             this.hideInvoices = true;
           }
           if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hideService = true;
           }
+          if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'N'){
+            this.hideService = true;
+          }
           if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hideSales = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'N'){
             this.hideSales = true;
           }
           if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hideAttrition = true;
           }
+          if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'N'){
+            this.hideAttrition = true;
+          }
           if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
+            this.hide3GExcelExport = true;
+          }
+          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'N'){
             this.hide3GExcelExport = true;
           }
           if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){

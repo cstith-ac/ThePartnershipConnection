@@ -329,6 +329,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   defaultAmount2:number;
 
   taxToolTip="Enter dollars and cents"
+  viewAvailableDocuments="View available documents"
 
   //foo;
   target;
@@ -2914,8 +2915,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       reader.addEventListener("load", () => {
         //console.log(reader.result);
         //localStorage.setItem("invoice", reader.result as string);
+
+        // Show the name = false
+        // Show 'No File Selected' = true
         this.showInvoiceFile = true;
       });
+
+      // var msg = this.invoiceUpload.replace(/Item:/g, "");
+      // console.log(msg)
 
       reader.readAsDataURL(e.target.files[i]);
 
@@ -3158,6 +3165,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.incentiveDashboardForm.get('otherDocument2Upload').reset();
 
     this.selectedOtherDocument2File = {};
+  }
+
+  onOpenDocumentsModal(documentUpload){
+    this.modalService.open(documentUpload,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
   }
 
   getLineItemSubtotal() {
