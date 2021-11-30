@@ -1,8 +1,8 @@
 <form [formGroup]="incentiveDashboardTestForm">
 
     <!--CUSTOMER-->
-    <div class="form-group">
-        <label class="col-sm-2 col-form-label">Customer</label>
+    <div class="form-group form-inline">
+        <label class="col-form-label">Customer</label>
         <div class="ng-autocomplete">
             <ng-autocomplete
                 #customerRef
@@ -22,7 +22,7 @@
             </ng-autocomplete>
 
             <ng-template #itemTemplate let-item>
-                <a [innerHTML]="item.customerName"></a>
+                <a [innerHTML]="item.customer_Name"></a>
                 <a [innerHTML]="item.customerNumber"></a>
             </ng-template>
 
@@ -39,33 +39,13 @@
             New Customer
         </span>
     </div>
-
-    <!-- <div class="form-group">
-        <label>Customer</label>
-        <input 
-            type="text"
-            class="form-control col-sm-5 fullWidthInput" 
-            [(ngModel)]="customer"
-            formControlName="CustomerID"
-        >
-        <span class="ml-2" (click)="openSearchCustomerModal(content)">
-            <i class="fas fa-search"></i>
-        </span>
-        <kendo-dropdownlist
-            [data]="customers"
-            [value]="selectedCustomer"
-            [textField]="'name'"
-            [valueField]="'id'"
-            (valueChange)="onCustomerChange($event)"
-          >
-          </kendo-dropdownlist>
-        
-    </div> -->
     
-    <!-- <div class="form-group">
+    <!--SITE-->
+    <div class="form-group form-inline">
         <label>Site</label>
         <kendo-dropdownlist
             [data]="listsitesforcustomer"
+            [disabled]="isSiteDisabled"
             [value]="customer_Site_id"
             [textField]="'siteName'"
             [valueField]="'customer_Site_id'"
@@ -74,17 +54,19 @@
           </kendo-dropdownlist>
     </div>
 
-    <div class="form-group">
+    <!--SYSTEM-->
+    <div class="form-group form-inline">
         <label>System</label>
         <kendo-dropdownlist
-            [data]="systems"
-            [value]="selectedSystem"
-            [textField]="'id'"
-            [valueField]="'name'"
+            [disabled]="isSystemDisabled"
+            [data]="listSystemsForSite"
+            [value]="customer_System_id"
+            [textField]="'customer_System_id'"
+            [valueField]="'customer_System_id'"
             (valueChange)="onSystemChange($event)"
           >
           </kendo-dropdownlist>
-    </div> -->
+    </div>
 
 </form>
 <ng-template #content let-modal>
@@ -117,44 +99,7 @@
             <div class="col-md-4">
                 <h2>Search By:</h2>
                 <form>
-                    <!-- <div class="form-group">
-                        <input 
-                            [(ngModel)]="searchByCustomer"
-                            [checked]="true"
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCustomer($event.target.value)"
-                        >
-                        <label>Customer</label>
-                    </div> -->
-                    <!-- <div class="form-group">
-                        <input
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToBilling($event.target.value)"
-                        >
-                        <label>Billing Address</label>
-                    </div> -->
-                    <!-- <div class="form-group">
-                        <input 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToSite($event.target.value)"
-                        >
-                        <label>Site Address</label>
-                    </div> -->
-                    <!-- <div class="form-group">
-                        <input 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCentralStation($event.target.value)"
-                        >
-                        <label>Central Station #</label>
-                    </div> -->
+
                 </form>
             </div>
             <div class="col-md-4">
@@ -162,27 +107,7 @@
                 <form>
                     <div class="row">
                         <h3>Cancelled Customers</h3>
-                        <!-- <div class="radio-label-vertical-wrapper">
-                            <div class="form-group">
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="0" 
-                                    required
-                                    (change)="onItemChangeToInclude($event.target.value)"
-                                >Include</label>
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="1" 
-                                    required
-                                    [checked]="true"
-                                    (change)="onItemChangeToExclude($event.target.value)"
-                                >Exclude</label>
-                            </div>
-                        </div> -->
+                        
                     </div>
                 </form>
             </div>

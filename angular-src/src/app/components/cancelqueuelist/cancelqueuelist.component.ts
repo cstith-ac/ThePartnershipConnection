@@ -7,7 +7,11 @@ import { RouteService } from 'src/app/services/route.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { FlashMessagesService } from 'angular2-flash-messages';
 declare var $: any;
+import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
+import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cancelqueuelist',
@@ -30,13 +34,16 @@ export class CancelqueuelistComponent implements OnInit {
   e_Mail;
   full_Cancel;
   clicked = false;//disables button after click
-  // full;
-  // partial;
+  sedonaContactEmail;
+  partnerName;
+  userName: any;
 
   constructor(
     public fb: FormBuilder,
+    private authService: AuthService,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
+    private flashMessage: FlashMessagesService,
     private router: Router,
     public jwtHelper: JwtHelperService
   ) { }
@@ -44,26 +51,74 @@ export class CancelqueuelistComponent implements OnInit {
   ngOnInit() {
     $("#wrapper").addClass("toggled");
 
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      // console.log('this works')
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
+
     this.spinnerService.show();
 
-    this.routeService.getCancelQueueList().subscribe(
-      res => {
-        if(res) {
-          this.spinnerService.hide();
-        }
-        this.cancelQueueList = res;
+    if(this.sedonaContactEmail) {
+      // console.log(this.sedonaContactEmail + ' is the alias user')
+      this.userName = this.sedonaContactEmail;
 
-        for(var i = 0; i < this.cancelQueueList.length; i++) {
-          //console.log(this.cancelQueueList[i].full_Cancel)
-          if(this.cancelQueueList[i].full_Cancel === 'Y') {
-            this.cancelQueueList[i].full_Cancel = 'Full'
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getCancelQueueListX(res.userName,this.sedonaContactEmail))
+      ).subscribe(data => {
+        if(data.status === 200) {
+          this.spinnerService.hide()
+          console.log(data.statusText)
+        }
+        this.cancelQueueList = data.body
+      },(err:HttpErrorResponse) => {
+        this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+          cssClass: 'text-center alert-danger',
+          timeout: 5000
+        });
+        this.spinnerService.hide();
+      })
+    }
+    if(!this.sedonaContactEmail) {
+      // console.log('use the regular stored procedure')
+      this.routeService.getCancelQueueList().subscribe(
+        res => {
+          if(res) {
+            this.spinnerService.hide();
           }
-          if(this.cancelQueueList[i].full_Cancel === 'N') {
-            this.cancelQueueList[i].full_Cancel = 'Partial'
+          this.cancelQueueList = res;
+  
+          for(var i = 0; i < this.cancelQueueList.length; i++) {
+            //console.log(this.cancelQueueList[i].full_Cancel)
+            if(this.cancelQueueList[i].full_Cancel === 'Y') {
+              this.cancelQueueList[i].full_Cancel = 'Full'
+            }
+            if(this.cancelQueueList[i].full_Cancel === 'N') {
+              this.cancelQueueList[i].full_Cancel = 'Partial'
+            }
           }
         }
-      }
-    )
+      )
+    }
+
+    // this.routeService.getCancelQueueList().subscribe(
+    //   res => {
+    //     if(res) {
+    //       this.spinnerService.hide();
+    //     }
+    //     this.cancelQueueList = res;
+
+    //     for(var i = 0; i < this.cancelQueueList.length; i++) {
+    //       //console.log(this.cancelQueueList[i].full_Cancel)
+    //       if(this.cancelQueueList[i].full_Cancel === 'Y') {
+    //         this.cancelQueueList[i].full_Cancel = 'Full'
+    //       }
+    //       if(this.cancelQueueList[i].full_Cancel === 'N') {
+    //         this.cancelQueueList[i].full_Cancel = 'Partial'
+    //       }
+    //     }
+    //   }
+    // )
 
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');

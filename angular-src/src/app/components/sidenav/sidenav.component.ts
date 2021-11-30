@@ -147,7 +147,7 @@ export class SidenavComponent implements OnInit {
     localStorage.clear();
 
     this.flashMessage.show('You are logged out', {
-      cssClass:'alert-success',
+      cssClass:'text-center alert-success',
       timeout: 3000
     });
 

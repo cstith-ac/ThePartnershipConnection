@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<Object> GetTPCCollectionsCallToActionButtonXs(string id1, string id2)
         {
-            return await db.GetTPCCollectionsCallToActionButtonXs.FromSqlRaw("EXECUTE dbo.TPCCollectionsCallToActionButtonX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
+            return await db.GetTPCCollectionsCallToActionButtonXs.FromSqlRaw("EXECUTE dbo.TPCCollectionsCallToActionButtonX @EmailAddress = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
         }
     }
 }

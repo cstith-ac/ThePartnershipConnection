@@ -459,8 +459,6 @@
             <div class="col-md-12 pt-2 pb-1">
               <p class="attritionGoalPercent">10%</p>
               <span class="goal"></span>
-              <!-- <p>10%</p>
-<p class="goal">&#9660;</p> -->
               <p  *ngIf="(item.attritionLastMonth < 10)">
                 <ngb-progressbar 
                   type="success"
@@ -489,7 +487,7 @@
                   [showValue]="false"
                   [(value)]="attritionValue"
                   [striped]="false"
-                  [(ngbTooltip)]="attritionProgress"
+                  
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p>
@@ -500,7 +498,7 @@
                   [showValue]="false"
                   [(value)]="attritionValue"
                   [striped]="false"
-                  [(ngbTooltip)]="attritionProgress"
+                  
                   tooltipClass="transparent-tooltip"
                   [max]=30
                 ></ngb-progressbar>

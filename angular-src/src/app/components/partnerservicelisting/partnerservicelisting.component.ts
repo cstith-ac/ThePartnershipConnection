@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { PartnerServiceListing } from 'src/app/models/partnerservicelisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { mergeMap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -57,6 +60,7 @@ export class PartnerservicelistingComponent implements OnInit {
 
   sedonaContactEmail;
   partnerName;
+  userName: any;
 
   clicked = false;//disables button after click
 
@@ -67,8 +71,9 @@ export class PartnerservicelistingComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    private modalService: NgbModal,
-    public jwtHelper: JwtHelperService
+    private flashMessage: FlashMessagesService,
+    public jwtHelper: JwtHelperService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -90,13 +95,31 @@ export class PartnerservicelistingComponent implements OnInit {
     this.spinnerService.show();
 
     if(this.sedonaContactEmail) {
-      console.log('get x stored proc')
-      this.routeService.getPartnerServiceListingX(this.sedonaContactEmail, this.partnerName).subscribe(res => {
-        console.log(res)
+      // console.log('get x stored proc')
+      this.userName = this.sedonaContactEmail;
+
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getPartnerServiceListingX(this.emailAddress,this.sedonaContactEmail))
+      ).subscribe(data => {
+        if(data.status === 200) {
+          this.spinnerService.hide()
+          console.log(data.statusText)
+        }
+        this.partnerServiceListing = data.body;
+      },(err:HttpErrorResponse) => {
+        this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+          cssClass: 'text-center alert-danger',
+          timeout: 5000
+        });
+        this.spinnerService.hide();
       })
+
+      // this.routeService.getPartnerServiceListingX(this.emailAddress,this.sedonaContactEmail).subscribe(res => {
+      //   console.log(res)
+      // })
     }
     if(!this.sedonaContactEmail) {
-      console.log('get regular stored proc')
+      // console.log('get regular stored proc')
       this.routeService.getPartnerServiceListingExtended().subscribe(
       res => {
         if(res) {

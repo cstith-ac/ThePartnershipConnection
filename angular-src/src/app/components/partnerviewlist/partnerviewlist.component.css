@@ -96,3 +96,7 @@
 .hyperlink {
     color: #2981d0;
 }
+
+.myColumns{-webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;}

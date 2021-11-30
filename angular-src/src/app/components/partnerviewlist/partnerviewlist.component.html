@@ -162,6 +162,7 @@
                         <th scope="col">RM Assigned<i class="fas fa-filter pl-3" (click)="onOpenRMFilterModal(rmAssigned)"></i></th>
                         <th scope="col">Last Login</th>
                         <th scope="col">State<i class="fas fa-filter pl-3" (click)="onOpenStateFilterModal(state)"></i></th>
+                        <th scope="col">Primary Contact</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -174,6 +175,7 @@
                         <td>{{ item.rmAssigned }}</td>
                         <td>{{ item.lastLoginOn }}</td>
                         <td>{{ item.usState }}</td>
+                        <td>{{ item.primaryContact }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -200,195 +202,27 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="partnerViewListFilterForm">
-                    <div class="row mt-5 mb-5">
-                        <div class="form-group">
+                    <div class="row">
+                        <div class="col">
                             <h5>Regional Manager</h5>
-                            <ul class="list-group">
-                                <div class="col">
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="1"
-                                        >
-                                        <label class="mr-2">All</label>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="17"
-                                        >
-                                        <label class="mr-2">Cara Davidson</label>
-                                    </li>
-                                </div>
-                                <div class="col">
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="371"
-                                        >
-                                        <label class="mr-2">Kevin Keenan</label>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="448"
-                                        >
-                                        <label class="mr-2">Colby Monachino</label>
-                                    </li>
-                                </div>
-                                <div class="col">
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="449"
-                                        >
-                                        <label class="mr-2">Joe Monachino</label>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <input 
-                                            type="radio" 
-                                            class="mr-2 ml-2" 
-                                            formControlName="FilterRM"
-                                            name="FilterRM"
-                                            (change)="onChangeFilterRM($event)"
-                                            value="436"
-                                        >
-                                        <label class="mr-2">Taylor Reilly</label>
-                                    </li>
-                                </div>
-                                <!-- <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="1"
-                                    >
-                                    <label class="mr-2">All</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="17"
-                                    >
-                                    <label class="mr-2">Cara Davidson</label>
-                                </li> -->
-                                <!-- <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="371"
-                                    >
-                                    <label class="mr-2">Kevin Keenan</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="448"
-                                    >
-                                    <label class="mr-2">Colby Monachino</label>
-                                </li> -->
-                                <!-- <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="449"
-                                    >
-                                    <label class="mr-2">Joe Monachino</label>
-                                </li>
-                                <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterRM"
-                                        name="FilterRM"
-                                        (change)="onChangeFilterRM($event)"
-                                        value="436"
-                                    >
-                                    <label class="mr-2">Taylor Reilly</label>
-                                </li> -->
-                            </ul>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="myColumns" >
+                            <div class="form-check" *ngFor="let item of rmListForTPC; let i = index">
+                                <input  
+                                    class="form-check-input" 
+                                    type="radio" 
+                                    formControlName="FilterRM"
+                                    id="{{item.rmid}}"
+                                    value="{{item.rmAssigned}}" 
+                                    (change)="onChangeFilterRM($event)"/>
+                                    
+                                    {{item.rmAssigned}}
+                        </div>
+                    </div>         
+                  </div>
                 </form>
-                <!-- <div class="row ml-0">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-6 pl-0">
-                                <h1 class="install-company-list-header">Please choose a partner
-                                </h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group form-inline">
-                    Search by typing a Company Name:
-                    <input 
-                        type="text" 
-                        class="form-control ml-2" 
-                        name="searchTerm" 
-                        [(ngModel)]="searchTerm" 
-                        (input)="search($event.target.value)"
-                    >
-                </div>
-                <div class="table-responsive">
-                    <table class="table align-items-center table-borderless">
-                        <thead>
-                            <th scope="col">Company Name</th>
-                            <th scope="col">Partner Code</th>
-                            <th scope="col"></th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of installCompanyList2 | listFilter: searchTerm | slice: (page-1) * pageSize: page * pageSize; index as i">  
-                                <td data-id="{{item.installCompanyID}}" (click)="onClickNewDefaultSelection(item.installCompanyID,item.companyName,item.partnerCode)">{{ item.companyName }}</td>
-                                <td>{{ item.partnerCode }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <ngb-pagination 
-                        [collectionSize]="collectionSize" 
-                        [(page)]="page" 
-                        [maxSize]="5" 
-                        [boundaryLinks]="true"
-                        [pageSize]="pageSize" 
-                        class="d-flex justify-content-center mt-5">
-                    </ngb-pagination> 
-                </div> -->
             </div>
         </div>
     </div>
@@ -404,24 +238,26 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="partnerViewListFilterForm">
-                    <div class="row mt-5 mb-5">
-                        <div class="form-group">
+                    <div class="row">
+                        <div class="col">
                             <h5>State</h5>
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <input 
-                                        type="radio" 
-                                        class="mr-2 ml-2" 
-                                        formControlName="FilterState"
-                                        name="FilterState"
-                                        (change)="onChangeFilterState($event)"
-                                        value="1"
-                                    >
-                                    <label class="mr-2">All</label>
-                                </li>
-                            </ul>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="myColumns" >
+                            <div class="form-check" *ngFor="let item of tpcStateList; let i = index">
+                                <input  
+                                    class="form-check-input" 
+                                    type="radio" 
+                                    formControlName="FilterState"
+                                    id="{{item.usStateID}}"
+                                    value="{{item.usStateName}}" 
+                                    (change)="onChangeFilterState($event)"/>
+                                    
+                                    {{item.usStateName}}
+                        </div>
+                    </div>         
+                  </div>
                 </form>
                 <!-- <div class="row ml-0">
                     <div class="col-md-12">

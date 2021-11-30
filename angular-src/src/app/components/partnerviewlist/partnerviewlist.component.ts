@@ -10,6 +10,7 @@ import { ListPartnerContacts } from 'src/app/models/listpartnercontacts';
 import { HttpErrorResponse } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { RMListforTPC } from 'src/app/models/rmlistfortpc';
+import { TPCStateList } from 'src/app/models/tpcstatelist';
 declare var $: any;
 
 @Component({
@@ -20,6 +21,7 @@ declare var $: any;
 export class PartnerviewlistComponent implements OnInit {
   listPartnerContacts: ListPartnerContacts[];
   rmListForTPC: RMListforTPC[];
+  tpcStateList: TPCStateList[];
   partnerViewListFilterForm: FormGroup;
   partnerContactsSearchForm: FormGroup;
   page = 1;
@@ -36,6 +38,7 @@ export class PartnerviewlistComponent implements OnInit {
 
   rmAssigned;
   rmid;
+  usStateID;
 
   openFilter="Open Filter";
 
@@ -107,21 +110,28 @@ export class PartnerviewlistComponent implements OnInit {
       }
     )
 
-    this.routeService.getRMListforTPC().subscribe(
-      res => {
-        //console.log(res.body);
-        if(res.status === 200) {
-          this.rmListForTPC = res.body;
-          for(let i = 0; i < this.rmListForTPC.length; i++) {
-            console.log(this.rmListForTPC[i].rmAssigned);
-            console.log(this.rmListForTPC[i].rmid);
+    // this.routeService.getRMListforTPC().subscribe(
+    //   res => {
+    //     //console.log(res.body);
+    //     if(res.status === 200) {
+    //       this.rmListForTPC = res.body;
+    //       for(let i = 0; i < this.rmListForTPC.length; i++) {
+    //         console.log(this.rmListForTPC[i].rmAssigned);
+    //         console.log(this.rmListForTPC[i].rmid);
 
-            // this.rmAssigned = this.rmListForTPC[i].rmAssigned;
-            // this.rmid = this.rmListForTPC[i].rmid;
-          }
-        }
-      }
-    )
+    //         // this.rmAssigned = this.rmListForTPC[i].rmAssigned;
+    //         // this.rmid = this.rmListForTPC[i].rmid;
+    //       }
+    //     }
+    //   }
+    // )
+
+    //get state list
+    // this.routeService.getTPCStateList().subscribe(
+    //   res => {
+    //     console.log(res.body)
+    //   }
+    // )
   }
 
   // ngOnDestroy() {
@@ -143,6 +153,15 @@ export class PartnerviewlistComponent implements OnInit {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class950'
     });
+
+    this.routeService.getRMListforTPC().subscribe(
+      res => {
+        //console.log(res.body);
+        if(res.status === 200) {
+          this.rmListForTPC = res.body;
+        }
+      }
+    )
   }
   onOpenStateFilterModal(state) {
     // show or hide the list
@@ -151,14 +170,57 @@ export class PartnerviewlistComponent implements OnInit {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class950'
     });
+
+    this.routeService.getTPCStateList().subscribe(
+      res => {
+        console.log(res.body)
+        this.tpcStateList = res.body;
+      }
+    )
   }
   onChangeFilterRM(e) {
     console.log(e)
     console.log(e.target.value)
+    console.log(parseInt(e.target.id))
+    
+    this.rmid = parseInt(e.target.id)
+    // exec dbo.ListPartnerContacts 'Y',1,1
+    let params = {
+      "PrimaryOnly": "Y",
+      "RMFilter": this.rmid,
+      "USStateID": 1
+    }
+
+    if(!this.usStateID) {
+      this.usStateID = 1;
+    }
+
+    this.routeService.getListPartnerContactsByID('y',this.rmid, this.usStateID).subscribe(
+      res => {
+        console.log(res.body)
+        this.listPartnerContacts = res.body;
+        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName));
+      }
+    )
   }
   onChangeFilterState(e) {
     console.log(e)
     console.log(e.target.value)
+    console.log(parseInt(e.target.id))
+
+    this.usStateID = parseInt(e.target.id);
+
+    if(!this.rmid) {
+      this.rmid = 1;
+    }
+
+    this.routeService.getListPartnerContactsByID('y', this.rmid, this.usStateID).subscribe(
+      res => {
+        console.log(res.body)
+        this.listPartnerContacts = res.body;
+        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName));
+      }
+    )
   }
 
   onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {

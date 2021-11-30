@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 import { Location } from '@angular/common';
 
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService,
+    private spinnerService: NgxSpinnerService,
     public location: Location) { }
 
   ngOnInit() {
@@ -48,7 +50,9 @@ export class LoginComponent implements OnInit {
       var downloadTimer = setInterval(function(){
         if(timeleft <= 0){
           clearInterval(downloadTimer);
-          document.getElementById("countdown").innerHTML = "😊";
+          //document.getElementById("countdown").innerHTML = "😊";
+          //document.getElementById("countdown").innerHTML = "👍";
+          document.getElementById("countdown").innerHTML = "<i class='em em-smile'></i>";
         } else {
           document.getElementById("countdown").innerHTML = timeleft + " seconds";
         }
@@ -65,11 +69,9 @@ export class LoginComponent implements OnInit {
       if(user.afaRole === 19 || user.afaRole === 14 || user.afaRole === 9) {
         setTimeout(() => {
           this.onNavigateToCustomerCareDashboard();
-        }, 5000);
-        return true;
-      } else {
-        return false;
-      }
+        }, 7000);
+        //return true;
+      } 
     }
 
     if(localStorage.getItem('user')) {
@@ -94,6 +96,8 @@ export class LoginComponent implements OnInit {
   // }
 
   onLoginSubmit() {
+    this.spinnerService.show();
+
     const user = {
       username: this.username,
       password: this.password
@@ -107,8 +111,9 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('user',  JSON.stringify(res.body));
         localStorage.setItem('removeSplash', res.body.removeSplash);
 
-        if(res.body.afaRole === 5) {
+        if(res.body.afaRole === 5 && res.status === 200) {
           //console.log(res.afaRole)
+          this.spinnerService.hide();
           this.router.navigate(['/partner-dashboard'])
         } else if (res.body.afaRole === 19 || res.body.afaRole === 14) {
           this.router.navigate(['/dashboard'])
@@ -123,10 +128,18 @@ export class LoginComponent implements OnInit {
 
         if(res.status === 200) {
           this.flashMessage.show('You are now logged in', {
-            cssClass: 'alert-success',
+            cssClass: 'text-center alert-success',
             timeout: 5000
           });
         }
+      },
+      error => {
+        // alert('There was a problem with your credentials. Please check your username and password and log in again.')
+        this.flashMessage.show('There was a problem with your credentials. Please check your username and password and log in again.', {
+          cssClass: 'text-center alert-danger',
+          timeout: 3000
+        });
+        this.spinnerService.hide();
       }
     )
 

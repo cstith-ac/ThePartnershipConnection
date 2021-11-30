@@ -66,7 +66,7 @@
                         </div>
                         
                         <!--SITE-->
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline mb-0" [ngStyle]="{marginTop: '1.5rem'}">
                             <label class="col-sm-2 col-form-label">Site</label>
                             <div *ngIf="isSiteSelectionFirst">
                                 <input 
@@ -107,7 +107,7 @@
                         </div>
                         
                         <!--SYSTEM-->
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline mb-0">
                             <label class="col-sm-2 col-form-label">System</label>
 
                             <div *ngIf="isSystemSelectionFirst">
@@ -157,7 +157,7 @@
                             <!-- <input type="text" class="form-control col-sm-5" placeholder="12345"> -->
                         </div>
 
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline mb-0">
                             <p class="text-error">Verify System Information!</p>
                         </div>
                         <div class="form-group form-inline">
@@ -196,7 +196,7 @@
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
                             </span>
                         </div>
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline" [ngStyle]="{marginBottom: '0.5rem'}">
                             <label class="col-sm-2 col-form-label">Panel Type</label>
                             <div class="dropdown" *ngIf="!panelTypePreselected">
                                 <select 
@@ -220,12 +220,12 @@
                                 <small>If <b>Other</b> is selected, please describe in Comments Section</small>
                             </span>
                         </div>
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline" [ngStyle]="{marginBottom: '0.2rem'}">
                             <label class="col-sm-2 col-form-label">Panel Location</label>
                             <input *ngIf="!panelLocationPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
                             <input *ngIf="panelLocationPreSelected" type="text" class="form-control col-sm-5" [(ngModel)]="panel_Location" formControlName="PanelLocation">
                         </div>
-                        <div class="form-group form-inline">
+                        <div class="form-group form-inline" [ngStyle]="{marginBottom: '0.5rem'}">
                             <label class="col-sm-2 col-form-label">Central Station</label>
                             <div class="dropdown" *ngIf="!centralStationPreselected">
                                 <select 
@@ -251,7 +251,41 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Additional Info</label>
-                            <input type="text" class="form-control col-sm-10" [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" (keyup)="getAdditionalInfo($event)">
+                            <!-- <input 
+                                type="text" 
+                                class="form-control col-sm-5" 
+                                [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" 
+                                (keyup)="getAdditionalInfo($event)"
+                            > -->
+                            <textarea 
+                                cols="30" 
+                                rows="2"
+                                class="form-control col-sm-5" 
+                                [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" 
+                                (keyup)="getAdditionalInfo($event)"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group form-inline mb-0">
+                            <p class="text-error">Customer Email Information</p>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label class="col-sm-2 col-form-label">Email Address</label>
+
+                            <input  
+                                type="text" 
+                                class="form-control col-sm-5" 
+                                [(ngModel)]="customerEmailAddress"
+                                formControlName="CustomerEmailAddress"
+                            >
+
+                            <label class="ml-3">Enroll in Emailed Invoices</label>
+                            <input 
+                                type="checkbox"
+                                class="form-control form-check-input ml-3"
+                                [(ngModel)]="enrollInEmailInvoices"
+                                formControlName="EnrollInEmailInvoices"
+                            >
                         </div>
                     </div>
                     <div class="col-md-7">
@@ -482,7 +516,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-sm-7 col-form-label pl-0">Invoice #</label>
-                                    <div class="input-group d-flex justify-content-center">
+                                    <div class="input-group d-flex">
                                         <input 
                                             type="text" class="form-control col-sm-10" 
                                             [(ngModel)]="invoiceNumber" formControlName="PartnerInvoiceNumber">
@@ -743,21 +777,12 @@
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
                       </div>
-                    <!-- <span class="fa fa-search"></span> -->
-                    <!-- <span class="input-group-append">
-                        <button class="btn btn-outline-secondary border-left-0" id="search-border" type="button">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </span> -->
                 </div>
-                <!-- <div class="col-sm-8">
-                    <input type="text" class="form-control" [(ngModel)]="searchValue">
-                </div> -->
             </div>
             <div class="col-md-4">
                 <h2>Search By:</h2>
                 <form>
-                    <div class="form-group">
+                    <div class="form-group form-inline">
                         <input 
                             [(ngModel)]="searchByCustomer"
                             [checked]="true"
@@ -767,8 +792,6 @@
                             (change)="onItemChangeToCustomer($event.target.value)"
                         >
                         <label>Customer</label>
-                    </div>
-                    <div class="form-group">
                         <input
                             type="radio" 
                             name="searchBy" 
@@ -777,7 +800,16 @@
                         >
                         <label>Billing Address</label>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
+                        <input
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToBilling($event.target.value)"
+                        >
+                        <label>Billing Address</label>
+                    </div> -->
+                    <div class="form-group form-inline">
                         <input 
                             type="radio" 
                             name="searchBy" 
@@ -785,8 +817,6 @@
                             (change)="onItemChangeToSite($event.target.value)"
                         >
                         <label>Site Address</label>
-                    </div>
-                    <div class="form-group">
                         <input 
                             type="radio" 
                             name="searchBy" 
@@ -795,6 +825,15 @@
                         >
                         <label>Central Station #</label>
                     </div>
+                    <!-- <div class="form-group">
+                        <input 
+                            type="radio" 
+                            name="searchBy" 
+                            class="mr-3"
+                            (change)="onItemChangeToCentralStation($event.target.value)"
+                        >
+                        <label>Central Station #</label>
+                    </div> -->
                 </form>
             </div>
             <div class="col-md-4">

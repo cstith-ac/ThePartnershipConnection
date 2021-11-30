@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { TPCPartnerAgingReport } from 'src/app/models/tpcpartneragingreport';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { FlashMessagesService } from 'angular2-flash-messages';
+import { mergeMap } from 'rxjs/operators';
 declare var $: any;
 const moment = require('moment');
 
@@ -77,6 +79,9 @@ export class TpcpartneragingreportComponent implements OnInit {
 
   agingListForm: FormGroup;
   clicked = false;//disables button after click
+  sedonaContactEmail;
+  partnerName;
+  userName: any;
 
   constructor(
     public fb: FormBuilder,
@@ -87,6 +92,7 @@ export class TpcpartneragingreportComponent implements OnInit {
     private userService: UserService,
     private modalService: NgbModal,
     public jwtHelper: JwtHelperService,
+    private flashMessage: FlashMessagesService,
     private renderer: Renderer2
   ) { }
 
@@ -97,6 +103,12 @@ export class TpcpartneragingreportComponent implements OnInit {
       this.router.navigate(["login"]);
     } else {
       //console.log('your logged in')
+    }
+
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      // console.log('this works')
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
     }
 
     this.agingListForm = this.fb.group({
@@ -142,6 +154,29 @@ export class TpcpartneragingreportComponent implements OnInit {
     }, 8);
 
     this.spinnerService.show();
+
+    if(this.sedonaContactEmail) {
+      // console.log('use the X stored procedure')
+      this.userName = this.sedonaContactEmail;
+
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getTPCPartnerAgingReportX(res.userName,this.sedonaContactEmail))
+      ).subscribe(data => {
+        if(data.status === 200) {
+          this.spinnerService.hide()
+          console.log(data.statusText)
+        }
+        this.tpcPartnerAgingReport = data.body;
+        this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+          val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
+          val.filterCategory.toLowerCase().includes('over 120') || 
+          val.filterCategory.toLowerCase().includes('over 90'))
+          this.collectionSize = this.tpcPartnerAgingReport.length;
+      })
+    }
+    if(!this.sedonaContactEmail) {
+      console.log('use the regular stored procedure')
+    }
 
     this.routeService.getTPCPartnerAgingReport().subscribe(
       res => {
@@ -270,24 +305,10 @@ export class TpcpartneragingreportComponent implements OnInit {
       
     }
     
-    // this.routeService.getTPCPartnerAgingReport().subscribe(
-    //   res => {
-    //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    //     val.filterCategory.toLowerCase().includes('120'));
-    //     this.collectionSize = this.tpcPartnerAgingReport.length;
-    //   }
-    // )
-
-    //check if another button is clicked
-    // console.log(this.tpcPartnerAgingReport)
-    // console.log(this.onClick120DayElement.nativeElement.value)
-    // console.log(value)
-    
   }
 
   onClick90Day(value: string) {
     if(value !== '120') {
-      // console.log('the value is: ' + value)
 
       let element120Day = this.onClick120DayElement.nativeElement;
       element120Day.classList.remove('active');
@@ -299,79 +320,106 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('90'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('90'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes('90'));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('90'));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggle90 = !this.toggle90;
 
-      // let clickedElement = this.onClick90DayElement.nativeElement;
-      
-      // console.log(clickedElement)
-      // console.log(this.onClick90DayElement.nativeElement)
-      
-      // if(clickedElement === this.onClick90DayElement.nativeElement) {
-      //   let isCertainButtonAlreadyActive = clickedElement.classList.contains("active");
-      //   console.log(isCertainButtonAlreadyActive)
-      //   // if( this.onClick90DayElement.nativeElement ) {
-      //   //   this.onClick90DayElement.nativeElement.remove("active");
-      //   // }
-
-      //   clickedElement.className += " active";
-      //   if(clickedElement.classList.contains("active")) {
-      //     clickedElement.classList.remove("active")
-      //   }
-      // }
-
-    }
-
-    // this.routeService.getTPCPartnerAgingReport().subscribe(
-    //   res => {
-    //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    //   val.filterCategory.toLowerCase().includes('90'));
-    //   this.collectionSize = this.tpcPartnerAgingReport.length;
-    //     }
-    //   )   
+    } 
   }
 
   onClickHighRMR(value: string) {
     if(value !== '120') {
-      // console.log('the value is: ' + value)
-
-      // let element120Day = this.onClick120DayElement.nativeElement;
-      // element120Day.classList.remove('active');
-
-      // let element90Day = this.onClick90DayElement.nativeElement;
-      // element90Day.classList.remove('active');
       
       this.tpcPartnerAgingReport;
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('over 120, high rmr') || val.filterCategory.toLowerCase().includes('over 120') || val.filterCategory.toLowerCase().includes('over 90'))
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('over 120, high rmr') || val.filterCategory.toLowerCase().includes('over 120') || val.filterCategory.toLowerCase().includes('over 90'))
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
 
-          this.tpcPartnerAgingReport = res;
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          // val.filterCategory.toLowerCase().includes('high'));
-          val.filterCategory.toLowerCase().includes('over 120, high rmr') || val.filterCategory.toLowerCase().includes('over 120') || val.filterCategory.toLowerCase().includes('over 90'))
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('over 120, high rmr') || val.filterCategory.toLowerCase().includes('over 120') || val.filterCategory.toLowerCase().includes('over 90'))
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggleHigh = !this.toggleHigh;
     }
@@ -396,26 +444,53 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('pending'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('pending'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes('pending'));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('pending'));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.togglePending = !this.togglePending;
     }
-
-    // this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.filterCategory.toLowerCase().includes('pending'));
-    // this.collectionSize = this.tpcPartnerAgingReport.length;
   }
 
   onClick60Day(value: string) {
@@ -433,26 +508,53 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('60'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('60'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes('60'));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('60'));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggle60 = !this.toggle60;
     }
-
-    // this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.filterCategory.toLowerCase().includes('60'));
-    // this.collectionSize = this.tpcPartnerAgingReport.length;
   }
 
   onClick30Day(value: string) {
@@ -470,26 +572,53 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('30'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('30'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes('30'));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('30'));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggle30 = !this.toggle30;
     }
-
-    // this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.filterCategory.toLowerCase().includes('30'));
-    // this.collectionSize = this.tpcPartnerAgingReport.length;
   }
 
   onClickRMT(value: string) {
@@ -507,26 +636,53 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('rmt'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes('rmt'));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes('rmt'));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes('rmt'));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggleRMT = !this.toggleRMT;
     }
-
-    // this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.filterCategory.toLowerCase().includes('rmt'));
-    // this.collectionSize = this.tpcPartnerAgingReport.length;
   }
 
   onClickAllCustomers(value: string) {
@@ -544,32 +700,58 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes(''));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes(''));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes(''));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes(''));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.toggleAll = !this.toggleAll;
     }
-
-    // this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.filterCategory.toLowerCase().includes(''));
-    // this.collectionSize = this.tpcPartnerAgingReport.length;
   }
 
   search(value: string): void {
     console.log(value)
     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.activeRMR.toLowerCase().includes(value));
     val.filterCategory.toString().toLowerCase().includes(value));
     this.collectionSize = this.tpcPartnerAgingReport.length;
   }
@@ -577,7 +759,6 @@ export class TpcpartneragingreportComponent implements OnInit {
   searchMinimumAmountDue(value: string): void {
     console.log(value)
     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    // val.activeRMR.toLowerCase().includes(value));
     val.pastDue.toString().toLowerCase().includes(value));
     this.collectionSize = this.tpcPartnerAgingReport.length;
   }
@@ -587,19 +768,50 @@ export class TpcpartneragingreportComponent implements OnInit {
 
       this.spinnerService.show();
 
-      this.routeService.getTPCPartnerAgingReport().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
+      if(this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReportX(this.userEmailAddress,this.sedonaContactEmail).subscribe(
+          res => {
+            if(res.status===200) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res.body;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes(''));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
           }
+        )
+      }
+      if(!this.sedonaContactEmail) {
+        this.routeService.getTPCPartnerAgingReport().subscribe(
+          res => {
+            if(res) {
+              this.spinnerService.hide()
+            }
+  
+            this.tpcPartnerAgingReport = res;
+            
+            this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+            val.filterCategory.toLowerCase().includes(''));
+            this.collectionSize = this.tpcPartnerAgingReport.length;
+          }
+        )
+      }
 
-          this.tpcPartnerAgingReport = res;
+      // this.routeService.getTPCPartnerAgingReport().subscribe(
+      //   res => {
+      //     if(res) {
+      //       this.spinnerService.hide()
+      //     }
+
+      //     this.tpcPartnerAgingReport = res;
           
-          this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          val.filterCategory.toLowerCase().includes(''));
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-        }
-      )
+      //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+      //     val.filterCategory.toLowerCase().includes(''));
+      //     this.collectionSize = this.tpcPartnerAgingReport.length;
+      //   }
+      // )
 
       this.agingListForm.controls['minimumAmountDue'].setValue(5)
   }

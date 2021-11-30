@@ -112,3 +112,6 @@
     color: #8898aa;
     height: calc(2.75rem + 2px);
   }
+  .ng-autocomplete {
+    width: 280px;
+  }

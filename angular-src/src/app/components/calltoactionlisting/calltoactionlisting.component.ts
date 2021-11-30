@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { PartnerCallToActionButton } from '../../models/partnercalltoactionbutton';
 declare var $: any;
+import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -23,6 +24,10 @@ export class CalltoactionlistingComponent implements OnInit {
   emailAddress;
   customer_Id;
 
+  sedonaContactEmail;
+  partnerName;
+  userName: any
+
   constructor(
     public fb: FormBuilder,
     private spinnerService: NgxSpinnerService,
@@ -37,32 +42,84 @@ export class CalltoactionlistingComponent implements OnInit {
   ngOnInit() {
     $("#wrapper").addClass("toggled");
 
-    this.spinnerService.show();
-    
-    this.routeService.getPartnerCallToActionButton().subscribe(
-      res => {
-        if(res.status === 200) {
-          this.spinnerService.hide();
-          this.flashMessage.show('Your requested data is displayed below', {
-            cssClass: 'text-center alert-success',
-            timeout: 5000
-          });
-        }
-        
-        console.log(res)
-        console.log(res.body)
-        console.log(res.headers)
-        console.log(res.status)
-        this.partnerCallToActionButton = res.body;
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      // console.log('this works')
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
 
-      }, (err: HttpErrorResponse) => {
-        //alert('there was an error')
+    this.spinnerService.show();
+
+    if(this.sedonaContactEmail) {
+      this.userName = this.sedonaContactEmail;
+
+      this.authService.getProfile().pipe(
+        mergeMap((res:any) => this.routeService.getTPCCollectionsCallToActionButtonX(this.emailAddress,this.sedonaContactEmail))
+      ).subscribe(data => {
+        if(data.status === 200) {
+          this.spinnerService.hide();
+          console.log(data.statusText)
+        }
+        this.partnerCallToActionButton = data.body
+      },(err:HttpErrorResponse) => {
         this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
           cssClass: 'text-center alert-danger',
           timeout: 5000
         });
-      }
-    )
+        this.spinnerService.hide();
+      })
+    }
+    if(!this.sedonaContactEmail) {
+      this.routeService.getPartnerCallToActionButton().subscribe(
+        res => {
+          if(res.status === 200) {
+            this.spinnerService.hide();
+            this.flashMessage.show('Your requested data is displayed below', {
+              cssClass: 'text-center alert-success',
+              timeout: 5000
+            });
+          }
+          
+          console.log(res)
+          console.log(res.body)
+          console.log(res.headers)
+          console.log(res.status)
+          this.partnerCallToActionButton = res.body;
+  
+        }, (err: HttpErrorResponse) => {
+          //alert('there was an error')
+          this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+            cssClass: 'text-center alert-danger',
+            timeout: 5000
+          });
+        }
+      )
+    }
+    
+    // this.routeService.getPartnerCallToActionButton().subscribe(
+    //   res => {
+    //     if(res.status === 200) {
+    //       this.spinnerService.hide();
+    //       this.flashMessage.show('Your requested data is displayed below', {
+    //         cssClass: 'text-center alert-success',
+    //         timeout: 5000
+    //       });
+    //     }
+        
+    //     console.log(res)
+    //     console.log(res.body)
+    //     console.log(res.headers)
+    //     console.log(res.status)
+    //     this.partnerCallToActionButton = res.body;
+
+    //   }, (err: HttpErrorResponse) => {
+    //     //alert('there was an error')
+    //     this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+    //       cssClass: 'text-center alert-danger',
+    //       timeout: 5000
+    //     });
+    //   }
+    // )
 
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');

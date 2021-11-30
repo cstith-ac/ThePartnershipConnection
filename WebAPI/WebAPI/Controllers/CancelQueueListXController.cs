@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<Object> GetCancelQueueListXs(string id1, string id2)
         {
-            return await db.GetCancelQueueListXs.FromSqlRaw("EXECUTE dbo.CancelQueueListX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
+            return await db.GetCancelQueueListXs.FromSqlRaw("EXECUTE dbo.CancelQueueListX @EmailAddress = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
         }
     }
 }

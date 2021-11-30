@@ -3,12 +3,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
+import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
+import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-partnerinvoicelisting',
@@ -60,16 +64,20 @@ export class PartnerinvoicelistingComponent implements OnInit {
   pageSize=10;
 
   clicked = false;//disables button after click
+  sedonaContactEmail;
+  partnerName;
+  userName: any;
 
   constructor(
     public fb: FormBuilder,
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
-    private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    private modalService: NgbModal,
-    public jwtHelper: JwtHelperService
+    public jwtHelper: JwtHelperService,
+    private flashMessage: FlashMessagesService,
+    private router: Router,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -83,17 +91,92 @@ export class PartnerinvoicelistingComponent implements OnInit {
 
     $("#wrapper").addClass("toggled");
 
+    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
+      // console.log('this works')
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
+      this.partnerName = localStorage.getItem('partnerName')
+    }
+
     this.spinnerService.show();
 
-    this.routeService.getPartnerInvoiceListing().subscribe(
-    res => {
-      if(res) {
-        this.spinnerService.hide()
+    setTimeout(() => {
+      if(this.sedonaContactEmail) {
+        this.userName = this.sedonaContactEmail;
+  
+        let params = {
+          "EmailAddress": this.emailAddress,
+          "Filter": 1,
+          "StartDate": null,
+          "EndDate": null,
+          "AliasEmail": this.sedonaContactEmail
+        }
+  
+        this.authService.getProfile().pipe(
+          mergeMap((res:any) => this.routeService.postPartnerInvoiceListingX(params))
+        ).subscribe(data => {
+          if(data.status === 200) {
+            this.spinnerService.hide();
+            console.log(data.statusText)
+          }
+          this.partnerInvoiceListing = data.body
+        },(err:HttpErrorResponse) => {
+          this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+            cssClass: 'text-center alert-danger',
+            timeout: 5000
+          });
+          this.spinnerService.hide();
+        })
       }
+    }, 4);
+
+    // if(this.sedonaContactEmail) {
+    //   this.userName = this.sedonaContactEmail;
+
+    //   let params = {
+    //     "EmailAddress": this.emailAddress,
+    //     "Filter": 1,
+    //     "StartDate": null,
+    //     "EndDate": null,
+    //     "AliasEmail": this.sedonaContactEmail
+    //   }
+
+    //   this.authService.getProfile().pipe(
+    //     mergeMap((res:any) => this.routeService.postPartnerInvoiceListingX(params))
+    //   ).subscribe(data => {
+    //     if(data.status === 200) {
+    //       this.spinnerService.hide();
+    //       console.log(data.statusText)
+    //     }
+    //     this.partnerInvoiceListing = data.body
+    //   },(err:HttpErrorResponse) => {
+    //     this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+    //       cssClass: 'text-center alert-danger',
+    //       timeout: 5000
+    //     });
+    //     this.spinnerService.hide();
+    //   })
+    // }
+    if(!this.sedonaContactEmail) {
+      this.routeService.getPartnerInvoiceListing().subscribe(
+        res => {
+          if(res) {
+            this.spinnerService.hide()
+          }
+          
+          this.partnerInvoiceListing = [].concat(res);
+          
+        })
+    }
+
+    // this.routeService.getPartnerInvoiceListing().subscribe(
+    // res => {
+    //   if(res) {
+    //     this.spinnerService.hide()
+    //   }
       
-      this.partnerInvoiceListing = [].concat(res);
+    //   this.partnerInvoiceListing = [].concat(res);
       
-    })
+    // })
     
     this.authService.getProfile().subscribe(
       res => {

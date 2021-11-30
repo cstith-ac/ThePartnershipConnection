@@ -31,6 +31,7 @@ export class PartnerdashboardComponent implements OnInit {
   partnerInvoiceListing: PartnerInvoiceListing[];
   user;
   firstName;
+  attritionLastMonth;
   attritionValue;
   attritionProgress;
   threegConversionValue;
@@ -289,7 +290,30 @@ export class PartnerdashboardComponent implements OnInit {
           this.partnerLandingPage = data.body
           this.firstName = this.sedonaContactEmail // use this or...
           // this.firstName = this.partnerName;  // use this
-          console.log(data.body)
+          // console.log(data.body)
+
+          for(var i = 0; i < this.partnerLandingPage.length; i++) {
+            console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
+            console.log(this.partnerLandingPage[i].attritionLastMonth)
+            console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
+            // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
+            // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
+            // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
+            // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
+            this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
+            this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
+            this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
+            console.log(typeof this.attritionValue)//number
+            console.log('alias')
+  
+            this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
+            this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
+  
+            if(this.partnerLandingPage[i].highRMRCancelPerson == "") {
+              console.log("nothing here")
+            }
+          }
+
           },(err:HttpErrorResponse) => {
             this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
               cssClass: 'text-center alert-danger',
@@ -365,7 +389,10 @@ export class PartnerdashboardComponent implements OnInit {
             // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
             // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
             this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
-            this.attritionValue = this.partnerLandingPage[i].attritionLastMonth;
+            this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
+            this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
+            console.log(typeof this.attritionValue)//number
+            console.log('partner')
   
             this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
             this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";

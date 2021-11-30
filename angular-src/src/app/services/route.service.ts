@@ -417,7 +417,7 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerInvoiceListing`, httpOptions);
   }
 
-  postPartnerInvoiceListingX(partnerInvoiceListingX: PartnerInvoiceListingX): Observable<HttpResponse<any>> {
+  postPartnerInvoiceListingX(params:any): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 
@@ -426,8 +426,20 @@ export class RouteService {
       }),
       observe: 'response' as 'body'
     };
-    return this.http.post<any>(`${this.baseUrl}/api/PartnerInvoiceListingX/`, partnerInvoiceListingX, httpOptions);
+    return this.http.post<any>(`${this.baseUrl}/api/PartnerInvoiceListingX/`, params, httpOptions);
   }
+
+  // postPartnerInvoiceListingX(partnerInvoiceListingX: PartnerInvoiceListingX): Observable<HttpResponse<any>> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 
+  //       'Content-Type': 'application/json',
+  //       'Authorization':'Bearer '+ this.authToken 
+  //     }),
+  //     observe: 'response' as 'body'
+  //   };
+  //   return this.http.post<any>(`${this.baseUrl}/api/PartnerInvoiceListingX/`, partnerInvoiceListingX, httpOptions);
+  // }
 
   getTPCStateList(): Observable<HttpResponse<any>> {
     this.loadToken();
@@ -510,15 +522,16 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CancelQueueList`, httpOptions);
   }
 
-  getCancelQueueListX(id1:string,id2:string): Observable<any>  {
+  getCancelQueueListX(id1:string,id2:string): Observable<HttpResponse<any>>  {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.authToken
-      })
+      }),
+      observe: 'response' as 'body'
     };
-    return this.http.get<any>(`${this.baseUrl}/api/CancelQueueListX`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}/api/CancelQueueListX/` + id1 + `/` + id2, httpOptions);
   }
 
   getCancelQueueSiteList(id: number): Observable<any> {
@@ -543,15 +556,16 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListing`, httpOptions);
   }
 
-  getPartnerServiceListingX(id1:string,id2:string): Observable<any>  {
+  getPartnerServiceListingX(id1:string,id2:string): Observable<HttpResponse<any>>  {
     this.loadToken();
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.authToken
-      })
+      }),
+      observe: 'response' as 'body'
     };
-    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingX`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceListingX/` + id1 + `/` + id2, httpOptions);
   }
 
   getPartnerServiceListingExtended(): Observable<any>  {
@@ -897,6 +911,18 @@ export class RouteService {
     return this.http.post<any>(`${this.baseUrl}/api/ListPartnerContacts`,params, httpOptions);
   }
 
+  getListPartnerContactsByID(id1:string, id2:number, id3:number): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken
+      }),
+      observe: 'response' as 'body',
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/ListPartnerContacts/`+ id1 + '/' + id2 + '/' + id3, httpOptions);
+  }
+
   getRMListforTPC(): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
@@ -908,6 +934,18 @@ export class RouteService {
     };
     return this.http.get<any>(`${this.baseUrl}/api/RMListforTPC`, httpOptions);
   }
+
+  // getTPCStateList(): Observable<HttpResponse<any>> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 
+  //       'Content-Type': 'application/json',
+  //       'Authorization':'Bearer '+ this.authToken
+  //     }),
+  //     observe: 'response' as 'body',
+  //   };
+  //   return this.http.get<any>(`${this.baseUrl}/api/TPCStateList`, httpOptions);
+  // }
 
   loadToken() {
     const token = localStorage.getItem('token');

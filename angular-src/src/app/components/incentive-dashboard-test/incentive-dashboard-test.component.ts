@@ -10,15 +10,12 @@ import { CustomerSearchList } from '../../models/customersearchlist';
 import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
-import { IncentiveDashboard } from '../../models/incentivedashboard';
-import { AuthService } from '../../services/auth.service';
-import { IncentiveEntryService } from '../../services/incentive-entry.service';
+import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
+
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
-import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
-import { IncentivedashboardComponent } from '../incentivedashboard/incentivedashboard.component';
+
 import { RouteService } from '../../services/route.service';
-import { Incentive_Add_Equipment } from 'src/app/models/incentiveaddequipment';
+
 
 @Component({
   selector: 'app-incentive-dashboard-test',
@@ -56,6 +53,7 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
   customerSearchListSite: CustomerSearchListSite[];
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
   listsitesforcustomer: ListSitesForCustomer[];
+  listSystemsForSite: ListSystemsForSite[];
   p: number = 1;
   searchValue:string;
   id;
@@ -64,8 +62,16 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
   customerNumber;
   customer_Site_id;
   customerSiteName;
+  alarmAccount: string;
+  systemTypeID: string;
+  customer_System_id: number;
+  panelTypeID: any;
+  panel_Location: any;
+  centralStationID: any;
+  additionalInfo: any;
 
-
+  isSystemDisabled = true;
+  isSiteDisabled = true;
 
   constructor(
     private router: Router,
@@ -284,7 +290,31 @@ export class IncentiveDashboardTestComponent implements OnInit, OnDestroy {
         }
 
         //get site
-        this.getSiteAfterCustomer()
+        //this.getSiteAfterCustomer()
+        this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+          res => {
+            console.log(res)
+            this.listSystemsForSite = res;
+    
+            for(var i = 0; i < this.listSystemsForSite.length; i++) {
+              console.log(this.listSystemsForSite[i].customer_System_id)
+    
+              this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+              this.systemTypeID = this.listSystemsForSite[i].systemType;
+              this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+    
+              this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+                res => {
+                  this.alarmAccount = res.accountNumber;
+                  this.systemTypeID = res.systemType;
+                  this.panelTypeID = res.panelType;
+                  this.panel_Location = res.panelLocation;
+                  this.centralStationID = res.centralStationID;
+                  this.additionalInfo = res.additionalInfo;
+                }
+              )
+            }
+        })
       }
     )
   }

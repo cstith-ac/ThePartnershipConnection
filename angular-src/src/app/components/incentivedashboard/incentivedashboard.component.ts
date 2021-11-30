@@ -81,6 +81,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   authToken: any;
   user:any=Object;
   userEmailAddress: '';
+  customerEmailAddress;
+  enrollInEmailInvoices;
 
   ticket_Number;
   customer_Number;
@@ -696,6 +698,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.incentiveDashboardForm = this.fb.group({
       UserEmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email, //@UserEmailAddress
+      CustomerEmailAddress:[""], //@CustomerEmailAddress
       //CustomerID: this.id, //@CustomerID
       InstallCompanyID: this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID')),
       CustomerID: ["", Validators.required], //@CustomerID
@@ -731,7 +734,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       RenewalMonths: [""], //@RenewalMonths
       ServiceIncluded: localStorage.getItem('serviceIncluded'), //@ServiceInclude
       SignalsTested: ["", Validators.required],
-      PartnerComments: [""] //@PartnerComments
+      PartnerComments: [""], //@PartnerComments
+      EnrollInEmailInvoices: [""]
     });
 
     this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
@@ -1394,7 +1398,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                       }
                     )
                   }
-                })
+              })
             }
           }
         )
@@ -1738,7 +1742,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.routeService.getCustomerSearchListCentralStation().subscribe(
       res => {
         this.customerSearchListCentralStation = res;
-        console.log(this.customerSearchListCentralStation)
+        // console.log(this.customerSearchListCentralStation)
         for(var i = 0; i < this.customerSearchListCentralStation.length; i++) {
           console.log(this.customerSearchListCentralStation[i])
         }
@@ -1746,7 +1750,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  //select Central Station 1st
+  //select System/Central Station 1st
   selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, alarmAccount:string, system_Code: string, customer_Name:string, customer_Number:string) {
     let selectedCustomerid = customer_id;
     let selectedCustomerSiteId = customer_Site_Id;
@@ -1765,13 +1769,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     console.log(selectedCustomerSiteId);
     console.log(selectedAlarmAccount+' - '+selectedSystemCode)
+    this.isRemoveSystemDropdown=false
+    this.isSystemSelectionFirst=true
+    this.alarmAccountPreSelected=true
 
     this.modalService.dismissAll();
 
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        //console.log(res);
+        console.log(res);
+
         this.listsitesforcustomer = res;
+        this.customerPreselected=true
+
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
           console.log(this.listsitesforcustomer[i].customer_Site_id)
 
@@ -1870,7 +1880,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log('@ContractTerm:' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
     console.log('@RenewalMonths:' + parseInt(this.renewalMonths));
     console.log('@ServiceIncluded:' + form.value.ServiceIncluded);
-
+    console.log('@EnrollInEmailInvoices: '+ form.value.EnrollInEmailInvoices);
     console.log('@PartnerComments:' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
@@ -1908,6 +1918,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(localStorage.getItem('central_Station_ID')) {
       this.incentiveDashboardForm.controls['CentralStationID'].setValue(parseInt(this.centralStationID))
     } 
+
+    if(this.enrollInEmailInvoices === true) {
+      console.log(this.customerEmailAddress + '/Auto')
+      this.customerEmailAddress = this.customerEmailAddress+'/Auto';
+    }
+    if(this.enrollInEmailInvoices === false) {
+      console.log('Just pass the customer email addressss')
+    }
 
     // confirm('Click ok to confirm form submission')
 
@@ -2281,6 +2299,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         }
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         // updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
         updateIncentiveAddFinishWithJobID.customerEmailAddress = '';
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
@@ -2663,7 +2682,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        //the customer's email address and not the partner's email
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
+        // updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
         
         if(!this.other_Document2_file_name) {

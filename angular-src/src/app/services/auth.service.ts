@@ -51,8 +51,16 @@ export class AuthService {
       }),
       observe:'response' as 'body'
     };
+    // return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
     return this.http.post<any>(this.baseUrl + '/api/ApplicationUser/Login', user, httpOptions).pipe(
-      catchError(this.errorHandler)
+      catchError((err) => {
+        console.log('error caught in auth service');
+        // alert('There was a problem with your credentials. Please check your username and password and log in again.')
+        console.error(err);
+        return throwError(err);
+      })
     );
   }
   // OLD

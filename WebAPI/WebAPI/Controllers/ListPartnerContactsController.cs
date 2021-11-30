@@ -65,5 +65,12 @@ namespace WebAPI.Controllers
                 return Lst;
             }
         }
+
+        [HttpGet("{id1}/{id2}/{id3}")]
+        [Authorize]
+        public async Task<Object> GetListPartnerContactsByID(string id1, int id2, int id3)
+        {
+            return await db.GetListPartnerContacts.FromSqlRaw("EXECUTE [dbo].[ListPartnerContacts] @PrimaryOnly={0}, @RMFilter={1}, @USStateID={2}", id1, id2, id3).ToListAsync();
+        }
     }
 }
