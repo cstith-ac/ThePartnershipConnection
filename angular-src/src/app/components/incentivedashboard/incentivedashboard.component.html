@@ -6,21 +6,21 @@
         <div class="row ml-0">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!-- <div class="col-md-5">
                         <h1 class="incentive-header">Invoice Entry | 
                             <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
                         </h1>
                     </div>
                     <div class="col-md-7">
                         <p class="text-error" (click)="openRequiredItemsModal(required)"><i class="fas fa-exclamation-triangle pr-2"></i>The following items are Required</p>
-                    </div>
-                    <!-- <h1 class="incentive-header">Invoice Entry | 
+                    </div> -->
+                    <h1 class="incentive-header">Invoice Entry | 
                         <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
-                    </h1> -->
+                    </h1>
                 </div>
             </div>
         </div>
-        <form [formGroup]="incentiveDashboardForm" (ngSubmit)="onSubmit(incentiveDashboardForm)">
+        <form [formGroup]="incentiveDashboardForm">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-5 mt-1_8">
@@ -216,7 +216,7 @@
                                     [(ngModel)]="panelTypeID"
                                     (change)="onChangeGetPanelType($event)"
                                 >
-                                    <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}" [ngValue]="list.panel_Type_Id">
+                                    <option *ngFor="let list of listpaneltypes" value="{{ list.panel_Type_Id }}">
                                         {{ list.panelName }}
                                     </option>
                                 </select>
@@ -266,7 +266,7 @@
                             <input 
                                 type="text"
                                 maxlength="50" 
-                                class="form-control col-sm-10" 
+                                class="form-control col-sm-5" 
                                 [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" 
                                 (keyup)="getAdditionalInfo($event)"
                             >
@@ -692,20 +692,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group form-inline form-check mb-0">
-                                        <label class="col-sm-5 col-form-label text-danger font-weight-bold form-check-label">Signals Tested!</label>
-                                        <input 
-                                            type="checkbox" class="form-control form-check-input" 
-                                            [value]="false"
-                                            [(ngModel)]="signalsTested" formControlName="SignalsTested"
-                                            (change)="onSignalsTested($event)"
-                                        >
-                                    </div>
-                                    <div class="form-group form-inline mb-0">
-                                        <label class="col-sm-10 col-form-label">
-                                            <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
-                                        </label>
-                                    </div> -->
                                 </div>
                                 
                                 <!-- <div class="progress" *ngIf="barWidth!='0%'">
@@ -731,13 +717,29 @@
                                     <i class="far fa-eye pr-2"></i>Add/View Comments
                                 </button>
 
-                                <button 
+                                <!--Validate Invoice/Submit Invoice-->
+                                <ng-container *ngIf="showValidateInvoiceButton">
+                                    <button 
+                                        type="submit" 
+                                        class="btn btn-validate float-right mr-2"
+                                        (click)="openValidateItemsModal(required)"
+                                    ><i class="fas fa-exclamation-triangle pr-2"></i>Validate Invoice</button>
+                                </ng-container>
+                                <ng-container *ngIf="showSubmitInvoiceButton">
+                                    <button 
+                                        type="submit" 
+                                        class="btn btn-secondary float-right mr-2"
+                                        (click)="onSubmit(incentiveDashboardForm);clicked = true;"
+                                    ><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
+                                </ng-container>
+
+                                <!-- <button 
                                     type="button" 
                                     class="btn btn-secondary float-right mr-2" 
                                     (click)="onSubmit(incentiveDashboardForm);clicked = true;" 
                                     [disabled]="clicked || !incentiveDashboardForm.valid">
                                     <i class="fas fa-plus pr-2"></i>Submit Invoice
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div> 
@@ -892,7 +894,6 @@
                     <th scope="col">City</th>
                     <th scope="col">State</th>
                     <th scope="col">Zip Code</th>
-                    <!-- <th scope="col"></th> -->
                 </tr>
             </thead>
             <tbody>
@@ -906,14 +907,6 @@
                     <td>{{ customer.city }}</td>
                     <td>{{ customer.state }}</td>
                     <td>{{ customer.zipCode }}</td>
-                    <!-- <td>
-                        <button 
-                            class="btn btn-primary" 
-                            (click)="selectCustomer(customer.customer_id,customer.customer_Name)"
-                        >
-                            Select
-                        </button>
-                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -1251,7 +1244,6 @@
 
 <ng-template #recurring let-modal>
     <div class="modal-header">
-        <!-- <h4 class="modal-title">Title</h4> -->
         <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
             <span aria-label="true">&times;</span>
         </button>
@@ -1426,16 +1418,6 @@
                                             [style.width]="'80%'"
                                             [attr.disabled]="true"
                                         ></kendo-numerictextbox>
-                                      <!-- <input 
-                                        type="text"
-                                        class="form-control"
-                                        formControlName="Total"
-                                        placeholder="$0.00"
-                                        mask="separator.2" 
-                                        thousandSeparator=","
-                                        prefix="$"
-                                        [attr.disabled]="true"
-                                      > -->
                                     </div>
                                     <div class="col">
                                         <button class="btn btn-add" type="button" (click)="addNewItem()">
@@ -1825,7 +1807,6 @@
 
 <ng-template #required let-modal>
     <div class="modal-header">
-        <!-- <h4 class="modal-title">Title</h4> -->
         <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
             <span aria-label="true">&times;</span>
         </button>

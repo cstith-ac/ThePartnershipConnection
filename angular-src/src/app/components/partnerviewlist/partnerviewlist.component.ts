@@ -251,6 +251,10 @@ export class PartnerviewlistComponent implements OnInit {
     this.listPartnerContacts.sort((a, b) => a.partnerCode.localeCompare(b.partnerCode));
   }
 
+  onClickSortPartnerName(e) {
+    this.listPartnerContacts.sort((a,b) => a.partnerName.localeCompare(b.partnerName));
+  }
+
   onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {
     this.partnerCode = partnerCode;
     this.sedonaContactEmail = sedonaContactEmail;

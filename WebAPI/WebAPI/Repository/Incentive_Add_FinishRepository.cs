@@ -44,6 +44,10 @@ namespace WebAPI.Repository
             //}
 
             var customerEmailAddressParam = new SqlParameter("@CustomerEmailAddress", incentive_Add_Finish.CustomerEmailAddress);
+            if (incentive_Add_Finish.CustomerEmailAddress == null) 
+            {
+                customerEmailAddressParam.Value = "";
+            }
 
             var testParam = new SqlParameter("@Test", incentive_Add_Finish.Test);
 

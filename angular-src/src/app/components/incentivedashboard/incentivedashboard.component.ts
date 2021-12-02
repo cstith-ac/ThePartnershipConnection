@@ -35,6 +35,7 @@ import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 import { fromEvent, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError, map, tap, concatMap } from 'rxjs/operators';
 declare var $: any;
+const moment = require('moment');
 
 @Component({
   selector: 'app-incentivedashboard',
@@ -278,6 +279,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   selectedOtherDocument1File;
   selectedOtherDocument2File;
 
+  billingStartDate;
   recurringValueChanges$;
   equipMatValueChanges$;
   laborChargesValueChanges$;
@@ -311,6 +313,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   viewAvailableDocuments="View available documents"
 
   submitted = false;
+  showValidateInvoiceButton = true;
+  showSubmitInvoiceButton = false;
+
   target;
   clicked = false;//disables button after click
   frmData; // Invoice
@@ -970,13 +975,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeGetPanelType(e) {
-    // console.log(e)
-    // console.log(e.target.value)
-    // console.log(typeof e.target.value)
-    // console.log(e.target.value.substring(3)) //++
-    localStorage.removeItem('panel_Type_Id');
-    localStorage.removeItem('panelType');
-    this.panelTypeID = parseInt(e.target.value.substring(3));
+    console.log(e)
+    console.log(e.target.value)
+    this.panelTypeID = Number(e.target.value);
+    // this.panelTypeID = parseInt(e.target.value.substring(3));
+    console.log(this.panelTypeID)
+    console.log(typeof this.panelTypeID)
+    //get the value and remove the index
+    //if the Panel Type is changed, get the new panel type id
+    // this.incentiveDashboardForm.controls['PanelTypeID'].valueChanges.subscribe(
+    //   res => {
+    //     console.log(res)
+    //     this.panelTypeID = res;
+    //   }
+    // ) 
+
+    // localStorage.removeItem('panel_Type_Id');
+    // localStorage.removeItem('panelType');
+    // // this.panelTypeID = parseInt(e.target.value.substring(3));
+    // console.log(this.panelTypeID)
   }
 
   onChangeGetCentralStation(e) {
@@ -1039,6 +1056,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Total: this.fb.control(0)
     })
   }
+
   //Equip & Mat
   private generateFakeDatumFormGroup(datum) {
     return this.fb.group({
@@ -1054,6 +1072,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Total: this.fb.control(0)
     })
   }
+
   private generateDatumFormGroup(datum) {
     return this.fb.group({
       ItemID: this.fb.control(datum.itemID),
@@ -1064,6 +1083,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //Total: this.fb.control(0)
     })
   }
+
   //Labor
   private generateLaborChargesDatumFormGroup(datumLabor) {
     return this.fb.group({
@@ -1807,9 +1827,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //   }
   // }
 
-  get f() {
-    return this.incentiveDashboardForm.controls
-  }
+  // get f() {
+  //   return this.incentiveDashboardForm.controls
+  // }
 
   onSubmit(form: FormGroup) {
 
@@ -2282,9 +2302,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           updateIncentiveAddFinishWithJobID.serviceTicketNumber = '0'
         }
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        // updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = '';
+        if(this.customerEmailAddress == null || this.customerEmailAddress === '' || !this.customerEmailAddress || typeof this.customerEmailAddress == 'undefined') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        } else {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
+        }
+        
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.file_name) {
@@ -2373,7 +2396,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        if(this.customerEmailAddress == null || this.customerEmailAddress == '') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        }
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.site_visit_file_name) {
@@ -2446,7 +2472,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        if(this.customerEmailAddress == null || this.customerEmailAddress == '') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        }
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.contract_file_name) {
@@ -2520,7 +2549,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        if(this.customerEmailAddress == null || this.customerEmailAddress == '') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        }
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.subscriber_file_name) {
@@ -2593,7 +2625,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         updateIncentiveAddFinishWithJobID.serviceChecked = localStorage.getItem('serviceIncluded');
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
-        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
+        if(this.customerEmailAddress == null || this.customerEmailAddress == '') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        }
+        updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
 
         if(!this.other_Document1_file_name) {
@@ -2667,8 +2702,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // updateIncentiveAddFinishWithJobID.comments = form.value.PartnerComments;
         updateIncentiveAddFinishWithJobID.serviceTicketNumber = this.ticket_Number;
         //the customer's email address and not the partner's email
+        if(this.customerEmailAddress == null || this.customerEmailAddress == '') {
+          updateIncentiveAddFinishWithJobID.customerEmailAddress = ''
+        }
         updateIncentiveAddFinishWithJobID.customerEmailAddress = this.customerEmailAddress;
-        // updateIncentiveAddFinishWithJobID.customerEmailAddress = this.userEmailAddress;
         updateIncentiveAddFinishWithJobID.test = localStorage.getItem('signalsTested');
         
         if(!this.other_Document2_file_name) {
@@ -3227,16 +3264,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   initEntryRow() {
+    this.billingStartDate = moment('12-30-1899', 'DD-MM-YYYY');
     return this.fb.group({
-      ItemID: ["", Validators.required],
+      ItemID: [0, Validators.required],
       Description: ["", Validators.required],
       BillCycle: ["", Validators.required],
-      RMR: ["", Validators.required],
+      RMR: [0, Validators.required],
       // PassThrough: ["", Validators.required],
       PassThrough: [this.passThrough, Validators.required],
-      BillingStartDate: ["", Validators.required],
+      BillingStartDate: [this.billingStartDate, Validators.required],
       Add2Item: [0],
-      Multiple: ["", Validators.required],
+      Multiple: [25, Validators.required],
       Total: ["", Validators.required]
     })
   }
@@ -3346,10 +3384,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   initEquipMatEntryRow() {
     return this.fb.group({
-      ItemID: ["", Validators.required],
+      ItemID: [0, Validators.required],
       Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
+      Quantity: [0, Validators.required],
+      Cost: [0, Validators.required],
       Total: ["", Validators.required]
     })
   }
@@ -3430,10 +3468,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   initLaborChargesEntryRow() {
     return this.fb.group({
-      ItemID: ["", Validators.required],
+      ItemID: [0, Validators.required],
       Description: ["", Validators.required],
-      Quantity: ["", Validators.required],
-      Cost: ["", Validators.required],
+      Quantity: [0, Validators.required],
+      Cost: [0, Validators.required],
       Total: ["", Validators.required]
     })
   }
@@ -3526,7 +3564,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
 
-  openRequiredItemsModal(required) {
+  openValidateItemsModal(required) {
     this.modalService.open(required, {
       windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'

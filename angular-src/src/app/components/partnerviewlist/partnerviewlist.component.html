@@ -36,7 +36,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Partner Code<i class="fas fa-sort pl-1" (click)="onClickSortPartnerCode($event)"></i></th>
-                        <th scope="col">Partner Name</th>
+                        <th scope="col">Partner Name<i class="fas fa-sort pl-1" (click)="onClickSortPartnerName($event)"></i></th>
                         <th scope="col">Sedona Contact Email</th>
                         <th scope="col">TPC Login Exists</th>
                         <th scope="col">RM Assigned<i class="fas fa-filter pl-1" (click)="onOpenRMFilterModal(rmAssigned)"></i></th>
@@ -82,9 +82,9 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="partnerViewListFilterForm">
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col">
-                            <h5>Regional Manager</h5>
+                            <h5 class="headline-5">Regional Manager Filter</h5>
                         </div>
                     </div>
                     <div class="form-group">
@@ -118,9 +118,9 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="partnerViewListFilterForm">
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col">
-                            <h5>State</h5>
+                            <h5 class="headline-5">State Filter</h5>
                         </div>
                     </div>
                     <div class="form-group">
@@ -154,26 +154,42 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="primaryContactFilterForm">
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col">
-                            <h5>Primary Contact Filter</h5>
+                            <h5 class="headline-5">Primary Contact Filter</h5>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="my-columns">
-                            <div class="form-check">
-                                <input 
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input 
                                     type="radio"
                                     formControlName="FilterPrimaryContact"
                                     id="all"
                                     value="n" 
                                     (change)="onChangeFilterPrimaryContact($event)">All Contacts
-                                <input
+                                </div>
+                                <div class="col-md-6">
+                                    <input
                                     type="radio"
                                     formControlName="FilterPrimaryContact"
                                     id="primary"
                                     value="y" 
                                     (change)="onChangeFilterPrimaryContact($event)">Primary Contacts
+                                </div>
+                                <!-- <input 
+                                    type="radio"
+                                    formControlName="FilterPrimaryContact"
+                                    id="all"
+                                    value="n" 
+                                    (change)="onChangeFilterPrimaryContact($event)">All Contacts -->
+                                <!-- <input
+                                    type="radio"
+                                    formControlName="FilterPrimaryContact"
+                                    id="primary"
+                                    value="y" 
+                                    (change)="onChangeFilterPrimaryContact($event)">Primary Contacts -->
                             </div>
                         </div>
                     </div>
