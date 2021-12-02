@@ -24,6 +24,7 @@ export class PartnerviewlistComponent implements OnInit {
   tpcStateList: TPCStateList[];
   partnerViewListFilterForm: FormGroup;
   partnerContactsSearchForm: FormGroup;
+  primaryContactFilterForm: FormGroup;
   page = 1;
   count = 0;
   tableSize = 5;
@@ -74,6 +75,10 @@ export class PartnerviewlistComponent implements OnInit {
       SearchTerm: [""]
     })
 
+    this.primaryContactFilterForm = this.fb.group({
+      FilterPrimaryContact: ["y"]
+    })
+
     this.spinnerService.show();
 
     let params = {
@@ -93,10 +98,10 @@ export class PartnerviewlistComponent implements OnInit {
         }
         if(res.status)
 
-        console.log(res);
-        console.log(res.body);
-        console.log(res.headers);
-        console.log(res.status);
+        // console.log(res);
+        // console.log(res.body);
+        // console.log(res.headers);
+        // console.log(res.status);
 
         this.listPartnerContacts = res.body;
         this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName))
@@ -163,6 +168,7 @@ export class PartnerviewlistComponent implements OnInit {
       }
     )
   }
+
   onOpenStateFilterModal(state) {
     // show or hide the list
     this.modalService.open(state,
@@ -178,6 +184,7 @@ export class PartnerviewlistComponent implements OnInit {
       }
     )
   }
+
   onChangeFilterRM(e) {
     console.log(e)
     console.log(e.target.value)
@@ -203,10 +210,11 @@ export class PartnerviewlistComponent implements OnInit {
       }
     )
   }
+
   onChangeFilterState(e) {
-    console.log(e)
-    console.log(e.target.value)
-    console.log(parseInt(e.target.id))
+    // console.log(e)
+    // console.log(e.target.value)
+    // console.log(parseInt(e.target.id))
 
     this.usStateID = parseInt(e.target.id);
 
@@ -223,6 +231,26 @@ export class PartnerviewlistComponent implements OnInit {
     )
   }
 
+  onChangeFilterPrimaryContact(e) {
+    console.log(e.target.value)
+    if(!this.rmid) {
+      this.rmid = 1;
+    }
+    if(!this.usStateID) {
+      this.usStateID = 1;
+    }
+    this.routeService.getListPartnerContactsByID(e.target.value, this.rmid, this.usStateID).subscribe(
+      res => {
+        this.listPartnerContacts = res.body
+      }
+    )
+  }
+
+  onClickSortPartnerCode(e) {
+    console.log(e)
+    this.listPartnerContacts.sort((a, b) => a.partnerCode.localeCompare(b.partnerCode));
+  }
+
   onClickOpenPartnerLandingPage(partnerCode:string, sedonaContactEmail: string, partnerName: string) {
     this.partnerCode = partnerCode;
     this.sedonaContactEmail = sedonaContactEmail;
@@ -231,17 +259,17 @@ export class PartnerviewlistComponent implements OnInit {
     localStorage.setItem('sedonaContactEmail', this.sedonaContactEmail)
     localStorage.setItem('partnerName', this.partnerName);
 
-    if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
-      // Save it!
-      console.log('A user was selected.');
-      this.router.navigate(['partner-dashboard']);
-    } else {
-      // Do nothing!
-      console.log('A user was NOT selected.');
-      // show flashmessage, tell the user to please select a user
-    }
+    // if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
+    //   // Save it!
+    //   console.log('A user was selected.');
+    //   this.router.navigate(['partner-dashboard']);
+    // } else {
+    //   // Do nothing!
+    //   console.log('A user was NOT selected.');
+    //   // show flashmessage, tell the user to please select a user
+    // }
 
-    // this.router.navigate(['partner-dashboard']);
+    this.router.navigate(['partner-dashboard']);
     // this.routeService.getPartnerLandingPageX('cstith@alarmconnections.com','hugo@cloudsecurityalarms.com').subscribe(
     //   res => {
     //     console.log(res.body)
@@ -307,6 +335,14 @@ export class PartnerviewlistComponent implements OnInit {
 
   onOpenFilterModal(filter){
     this.modalService.open(filter,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+  }
+
+  onOpenFilterPrimaryContactModal(primaryContact) {
+    this.modalService.open(primaryContact,
       {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class950'

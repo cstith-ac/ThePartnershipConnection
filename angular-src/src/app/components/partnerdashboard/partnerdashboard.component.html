@@ -449,7 +449,7 @@
         </div>
         <div class="card-body paddingTop-14px">
           <div class="row">
-            <div class="col-md-12 pt-2 pb-4">
+            <div class="col-md-12">
               <span class="subtitle-2 medium-emphasis text-uppercase">Last Month</span>
               <!-- <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth | number: '1.0-0' }}%</span> -->
               <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth.toFixed(1) }}%</span>
@@ -459,7 +459,7 @@
             <div class="col-md-12 pt-2 pb-1">
               <p class="attritionGoalPercent">10%</p>
               <span class="goal"></span>
-              <p  *ngIf="(item.attritionLastMonth < 10)">
+              <p  *ngIf="item.attritionLastMonth &lt; 10">
                 <ngb-progressbar 
                   type="success"
                   [max]="30"
@@ -480,7 +480,7 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p> -->
-              <p *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11) || (item.attritionLastMonth === 12) || (item.attritionLastMonth === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
+              <p *ngIf="(item.attritionLastMonth &gt; 10) && (item.attritionLastMonth &lt; 15)">
                 <ngb-progressbar 
                   type="warning"
                   [max]="30"
@@ -491,7 +491,7 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p>
-              <p *ngIf="item.attritionLastMonth > 15">
+              <p *ngIf="item.attritionLastMonth &gt; 15">
                 <ngb-progressbar 
                   type="danger"
                   [max]="30"

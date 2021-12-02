@@ -314,6 +314,24 @@ export class PartnerdashboardComponent implements OnInit {
             }
           }
 
+          // setTimeout(() => {
+          //   for(var i = 0; i < this.partnerLandingPage.length; i++) {
+          //     this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
+          //     this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
+          //     this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
+          //     console.log(typeof this.attritionValue)//number
+          //     console.log('alias')
+    
+          //     this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
+          //     this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
+    
+          //     if(this.partnerLandingPage[i].highRMRCancelPerson == "") {
+          //       console.log("nothing here")
+          //     }
+          //   }
+          //   console.log(this.attritionValue)
+          // }, 2000);
+
           },(err:HttpErrorResponse) => {
             this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
               cssClass: 'text-center alert-danger',

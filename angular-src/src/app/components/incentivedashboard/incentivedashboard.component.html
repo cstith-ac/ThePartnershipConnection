@@ -6,9 +6,17 @@
         <div class="row ml-0">
             <div class="col-md-12">
                 <div class="row">
-                    <h1 class="incentive-header">Invoice Entry | 
+                    <div class="col-md-5">
+                        <h1 class="incentive-header">Invoice Entry | 
+                            <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
+                        </h1>
+                    </div>
+                    <div class="col-md-7">
+                        <p class="text-error" (click)="openRequiredItemsModal(required)"><i class="fas fa-exclamation-triangle pr-2"></i>The following items are Required</p>
+                    </div>
+                    <!-- <h1 class="incentive-header">Invoice Entry | 
                         <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
-                    </h1>
+                    </h1> -->
                 </div>
             </div>
         </div>
@@ -55,6 +63,10 @@
                                     [(ngModel)]="customer" 
                                     [ngModelOptions]="{standalone: true}">
                             </div>
+
+                            <!-- <div *ngIf="submitted && f.CustomerID.errors" class="invalid-feedback">
+                                <div *ngIf="f.CustomerID.errors.required">Please enter or select the customer</div>
+                            </div> -->
                         
                             <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)" *ngIf="!customerPreselected">
                                 <i class="fas fa-search"></i>
@@ -251,19 +263,20 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Additional Info</label>
-                            <!-- <input 
-                                type="text" 
-                                class="form-control col-sm-5" 
+                            <input 
+                                type="text"
+                                maxlength="50" 
+                                class="form-control col-sm-10" 
                                 [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" 
                                 (keyup)="getAdditionalInfo($event)"
-                            > -->
-                            <textarea 
+                            >
+                            <!-- <textarea 
                                 cols="30" 
                                 rows="2"
                                 class="form-control col-sm-5" 
                                 [(ngModel)]="additionalInfo" formControlName="AdditionalInfo" 
                                 (keyup)="getAdditionalInfo($event)"
-                            ></textarea>
+                            ></textarea> -->
                         </div>
 
                         <div class="form-group form-inline mb-0">
@@ -296,17 +309,12 @@
                                         Upload Documents - (An invoice submission is required)
                                     </h3>
                                 </div>
-                                <div class="col-md-6" *ngIf="showInvoiceFile" >
+                                <div class="col-md-6" *ngIf="showInvoiceFile || showSubscriberFormFile || showSiteVisitFile || showOtherDocument1File || showContractFile ||showOtherDocument2File" >
                                     <h3>
                                         Documents Available 
                                         <i class="fa fa-eye text-success pl-3" (click)="onOpenDocumentsModal(documentUpload)" [(ngbTooltip)]="viewAvailableDocuments"></i>
                                     </h3>
                                 </div>
-                                <!-- <div class="col-md-12">
-                                    <h3>
-                                        Upload Documents - (An invoice submission is required)
-                                    </h3>
-                                </div> -->
                             </div>
                             <div class="row form-inline mb-3">
                                 <div class="col-md-6">
@@ -321,122 +329,111 @@
                                             formControlName="InvoiceUpload"
                                             (change)="getInvoiceFileDetails($event)"
                                         >
-                                    <i 
-                                        *ngIf="showInvoiceFile"
-                                        class="pl-3 far fa-trash-alt text-danger" 
-                                        (click)="removeInvoiceFile()"
-                                    ></i>
-                                    </div>
-                                     <!-- <div class="form-group" *ngIf="showInvoiceFile">
-                                        <label class="col-sm-4 col-form-label pl-0">Invoice</label>
-                                        <i class="fas fa-check pr-3 text-success"></i>
-                                        <input 
-                                            type="file"
-                                            class="form-control col-sm-6" 
-                                            [(ngModel)]="invoiceUpload" 
-                                            formControlName="InvoiceUpload"
-                                            (change)="getInvoiceFileDetails($event)"
-                                        >
-                                    </div> -->
-                                    <!-- <div class="form-group" *ngIf="showInvoiceFile">
-                                        <label class="col-sm-4 col-form-label pl-0">Invoice</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #invoice>{{file_name}}</p>
                                         <i 
+                                            *ngIf="showInvoiceFile"
                                             class="pl-3 far fa-trash-alt text-danger" 
                                             (click)="removeInvoiceFile()"
                                         ></i>
-                                    </div> -->
+                                    </div>
                                 </div>
     
                                 <div class="col-md-6">
-                                    <div class="form-group" *ngIf="!showSubscriberFormFile">
-                                        <!-- <label class="col-sm-5 col-form-label">Subscriber Form</label> -->
-                                        <label class="col-sm-5 col-form-label">Work Order</label>
-                                        <i class="fas fa-upload pr-3"></i>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-form-label">Work Order</label>
+                                        <i class="fas fa-upload pr-3" *ngIf="!showSubscriberFormFile"></i>
+                                        <i *ngIf="showSubscriberFormFile" class="fas fa-check pr-3 text-success"></i>
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="subscriberFormUpload" formControlName="SubscriberFormUpload"
+                                            [(ngModel)]="subscriberFormUpload" 
+                                            formControlName="SubscriberFormUpload"
                                             (change)="getSubscriberFileDetails($event)"
                                         >
-                                    </div>
-                                    <div class="form-group" *ngIf="showSubscriberFormFile">
-                                        <label class="col-sm-4 col-form-label pl-0">Work Order</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #subscriberForm>{{subscriber_file_name}}</p>
-                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSubscriberFormFile()"></i>
+                                        <i 
+                                            *ngIf="showSubscriberFormFile"
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeSubscriberFormFile()"
+                                        ></i>
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-inline mb-3">
                                 <div class="col-md-6">
-                                    <div class="form-group" *ngIf="!showSiteVisitFile">
-                                        <!-- <label class="col-sm-4 col-form-label pl-0">Site Visit</label> -->
+                                    <div class="form-group">
                                         <label class="col-sm-4 col-form-label pl-0">Customer Visit</label>
-                                        <i class="fas fa-upload pr-3"></i>
+                                        <i class="fas fa-upload pr-3" *ngIf="!showSiteVisitFile"></i>
+                                        <i *ngIf="showSiteVisitFile" class="fas fa-check pr-3 text-success"></i>
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="siteVisitUpload" formControlName="SiteVisitUpload"
+                                            [(ngModel)]="siteVisitUpload" 
+                                            formControlName="SiteVisitUpload"
                                             (change)="getSiteVisitFileDetails($event)"
                                         >
-                                    </div>
-                                    <div class="form-group" *ngIf="showSiteVisitFile">
-                                        <label class="col-sm-4 col-form-label pl-0">Customer Visit</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #siteVisit>{{site_visit_file_name}}</p>
-                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeSiteVisitFile()"></i>
+                                        <i 
+                                            *ngIf="showSiteVisitFile"
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeSiteVisitFile()"
+                                        ></i>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group" *ngIf="!showOtherDocument1File">
-                                        <label class="col-sm-5 col-form-label">Other Document</label>
-                                        <i class="fas fa-upload pr-3"></i>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3" *ngIf="!showOtherDocument1File"></i>
+                                        <i *ngIf="showOtherDocument1File" class="fas fa-check pr-3 text-success"></i>
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="otherDocument1Upload" formControlName="OtherDocument1Upload"
+                                            [(ngModel)]="otherDocument1Upload" 
+                                            formControlName="OtherDocument1Upload"
                                             (change)="getOtherDocument1FileDetails($event)"
                                         >
-                                    </div>
-                                    <div class="form-group" *ngIf="showOtherDocument1File">
-                                        <label class="col-sm-4 col-form-label pl-0">Other Document</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument1>{{other_Document1_file_name}}</p>
-                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument1File()"></i>
+                                        <i 
+                                            *ngIf="showOtherDocument1File"
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeOtherDocument1File()"
+                                        ></i>
                                     </div>
                                 </div>
                             </div>
                             <div class="row form-inline mb-3">
                                 <div class="col-md-6">
-                                    <div class="form-group" *ngIf="!showContractFile">
+                                    <div class="form-group">
                                         <label class="col-sm-4 col-form-label pl-0">Contract</label>
-                                        <i class="fas fa-upload pr-3"></i>
+                                        <i class="fas fa-upload pr-3" *ngIf="!showContractFile"></i>
+                                        <i *ngIf="showContractFile" class="fas fa-check pr-3 text-success"></i>
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="contractUpload" formControlName="ContractUpload"
+                                            [(ngModel)]="contractUpload" 
+                                            formControlName="ContractUpload"
                                             (change)="getContractFileDetails($event)"
                                         >
-                                    </div>
-                                    <div class="form-group" *ngIf="showContractFile">
-                                        <label class="col-sm-4 col-form-label pl-0">Contract</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #contract>{{contract_file_name}}</p>
-                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeContractFile()"></i>
+                                        <i 
+                                            *ngIf="showContractFile"
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeContractFile()"
+                                        ></i>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group" *ngIf="!showOtherDocument2File">
-                                        <label class="col-sm-5 col-form-label">Other Document</label>
-                                        <i class="fas fa-upload pr-3"></i>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-form-label">Other Document</label>
+                                        <i class="fas fa-upload pr-3" *ngIf="!showOtherDocument2File"></i>
+                                        <i *ngIf="showOtherDocument2File" class="fas fa-check pr-3 text-success"></i>
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="otherDocument2Upload" formControlName="OtherDocument2Upload"
+                                            [(ngModel)]="otherDocument2Upload" 
+                                            formControlName="OtherDocument2Upload"
                                             (change)="getOtherDocument2FileDetails($event)"
-                                        > 
-                                    </div>
-                                    <div class="form-group" *ngIf="showOtherDocument2File">
-                                        <label class="col-sm-4 col-form-label pl-0">Other Document</label>
-                                        <p class="mb-0 ml-4 uploaded-file" #otherDocument2>{{other_Document2_file_name}}</p>
-                                        <i class="pl-3 far fa-trash-alt text-danger" (click)="removeOtherDocument2File()"></i>
+                                        >
+                                        <i 
+                                            *ngIf="showOtherDocument2File"
+                                            class="pl-3 far fa-trash-alt text-danger" 
+                                            (click)="removeOtherDocument2File()"
+                                        ></i>
                                     </div>
                                 </div>
                             </div>
@@ -449,12 +446,10 @@
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                      <!-- <ul *ngFor="let setting of afaUserSettings">
-                                          <li>{{ setting.availablePermissions }}</li>
-                                      </ul> -->
                                       <div class="col">
                                           <ol class="pl-0">
-                                              <li class="">Invoice
+
+                                              <li class="mt-1 mb-1">Invoice
                                                 <span *ngIf="showInvoiceFile" class="body-2 pl-3 medium-emphasis">
                                                     {{file_name}}
                                                 </span>
@@ -463,46 +458,63 @@
                                                     (click)="removeInvoiceFile()"
                                                 ></i> 
                                               </li>
-                                              <li>Customer Visit</li>
-                                              <li>Contract</li>
-                                              <li>Work Order</li>
-                                              <li>Other Document</li>
-                                              <li>Other Document</li>
-                                          </ol>
-                                            <!-- <p>1. Invoice 
-                                                <span *ngIf="showInvoiceFile" class="body-2 pl-3">
-                                                    {{file_name}}
+
+                                              <li class="mt-1 mb-1">Customer Visit
+                                                <span *ngIf="showSiteVisitFile" class="body-2 pl-3 medium-emphasis">
+                                                    {{site_visit_file_name}}
                                                 </span>
                                                 <i 
                                                     class="pl-3 far fa-trash-alt text-danger" 
-                                                    (click)="removeInvoiceFile()"
+                                                    (click)="removeSiteVisitFile()"
                                                 ></i> 
-                                            </p>
-                                            <p>2. Customer Visit</p>
-                                            <p>3. Contract</p>
-                                            <p>4. Work Order</p>
-                                            <p>5. Other Document</p>
-                                            <p>6. Other Document</p> -->
+                                              </li>
+
+                                              <li class="mt-1 mb-1">Contract
+                                                <span *ngIf="showContractFile" class="body-2 pl-3 medium-emphasis">
+                                                    {{contract_file_name}}
+                                                </span>
+                                                <i 
+                                                    class="pl-3 far fa-trash-alt text-danger" 
+                                                    (click)="removeContractFile()"
+                                                ></i>
+                                              </li>
+
+                                              <li class="mt-1 mb-1">Work Order
+                                                <span *ngIf="showSubscriberFormFile" class="body-2 pl-3 medium-emphasis">
+                                                    {{subscriber_file_name}}
+                                                </span>
+                                                <i 
+                                                    class="pl-3 far fa-trash-alt text-danger" 
+                                                    (click)="removeSubscriberFormFile()"
+                                                ></i>
+                                              </li>
+
+                                              <li class="mt-1 mb-1">Other Document
+                                                <span *ngIf="showOtherDocument1File" class="body-2 pl-3 medium-emphasis">
+                                                    {{other_Document1_file_name}}
+                                                </span>
+                                                <i 
+                                                    class="pl-3 far fa-trash-alt text-danger" 
+                                                    (click)="removeOtherDocument1File()"
+                                                ></i>
+                                              </li>
+
+                                              <li class="mt-1 mb-1">Other Document
+                                                <span *ngIf="showOtherDocument2File" class="body-2 pl-3 medium-emphasis">
+                                                    {{other_Document2_file_name}}
+                                                </span>
+                                                <i 
+                                                    class="pl-3 far fa-trash-alt text-danger" 
+                                                    (click)="removeOtherDocument2File()"
+                                                ></i>
+                                              </li>
+                                          </ol>
                                       </div>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Close</button>
                                   </div>
                             </ng-template>
-                            <!-- <div class="row">
-                                <div class="col">
-                                    <p>1. Invoice 
-                                        <span *ngIf="showInvoiceFile" class="body-2 pl-3">{{file_name}}</span><i 
-                                        class="pl-3 far fa-trash-alt text-danger" 
-                                        (click)="removeInvoiceFile()"></i> 
-                                    </p>
-                                    <p>2. Customer Visit</p>
-                                    <p>3. Contract</p>
-                                    <p>4. Work Order</p>
-                                    <p>5. Other Document</p>
-                                    <p>6. Other Document</p>
-                                </div>
-                            </div> -->
                         </div>
                         
                         <div class="row mt-3">
@@ -574,7 +586,6 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-inline">
-                                    <!-- <label class="col-form-label pl-0 col-sm-6">Recurring (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label> -->
                                     <label class="col-form-label pl-0 col-sm-6">Add RMR (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openRecurringModal(recurring)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
                                         <kendo-numerictextbox
@@ -587,7 +598,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-inline">
-                                    <!-- <label class="col-form-label pl-0 col-sm-6">Equipment &amp; Materials (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label> -->
                                     <label class="col-form-label pl-0 col-sm-6">Other Charges (Enter Line Items)<i class="fas fa-plus-circle pl-3" (click)="openEquipMaterialsModal(equipmat)"></i></label>
                                     <div class="input-group col-sm-5 ml-auto">
                                         <kendo-numerictextbox
@@ -631,12 +641,6 @@
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-3 col-form-label">Start Date</label>
-                                        <!-- <input 
-                                            type="date" 
-                                            class="form-control col-sm-5" 
-                                            [(ngModel)]="startDate" formControlName="ContractDate"
-                                            (change)="getContractDate($event)"    
-                                        > -->
                                         <input type="date" formControlName="ContractDate" class="form-control">
                                     </div>
                                     <div class="form-group form-inline">
@@ -714,16 +718,26 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <!-- <div class="row d-flex justify-content-between">
-                                  <button class="btn btn-success">Add/View Comments</button>
-                                  <button class="btn btn-primary btn-light-blue">Submit Incentive</button>
-                                </div> -->
-                                <button type="reset" class="btn btn-error float-right" (click)="reset()"><i class="fas fa-redo pr-2"></i>Reset</button>
-                                <button type="button" class="btn btn-light-blue float-right" (click)="openAddViewCommentsModal(comments)"><i class="far fa-eye pr-2"></i>Add/View Comments</button>
+                                <button 
+                                    type="reset" 
+                                    class="btn btn-error float-right" 
+                                    (click)="reset()">
+                                    <i class="fas fa-redo pr-2"></i>Reset
+                                </button>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-light-blue float-right" 
+                                    (click)="openAddViewCommentsModal(comments)">
+                                    <i class="far fa-eye pr-2"></i>Add/View Comments
+                                </button>
 
-                                <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(incentiveDashboardForm)" [disabled]="!incentiveDashboardForm.valid">Submit Incentive</button> -->
-
-                                <button type="button" class="btn btn-secondary float-right mr-2" (click)="onSubmit(incentiveDashboardForm);clicked = true;" [disabled]="clicked || !incentiveDashboardForm.valid"><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-secondary float-right mr-2" 
+                                    (click)="onSubmit(incentiveDashboardForm);clicked = true;" 
+                                    [disabled]="clicked || !incentiveDashboardForm.valid">
+                                    <i class="fas fa-plus pr-2"></i>Submit Invoice
+                                </button>
                             </div>
                         </div>
                     </div> 
@@ -1337,6 +1351,7 @@
                                     <div class="col">
                                       <input 
                                         type="text"
+                                        maxlength="50"
                                         class="form-control" 
                                         formControlName="Description"
                                         name="something_{{i}}"
@@ -1551,7 +1566,8 @@
                                 </div>
                                 <div class="col">
                                     <input 
-                                        type="text" 
+                                        type="text"
+                                        maxlength="50"
                                         class="form-control description"
                                         formControlName="Description" 
                                         name="something_{{i}}"
@@ -1722,7 +1738,8 @@
                                 </div>
                                 <div class="col">
                                     <input 
-                                        type="text" 
+                                        type="text"
+                                        maxlength="50" 
                                         class="form-control description"
                                         formControlName="Description"
                                         name="something_{{i}}"
@@ -1799,6 +1816,56 @@
                         <div class="col">
                             <p>Total is: ${{ totalSumLaborCharges }}</p>
                         </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #required let-modal>
+    <div class="modal-header">
+        <!-- <h4 class="modal-title">Title</h4> -->
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <div class="row ml-0">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col">
+                            <p>hello</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>hello</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>hello</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>hello</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <section>
+                <header class="">
+                    <div class="col">
+                        <p>hello</p>
+                    </div>
+                </header>
+                <form >
+                    <div class="col">
+                        <p>hello</p>
                     </div>
                 </form>
             </section>

@@ -135,10 +135,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   serviceIncluded: '';
   renewalMonths = '12';
   customer_Site_id: any;
-  // customer_System_id:number;
   customer_System_id: any;
   systemName: string;
-  // panel_Type_Id: number;
   panel_Type_Id: number;
   panelName: string;
 
@@ -150,19 +148,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   incentiveLaborChargesEntryForm: FormGroup;
 
   rmr: number;
-  //passThrough: number;
   passThrough=0;
   multiple: number;
   total: number;
   totalRecurringCalc;
   itemID;
   description;
-  // quantity: number;
   quantity=1;
   cost: number;
-  //hours: number;
   laborQuantity: number;
-  //costPerHour: number;
   laborCost: number;
   totalEquipMatCalc;
   totalLaborChargesCalc;
@@ -171,7 +165,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   customer: string;
   siteName: string;
   customerSiteId: number;
-  // systemTypeID: string;
   systemTypeID;
   customerSystemId: number;
   alarmAccount: string;
@@ -184,20 +177,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   newCustomer: '';
   newSite: '';
   accountNumber: '';
-  // systemType: '';
-  // panelTypeID: '';
   panelTypeID;
-  //panelLocation: '';
   panel_Location;
-  // centralStationID: '';
   centralStationID;
-  // additionalInfo: '';
-  // invoiceUpload: '';
-  // siteVisitUpload: '';
-  // contractUpload: '';
-  // subscriberFormUpload: '';
-  // otherDocument1Upload: '';
-  // otherDocument2Upload: '';
+
   customerSiteName;
   invoiceFile;
   subscriberFormFile;
@@ -228,17 +211,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   equipmentAndMaterials;
   laborCharges;
   recurringFromLocalStorage;
-  //recurring: '';
-  //recurring:number;
-  //equipmentAndMaterials: '';
-  // laborCharges: '';
-  // lineItemSubtotal: '';
+
   lineItemSubtotal;
   startDate: '';
-  // term: '';
   contractTerm;
   renewal;
-  // signalsTested: '';
   signalsTested;
   additionalInfo;
   partnerComments;
@@ -333,7 +310,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   taxToolTip="Enter dollars and cents"
   viewAvailableDocuments="View available documents"
 
-  //foo;
+  submitted = false;
   target;
   clicked = false;//disables button after click
   frmData; // Invoice
@@ -1723,7 +1700,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
           console.log(this.listsitesforcustomer[i])
-          
+          this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer);
         }
       }
     )
@@ -1830,7 +1807,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //   }
   // }
 
+  get f() {
+    return this.incentiveDashboardForm.controls
+  }
+
   onSubmit(form: FormGroup) {
+
+    this.submitted = true;
+
     //Incentive_ADD_Start
     console.log('@UserEmailAddress:' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
     if(localStorage.getItem('customer_Id')) {
@@ -2785,66 +2769,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           console.log('Finished!...');
           this.spinnerService.hide();
 
-          //localStorage.removeItem('installCompanyID');
-          // localStorage.removeItem('totalRecurringCalc');
-          // localStorage.removeItem('totalEquipMatCalc');
-          // localStorage.removeItem('totalLaborChargesCalc');
-          // localStorage.removeItem('invoiceDate');
-          // localStorage.removeItem('invoiceNumber');
-          // localStorage.removeItem('invoiceTotal');
-          // localStorage.removeItem('recurringentry');
-          // localStorage.removeItem('equipmatentry');
-          // localStorage.removeItem('laborchargesentry');
-          // localStorage.removeItem('invoiceName');
-          // localStorage.removeItem('invoiceFileSize');
-          // localStorage.removeItem('invoice');
-          // localStorage.removeItem('subscriberForm');
-          // localStorage.removeItem('subscriberFormName');
-          // localStorage.removeItem('siteVisit');
-          // localStorage.removeItem('siteVisitName');
-          // localStorage.removeItem('otherDocument1');
-          // localStorage.removeItem('otherDocument1Name');
-          // localStorage.removeItem('contract');
-          // localStorage.removeItem('contractName');
-          // localStorage.removeItem('otherDocument2');
-          // localStorage.removeItem('otherDocument2Name');
-          // localStorage.removeItem('contractDate');
-          // localStorage.removeItem('contractTerm');
-          // localStorage.removeItem('serviceIncluded');
-          // localStorage.removeItem('customerId');
-          // localStorage.removeItem('customerName');
-          // localStorage.removeItem('customerSiteName');
-          // localStorage.removeItem('customerSystemInformation');
-          // localStorage.removeItem('alarmAccount');
-          // localStorage.removeItem('systemType');
-          // localStorage.removeItem('panelType');
-          // localStorage.removeItem('panelLocation');
-          // localStorage.removeItem('centralStationID');
-          // localStorage.removeItem('customerSiteId');
-          // localStorage.removeItem('renewal');
-          // localStorage.removeItem('partnerTaxAmount');
-          // localStorage.removeItem('additionalInfo');
-          // localStorage.removeItem('partnerComments');
-          // localStorage.removeItem('signalsTested');
-          // localStorage.removeItem('testObject');
-          // localStorage.removeItem('checkBoxAutoInsertList');
-          // localStorage.removeItem('results');
-          // localStorage.removeItem('customer_Id');
-          // localStorage.removeItem('customer_Site_Id');
-          // localStorage.removeItem('customer_System_Id');
-          // localStorage.removeItem('ticket_Number');
-          // localStorage.removeItem('customer_Number');
-          // localStorage.removeItem('customer_Name');
-          // localStorage.removeItem('business_Name');
-          // localStorage.removeItem('address_1');
-          // localStorage.removeItem('csAccount');
-          // localStorage.removeItem('panel_Location');
-          // localStorage.removeItem('centralStation');
-          // localStorage.removeItem('panel_Type_Id');
-          // localStorage.removeItem('central_Station_ID');
-          // localStorage.removeItem('system_Id');
-
-          // this.router.navigate(['incentive-entry/']);
           }, (err: HttpErrorResponse) => {
             alert(err + ' there was a problem. Please contact an administrator');
             this.flashMessage.show('There may have been a problem with your invoice submission. Please contact invoices@alarmconnections.com to confirm.', {
@@ -3597,6 +3521,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       // console.log(this.incentiveDashboardForm.controls['PartnerComments'].value)
       let newPartnerComments = this.incentiveDashboardForm.controls['PartnerComments'].value;
       localStorage.setItem("partnerComments", newPartnerComments);
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    })
+  }
+
+  openRequiredItemsModal(required) {
+    this.modalService.open(required, {
+      windowClass: 'my-class',
+      ariaLabelledBy: 'modal-basic-title'
+    }).result.then((result) => {
+      console.log('required items listed')
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     })
