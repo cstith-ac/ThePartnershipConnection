@@ -1813,26 +1813,11 @@
     </div>
     <div class="modal-body">
         <div class="card-body">
-            <div class="row ml-0">
+            <div class="row mb-5">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col">
-                            <p>hello</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p>hello</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p>hello</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p>hello</p>
+                        <div class="col text-center mb-4">
+                            <h5 class="headline-5">Invoice Validation</h5>
                         </div>
                     </div>
                 </div>
@@ -1841,15 +1826,63 @@
             <section>
                 <header class="">
                     <div class="col">
-                        <p>hello</p>
+                        <div class="row">
+                            <!-- <div id="traffic-light">
+                                <div id="red" class="bulb"></div>
+                                <div id="" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div> -->
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">The new system box is checked. Alarm Account, Panel Type, System Type and Central Station must be entered.</p>
+                        </div>
+                        <div class="row">
+                            <!-- <div id="traffic-light">
+                                <div id="red" class="bulb"></div>
+                                <div id="" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div> -->
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">The customer visit incentive item is entered. You must upload the customer visit form.</p>
+                        </div>
+                        <div class="row">
+                            <!-- <div id="traffic-light">
+                                <div id="" class="bulb"></div>
+                                <div id="yellow" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div> -->
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
+                            <p class="medium-emphasis body-2">You checked the box Add RMR and no RMR lines were entered. You may want to correct this.</p>
+                        </div>
                     </div>
                 </header>
                 <form >
                     <div class="col">
-                        <p>hello</p>
+                        
                     </div>
                 </form>
             </section>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col">
+            <button 
+                type="button" 
+                class="btn btn-validate" 
+                (click)="modal.close('Save click')"
+            >Return to Invoice Entry</button>
+        </div>
+        <div class="col">
+            <i class="fas fa-stop-circle mr-1 text-error"></i>Required
+        </div>
+        <div class="col">
+            <i class="fas fa-exclamation-triangle mr-1 text-warning"></i>Suggested
+        </div>
+        <div class="col">
+            <button 
+                type="submit" 
+                class="btn btn-secondary"
+                (click)="onSubmit(incentiveDashboardForm);clicked = true;"
+            ><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
         </div>
     </div>
 </ng-template>
