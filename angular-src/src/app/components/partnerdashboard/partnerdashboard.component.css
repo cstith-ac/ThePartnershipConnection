@@ -322,12 +322,14 @@
 
 /***SEDONA WEB button***/
 .btn-outline-white:not(:disabled):not(.disabled):active, .btn-outline-white:not(:disabled):not(.disabled).active, .show > .btn-outline-white.dropdown-toggle {
-    color: #fff !important;
+    /* color: #fff !important; */
+    color: #f6f6f6 !important;
     border-color: #90c5ee !important;
     background-color: #90c5ee !important;
 }
 .btn-outline-white:hover {
-    color: #fff !important;
+    /* color: #fff !important; */
+    color: #f6f6f6 !important;
     border-color: #90c5ee !important;
     background-color: #90c5ee !important;
 }

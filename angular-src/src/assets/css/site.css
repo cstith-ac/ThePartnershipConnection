@@ -825,6 +825,10 @@ p {
     /* width: 1450px; */
     width: 1530px;
 }
+.my-class1050 .modal-dialog {
+    max-width: 1050px !important;
+    width: 1050px;
+}
 .my-class1250 .modal-dialog {
     max-width: 1250px !important;
     width: 1250px;

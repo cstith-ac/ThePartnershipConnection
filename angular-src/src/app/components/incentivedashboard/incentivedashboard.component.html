@@ -54,6 +54,11 @@
                                 <ng-template #notFoundTemplate let-notFound>
                                     <div [innerHTML]="notFound"></div>
                                 </ng-template>
+
+                                <div class="mt-1">
+                                    <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small>
+                                </div>
+                                <!-- <small class="text-error mt-5" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small> -->
                             </div>
                             <div *ngIf="customerPreselected">
                                 <input  
@@ -63,11 +68,6 @@
                                     [(ngModel)]="customer" 
                                     [ngModelOptions]="{standalone: true}">
                             </div>
-
-                            <!-- <div *ngIf="submitted && f.CustomerID.errors" class="invalid-feedback">
-                                <div *ngIf="f.CustomerID.errors.required">Please enter or select the customer</div>
-                            </div> -->
-                        
                             <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)" *ngIf="!customerPreselected">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -76,39 +76,44 @@
                                 New Customer
                             </span>
                         </div>
+                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">Please enter or select the customer.</small> -->
                         
                         <!--SITE-->
                         <div class="form-group form-inline mb-0" [ngStyle]="{marginTop: '1.5rem'}">
                             <label class="col-sm-2 col-form-label">Site</label>
-                            <div *ngIf="isSiteSelectionFirst">
-                                <input 
-                                readonly
-                                    type="text" 
-                                    class="form-control col-sm-12 fullWidthInput" 
-                                    [(ngModel)]="siteName" 
-                                    formControlName="CustomerSiteID"
-                                >
-                            </div>
-                            <div *ngIf="isRemoveDropdown">
-                                <div class="dropdown">
-                                    <select 
-                                        #siteRef
-                                        [(ngbTooltip)]="customerSiteName"
-                                        formControlName="CustomerSiteID" 
-                                        class="form-control col-sm-12 fullWidthSelect" 
-                                        [(ngModel)]="siteName"
-                                        (change)="onChangeSite($event)" 
+                            <div class="siteWidth">
+                                <div *ngIf="isSiteSelectionFirst">
+                                    <input 
+                                    readonly
+                                        type="text" 
+                                        class="form-control col-sm-12 fullWidthInput" 
+                                        [(ngModel)]="siteName" 
+                                        formControlName="CustomerSiteID"
                                     >
-                                        <option 
-                                            *ngFor="let site of listsitesforcustomer" 
-                                            value="{{ site.customer_Site_id }}" 
-                                            
-                                        >
-                                            {{ site.siteName }} - {{ site.address_1 }}
-                                        </option>
-                                    </select>
                                 </div>
+                                <div *ngIf="isRemoveDropdown">
+                                    <div class="dropdown">
+                                        <select 
+                                            #siteRef
+                                            [(ngbTooltip)]="customerSiteName"
+                                            formControlName="CustomerSiteID" 
+                                            class="form-control col-sm-12 fullWidthSelect" 
+                                            [(ngModel)]="siteName"
+                                            (change)="onChangeSite($event)" 
+                                        >
+                                            <option 
+                                                *ngFor="let site of listsitesforcustomer" 
+                                                value="{{ site.customer_Site_id }}" 
+                                                
+                                            >
+                                                {{ site.siteName }} - {{ site.address_1 }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerSiteID').errors && this.incentiveDashboardForm.get('CustomerSiteID').hasError('required') && this.customerIDValidated">* Please enter or select the site.</small> -->
                             </div>
+                            
                             <span class="ml-2" #siteSearchIcon (click)="openSearchSiteModal(site)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -117,38 +122,42 @@
                                 New Site
                             </span>
                         </div>
+                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerSiteID').errors && this.incentiveDashboardForm.get('CustomerSiteID').hasError('required') && this.customerIDValidated">Please enter or select the site.</small> -->
                         
                         <!--SYSTEM-->
-                        <div class="form-group form-inline mb-0">
+                        <div class="form-group form-inline mb-0 mt-3">
                             <label class="col-sm-2 col-form-label">System</label>
-
-                            <div *ngIf="isSystemSelectionFirst">
-                                <input
-                                    readonly 
-                                    type="text" 
-                                    class="form-control col-sm-12 fullWidthInput" 
-                                    [(ngModel)]="systemCode" 
-                                    formControlName="CustomerSystemID"
-                                >
-                            </div>
-                            <div *ngIf="isRemoveSystemDropdown">
-                                <div class="dropdown">
-                                    <select 
-                                        #systemRef
-                                        formControlName="CustomerSystemID" 
-                                        class="form-control col-sm-12 fullWidthSelect"
-                                        [(ngModel)]="selectedValue"
-                                        (change)="onChangeSystem($event)"
+                            <div class="systemWidth">
+                                <div *ngIf="isSystemSelectionFirst">
+                                    <input
+                                        readonly 
+                                        type="text" 
+                                        class="form-control col-sm-12 fullWidthInput" 
+                                        [(ngModel)]="systemCode" 
+                                        formControlName="CustomerSystemID"
                                     >
-                                        <option 
-                                            *ngFor="let system of listSystemsForSite" 
-                                            value="{{ system.customer_System_id }}" 
-                                        >
-                                            {{ system.systemType }} - {{  system.alarmAccount }}
-                                        </option>
-                                    </select>
                                 </div>
+                                <div *ngIf="isRemoveSystemDropdown">
+                                    <div class="dropdown">
+                                        <select 
+                                            #systemRef
+                                            formControlName="CustomerSystemID" 
+                                            class="form-control col-sm-12 fullWidthSelect"
+                                            [(ngModel)]="selectedValue"
+                                            (change)="onChangeSystem($event)"
+                                        >
+                                            <option 
+                                                *ngFor="let system of listSystemsForSite" 
+                                                value="{{ system.customer_System_id }}" 
+                                            >
+                                                {{ system.systemType }} - {{  system.alarmAccount }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerSystemID').errors && this.incentiveDashboardForm.get('CustomerSystemID').hasError('required') && this.customerSystemIDValidated">* Please enter or selected the system. Check the "New System" box if this is a new system.</small> -->
                             </div>
+                            
                             <span class="ml-2" #systemSearchIcon (click)="openSearchSystemModal(system)">
                                 <i class="fas fa-search"></i>
                             </span>
@@ -158,10 +167,11 @@
                                 class="form-control form-check-input ml-3" 
                                 [(ngModel)]="newSystem" 
                                 formControlName="NewSystem"
-                                (change)="onNewSystemCheckedUnchecked($event)"
+                                (change)="onChangeNewSystem($event)"
                             >
                             <label class="col-sm-2 col-form-label form-check-label" #newSystemDisplayLabel>This is a new system</label>
                         </div>
+                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerSystemID').errors && this.incentiveDashboardForm.get('CustomerSystemID').hasError('required') && this.customerSystemIDValidated">Please enter or selected the system. Check the "New System" box if this is a new system.</small> -->
 
                         <div class="form-group form-inline" *ngIf="ticket_NumberPreSelected">
                             <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
@@ -182,7 +192,8 @@
                             <label class="col-sm-2 col-form-label">System Type</label>
                             <div class="dropdown" *ngIf="!systemTypePreselected">
                                 <select 
-                                    formControlName="SystemTypeID" class="form-control col-sm-12 fullWidthSelect" 
+                                    formControlName="SystemTypeID" 
+                                    class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="systemTypeID"
                                     (change)="onChangeGetSystemType($event)"
                                 >
@@ -212,7 +223,8 @@
                             <label class="col-sm-2 col-form-label">Panel Type</label>
                             <div class="dropdown" *ngIf="!panelTypePreselected">
                                 <select 
-                                    formControlName="PanelTypeID" class="form-control col-sm-12 fullWidthSelect" 
+                                    formControlName="PanelTypeID" 
+                                    class="form-control col-sm-12 fullWidthSelect" 
                                     [(ngModel)]="panelTypeID"
                                     (change)="onChangeGetPanelType($event)"
                                 >
@@ -504,6 +516,7 @@
                                                     {{other_Document2_file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showOtherDocument2File"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeOtherDocument2File()"
                                                 ></i>
@@ -525,9 +538,9 @@
                             </div>
                         </div>
                         <div class="row form-inline mb-2">
-                            <div class="col-md-3">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label class="col-sm-7 col-form-label pl-0">Invoice #</label>
+                                    <label class="col-form-label pl-0">Invoice #</label>
                                     <div class="input-group d-flex">
                                         <input 
                                             type="text" class="form-control col-sm-10" 
@@ -535,9 +548,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label class="col-sm-7 col-form-label pl-0">Invoice Date</label>
+                                    <label class="col-form-label pl-0">Invoice Date</label>
                                     <div class="input-group d-flex justify-content-center">
                                         <input 
                                             type="date" 
@@ -547,9 +560,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label class="col-sm-3 col-form-label">Total</label>
+                                    <label class="col-form-label">Total</label>
                                     <div class="input-group d-flex justify-content-center">
                                         <kendo-numerictextbox
                                             format="c2"
@@ -558,13 +571,15 @@
                                             placeholder="$0.00"
                                             [style.height]="'calc(1.5em + 1.3rem)'"
                                             [style.width]="'80%'"
+                                            (keyup)="onChangeInvoiceTotal($event)"
                                         ></kendo-numerictextbox>
                                     </div>
+                                    <!-- <small class="text-error" *ngIf="invoiceTotalValidated">* The entered total does not match the sum of the item subtotal plus the tax.</small> -->
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label class="col-sm-3 col-form-label">Tax</label>
+                                    <label class="col-form-label">Tax</label>
                                     <div class="input-group d-flex justify-content-center">
                                         <kendo-numerictextbox
                                             format="n2"
@@ -572,7 +587,7 @@
                                             [spinners]="false"
                                             placeholder="$0.00"
                                             formControlName="PartnerTaxAmount"
-                                            (keyup)="getPartnerTaxAmount($event)"
+                                            (keyup)="onKeyupGetPartnerTaxAmount($event)"
                                             (change)="onChangePartnerTaxAmount($event)"
                                             [min]="0"
                                             [(ngbTooltip)]="taxToolTip"
@@ -580,8 +595,10 @@
                                             [style.width]="'80%'"
                                         ></kendo-numerictextbox>
                                     </div>
+                                    <!-- <small class="text-error" *ngIf="invoiceTotalValidated">* The entered total does not match the sum of the item subtotal plus the tax.</small> -->
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -641,7 +658,15 @@
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-3 col-form-label">Start Date</label>
-                                        <input type="date" formControlName="ContractDate" class="form-control">
+                                        <!-- <input 
+                                            type="date" formControlName="ContractDate" class="form-control" 
+                                            (change)="getContractDate($event)"
+                                        > -->
+                                        <input 
+                                            type="date" 
+                                            formControlName="ContractDate" 
+                                            class="form-control"
+                                        >
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 col-form-label">Term</label>
@@ -724,6 +749,11 @@
                                         class="btn btn-validate float-right mr-2"
                                         (click)="openValidateItemsModal(required)"
                                     ><i class="fas fa-exclamation-triangle pr-2"></i>Validate Invoice</button>
+                                    <!-- <button 
+                                        type="submit" 
+                                        class="btn btn-validate float-right mr-2"
+                                        (click)="validateItems()"
+                                    ><i class="fas fa-exclamation-triangle pr-2"></i>Validate Invoice</button> -->
                                 </ng-container>
                                 <ng-container *ngIf="showSubmitInvoiceButton">
                                     <button 
@@ -1229,7 +1259,8 @@
                         </label>
                         <textarea 
                             class="form-control" 
-                            rows="12" formControlName="PartnerComments"
+                            rows="12" 
+                            formControlName="PartnerComments"
                             [(ngModel)]="partnerComments"
                         ></textarea>
                     </div>
@@ -1816,7 +1847,7 @@
             <div class="row mb-5">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col text-center mb-4">
+                        <div class="col text-center">
                             <h5 class="headline-5">Invoice Validation</h5>
                         </div>
                     </div>
@@ -1826,38 +1857,143 @@
             <section>
                 <header class="">
                     <div class="col">
-                        <div class="row">
-                            <!-- <div id="traffic-light">
+                        <div class="row" *ngIf="customerIDValidated || customerSiteIDValidated || customerSystemIDValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You must select a customer, site and either select a system or have the “New System” box checked to continue.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="invoiceTotalValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                The entered total does not match the sum of the item subtotal plus the tax.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="systemInformationSectionValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A new system requires Account Number, System Type, Panel Type and Central Station.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="invoiceDocValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                All submissions must be accompanied by an uploaded invoice form.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="customerVisitDocValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A customer visit form must be uploaded if a customer or adoption visit was performed.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="contractDocValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A contract must be uploaded with all new RMR.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="workOrderDocValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A work order must be uploaded for all service related invoices.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="contractTermsValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                RMR items require a contract start date.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="addViewCommentsSignalsValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                If you check the option "Not All Signals Tested", you need to provide detail in the Comments section.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="addViewCommentsSystemValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You selected the System Type "Other". Please provide details in the Comments section.
+                            </p>
+                        </div>
+                        
+                        <div class="row" *ngIf="addViewCommentsPanelValidated">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You selected the Panel Type "Other". Please provide details in the Comments section.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="addNewRMRServiceBoxCheckedValidated">
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning  mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You selected the option to add RMR, however no RMR has been added yet.
+                            </p>
+                        </div>
+                        <!-- <div>
+                            <p>suggested</p>
+                        </div> -->
+                        <!-- <div class="row" *ngIf="customerIDValidated">
+                            <div id="traffic-light">
                                 <div id="red" class="bulb"></div>
                                 <div id="" class="bulb"></div>
                                 <div id="green" class="bulb"></div>
-                            </div> -->
+                            </div>
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">Please enter or select the customer.</p>
+                        </div>
+                        <div class="row" *ngIf="customerSiteIDValidated">
+                            <div id="traffic-light">
+                                <div id="red" class="bulb"></div>
+                                <div id="" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div>
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">Please enter or select the site.</p>
+                        </div>
+                        <div class="row" *ngIf="customerSystemIDValidated">
+                            <div id="traffic-light">
+                                <div id="red" class="bulb"></div>
+                                <div id="" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div>
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">Please enter or selected the system. Check the "New System" box if this is a new system.</p>
+                        </div>
+                        <div class="row">
+                            <div id="traffic-light">
+                                <div id="red" class="bulb"></div>
+                                <div id="" class="bulb"></div>
+                                <div id="green" class="bulb"></div>
+                            </div>
                             <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
                             <p class="medium-emphasis body-2">The new system box is checked. Alarm Account, Panel Type, System Type and Central Station must be entered.</p>
                         </div>
                         <div class="row">
-                            <!-- <div id="traffic-light">
+                            <div id="traffic-light">
                                 <div id="red" class="bulb"></div>
                                 <div id="" class="bulb"></div>
                                 <div id="green" class="bulb"></div>
-                            </div> -->
+                            </div>
                             <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
                             <p class="medium-emphasis body-2">The customer visit incentive item is entered. You must upload the customer visit form.</p>
                         </div>
                         <div class="row">
-                            <!-- <div id="traffic-light">
+                            <div id="traffic-light">
                                 <div id="" class="bulb"></div>
                                 <div id="yellow" class="bulb"></div>
                                 <div id="green" class="bulb"></div>
-                            </div> -->
+                            </div>
                             <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
                             <p class="medium-emphasis body-2">You checked the box Add RMR and no RMR lines were entered. You may want to correct this.</p>
-                        </div>
+                        </div> -->
                     </div>
                 </header>
                 <form >
                     <div class="col">
-                        
+                        <p *ngIf="formIsValidText">
+                            <i class="fas fa-check text-success pr-2"></i>The form is valid
+                        </p>
                     </div>
                 </form>
             </section>
@@ -1869,7 +2005,7 @@
                 type="button" 
                 class="btn btn-validate" 
                 (click)="modal.close('Save click')"
-            >Return to Invoice Entry</button>
+            ><i class="fas fa-undo-alt pr-2"></i>Return to Invoice Entry</button>
         </div>
         <div class="col">
             <i class="fas fa-stop-circle mr-1 text-error"></i>Required
@@ -1882,7 +2018,16 @@
                 type="submit" 
                 class="btn btn-secondary"
                 (click)="onSubmit(incentiveDashboardForm);clicked = true;"
+                [disabled]="clicked || !incentiveDashboardForm.valid"
             ><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
+
+            <!-- <button 
+                type="button" 
+                class="btn btn-secondary float-right mr-2" 
+                (click)="onSubmit(incentiveDashboardForm);clicked = true;" 
+                [disabled]="clicked || !incentiveDashboardForm.valid">
+                <i class="fas fa-plus pr-2"></i>Submit Invoice
+            </button> -->
         </div>
     </div>
 </ng-template>

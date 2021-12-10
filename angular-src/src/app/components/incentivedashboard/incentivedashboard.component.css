@@ -176,7 +176,8 @@
 
 .fullWidthSelect {
   /* width: calc(17vw - 20px); */
-  width: calc(15vw - 20px);
+  /* width: calc(15vw - 20px); */
+  width: calc(19vw - 20px);
 }
 
 .fullWidthInput {
@@ -363,6 +364,20 @@ header, .row {
 }
 #yellow {
   background-color: yellow;
+}
+.siteWidth {
+  width: 280px;
+}
+.systemWidth {
+  width: 280px;
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+  .fullWidthSelect {
+    width: calc(15vw - 20px);
+  }
 }
 
 /*Progress Bar*/

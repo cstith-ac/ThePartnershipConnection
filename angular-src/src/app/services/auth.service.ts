@@ -163,7 +163,7 @@ export class AuthService {
 
   isEmployee() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    //Employee = 9, Super Admin = 19, Admin = 14
+    // Employee = 9, Super Admin = 19, Admin = 14
     if(user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14) {
       return true;
     } else {
@@ -173,7 +173,7 @@ export class AuthService {
 
   isPartner() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    //Partner = 5
+    // Partner = 5
     if(user.afaRole === 5) {
       return true;
     } else {
@@ -183,8 +183,8 @@ export class AuthService {
 
   isEmployeeWithIncentiveAccess() {
     const user: any = JSON.parse(localStorage.getItem('user'));
-    //Partner = 5, Employee = 9, Super Admin = 19, Admin = 14, Employee with Incentive Entry Access = 10
-    console.log('isEmployeeWithIncentiveAccess was called')
+    // Partner = 5, Employee = 9, Super Admin = 19, Admin = 14, Employee with Incentive Entry Access = 10
+    // console.log('isEmployeeWithIncentiveAccess was called')
     if(user.afaRole === 5 || user.afaRole === 9 || user.afaRole === 19 || user.afaRole === 14 || user.afaRole === 10) {
       return true;
     } else {
@@ -201,7 +201,7 @@ export class AuthService {
     }
   }
 
-  //this is not working, working code is in sidenav component
+  // this is not working, working code is in sidenav component
   logout() {
     this.authToken = null;
     this.user = null;

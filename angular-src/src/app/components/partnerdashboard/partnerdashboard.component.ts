@@ -437,7 +437,7 @@ export class PartnerdashboardComponent implements OnInit {
   }
 
   getMonthDiff() {
-    this.todaysDate = moment(moment(), 'DD-MM-YYYY')
+    this.todaysDate = moment(moment(), 'DD-MM-YYYY');
     this.attSunsetDate = moment('22-02-2022', 'DD-MM-YYYY');
     this.verizonSunsetDate = moment('01-11-2022' ,'DD-MM-YYYY');
 
