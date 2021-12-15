@@ -72,7 +72,7 @@ export class PartnerwindowComponent implements OnInit {
     }
 
     if(this.authService.isEmployeeWithIncentiveAccess()){
-      console.log(this.route.url)     
+      // console.log(this.route.url)     
     }
 
     if(this.authService.isPartner()) {

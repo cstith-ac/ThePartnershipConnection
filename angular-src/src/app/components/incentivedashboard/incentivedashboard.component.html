@@ -466,6 +466,7 @@
                                                     {{file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showInvoiceFile"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeInvoiceFile()"
                                                 ></i> 
@@ -476,6 +477,7 @@
                                                     {{site_visit_file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showSiteVisitFile"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeSiteVisitFile()"
                                                 ></i> 
@@ -486,6 +488,7 @@
                                                     {{contract_file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showContractFile"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeContractFile()"
                                                 ></i>
@@ -496,6 +499,7 @@
                                                     {{subscriber_file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showSubscriberFormFile"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeSubscriberFormFile()"
                                                 ></i>
@@ -506,6 +510,7 @@
                                                     {{other_Document1_file_name}}
                                                 </span>
                                                 <i 
+                                                    *ngIf="showOtherDocument1File"
                                                     class="pl-3 far fa-trash-alt text-danger" 
                                                     (click)="removeOtherDocument1File()"
                                                 ></i>
@@ -562,8 +567,9 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label class="col-form-label">Total</label>
-                                    <div class="input-group d-flex justify-content-center">
+                                    <!-- <label class="col-form-label">Total</label> -->
+                                    <div class="">
+                                        <label class="col-form-label">Total</label>
                                         <kendo-numerictextbox
                                             format="c2"
                                             [value]="invoiceTotal"
@@ -572,6 +578,7 @@
                                             [style.height]="'calc(1.5em + 1.3rem)'"
                                             [style.width]="'80%'"
                                             (keyup)="onChangeInvoiceTotal($event)"
+                                            title="Total"
                                         ></kendo-numerictextbox>
                                     </div>
                                     <!-- <small class="text-error" *ngIf="invoiceTotalValidated">* The entered total does not match the sum of the item subtotal plus the tax.</small> -->
@@ -579,8 +586,9 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label class="col-form-label">Tax</label>
-                                    <div class="input-group d-flex justify-content-center">
+                                    <!-- <label class="col-form-label">Tax</label> -->
+                                    <div class="">
+                                        <label class="col-form-label">Tax</label>
                                         <kendo-numerictextbox
                                             format="n2"
                                             [value]="partnerTaxAmount"
@@ -658,15 +666,15 @@
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-3 col-form-label">Start Date</label>
-                                        <!-- <input 
-                                            type="date" formControlName="ContractDate" class="form-control" 
-                                            (change)="getContractDate($event)"
-                                        > -->
                                         <input 
+                                            type="date" formControlName="ContractDate" class="form-control" 
+                                            (change)="onChangeVerifyContractDate($event)"
+                                        >
+                                        <!-- <input 
                                             type="date" 
                                             formControlName="ContractDate" 
                                             class="form-control"
-                                        >
+                                        > -->
                                     </div>
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2 col-form-label">Term</label>
@@ -1925,9 +1933,39 @@
                             </p>
                         </div>
                         <div class="row" *ngIf="addNewRMRServiceBoxCheckedValidated">
-                            <i class="fas fa-exclamation-triangle mr-1 text-warning  mr-3"></i>
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
                             <p class="medium-emphasis body-2">
                                 You selected the option to add RMR, however no RMR has been added yet.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="laborChargesValidated">
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A service invoice may include labor charges, however none have been entered.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="otherChargesValidated">
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                A service invoice may include other charges, however none have been entered.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="contractInPresentOrFutureValidated">
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You have entered a contract start date that is in the future.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="contractInPastValidated">
+                            <i class="fas fa-exclamation-triangle mr-1 text-warning mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You have entered a contract start date that is greater than three months in the past.
+                            </p>
+                        </div>
+                        <div class="row" *ngIf="signalsCheckedText">
+                            <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                            <p class="medium-emphasis body-2">
+                                You must indicate if the signals were tested or not.
                             </p>
                         </div>
                         <!-- <div>
@@ -1990,10 +2028,18 @@
                     </div>
                 </header>
                 <form >
-                    <div class="col">
-                        <p *ngIf="formIsValidText">
-                            <i class="fas fa-check text-success pr-2"></i>The form is valid
+                    <!-- <div class="row" *ngIf="signalsCheckedText">
+                        <i class="fas fa-stop-circle mr-1 text-error mr-3"></i>
+                        <p class="medium-emphasis body-2">
+                            You must indicate if the signals were tested or not.
                         </p>
+                    </div> -->
+                    <div class="row">
+                        <div class="col">
+                            <p class="body-2 high-emphasis" *ngIf="formIsValidText">
+                                <i class="fas fa-check text-success pr-2"></i>The form is valid.
+                            </p>
+                        </div>
                     </div>
                 </form>
             </section>

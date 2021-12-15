@@ -11,6 +11,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { RMListforTPC } from 'src/app/models/rmlistfortpc';
 import { TPCStateList } from 'src/app/models/tpcstatelist';
+import { PartnerServiceNote } from 'src/app/models/partnerservicenote';
+import { PartnerCriticalMessage } from 'src/app/models/partnercriticalmessage';
+import { PartnerCustCareNote } from 'src/app/models/partnercustcarenote';
 declare var $: any;
 
 @Component({
@@ -22,6 +25,9 @@ export class PartnerviewlistComponent implements OnInit {
   listPartnerContacts: ListPartnerContacts[];
   rmListForTPC: RMListforTPC[];
   tpcStateList: TPCStateList[];
+  partnerServiceNote: PartnerServiceNote[];
+  partnerCriticalMessage: PartnerCriticalMessage[];
+  partnerCustCareNote: PartnerCustCareNote[];
   partnerViewListFilterForm: FormGroup;
   partnerContactsSearchForm: FormGroup;
   primaryContactFilterForm: FormGroup;
@@ -42,6 +48,18 @@ export class PartnerviewlistComponent implements OnInit {
   usStateID;
 
   openFilter="Open Filter";
+
+  // partnerServiceNoteToolTip = "Partner Service Note";
+  serviceNote;
+  customerCareNote;
+  criticalMessage;
+
+  public reportingTagDictionary:[any] = [
+    {
+      'owner': 'Owner',
+      'ownerReportingLevel': 'Owner level reporting'
+    }
+  ]
 
   constructor(
     private modalService: NgbModal,
@@ -80,6 +98,8 @@ export class PartnerviewlistComponent implements OnInit {
     })
 
     this.spinnerService.show();
+
+    // console.log(this.reportingTagDictionary)
 
     let params = {
       "PrimaryOnly": "Y",
@@ -297,7 +317,7 @@ export class PartnerviewlistComponent implements OnInit {
     // )
   }
 
-  onChangeClearSearch(e){
+  onChangeClearSearch(e) {
     console.log(e.target.value)
     // this.partnerContactsSearchForm.valueChanges.subscribe(
     //   res => {
@@ -337,7 +357,7 @@ export class PartnerviewlistComponent implements OnInit {
 
   }
 
-  onOpenFilterModal(filter){
+  onOpenFilterModal(filter) {
     this.modalService.open(filter,
       {
         ariaLabelledBy: 'modal-basic-title',
@@ -351,6 +371,114 @@ export class PartnerviewlistComponent implements OnInit {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class950'
     });
+  }
+
+  onClickOpenReportingTagDictionary(reportingTagDictionary) {
+    this.modalService.open(reportingTagDictionary,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+    console.log(reportingTagDictionary)
+    console.log(this.reportingTagDictionary)
+    reportingTagDictionary = [
+      {
+        'owner': 'Owner',
+        'ownerReportingLevel': 'Owner level reporting'
+      }
+    ]
+  }
+
+  openPartnerServiceNoteModal(partnerCode: string, partnerServiceNote) {
+    this.modalService.open(partnerServiceNote,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+
+    this.spinnerService.show();
+
+    this.partnerCode = partnerCode;
+
+    this.routeService.getPartnerServiceNote(this.partnerCode).subscribe(
+      res => {
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          // this.flashMessage.show('Your requested data is displayed below', {
+          //   cssClass: 'text-center alert-success',
+          //   timeout: 1000
+          // });
+        }
+        // console.log(Object.entries(res.body))
+        
+        this.partnerServiceNote = [].concat(res.body);
+
+        for(let i = 0; i < this.partnerServiceNote.length; i++) {
+          // console.log(this.partnerServiceNote[i].serviceNote)
+          this.serviceNote = this.partnerServiceNote[i].serviceNote
+        }
+      }
+    )
+  }
+
+  openPartnerCustCareNoteModal(partnerCode: string, partnerCustCareNote) {
+    this.modalService.open(partnerCustCareNote,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+
+    this.spinnerService.show();
+
+    this.partnerCode = partnerCode;
+
+    this.routeService.getPartnerCustCareNote(this.partnerCode).subscribe(
+      res => {
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          // this.flashMessage.show('Your requested data is displayed below', {
+          //   cssClass: 'text-center alert-success',
+          //   timeout: 1000
+          // });
+        }
+        // console.log(Object.entries(res.body));
+        this.partnerCustCareNote = [].concat(res.body);
+
+        for(let i = 0; i < this.partnerCustCareNote.length; i++) {
+          this.customerCareNote = this.partnerCustCareNote[i].customerCareNote;
+        }
+      }
+    )
+  }
+
+  openPartnerCriticalMessage(partnerCode: string, partnerCriticalMessage) {
+    this.modalService.open(partnerCriticalMessage,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        windowClass: 'my-class950'
+    });
+
+    this.spinnerService.show();
+
+    this.partnerCode = partnerCode;
+
+    this.routeService.getPartnerCriticalMessage(this.partnerCode).subscribe(
+      res => {
+        if(res.status === 200) {
+          this.spinnerService.hide();
+          // this.flashMessage.show('Your requested data is displayed below', {
+          //   cssClass: 'text-center alert-success',
+          //   timeout: 1000
+          // });
+        }
+
+        this.partnerCriticalMessage = [].concat(res.body);
+
+        for(let i = 0; i < this.partnerCriticalMessage.length; i++) {
+          this.criticalMessage = this.partnerCriticalMessage[i].criticalMessage;
+        }
+      }
+    )
   }
 
 }

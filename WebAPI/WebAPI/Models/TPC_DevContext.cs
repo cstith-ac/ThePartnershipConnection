@@ -98,6 +98,9 @@ namespace WebAPI.Models
         public virtual DbSet<Customer3GListingX> GetCustomer3GListingXResult { get; set; }
         public virtual DbSet<TPCStateList> GetTPCStateLists { get; set; }
         public virtual DbSet<RMListforTPC> GetRMListforTPCs { get; set; }
+        public virtual DbSet<PartnerCriticalMessage> GetPartnerCriticalMessages { get; set; }
+        public virtual DbSet<PartnerCustCareNote> GetPartnerCustCareNotes { get; set; }
+        public virtual DbSet<PartnerServiceNote> GetPartnerServiceNotes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -636,6 +639,21 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<RMListforTPC>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerCriticalMessage>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerCustCareNote>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<PartnerServiceNote>(entity =>
             {
                 entity.HasNoKey();
             });

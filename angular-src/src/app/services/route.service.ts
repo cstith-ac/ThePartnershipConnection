@@ -935,6 +935,42 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/RMListforTPC`, httpOptions);
   }
 
+  getPartnerServiceNote(id:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken
+      }),
+      observe: 'response' as 'body',
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerServiceNote/`+ id, httpOptions);
+  }
+
+  getPartnerCustCareNote(id:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken
+      }),
+      observe: 'response' as 'body',
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerCustCareNote/`+ id, httpOptions);
+  }
+
+  getPartnerCriticalMessage(id:string): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken
+      }),
+      observe: 'response' as 'body',
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/PartnerCriticalMessage/`+ id, httpOptions);
+  }
+
   // getTPCStateList(): Observable<HttpResponse<any>> {
   //   this.loadToken();
   //   let httpOptions = { 

@@ -105,7 +105,7 @@ export class PartnerdashboardComponent implements OnInit {
         filter((e:any) => e instanceof RoutesRecognized),
           pairwise()
       ).subscribe((e: any) => {
-        console.log(e[0].urlAfterRedirects); //string
+        // console.log(e[0].urlAfterRedirects); //string
         // this.previousUrl = e[0].urlAfterRedirects
       })
 
@@ -399,9 +399,10 @@ export class PartnerdashboardComponent implements OnInit {
           }
           this.partnerLandingPage = res.body;
           for(var i = 0; i < this.partnerLandingPage.length; i++) {
-            console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
-            console.log(this.partnerLandingPage[i].attritionLastMonth)
-            console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
+            // console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
+            // console.log(this.partnerLandingPage[i].attritionLastMonth)
+            // console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
+
             // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
             // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
             // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
@@ -409,8 +410,8 @@ export class PartnerdashboardComponent implements OnInit {
             this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
             this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
             this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
-            console.log(typeof this.attritionValue)//number
-            console.log('partner')
+            // console.log(typeof this.attritionValue) //number
+            // console.log('partner')
   
             this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
             this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";

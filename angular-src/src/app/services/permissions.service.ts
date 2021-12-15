@@ -53,7 +53,7 @@ export class PermissionsService {
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
     };
-    console.log(`calling api with %c${id}`, 'font-weight:bold');
+    // console.log(`calling api with %c${id}`, 'font-weight:bold');
     return this.http.get<any>(`${this.baseUrl}/api/PermissionsUserMap/`+ id, httpOptions);
   }
 

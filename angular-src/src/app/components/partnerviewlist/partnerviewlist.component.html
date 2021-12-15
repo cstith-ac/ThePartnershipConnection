@@ -43,6 +43,8 @@
                         <th scope="col">Last Login</th>
                         <th scope="col">State<i class="fas fa-filter pl-1" (click)="onOpenStateFilterModal(state)"></i></th>
                         <th scope="col">Primary Contact<i class="fas fa-filter pl-1" (click)="onOpenFilterPrimaryContactModal(primaryContact)"></i></th>
+                        <th scope="col">Special Notes</th>
+                        <th scope="col">Alert Tags<i class="far fa-question-circle pl-1" (click)="onClickOpenReportingTagDictionary(reportingTagDictionary)"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,6 +58,16 @@
                         <td>{{ item.lastLoginOn }}</td>
                         <td>{{ item.usState }}</td>
                         <td>{{ item.primaryContact }}</td>
+                        <td>
+                            <i class="pl-3" (click)="openPartnerServiceNoteModal(item.partnerCode, partnerServiceNote)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset bi-icon-xl" viewBox="0 0 16 16">
+                                    <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+                                </svg>
+                            </i>
+                            <i class="fas fa-wrench pl-2 pr-3 bi-icon" (click)="openPartnerCustCareNoteModal(item.partnerCode, partnerCustCareNote)"></i>
+                            <i class="fas fa-exclamation bi-icon" (click)="openPartnerCriticalMessage(item.partnerCode, partnerCriticalMessage)"></i>
+                        </td>
+                        <td>{{ item.role }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -132,8 +144,8 @@
                                     formControlName="FilterState"
                                     id="{{item.usStateID}}"
                                     value="{{item.usStateName}}" 
-                                    (change)="onChangeFilterState($event)"/>
-                                    
+                                    (change)="onChangeFilterState($event)"
+                                />    
                                     {{item.usStateName}}
                         </div>
                     </div>         
@@ -194,6 +206,97 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #reportingTagDictionary let-reportingTagDictionary>
+    <div class="modal-header">
+        <!-- <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button> -->
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <h5 class="headline-5">Reporting Tag Dictionary</h5>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="my-columns">
+                            <div class="row">
+                                <ul class="list-group">
+                                    <li class="list-group-item pl-3 pb-0 border-0">Owner <span class="pl-5"></span>Owner level reporting</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">3GRep<span class="pl-5"></span>3G Reporting</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">Prospect<span class="pl-5"></span>Sales opportunity alerts</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">Aging<span class="pl-5"></span>Monday morning aging list</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">ACHPay<span class="pl-5"></span>Remittance for ACH payments</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">PHR<span class="pl-5"></span>Partner Health Reports</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">DHR<span class="pl-5"></span>Partner Health Reports</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">CustCare<span class="pl-5"></span>Cancellation Alerts</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">Action<span class="pl-5"></span>Call to Action Report</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">Skip<span class="pl-5"></span>Ignore this user for all reporting and emails.</li>
+                                    <li class="list-group-item pl-3 pb-0 border-0">CanRep<span class="pl-5"></span>CanRep Reports</li>
+                                </ul>
+                                <!-- <p>{{reportingTagDictionary.owner}}</p> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #partnerServiceNote let-modal>
+    <div class="modal-header">
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <!-- <p *ngFor="let item of partnerServiceNote; let i = index">{{ item.serviceNote }}</p> -->
+                <!-- <p>test</p> -->
+                <p>{{ partnerCode }}</p>
+                <p>{{ serviceNote }}</p>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #partnerCustCareNote let-modal>
+    <div class="modal-header">
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <p>{{ partnerCode }}</p>
+                <p>{{ customerCareNote }}</p>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #partnerCriticalMessage let-modal>
+    <div class="modal-header">
+        <button class="close" aria-label="close" (click)="modal.dismiss('Cross click')">
+            <span aria-label="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <p>{{ partnerCode }}</p>
+                <p>{{ criticalMessage }}</p>
             </div>
         </div>
     </div>

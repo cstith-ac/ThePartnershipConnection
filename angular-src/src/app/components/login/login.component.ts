@@ -105,8 +105,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user).subscribe(
       res => {
-        console.log(res.body.afaRole)
-        console.log(res.status)
+        // console.log(res.body.afaRole)
+        // console.log(res.status)
         localStorage.setItem('token', res.body.token);
         localStorage.setItem('user',  JSON.stringify(res.body));
         localStorage.setItem('removeSplash', res.body.removeSplash);

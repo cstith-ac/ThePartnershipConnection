@@ -329,8 +329,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   addViewCommentsSystemValidated: boolean = false;
   addViewCommentsPanelValidated: boolean = false;
   addNewRMRServiceBoxCheckedValidated: boolean = false;
+  laborChargesValidated: boolean = false;
+  otherChargesValidated: boolean = false;
+  contractInPresentOrFutureValidated: boolean = false;
+  contractInPastValidated: boolean = false;
 
   formIsValidText: boolean = false;
+  signalsCheckedText: boolean = false;
 
   target;
   clicked = false;//disables button after click
@@ -1035,6 +1040,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(this.incentiveDashboardForm.get('LineItemSubtotal').value === this.invoiceTotal) {
       console.log('match')
       this.invoiceTotalValidated = false;
+      this.invoiceTotal = parseInt(e.target.value)
       //
     } else {
       console.log('no match')
@@ -1048,6 +1054,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(this.invoiceTotal)
     console.log(this.partnerTaxAmount)
     console.log(this.lineItemSubtotal)
+    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     console.log(this.invoiceTotal + this.partnerTaxAmount)
     if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
       this.invoiceTotalValidated = true;
@@ -1414,29 +1421,52 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  getContractDate(e) {
-    console.log(e.target.value)//this is the contract date format in the form
+  onChangeVerifyContractDate(e) {
+    console.log(e);
+    console.log(e.target.value); //this is the contract date format in the form
    
     let todaysDate = new Date();
     let todaysDateString = e.target.value;
 
     todaysDateString = todaysDate.getFullYear() + '-' + ('0' + (todaysDate.getMonth()+1)).slice(-2) + '-' + ('0' + todaysDate.getDate()).slice(-2);
 
-    console.log('Today is: '+ todaysDateString) //this is today's date
-
-    // let dateObj = new Date();
-    // let month = dateObj.getUTCMonth() + 1;
-    // let day = dateObj.getUTCDate();
-    // let year = dateObj.getUTCFullYear();
-    // let todaysdate = year + "-" + month + "-" + day;
-
-    if(todaysDateString !== e.target.value) {
-      console.log('the selected date : '+ e.target.value + ' does not equal today\'s date: ' + todaysDateString)
+    if(e.target.value === todaysDateString) {
+      console.log('you selected today\'s date')
+      this.contractInPresentOrFutureValidated = true;
     }
 
-    let newContractDate = e.target.value;
+    if(e.target.value > todaysDateString) {
+      console.log('the selected date is in the future')
+      this.contractInPresentOrFutureValidated = true;
+    }
 
-    // localStorage.setItem("contractDate", newContractDate);
+    if(e.target.value < todaysDateString) {
+      console.log('the selected date is in the past')
+      console.log(todaysDateString)
+      // this.contractInPastValidated = true;
+      // if the entered contract start date is greater than 3 months in the past
+    }
+
+    var threeMonthsAgo = moment().subtract(3, 'months');
+    var threeMonthsAgoFormatted = threeMonthsAgo.format(moment.HTML5_FMT.DATE);
+
+    if(e.target.value === threeMonthsAgoFormatted) {
+      console.log('date selected is exactly 3 months ago')
+    }
+
+    if(e.target.value < threeMonthsAgoFormatted) {
+      console.log('date selected is more than 3 months ago');
+      this.contractInPastValidated = true;
+    }
+
+    if(e.target.value > threeMonthsAgoFormatted) {
+      console.log('date selected is more than 3 months ago');
+      this.contractInPastValidated = false;
+    }
+
+    console.log(threeMonthsAgo.format()); // 2015-10-13T09:37:35+02:00
+    console.log(threeMonthsAgoFormatted);
+
   }
 
   getContractTerm(e) {
@@ -2838,6 +2868,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
           console.log(res.status)
 
+          // return window to top of page to display confirmation message to user
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+          
           this.modalService.dismissAll();
 
           if(res.status === 200) {
@@ -3429,7 +3465,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(i == 0) {
       const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-      controlArray.at(i).get('ItemID').setValue('');
+      controlArray.at(i).get('ItemID').setValue(0);
       controlArray.at(i).get('Description').setValue('');
       controlArray.at(i).get('BillCycle').setValue('');
       controlArray.at(i).get('RMR').setValue('');
@@ -3696,7 +3732,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.verifyAddViewCommentsSignals();
     this.verifyAddViewCommentsSystem();
     this.verifyAddViewCommentsPanel();
-    this.verifyAddNewRMRServiceBoxCheckedValidated();
+    this.verifyAddNewRMRServiceBoxChecked();
+    this.verifyLaborCharges();
+    this.verifyOtherCharges();
+
+    //calculate the total at each validation check as these totals could change
+    this.calculateInvoiceTotal();
+
+    if(!this.incentiveDashboardForm.controls['SignalsTested'].valid) {
+      this.signalsCheckedText = true;
+      console.log('you must indicate if the signals were tested or not')
+    }
+    if(this.incentiveDashboardForm.controls['SignalsTested'].valid) {
+      this.signalsCheckedText = false;
+      console.log('you have already indicated if the signals were tested or not')
+    }
+    
 
     if(this.incentiveDashboardForm.valid) {
       this.formIsValidText = true;
@@ -3762,33 +3813,43 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(controlArray.length)
 
     // if no items are added to Add RMR, the Contract Doc will remain not a required item to submit an invoice
-    if(controlArray.length < 1) {
-      // make the Contract Doc a not required item to submit the invoice
-      //this.contractDocValidated = false;
-      if(this.contractUpload === null) {
-        this.contractDocValidated = false;
-      }
-    }
+    // if(controlArray.length < 1) {
+    //   // make the Contract Doc a not required item to submit the invoice
+    //   // this.contractDocValidated = false;
+    //   if(this.contractUpload === null) {
+    //     this.contractDocValidated = false;
+    //   }
+    // }
 
     // if more at least 1 item is added to Add RMR, the Contract Doc will become a required item to submit an invoice
-    if(controlArray.length > 1) {
-      this.contractDocValidated = true;
-      this.incentiveDashboardForm.get("ContractUpload").setValidators(Validators.required);
-      this.incentiveDashboardForm.controls["ContractUpload"].updateValueAndValidity();
-    }
+    // if(controlArray.length > 1) {
+    //   this.contractDocValidated = true;
+    //   this.incentiveDashboardForm.get("ContractUpload").setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls["ContractUpload"].updateValueAndValidity();
+    // }
 
     if(this.contractUpload) {
       this.contractDocValidated = false;
     }
 
-    //this.verifyContractTerms();
+    this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+      console.log(element)
+      console.log(element.ItemID)
+      if(element.ItemID === 0) {
+        console.log('Display the validation text. The partner has not manually entered a recurring item')
+        this.contractDocValidated = false;
+      }
+      if(element.ItemID !== 0) {
+        console.log('Remove the validation text. The partner has manually entered a recurring item')
+        this.contractDocValidated = true;
+      }
+    });
+    // this.verifyContractTerms();
     
-
-    if(this.selectedForCheckBoxAutoInsert[6] === 'y') {
-      console.log('this works')
-    }
+    // if(this.selectedForCheckBoxAutoInsert[6] === 'y') {
+    //   console.log('this works')
+    // }
    
-
     // if(this.incentiveDashboardForm.controls['ContractUpload'].valid) {
     //   this.contractDocValidated = false;
     // }
@@ -3800,8 +3861,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   verifyWorkOrderDoc() {
     console.log('verify work order doc (subscriber file)')
     if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
-      console.log(`the ticket number is ${this.ticket_Number}`)
-      console.log('A work order must be uploaded for all service related invoices.')
+      // console.log(`the ticket number is ${this.ticket_Number}`)
+      // console.log('A work order must be uploaded for all service related invoices.')
        // show  the error if the ticket number exists
        this.workOrderDocValidated = true;
     }
@@ -3818,7 +3879,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(controlArray.length > 1) {
       this.contractTermsValidated = true;
-      console.log('RMR items require a contract start date');
+      // console.log('RMR items require a contract start date');
       this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
       this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
     }
@@ -3833,7 +3894,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // If you check the option "Not All Signals Tested", you need to provide detail in the Comments section.
     if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
       // show error message
-      console.log('show error message')
+      // console.log('show error message')
       this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
       this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
       this.addViewCommentsSignalsValidated = true
@@ -3878,28 +3939,71 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  verifyAddNewRMRServiceBoxCheckedValidated() {
+  verifyAddNewRMRServiceBoxChecked() {
     // Add RMR Section should have at least one entry
 
-    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring')
+    const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
 
-    if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length === 1) {
-      //console.log('You selected the option to add RMR, however no RMR has been added yet.')
-      this.addNewRMRServiceBoxCheckedValidated = true;
+    this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+      console.log(element)
+      if(element.ItemID === 0 && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
-      console.log('there is only 1 (blank) recurring entry');
+        console.log('Display the validation text. The partner has not manually entered a recurring item');
 
-      
+        this.addNewRMRServiceBoxCheckedValidated = true;
+
+        // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length === 1) {
+
+        //   this.addNewRMRServiceBoxCheckedValidated = true;
+        // }
+      }
+      if(element.ItemID !== 0 || element.ItemID === '' && this.selectedForCheckBoxAutoInsert[6] === 'y') {
+
+        console.log('Remove the validation text. The partner has manually entered a recurring item');
+
+        this.addNewRMRServiceBoxCheckedValidated = false;
+        // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
+
+        //   this.addNewRMRServiceBoxCheckedValidated = false;
+    
+        // }
+      }
+    });
+
+    // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length === 1) {
+
+    //   this.addNewRMRServiceBoxCheckedValidated = true;
+    // }
+
+    // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
+
+    //   this.addNewRMRServiceBoxCheckedValidated = false;
+
+    // }
+  }
+
+  verifyLaborCharges() {
+    if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
+       // show  the error if the ticket number exists
+       this.laborChargesValidated = true;
     }
 
-    if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
-      //console.log('You selected the option to add RMR, however no RMR has been added yet.')
-      this.addNewRMRServiceBoxCheckedValidated = false;
-
-      console.log('more than 1 (blank) recurring entry has been entered');
-
-      
+    //if the work order upload exists, remove the validation text
+    if(this.subscriberFormUpload) {
+      this.laborChargesValidated = false;
     }
+  }
+
+  verifyOtherCharges() {
+    if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
+      // show  the error if the ticket number exists
+      this.otherChargesValidated = true;
+   }
+
+   //if the work order upload exists, remove the validation text
+   if(this.subscriberFormUpload) {
+     this.otherChargesValidated = false;
+   }
   }
 
   // validateItems() {

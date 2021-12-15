@@ -149,14 +149,13 @@ export class IncentiveentryComponent implements OnInit {
     private modalService: NgbModal
   ) {
     this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID'));
-    console.log(this.installCompanyID)
    }
 
   ngOnInit() {
     localStorage.setItem("serviceIncluded","n");
 
     this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID'));
-    console.log(this.installCompanyID)
+    // console.log(this.installCompanyID)
     // console.log(this.selectedForCheckBoxAutoInsert)
 
     // if(this.selectedForCheckBoxAutoInsert.length === 0) {
@@ -370,7 +369,7 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
 
     this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))
-    console.log(this.selectedForCheckBoxAutoInsert);
+    // console.log(this.selectedForCheckBoxAutoInsert);
     localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
 
     //return
@@ -640,20 +639,20 @@ export class IncentiveentryComponent implements OnInit {
 
     this.authService.getProfile().subscribe(
       res => {
-        console.log(res.email)
-        console.log(res.afaRole)
+        // console.log(res.email)
+        // console.log(res.afaRole)
         this.currentACUserEmail = res.email;
         this.currentUserRole = res.afaRole;
 
         if(this.currentUserRole !== 5) {
-          console.log('dbo.PartnerServiceListingExtendedAC')
+          // console.log('dbo.PartnerServiceListingExtendedAC')
           // use this.currentACUserEmail and this.installCompanyID as params for the GET request
           this.routeService.getPartnerServiceListingExtendedAC(this.currentACUserEmail,this.installCompanyID).subscribe(
             res => {
               if(res) {
                 this.spinnerService.hide();
               }
-              console.log(res.body)
+              // console.log(res.body)
               this.partnerServiceListingExtendedAC = res.body;
               // for(let i = 0; i < this.partnerServiceListingExtendedAC.length; i++) {
               //   console.log(this.partnerServiceListingExtendedAC[i].ticket_Number)
@@ -663,7 +662,7 @@ export class IncentiveentryComponent implements OnInit {
         }
     
         if(this.currentUserRole == 5) {
-          console.log('dbo.PartnerServiceListingExtended')
+          // console.log('dbo.PartnerServiceListingExtended')
           this.routeService.getPartnerServiceListingExtended().subscribe(
             res => {
               if(res) {
