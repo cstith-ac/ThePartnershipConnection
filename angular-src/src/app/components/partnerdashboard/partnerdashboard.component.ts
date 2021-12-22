@@ -421,7 +421,8 @@ export class PartnerdashboardComponent implements OnInit {
             }
           }
         }, (err: HttpErrorResponse) => {
-          alert('there was an error')
+          alert('There was an error retrieving your requested data.');
+          this.spinnerService.hide();
         }
       )
     }

@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
       localStorage.removeItem('user');
       this.router.navigate(["login"]);
     } else {
-      console.log('your logged in')
+      // console.log('your logged in')
     }
     
     $("#wrapper").addClass("toggled");

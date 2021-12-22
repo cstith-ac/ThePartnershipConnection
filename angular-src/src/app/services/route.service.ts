@@ -679,6 +679,18 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchMatch/`+ id, httpOptions);
   }
 
+  getCustomerSearchListDec14(): Observable<HttpResponse<any>> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken 
+      }),
+      observe: 'response' as 'body' 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListDec14/`, httpOptions);
+  }
+
   getCustomerSearchList(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
@@ -693,6 +705,14 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
     };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListSite/`, httpOptions);
+  }
+
+  getCustomerSearchListDec14Site(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListDec14Site/`, httpOptions);
   }
 
   getCustomerSearchListCentralStation(): Observable<any> {

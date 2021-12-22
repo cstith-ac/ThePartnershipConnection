@@ -361,20 +361,42 @@ export class IncentiveentryComponent implements OnInit {
 
   onSubmit(form: FormGroup) {
 
-    this.submitted = true;
+    if(this.incentiveEntryForm.get('InvoiceTotal').value === 0) {
 
-    localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
-    localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
-    localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
-    localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
+      if(confirm('You are about to create a $0 invoice. Are you sure?') === true) {
+        this.submitted = true;
 
-    this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))
-    // console.log(this.selectedForCheckBoxAutoInsert);
-    localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+        localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
+        localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
+        localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
+        localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
 
-    //return
-    this.router.navigate(["/incentive-dashboard"]);
-    //this.router.navigate(["/incentive-dashboard-test"])//delete me after testing
+        this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))
+        
+        localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+
+        this.router.navigate(["/incentive-dashboard"]);
+      } else {
+        return
+      }
+
+    } 
+
+    if(this.incentiveEntryForm.get('InvoiceTotal').value !== 0) {
+      this.submitted = true;
+
+      localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
+      localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
+      localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
+      localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
+
+      this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))
+      
+      localStorage.setItem("checkBoxAutoInsertList", JSON.stringify(this.selectedForCheckBoxAutoInsert));
+
+      this.router.navigate(["/incentive-dashboard"]);
+    }
+
   }
 
   disableOther(e) {

@@ -110,3 +110,10 @@ svg.bi.bi-icon-xl {
     /* font-size: 32px; */
     font-size: 1.5rem;
 }
+.rowReportingTagDictionary {
+    display: flex;
+}
+.columnReportingTagDictionary {
+    flex: 50%;
+    padding: 5px 0;
+}

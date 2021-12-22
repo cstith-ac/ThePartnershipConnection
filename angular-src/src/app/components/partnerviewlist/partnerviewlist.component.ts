@@ -124,7 +124,7 @@ export class PartnerviewlistComponent implements OnInit {
         // console.log(res.status);
 
         this.listPartnerContacts = res.body;
-        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName))
+        this.listPartnerContacts.sort((a, b) => a.partnerName.localeCompare(b.partnerName));
         
       }, (err: HttpErrorResponse) => {
         this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {

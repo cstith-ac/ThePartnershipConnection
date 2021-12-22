@@ -3,7 +3,7 @@ import { Location, formatDate } from '@angular/common';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
 import { environment } from '../../../environments/environment';
-import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -14,6 +14,7 @@ import { ListCentralStations } from '../../models/listcentralstations';
 import { ListSitesForCustomer } from 'src/app/models/listsitesforcustomer';
 import { ListSystemsForSite } from 'src/app/models/listsystemsforsite';
 import { CustomerSearchList } from '../../models/customersearchlist';
+import { CustomerSearchListDec14 } from '../../models/customersearchlistdec14';
 import { CustomerSearchListSite } from '../../models/customersearchlistsite';
 import { CustomerSearchListCentralStation } from 'src/app/models/customersearchlistcentralstation';
 import { ListSystemTypes } from '../../models/listsystemtypes';
@@ -34,6 +35,7 @@ import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
 import { fromEvent, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError, map, tap, concatMap } from 'rxjs/operators';
+import { element } from 'protractor';
 declare var $: any;
 const moment = require('moment');
 
@@ -101,6 +103,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   listsitesforcustomer: ListSitesForCustomer[];
   listSystemsForSite: ListSystemsForSite[];
   customerSearchList: CustomerSearchList[];
+  customerSearchListDec14: CustomerSearchListDec14[];
   customerSearchListSite: CustomerSearchListSite[];
   customerSearchListCentralStation: CustomerSearchListCentralStation[];
   listsystemtypes: ListSystemTypes[];
@@ -223,6 +226,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   customer_id;
   customer_Name;
+  customerStatus;
+  pendingCancel;
+  collectionsStatus;
   cust_Numb_Name; // customer_Number + customer_Name
   business_Name;
   address_1;
@@ -334,6 +340,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   contractInPresentOrFutureValidated: boolean = false;
   contractInPastValidated: boolean = false;
 
+  fullTextValidated: boolean = false;
+  partialTextValidated: boolean = false;
+  collectionsStatusValidated: boolean = false;
+  customerStatusValidated: boolean = false;
+
+  systemInformationSectionValidatedNonPartner: boolean = false;
+  invoiceDocValidatedNonPartner: boolean = false;
+  customerVisitDocValidatedNonPartner: boolean = false;
+  contractDocValidatedNonPartner: boolean = false;
+  workOrderDocValidatedNonPartner: boolean = false;
+  contractTermsValidatedNonPartner: boolean = false;
+  addViewCommentsSignalsValidatedNonPartner: boolean = false;
+  addViewCommentsSystemValidatedNonPartner: boolean = false;
+  addViewCommentsPanelValidatedNonPartner: boolean = false;
+
   formIsValidText: boolean = false;
   signalsCheckedText: boolean = false;
 
@@ -363,12 +384,81 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     router.events.forEach((event) => {
       if(event instanceof NavigationStart) {
         if(event.navigationTrigger === 'popstate') {
-          console.log(event)
+          console.log(event);
+          localStorage.removeItem('installCompanyID');
+          localStorage.removeItem('totalRecurringCalc');
+          localStorage.removeItem('totalEquipMatCalc');
+          localStorage.removeItem('totalLaborChargesCalc');
+          localStorage.removeItem('invoiceDate');
+          localStorage.removeItem('invoiceNumber');
+          localStorage.removeItem('invoiceTotal');
+          localStorage.removeItem('recurringentry');
+          localStorage.removeItem('equipmatentry');
+          localStorage.removeItem('laborchargesentry');
+          localStorage.removeItem('invoiceName');
+          localStorage.removeItem('invoiceFileSize');
+          localStorage.removeItem('invoice');
+          localStorage.removeItem('subscriberForm');
+          localStorage.removeItem('subscriberFormName');
+          localStorage.removeItem('siteVisit');
+          localStorage.removeItem('siteVisitName');
+          localStorage.removeItem('otherDocument1');
+          localStorage.removeItem('otherDocument1Name');
+          localStorage.removeItem('contract');
+          localStorage.removeItem('contractName');
+          localStorage.removeItem('otherDocument2');
+          localStorage.removeItem('otherDocument2Name');
+          localStorage.removeItem('contractDate');
+          localStorage.removeItem('contractTerm');
+          localStorage.removeItem('serviceIncluded');
+          localStorage.removeItem('customerId');
+          localStorage.removeItem('customerName');
+          localStorage.removeItem('customerSiteName');
+          localStorage.removeItem('customerSystemInformation');
+          localStorage.removeItem('alarmAccount');
+          localStorage.removeItem('systemType');
+          localStorage.removeItem('panelType');
+          localStorage.removeItem('panelLocation');
+          localStorage.removeItem('centralStationID');
+          localStorage.removeItem('customerSiteId');
+          localStorage.removeItem('renewal');
+          localStorage.removeItem('partnerTaxAmount');
+          localStorage.removeItem('additionalInfo');
+          localStorage.removeItem('partnerComments');
+          localStorage.removeItem('signalsTested');
+          localStorage.removeItem('checkBoxAutoInsertList');
+          localStorage.removeItem('totalEquipMatCalc');
+          localStorage.removeItem('customer_Id');
+          localStorage.removeItem('customer_Site_Id');
+          localStorage.removeItem('customer_System_Id');
+          localStorage.removeItem('ticket_Number');
+          localStorage.removeItem('customer_Number');
+          localStorage.removeItem('customer_Name');
+          localStorage.removeItem("business_Name");
+          localStorage.removeItem("address_1");
+          localStorage.removeItem("systemType");
+          localStorage.removeItem("csAccount");
+          localStorage.removeItem("panelType");
+          localStorage.removeItem("panel_Location");
+          localStorage.removeItem("centralStation");
+          localStorage.removeItem("panel_Type_Id");
+          localStorage.removeItem("central_Station_ID");
+          localStorage.removeItem("system_Id");
+          // allow the user to navigate to the incentive entry. Just remove the items passed from incentive entry;
           // router.navigate(['/incentive-dashboard'], {replaceUrl:true});
           // location.replaceState('/incentive-dashboard');
         } 
       }
     })
+
+    // router.events
+    //   .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
+    //   .subscribe(event => {
+    //     if (event.id === 1 && event.url === event.urlAfterRedirects) {
+    //       console.log('the page was refreshed')
+    //       alert('using the back button will reset all of your currently entered information')
+    //     }
+    // });
   }
   
 
@@ -1051,11 +1141,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   calculateInvoiceTotal() {
-    console.log(this.invoiceTotal)
-    console.log(this.partnerTaxAmount)
-    console.log(this.lineItemSubtotal)
+    // console.log(this.invoiceTotal)
+    // console.log(this.partnerTaxAmount)
+    // console.log(this.lineItemSubtotal)
+
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    console.log(this.invoiceTotal + this.partnerTaxAmount)
+    // console.log(this.invoiceTotal + this.partnerTaxAmount)
     if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
       this.invoiceTotalValidated = true;
     }
@@ -1071,22 +1162,22 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     console.log(this.systemTypeID);
 
-    if(this.systemTypeID === 98) {
-      console.log('call the verifyAddViewCommentsSystem method')
-      // if 'other' is selected, invalidate PartnerComments
-      this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-      this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
+    // if(this.systemTypeID === 98) {
+    //   console.log('call the verifyAddViewCommentsSystem method')
+    //   // if 'other' is selected, invalidate PartnerComments
+    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
 
-      this.addViewCommentsSystemValidated = true
-    }
+    //   this.addViewCommentsSystemValidated = true
+    // }
 
-    if(this.systemTypeID !== 98) {
-      this.incentiveDashboardForm.controls['SystemTypeID'].valid;
-      this.addViewCommentsSystemValidated = false;
-      //this.incentiveDashboardForm.controls['PartnerComments'].valid;
-      //this.incentiveDashboardForm.controls['PartnerComments'].setErrors(null);
-      this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-    }
+    // if(this.systemTypeID !== 98) {
+    //   this.incentiveDashboardForm.controls['SystemTypeID'].valid;
+    //   this.addViewCommentsSystemValidated = false;
+    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid;
+    //   //this.incentiveDashboardForm.controls['PartnerComments'].setErrors(null);
+    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
+    // }
   }
 
   onChangeGetPanelType(e) {
@@ -1095,19 +1186,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(this.panelTypeID)
     console.log(typeof this.panelTypeID)
 
-    if(this.panelTypeID === 675) {
-      this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-      this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
+    // if(this.panelTypeID === 675) {
+    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
 
-      this.addViewCommentsPanelValidated = true
-    }
+    //   this.addViewCommentsPanelValidated = true
+    // }
 
-    if(this.panelTypeID !== 675) {
-      this.incentiveDashboardForm.controls["PanelTypeID"].valid;
-      this.addViewCommentsPanelValidated = false;
-      //this.incentiveDashboardForm.controls['PartnerComments'].valid;
-      this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-    }
+    // if(this.panelTypeID !== 675) {
+    //   this.incentiveDashboardForm.controls["PanelTypeID"].valid;
+    //   this.addViewCommentsPanelValidated = false;
+    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid;
+    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
+    // }
 
     //get the value and remove the index
     //if the Panel Type is changed, get the new panel type id
@@ -1153,7 +1244,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.incentiveDashboardForm.controls['CustomerSystemID'].disable();
 
-      this.systemInformationSectionValidated = true;
+      // this.systemInformationSectionValidated = true;
       // this.customerSystemIDValidated = true;
 
       console.log('display error message')
@@ -1168,9 +1259,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.incentiveDashboardForm.controls['CustomerSystemID'].enable();
 
-      this.systemInformationSectionValidated = false;
+      // this.systemInformationSectionValidated = false;
 
-      console.log('remove error message')
     }
   }
 
@@ -1642,7 +1732,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(value === '0') {
       console.log('filter the table by active customers: ', value)
       //filter the table by active customers
-      let cancel = this.customerSearchList.filter(x => x.customerStatus === 'Cancel');
+      let cancel = this.customerSearchListDec14.filter(x => x.customerStatus === 'Cancel');
       console.group(cancel);
     }
   }
@@ -1654,7 +1744,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //this.searchValue = "Active"
       console.log('filter the table by cancelled customers: ', value)
       //filter the table by cancelled customers
-      let active = this.customerSearchList.filter(x => x.customerStatus === 'Active');
+      let active = this.customerSearchListDec14.filter(x => x.customerStatus === 'Active');
       console.log(active);
     }
   }
@@ -1701,21 +1791,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       ariaLabelledBy: 'modal-basic-title'
     });
 
-    this.routeService.getCustomerSearchList().subscribe(
+    this.spinnerService.show();
+
+    this.routeService.getCustomerSearchListDec14().subscribe(
       res => {
-        this.customerSearchList = res;
+        if(res.status === 200) {
+          this.spinnerService.hide();
+        }
+        this.customerSearchListDec14 = res.body;
+
+        // let full = this.customerSearchListDec14.filter(x => x.pendingCancel === 'Full');
+        // console.log(full);
       }
     )
   }
 
-  selectCustomer(customer_id:number,customer_Name:string,customer_Number:string) {
-    console.log(this.divSiteSearchIcon.nativeElement);
+  selectCustomer(customer_id:number, customer_Name:string, customer_Number:string, customerStatus:string, pendingCancel:string, collectionsStatus:string) {
+    // console.log(this.divSiteSearchIcon.nativeElement);
     this.divSiteSearchIcon.nativeElement.style.display = 'none';
     this.divSystemSearchIcon.nativeElement.style.display = 'none';
 
     let selectedCustomerName = customer_Name;
     let selectedCustomerid = customer_id;
     let selectedCustomerNumber = customer_Number;
+    
+    this.customerStatus = customerStatus;
+    this.pendingCancel = pendingCancel;
+    this.collectionsStatus = collectionsStatus;
 
     this.customer = selectedCustomerNumber + ' - ' + selectedCustomerName;
     this.id = selectedCustomerid;
@@ -1730,7 +1832,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       res => {
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          console.log(this.listsitesforcustomer[i])
+          // console.log(this.listsitesforcustomer[i])
         }
       }
     )
@@ -1833,7 +1935,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.customerSearchListSite = res;
         console.log(this.customerSearchListSite)
         for(var i = 0; i < this.customerSearchListSite.length; i++) {
-          console.log(this.customerSearchListSite[i])
+          // console.log(this.customerSearchListSite[i])
         }
       }
     )
@@ -1866,7 +1968,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //console.log(res);
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          console.log(this.listsitesforcustomer[i])
+          // console.log(this.listsitesforcustomer[i])
           this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer);
         }
       }
@@ -1888,7 +1990,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.customerSearchListCentralStation = res;
         // console.log(this.customerSearchListCentralStation)
         for(var i = 0; i < this.customerSearchListCentralStation.length; i++) {
-          console.log(this.customerSearchListCentralStation[i])
+          // console.log(this.customerSearchListCentralStation[i])
         }
       }
     )
@@ -1921,13 +2023,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.routeService.getListSitesForCustomer(this.id).subscribe(
       res => {
-        console.log(res);
+        // console.log(res);
 
         this.listsitesforcustomer = res;
         this.customerPreselected=true
 
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          console.log(this.listsitesforcustomer[i].customer_Site_id)
+          // console.log(this.listsitesforcustomer[i].customer_Site_id)
 
           //focus Site
           this.siteElement.nativeElement.focus()
@@ -1986,53 +2088,53 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log('@UserEmailAddress:' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
     if(localStorage.getItem('customer_Id')) {
       this.customer_id = localStorage.getItem('customer_Id');
-      console.log('@CustomerID:' + this.customer_id)
+      // console.log('@CustomerID:' + this.customer_id)
     } else {
-      console.log('@CustomerID:' + parseInt(this.id)) // @CustomerID Int,
+      // console.log('@CustomerID:' + parseInt(this.id)) // @CustomerID Int,
     }
     // console.log('@CustomerID :' + parseInt(this.id)) // @CustomerID Int,
     //console.log(form.value.CustomerID) // @CustomerID Int, Get this instead of the id
     if(localStorage.getItem('customer_Site_Id')) {
       this.customer_Site_id = localStorage.getItem('customer_Site_Id')
-      console.log('@CustomerSiteID:' + this.customer_Site_id)
+      // console.log('@CustomerSiteID:' + this.customer_Site_id)
     } else {
-      console.log('@CustomerSiteID:' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
+      // console.log('@CustomerSiteID:' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
     }
     // console.log('@CustomerSiteID :' + parseInt(form.value.CustomerSiteID)) // @CustomerSiteID Int,
 
     if(localStorage.getItem('customer_System_Id')){
       this.customer_System_id = localStorage.getItem('customer_System_Id')
-      console.log('@CustomerSystemID:' + this.customer_System_id)
+      // console.log('@CustomerSystemID:' + this.customer_System_id)
     } else {
-      console.log('@CustomerSystemID:' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
+      // console.log('@CustomerSystemID:' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
     }
     // console.log('@CustomerSystemID :' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
-    console.log('@AlarmAccount:' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
-    console.log('@SystemTypeID:' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
+    // console.log('@AlarmAccount:' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
+    // console.log('@SystemTypeID:' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
     if(localStorage.getItem('panel_Type_Id')) {
       this.panelTypeID = localStorage.getItem('panel_Type_Id')
-      console.log('@PanelTypeID:' + this.panelTypeID)
+      // console.log('@PanelTypeID:' + this.panelTypeID)
     } else {
-      console.log('@PanelTypeID:' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
+      // console.log('@PanelTypeID:' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
     }
     // console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
-    console.log('@PanelLocation:' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
+    // console.log('@PanelLocation:' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
     if(localStorage.getItem('central_Station_ID')) {
       this.centralStationID = localStorage.getItem('central_Station_ID')
-      console.log('@CentralStationID:' + this.centralStationID)
+      // console.log('@CentralStationID:' + this.centralStationID)
     } else {
-      console.log('@CentralStationID:' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
+      // console.log('@CentralStationID:' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
     }
     // console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    console.log('@AdditionalInfo:' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
-    console.log('@PartnerInvoiceNumber:' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
-    console.log('@PartnerInvoiceDate:' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
-    console.log('@ContractDate:' + form.value.ContractDate) // @ContractDate DateTime,
-    console.log('@ContractTerm:' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
-    console.log('@RenewalMonths:' + parseInt(this.renewalMonths));
-    console.log('@ServiceIncluded:' + form.value.ServiceIncluded);
-    console.log('@EnrollInEmailInvoices: '+ form.value.EnrollInEmailInvoices);
-    console.log('@PartnerComments:' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
+    // console.log('@AdditionalInfo:' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
+    // console.log('@PartnerInvoiceNumber:' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
+    // console.log('@PartnerInvoiceDate:' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
+    // console.log('@ContractDate:' + form.value.ContractDate) // @ContractDate DateTime,
+    // console.log('@ContractTerm:' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
+    // console.log('@RenewalMonths:' + parseInt(this.renewalMonths));
+    // console.log('@ServiceIncluded:' + form.value.ServiceIncluded);
+    // console.log('@EnrollInEmailInvoices: '+ form.value.EnrollInEmailInvoices);
+    // console.log('@PartnerComments:' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
@@ -2071,11 +2173,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     } 
 
     if(this.enrollInEmailInvoices === true) {
-      console.log(this.customerEmailAddress + '/Auto')
+      // console.log(this.customerEmailAddress + '/Auto')
       this.customerEmailAddress = this.customerEmailAddress+'/Auto';
     }
     if(this.enrollInEmailInvoices === false) {
-      console.log('Just pass the customer email addressss')
+      // console.log('Just pass the customer email addressss')
     }
 
     // confirm('Click ok to confirm form submission')
@@ -3723,7 +3825,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   openValidateItemsModal(required) {
-    this.verifyCustomerSection();
+    this.verifyCustomerSiteSystem();
+    this.verifySystemInformationSection();
     this.verifyInvoiceDoc();
     this.verifyCustomerVisitDoc();
     this.verifyContractDoc();
@@ -3735,17 +3838,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.verifyAddNewRMRServiceBoxChecked();
     this.verifyLaborCharges();
     this.verifyOtherCharges();
+    this.verifyPendingCancelCollectionsStatus();
+    this.verifyCancelledCustomer();
 
     //calculate the total at each validation check as these totals could change
     this.calculateInvoiceTotal();
 
     if(!this.incentiveDashboardForm.controls['SignalsTested'].valid) {
       this.signalsCheckedText = true;
-      console.log('you must indicate if the signals were tested or not')
+      // console.log('you must indicate if the signals were tested or not')
     }
     if(this.incentiveDashboardForm.controls['SignalsTested'].valid) {
       this.signalsCheckedText = false;
-      console.log('you have already indicated if the signals were tested or not')
+      // console.log('you have already indicated if the signals were tested or not')
     }
     
 
@@ -3765,7 +3870,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
 
-  verifyCustomerSection(){
+  verifyCustomerSiteSystem(){
     if(this.incentiveDashboardForm.controls['CustomerID'].valid) {
       this.customerIDValidated = false;
       this.systemInformationSectionValidated = false;
@@ -3780,24 +3885,93 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  verifyInvoiceDoc() {
-    if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
-      this.invoiceDocValidated = false;
-      //console.log(this.incentiveDashboardForm.controls['InvoiceUpload'].value)
+  verifySystemInformationSection() {
+    let newSystemCheckbox = this.incentiveDashboardForm.controls['NewSystem'].value; 
+
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      console.log(newSystemCheckbox);
+      if(newSystemCheckbox === true) {
+        this.systemInformationSectionValidatedNonPartner = true;
+      }
+      if(newSystemCheckbox === false) {
+        this.systemInformationSectionValidatedNonPartner = false;
+      }
     }
-    if(this.incentiveDashboardForm.controls['InvoiceUpload'].value === null) {
-      this.invoiceDocValidated = true;
-      //console.log(this.incentiveDashboardForm.controls['InvoiceUpload'].value)
+
+    if(this.user.afaRole === 5) {
+      if(newSystemCheckbox === true) {
+        this.systemInformationSectionValidated = true;
+      }
+      if(newSystemCheckbox === false) {
+        this.systemInformationSectionValidated = false;
+      }
     }
   }
 
+  verifyInvoiceDoc() {
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      this.incentiveDashboardForm.get('InvoiceUpload').setErrors(null);
+       
+      if(!this.invoiceUpload) {
+        this.invoiceDocValidatedNonPartner = true; 
+      }
+
+      if(this.invoiceUpload) {
+        this.invoiceDocValidatedNonPartner = false; 
+      }
+    }
+
+    if(this.user.afaRole === 5) {
+      if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+        this.invoiceDocValidated = false;
+      }
+      if(this.incentiveDashboardForm.controls['InvoiceUpload'].value === null) {
+        this.invoiceDocValidated = true;
+      }
+    }
+
+    // if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+    //   this.invoiceDocValidated = false;
+    // }
+    // if(this.incentiveDashboardForm.controls['InvoiceUpload'].value === null) {
+    //   this.invoiceDocValidated = true;
+    // }
+  }
+
   verifyCustomerVisitDoc() {
-    if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
-      this.customerVisitDocValidated = false;
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      
+      if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
+        this.customerVisitDocValidatedNonPartner = false;
+      }
+
+      if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
+        this.customerVisitDocValidatedNonPartner = false;
+      }
+      if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+        this.customerVisitDocValidatedNonPartner = true;
+      }
     }
-    if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-      this.customerVisitDocValidated = true;
+
+    if(this.user.afaRole === 5) {
+      if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
+        this.customerVisitDocValidated = false;
+      }
+
+      if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
+        this.customerVisitDocValidated = false;
+      }
+      if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+        this.customerVisitDocValidated = true;
+      }
     }
+
+    // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
+    //   this.customerVisitDocValidated = false;
+    // }
+    // if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+    //   this.customerVisitDocValidated = true;
+    // }
 
     // if(localStorage.getItem('equipmatentry')) {
     //   this.customerVisitDocValidated = true;
@@ -3810,7 +3984,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   verifyContractDoc() {
     // if add rmr (modal) has more than 1 recurring item
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-    console.log(controlArray.length)
 
     // if no items are added to Add RMR, the Contract Doc will remain not a required item to submit an invoice
     // if(controlArray.length < 1) {
@@ -3828,22 +4001,53 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   this.incentiveDashboardForm.controls["ContractUpload"].updateValueAndValidity();
     // }
 
-    if(this.contractUpload) {
-      this.contractDocValidated = false;
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+        if(element.ItemID === 0) {
+          this.contractDocValidatedNonPartner = false;
+        }
+        if(element.ItemID !== 0) {
+          this.contractDocValidatedNonPartner = true;
+        }
+      })
     }
 
-    this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-      console.log(element)
-      console.log(element.ItemID)
-      if(element.ItemID === 0) {
-        console.log('Display the validation text. The partner has not manually entered a recurring item')
+    if(this.user.afaRole === 5) {
+      if(this.contractUpload) {
         this.contractDocValidated = false;
       }
-      if(element.ItemID !== 0) {
-        console.log('Remove the validation text. The partner has manually entered a recurring item')
-        this.contractDocValidated = true;
-      }
-    });
+  
+      this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+        // console.log(element)
+        // console.log(element.ItemID)
+        if(element.ItemID === 0) {
+          // console.log('Display the validation text. The partner has not manually entered a recurring item');
+          this.contractDocValidated = false;
+        }
+        if(element.ItemID !== 0) {
+          // console.log('Remove the validation text. The partner has manually entered a recurring item');
+          this.contractDocValidated = true;
+        }
+      });
+    }
+
+    // if(this.contractUpload) {
+    //   this.contractDocValidated = false;
+    // }
+
+    // this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+    //   // console.log(element)
+    //   // console.log(element.ItemID)
+    //   if(element.ItemID === 0) {
+    //     // console.log('Display the validation text. The partner has not manually entered a recurring item');
+    //     this.contractDocValidated = false;
+    //   }
+    //   if(element.ItemID !== 0) {
+    //     // console.log('Remove the validation text. The partner has manually entered a recurring item');
+    //     this.contractDocValidated = true;
+    //   }
+    // });
+
     // this.verifyContractTerms();
     
     // if(this.selectedForCheckBoxAutoInsert[6] === 'y') {
@@ -3859,68 +4063,176 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   verifyWorkOrderDoc() {
-    console.log('verify work order doc (subscriber file)')
-    if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
-      // console.log(`the ticket number is ${this.ticket_Number}`)
-      // console.log('A work order must be uploaded for all service related invoices.')
-       // show  the error if the ticket number exists
-       this.workOrderDocValidated = true;
+    
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
+        this.workOrderDocValidatedNonPartner = true;
+     }
+ 
+     //if the work order upload exists, remove the validation text
+     if(this.subscriberFormUpload) {
+       this.workOrderDocValidatedNonPartner = false;
+     }
     }
 
-    //if the work order upload exists, remove the validation text
-    if(this.subscriberFormUpload) {
-      this.workOrderDocValidated = false;
+    if(this.user.afaRole === 5) {
+      if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
+        this.workOrderDocValidated = true;
+     }
+ 
+     //if the work order upload exists, remove the validation text
+     if(this.subscriberFormUpload) {
+       this.workOrderDocValidated = false;
+     }
     }
+
+    // if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
+    //    this.workOrderDocValidated = true;
+    // }
+
+    // //if the work order upload exists, remove the validation text
+    // if(this.subscriberFormUpload) {
+    //   this.workOrderDocValidated = false;
+    // }
   }
 
   verifyContractTerms() {
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-    console.log(controlArray.length)
+    
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
 
-    if(controlArray.length > 1) {
-      this.contractTermsValidated = true;
-      // console.log('RMR items require a contract start date');
-      this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
-      this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
+      this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+        if(element.ItemID === 0) {
+          this.contractTermsValidatedNonPartner = false;
+        }
+
+        if(element.ItemID !== 0) {
+          this.contractTermsValidatedNonPartner = true;
+        }
+      })
+      
+  
     }
 
-    if(this.incentiveDashboardForm.controls["ContractDate"].valid) {
-      this.contractTermsValidated = false;
+    if(this.user.afaRole === 5) {
+
+      this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
+        if(element.ItemID === 0) {
+          this.contractTermsValidated = false;
+          // console.log('RMR items require a contract start date');
+          // this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
+          // this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
+        }
+
+        // if entryrowsrecurring has a value, require contract date
+        if(element.ItemID !== 0) {
+          this.contractTermsValidated = true;
+          this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
+          this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
+        }
+
+        // if entryrowsrecurring and contract date has a value, remove validation text and declare contract date valid
+        if(element.ItemID !== 0 && this.incentiveDashboardForm.controls["ContractDate"].valid) {
+          this.contractTermsValidated = false;
+        }
+        // if(element.ItemID !== 0 && this.incentiveDashboardForm.controls["ContractDate"].valid) {
+        //   this.contractTermsValidated = true;
+        // }
+      })
+
+      // if(controlArray.length > 1) {
+      //   this.contractTermsValidated = true;
+      //   this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
+      //   this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
+      // }
+  
+      // if(this.incentiveDashboardForm.controls["ContractDate"].valid) {
+      //   this.contractTermsValidated = false;
+      // }
     }
+
+    // if(controlArray.length > 1) {
+    //   this.contractTermsValidated = true;
+    //   // console.log('RMR items require a contract start date');
+    //   this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
+    // }
+
+    // if(this.incentiveDashboardForm.controls["ContractDate"].valid) {
+    //   this.contractTermsValidated = false;
+    // }
   }
 
   verifyAddViewCommentsSignals() {
 
     // If you check the option "Not All Signals Tested", you need to provide detail in the Comments section.
-    if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
-      // show error message
-      // console.log('show error message')
-      this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-      this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
-      this.addViewCommentsSignalsValidated = true
+
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
+        this.addViewCommentsSignalsValidatedNonPartner = true;
+      }
+      if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
+        this.addViewCommentsSignalsValidatedNonPartner = false;
+      }
     }
 
-    if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
-      this.addViewCommentsSignalsValidated = false;
-      this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-      // this.incentiveDashboardForm.controls["PartnerComments"].setValidators(null)
-      //this.incentiveDashboardForm.controls['PartnerComments'].valid
+    if(this.user.afaRole === 5) {
+      if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
+        this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
+        this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
+        this.addViewCommentsSignalsValidated = true
+      }
+  
+      if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
+        this.addViewCommentsSignalsValidated = false;
+        this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
+        // this.incentiveDashboardForm.controls["PartnerComments"].setValidators(null)
+        //this.incentiveDashboardForm.controls['PartnerComments'].valid
+      }
     }
+
+    // if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
+    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
+    //   this.addViewCommentsSignalsValidated = true
+    // }
+
+    // if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
+    //   this.addViewCommentsSignalsValidated = false;
+    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
+    //   // this.incentiveDashboardForm.controls["PartnerComments"].setValidators(null)
+    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid
+    // }
 
   }
 
   verifyAddViewCommentsSystem() {
     // You selected the System Type "Other". Please provide details in the Comments section.
-    // console.log('You selected the System Type "Other". Please provide details in the Comments section.');
 
-    if(this.incentiveDashboardForm.controls['SystemTypeID'].value === '98') {
-      this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
-      this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
-      this.addViewCommentsSystemValidated = true;
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      
+      if(this.incentiveDashboardForm.controls['SystemTypeID'].value === 98) {
+        this.addViewCommentsSystemValidatedNonPartner = true;
+      }
+      if(this.incentiveDashboardForm.controls['SystemTypeID'].value !== 98) {
+        
+        this.addViewCommentsSystemValidatedNonPartner = false;
+      }
+
     }
 
-    if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
-      this.addViewCommentsSystemValidated = false;
+    if(this.user.afaRole === 5) {
+      
+      if(this.incentiveDashboardForm.controls['SystemTypeID'].value === 98) {
+        this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
+        this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
+        this.addViewCommentsSystemValidated = true;
+      }
+  
+      if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
+        this.addViewCommentsSystemValidated = false;
+      }
+
     }
   }
 
@@ -3928,15 +4240,50 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // You selected the Panel Type "Other". Please provide details in the Comments section.
     // console.log('You selected the Panel Type "Other". Please provide details in the Comments section.');
 
-    if(this.incentiveDashboardForm.controls['PanelTypeID'].value === '675') {
-      this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
-      this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
-      this.addViewCommentsPanelValidated = true;
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      
+      if(this.incentiveDashboardForm.controls['PanelTypeID'].value === 675) {
+        // this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
+        // this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
+        
+        this.addViewCommentsPanelValidatedNonPartner = true;
+      }
+
+      if(this.incentiveDashboardForm.controls['PanelTypeID'].value !== 675) {
+        
+        this.addViewCommentsPanelValidatedNonPartner = false;
+      }
+
     }
 
-    if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
-      this.addViewCommentsPanelValidated = false;
+    if(this.user.afaRole === 5) {
+
+      if(this.incentiveDashboardForm.controls['PanelTypeID'].value === 675) {
+        this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
+        this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
+        this.addViewCommentsPanelValidated = true;
+      }
+  
+      if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
+        this.addViewCommentsPanelValidated = false;
+      }
+
+      if(this.incentiveDashboardForm.controls['PanelTypeID'].value !== 675) {
+        this.incentiveDashboardForm.controls["PanelTypeID"].valid;
+        this.addViewCommentsPanelValidated = false;
+        this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
+      }
     }
+
+    // if(this.incentiveDashboardForm.controls['PanelTypeID'].value === '675') {
+    //   this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
+    //   this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
+    //   this.addViewCommentsPanelValidated = true;
+    // }
+
+    // if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
+    //   this.addViewCommentsPanelValidated = false;
+    // }
   }
 
   verifyAddNewRMRServiceBoxChecked() {
@@ -3945,10 +4292,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
 
     this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-      console.log(element)
+      // console.log(element)
       if(element.ItemID === 0 && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
-        console.log('Display the validation text. The partner has not manually entered a recurring item');
+        // console.log('Display the validation text. The partner has not manually entered a recurring item');
 
         this.addNewRMRServiceBoxCheckedValidated = true;
 
@@ -3959,7 +4306,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
       if(element.ItemID !== 0 || element.ItemID === '' && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
-        console.log('Remove the validation text. The partner has manually entered a recurring item');
+        // console.log('Remove the validation text. The partner has manually entered a recurring item');
 
         this.addNewRMRServiceBoxCheckedValidated = false;
         // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
@@ -4004,6 +4351,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
    if(this.subscriberFormUpload) {
      this.otherChargesValidated = false;
    }
+  }
+
+  verifyPendingCancelCollectionsStatus() {
+    if(this.pendingCancel === 'Full') {
+      this.fullTextValidated = true;
+      // console.log(this.pendingCancel);
+    }
+    if(this.pendingCancel === 'Partial') {
+      this.partialTextValidated = true;
+      // console.log(this.pendingCancel);
+    }
+
+    if(this.collectionsStatus) {
+      // console.log('collections');
+      this.collectionsStatusValidated = true;
+    }
+  }
+
+  verifyCancelledCustomer() {
+    console.log('verifyCancelledCustomer')
+    if(this.customerStatus === 'Cancel') {
+      this.customerStatusValidated = true;
+    }
+
+    if(this.customerStatus !== 'Cancel') {
+      this.customerStatusValidated = false;
+    }
   }
 
   // validateItems() {

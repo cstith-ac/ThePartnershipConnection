@@ -86,7 +86,7 @@ export class CallsummaryComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.show) // the issue has been resolved. The checkbox for Was the issue resolved? is checked by default
+    // console.log(this.show) // the issue has been resolved. The checkbox for Was the issue resolved? is checked by default
 
     this.buildForm();
     this.setIsRequiredValuesValidators();

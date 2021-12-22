@@ -59,7 +59,7 @@
                         <td>{{ item.usState }}</td>
                         <td>{{ item.primaryContact }}</td>
                         <td>
-                            <i class="pl-3" (click)="openPartnerServiceNoteModal(item.partnerCode, partnerServiceNote)">
+                            <i class="pl-1" (click)="openPartnerServiceNoteModal(item.partnerCode, partnerServiceNote)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset bi-icon-xl" viewBox="0 0 16 16">
                                     <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
                                 </svg>
@@ -228,8 +228,10 @@
                     </div>
                     <div class="form-group">
                         <div class="my-columns">
-                            <div class="row">
-                                <ul class="list-group">
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">Owner</div>
+                                <div class="columnReportingTagDictionary">Owner level reporting</div>
+                                <!-- <ul class="list-group">
                                     <li class="list-group-item pl-3 pb-0 border-0">Owner <span class="pl-5"></span>Owner level reporting</li>
                                     <li class="list-group-item pl-3 pb-0 border-0">3GRep<span class="pl-5"></span>3G Reporting</li>
                                     <li class="list-group-item pl-3 pb-0 border-0">Prospect<span class="pl-5"></span>Sales opportunity alerts</li>
@@ -241,8 +243,47 @@
                                     <li class="list-group-item pl-3 pb-0 border-0">Action<span class="pl-5"></span>Call to Action Report</li>
                                     <li class="list-group-item pl-3 pb-0 border-0">Skip<span class="pl-5"></span>Ignore this user for all reporting and emails.</li>
                                     <li class="list-group-item pl-3 pb-0 border-0">CanRep<span class="pl-5"></span>CanRep Reports</li>
-                                </ul>
-                                <!-- <p>{{reportingTagDictionary.owner}}</p> -->
+                                </ul> -->
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">3GRep</div>
+                                <div class="columnReportingTagDictionary">3G Reporting</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">Prospect</div>
+                                <div class="columnReportingTagDictionary">Sales Opportunity</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">Aging</div>
+                                <div class="columnReportingTagDictionary">Monday morning aging list</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">ACHPay</div>
+                                <div class="columnReportingTagDictionary">Remittance for ACH payments</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">PHR</div>
+                                <div class="columnReportingTagDictionary">Partner Health Reports</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">DHR</div>
+                                <div class="columnReportingTagDictionary">Partner Health Reports</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">CustCare</div>
+                                <div class="columnReportingTagDictionary">Cancellation Alerts</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">Action</div>
+                                <div class="columnReportingTagDictionary">Call to Action Report</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">Skip</div>
+                                <div class="columnReportingTagDictionary">Ignore this user for all reporting and emails.</div>
+                            </div>
+                            <div class="rowReportingTagDictionary">
+                                <div class="columnReportingTagDictionary">CanRep</div>
+                                <div class="columnReportingTagDictionary">CanRep Reports</div>
                             </div>
                         </div>
                     </div>

@@ -58,8 +58,11 @@ namespace WebAPI.Models
         public virtual DbSet<ListMaterialItems> GetListMaterialItems { get; set; }
         public virtual DbSet<ListLaborItems> GetListLaborItems { get; set; }
         public virtual DbSet<CustomerSearchList> GetCustomerSearchLists { get; set; }
+        public virtual DbSet<CustomerSearchListDec14> GetCustomerSearchListDec14s { get; set; }
         public virtual DbSet<CustomerSearchListSites> GetCustomerSearchListSites { get; set; }
+        public virtual DbSet<CustomerSearchListDec14Sites> GetCustomerSearchListDec14Sites { get; set; }
         public virtual DbSet<CustomerSearchListCentralStation> GetCustomerSearchListCentralStations { get; set; }
+        public virtual DbSet<CustomerSearchListDec14CentralStation> GetCustomerSearchListDec14CentralStations { get; set; }
         public virtual DbSet<ListSystemTypes> GetListSystemTypes { get; set; }
         public virtual DbSet<ListMultiples> GetListMultiples { get; set; }
         public virtual DbSet<CustomerSystemInfoGet> GetCustomerSystemInfoGets { get; set; }
@@ -439,12 +442,27 @@ namespace WebAPI.Models
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<CustomerSearchListDec14>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<CustomerSearchListSites>(entity =>
             {
                 entity.HasNoKey();
             });
 
+            modelBuilder.Entity<CustomerSearchListDec14Sites>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<CustomerSearchListCentralStation>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerSearchListDec14CentralStation>(entity =>
             {
                 entity.HasNoKey();
             });
