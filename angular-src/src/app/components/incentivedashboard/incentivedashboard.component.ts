@@ -345,6 +345,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   collectionsStatusValidated: boolean = false;
   customerStatusValidated: boolean = false;
 
+  invoiceTotalValidatedNonPartner: boolean = false;
   systemInformationSectionValidatedNonPartner: boolean = false;
   invoiceDocValidatedNonPartner: boolean = false;
   customerVisitDocValidatedNonPartner: boolean = false;
@@ -706,16 +707,41 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
 
         setTimeout(() => {
-          if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount) {
+          if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+            if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount) {
             
-            this.invoiceTotalValidated = true;
-            
+              this.invoiceTotalValidatedNonPartner = true;
+              
+            }
+            if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount) {
+  
+              this.invoiceTotalValidatedNonPartner = false;
+  
+            }
           }
-          if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount) {
 
-            this.invoiceTotalValidated = false;
+          if(this.user.afaRole === 5) {
+            if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount) {
+            
+              this.invoiceTotalValidated = true;
+              
+            }
+            if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount) {
+  
+              this.invoiceTotalValidated = false;
+  
+            }
+          }
+          // if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount) {
+            
+          //   this.invoiceTotalValidated = true;
+            
+          // }
+          // if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount) {
 
-          }   
+          //   this.invoiceTotalValidated = false;
+
+          // }   
         }, 1000);
 
         let fakeRecurringData = [{
@@ -950,6 +976,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.panelLocationPreSelected = true;
     }
     this.centralStationID = localStorage.getItem('centralStation');
+
+    // if the user is an employee, set the formcontrol fields InvoiceUpload and SiteVisitUpload valid
+    setTimeout(() => {
+      if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+        console.log('set InvoiceUpload and SiteVisitUpload valid')
+      }
+    }, 4);
   }
 
   ngAfterViewChecked() {
@@ -991,6 +1024,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         // set CustomerSystemID
         //this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
       }
+
       if(localStorage.getItem("csAccount")) {
         this.alarmAccount = this.alarmAccount;
       }
@@ -1042,58 +1076,58 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       if(this.recurring) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring));
       }
+
       if(this.recurring && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + this.partnerTaxAmount);
       }
+
       if(this.equipmentAndMaterials) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials));
       }
+
       if(this.equipmentAndMaterials && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials) + this.partnerTaxAmount);
       }
+
       if(this.laborCharges) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.laborCharges));
       }
+
       if(this.laborCharges && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
+
       if(this.equipmentAndMaterials && this.laborCharges) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges));
       }
+
       if(this.equipmentAndMaterials && this.laborCharges && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
+
       if(this.recurring && this.equipmentAndMaterials) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials));
       }
+
       if(this.recurring && this.equipmentAndMaterials && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + this.partnerTaxAmount);
       }
+
       if(this.recurring && this.laborCharges) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.laborCharges));
       }
+
       if(this.recurring && this.laborCharges && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
+
       if(this.recurring && this.equipmentAndMaterials && this.laborCharges) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges));
       }
+
       if(this.recurring && this.equipmentAndMaterials && this.laborCharges && this.partnerTaxAmount) {
         this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
       }
-
-      // if there's a page refresh, re-populate fields with previously entered values
-      
-      // this.incentiveDashboardForm.controls["ContractDate"].setValue(localStorage.getItem("contractDate"));//breaking the entering of a date
-
-
-      //this.partnerTaxAmount = parseInt(localStorage.getItem("partnerTaxAmount"));
-      //this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(localStorage.getItem("partnerTaxAmount"));
-      //this.incentiveDashboardForm.controls["ContractTerm"].setValue(localStorage.getItem("contractTerm"));
-
-      // get key/value pairs from localstorage
-      // string to object
-      // store in variable
 
       let recurringFromLocalStorage = localStorage.getItem("recurringentry");
       JSON.parse(recurringFromLocalStorage);
@@ -1101,7 +1135,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     }, 1000);
 
-    
   }
 
   ngOnChanges(){
@@ -1129,7 +1162,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.invoiceTotal = parseInt(e.target.value)
     if(this.incentiveDashboardForm.get('LineItemSubtotal').value === this.invoiceTotal) {
       console.log('match')
-      this.invoiceTotalValidated = false;
+      //this.invoiceTotalValidated = false;
       this.invoiceTotal = parseInt(e.target.value)
       //
     } else {
@@ -1141,18 +1174,36 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   calculateInvoiceTotal() {
-    // console.log(this.invoiceTotal)
-    // console.log(this.partnerTaxAmount)
-    // console.log(this.lineItemSubtotal)
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    
+      if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+        this.invoiceTotalValidatedNonPartner = true;
+      }
+      if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+        this.invoiceTotalValidatedNonPartner = false;
+      }
+    }
 
-    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    // console.log(this.invoiceTotal + this.partnerTaxAmount)
-    if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
-      this.invoiceTotalValidated = true;
+    if(this.user.afaRole === 5) {
+      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    
+      if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+        this.invoiceTotalValidated = true;
+      }
+      if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+        this.invoiceTotalValidated = false;
+      }
     }
-    if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-      this.invoiceTotalValidated = false;
-    }
+
+    // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    
+    // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+    //   this.invoiceTotalValidated = true;
+    // }
+    // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+    //   this.invoiceTotalValidated = false;
+    // }
   }
 
   onChangeGetSystemType(e) {
@@ -1488,13 +1539,33 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.partnerTaxAmount = parseFloat(e.target.value)
     console.log(typeof this.partnerTaxAmount)
 
-    if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
-      this.invoiceTotalValidated = true;
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
+        this.invoiceTotalValidatedNonPartner = true;
+      }
+  
+      if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount){
+        this.invoiceTotalValidatedNonPartner = false;
+      }
     }
 
-    if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount){
-      this.invoiceTotalValidated = false;
+    if(this.user.afaRole === 5) {
+      if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
+        this.invoiceTotalValidated = true;
+      }
+  
+      if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount){
+        this.invoiceTotalValidated = false;
+      }
     }
+
+    // if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
+    //   this.invoiceTotalValidated = true;
+    // }
+
+    // if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount){
+    //   this.invoiceTotalValidated = false;
+    // }
 
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
 
@@ -3844,13 +3915,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //calculate the total at each validation check as these totals could change
     this.calculateInvoiceTotal();
 
+    // this is the text that will remind the user to check if signals were tested or not, regardless of partner or employee
     if(!this.incentiveDashboardForm.controls['SignalsTested'].valid) {
       this.signalsCheckedText = true;
-      // console.log('you must indicate if the signals were tested or not')
     }
     if(this.incentiveDashboardForm.controls['SignalsTested'].valid) {
       this.signalsCheckedText = false;
-      // console.log('you have already indicated if the signals were tested or not')
     }
     
 
@@ -3942,12 +4012,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
       
       if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
+        //this.incentiveDashboardForm.controls['SiteVisitUpload'].valid;
+        this.incentiveDashboardForm.controls['SiteVisitUpload'].setErrors(null);
         this.customerVisitDocValidatedNonPartner = false;
       }
 
-      if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
-        this.customerVisitDocValidatedNonPartner = false;
-      }
+      // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
+      //   this.customerVisitDocValidatedNonPartner = false;
+      // }
       if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
         this.customerVisitDocValidatedNonPartner = true;
       }
@@ -4370,7 +4442,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   verifyCancelledCustomer() {
-    console.log('verifyCancelledCustomer')
     if(this.customerStatus === 'Cancel') {
       this.customerStatusValidated = true;
     }
@@ -4379,18 +4450,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.customerStatusValidated = false;
     }
   }
-
-  // validateItems() {
-  //   if(this.incentiveDashboardForm.controls['CustomerID'].valid) {
-  //     this.customerIDValidated = false;
-  //   }
-  //   if(this.incentiveDashboardForm.controls['CustomerSiteID'].valid) {
-  //     this.customerSiteIDValidated = false;
-  //   }
-  //   if(this.incentiveDashboardForm.controls['CustomerSystemID'].valid) {
-  //     this.customerSystemIDValidated = false;
-  //   }
-  // }
 
   onChangeSystemType(e) {
     console.log(e)

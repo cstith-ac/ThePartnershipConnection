@@ -65,6 +65,8 @@ export class AdmineditComponent implements OnInit {
       {
         id: "",
         email: "",
+        firstName: "",
+        lastName: "",
         password: ["", [Validators.required, Validators.minLength(6)]],
         confirmPassword: ["", Validators.required]
       },
@@ -81,13 +83,15 @@ export class AdmineditComponent implements OnInit {
   onSubmit(form: FormGroup) {
     this.submitted = true;
 
-    console.log('Password: ', form.value.password)
-    console.log('Password: ', form.value.confirmPassword)
+    console.log('First Name: ', form.value.firstName);
+    console.log('Last Name: ', form.value.lastName);
+    console.log('Password: ', form.value.password);
+    console.log('Password: ', form.value.confirmPassword);
 
     if(this.updateAspNetUserForm.invalid) {
       return;
     }
-
+    
     this.routeService.updatePassword(this.updateAspNetUserForm.value).subscribe(data => {
       //console.log(data);
       for(let key in data) {
@@ -105,7 +109,11 @@ export class AdmineditComponent implements OnInit {
       // get the response. if the response is 200 OK, show notification
       // this.flashMessage.show('Password updated successfully', {cssClass:'alert-success', timeout: 3000});
       //     this.onReset();
-    })
+    });
+
+    // this.routeService.updateUser(this.updateAspNetUserForm.value).subscribe(data => {
+    //   console.log(data)
+    // })
   }
 
   onReset() {

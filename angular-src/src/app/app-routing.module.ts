@@ -55,6 +55,7 @@ import { PartnerinvoicelistingComponent } from './components/partnerinvoicelisti
 import { TpcpartneragingreportComponent } from './components/tpcpartneragingreport/tpcpartneragingreport.component';
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
+import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -295,6 +296,11 @@ const routes: Routes = [
   {
     path: 'admin-edit/:id',
     component: AdmineditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin-edit-user/:id',
+    component: AdminedituserComponent,
     canActivate: [AuthGuard]
   },
   {

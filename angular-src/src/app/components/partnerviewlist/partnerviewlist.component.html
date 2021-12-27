@@ -59,12 +59,13 @@
                         <td>{{ item.usState }}</td>
                         <td>{{ item.primaryContact }}</td>
                         <td>
-                            <i class="pl-1" (click)="openPartnerServiceNoteModal(item.partnerCode, partnerServiceNote)">
+                            <i class="pl-1" (click)="openPartnerCustCareNoteModal(item.partnerCode, partnerCustCareNote)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-headset bi-icon-xl" viewBox="0 0 16 16">
                                     <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
                                 </svg>
                             </i>
-                            <i class="fas fa-wrench pl-2 pr-3 bi-icon" (click)="openPartnerCustCareNoteModal(item.partnerCode, partnerCustCareNote)"></i>
+                            <!-- <i class="fas fa-wrench pl-2 pr-3 bi-icon" (click)="openPartnerCustCareNoteModal(item.partnerCode, partnerCustCareNote)"></i> -->
+                            <i class="fas fa-wrench pl-2 pr-3 bi-icon" (click)="openPartnerServiceNoteModal(item.partnerCode, partnerServiceNote)"></i>
                             <i class="fas fa-exclamation bi-icon" (click)="openPartnerCriticalMessage(item.partnerCode, partnerCriticalMessage)"></i>
                         </td>
                         <td>{{ item.role }}</td>
@@ -301,11 +302,24 @@
     </div>
     <div class="modal-body">
         <div class="card">
+            <div class="card-header">
+                <div class="row mb-3">
+                    <div class="col">
+                        <h5 class="headline-5 high-emphasis">Service Note</h5>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
-                <!-- <p *ngFor="let item of partnerServiceNote; let i = index">{{ item.serviceNote }}</p> -->
-                <!-- <p>test</p> -->
-                <p>{{ partnerCode }}</p>
-                <p>{{ serviceNote }}</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="subtitle-2 medium-emphasis">{{ partnerCode }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="body-2 medium-emphasis">{{ serviceNote }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -319,9 +333,26 @@
     </div>
     <div class="modal-body">
         <div class="card">
+            <div class="card-header">
+                <div class="row mb-3">
+                    <div class="col">
+                        <h5 class="headline-5 high-emphasis">Customer Care Note</h5>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
-                <p>{{ partnerCode }}</p>
-                <p>{{ customerCareNote }}</p>
+               <div class="row">
+                   <div class="col-md-12">
+                       <p class="subtitle-2 medium-emphasis">{{ partnerCode }}</p>
+                   </div>
+               </div>
+               <div class="row">
+                   <div class="col-md-12">
+                       <p class="body-2 medium-emphasis">
+                        {{ customerCareNote }}
+                       </p>
+                   </div>
+               </div>
             </div>
         </div>
     </div>
@@ -335,9 +366,24 @@
     </div>
     <div class="modal-body">
         <div class="card">
+            <div class="card-header">
+                <div class="row mb-3">
+                    <div class="col">
+                        <h5 class="headline-5 high-emphasis">Critical Message</h5>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
-                <p>{{ partnerCode }}</p>
-                <p>{{ criticalMessage }}</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="subtitle-2 medium-emphasis">{{ partnerCode }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="body-2 medium-emphasis">{{ criticalMessage }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

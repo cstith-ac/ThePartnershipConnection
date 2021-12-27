@@ -47,9 +47,18 @@ namespace WebAPI.Controllers
             return user;
         }
 
+        //[HttpPut("{id}")]
+        //[Authorize]
+        //public IActionResult Put(int id, [FromBody] ApplicationUser applicationUser)
+        //{
+        //    var data = _context.Users.Update(applicationUser);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
+
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateUserFromAdmin(int id, ApplicationUser model)
+        public async Task<IActionResult> UpdateUserFromAdmin([FromBody] ApplicationUser model)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == model.Id);
 
@@ -62,7 +71,7 @@ namespace WebAPI.Controllers
             user.CellPhoneNumber1 = model.CellPhoneNumber1;
             user.AfaEmployee = model.AfaEmployee;
             user.AfaRole = model.AfaRole;
-            user.PasswordHash = model.PasswordHash;
+            //user.PasswordHash = model.PasswordHash;
             user.RemoveSplash = model.RemoveSplash;
 
             var result = await _userManager.UpdateAsync(user);
@@ -81,7 +90,8 @@ namespace WebAPI.Controllers
                 user.CellPhoneNumber1,
                 user.AfaEmployee,
                 user.AfaRole,
-                user.PasswordHash
+                user.RemoveSplash
+                //user.PasswordHash
             });
         }
 

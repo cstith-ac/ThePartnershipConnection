@@ -118,8 +118,13 @@ export class AdminComponent implements OnInit {
     })
   }
 
+  editCurrentUser(id:number) {
+    // console.log('edit the user ', id);
+    this.router.navigate(['admin-edit-user/'+ id]);
+  }
+
   editCurrentUserPassword(id:number) {
-    this.router.navigate(['admin-edit/'+ id])
+    this.router.navigate(['admin-edit/'+ id]);
   }
 
   editCurrentUserPermissions(e, id:number, userName:string) {

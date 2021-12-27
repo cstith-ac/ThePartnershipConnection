@@ -83,6 +83,11 @@
                               </button>
                               <button 
                                 class="btn btn-primary" 
+                                (click)="editCurrentUser(item.id)">
+                                <i class="fas fa-user pr-2"></i>Edit User
+                              </button>
+                              <button 
+                                class="btn btn-primary" 
                                 (click)="editCurrentUserPermissions($event,item.id, item.userName)">
                                 <i class="fa fa-lock pr-2"></i>Edit User Permissions
                               </button>
@@ -120,7 +125,7 @@
 <!--Settings Modal-->
 
 
-<!--begin test-->
+<!--begin Edit User Permission Modal -->
 <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" id="maxWidth-1160">
     <div class="modal-content">
@@ -356,7 +361,7 @@
     </div>
 </div>
 </div>
-<!--end test-->
+<!--end Edit User Permission Modal-->
 
 <!--Delete User Modal-->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

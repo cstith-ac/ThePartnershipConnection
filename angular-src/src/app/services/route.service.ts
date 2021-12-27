@@ -88,21 +88,29 @@ export class RouteService {
   updatePassword(resetPassord: ResetPassword):  Observable<ResetPassword>{
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', "Accept": "application/json", 'Authorization':'Bearer ' + this.authToken }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json', 
+        "Accept": "application/json", 
+        'Authorization':'Bearer ' + this.authToken 
+      }) 
     };
-    return this.http.post<ResetPassword>(this.baseUrl + '/api/Administration/ResetPassword',resetPassord , httpOptions);
+    return this.http.post<ResetPassword>(this.baseUrl + '/api/Administration/ResetPassword', resetPassord, httpOptions);
   }
 
   //This will be used in the future by an admin or super admin to update an entire profile of a user
-  // updateUser(id: number): Observable<any>{
-  //   this.loadToken();
-  //   let httpOptions = { 
-  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
-  //   };
-  //   return this.http.get<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
-  //     catchError(this.errorHandler)
-  //   )
-  // }
+  updateUser(id: number): Observable<HttpResponse<any>>{
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken 
+      }),
+      observe: 'response' as 'body'
+    };
+    return this.http.put<any>(`${this.baseUrl}/api/Administration/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
 
   getCustomerAccessList(): Observable<any> {
     this.loadToken();

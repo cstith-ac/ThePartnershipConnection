@@ -3,7 +3,7 @@
         <div class="card-header bg-white border-0">
             <div class="row align-items-center">
                 <div class="col-md-12">
-                    <h3 class="mb-0">Update {{ user.firstName }}'s Password</h3>
+                    <h3 class="mb-0">Update {{ user.firstName }}'s Profile</h3>
                 </div>
             </div>
         </div>
@@ -13,31 +13,37 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    <form [formGroup]="updateAspNetUserForm" (ngSubmit)="onSubmit(updateAspNetUserForm)">
+                    <form [formGroup]="updateAspNetUserProfileForm" (ngSubmit)="onSubmit(updateAspNetUserProfileForm)">
                         <input type="hidden" name="token" [value]="token" />
                         <input type="hidden" name="id" [value]="user.id" />
                         <input type="hidden" name="email" [value]="user.email" />
-                        <input type="hidden" name="email" [value]="user.firstName" />
-                        <input type="hidden" name="email" [value]="user.lastName" />
-                        <!-- <div class="form-group">
+                        <input type="hidden" name="firstName" [value]="user.firstName" />
+                        <input type="hidden" name="lastName" [value]="user.lastName" />
+                        <input type="hidden" name="phoneNumber" [value]="user.phoneNumber" />
+                        <input type="hidden" name="cellPhoneNumber1" [value]="user.cellPhoneNumber1" />
+                        <input type="hidden" name="altEmail" [value]="user.altEmail" />
+                        <input type="hidden" name="afaEmployee" [value]="user.afaEmployee" />
+                        <input type="hidden" name="afaRole" [value]="user.afaRole" />
+                        <input type="hidden" name="removeSplash" [value]="user.removeSplash" />
+                        <div class="form-group">
                             <label>UserName</label>
-                            <input type="text" class="form-control form-control-alternative" formControlName="userName" di />
+                            <input type="text" class="form-control form-control-alternative" formControlName="userName" />
                         </div>
                         <div class="form-group">
                             <label>Email</label>
                             <input type="text" class="form-control form-control-alternative" formControlName="email" />
-                        </div> -->
+                        </div>
 
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label>First Name</label>
                             <input type="text" class="form-control form-control-alternative" formControlName="firstName" />
                         </div>
                         <div class="form-group">
                             <label>Last Name</label>
                             <input type="text" class="form-control form-control-alternative" formControlName="lastName" />
-                        </div> -->
+                        </div>
 
-                        <!--<div class="form-group">
+                        <div class="form-group">
                             <label>Phone Number</label>
                             <input type="tel" class="form-control form-control-alternative" formControlName="phoneNumber" />
                         </div>
@@ -48,10 +54,22 @@
                         <div class="form-group">
                             <label>Alternate Email Address</label>
                             <input type="email" class="form-control form-control-alternative" formControlName="altEmail" />
-                        </div> -->
+                        </div>
+                        <div class="form-group">
+                            <label>Alarm Connections Employee</label>
+                            <input type="text" class="form-control form-control-alternative" formControlName="afaEmployee" />
+                        </div>
+                        <div class="form-group">
+                            <label>Alarm Connections Role</label>
+                            <input type="text" class="form-control form-control-alternative" formControlName="afaRole" />
+                        </div>
+                        <div class="form-group">
+                            <label>Remove Instructions</label>
+                            <input type="number" class="form-control form-control-alternative" formControlName="removeSplash" />
+                        </div>
 
                         <!--password and password confirm change-->
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Password</label>
                             <input 
                                 type="password" 
@@ -80,7 +98,7 @@
                                 Passwords must match
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-md-12">
