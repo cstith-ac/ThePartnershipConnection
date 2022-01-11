@@ -13,6 +13,7 @@ import { ContactListAdditional } from 'src/app/models/contactlistadditional';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from '../../../environments/environment';
+import { AppinsightsService } from 'src/app/services/appinsights.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -48,7 +49,8 @@ export class SidenavComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private elementRef: ElementRef,
-    private flashMessage: FlashMessagesService) { }
+    private flashMessage: FlashMessagesService,
+    private appInsights: AppinsightsService) { }
 
   ngOnInit() {
     // this.showSplash;

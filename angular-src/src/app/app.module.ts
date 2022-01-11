@@ -100,6 +100,7 @@ import { RemovewhitespacesPipe } from './_helpers/removewhitespaces.pipe';
 import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpage/partnerconnsplashpage.component';
 import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
 import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
+import { FilterPartnerviewlistPipe } from './_helpers/filter-partnerviewlist.pipe';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -172,6 +173,7 @@ import { AdminedituserComponent } from './components/adminedituser/adminedituser
     PartnerconnsplashpageComponent,
     PartnerviewlistComponent,
     AdminedituserComponent,
+    FilterPartnerviewlistPipe,
     //CustomerTestComponent
   ],
   imports: [

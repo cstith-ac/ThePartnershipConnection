@@ -5,18 +5,27 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:63052',
+  appInsights: {
+    instrumentationKey: '9e5cf497-b794-4e72-a1c6-603856eeda3b'
+  },
   appVersion: require('../../../angular-src/package.json').version + '-dev'
 };
 
 // export const environment = {
 //   production: true,
 //   baseUrl: 'https://thepartnershipconnectionapi.azurewebsites.net',
+//   appInsights: {
+//     instrumentationKey: '9e5cf497-b794-4e72-a1c6-603856eeda3b'
+//   }, 
 //   appVersion: require('../../../angular-src/package.json').version
 // };
 
 // export const environment = {
 //   production: true,
 //   baseUrl: 'https://thepartnershipconnectionapi-staging.azurewebsites.net',
+//   appInsights: {
+//     instrumentationKey: '9e5cf497-b794-4e72-a1c6-603856eeda3b'
+//   },
 //   appVersion: require('../../../angular-src/package.json').version
 // };
 

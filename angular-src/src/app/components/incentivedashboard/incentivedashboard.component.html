@@ -27,6 +27,7 @@
                         <!--CUSTOMER-->
                         <div class="form-group form-inline">
                             <label class="col-sm-2 col-form-label">Customer</label>
+                            
                             <div class="ng-autocomplete" *ngIf="!customerPreselected">
                                 <ng-autocomplete
                                     #customerRef
@@ -68,9 +69,11 @@
                                     [(ngModel)]="customer" 
                                     [ngModelOptions]="{standalone: true}">
                             </div>
+
                             <span class="ml-2" #customerSearchIcon (click)="openSearchCustomerModal(content)" *ngIf="!customerPreselected">
                                 <i class="fas fa-search"></i>
                             </span>
+
                             <span class="pl-4" (click)="routeToNewCustomer()" *ngIf="!customerPreselected">
                                 <i class="fas fa-plus-circle"></i>
                                 New Customer
@@ -461,7 +464,7 @@
                                   </div>
                                   <div class="modal-body">
                                       <div class="col">
-                                          <ol class="pl-0">
+                                          <ol class="list-group pl-0">
 
                                               <li class="mt-1 mb-1">Invoice
                                                 <span *ngIf="showInvoiceFile" class="body-2 pl-3 medium-emphasis">
@@ -702,7 +705,7 @@
                                     <div class="row">
                                         <div class="col border-right ml-2 pl-3 pr-2">
                                             <div class="form-group form">
-                                                <label class="mr-3 text-success font-weight-bold">Signals Tested!</label>
+                                                <label class="mr-2 text-success font-weight-bold">Signals Tested!</label>
                                                 <input 
                                                     type="radio" 
                                                     formControlName="SignalsTested" 
@@ -713,9 +716,9 @@
                                                 <small>I certify that all signals to and from the Central Station have been tested and the alarm system passed all of those tests.</small>
                                             </div>
                                         </div>
-                                        <div class="col pr-3 pl-2 mr-2">
+                                        <div class="col pr-3 pl-2 mr-1">
                                             <div class="form-group form">
-                                                <label class="mr-3 text-danger font-weight-bold">Not All Signals Tested!</label>
+                                                <label class="mr-2 text-danger font-weight-bold">Not All Signals Tested!</label>
                                                 <input 
                                                     type="radio" 
                                                     formControlName="SignalsTested" 
@@ -2012,7 +2015,7 @@
             <span aria-label="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body pt-0">
         <div class="card-body">
             <div class="row mb-5">
                 <div class="col-md-12">

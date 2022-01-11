@@ -39,6 +39,8 @@ export class AdminComponent implements OnInit {
   tableSizes = [5,10,15,25,50,100,150,200];
   pageSize=10;
   public value=5;
+
+  p: number = 1;
   
   id;
   userName;
@@ -57,15 +59,6 @@ export class AdminComponent implements OnInit {
   selected9: number = 0;
   selected10: number = 0;
   removeSplash: boolean = true;
-  // selected2: boolean = false;
-  // selected3: boolean = false;
-  // selected4: boolean = false;
-  // selected5: boolean = false;
-  // selected6: boolean = false;
-  // selected7: boolean = false;
-  // selected8: boolean = false;
-  // selected9: boolean = false;
-  // selected10: boolean = false;
   is3gConversion;
   isPendingCancellations;
 

@@ -2,10 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { fromEventPattern } from 'rxjs';
 import { AssistantSystems } from 'src/app/models/assistantsystems';
 import { SystemInfo } from 'src/app/models/systeminfo';
-import { CustomerContractNotes } from 'src/app/models/customercontractnotes'; 
+import { CustomerContractNotes } from 'src/app/models/customercontractnotes';
+import { CustomerContractInfo } from 'src/app/models/customercontractinfo';
 import { RouteService } from '../../services/route.service';
 import { Router } from '@angular/router';
-import { CustomerContractInfo } from 'src/app/models/customercontractinfo';
 declare var $: any;
 
 @Component({

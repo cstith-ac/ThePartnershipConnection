@@ -116,7 +116,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
         ).subscribe(data => {
           if(data.status === 200) {
             this.spinnerService.hide();
-            console.log(data.statusText)
           }
           this.partnerInvoiceListing = data.body
         },(err:HttpErrorResponse) => {
@@ -271,15 +270,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
     this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
     this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
 
-    //this.relevantMemo = relevantMemo.trim()
-    console.log(this.relevantMemo)
-    console.log(this.relevantMemo.trim());
-    console.log(relevantMemo.replace(/^\s+|\s+$/g, ''));
-
-    // for(var i = 0; i < this.partnerInvoiceListing.length; i++) {
-    //   console.log(this.partnerInvoiceListing[0].relevantMemo)
-    //   this.relevantMemo = this.partnerInvoiceListing[i].relevantMemo.trim();
-    // }
   }
 
   onOpenMessageModal() {
@@ -287,11 +277,9 @@ export class PartnerinvoicelistingComponent implements OnInit {
   }
 
   onSubmitMessage(form: FormGroup) {
-    // console.log(this.partnerInvoiceListingForm.value);
 
     this.routeService.postPartnerAddNote(this.partnerInvoiceListingForm.value).subscribe(
       res => {
-        //console.log(res)
         $("#detailsModal").modal("hide");
         $("#memoModal").modal("hide");
       },

@@ -73,17 +73,6 @@ namespace WebAPI.Repository
                 }
                 var file_dataParam = new SqlParameter("@file_data", SqlDbType.Image, customer_Document_ADDED.file_data.Length);
                 file_dataParam.Value = customer_Document_ADDED.file_data;
-                //var file_dataParam = new SqlParameter("@file_data", customer_Document_ADDED.file_data);
-
-                //cmd.Parameters.Add("@file_data", SqlDbType.Binary).Value = file_dataParam;
-                //cmd.Parameters.AddWithValue("@file_data", SqlDbType.Image).Value = file_dataParam;
-
-                //using (var memoryStream = new MemoryStream())
-                //{
-                //    await file_dataParam
-                //}
-
-                //file_dataParam.SqlDbType = SqlDbType.Image;
 
                 // define the output parameter that needs to be retained
                 // for the Id created when the Stored Procedure executes 

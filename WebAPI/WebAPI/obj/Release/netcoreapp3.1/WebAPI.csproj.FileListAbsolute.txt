@@ -60,8 +60,6 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\runt
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.csprojAssemblyReference.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.AssemblyInfoInputs.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.AssemblyInfo.cs
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.csproj.CoreCompileInputs.cache
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.RazorTargetAssemblyInfo.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.csproj.CopyComplete
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\staticwebassets\WebAPI.StaticWebAssets.Manifest.cache
@@ -70,3 +68,15 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebA
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.pdb
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.genruntimeconfig.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-staging - Web Deploy\profile.arm.json
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.ApplicationInsights.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.ApplicationInsights.AspNetCore.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.AI.DependencyCollector.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.AI.EventCounterCollector.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.AI.WindowsServer.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.ApplicationInsights.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.csproj.CoreCompileInputs.cache
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Release\netcoreapp3.1\WebAPI.MvcApplicationPartsAssemblyInfo.cache

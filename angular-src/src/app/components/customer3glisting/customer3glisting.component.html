@@ -48,37 +48,24 @@
         title="Alarm Account" 
         [style]="{color: '#ca5856'}">
       </kendo-grid-column>
-      <!-- <kendo-grid-column field="alarm_Account" title="Alarms Account">
-        <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-          {{column.field}}({{columnIndex}})
-        </ng-template>
-      </kendo-grid-column> -->
       <kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
       <kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
       <kendo-grid-column field="customerType" title="Customer Type"></kendo-grid-column>
       <kendo-grid-column field="siteName" title="Site Name"></kendo-grid-column>
-      <!-- <kendo-grid-column field="site_Number" title="Site Number"></kendo-grid-column> -->
       <kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
-      <!-- <kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column> -->
       <kendo-grid-column field="city" title="City"></kendo-grid-column>
       <kendo-grid-column field="state" title="State"></kendo-grid-column>
       <kendo-grid-column field="zipCode" title="Zip Code"></kendo-grid-column>
       <kendo-grid-column field="panel_Type_Code" title="Panel Type"></kendo-grid-column>
-      <!-- <kendo-grid-column field="panel_Location" title="Panel Location"></kendo-grid-column> -->
       <kendo-grid-column field="system_Code" title="System Type"></kendo-grid-column>
       <kendo-grid-column field="cellType" title="Cell Type"></kendo-grid-column>
       <kendo-grid-column field="cellGeneration" title="Cell Generation"></kendo-grid-column>
       <kendo-grid-column field="cellModel" title="Cell Model"></kendo-grid-column>
       <kendo-grid-column field="carrier" title="Carrier"></kendo-grid-column>
-      <!-- <kendo-grid-column field="offer1" title="Offer 1"></kendo-grid-column>
-      <kendo-grid-column field="offer2" title="Offer 2"></kendo-grid-column>
-      <kendo-grid-column field="offer3" title="Offer 3"></kendo-grid-column>
-      <kendo-grid-column field="offer4" title="Offer 4"></kendo-grid-column> -->
       <kendo-grid-column field="rmrAtCustomer" title="Customer RMR" format="{0:c}"></kendo-grid-column>
-      <!-- <kendo-grid-column field="rmrAtSite" title="RMR At Site"></kendo-grid-column>
-      <kendo-grid-column field="rmrAtSystem" title="RMR At System"></kendo-grid-column> -->
     </kendo-grid-column-group>
-    <kendo-grid-excel fileName="customer3glisting"></kendo-grid-excel>
+    <kendo-grid-excel fileName="customer3glisting" [fetchData]="allData">
+    </kendo-grid-excel>
     </kendo-grid>
   </div>
 </div>

@@ -98,6 +98,8 @@ namespace WebAPI
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
+            services.AddApplicationInsightsTelemetry();
+
             //OLD Cors Policy
             //services.AddCors();
 

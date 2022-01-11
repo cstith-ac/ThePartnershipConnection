@@ -4085,20 +4085,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
 
     if(this.user.afaRole === 5) {
-      if(this.contractUpload) {
-        this.contractDocValidated = false;
-      }
+      // if(this.contractUpload) {
+      //   this.contractDocValidated = false;
+      // }
   
       this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-        // console.log(element)
-        // console.log(element.ItemID)
         if(element.ItemID === 0) {
-          // console.log('Display the validation text. The partner has not manually entered a recurring item');
           this.contractDocValidated = false;
         }
         if(element.ItemID !== 0) {
-          // console.log('Remove the validation text. The partner has manually entered a recurring item');
           this.contractDocValidated = true;
+
+          if(this.contractUpload) {
+            this.contractDocValidated = false;
+          }
         }
       });
     }

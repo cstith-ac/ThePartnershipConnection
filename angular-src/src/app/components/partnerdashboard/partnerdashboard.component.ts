@@ -277,20 +277,14 @@ export class PartnerdashboardComponent implements OnInit {
 
       this.authService.getProfile().pipe(
         mergeMap((res:any) => this.routeService.getPartnerLandingPageX(res.userName, this.sedonaContactEmail))
-        ).subscribe(data => {
-          if(data.status === 200) {
+        ).subscribe(res => {
+          if(res.status === 200) {
             this.spinnerService.hide()
-            // this.flashMessage.show('Your requested data is displayed below', {
-            //   cssClass: 'text-center alert-success',
-            //   timeout: 2000
-            // });
-            console.log(data.statusText)
+            console.log(res.statusText)
           }
-          // this.partnerLandingPageX = data.body
-          this.partnerLandingPage = data.body
-          this.firstName = this.sedonaContactEmail // use this or...
-          // this.firstName = this.partnerName;  // use this
-          // console.log(data.body)
+          // this.partnerLandingPageX = res.body
+          this.partnerLandingPage = res.body
+          this.firstName = this.sedonaContactEmail 
 
           for(var i = 0; i < this.partnerLandingPage.length; i++) {
             console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
@@ -314,30 +308,14 @@ export class PartnerdashboardComponent implements OnInit {
             }
           }
 
-          // setTimeout(() => {
-          //   for(var i = 0; i < this.partnerLandingPage.length; i++) {
-          //     this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
-          //     this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
-          //     this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
-          //     console.log(typeof this.attritionValue)//number
-          //     console.log('alias')
-    
-          //     this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
-          //     this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
-    
-          //     if(this.partnerLandingPage[i].highRMRCancelPerson == "") {
-          //       console.log("nothing here")
-          //     }
-          //   }
-          //   console.log(this.attritionValue)
-          // }, 2000);
-
           },(err:HttpErrorResponse) => {
             this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
               cssClass: 'text-center alert-danger',
               timeout: 5000
             });
             this.spinnerService.hide();
+            localStorage.clear();
+            this.router.navigate(['/login'])
           }
       )
     } 

@@ -38,6 +38,8 @@ export class PartnerviewlistComponent implements OnInit {
   pageSize=10;
   collectionSize: number;
 
+  p: number = 1;
+
   partnerCode;
   sedonaContactEmail;
   partnerName;

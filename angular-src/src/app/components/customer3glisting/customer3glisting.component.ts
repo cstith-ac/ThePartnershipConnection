@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 declare var $: any;
 import { mergeMap, switchMap } from 'rxjs/operators';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 @Component({
   selector: 'app-customer3glisting',
@@ -105,6 +106,7 @@ export class Customer3glistingComponent implements OnInit {
     public permissionService: PermissionsService
   ) { 
     this.gridData = this.customer3gListing;
+    this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
@@ -192,32 +194,6 @@ export class Customer3glistingComponent implements OnInit {
         }
       )
     }
-    // Query permission for exportToExcel
-    // use SwitchMap to get profile then permissions user map
-    // this.authService.getProfile().pipe(
-    //   mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
-    // ).subscribe(data => {
-    //   console.log(data)
-    //   this.permissionsUserMap = data;
-
-    //   //show/hide card or card and button base on hasPermission value of Y or N
-    //   for(let i = 0; i < this.permissionsUserMap.length; i++) {
-    //     if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       console.log('this works')
-    //       this.hide3GExcelExport = true;
-    //     }
-    //   }
-    // })
-
-    // this.routeService.getCustomer3GListing().subscribe(
-    //   res => {
-    //     if(res) {
-    //       this.spinnerService.hide()
-    //     }
-    //     this.gridData = res;
-        
-    //   }
-    // )
 
     this.customer3gListingForm = this.fb.group({
       EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
@@ -417,6 +393,15 @@ export class Customer3glistingComponent implements OnInit {
 
   public mySelection: number[] = [];
 
+  public allData(): ExcelExportData {
+    const result: ExcelExportData = {
+      data: process(this.gridData, {
+      }).data
+    };
+
+    return result;
+  }
+
   onOpenDetails3gModal(e,customer_System_Id: number) {
     $("#details3gModal").modal("show");
 
@@ -493,7 +478,6 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   onSubmit3gListingMessage(form: FormGroup) {
-    //console.log(this.customer3gListingForm.value)
     this.routeService.postPartnerAddNote(this.customer3gListingForm.value).subscribe(
       res => {
         $("#details3gModal").modal("hide");
@@ -501,9 +485,5 @@ export class Customer3glistingComponent implements OnInit {
       }
     )
   }
-
-  // private mySelectionKey(context: RowArgs): string {
-  //   return context.dataItem.ProductName + " " + context.index;
-  // }
   
 }

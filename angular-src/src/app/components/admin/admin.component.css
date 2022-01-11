@@ -194,4 +194,11 @@ input:checked + .noPermission:before {
     border-radius: .375rem;
     background-color: ghostwhite;
 }
-  
+.pt-26 {
+    padding-top: 26px;
+}
+.list-group-item {
+    background-color: transparent;
+    border-top: 1px solid #ddd;
+    border-radius: 0;
+}

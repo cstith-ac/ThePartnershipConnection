@@ -1,44 +1,76 @@
 <div class="pr-5 pl-5 row">
   <div class="col-xl-12">
       <div class="card bg-secondary shadow">
-          <div class="card-header bg-white border-0">
+          <!-- <div class="card-header bg-white border-0">
               <div class="row align-items-center">
                   <div class="col-md-12">
                       <h3>Admin/SuperAdmin Dashboard</h3>
                   </div>
               </div>
-          </div>
+          </div> -->
           <div class="card-body">
               <div class="row">
-                  <div class="col-md-12">
-                      <ul class="list-group">
-                          <li class="list-group-item">Only an admin or super admin can access this dashboard.</li>
-                          <li class="list-group-item">Click the Edit User Password button to update a password</li>
-                      </ul>
-                  </div>
+                <div class="col card m-2 p-2">
+                  <h3>Admin/SuperAdmin Dashboard</h3>
+                </div>
+                <div class="col card m-2 p-2">
+                  <h3>Only an admin or super admin can access this dashboard.</h3>
+                </div>
+                <div class="col card m-2 p-2">
+                  <h3>Click <i class="fa fa-key pl-1"></i> Edit User Password to update a password.</h3>
+                  <h3>Click <i class="fas fa-user pl-1"></i> Edit User Password to update a user.</h3>
+                  <h3>Click <i class="fa fa-lock pl-1"></i> Edit User Permissions to update user permissions.</h3>
+                </div>
+                <!-- <div class="col-md-12">
+                    <ul class="list-group">
+                        <li class="list-group-item pl-0">Only an admin or super admin can access this dashboard.</li>
+                        <li class="list-group-item pl-0">Click the Edit User Password button to update a password</li>
+                    </ul>
+                </div> -->
               </div>
               
+              <!-- <div class="row">
+                <div class="form-inline float-left pl-3 mr-auto">
+                  <label>Search by typing a Username:</label>
+                  <input 
+                    type="text" 
+                    class="form-control ml-2"
+                    [(ngModel)]="searchTerm"
+                    placeholder="John Doe">
+                </div>
+              </div> -->
             <div class="row">
-                <div class="col-md-12 pl-0 mt-2">
+                <div class="col-md-12 pl-0">
+                  
                   <form [formGroup]="adminUserSearchForm">
+                    <!-- <div class="form-inline float-left pl-3 mr-auto">
+                      <label>Search by typing a Username:</label>
+                      <input 
+                        type="text" 
+                        class="form-control ml-2"
+                        [(ngModel)]="searchTerm"
+                        placeholder="John Doe">
+                    </div> -->
                     <div class="form-group">
-                      <div class="d-flex bd-highlight mb-2">
-                        <div class="form-inline float-left pl-3 mr-auto">
+                      <div class="form-inline float-left pl-3 mr-auto">
+                        <label>Search by typing a Username:</label>
+                        <input 
+                          type="text" 
+                          class="form-control ml-2"
+                          [(ngModel)]="searchTerm"
+                          formControlName="SearchTerm"
+                          placeholder="John Doe"
+                        >
+                      </div>
+                      <div class="d-flex bd-highlight mb-2 float-right">
+                        <!-- <div class="form-inline float-left pl-3 mr-auto">
                           <label>Search by typing a Username:</label>
                           <input 
-                              placeholder="Click clear to reset the list"
-                              type="text" 
-                              class="form-control ml-2" 
-                              name="searchTerm" 
-                              [(ngModel)]="searchTerm" 
-                              formControlName="SearchTerm"
-                              (input)="search($event.target.value)"
-                              (change)="onChangeClearSearch($event)"
-                          >
-                          <div class="bd-highlight pl-3">
-                            <button class="btn btn-primary" (click)="clearSearch()">Clear</button>
-                          </div>
-                        </div>
+                            type="text" 
+                            class="form-control ml-2"
+                            [(ngModel)]="searchTerm"
+                            placeholder="John Doe">
+                        </div> -->
                         <div class="p-2 bd-highlight pr-4">
                           <button class="btn btn-primary" (click)="exportToExcel()">Export to Excel</button>
                         </div>
@@ -70,11 +102,11 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let item of allUsers | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                          <tr *ngFor="let item of allUsers | filterAdmin:searchTerm | paginate: { itemsPerPage: 10, currentPage: p }">
                             <!-- <th scope="row">{{item.id}}</th> -->
-                            <td>{{ item.userName }}</td>
-                            <td>{{ item.firstName }}</td>
-                            <td>{{ item.lastName }}</td>
+                            <td class="pb-0 pt-26">{{ item.userName }}</td>
+                            <td class="pb-0 pt-26">{{ item.firstName }}</td>
+                            <td class="pb-0 pt-26">{{ item.lastName }}</td>
                             <td class="float-right">
                               <button 
                                 class="btn btn-primary" 
@@ -98,7 +130,11 @@
                           </tr>
                         </tbody>
                       </table>
-                      <ngb-pagination
+                      <div class="mt-3">
+                        <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+                      </div>
+                      <!-- <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls> -->
+                      <!-- <ngb-pagination
                           [collectionSize]="allUsers?.length"
                           [(page)]="page" 
                           [maxSize]="5" 
@@ -106,7 +142,8 @@
                           [ellipses]="false" 
                           [boundaryLinks]="true"
                           class="d-flex justify-content-center mt-5">
-                      </ngb-pagination>
+                      </ngb-pagination> -->
+
                       <!-- <div class="d-flex justify-content-center">
                         <pagination-controls  
                           previousLabel="Prev" 

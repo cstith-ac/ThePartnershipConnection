@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { SystemInfo } from 'src/app/models/systeminfo';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { SystemInfo } from 'src/app/models/systeminfo';
 import { ServiceTicketNotes } from 'src/app/models/serviceticketnotes';
 declare var $: any;
 
@@ -34,7 +36,11 @@ export class SysteminfodetailComponent implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    private routeService: RouteService) { 
+    public jwtHelper: JwtHelperService,
+    private spinnerService: NgxSpinnerService,
+    private routeService: RouteService,
+    private router: Router
+  ) { 
     this.route.params.subscribe(res => {
       this.id = res['id'];
       this.routeService.getCustomerSystemInfo(this.id).subscribe(
@@ -43,10 +49,21 @@ export class SysteminfodetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    //console.log('hello')
+
+    if(this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.router.navigate(["login"]);
+    } else {
+      //console.log('your logged in')
+    }
+
+    this.spinnerService.show();
     this.routeService.getCustomerSystemInfo(this.id).subscribe(
       res => {
-        //console.log(res.lastServiceTicketID)
+        if(res) {
+          this.spinnerService.hide();
+        }
         this.lastServiceTicketId = res.lastServiceTicketID;
       }
     )

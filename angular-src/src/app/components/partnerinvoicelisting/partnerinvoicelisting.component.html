@@ -26,7 +26,7 @@
                       <!-- <td scope="row" >{{ item.incentiveID }}</td> -->
                       <td id="{{ item.incentiveID }}" class="hyperlink" (click)="onOpenPartnerInvoiceListingModal(item.ticketID, item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber, item.csAccount)">{{ item.vendorInvoiceNumber }}</td>
                       <td>{{ item.invoiceDate }}</td>
-                      <td>${{ item.invoiceAmount }}</td>
+                      <td>{{ item.invoiceAmount | currency }}</td>
                       <td>{{ item.customer_Number }}</td>
                       <td>{{ item.customer_Name }}</td>
                       <td>{{ item.ticketNumber }}</td>
@@ -63,7 +63,6 @@
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-12 mb-2">
-                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -121,7 +120,7 @@
                                     <span class="subtitle-2 high-emphasis">Amount Submitted</span>
                                 </p>
                                 <p>
-                                    <span class="body-2 medium-emphasis">${{ invoiceAmount }}</span>
+                                    <span class="body-2 medium-emphasis">{{ invoiceAmount | currency }}</span>
                                 </p>
                                 <p class="mb-0">
                                     <span class="subtitle-2 high-emphasis">Processing Status</span>
@@ -151,7 +150,7 @@
                                     <span class="subtitle-2 high-emphasis">Credit Amount Taken</span>
                                 </p>
                                 <p>
-                                    <span class="body-2 medium-emphasis">{{ creditAmount }}</span>
+                                    <span class="body-2 medium-emphasis">{{ creditAmount | currency }}</span>
                                 </p>
                             </div>
                             <div class="col">
@@ -173,7 +172,7 @@
                                     <span class="subtitle-2 high-emphasis">Amount Paid</span>
                                 </p>
                                 <p>
-                                    <span class="body-2 medium-emphasis">{{ amountPaid }}</span>
+                                    <span class="body-2 medium-emphasis">{{ amountPaid | currency }}</span>
                                 </p>
                             </div>
                         </div>
