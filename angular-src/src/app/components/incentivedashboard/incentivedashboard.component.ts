@@ -1690,6 +1690,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                     this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
                     this.systemTypeID = this.listSystemsForSite[i].systemType;
                     this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+                    // if the user manually enters a customer number, the CustomerSystemID in the form needs to be assigned the set value for customer_System_id
+                    this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id)
 
                     this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
                       res => {
@@ -1891,7 +1893,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.customer = selectedCustomerNumber + ' - ' + selectedCustomerName;
     this.id = selectedCustomerid;
-    this.incentiveDashboardForm.get("CustomerID").setValue(this.customer);
+    this.incentiveDashboardForm.get("CustomerID").setValue(this.customer); // this is setting and passing the value 1234-5 John Doe, for example
 
     this.modalService.dismissAll();
 
@@ -2178,33 +2180,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     } else {
       // console.log('@CustomerSystemID:' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
     }
-    // console.log('@CustomerSystemID :' + parseInt(form.value.CustomerSystemID)) // @CustomerSystemID Int,
-    // console.log('@AlarmAccount:' +form.value.AlarmAccount) // @AlarmAccount NVarChar(50),
-    // console.log('@SystemTypeID:' + parseInt(form.value.SystemTypeID)) // @SystemTypeID Int,
     if(localStorage.getItem('panel_Type_Id')) {
       this.panelTypeID = localStorage.getItem('panel_Type_Id')
       // console.log('@PanelTypeID:' + this.panelTypeID)
     } else {
       // console.log('@PanelTypeID:' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
     }
-    // console.log('@PanelTypeID :' + parseInt(form.value.PanelTypeID)) // @PanelTypeID Int,
-    // console.log('@PanelLocation:' + form.value.PanelLocation) // @PanelLocation NVarChar(50),
     if(localStorage.getItem('central_Station_ID')) {
       this.centralStationID = localStorage.getItem('central_Station_ID')
       // console.log('@CentralStationID:' + this.centralStationID)
     } else {
       // console.log('@CentralStationID:' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
     }
-    // console.log('@CentralStationID :' + parseInt(form.value.CentralStationID)) // @CentralStationID Int,
-    // console.log('@AdditionalInfo:' + form.value.AdditionalInfo) // @AdditionalInfo NVarChar(255),
-    // console.log('@PartnerInvoiceNumber:' + form.value.PartnerInvoiceNumber) // @PartnerInvoiceNumber NVarChar(30),
-    // console.log('@PartnerInvoiceDate:' + form.value.PartnerInvoiceDate) // @PartnerInvoiceDate DateTime,
-    // console.log('@ContractDate:' + form.value.ContractDate) // @ContractDate DateTime,
-    // console.log('@ContractTerm:' + parseInt(form.value.ContractTerm)) // @ContractTerm Int,
-    // console.log('@RenewalMonths:' + parseInt(this.renewalMonths));
-    // console.log('@ServiceIncluded:' + form.value.ServiceIncluded);
-    // console.log('@EnrollInEmailInvoices: '+ form.value.EnrollInEmailInvoices);
-    // console.log('@PartnerComments:' + form.value.PartnerComments) // @PartnerComments NVarChar(1024)
 
     // //Replaces CustomerID with customer_id from the database instead of the customer_Name
     // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id);
@@ -2212,7 +2199,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(localStorage.getItem('customer_Id')) {
       this.incentiveDashboardForm.controls["CustomerID"].setValue(parseInt(this.customer_id));
     } else {
-      this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer_id); //other way breaks if customer pre-selected
+      this.incentiveDashboardForm.controls["CustomerID"].setValue(this.id)
+      // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer_id); //other way breaks if customer pre-selected
     }
     if(localStorage.getItem('customer_Site_Id')) {
       this.incentiveDashboardForm.controls["CustomerSiteID"].setValue(parseInt(this.customer_Site_id))
