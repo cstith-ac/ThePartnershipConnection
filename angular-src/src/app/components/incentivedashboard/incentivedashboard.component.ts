@@ -1237,6 +1237,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(this.panelTypeID)
     console.log(typeof this.panelTypeID)
 
+    localStorage.removeItem('panelType');
+    this.panelTypeID = Number(e.target.value);
+
     // if(this.panelTypeID === 675) {
     //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
     //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
@@ -1256,7 +1259,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // this.incentiveDashboardForm.controls['PanelTypeID'].valueChanges.subscribe(
     //   res => {
     //     console.log(res)
-    //     this.panelTypeID = res;
+    //     //this.panelTypeID = res;
     //   }
     // ) 
 
@@ -1267,10 +1270,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeGetCentralStation(e) {
-    // console.log(e)
-    // console.log(e.target.value)
-    // console.log(typeof e.target.value)
-    // console.log(e.target.value.substring(3)) //++
     localStorage.removeItem('central_Station_ID');
     localStorage.removeItem('centralStation');
     this.centralStationID = parseInt(e.target.value.substring(3))

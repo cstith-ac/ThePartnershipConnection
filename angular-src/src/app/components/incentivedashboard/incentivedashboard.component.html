@@ -6,14 +6,6 @@
         <div class="row ml-0">
             <div class="col-md-12">
                 <div class="row">
-                    <!-- <div class="col-md-5">
-                        <h1 class="incentive-header">Invoice Entry | 
-                            <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
-                        </h1>
-                    </div>
-                    <div class="col-md-7">
-                        <p class="text-error" (click)="openRequiredItemsModal(required)"><i class="fas fa-exclamation-triangle pr-2"></i>The following items are Required</p>
-                    </div> -->
                     <h1 class="incentive-header">Invoice Entry | 
                         <span class="company text-error">{{ companyName }} - {{ partnerCode }}</span>
                     </h1>
@@ -59,7 +51,6 @@
                                 <div class="mt-1">
                                     <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small>
                                 </div>
-                                <!-- <small class="text-error mt-5" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small> -->
                             </div>
                             <div *ngIf="customerPreselected">
                                 <input  
@@ -79,7 +70,6 @@
                                 New Customer
                             </span>
                         </div>
-                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">Please enter or select the customer.</small> -->
                         
                         <!--SITE-->
                         <div class="form-group form-inline mb-0" [ngStyle]="{marginTop: '1.5rem'}">
@@ -114,7 +104,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerSiteID').errors && this.incentiveDashboardForm.get('CustomerSiteID').hasError('required') && this.customerIDValidated">* Please enter or select the site.</small> -->
                             </div>
                             
                             <span class="ml-2" #siteSearchIcon (click)="openSearchSiteModal(site)">
@@ -125,7 +114,6 @@
                                 New Site
                             </span>
                         </div>
-                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerSiteID').errors && this.incentiveDashboardForm.get('CustomerSiteID').hasError('required') && this.customerIDValidated">Please enter or select the site.</small> -->
                         
                         <!--SYSTEM-->
                         <div class="form-group form-inline mb-0 mt-3">
@@ -158,7 +146,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerSystemID').errors && this.incentiveDashboardForm.get('CustomerSystemID').hasError('required') && this.customerSystemIDValidated">* Please enter or selected the system. Check the "New System" box if this is a new system.</small> -->
                             </div>
                             
                             <span class="ml-2" #systemSearchIcon (click)="openSearchSystemModal(system)">
@@ -176,12 +163,10 @@
                                 class="col-sm-2 col-form-label form-check-label" #newSystemDisplayLabel
                             >This is a new system</label>
                         </div>
-                        <!-- <small class="text-error ml-5" *ngIf="this.incentiveDashboardForm.get('CustomerSystemID').errors && this.incentiveDashboardForm.get('CustomerSystemID').hasError('required') && this.customerSystemIDValidated">Please enter or selected the system. Check the "New System" box if this is a new system.</small> -->
 
                         <div class="form-group form-inline" *ngIf="ticket_NumberPreSelected">
                             <label class="col-sm-2 col-form-label">Alarm Connections Ticket #</label>
                             <input readonly type="text" class="form-control col-sm-5" placeholder="..." formControlName="TicketNumber">
-                            <!-- <input type="text" class="form-control col-sm-5" placeholder="12345"> -->
                         </div>
 
                         <div class="form-group form-inline mb-0">
