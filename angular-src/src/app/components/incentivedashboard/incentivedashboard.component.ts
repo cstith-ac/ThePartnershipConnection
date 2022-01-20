@@ -3578,7 +3578,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.get('entryRowsRecurring').value))
     
-    this.modalService.dismissAll()
+    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+
+    this.modalService.dismissAll();
   }
 
   initEntryRow() {
@@ -3697,6 +3699,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
     localStorage.setItem('equipmatentry', JSON.stringify(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value));
 
+    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+
     this.modalService.dismissAll();
   }
 
@@ -3780,6 +3784,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.laborCharges=this.totalSumLaborCharges;
 
     localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges').value));
+
+    this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
     this.modalService.dismissAll();
   }

@@ -580,7 +580,7 @@
                                     <div class="">
                                         <label class="col-form-label">Tax</label>
                                         <kendo-numerictextbox
-                                            format="n2"
+                                            format="c2"
                                             [value]="partnerTaxAmount"
                                             [spinners]="false"
                                             placeholder="$0.00"
@@ -639,7 +639,14 @@
                                 <div class="form-group form-inline">
                                     <label class="col-sm-6 col-form-label pl-0 display-contents">Line Items &amp; Tax Subtotal</label>
                                     <div class="input-group col-sm-5 ml-auto">
+                                        <!-- <input 
+                                            type="number" 
+                                            formControlName="LineItemSubtotal"
+                                            [(ngModel)]="lineItemSubtotal"
+                                        > -->
+                                        <p class="lineItemSubtotal">{{ lineItemSubtotal | currency }}</p>
                                         <kendo-numerictextbox
+                                            class="d-none"
                                             format="c2"
                                             [value]="lineItemSubtotal"
                                             formControlName="LineItemSubtotal"
