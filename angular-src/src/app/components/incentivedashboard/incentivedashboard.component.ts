@@ -1592,7 +1592,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(e.target.value === todaysDateString) {
       console.log('you selected today\'s date')
-      this.contractInPresentOrFutureValidated = true;
+      // this.contractInPresentOrFutureValidated = true;
+      this.contractInPresentOrFutureValidated = false;
     }
 
     if(e.target.value > todaysDateString) {
@@ -1603,6 +1604,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(e.target.value < todaysDateString) {
       console.log('the selected date is in the past')
       console.log(todaysDateString)
+      this.contractInPresentOrFutureValidated = false;
       // this.contractInPastValidated = true;
       // if the entered contract start date is greater than 3 months in the past
     }
@@ -3729,7 +3731,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(i == 0) {
       const controlArray = <FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat');
-      controlArray.at(i).get('ItemID').setValue('');
+      controlArray.at(i).get('ItemID').setValue(0);
       controlArray.at(i).get('Description').setValue('');
       controlArray.at(i).get('Quantity').setValue('');
       controlArray.at(i).get('Cost').setValue('');
@@ -4019,16 +4021,38 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
 
     if(this.user.afaRole === 5) {
-      if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
-        this.customerVisitDocValidated = false;
-      }
+      // if there is a recurring item, require a customer visit form
+      // if there isn't a recurring item, do not require a customer visit form
+      // if the recurring item was add and then removed, do not require a customer visit form
+      // are ItemID 610 or 635 present?
+
+      this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+        if(element.ItemID === 610 || element.ItemID === 635) {
+          this.customerVisitDocValidated = true;
+
+          if(this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+            this.customerVisitDocValidated = true;
+          }
+
+        }
+        if(element.ItemID === 0) {
+          this.customerVisitDocValidated = false;
+        }
+      })
+      // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+      //   this.customerVisitDocValidated = true;
+      // }
+
+      // if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
+      //   this.customerVisitDocValidated = false;
+      // }
 
       if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
         this.customerVisitDocValidated = false;
       }
-      if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-        this.customerVisitDocValidated = true;
-      }
+      // if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+      //   this.customerVisitDocValidated = true;
+      // }
     }
 
     // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
@@ -4049,22 +4073,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   verifyContractDoc() {
     // if add rmr (modal) has more than 1 recurring item
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
-
-    // if no items are added to Add RMR, the Contract Doc will remain not a required item to submit an invoice
-    // if(controlArray.length < 1) {
-    //   // make the Contract Doc a not required item to submit the invoice
-    //   // this.contractDocValidated = false;
-    //   if(this.contractUpload === null) {
-    //     this.contractDocValidated = false;
-    //   }
-    // }
-
-    // if more at least 1 item is added to Add RMR, the Contract Doc will become a required item to submit an invoice
-    // if(controlArray.length > 1) {
-    //   this.contractDocValidated = true;
-    //   this.incentiveDashboardForm.get("ContractUpload").setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls["ContractUpload"].updateValueAndValidity();
-    // }
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
       this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
