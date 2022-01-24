@@ -101,9 +101,19 @@ import { PartnerconnsplashpageComponent } from './components/partnerconnsplashpa
 import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
 import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
 import { FilterPartnerviewlistPipe } from './_helpers/filter-partnerviewlist.pipe';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "$",
+  suffix: "",
+  thousands: ","
+};
 
 @NgModule({
   declarations: [
@@ -205,9 +215,10 @@ import { FilterPartnerviewlistPipe } from './_helpers/filter-partnerviewlist.pip
     ExcelModule,
     UploadModule,
     AutocompleteLibModule,
-    AvatarModule
+    AvatarModule,
+    CurrencyMaskModule
   ],
-  providers: [ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
+  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}, ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

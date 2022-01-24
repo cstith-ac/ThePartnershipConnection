@@ -92,13 +92,25 @@
                 <div class="invoice-col">
                     <div class="form-group">
                         <label class="mr-2">Invoice Total</label>
-                        <kendo-numerictextbox
+                        <!-- <input 
+                            currencyMask 
+                            formControlName="InvoiceTotal"
+                        > -->
+                        <input 
+                            currencyMask 
+                            [(ngModel)]="invoiceTotalIE"
+                            formControlName="InvoiceTotal"
+                             (keyup)="getInvoiceTotal($event)"
+                            
+                        >
+                        <!-- <kendo-numerictextbox
                             format="c2"
-                            [value]="value"
+                            [value]="invoiceTotalIE"
                             placeholder="$0.00"
                             formControlName="InvoiceTotal"
                             [spinners]="false"
-                        ></kendo-numerictextbox>
+                            (keyup)="getInvoiceTotal($event)"
+                        ></kendo-numerictextbox> -->
                     </div>
                 </div>
             </div>

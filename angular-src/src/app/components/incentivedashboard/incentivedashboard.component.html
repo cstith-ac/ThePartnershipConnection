@@ -560,23 +560,28 @@
                                     <!-- <label class="col-form-label">Total</label> -->
                                     <div class="">
                                         <label class="col-form-label">Total</label>
-                                        <kendo-numerictextbox
+                                        <input 
+                                            currencyMask
+                                            class="invoiceTotalInput"
+                                            [(ngModel)]="invoiceTotal"
+                                            formControlName="InvoiceTotal"
+                                        >
+                                        <!-- <kendo-numerictextbox
                                             format="c2"
                                             [value]="invoiceTotal"
+                                            formControlName="InvoiceTotal"
                                             [spinners]="false"
                                             placeholder="$0.00"
                                             [style.height]="'calc(1.5em + 1.3rem)'"
                                             [style.width]="'80%'"
                                             (keyup)="onChangeInvoiceTotal($event)"
                                             title="Total"
-                                        ></kendo-numerictextbox>
+                                        ></kendo-numerictextbox> -->
                                     </div>
-                                    <!-- <small class="text-error" *ngIf="invoiceTotalValidated">* The entered total does not match the sum of the item subtotal plus the tax.</small> -->
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <!-- <label class="col-form-label">Tax</label> -->
                                     <div class="">
                                         <label class="col-form-label">Tax</label>
                                         <kendo-numerictextbox
@@ -593,7 +598,6 @@
                                             [style.width]="'80%'"
                                         ></kendo-numerictextbox>
                                     </div>
-                                    <!-- <small class="text-error" *ngIf="invoiceTotalValidated">* The entered total does not match the sum of the item subtotal plus the tax.</small> -->
                                 </div>
                             </div>
                             
@@ -639,11 +643,6 @@
                                 <div class="form-group form-inline">
                                     <label class="col-sm-6 col-form-label pl-0 display-contents">Line Items &amp; Tax Subtotal</label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <!-- <input 
-                                            type="number" 
-                                            formControlName="LineItemSubtotal"
-                                            [(ngModel)]="lineItemSubtotal"
-                                        > -->
                                         <p class="lineItemSubtotal">{{ lineItemSubtotal | currency }}</p>
                                         <kendo-numerictextbox
                                             class="d-none"

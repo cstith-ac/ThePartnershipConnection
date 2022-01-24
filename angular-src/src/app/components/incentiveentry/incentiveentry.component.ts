@@ -56,6 +56,8 @@ export class IncentiveentryComponent implements OnInit {
   invoiceNumber;
   invoiceDate;
   invoiceTotal;//currencypipe
+  invoiceTotalIE;
+  options;
 
   customerVisit: '';
   contractResign: '';
@@ -352,7 +354,21 @@ export class IncentiveentryComponent implements OnInit {
   transformAmount(element) {
     this.invoiceTotal = this.currencyPipe.transform(this.invoiceTotal, '$');
 
-    element.target.value = this.invoiceTotal;
+    this.invoiceTotal = element.target.value;
+  }
+
+  getInvoiceTotal(e) {
+    console.log(e.target.value) //string
+    // const total = e.target.value;
+
+    // let dollarUSLocale = Intl.NumberFormat('en-US');
+    // let x = dollarUSLocale.format(parseFloat(total));
+    // let value = Number(x.replace(/[^0-9.-]+/g,""));
+    // console.log(value.toFixed(2))
+    // this.invoiceTotalIE = value.toFixed(2);
+
+    //this.incentiveEntryForm.controls["InvoiceTotal"].setValue(parseFloat(valueCurrency))
+    //this.invoiceTotal=(e.target.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   get f() { 
@@ -368,7 +384,7 @@ export class IncentiveentryComponent implements OnInit {
 
         localStorage.setItem('invoiceNumber',this.incentiveEntryForm.get('InvoiceNumber').value);
         localStorage.setItem('invoiceDate',this.incentiveEntryForm.get('InvoiceDate').value);
-        localStorage.setItem('invoiceTotal',this.incentiveEntryForm.get('InvoiceTotal').value);
+        localStorage.setItem('invoiceTotal',this.invoiceTotalIE);
         localStorage.setItem("serviceIncluded",this.incentiveEntryForm.get('ServiceIncluded').value);
 
         this.selectedForCheckBoxAutoInsert.splice(30,1,JSON.parse(localStorage.getItem("installCompanyID")))

@@ -510,6 +510,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.invoiceNumber = localStorage.getItem('invoiceNumber');
     this.invoiceDate = localStorage.getItem('invoiceDate');
     this.invoiceTotal = parseFloat(localStorage.getItem('invoiceTotal'));
+    // this.invoiceTotal = parseInt(localStorage.getItem('invoiceTotal'));
+    console.log(this.invoiceTotal); // 100 parseInt, 100 parseFloat
 
     // //Get Files from local storage if page is refreshed
     this.invoiceFile = localStorage.getItem("invoice");
@@ -3432,6 +3434,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.showContractFile = false;
     this.contractUpload = '';
     this.incentiveDashboardForm.get('ContractUpload').reset();
+    this.incentiveDashboardForm.controls["ContractUpload"].setValidators(null);
 
     this.selectedContractFile = {};
   }
@@ -4005,19 +4008,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   verifyCustomerVisitDoc() {
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
-      
-      if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
-        //this.incentiveDashboardForm.controls['SiteVisitUpload'].valid;
-        this.incentiveDashboardForm.controls['SiteVisitUpload'].setErrors(null);
+
+      this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
+        if(element.ItemID === 610 || element.ItemID === 635) {
+          this.customerVisitDocValidatedNonPartner = true;
+
+          if(this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
+            this.customerVisitDocValidatedNonPartner = true;
+          }
+
+        }
+        if(element.ItemID === 0) {
+          this.customerVisitDocValidatedNonPartner = false;
+        }
+      })
+
+      if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
         this.customerVisitDocValidatedNonPartner = false;
       }
 
-      // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
-      //   this.customerVisitDocValidatedNonPartner = false;
-      // }
-      if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-        this.customerVisitDocValidatedNonPartner = true;
-      }
     }
 
     if(this.user.afaRole === 5) {
@@ -4039,35 +4048,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.customerVisitDocValidated = false;
         }
       })
-      // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-      //   this.customerVisitDocValidated = true;
-      // }
-
-      // if(this.selectedForCheckBoxAutoInsert[0] === 'y' || this.selectedForCheckBoxAutoInsert[1] === 'y') {
-      //   this.customerVisitDocValidated = false;
-      // }
 
       if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
         this.customerVisitDocValidated = false;
       }
-      // if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-      //   this.customerVisitDocValidated = true;
-      // }
     }
 
-    // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
-    //   this.customerVisitDocValidated = false;
-    // }
-    // if(localStorage.getItem('equipmatentry') && this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
-    //   this.customerVisitDocValidated = true;
-    // }
+  }
 
-    // if(localStorage.getItem('equipmatentry')) {
-    //   this.customerVisitDocValidated = true;
-    // }
-    // if(this.incentiveDashboardForm.controls['SiteVisitUpload'].valid) {
-    //   this.customerVisitDocValidated = false;
-    // }
+  checkForContractUploadNonPartner() {
+    console.log('check for Contract')
+    if(this.contractUpload) {
+      this.contractDocValidatedNonPartner = false;
+    }
+  }
+
+  checkForContractUpload() {
+    console.log('check for Contract')
+    if(this.contractUpload) {
+      this.contractDocValidated = false;
+    }
   }
 
   verifyContractDoc() {
@@ -4075,20 +4075,31 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+
+      // check if the form value is value or not valid
+      // if ContractUpload value is valid, contractDocValidated value equals false
+      // if ContractUpload value is invalid, contractDocValidated value equals true
+      // if(this.incentiveDashboardForm.controls['ContractUpload'].value === null) {
+      //   this.contractDocValidatedNonPartner = true
+      // } 
+
+      // if(this.incentiveDashboardForm.controls['ContractUpload'].valid) {
+      //   this.contractDocValidatedNonPartner = false;
+      // }
+
       this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
         if(element.ItemID === 0) {
           this.contractDocValidatedNonPartner = false;
         }
         if(element.ItemID !== 0) {
           this.contractDocValidatedNonPartner = true;
+
+          this.checkForContractUploadNonPartner();
         }
       })
     }
 
     if(this.user.afaRole === 5) {
-      // if(this.contractUpload) {
-      //   this.contractDocValidated = false;
-      // }
   
       this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
         if(element.ItemID === 0) {
@@ -4097,42 +4108,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         if(element.ItemID !== 0) {
           this.contractDocValidated = true;
 
-          if(this.contractUpload) {
-            this.contractDocValidated = false;
-          }
+          this.checkForContractUpload();
         }
       });
     }
-
-    // if(this.contractUpload) {
-    //   this.contractDocValidated = false;
-    // }
-
-    // this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-    //   // console.log(element)
-    //   // console.log(element.ItemID)
-    //   if(element.ItemID === 0) {
-    //     // console.log('Display the validation text. The partner has not manually entered a recurring item');
-    //     this.contractDocValidated = false;
-    //   }
-    //   if(element.ItemID !== 0) {
-    //     // console.log('Remove the validation text. The partner has manually entered a recurring item');
-    //     this.contractDocValidated = true;
-    //   }
-    // });
-
-    // this.verifyContractTerms();
-    
-    // if(this.selectedForCheckBoxAutoInsert[6] === 'y') {
-    //   console.log('this works')
-    // }
-   
-    // if(this.incentiveDashboardForm.controls['ContractUpload'].valid) {
-    //   this.contractDocValidated = false;
-    // }
-    // if(this.incentiveDashboardForm.controls['ContractUpload'].value === null) {
-    //   this.contractDocValidated = true;
-    // }
   }
 
   verifyWorkOrderDoc() {
@@ -4192,9 +4171,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
         if(element.ItemID === 0) {
           this.contractTermsValidated = false;
-          // console.log('RMR items require a contract start date');
-          // this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
-          // this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
         }
 
         // if entryrowsrecurring has a value, require contract date
