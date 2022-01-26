@@ -1654,8 +1654,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public historyHeading: string = 'Recently selected';
 
   getServerResponse(event){
-    console.log(parseInt(event))
-    console.log(this.incentiveDashboardForm.controls["CustomerID"])
+    console.log(parseInt(event));
+    console.log(this.incentiveDashboardForm.controls["CustomerID"]);
+    
     this.incentiveDashboardForm.controls["CustomerID"].valueChanges
     .pipe(debounceTime(1000),distinctUntilChanged(),filter(x => typeof x === 'string'))
     // .subscribe(queryField  => this.routeService.getCustomerSearchMatch('1116-1417')
@@ -3978,6 +3979,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   verifyInvoiceDoc() {
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      
+      // the reactive form value InvoiceUpload should be valid to allow submission. 
+      // the only requirement for anyone other than a Partner is the InvoiceUpload
       this.incentiveDashboardForm.get('InvoiceUpload').setErrors(null);
        
       if(!this.invoiceUpload) {
@@ -4008,6 +4012,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   verifyCustomerVisitDoc() {
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+
+      // the reactive form value SiteVisitUpload should be valid to allow submission. 
+      // the only requirement for anyone other than a Partner is the InvoiceUpload
+      this.incentiveDashboardForm.get('SiteVisitUpload').setErrors(null);
 
       this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
         if(element.ItemID === 610 || element.ItemID === 635) {
