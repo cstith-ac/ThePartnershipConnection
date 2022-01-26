@@ -665,6 +665,7 @@
                                         <input 
                                             type="date" formControlName="ContractDate" class="form-control" 
                                             (change)="onChangeVerifyContractDate($event)"
+                                            (keydown)="getKeyPress($event)"
                                         >
                                         <!-- <input 
                                             type="date" 
@@ -751,7 +752,7 @@
                                     <button 
                                         type="submit" 
                                         class="btn btn-validate float-right mr-2"
-                                        (click)="openValidateItemsModal(required)"
+                                        (click)="openValidateItemsModal(required, $event)"
                                     ><i class="fas fa-exclamation-triangle pr-2"></i>Validate Invoice</button>
                                     <!-- <button 
                                         type="submit" 

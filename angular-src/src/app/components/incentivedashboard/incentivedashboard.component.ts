@@ -1615,21 +1615,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     var threeMonthsAgoFormatted = threeMonthsAgo.format(moment.HTML5_FMT.DATE);
 
     if(e.target.value === threeMonthsAgoFormatted) {
-      console.log('date selected is exactly 3 months ago')
+      // console.log('date selected is exactly 3 months ago')
     }
 
     if(e.target.value < threeMonthsAgoFormatted) {
-      console.log('date selected is more than 3 months ago');
+      // console.log('date selected is more than 3 months ago');
       this.contractInPastValidated = true;
     }
 
     if(e.target.value > threeMonthsAgoFormatted) {
-      console.log('date selected is more than 3 months ago');
+      // console.log('date selected is more than 3 months ago');
       this.contractInPastValidated = false;
     }
 
-    console.log(threeMonthsAgo.format()); // 2015-10-13T09:37:35+02:00
-    console.log(threeMonthsAgoFormatted);
+    // console.log(threeMonthsAgo.format()); // 2015-10-13T09:37:35+02:00
+    // console.log(threeMonthsAgoFormatted);
 
   }
 
@@ -1861,7 +1861,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
   }
 
-  //select Customer 1st
+  //*********select Customer 1st*********//
   openSearchCustomerModal(content) {
     this.modalService.open(content, {
       windowClass: 'my-class',
@@ -2018,7 +2018,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  //select Site 1st
+  //*********select Site 1st*********//
   selectSite(customer_id:number,customer_Name:string, siteName:string, customer_Site_Id:number,customer_Number:string) {
     this.divSystemSearchIcon.nativeElement.style.display='none';
     
@@ -2073,7 +2073,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     )
   }
 
-  //select System/Central Station 1st
+  //*********select System/Central Station 1st*********//
   selectCentralStation(customer_id:number, customer_Site_Id:number, customer_System_Id:number, alarmAccount:string, system_Code: string, customer_Name:string, customer_Number:string) {
     let selectedCustomerid = customer_id;
     let selectedCustomerSiteId = customer_Site_Id;
@@ -3894,14 +3894,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
 
-  openValidateItemsModal(required) {
+  openValidateItemsModal(required,e) {
     this.verifyCustomerSiteSystem();
     this.verifySystemInformationSection();
     this.verifyInvoiceDoc();
     this.verifyCustomerVisitDoc();
     this.verifyContractDoc();
     this.verifyWorkOrderDoc();
-    this.verifyContractTerms();
+    this.verifyContractTerms(e);
     this.verifyAddViewCommentsSignals();
     this.verifyAddViewCommentsSystem();
     this.verifyAddViewCommentsPanel();
@@ -4156,7 +4156,35 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // }
   }
 
-  verifyContractTerms() {
+  getKeyPress(e) {
+    const keyID = e.keyCode;
+    switch(keyID)
+    {
+      case 8:
+        alert("backspace");
+        console.log(this.incentiveDashboardForm.get('ContractDate').value);
+        // if the value of ContractDate is false, do something
+        // the validation text cannot appear
+        this.contractTermsValidatedNonPartner = true;
+        break;
+      case 46:
+        alert("delete");
+        console.log(this.incentiveDashboardForm.get('ContractDate').value);
+        // if the value of ContractDate is empty or null, show the contractTermsValidatedNonPartner text
+        if(this.incentiveDashboardForm.get('ContractDate').value === null || this.incentiveDashboardForm.get('ContractDate').value === "") {
+          this.contractTermsValidated = true;
+        }
+        
+        this.contractTermsValidatedNonPartner = true;
+        break;
+        default:
+        break;
+    }
+
+    console.log(e);
+  }
+
+  verifyContractTerms(e) {
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
     
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
@@ -4168,6 +4196,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
         if(element.ItemID !== 0) {
           this.contractTermsValidatedNonPartner = true;
+
+          // check if the reactive form value ContractDate has been touched
+          if(this.incentiveDashboardForm.controls['ContractDate'].touched) {
+            this.contractTermsValidatedNonPartner = false;
+
+            // if the ContractDate has been manually removed, the validation text should be visible
+            // get the keys for Delete and Backspace
+            if(this.incentiveDashboardForm.get('ContractDate').value === null || this.incentiveDashboardForm.get('ContractDate').value === "") {
+              this.contractInPastValidated = false;
+            }
+            
+            this.getKeyPress(e);
+          }
+          
         }
       })
       
