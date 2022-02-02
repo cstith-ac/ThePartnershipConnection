@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+//import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -184,6 +185,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PartnerviewlistComponent,
     AdminedituserComponent,
     FilterPartnerviewlistPipe,
+    //NgbTypeahead
     //CustomerTestComponent
   ],
   imports: [

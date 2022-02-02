@@ -33,7 +33,7 @@ import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
-import { fromEvent, of } from 'rxjs';
+import { fromEvent, Observable, of, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError, map, tap, concatMap } from 'rxjs/operators';
 import { element } from 'protractor';
 declare var $: any;
@@ -96,6 +96,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   id;
   customersiteid;
+  CustomerSearchMatch:CustomerSearchMatch[];
   incentiveEntry: IncentiveEntry[];
   incentivedashboard:any[];
   listpaneltypes: ListPanelTypes[];
@@ -464,6 +465,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   
 
   ngOnInit() {
+    
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -879,7 +881,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       CentralStationID: ["", Validators.required], //@CentralStationID
       AdditionalInfo: [""], //@AdditionalInfo
       InvoiceUpload: ["", Validators.required],
-      SiteVisitUpload: ["", Validators.required],
+      SiteVisitUpload: [""],
       ContractUpload: [""],
       SubscriberFormUpload: [""],
       OtherDocument1Upload: [""],
@@ -1192,6 +1194,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
       if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
         this.invoiceTotalValidated = true;
+        // set InvoiceTotal invalid if InvoiceTotal plus PartnerTaxAmount doesn't match LineItemSubtotal
+        this.incentiveDashboardForm.controls['InvoiceTotal'].setErrors({});
       }
       if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
         this.invoiceTotalValidated = false;
@@ -1653,73 +1657,133 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public keyword = 'customerNumber';
   public historyHeading: string = 'Recently selected';
 
+  search = (text$: Observable<any>) => text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    // switchMap( 
+    //   (searchText) => this.routeService.getCustomerSearchMatch(searchText).forEach(
+    //     x => {
+    //       console.log(x)
+    //       x.map(val => {
+    //         return this.id= val.customerID
+    //       })
+    //     }) ),
+    switchMap( 
+      (searchText) => this.routeService.getCustomerSearchMatch(searchText)),
+      tap(res=>{
+        let x = res.forEach(x =>{
+          // console.log(x.customerID)
+          this.id = x.customerID;
+        })
+      }),
+      tap(()=>{
+        // this.routeService.getCustomerSearchMatch(searchText).subscribe
+        //this.doGetCustomerID()
+      }),
+      tap(() => this.routeService.getListSitesForCustomer(this.id).subscribe(res => {
+        // console.log(res)
+        this.listsitesforcustomer = res;
+      }))
+  )
+
+  resultFormatCustomerListValue(value:any) {
+    return value.customerNumber + ' ' + value.customerName
+  }
+
+  inputFormatCustomerListValue(value:any) {
+    if(value.customerName) 
+      return value.customerNumber + ' - ' + value.customerName
+      return value;
+  }
+
+  onChangeFocus(e) {
+    // console.log(e);
+    this.siteElement.nativeElement.focus();
+  }
+
+  doSetCustomerIDSystemID(){
+    this.incentiveDashboardForm.controls['CustomerID'].setValue(this.id);
+    this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
+    // console.log('get customerID');
+   }
+
   getServerResponse(event){
     console.log(parseInt(event));
     console.log(this.incentiveDashboardForm.controls["CustomerID"]);
+
+    //test//
+    // this.incentiveDashboardForm.controls["CustomerID"].valueChanges.pipe(
+    //   debounceTime(1000),
+    //   distinctUntilChanged(),
+    //   filter(x => typeof x === 'string')
+    // ).subscribe(x => {
+    //   console.log(x)
+    // })
+    //test//
     
-    this.incentiveDashboardForm.controls["CustomerID"].valueChanges
-    .pipe(debounceTime(1000),distinctUntilChanged(),filter(x => typeof x === 'string'))
-    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch('1116-1417')
-    .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
-    .subscribe(response => {
-      console.log(response)
-      this.results = response;
-      let obj = response.find(e => e.customerName === e.customerName)
-      for(var i = 0; i < response.length; i++) {
-        console.log(response[i].customerID)
-        var x = response[i].customerID;
-        this.id = response[i].customerID;
-        this.customerNumber = response[i].customerNumber;
-        this.customer = response[i].customerName; //this is clearing the site entry when used with ngModel
-        this.routeService.getListSitesForCustomer(x).subscribe(
-          res => {
-            //console.log(res);
-            this.listsitesforcustomer = res;
-            for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-              console.log(this.listsitesforcustomer[i])
-              this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
+    // this.incentiveDashboardForm.controls["CustomerID"].valueChanges
+    // .pipe(debounceTime(1000),distinctUntilChanged(),filter(x => typeof x === 'string'))
+    // // .subscribe(queryField  => this.routeService.getCustomerSearchMatch('1116-1417')
+    // .subscribe(queryField  => this.routeService.getCustomerSearchMatch(queryField)
+    // .subscribe(response => {
+    //   console.log(response)
+    //   this.results = response;
+    //   let obj = response.find(e => e.customerName === e.customerName)
+    //   for(var i = 0; i < response.length; i++) {
+    //     console.log(response[i].customerID)
+    //     var x = response[i].customerID;
+    //     this.id = response[i].customerID;
+    //     this.customerNumber = response[i].customerNumber;
+    //     this.customer = response[i].customerName; //this is clearing the site entry when used with ngModel
+    //     this.routeService.getListSitesForCustomer(x).subscribe(
+    //       res => {
+    //         //console.log(res);
+    //         this.listsitesforcustomer = res;
+    //         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
+    //           console.log(this.listsitesforcustomer[i])
+    //           this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
 
-               //set customerSiteName for ngbTooltip, SiteName + Address_1
-              let customerSiteName = this.listsitesforcustomer[i].siteName;
-              let address_1 = this.listsitesforcustomer[i].address_1;
-              this.customerSiteName = customerSiteName + ' - ' + address_1;
+    //            //set customerSiteName for ngbTooltip, SiteName + Address_1
+    //           let customerSiteName = this.listsitesforcustomer[i].siteName;
+    //           let address_1 = this.listsitesforcustomer[i].address_1;
+    //           this.customerSiteName = customerSiteName + ' - ' + address_1;
 
-              this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
-                res => {
-                  console.log(res)
-                  this.listSystemsForSite = res;
+    //           this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+    //             res => {
+    //               console.log(res)
+    //               this.listSystemsForSite = res;
 
-                  for(var i = 0; i < this.listSystemsForSite.length; i++) {
-                    console.log(this.listSystemsForSite[i].customer_System_id)
+    //               for(var i = 0; i < this.listSystemsForSite.length; i++) {
+    //                 console.log(this.listSystemsForSite[i].customer_System_id)
 
-                    this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
-                    this.systemTypeID = this.listSystemsForSite[i].systemType;
-                    this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
-                    // if the user manually enters a customer number, the CustomerSystemID in the form needs to be assigned the set value for customer_System_id
-                    this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id)
+    //                 this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+    //                 this.systemTypeID = this.listSystemsForSite[i].systemType;
+    //                 this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+    //                 // if the user manually enters a customer number, the CustomerSystemID in the form needs to be assigned the set value for customer_System_id
+    //                 this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id)
 
-                    this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
-                      res => {
-                        this.alarmAccount = res.accountNumber;
-                        this.systemTypeID = res.systemType;
-                        this.panelTypeID = res.panelType;
-                        this.panel_Location = res.panelLocation;
-                        this.centralStationID = res.centralStationID;
-                        this.additionalInfo = res.additionalInfo;
-                      }
-                    )
-                  }
-              })
-            }
-          }
-        )
-        //set state for CustomerSiteID as valid
-        this.incentiveDashboardForm.get("CustomerSiteID").setValidators(null);
-        this.incentiveDashboardForm.get("CustomerSiteID").updateValueAndValidity(); 
-      }
-    }
-      )
-    )
+    //                 this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+    //                   res => {
+    //                     this.alarmAccount = res.accountNumber;
+    //                     this.systemTypeID = res.systemType;
+    //                     this.panelTypeID = res.panelType;
+    //                     this.panel_Location = res.panelLocation;
+    //                     this.centralStationID = res.centralStationID;
+    //                     this.additionalInfo = res.additionalInfo;
+    //                   }
+    //                 )
+    //               }
+    //           })
+    //         }
+    //       }
+    //     )
+    //     //set state for CustomerSiteID as valid
+    //     this.incentiveDashboardForm.get("CustomerSiteID").setValidators(null);
+    //     this.incentiveDashboardForm.get("CustomerSiteID").updateValueAndValidity(); 
+    //   }
+    // }
+    //   )
+    // )
 
     // var optionSelection;
     // this.incentiveDashboardForm.controls["CustomerID"].valueChanges
@@ -2157,6 +2221,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //   return this.incentiveDashboardForm.controls
   // }
 
+  
   onSubmit(form: FormGroup) {
 
     this.submitted = true;
@@ -3243,6 +3308,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       //this.myFiles.push(e.target.files[i]);
       this.myFiles.Invoice = e.target.files[i];
+
     }
   }
 
@@ -3895,6 +3961,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   openValidateItemsModal(required,e) {
+    //this.doSetCustomerIDSystemID();
     this.verifyCustomerSiteSystem();
     this.verifySystemInformationSection();
     this.verifyInvoiceDoc();
@@ -4015,7 +4082,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       // the reactive form value SiteVisitUpload should be valid to allow submission. 
       // the only requirement for anyone other than a Partner is the InvoiceUpload
-      this.incentiveDashboardForm.get('SiteVisitUpload').setErrors(null);
+      //this.incentiveDashboardForm.get('SiteVisitUpload').setErrors(null);
+
 
       this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
         if(element.ItemID === 610 || element.ItemID === 635) {
@@ -4038,6 +4106,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
 
     if(this.user.afaRole === 5) {
+      // the reactive form value SiteVisitUpload should get a valid state . 
+      // this.incentiveDashboardForm.get('SiteVisitUpload').clearValidators();
+      // this.incentiveDashboardForm.get('SiteVisitUpload').updateValueAndValidity();
+
       // if there is a recurring item, require a customer visit form
       // if there isn't a recurring item, do not require a customer visit form
       // if the recurring item was add and then removed, do not require a customer visit form
@@ -4045,6 +4117,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
         if(element.ItemID === 610 || element.ItemID === 635) {
+          this.incentiveDashboardForm.get('SiteVisitUpload').setValidators(Validators.required);
+          this.incentiveDashboardForm.get('SiteVisitUpload').updateValueAndValidity();
           this.customerVisitDocValidated = true;
 
           if(this.incentiveDashboardForm.controls['SiteVisitUpload'].value === null) {
@@ -4065,14 +4139,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   checkForContractUploadNonPartner() {
-    console.log('check for Contract')
     if(this.contractUpload) {
       this.contractDocValidatedNonPartner = false;
     }
   }
 
   checkForContractUpload() {
-    console.log('check for Contract')
     if(this.contractUpload) {
       this.contractDocValidated = false;
     }
@@ -4155,21 +4227,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   this.workOrderDocValidated = false;
     // }
   }
+  disableBackSpaceAndDelete(e) {
+    if(e.keyCode === 8 || e.keyCode === 46) {
+      e.preventDefault();
+    }
+  }
 
   getKeyPress(e) {
     const keyID = e.keyCode;
     switch(keyID)
     {
       case 8:
-        alert("backspace");
-        console.log(this.incentiveDashboardForm.get('ContractDate').value);
+        // alert("backspace");
+        // console.log(this.incentiveDashboardForm.get('ContractDate').value);
         // if the value of ContractDate is false, do something
         // the validation text cannot appear
         this.contractTermsValidatedNonPartner = true;
         break;
       case 46:
-        alert("delete");
-        console.log(this.incentiveDashboardForm.get('ContractDate').value);
+        // alert("delete");
+        // console.log(this.incentiveDashboardForm.get('ContractDate').value);
         // if the value of ContractDate is empty or null, show the contractTermsValidatedNonPartner text
         if(this.incentiveDashboardForm.get('ContractDate').value === null || this.incentiveDashboardForm.get('ContractDate').value === "") {
           this.contractTermsValidated = true;
@@ -4179,6 +4256,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         break;
         default:
         break;
+    }
+
+    if(keyID === 8 || keyID === 46) {
+      e.preventDefault();
     }
 
     console.log(e);
@@ -4198,7 +4279,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.contractTermsValidatedNonPartner = true;
 
           // check if the reactive form value ContractDate has been touched
-          if(this.incentiveDashboardForm.controls['ContractDate'].touched) {
+          if(this.incentiveDashboardForm.controls['ContractDate'].touched && this.incentiveDashboardForm.get('ContractDate').value) {
             this.contractTermsValidatedNonPartner = false;
 
             // if the ContractDate has been manually removed, the validation text should be visible

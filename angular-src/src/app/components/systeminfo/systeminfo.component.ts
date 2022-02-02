@@ -64,7 +64,8 @@ export class SysteminfoComponent implements OnInit {
     this.router.navigate(["system-info/", id])
   }
 
-  showaccountInfoModal(customer_System_Id:number) {
+  showSystemInfoDetail(customer_System_Id:number) {
+    //navigate to the SysteminfodetailComponent
     this.router.navigate(['system-info/'+ customer_System_Id])
   }
 

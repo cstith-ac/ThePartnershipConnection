@@ -21,7 +21,7 @@
                             <label class="col-sm-2 col-form-label">Customer</label>
                             
                             <div class="ng-autocomplete" *ngIf="!customerPreselected">
-                                <ng-autocomplete
+                                <!-- <ng-autocomplete
                                     #customerRef
                                     [data]="results"
                                     formControlName="CustomerID"
@@ -46,8 +46,18 @@
 
                                 <ng-template #notFoundTemplate let-notFound>
                                     <div [innerHTML]="notFound"></div>
-                                </ng-template>
-
+                                </ng-template> -->
+                                <input 
+                                    type="text" 
+                                    id="typeahead-basic" 
+                                    class="form-control fullWidthSelect"
+                                    formControlName="CustomerID"
+                                    [placeholder]="'Type a customer number...'"
+                                    [ngbTypeahead]="search"
+                                    [resultFormatter]="resultFormatCustomerListValue" 
+                                    [inputFormatter]="inputFormatCustomerListValue"
+                                    (change)="onChangeFocus($event)"
+                                >
                                 <div class="mt-1">
                                     <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small>
                                 </div>
@@ -584,7 +594,16 @@
                                 <div class="form-group">
                                     <div class="">
                                         <label class="col-form-label">Tax</label>
-                                        <kendo-numerictextbox
+                                        <input 
+                                            currencyMask
+                                            class="invoiceTotalInput"
+                                            [(ngModel)]="partnerTaxAmount"
+                                            formControlName="PartnerTaxAmount"
+                                            
+                                            [min]="0"
+                                            [(ngbTooltip)]="taxToolTip"
+                                        >
+                                        <!-- <kendo-numerictextbox
                                             format="c2"
                                             [value]="partnerTaxAmount"
                                             [spinners]="false"
@@ -596,7 +615,7 @@
                                             [(ngbTooltip)]="taxToolTip"
                                             [style.height]="'calc(1.5em + 1.3rem)'"
                                             [style.width]="'80%'"
-                                        ></kendo-numerictextbox>
+                                        ></kendo-numerictextbox> -->
                                     </div>
                                 </div>
                             </div>
@@ -668,9 +687,9 @@
                                             (keydown)="getKeyPress($event)"
                                         >
                                         <!-- <input 
-                                            type="date" 
-                                            formControlName="ContractDate" 
-                                            class="form-control"
+                                            type="date" formControlName="ContractDate" class="form-control" 
+                                            (change)="onChangeVerifyContractDate($event)"
+                                            (keydown)="disableBackSpaceAndDelete($event)"
                                         > -->
                                     </div>
                                     <div class="form-group form-inline">

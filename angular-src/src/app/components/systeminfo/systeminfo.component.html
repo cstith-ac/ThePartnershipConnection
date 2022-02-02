@@ -45,7 +45,7 @@
             </thead>
             <tbody id="systemInfo" #systemInfo *ngFor="let item of assistantsystems">
                 <tr class="system-info-collection"></tr>
-                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showaccountInfoModal(item.customer_System_Id)" [style.padding-left]="'1.5rem'">{{ item.alarm_Account }} <br> 
+                <td class="system-info-collectionItem" data-id=" ' + {{item.customer_System_Id}} +' " (click)="showSystemInfoDetail(item.customer_System_Id)" [style.padding-left]="'1.5rem'">{{ item.alarm_Account }} <br> 
                     <span *ngIf="item?.featureMessage?.length > 0" [style.color]="'red'" [style.fontWeight]="'900'" class="pr-2">{{ item.featureMessage }}</span>
                     <span [style.color]="'black'" [style.fontWeight]="'500'" [style.fontSize]="'.8125rem'">{{ item.siteAddress }}</span>
                 </td>
