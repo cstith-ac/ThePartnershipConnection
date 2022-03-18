@@ -151,6 +151,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   incentiveRecurringEntryForm: FormGroup;
   incentiveEquipMatEntryForm: FormGroup;
   incentiveLaborChargesEntryForm: FormGroup;
+  partnerCommentsEntryForm: FormGroup;
 
   rmr: number;
   passThrough=0;
@@ -903,6 +904,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       EnrollInEmailInvoices: [""]
     });
 
+    this.partnerCommentsEntryForm = this.fb.group({
+      PartnerComments: [""]
+    });
+
     this.recurringValueChanges$ = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].valueChanges;
     this.recurringValueChanges$.subscribe(
       entryRowsRecurring => this.updateTotalRecurring(entryRowsRecurring)
@@ -1186,6 +1191,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
       if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
         this.invoiceTotalValidatedNonPartner = false;
+        this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
       }
     }
 
@@ -1198,6 +1204,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.incentiveDashboardForm.controls['InvoiceTotal'].setErrors({});
       }
       if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+        console.log(this.lineItemSubtotal)
+        this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
         this.invoiceTotalValidated = false;
       }
     }
@@ -1683,8 +1691,52 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       tap(() => this.routeService.getListSitesForCustomer(this.id).subscribe(res => {
         // console.log(res)
         this.listsitesforcustomer = res;
+        for(var i = 0; i < this.listsitesforcustomer.length;i++) {
+          this.listsitesforcustomer[i].customer_Site_id;
+
+          this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
+          this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
+
+          this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
+            res => {
+              this.listSystemsForSite = res;
+
+              for(var i = 0; i < this.listSystemsForSite.length; i ++) {
+                console.log(this.listSystemsForSite[i].customer_System_id)
+                //Get Customer_system_id for dbo.CustomerSystemInfoGet
+                //this.customer_System_id = e.target.value;
+                this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+
+                this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+                this.systemTypeID = this.listSystemsForSite[i].systemType;
+                this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+                
+                this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+                  res => {
+                    console.log(res)
+                    this.alarmAccount = res.accountNumber;
+                    this.systemTypeID = res.systemType;
+                    this.panelTypeID = res.panelType;
+                    this.panel_Location = res.panelLocation;
+                    this.centralStationID = res.centralStationID;
+                    this.additionalInfo = res.additionalInfo;
+                  }
+                )
+              }
+            }
+          )
+        }
       }))
   )
+
+  removeCustomerValidationIfSelected() {
+    if(this.id && this.customer_Site_id && this.customer_System_id) {
+      this.customerIDValidated = false;
+      console.log(this.id);
+      console.log(this.customer_Site_id);
+      console.log(this.customer_System_id);
+    }
+  }
 
   resultFormatCustomerListValue(value:any) {
     return value.customerNumber + ' ' + value.customerName
@@ -3960,8 +4012,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     })
   }
 
+  onPartnerCommentsSubmit(form: FormGroup) {
+    this.incentiveDashboardForm.get('PartnerComments').setValue(this.partnerCommentsEntryForm.get('PartnerComments').value);
+
+    this.modalService.dismissAll();
+  }
+
   openValidateItemsModal(required,e) {
     //this.doSetCustomerIDSystemID();
+    this.removeCustomerValidationIfSelected();
     this.verifyCustomerSiteSystem();
     this.verifySystemInformationSection();
     this.verifyInvoiceDoc();
@@ -3990,10 +4049,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
     
 
-    if(this.incentiveDashboardForm.valid) {
+    if(this.incentiveDashboardForm.valid && this.partnerCommentsEntryForm.valid) {
       this.formIsValidText = true;
     }
-    if(this.incentiveDashboardForm.invalid) {
+    if(this.incentiveDashboardForm.invalid && this.partnerCommentsEntryForm.invalid) {
       this.formIsValidText = false;
     }
 
@@ -4348,41 +4407,43 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // If you check the option "Not All Signals Tested", you need to provide detail in the Comments section.
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
+      //resolve bug
       if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
         this.addViewCommentsSignalsValidatedNonPartner = true;
+
+        //if there is a value present for PartnerComments, set the validity text to false
+        if(this.partnerCommentsEntryForm.get('PartnerComments').value) {
+          this.addViewCommentsSignalsValidatedNonPartner = false;
+        }
       }
       if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
         this.addViewCommentsSignalsValidatedNonPartner = false;
+        // the partner comments isn't a required item, so no action is required
       }
     }
 
     if(this.user.afaRole === 5) {
       if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
-        this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-        this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
-        this.addViewCommentsSignalsValidated = true
+        // make the partner comments a required item
+        this.partnerCommentsEntryForm.get('PartnerComments').setValidators(Validators.required);
+        this.partnerCommentsEntryForm.controls['PartnerComments'].updateValueAndValidity();
+
+        //console.log(this.incentiveDashboardForm.controls['PartnerComments'].status)
+        this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
+        this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
+        
+        this.addViewCommentsSignalsValidated = true;
+
+        if(this.partnerCommentsEntryForm.get('PartnerComments').value) {
+          this.addViewCommentsSignalsValidated = false;
+        }
       }
   
       if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
         this.addViewCommentsSignalsValidated = false;
-        this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-        // this.incentiveDashboardForm.controls["PartnerComments"].setValidators(null)
-        //this.incentiveDashboardForm.controls['PartnerComments'].valid
+        this.partnerCommentsEntryForm.get('PartnerComments').setErrors(null);
       }
     }
-
-    // if(this.incentiveDashboardForm.controls['SignalsTested'].value === '2') {
-    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
-    //   this.addViewCommentsSignalsValidated = true
-    // }
-
-    // if(this.incentiveDashboardForm.controls['SignalsTested'].value === '1') {
-    //   this.addViewCommentsSignalsValidated = false;
-    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-    //   // this.incentiveDashboardForm.controls["PartnerComments"].setValidators(null)
-    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid
-    // }
 
   }
 

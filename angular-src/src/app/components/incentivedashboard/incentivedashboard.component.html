@@ -1420,21 +1420,18 @@
 
 <ng-template #comments let-modal>
     <div class="modal-header">
-      <!-- <h4 class="modal-title" id="modal-basic-title">Search By System/Central Station</h4> -->
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
         <div class="row">
-            <!-- <div class="col-md-4">
-                <div class="col-sm-12">
-                    <h2>This space is provided for details, additional information and clarifications for your incentive. All information provided will be available to the incentive processing team!</h2>
-                </div>
-                
-            </div> -->
             <div class="col-md-12">
-                <form [formGroup]="incentiveDashboardForm">
+                <!-- <form [formGroup]="incentiveDashboardForm">
+                    <input type="text" formControlName="PartnerComments" class="d-none">
+                </form> -->
+
+                <form [formGroup]="partnerCommentsEntryForm" (ngSubmit)="onPartnerCommentsSubmit(partnerCommentsEntryForm)">
                     <div class="form-group">
                         <label class="d-block text-center">
                             <div class="col-sm-7 m-auto">
@@ -1448,12 +1445,18 @@
                             [(ngModel)]="partnerComments"
                         ></textarea>
                     </div>
+                    <!-- <div class="form-group">
+                        <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')"><i class="fas fa-save pr-2"></i>Save</button>
+                    </div> -->
+                    <div class="col">
+                        <input type="submit" value="Submit" class="btn btn-submit" [disabled]="partnerCommentsEntryForm.invalid">
+                    </div>
                 </form>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')"><i class="fas fa-save pr-2"></i>Save</button>
+      <!-- <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')"><i class="fas fa-save pr-2"></i>Save</button> -->
     </div>
 </ng-template>
 
@@ -2271,7 +2274,7 @@
                 type="submit" 
                 class="btn btn-secondary"
                 (click)="onSubmit(incentiveDashboardForm);clicked = true;"
-                [disabled]="clicked || !incentiveDashboardForm.valid"
+                [disabled]="clicked || !incentiveDashboardForm.valid || !partnerCommentsEntryForm.valid"
             ><i class="fas fa-plus pr-2"></i>Submit Invoice</button>
 
             <!-- <button 
