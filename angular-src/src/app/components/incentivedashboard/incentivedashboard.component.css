@@ -175,18 +175,15 @@
 }
 .shadow {
   border: 1px solid black;
-  /* margin-bottom: 2.1rem; */
   padding: 0.1rem 0.8rem;
 }
 
 .fullWidthSelect {
-  /* width: calc(17vw - 20px); */
-  /* width: calc(15vw - 20px); */
   width: calc(19vw - 20px);
 }
 
 .fullWidthInput {
-  width: calc(17vw - 20px);
+  width: calc(19vw - 20px);
 }
 
 .footer-logo {
@@ -304,6 +301,11 @@ header,
 
 .ng-autocomplete ::ng-deep .autocomplete-container {
   box-shadow: none;
+}
+
+.readOnlyInput {
+  width: 16vw;
+  background-color: #fff;
 }
 
 .ng-autocomplete
@@ -441,30 +443,44 @@ header,
 /* Large screens ----------- */
 @media only screen and (min-width: 1824px) {
   .fullWidthSelect {
-    width: calc(15vw - 20px);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .fullWidthInput {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
-/*Progress Bar*/
-/* .progress {
-  width: 100%;
-  height: 50px;
-  text-align: center;
-  position: relative;
-  border: 1px solid #000;
+@media only screen and (min-width: 1540px) {
+  .fullWidthSelect {
+    width: calc(15vw - 20px);
+  }
+
+  .fullWidthInput {
+    width: calc(17vw - 20px);
+  }
 }
 
-.progress span {
-  margin: 0%;
-  font-size: 40px;
-  font-family: system-ui;
-  position: absolute;
-  color: #c5c5c5;
+@media only screen and (min-width: 1900px) {
+  .fullWidthSelect {
+    width: calc(14vw - 20px);
+  }
+
+  .fullWidthInput {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
-.bar {
-  background: #24292e;
-  height: inherit;
-  margin: 0%;
-  transition: all 0.5s ease-out ; 
-} */
+@media only screen and (min-width: 2300px) {
+  .fullWidthSelect {
+    width: calc(10vw - 20px);
+  }
+
+  .fullWidthInput {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

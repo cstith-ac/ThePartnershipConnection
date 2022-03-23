@@ -359,16 +359,19 @@ export class IncentiveentryComponent implements OnInit {
 
   getInvoiceTotal(e) {
     console.log(e.target.value) //string
-    // const total = e.target.value;
+    this.invoiceTotalIE = Number(this.invoiceTotalIE).toFixed(2)
+    // const total = parseFloat(e.target.value);
+    // console.log(total)
 
     // let dollarUSLocale = Intl.NumberFormat('en-US');
     // let x = dollarUSLocale.format(parseFloat(total));
     // let value = Number(x.replace(/[^0-9.-]+/g,""));
     // console.log(value.toFixed(2))
     // this.invoiceTotalIE = value.toFixed(2);
+    // this.invoiceTotalIE = parseFloat(total);
 
-    //this.incentiveEntryForm.controls["InvoiceTotal"].setValue(parseFloat(valueCurrency))
-    //this.invoiceTotal=(e.target.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    // this.incentiveEntryForm.controls["InvoiceTotal"].setValue(parseFloat(valueCurrency))
+    // this.invoiceTotal=(e.target.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   get f() { 

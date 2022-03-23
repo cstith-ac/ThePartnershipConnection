@@ -35,7 +35,15 @@ namespace WebAPI.Repository
             var alarmAccountParam = new SqlParameter("@AlarmAccount", jobIDAdded.AlarmAccount);
             var systemTypeIDParam = new SqlParameter("@SystemTypeID", jobIDAdded.SystemTypeID);
             var panelTypeIDParam = new SqlParameter("@PanelTypeID", jobIDAdded.PanelTypeID);
+            //if (jobIDAdded.PanelTypeID == null)
+            //{
+            //    panelTypeIDParam.Value = "0";
+            //}
             var panelLocationParam = new SqlParameter("@PanelLocation", jobIDAdded.PanelLocation);
+            if (jobIDAdded.PanelLocation == null)
+            {
+                panelLocationParam.Value = "";
+            }
             var centralStationIDParam = new SqlParameter("@CentralStationID", jobIDAdded.CentralStationID);
             var additionalInfoParam = new SqlParameter("@AdditionalInfo", jobIDAdded.AdditionalInfo);
             if (jobIDAdded.AdditionalInfo == null)

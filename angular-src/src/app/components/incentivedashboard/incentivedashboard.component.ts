@@ -70,6 +70,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   public value;
 
+  systemPopUp: boolean=false;
+
   updateRecurringWithJobID;
   updateEquipMatWithJobID;
   updateLaborChargesWithJobID;
@@ -1185,6 +1187,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   calculateInvoiceTotal() {
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
       this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+      this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
     
       if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
         this.invoiceTotalValidatedNonPartner = true;
@@ -1197,27 +1200,36 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(this.user.afaRole === 5) {
       this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    
-      if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+      this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+      
+      // console.log(this.lineItemSubtotal)
+      // console.log(typeof this.lineItemSubtotal)
+      // console.log(this.lineItemSubtotal.toFixed(2))
+
+      if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
+        console.log('the line items and tax don\'t equal the total');
         this.invoiceTotalValidated = true;
-        // set InvoiceTotal invalid if InvoiceTotal plus PartnerTaxAmount doesn't match LineItemSubtotal
-        this.incentiveDashboardForm.controls['InvoiceTotal'].setErrors({});
       }
-      if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-        console.log(this.lineItemSubtotal)
-        this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
+
+      if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
+        console.log('the line items and tax equal the total');
         this.invoiceTotalValidated = false;
       }
-    }
-
-    // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
-    // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
-    //   this.invoiceTotalValidated = true;
-    // }
-    // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-    //   this.invoiceTotalValidated = false;
-    // }
+      // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+      //   this.invoiceTotalValidated = true;
+      //   // set InvoiceTotal invalid if InvoiceTotal plus PartnerTaxAmount doesn't match LineItemSubtotal
+      //   this.incentiveDashboardForm.controls['InvoiceTotal'].setErrors({});
+      // }
+      // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+      //   console.log(this.lineItemSubtotal)
+
+      //   // this is possibly changing the total
+      //   // this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
+        
+      //   this.invoiceTotalValidated = false;
+      // }
+    }
   }
 
   onChangeGetSystemType(e) {
@@ -1226,23 +1238,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.systemTypeID = parseInt(e.target.value.substring(3));
 
     console.log(this.systemTypeID);
-
-    // if(this.systemTypeID === 98) {
-    //   console.log('call the verifyAddViewCommentsSystem method')
-    //   // if 'other' is selected, invalidate PartnerComments
-    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
-
-    //   this.addViewCommentsSystemValidated = true
-    // }
-
-    // if(this.systemTypeID !== 98) {
-    //   this.incentiveDashboardForm.controls['SystemTypeID'].valid;
-    //   this.addViewCommentsSystemValidated = false;
-    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid;
-    //   //this.incentiveDashboardForm.controls['PartnerComments'].setErrors(null);
-    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-    // }
   }
 
   onChangeGetPanelType(e) {
@@ -1253,34 +1248,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     localStorage.removeItem('panelType');
     this.panelTypeID = Number(e.target.value);
-
-    // if(this.panelTypeID === 675) {
-    //   this.incentiveDashboardForm.get("PartnerComments").setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls["PartnerComments"].updateValueAndValidity();
-
-    //   this.addViewCommentsPanelValidated = true
-    // }
-
-    // if(this.panelTypeID !== 675) {
-    //   this.incentiveDashboardForm.controls["PanelTypeID"].valid;
-    //   this.addViewCommentsPanelValidated = false;
-    //   //this.incentiveDashboardForm.controls['PartnerComments'].valid;
-    //   this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
-    // }
-
-    //get the value and remove the index
-    //if the Panel Type is changed, get the new panel type id
-    // this.incentiveDashboardForm.controls['PanelTypeID'].valueChanges.subscribe(
-    //   res => {
-    //     console.log(res)
-    //     //this.panelTypeID = res;
-    //   }
-    // ) 
-
-    // localStorage.removeItem('panel_Type_Id');
-    // localStorage.removeItem('panelType');
-    // // this.panelTypeID = parseInt(e.target.value.substring(3));
-    // console.log(this.panelTypeID)
   }
 
   onChangeGetCentralStation(e) {
@@ -1290,13 +1257,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeNewSystem(e) {
-
-    // this.incentiveDashboardForm.get('NewSystem').valueChanges.subscribe(val => {
-    //   console.log(val);
-    // })
-    // this.incentiveDashboardForm.get('CustomerSystemID').valueChanges.subscribe(val => {
-    //   console.log(val);
-    // })
 
     if(e.target.checked) {
       console.log('the input is checked')
@@ -1666,7 +1626,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public historyHeading: string = 'Recently selected';
 
   search = (text$: Observable<any>) => text$.pipe(
-    debounceTime(200),
+    debounceTime(1000), //changed from debounceTime(200) on 03/18/2022
     distinctUntilChanged(),
     // switchMap( 
     //   (searchText) => this.routeService.getCustomerSearchMatch(searchText).forEach(
@@ -1682,7 +1642,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         let x = res.forEach(x =>{
           // console.log(x.customerID)
           this.id = x.customerID;
-        })
+        });
       }),
       tap(()=>{
         // this.routeService.getCustomerSearchMatch(searchText).subscribe
@@ -1702,26 +1662,61 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               this.listSystemsForSite = res;
 
               for(var i = 0; i < this.listSystemsForSite.length; i ++) {
-                console.log(this.listSystemsForSite[i].customer_System_id)
-                //Get Customer_system_id for dbo.CustomerSystemInfoGet
-                //this.customer_System_id = e.target.value;
-                this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
-
-                this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
-                this.systemTypeID = this.listSystemsForSite[i].systemType;
-                this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
                 
-                this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
-                  res => {
-                    console.log(res)
-                    this.alarmAccount = res.accountNumber;
-                    this.systemTypeID = res.systemType;
-                    this.panelTypeID = res.panelType;
-                    this.panel_Location = res.panelLocation;
-                    this.centralStationID = res.centralStationID;
-                    this.additionalInfo = res.additionalInfo;
-                  }
-                )
+                if(this.listSystemsForSite.length > 1) {
+                  console.log('there are more than 1 system')
+                  this.systemPopUp=true;
+                }
+
+                if(this.listSystemsForSite.length == 1) {
+                  console.log('there is only 1 system')
+                  console.log(this.listSystemsForSite[i].systemType)
+                  console.log(this.listSystemsForSite[i].alarmAccount)
+                  this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+                  this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+                  this.selectedValue = this.listSystemsForSite[i].customer_System_id
+
+                  console.log(this.listSystemsForSite[i].customer_System_id)
+                  //added to fix autopopulate fields
+                  this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+
+                  this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+                  this.systemTypeID = this.listSystemsForSite[i].systemType;
+                  this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+                  
+                  this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+                    res => {
+                      console.log(res)
+                      this.alarmAccount = res.accountNumber;
+                      this.systemTypeID = res.systemType;
+                      this.panelTypeID = res.panelType;
+                      this.panel_Location = res.panelLocation;
+                      this.centralStationID = res.centralStationID;
+                      this.additionalInfo = res.additionalInfo;
+                    }
+                  )
+                }
+
+                // console.log(this.listSystemsForSite[i].customer_System_id)
+                // //Get Customer_system_id for dbo.CustomerSystemInfoGet
+                // //this.customer_System_id = e.target.value;
+                // this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
+
+                // this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
+                // this.systemTypeID = this.listSystemsForSite[i].systemType;
+                // this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
+                
+                // this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
+                //   res => {
+                //     console.log(res)
+                //     this.alarmAccount = res.accountNumber;
+                //     this.systemTypeID = res.systemType;
+                //     this.panelTypeID = res.panelType;
+                //     this.panel_Location = res.panelLocation;
+                //     this.centralStationID = res.centralStationID;
+                //     this.additionalInfo = res.additionalInfo;
+                //   }
+                // )
               }
             }
           )
@@ -2208,9 +2203,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     console.log(selectedCustomerSiteId);
     console.log(selectedAlarmAccount+' - '+selectedSystemCode)
-    this.isRemoveSystemDropdown=false
-    this.isSystemSelectionFirst=true
-    this.alarmAccountPreSelected=true
+    // this.isRemoveSystemDropdown=false
+    // this.isSystemSelectionFirst=true
+    // this.alarmAccountPreSelected=true
 
     this.modalService.dismissAll();
 
@@ -3689,13 +3684,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onRecurringSubmit(form: FormGroup) {
-    //console.log(form.value.Total)
     
     const control = <FormArray>this.incentiveRecurringEntryForm.controls['entryRowsRecurring'];
     
-    // this.incentiveEntryService.updateRecurring(this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].ItemID, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Description, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillCycle, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].RMR, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].PassThrough, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].BillingStartDate, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Multiple, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Add2Item, this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value[0].Total);
-    
-    // this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalRecurringCalc);
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumRecurring);
 
     this.recurring=this.totalSumRecurring;
@@ -3703,6 +3694,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.get('entryRowsRecurring').value))
     
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+
+    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
   }
@@ -3722,21 +3716,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Total: ["", Validators.required]
     })
   }
-
-  // Empty strings passing 
-  // initEntryRow() {
-  //   return this.fb.group({
-  //     ItemID: [0, Validators.required],
-  //     Description: [null, Validators.required],
-  //     BillCycle: [null, Validators.required],
-  //     RMR: [0, Validators.required],
-  //     PassThrough: [this.passThrough, Validators.required],
-  //     BillingStartDate: [null, Validators.required],
-  //     Add2Item: [0],
-  //     Multiple: [25, Validators.required],
-  //     Total: [0, Validators.required]
-  //   })
-  // }
 
   addNewItem():void {
     (<FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring'))
@@ -3811,11 +3790,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onEquipMatSubmit(form: FormGroup) {
-    //console.log(form.value.Total)
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
-    //push values to the incentive component
-    //not working. will use in the ngOnDestroy
-    // this.incentiveEntryService.updateEquipMat(this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].ItemID, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Description, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Quantity, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Cost, this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value[0].Total);
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
 
@@ -3823,7 +3798,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
     localStorage.setItem('equipmatentry', JSON.stringify(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value));
 
+    // console.log(this.recurring)
+    // console.log(typeof this.recurring)
+    // console.log(this.equipmentAndMaterials);
+    // console.log(typeof this.equipmentAndMaterials)
+    // console.log(this.laborCharges);
+    // console.log(typeof this.laborCharges)
+
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+    // console.log(Math.round(this.lineItemSubtotal).toFixed(2));
+    // console.log(this.lineItemSubtotal.toFixed(2));
+    // console.log(typeof this.lineItemSubtotal)
+    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
   }
@@ -3860,9 +3847,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       controlArray.at(i).get('Total').setValue('');
     }
 
-    // (<FormArray>this.incentiveEquipMatEntryForm.get('entryRowsEquipMat'))
-    // .push(this.initEquipMatEntryRow());
-
     localStorage.removeItem("equipmatentry");
     localStorage.removeItem("totalEquipMatCalc");
   }
@@ -3898,10 +3882,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onLaborChargesSubmit(form: FormGroup) {
-    //console.log(form.value.Total)
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
-    
-    // this.incentiveEntryService.updateLaborCharges(this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].ItemID, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Description, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Quantity, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Cost, this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value[0].Total);
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumLaborCharges);
 
@@ -3911,6 +3892,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
+    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
+
     this.modalService.dismissAll();
   }
 
@@ -3946,11 +3930,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       controlArray.at(i).get('Total').setValue('');
     }
 
-    // const control = (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
-    // .removeAt(i);
-    // (<FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges'))
-    // .push(this.initLaborChargesEntryRow());
-
     localStorage.removeItem("laborchargesentry");
     localStorage.removeItem("totalLaborChargesCalc");
   }
@@ -3964,47 +3943,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.router.navigate(["incentive-labor-charges"]);
   }
 
-  // openSearchCustomerModal(content) {
-  //   //bring up a modal
-  //   this.modalService.open(content, {
-  //     windowClass: 'my-class',
-  //     ariaLabelledBy: 'modal-basic-title'
-  //   }).result.then((result) => {
-  //     console.log(result)
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
-
-  // openSearchSiteModal(site) {
-  //   this.modalService.open(site, {
-  //     windowClass: 'my-class',
-  //     ariaLabelledBy: 'modal-basic-title'
-  //   }).result.then((result) => {
-  //     console.log(result)
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
-
-  // openSearchSystemModal(system) {
-  //   this.modalService.open(system, {
-  //     windowClass: 'my-class',
-  //     ariaLabelledBy: 'modal-basic-title'
-  //   }).result.then((result) => {
-  //     console.log(result)
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
-
   openAddViewCommentsModal(comments) {
     this.modalService.open(comments, {
       windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {
-      // console.log(result)
-      // console.log(this.incentiveDashboardForm.controls['PartnerComments'].value)
       let newPartnerComments = this.incentiveDashboardForm.controls['PartnerComments'].value;
       localStorage.setItem("partnerComments", newPartnerComments);
     }, (reason) => {
