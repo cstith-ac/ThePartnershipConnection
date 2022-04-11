@@ -58,6 +58,7 @@
     "ng-flash-messages": "^0.3.0",
     "ng2-currency-mask": "^9.0.0",
     "ngx-avatar": "^4.1.0",
+    "ngx-bootstrap": "^8.0.0",
     "ngx-filter-pipe": "^2.1.2",
     "ngx-mask": "^11.1.4",
     "ngx-pagination": "^5.0.0",

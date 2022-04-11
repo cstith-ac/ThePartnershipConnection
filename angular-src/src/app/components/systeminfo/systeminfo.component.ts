@@ -14,8 +14,6 @@ declare var $: any;
   styleUrls: ['./systeminfo.component.css']
 })
 export class SysteminfoComponent implements OnInit {
-  // @ViewChild('systemInfo') systemInfo: ElementRef;
-  // @ViewChild('systemInfoCustomerNumber') systemInfoCustomerNumber: ElementRef;
 
   id:number;
   note;
@@ -87,19 +85,5 @@ export class SysteminfoComponent implements OnInit {
       }
     )
   }
-
-  // showTemp(customer_Notes_Id: number) {
-  //   this.routeService.getCustomerContractNotes().subscribe(
-  //     res => {
-  //       this.note = this.contractNotes.map(x => x.customer_Notes_Id);
-  //       console.log(this.note);
-  //     }
-  //   )
-  // }
-
-  // showHide(event) {
-  //   console.log(event.target);
-  //   this.show = !this.show;
-  // }
 
 }

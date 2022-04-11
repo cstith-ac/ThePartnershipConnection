@@ -55,7 +55,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr *ngFor="let item of listPartnerContacts | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize"> -->
                     <tr *ngFor="let item of listPartnerContacts | filterPartnerviewlist:searchTerm | paginate: { itemsPerPage: 10, currentPage: p }">
                         <td class="hyperlink" (click)="onClickOpenPartnerLandingPage(item.partnerCode, item.sedonaContactEmail, item.partnerName)">{{ item.partnerCode }}</td>
                         <td>{{ item.partnerName }}</td>

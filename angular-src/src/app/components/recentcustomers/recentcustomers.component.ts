@@ -34,15 +34,6 @@ export class RecentcustomersComponent implements OnInit {
 
   id:number;
 
-  // customer0;
-  // customer1;
-  // customer2;
-  // customer3;
-  // customer4;
-  // customer5;
-  // customer6;
-  // customer4
-
   previousCustomer0;
   previousCustomer1;
   previousCustomer2;
@@ -183,12 +174,17 @@ export class RecentcustomersComponent implements OnInit {
     )
 
     //get dbo.CustomerCareDashboardInfo by CustomerID for each customer
-    this.routeService.getCustomerCareDashboardInfoById(this.id).subscribe(
-      res => {
-        console.log(res);
-        //customerRatingValueArray
-      }
-    )
+    if(this.id !== undefined) {
+      this.routeService.getCustomerCareDashboardInfoById(this.id).subscribe(
+        res => {
+          console.log(res);
+          //customerRatingValueArray
+        }
+      )
+    } else {
+      console.log(`${this.id} is undefined`)
+    }
+    
 
   }
 

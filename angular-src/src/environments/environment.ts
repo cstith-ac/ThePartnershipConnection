@@ -29,6 +29,15 @@ export const environment = {
 //   appVersion: require('../../../angular-src/package.json').version
 // };
 
+// export const environment = {
+//   production: true,
+//   baseUrl: 'https://thepartnershipconnectionapi-beta.azurewebsites.net',
+//   appInsights: {
+//     instrumentationKey: '9e5cf497-b794-4e72-a1c6-603856eeda3b'
+//   },
+//   appVersion: require('../../../angular-src/package.json').version
+// }
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

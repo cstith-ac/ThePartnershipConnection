@@ -402,7 +402,7 @@ export class Customer3glistingComponent implements OnInit {
     return result;
   }
 
-  onOpenDetails3gModal(e,customer_System_Id: number) {
+  onOpenDetails3gModal(e, customer_System_Id: number) {
     $("#details3gModal").modal("show");
 
     this.customer_System_Id = customer_System_Id;

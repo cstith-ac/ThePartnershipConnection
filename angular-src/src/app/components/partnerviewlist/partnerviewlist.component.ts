@@ -136,42 +136,7 @@ export class PartnerviewlistComponent implements OnInit {
         this.spinnerService.hide();
       }
     )
-
-    // this.routeService.getRMListforTPC().subscribe(
-    //   res => {
-    //     //console.log(res.body);
-    //     if(res.status === 200) {
-    //       this.rmListForTPC = res.body;
-    //       for(let i = 0; i < this.rmListForTPC.length; i++) {
-    //         console.log(this.rmListForTPC[i].rmAssigned);
-    //         console.log(this.rmListForTPC[i].rmid);
-
-    //         // this.rmAssigned = this.rmListForTPC[i].rmAssigned;
-    //         // this.rmid = this.rmListForTPC[i].rmid;
-    //       }
-    //     }
-    //   }
-    // )
-
-    //get state list
-    // this.routeService.getTPCStateList().subscribe(
-    //   res => {
-    //     console.log(res.body)
-    //   }
-    // )
   }
-
-  // ngOnDestroy() {
-  //   // alert(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}`)
-  //   // click ok to proceed or cancel and select another Partner
-  //   if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
-  //     // Save it!
-  //     console.log('Thing was saved to the database.');
-  //   } else {
-  //     // Do nothing!
-  //     console.log('Thing was not saved to the database.');
-  //   }
-  // }
 
   onOpenRMFilterModal(rmAssigned) {
     // show or hide the list
@@ -234,10 +199,6 @@ export class PartnerviewlistComponent implements OnInit {
   }
 
   onChangeFilterState(e) {
-    // console.log(e)
-    // console.log(e.target.value)
-    // console.log(parseInt(e.target.id))
-
     this.usStateID = parseInt(e.target.id);
 
     if(!this.rmid) {
@@ -285,16 +246,6 @@ export class PartnerviewlistComponent implements OnInit {
     localStorage.setItem('sedonaContactEmail', this.sedonaContactEmail)
     localStorage.setItem('partnerName', this.partnerName);
 
-    // if (confirm(`You selected ${this.partnerName} wtih the email ${this.sedonaContactEmail}. Are you sure you want to select this Partner?`)) {
-    //   // Save it!
-    //   console.log('A user was selected.');
-    //   this.router.navigate(['partner-dashboard']);
-    // } else {
-    //   // Do nothing!
-    //   console.log('A user was NOT selected.');
-    //   // show flashmessage, tell the user to please select a user
-    // }
-
     this.router.navigate(['partner-dashboard']);
     // this.routeService.getPartnerLandingPageX('cstith@alarmconnections.com','hugo@cloudsecurityalarms.com').subscribe(
     //   res => {
@@ -307,28 +258,11 @@ export class PartnerviewlistComponent implements OnInit {
     this.listPartnerContacts = this.listPartnerContacts.filter((val) => 
       val.partnerName.toLowerCase().includes(value));
 
-    // this.listPartnerContacts = this.listPartnerContacts.filter((val) => 
-    // val.partnerName.toLowerCase().indexOf(value.toLowerCase()) !== 1);
-
     this.collectionSize = this.listPartnerContacts.length;
-
-    // this.adminUserSearchForm.valueChanges.subscribe(
-    //   res => {
-    //     console.log(res)
-    //   }
-    // )
   }
 
   onChangeClearSearch(e) {
     console.log(e.target.value)
-    // this.partnerContactsSearchForm.valueChanges.subscribe(
-    //   res => {
-    //     console.log(res)
-    //   }
-    // )
-    
-    // this.listPartnerContacts.filter((s) => s.partnerName.toLowerCase())
-    // this.collectionSize = this.listPartnerContacts.length
   }
 
   clearSearch() {
@@ -406,17 +340,11 @@ export class PartnerviewlistComponent implements OnInit {
       res => {
         if(res.status === 200) {
           this.spinnerService.hide();
-          // this.flashMessage.show('Your requested data is displayed below', {
-          //   cssClass: 'text-center alert-success',
-          //   timeout: 1000
-          // });
         }
-        // console.log(Object.entries(res.body))
         
         this.partnerServiceNote = [].concat(res.body);
 
         for(let i = 0; i < this.partnerServiceNote.length; i++) {
-          // console.log(this.partnerServiceNote[i].serviceNote)
           this.serviceNote = this.partnerServiceNote[i].serviceNote
         }
       }
@@ -438,12 +366,7 @@ export class PartnerviewlistComponent implements OnInit {
       res => {
         if(res.status === 200) {
           this.spinnerService.hide();
-          // this.flashMessage.show('Your requested data is displayed below', {
-          //   cssClass: 'text-center alert-success',
-          //   timeout: 1000
-          // });
         }
-        // console.log(Object.entries(res.body));
         this.partnerCustCareNote = [].concat(res.body);
 
         for(let i = 0; i < this.partnerCustCareNote.length; i++) {
@@ -468,10 +391,6 @@ export class PartnerviewlistComponent implements OnInit {
       res => {
         if(res.status === 200) {
           this.spinnerService.hide();
-          // this.flashMessage.show('Your requested data is displayed below', {
-          //   cssClass: 'text-center alert-success',
-          //   timeout: 1000
-          // });
         }
 
         this.partnerCriticalMessage = [].concat(res.body);

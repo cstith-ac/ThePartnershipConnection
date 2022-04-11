@@ -12,13 +12,6 @@
                 <div class="col card-deck">
                     <div class="col card">
                         <div class="card-block">
-                            <!-- <h4 class="card-title">Permits</h4>
-                            <p class="card-text">
-                                Apply for parking permit
-                                <br> View existing permit requests
-                                <br> Activate Visitor permits
-                                <br>
-                            </p> -->
                             <p>
                                 #<span #systemInfoCustomerNumber id="systemInfoCustomerNumber">{{ systemInfo.customerNumber }}</span>&nbsp;&nbsp;
                                 <span id="systemInfoCustomerName">{{ systemInfo.customerName }}</span>&nbsp;&nbsp;
@@ -61,7 +54,6 @@
                                 <ng-template #non3GBlock>
                                     <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span>
                                 </ng-template>
-                                <!-- <span id="featureMessage" class="special-flag-text">{{systemInfo.featureMessage}}</span> -->
                             </p>
                             <p class="monitoredBy">
                                 <span class="afa-text-dark-blue">
@@ -88,17 +80,10 @@
                                 <span id="lastServiceTicketOn">{{systemInfo.lastServiceTicketOn}}</span>
                             </p>
                         </div>
-                        <!-- <div class="card-footer">
-                            Link
-                        </div> -->
                     </div>
             
                     <div class="col card text-center">
                         <div class="card-block">
-                            <!-- <h4 class="card-title">Vehicles</h4>
-                            <p class="card-text">
-                                View and manage your vehicles
-                            </p> -->
                             <p class="afa-text-blue text-right">
                                 <span id="systemType">{{systemInfo.systemType}}</span>
                             </p>
@@ -115,19 +100,16 @@
                                 <span id="systemInfoNextCycleOn">{{systemInfo.nextCycleOn}}</span>
                             </p>
                         </div>
-                        <!-- <div class="card-footer">
-                            Link
-                        </div> -->
                     </div>
             
                     <div class="col card">
                         <div class="card-block">
-                            <!-- <h4 class="card-title">Parking Tickets</h4>
-                            <p class="card-text">
-                                View your parking ticket history
-                            </p> -->
                             <div class="mb-3 afa-bg-panel-type system-notes-border system-notes-padding">
-                                <p>Panel Type - <span id="panelType"></span></p>
+                                <!-- <p>Panel Type - <span id="panelType"></span></p> -->
+                                <p>
+                                    <span class="afa-text-dark-blue">Panel Type - </span>
+                                    <span>{{systemInfo.panelType}}</span>
+                                </p>
                                 <p>
                                     <span class="afa-text-dark-blue">Cell Model - </span>
                                     <span id="cellModel">{{systemInfo.cellModel}}</span>
@@ -139,44 +121,311 @@
                             </div>
                             <div class="afa-bg-tan system-notes-border system-notes-padding">
                                 <h3 class="afa-text-blue">System Notes</h3>
-                                <!-- <p id="systemNotes">{{systemInfo.systemNotes}}</p> -->
                                 <pre id="systemNotes">
                                     {{systemInfo.systemNotes}}
                                 </pre>
                             </div>
                         </div>
-                        <!-- <div class="card-footer">
-                            Link
-                        </div> -->
                     </div>
                 </div>
             </div>
             
+            <!--Break this out into a separate component-->
             <div class="row">
-                <div class="card col">
+                <div class="card-deck col">
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information from <span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="true">Information from <span id="centralStationMonitoredBy">{{systemInfo.monitoredBy}}</span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information from Zone List<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#contactlist" role="tab" aria-controls="contactlist" aria-selected="true">Contact List<span id="centralStationMonitoredBy"></span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information from Contact List<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#zonelist" role="tab" aria-controls="zonelist" aria-selected="true">Zone List<span id="centralStationMonitoredBy"></span></a>
+                            </li>
+                            <li class="nav-item info-tab info-tab-bg">
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#signals" role="tab" aria-controls="signals" aria-selected="true">Signals<span id="centralStationMonitoredBy"></span></a>
+                            </li>
+                            <li class="nav-item info-tab info-tab-bg">
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="true">Miscellaneous<span id="centralStationMonitoredBy"></span></a>
                             </li>
                         </ul>
                         <div class="tab-content info-tab-bg" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <ul class="list-unstyled tab-list-padding">
-                                    <li>No connection to Central Station at this time.</li>
-                                </ul>
+                            <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                                <div class="card bg-transparent mb-3 shadow-none border-0">
+                                    <div class="row align-items-center mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Site Name</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1" *ngIf="!loading">{{site_name}}</p>
+                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
+                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Site Status</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1" *ngIf="!loading">{{sitestat_id}} <span *ngIf="sitestat_id">= Active</span></p>
+                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
+                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Code Words</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1" *ngIf="!loading">{{codeword1}}</p>
+                                            <p class="mb-1" *ngIf="!loading">{{codeword2}}</p>
+                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
+                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Address</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1" *ngIf="!loading">{{site_addr1}}</p>
+                                            <p class="mb-1" *ngIf="!loading">{{site_addr2}}</p>
+                                            <p class="mb-1" *ngIf="!loading">{{city_name}} {{state_id}} {{zip_code}}</p>
+                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
+                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Phone</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1" *ngIf="!loading">{{phone1 | phone}} <span *ngIf="ext1">ext. {{ext1}}</span></p>
+                                            <p class="mb-1" *ngIf="!loading">{{phone2 | phone}} <span *ngIf="ext2">ext. {{ext2}}</span></p>
+                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
+                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="position: absolute; top: 35%; left:35%; right: 0;">
+                                    <ngb-toast *ngIf="hasNoCentralStationData" [autohide]="false">
+                                        {{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant
+                                    </ngb-toast>
+                                </div>
+                                <div style="position: absolute; top: 35%; left:35%; right: 0;">
+                                    <ngb-toast *ngIf="loading" [autohide]="false">
+                                        <p class="loading">Loading Central Station Information</p>
+                                    </ngb-toast>
+                                </div>
+                                <!-- <ng-template #noCentralStationContent let-modal>
+                                    <p><i>Foo</i> not currently supported by the Customer Care Assistant</p>
+                                </ng-template> -->
                             </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                            <div class="tab-pane fade" id="contactlist" role="tabpanel" aria-labelledby="contactlist-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Sequence #</th>
+                                                <th scope="col" class="text-center">Name</th>
+                                                <th scope="col" class="text-center">PIN</th>
+                                                <th scope="col" class="text-center">Contact Type</th>
+                                                <th scope="col" class="text-center">Relation</th>
+                                                <th scope="col" class="text-center">Auth ID</th>
+                                                <th scope="col" class="text-center">Phone Type</th>
+                                                <th scope="col" class="text-center">Phone #'s</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of contactListData">
+                                                <td class="text-center">{{item.cs_seqno}}</td>
+                                                <td class="text-center">{{item.name}}</td>
+                                                <td class="text-center">{{item.pin}}</td>
+                                                <td class="text-center">{{item.contact_type_desc}}</td>
+                                                <td class="text-center">{{item.relation_id}}</td>
+                                                <td class="text-center">{{item.auth_id}}</td>
+                                                <td class="text-center">{{item.phone_type_list}}</td>
+                                                <td class="text-center">
+                                                    {{item.phn1}}
+                                                    {{item.phn2}}
+                                                    {{item.phn3}}
+                                                    {{item.phn4}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae egestas felis. Etiam ornare vehicula sollicitudin. Etiam condimentum nunc vel tempus dictum. Pellentesque nec elementum augue. Praesent et pretium magna. Sed id mi malesuada, posuere velit ac, aliquet mi. Nullam fringilla risus in nulla eleifend, non ornare turpis feugiat. Ut tellus ante, semper vitae tortor et, porta dignissim tellus. In hendrerit pellentesque luctus.</p>
+                            <div class="tab-pane fade" id="zonelist" role="tabpanel" aria-labelledby="zonelist-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Zone</th>
+                                                <th scope="col" class="text-center">Location</th>
+                                                <th scope="col" class="text-center">State</th>
+                                                <th scope="col" class="text-center">Service Type</th>
+                                                <th scope="col" class="text-center">Restore Required (1)</th>
+                                                <th scope="col" class="text-center">Restore Required (2)</th>
+                                                <th scope="col" class="text-center">Trouble State Flag</th>
+                                                <th scope="col" class="text-center">Trip Count</th>
+                                                <th scope="col" class="text-center">Event Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of zonesData">
+                                                <td class="text-center">{{item.zone_id}}</td>
+                                                <td class="text-center">{{item.comment50s}}</td>
+                                                <td class="text-center">{{item.zonestate_descr}}</td>
+                                                <td class="text-center">{{item.servtype_id}}</td>
+                                                <td class="text-center">{{item.restore_reqd_flag2}}</td>
+                                                <td class="text-center">{{item.restore_reqd_flag21}}</td>
+                                                <td class="text-center">{{item.trouble_state_flag}}</td>
+                                                <td class="text-center">{{item.trip_count}}</td>
+                                                <td class="text-center">{{item.event_descr}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- <div class="card bg-transparent mb-3 shadow-none border-0">
+                                    <div class="row align-items-center mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Zone</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{zone_id}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Location</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{comment50s}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">State</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{zonestate_descr}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Service Type</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{servtype_id}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Restore Required</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{restore_reqd_flag2}}</p>
+                                            <p class="mb-1" *ngIf="!loading">{{restore_reqd_flag21}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Trouble State Flag<span class="text-error">*</span></p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{trouble_state_flag}}</p>
+                                            <p class="mb-1 text-error">*These values are not verified by central station and are provided only as a reference.</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Trip Count<span class="text-error">*</span></p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{trip_count}}</p>
+                                            <p class="mb-1 text-error">*These values are not verified by central station and are provided only as a reference.</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Event Description</p>
+                                        </div>
+                                        <div class="col divider">
+                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
+                                            <p class="mb-1" *ngIf="!loading">{{event_descr}}</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="tab-pane fade" id="signals" role="tabpanel" aria-labelledby="signals-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Event Date</th>
+                                                <th scope="col" class="text-center">Event Class</th>
+                                                <th scope="col" class="text-center">Event</th>
+                                                <th scope="col" class="text-center">Zone ID</th>
+                                                <th scope="col" class="text-center">User ID</th>
+                                                <th scope="col" class="text-center">Username</th>
+                                                <th scope="col" class="text-center">Operator</th>
+                                                <th scope="col" class="text-center">Phone</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of eventHistoryDateData | paginate: { itemsPerPage: 10, currentPage: p }; index as i">
+                                                <td id="{{item.event_Date}}" class="text-center hyperlink" (click)="openEventHistoryDateDetails(item.event_Date, item.cS_Number, item.site_name, item.scheduled_Date, item.event, item.event_Class, item.zone_Id, item.user_Id, item.phone, item.userName, item.operator, item.comment, item.additional_Info, item.pascom)">{{item.event_Date | date : 'MM/dd/yyyy hh:mm:ss a'}}</td>
+                                                <!-- <td class="text-center" (click)="onClickGetEventHistoryDateDetails()">{{item.event_Date}}</td> -->
+                                                <td class="text-center">{{item.event_Class}}</td>
+                                                <td class="text-center">{{item.event}}</td>
+                                                <td class="text-center">{{item.zone_Id}}</td>
+                                                <td class="text-center">{{item.user_Id}}</td>
+                                                <td class="text-center">{{item.userName}}</td>
+                                                <td class="text-center">{{item.operator}}</td>
+                                                <td class="text-center">{{item.phone | phone}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-3">
+                                        <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+                                      </div>
+                                </div>
+                                <!-- <div class="card bg-transparent mb-3 shadow-none border-0">
+                                    <div class="row align-items-center mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Signals</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
+                                <div class="card bg-transparent mb-3 shadow-none border-0">
+                                    <div class="row align-items-center mt-1 mb-1">
+                                        <div class="col-1">
+                                            <p class="mb-1">Misc</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,9 +444,7 @@
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
-                <div class="col-md-12">
-                    <!-- <h2 class="modal-title" id="exampleModalLabel">title</h2> -->
-                </div>
+                <div class="col-md-12"></div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -205,23 +452,6 @@
             <div class="modal-body pt-0">
                 <div class="card border-0">
                     <div class="card-body p-0" id="">
-                        <!-- <div class="col-md-12" *ngFor="let item of basicUpgradeInfo">
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item"> {{item.upgradeOptions}}</li>
-                                    <li class="list-group-item"> {{item.upgradeOption1}}</li>
-                                    <li class="list-group-item"> {{item.upgradeOption2}}</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item">{{item.requirements}}</li>
-                                    <li class="list-group-item"> {{item.requirement1}}</li>
-                                    <li class="list-group-item"> {{item.requirement2}}</li>
-                                </ul>
-                            </div>
-                        </div> -->
-            
                         <div class="table-responsive">
                             <table class="table align-items-center" *ngFor="let item of basicUpgradeInfo">
                                 <thead>
@@ -267,61 +497,6 @@
 <!-- Last Service Ticket Modal -->
 <div class="modal fade" id="lastServiceTicketModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
-        <!-- <div class="modal-content">
-            <div class="modal-header pb-0 pl-2">
-                <div class="col-md-3">
-                    <h2 class="modal-title" id="exampleModalLabel">content</h2>
-                </div>
-                
-            </div>
-            <div class="modal-body pt-0">
-                <div class="card border-0">
-                    <div class="card-body p-0" id="ticketInfoContent">
-                        <div class="row  pt-3">
-                            <p>content</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="list-style-type-none padding-left0">
-                                    <p>content</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="list-style-type-none padding-left0">
-                                    <p>content</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>Customer Comments</h3>
-                                <div class="afa-bg-tan note-padding">
-                                    <p>contnetn</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 pt-3 pb-3">
-                                <button class="btn btn-primary boc-btn ml-0" >
-                                    Notes
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h3>Last Service Note</h3>
-                                <div class="afa-bg-tan note-padding">
-                                    <p>content</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div> -->
         <div class="modal-content" *ngFor="let item of serviceTicketInfo2">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-3">
@@ -439,6 +614,115 @@
             </div>
             <div class="modal-footer">
                 <button id="hideServiceTicketNotesModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Event History Date Details Modal -->
+<div class="modal fade" id="eventHistoryDateDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header pb-3 pl-2 divider-horizontal">
+                <div class="col-md-4">
+                    <!-- <p class="" id="exampleModalLabel">CS #: {{cS_Number}}</p> -->
+                    <span class="subtitle-2 medium-emphasis">CS #: </span>
+                    <span class="high-emphasis body-2">{{cS_Number}}</span>
+                </div>
+                <div class="col-md-5">
+                    <!-- <p class="">Site Name: {{site_name}}</p> -->
+                    <span class="subtitle-2 medium-emphasis">Site Name: </span>
+                    <span class="high-emphasis body-2">{{site_name}}</span>
+                </div>
+                <div class="col-md-3">
+                    <!-- <p class="">Scheduled Date: {{scheduled_Date}}</p> -->
+                    <span class="subtitle-2 medium-emphasis">Scheduled Date: </span>
+                    <span class="high-emphasis body-2">{{scheduled_Date | date : 'MM/dd/yyyy hh:mm:ss a'}}</span>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card border-0">
+                    <div class="card-body p-0">
+                        <div class="row pt-3 pb-3 divider-horizontal">
+                            <div class="col-md-4">
+                                <!-- <p>Event: {{ event }}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Event: </span>
+                                <span class="high-emphasis body-2">{{event}}</span>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <p>Event Date: {{ event_Date }}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Event Date: </span>
+                                <span class="high-emphasis body-2">{{event_Date | date : 'MM/dd/yyyy hh:mm:ss a'}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <!-- <p>Event Class: {{ event_Class }}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Event Class: </span>
+                                <span class="high-emphasis body-2">{{event_Class}}</span>
+                            </div>
+                        </div>
+
+                        <div class="row pt-3 pb-3 divider-horizontal">
+                            <div class="col-md-4">
+                                <span class="subtitle-2 medium-emphasis">Zone ID: </span>
+                                <span class="high-emphasis body-2">{{zone_Id}}</span>
+                            </div>
+                            <div class="col-md-5">
+                                <span class="subtitle-2 medium-emphasis">User ID: </span>
+                                <span class="high-emphasis body-2">{{user_Id}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="subtitle-2 medium-emphasis">Phone: </span>
+                                <span class="high-emphasis body-2">{{phone | phone}}</span>
+                            </div>
+                        </div>
+
+                        <div class="row pt-3 pb-3 divider-horizontal">
+                            <div class="col-md-4">
+                                <!-- <p>Username: {{ userName }}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Username: </span>
+                                <span class="high-emphasis body-2">{{userName}}</span>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <p>Operator: {{ operator }}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Operator: </span>
+                                <span class="high-emphasis body-2">{{operator}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                
+                            </div>
+                        </div>
+                        <div class="row pt-3 divider-horizontal">
+                            <div class="col">
+                                <!-- <p>Comment</p>
+                                <p>{{comment}}</p> -->
+                                <p><span class="subtitle-2 medium-emphasis">Comment</span></p>
+                                <p><span class="high-emphasis body-2">{{comment}}</span></p>
+                            </div>
+                        </div>
+                        <div class="row pt-3 divider-horizontal">
+                            <div class="col">
+                                <!-- <p>Additional Info</p>
+                                <p>{{additional_Info}}</p> -->
+                                <p><span class="subtitle-2 medium-emphasis">Additional Info</span></p>
+                                <p><span class="high-emphasis body-2">{{additional_Info}}</span></p>
+                            </div>
+                        </div>
+                        <div class="row pt-3 divider-horizontal">
+                            <div class="col">
+                                <!-- <p>PassCom</p>
+                                <p>{{pascom}}</p> -->
+                                <p><span class="subtitle-2 medium-emphasis">PassCom</span></p>
+                                <p><span class="high-emphasis body-2">{{pascom}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -8,26 +8,26 @@
         <div class="col-md-12">
             <table class="table table-striped">
                 <thead>
-                <tr>
-                  <th scope="col">Customer #</th>
-                  <th scope="col">Customer Name</th>
-                  <th scope="col">RMR</th>
-                  <th scope="col">Reason for Cancel</th>
-                  <th scope="col">Effective Date</th>
-                  <th scope="col">Cancellation Type</th>
-                  <th scope="col">Balance of Contract</th>
-                </tr>
+                    <tr>
+                        <th scope="col">Customer #</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">RMR</th>
+                        <th scope="col">Reason for Cancel</th>
+                        <th scope="col">Effective Date</th>
+                        <th scope="col">Cancellation Type</th>
+                        <th scope="col">Balance of Contract</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let list of cancelQueueList; index as i">
-                  <td id="{{ list.cancel_Queue_Id }}" class="hyperlink" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
-                  <td>{{ list.customer_Name }}</td>
-                  <td>{{ list.cancelledRMR | currency }}</td>
-                  <td>{{ list.rmR_Reason_Code }}</td>
-                  <td>{{ list.effective_Date | date }}</td>
-                  <td>{{ list.full_Cancel }}</td>
-                  <td>{{ list.balance_Of_Contract | currency }}</td>
-                </tr>
+                    <tr *ngFor="let list of cancelQueueList; index as i">
+                        <td id="{{ list.cancel_Queue_Id }}" class="hyperlink" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
+                        <td>{{ list.customer_Name }}</td>
+                        <td>{{ list.cancelledRMR | currency }}</td>
+                        <td>{{ list.rmR_Reason_Code }}</td>
+                        <td>{{ list.effective_Date | date }}</td>
+                        <td>{{ list.full_Cancel }}</td>
+                        <td>{{ list.balance_Of_Contract | currency }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -44,26 +44,16 @@
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-12 mb-2">
-                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> -->
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-md-6" *ngFor="let site of cancelQueueSiteList">
-                                <!-- <p>
-                                    <span class="col-md-6 pl-0">Balance Of Contract: {{ site.balance_Of_Contract | currency }}</span>
-                                    <span class="col-md-6 pl-0">Customer #: {{ customer_Number }}</span>
-                                    <span class="col-md-6">Customer Name: {{ customer_Name }}</span>
-                                    Balance Of Contract: {{ site.balance_Of_Contract }} | Business Name: {{ site.business_Name }}
-                                </p> -->
                                 <p> 
                                     <span class="subtitle-2">Customer #: </span> 
                                     <span class="body-2">{{ customer_Number }}</span></p>
@@ -130,22 +120,7 @@
                                 <p>
                                     <span class="subtitle-2">Cancellation Type: </span>
                                     <span class="body-2">{{ full_Cancel }}</span>
-                                     
                                 </p>
-                                <!-- <p>
-                                    <span class="subtitle-2"> Business Name: </span>
-                                    <span class="body-2">{{ site.business_Name }}</span>
-                                    <span class="body-2">{{ site.address_1 }},</span>
-                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }},</span> 
-                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
-                                </p> -->
-                                <!-- <p>
-                                    <span class="subtitle-2"></span>
-                                    <span class="body-2">{{ site.address_1 }},</span>
-                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }},</span> 
-                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
-                                     
-                                </p> -->
                             </div>
                             <div class="col-md-6">
                                 <div>
@@ -153,10 +128,8 @@
                                 </div>
                                 
                                 <div class="card mt-5">
-                                    <!-- <div class="card-header"></div> -->
                                     <div class="card-body">
                                         <p class="subtitle-2">Customer's Comment</p>
-                                        <!-- <p class="body-2">{{ memo }}</p> -->
                                         <p *ngIf="memo === ''; else noCommentBlock" class="body-2">There are no comments available for this customer.</p>
                                         <ng-template #noCommentBlock>
                                             <p class="body-2">{{ memo }}</p>
@@ -192,13 +165,6 @@
                                          <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span> </button>
                                     </div> -->
                                 </div>
-                                <!-- <p>
-                                    <span class="subtitle-2"> Business Name: </span>
-                                    <span class="body-2">{{ site.business_Name }} </span>
-                                    <span class="body-2">{{ site.address_1 }},</span>
-                                     <span *ngIf="site.address_2" class="body-2">{{ site.address_2 }}, </span> 
-                                     <span class="body-2">{{ site.city}}, {{ site.state }}  {{ site.zipCode}}</span>
-                                </p> -->
                             </div>
                         </div>
                       <!-- <form [formGroup]="cancelQueueListForm">
@@ -236,14 +202,10 @@
         <div class="modal-content">
             <div class="modal-header pb-0 pl-2">
                 <div class="col-md-12 mb-2">
-                    <!-- <h2 class="modal-title" id="exampleModalLabel">Memo</h2> -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> -->
             </div>
             <div class="modal-body pt-0">
                 <div class="card p-3">

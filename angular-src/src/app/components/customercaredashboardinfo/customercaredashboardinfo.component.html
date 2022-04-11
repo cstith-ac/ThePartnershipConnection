@@ -105,12 +105,12 @@
                         <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;">
                             
                             <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 0) && (item.emailAddress == '')">Invoices are printed. No email address on file.</span>
-                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">Invoices are printed. Email address on file, @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">Invoices are printed. Email address on file, {{item.emailAddress}}</span>
                             <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 1) && (item.emailAddress == '')">Invoices are printed and also sent via mail. <mark>No email address on file!</mark></span>
-                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are printed and also sent via email to @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 1) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are printed and also sent via email to {{item.emailAddress}}</span>
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (!item.emailAddress)">Invoices are sent via mail. <mark>No email address on file!</mark></span>
-                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are sent via email to @{{item.emailAddress}}</span>
-                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">No invoice delivery method chosen. Email address on file is @{{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are sent via email to {{item.emailAddress}}</span>
+                            <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">No invoice delivery method chosen. Email address on file is {{item.emailAddress}}</span>
 
                             <!-- <span *ngIf="item.invoicesArePrinted === 1;"> are printed. No email address on file. </span>
                             <span *ngIf="item.invoicesArePrinted === 0;"> are not printed</span>

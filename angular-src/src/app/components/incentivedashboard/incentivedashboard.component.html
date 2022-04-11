@@ -310,7 +310,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="invoiceUpload" 
+                                            
                                             formControlName="InvoiceUpload"
                                             (change)="getInvoiceFileDetails($event)"
                                         >
@@ -330,7 +330,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="subscriberFormUpload" 
+                                             
                                             formControlName="SubscriberFormUpload"
                                             (change)="getSubscriberFileDetails($event)"
                                         >
@@ -351,7 +351,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="siteVisitUpload" 
+                                             
                                             formControlName="SiteVisitUpload"
                                             (change)="getSiteVisitFileDetails($event)"
                                         >
@@ -370,7 +370,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="otherDocument1Upload" 
+                                             
                                             formControlName="OtherDocument1Upload"
                                             (change)="getOtherDocument1FileDetails($event)"
                                         >
@@ -391,7 +391,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="contractUpload" 
+                                             
                                             formControlName="ContractUpload"
                                             (change)="getContractFileDetails($event)"
                                         >
@@ -410,7 +410,7 @@
                                         <input 
                                             type="file" 
                                             class="form-control col-sm-6" 
-                                            [(ngModel)]="otherDocument2Upload" 
+                                             
                                             formControlName="OtherDocument2Upload"
                                             (change)="getOtherDocument2FileDetails($event)"
                                         >
@@ -548,6 +548,7 @@
                                             class="invoiceTotalInput"
                                             [(ngModel)]="invoiceTotal"
                                             formControlName="InvoiceTotal"
+                                            (change)="onChangeInvoiceTotal($event)"
                                         >
                                         <!-- <kendo-numerictextbox
                                             format="c2"
@@ -573,6 +574,7 @@
                                             [(ngModel)]="partnerTaxAmount"
                                             formControlName="PartnerTaxAmount"
                                             
+                                            (change)="onChangePartnerTaxAmount($event)"
                                             [min]="0"
                                             [(ngbTooltip)]="taxToolTip"
                                         >
@@ -635,7 +637,7 @@
                                 <div class="form-group form-inline">
                                     <label class="col-sm-6 col-form-label pl-0 display-contents">Line Items Subtotal</label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <p class="lineItemSubtotal">{{ lineItemSubtotal | currency }}</p>
+                                        <p class="lineItemSubtotal">{{ lineItemSubtotal | currency: 'USD' : true : '1.2-2' }}</p>
                                         <kendo-numerictextbox
                                             class="d-none"
                                             format="c2"
@@ -1601,6 +1603,7 @@
                                     </div>
                                     <div class="col">
                                         <kendo-numerictextbox
+                                            #fooRef
                                             format="c2"
                                             placeholder="$0.00"
                                             formControlName="Total"
@@ -1919,12 +1922,12 @@
                                     <!-- <input 
                                         type="text"
                                         class="form-control"
-                                        formControlName="CostPerHour"
+                                        formControlName="Cost"
                                         placeholder="$0.00"
                                         mask="separator.2" 
                                         thousandSeparator=","
                                         prefix="$"
-                                        (change)="calculateCostPerHour($event,i)"
+                                        (change)="calculateCost($event,i)"
                                     > -->
                                     <kendo-numerictextbox
                                         format="c2"
@@ -1933,6 +1936,7 @@
                                         [spinners]="false"
                                         [style.height]="'calc(1.5em + 1.3rem)'"
                                         [style.width]="'80%'"
+                                        (change)="calculateCost($event,i)"
                                     ></kendo-numerictextbox>
                                 </div>
                                 <div class="col">

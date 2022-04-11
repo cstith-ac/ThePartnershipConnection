@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, OnDestroy, AfterViewChecked, Input, ViewChild, ElementRef } from '@angular/core';
-import { Location, formatDate } from '@angular/common';
+import { Location, formatDate, CurrencyPipe } from '@angular/common';
 import { DataBindingDirective } from '@progress/kendo-angular-grid';
 import { process } from '@progress/kendo-data-query';
 import { environment } from '../../../environments/environment';
@@ -70,7 +70,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   public value;
 
-  systemPopUp: boolean=false;
+  systemPopUp: boolean = false;
 
   updateRecurringWithJobID;
   updateEquipMatWithJobID;
@@ -84,7 +84,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   uploadText;
 
   authToken: any;
-  user:any=Object;
+  user:any = Object;
   userEmailAddress: '';
   customerEmailAddress;
   enrollInEmailInvoices;
@@ -162,13 +162,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   totalRecurringCalc;
   itemID;
   description;
-  quantity=1;
+  quantity = 1;
   cost: number;
   laborQuantity: number;
   laborCost: number;
   totalEquipMatCalc;
   totalLaborChargesCalc;
-  placeholder="$0.00";
+  placeholder ="$0.00";
 
   customer: string;
   siteName: string;
@@ -214,7 +214,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   invoiceDate;
   invoiceTotal;
   // partnerTaxAmount=0;
-  partnerTaxAmount=0;
+  partnerTaxAmount = 0;
   recurring;
   equipmentAndMaterials;
   laborCharges;
@@ -319,8 +319,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   itemDescription2:string;
   defaultAmount2:number;
 
-  taxToolTip="Enter dollars and cents"
-  viewAvailableDocuments="View available documents"
+  taxToolTip = "Enter dollars and cents"
+  viewAvailableDocuments = "View available documents"
 
   submitted = false;
   showValidateInvoiceButton = true;
@@ -384,7 +384,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     private modalService: NgbModal,
     public fb: FormBuilder,
     private httpService: HttpClient,
-    private location: Location
+    private location: Location,
+    private cp: CurrencyPipe
   ) {
     router.events.forEach((event) => {
       if(event instanceof NavigationStart) {
@@ -456,14 +457,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     })
 
-    // router.events
-    //   .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
-    //   .subscribe(event => {
-    //     if (event.id === 1 && event.url === event.urlAfterRedirects) {
-    //       console.log('the page was refreshed')
-    //       alert('using the back button will reset all of your currently entered information')
-    //     }
-    // });
+    router.events
+      .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
+      .subscribe(event => {
+        if (event.id === 1 && event.url === event.urlAfterRedirects) {
+          console.log('the page was refreshed')
+          //alert('using the back button will reset all of your currently entered information')
+
+          setTimeout(() => {
+            this.removeDocumentsFromUIOnPageRefresh()
+          }, 8);
+
+        }
+    });
   }
   
 
@@ -728,6 +734,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           }
 
           if(this.user.afaRole === 5) {
+            // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+            // this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+
             if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount) {
             
               this.invoiceTotalValidated = true;
@@ -1170,49 +1179,64 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onChangeInvoiceTotal(e) {
     console.log(e)
-    this.invoiceTotal = parseInt(e.target.value)
-    if(this.incentiveDashboardForm.get('LineItemSubtotal').value === this.invoiceTotal) {
-      console.log('match')
-      //this.invoiceTotalValidated = false;
-      this.invoiceTotal = parseInt(e.target.value)
-      //
-    } else {
-      console.log('no match')
-      //this.invoiceTotalValidated = true;
-      this.calculateInvoiceTotal()
-    }
-    this.removeNaN(e)
+    // this.invoiceTotal = parseInt(e.target.value)
+    // if(this.incentiveDashboardForm.get('LineItemSubtotal').value === this.invoiceTotal) {
+    //   console.log('match')
+    //   //this.invoiceTotalValidated = false;
+    //   this.invoiceTotal = parseInt(e.target.value)
+    //   //
+    // } else {
+    //   console.log('no match')
+    //   //this.invoiceTotalValidated = true;
+    //   this.calculateInvoiceTotal()
+    // }
+    // this.removeNaN(e)
+  }
+
+  calculateCost(e,i) {
+    console.log(e.target.value);
   }
 
   calculateInvoiceTotal() {
-    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
-      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-      this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
     
-      if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
-        this.invoiceTotalValidatedNonPartner = true;
-      }
-      if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-        this.invoiceTotalValidatedNonPartner = false;
-        this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
-      }
-    }
+    if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
 
-    if(this.user.afaRole === 5) {
       this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-      this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
-      
-      // console.log(this.lineItemSubtotal)
-      // console.log(typeof this.lineItemSubtotal)
-      // console.log(this.lineItemSubtotal.toFixed(2))
 
       if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
         console.log('the line items and tax don\'t equal the total');
+        
+        this.invoiceTotalValidatedNonPartner = true;
+      }
+
+      if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
+        console.log('the line items and tax equal the total');
+
+        this.invoiceTotalValidatedNonPartner = false;
+      }
+    
+      // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
+      //   this.invoiceTotalValidatedNonPartner = true;
+      // }
+      // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
+      //   this.invoiceTotalValidatedNonPartner = false;
+      //   this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
+      // }
+    }
+
+    if(this.user.afaRole === 5) {
+
+      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+
+      if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
+        console.log('the line items and tax don\'t equal the total');
+        
         this.invoiceTotalValidated = true;
       }
 
       if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
         console.log('the line items and tax equal the total');
+
         this.invoiceTotalValidated = false;
       }
     
@@ -2036,7 +2060,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       // console.log(e.target.value)
       // this.customer_Site_id = 182015;
       this.alarmAccount = '';
-      this.systemTypeID ='';
+      this.systemTypeID = '';
       this.panelTypeID = '';
       this.panel_Location = '';
       this.centralStationID = '';
@@ -2353,6 +2377,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     }
     if(this.enrollInEmailInvoices === false) {
       // console.log('Just pass the customer email addressss')
+    }
+
+    // if the tax is Null, insert a zero value
+    if(this.incentiveDashboardForm.get('PartnerTaxAmount').value == null) {
+      this.incentiveDashboardForm.controls['PartnerTaxAmount'].setValue(0);
     }
 
     // confirm('Click ok to confirm form submission')
@@ -3316,6 +3345,48 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     // parameters 0 - 6
   }
 
+  removeDocumentsFromUIOnPageRefresh() {
+    if(!this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+      console.log('this invoice upload is INVALID');
+      this.showInvoiceFile = false;
+      localStorage.removeItem('invoiceName');
+      localStorage.removeItem('invoiceFileSize');
+    }
+    if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+      console.log('this invoice upload is valid')
+    }
+
+    if(this.incentiveDashboardForm.get('SiteVisitUpload').value === "") {
+      console.log('this customer/site visit upload is INVALID');
+      this.showSiteVisitFile = false;
+      localStorage.removeItem('siteVisitName');
+    }
+
+    if(this.incentiveDashboardForm.get('ContractUpload').value === "") {
+      console.log('this contract upload is INVALID');
+      this.showContractFile = false;
+      localStorage.removeItem('contractName');
+    }
+
+    if(this.incentiveDashboardForm.get('SubscriberFormUpload').value === "") {
+      console.log('this subscriber/work order upload is INVALID');
+      this.showSubscriberFormFile = false;
+      localStorage.removeItem('subscriberFormName');
+    }
+
+    if(this.incentiveDashboardForm.get('OtherDocument1Upload').value == "") {
+      console.log('this other document 1 upload is INVALID');
+      this.showOtherDocument1File = false;
+      localStorage.removeItem('otherDocument1Name');
+    }
+
+    if(this.incentiveDashboardForm.get('OtherDocument2Upload').value == "") {
+      console.log('this other document 2 upload is INVALID');
+      this.showOtherDocument2File = false;
+      localStorage.removeItem('otherDocument2Name');
+    }
+  }
+
   //Test Invoice file upload
   getInvoiceFileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
@@ -3332,6 +3403,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
         // Show the name = false
         // Show 'No File Selected' = true
+        // if the control is invalid, showInvoiceFile is false
         this.showInvoiceFile = true;
       });
 
@@ -3363,7 +3435,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   getSiteVisitFileDetails(e) {
     for (var i = 0; i < e.target.files.length; i++) {
       //push the files to the array
-      // console.log(e.target.files[i]);
       this.selectedSiteVisitFile = e.target.files[0];
 
       //upload to localstorage
@@ -3373,22 +3444,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         //localStorage.setItem("siteVisit", reader.result as string);
         this.showSiteVisitFile = true;
         console.log(this.showSiteVisitFile) //true
-        // console.log(this.customerVisitDocValidated) //true
-        // this.customerVisitDocValidated = false;
       });
 
       reader.readAsDataURL(e.target.files[i]);
 
       //get the file name
       this.site_visit_file_name = e.target.files[i].name;
-      //this.site_visit_file_name = 'siteVisit';
       localStorage.setItem('siteVisitName', this.site_visit_file_name);
-      //this.divSiteVisit.nativeElement.innerHTML = this.site_visit_file_name;
       //get the file size
       this.site_visit_file_size = e.target.files[i].size;
-      //this.invoiceDate = e.target.files[i].lastModified;
 
-      // this.myFiles.push(e.target.files[i]);
       this.myFiles.SiteVisit = e.target.files[i];
     }
   }
@@ -3412,14 +3477,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       //get the file name
       this.contract_file_name = e.target.files[i].name;
-      //this.contract_file_name = 'contract';
       localStorage.setItem('contractName', this.contract_file_name);
-      //this.divContract.nativeElement.innerHTML = this.contract_file_name;
       //get the file size
       this.contract_file_size = e.target.files[i].size;
-      //this.invoiceDate = e.target.files[i].lastModified;
 
-      // this.myFiles.push(e.target.files[i]);
       this.myFiles.Contract = e.target.files[i];
     }
   }
@@ -3689,13 +3750,13 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumRecurring);
 
-    this.recurring=this.totalSumRecurring;
+    this.recurring = this.totalSumRecurring;
 
     localStorage.setItem('recurringentry',JSON.stringify(this.incentiveRecurringEntryForm.get('entryRowsRecurring').value))
     
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
 
-    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    //this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
@@ -3794,22 +3855,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
 
-    this.equipmentAndMaterials=this.totalSumEquipMat;
+    this.equipmentAndMaterials = this.totalSumEquipMat;
     console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
     localStorage.setItem('equipmatentry', JSON.stringify(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value));
-
-    // console.log(this.recurring)
-    // console.log(typeof this.recurring)
-    // console.log(this.equipmentAndMaterials);
-    // console.log(typeof this.equipmentAndMaterials)
-    // console.log(this.laborCharges);
-    // console.log(typeof this.laborCharges)
 
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     // console.log(Math.round(this.lineItemSubtotal).toFixed(2));
     // console.log(this.lineItemSubtotal.toFixed(2));
-    // console.log(typeof this.lineItemSubtotal)
-    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    // console.log(typeof this.lineItemSubtotal);
+    console.log(this.equipmentAndMaterials.toFixed(2))
+    //this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
+    console.log(this.lineItemSubtotal)
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
@@ -3886,13 +3942,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumLaborCharges);
 
-    this.laborCharges=this.totalSumLaborCharges;
+    this.laborCharges = this.totalSumLaborCharges;
 
     localStorage.setItem('laborchargesentry', JSON.stringify(this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges').value));
 
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
     
-    this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
@@ -4053,20 +4108,26 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       // the only requirement for anyone other than a Partner is the InvoiceUpload
       this.incentiveDashboardForm.get('InvoiceUpload').setErrors(null);
        
-      if(!this.invoiceUpload) {
-        this.invoiceDocValidatedNonPartner = true; 
+      if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+        this.invoiceDocValidatedNonPartner = false;
       }
+      if(!this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
+        this.invoiceDocValidatedNonPartner = true;
+      }
+      // if(!this.invoiceUpload) {
+      //   this.invoiceDocValidatedNonPartner = true; 
+      // }
 
-      if(this.invoiceUpload) {
-        this.invoiceDocValidatedNonPartner = false; 
-      }
+      // if(this.invoiceUpload) {
+      //   this.invoiceDocValidatedNonPartner = false; 
+      // }
     }
 
     if(this.user.afaRole === 5) {
       if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
         this.invoiceDocValidated = false;
       }
-      if(this.incentiveDashboardForm.controls['InvoiceUpload'].value === null) {
+      if(!this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
         this.invoiceDocValidated = true;
       }
     }
@@ -4141,13 +4202,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   checkForContractUploadNonPartner() {
-    if(this.contractUpload) {
-      this.contractDocValidatedNonPartner = false;
+    // if(this.contractUpload) {
+    //   this.contractDocValidatedNonPartner = false;
+    // }
+    if(!!this.incentiveDashboardForm.get('ContractUpload').value) {
+      this.contractDocValidated = false;
     }
   }
 
   checkForContractUpload() {
-    if(this.contractUpload) {
+    // if(this.contractUpload) {
+    //   this.contractDocValidated = false;
+    // }
+    if(!!this.incentiveDashboardForm.get('ContractUpload').value) {
       this.contractDocValidated = false;
     }
   }
@@ -4229,6 +4296,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     //   this.workOrderDocValidated = false;
     // }
   }
+
   disableBackSpaceAndDelete(e) {
     if(e.keyCode === 8 || e.keyCode === 46) {
       e.preventDefault();

@@ -137,52 +137,6 @@ export class PartnerdashboardComponent implements OnInit {
     $("#wrapper").addClass("toggled");
 
     this.spinnerService.show();
-
-    // use SwitchMap to get profile then permissions user map
-    // this.authService.getProfile().pipe(
-    //   mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
-    // ).subscribe(data => {
-    //   //console.log(data)
-    //   this.permissionsUserMap = data;
-
-    //   //show/hide card or card and button base on hasPermission value of Y or N
-    //   for(let i = 0; i < this.permissionsUserMap.length; i++) {
-    //     // console.log(this.permissionsUserMap[i])
-    //     // console.log(this.permissionsUserMap[i].permissionName)
-    //     // console.log(this.permissionsUserMap[i].hasPermission)
-    //     if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hide3GConversion = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Pending Cancellations' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hidePendingCancellations = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Aging' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideAging = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Aging-CTA' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideAgingCTA = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Invoices' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideInvoices = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Service' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideService = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Sales' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideSales = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Attrition' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideAttrition = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hide3GExcelExport = true;
-    //     }
-    //     if(this.permissionsUserMap[i].permissionName === 'Create Invoice' && this.permissionsUserMap[i].hasPermission === 'Y'){
-    //       this.hideCreateInvoice = true;
-    //     }
-    //   }
-    // })
-
     
     this.authService.getProfile().subscribe(
       res => {
