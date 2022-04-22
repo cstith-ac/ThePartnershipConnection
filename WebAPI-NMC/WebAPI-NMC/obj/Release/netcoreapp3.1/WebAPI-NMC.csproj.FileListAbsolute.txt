@@ -1,0 +1,33 @@
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\appsettings.Development.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\appsettings.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Connected Services\NMCServiceReference\ConnectedService.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionAPI-NMC - Web Deploy\profile.arm.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.exe
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.deps.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.runtimeconfig.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.runtimeconfig.dev.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\WebAPI-NMC.pdb
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.Net.Http.WinHttpHandler.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.Duplex.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.Http.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.NetTcp.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.Primitives.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.ServiceModel.Security.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Net.Http.WinHttpHandler.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\unix\lib\netstandard2.0\System.Private.ServiceModel.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win7\lib\netstandard2.0\System.Private.ServiceModel.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.csprojAssemblyReference.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.AssemblyInfoInputs.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.AssemblyInfo.cs
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.csproj.CoreCompileInputs.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.RazorTargetAssemblyInfo.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.csproj.CopyComplete
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\staticwebassets\WebAPI-NMC.StaticWebAssets.Manifest.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\staticwebassets\WebAPI-NMC.StaticWebAssets.xml
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.pdb
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Release\netcoreapp3.1\WebAPI-NMC.genruntimeconfig.cache

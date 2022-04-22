@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteService } from '../../services/route.service';
 import { CmsService } from '../../services/cms.service';
+import { NmcService } from 'src/app/services/nmc.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SystemInfo } from 'src/app/models/systeminfo';
@@ -10,17 +11,20 @@ import { CentralStationDataCMS } from 'src/app/models/centralstationdatacms';
 import { SiteSystemNumbers } from 'src/app/models/sitesystemnumbers';
 import { EventHistoryDate } from 'src/app/models/eventhistorydate';
 import { switchMap, tap } from 'rxjs/operators';
+//import { DatePipe } from '@angular/common';
 declare var $: any;
 
 @Component({
   selector: 'app-systeminfodetail',
   templateUrl: './systeminfodetail.component.html',
-  styleUrls: ['./systeminfodetail.component.css']
+  styleUrls: ['./systeminfodetail.component.css'],
+  //providers: [DatePipe]
 })
 export class SysteminfodetailComponent implements OnInit {
   loading:boolean = true;
   //isValueNotPresent:boolean = false;
-  accountInactiveText;
+  accountInactiveText:boolean = false;
+
   accountNotFoundText;
   id;
   siteSystemNumbersData; // data returned from SiteSystemNumbers
@@ -28,6 +32,7 @@ export class SysteminfodetailComponent implements OnInit {
   contactListData;
   zonesData;
   eventHistoryDateData;
+  accountInfoData;
   sitestat_id;
   codeword1;
   codeword2;
@@ -125,7 +130,9 @@ export class SysteminfodetailComponent implements OnInit {
     private spinnerService: NgxSpinnerService,
     private routeService: RouteService,
     private cmsService: CmsService,
-    private router: Router
+    private nmcService: NmcService,
+    private router: Router,
+    //private datePipe: DatePipe
   ) { 
     this.route.params.subscribe(res => {
       this.id = res['id'];
@@ -165,6 +172,7 @@ export class SysteminfodetailComponent implements OnInit {
         this.alarmAccount = data.alarmAccount;
         this.centralStation = data.monitoredBy;
 
+        //***********This needs it's own method
         // if the alarm account contains a hyphen, remove the hyphen
         // if the alarm account contains the string '(inactive)', display the inactive text
         let hyphenatedAlarmAccount = this.alarmAccount.split('-').join('');
@@ -179,77 +187,145 @@ export class SysteminfodetailComponent implements OnInit {
           // console.log('this account is inactive');
           // console.log(inactiveAlarmAccount);
           // display the text Account not found at CMS
-          this.accountInactiveText = 'This account is INACTIVE';
+          this.accountInactiveText = true;
+
+          //this removes the text (inactive) that's appended to the alarmaccount
+          //this.alarmAccount=this.alarmAccount.slice(0, -10)
         }
 
         // check the centralStation variable
         // if the variable equals CMS, perform requests using CMS API
         // if the variable equals NMC, perform requests using NMC API
         if(this.centralStation === 'CMS') {
+          this.getAccountDetails();
+          // this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
+          //   res => {
+          //     // console.log(Object.values(res))
+          //     for(let key in res) {
+          //       // console.log(res[key])
+          //       this.siteSystemNumbersData = res[key]
+          //       this.site_no = this.siteSystemNumbersData.site_no;
+          //       this.system_no = this.siteSystemNumbersData.system_no;
 
-          this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
-            res => {
-              // console.log(Object.values(res))
-              for(let key in res) {
-                // console.log(res[key])
-                this.siteSystemNumbersData = res[key]
-                this.site_no = this.siteSystemNumbersData.site_no;
-                this.system_no = this.siteSystemNumbersData.system_no;
+          //       if(this.site_no === "") {
+          //         console.log('there is no site no');
+          //         this.accountNotFoundText = 'Account not found at CMS';
+          //       }
+          //     }
+          //     this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
+          //       // console.log(res)
+          //       for(let key in res) {
+          //         // console.log((res[key]));
+          //         this.loading = false;
+          //         this.siteSystemDetailsData = res[key];
 
-                if(this.site_no === "") {
-                  console.log('there is no site no');
-                  this.accountNotFoundText = 'Account not found at CMS';
-                }
-              }
-              this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
-                // console.log(res)
-                for(let key in res) {
-                  // console.log((res[key]));
-                  this.loading = false;
-                  this.siteSystemDetailsData = res[key];
+          //         if(!this.siteSystemDetailsData) {
+          //           console.log('there is no data from SiteSystemDetails available')
+          //         }
 
-                  if(!this.siteSystemDetailsData) {
-                    console.log('there is no data from SiteSystemDetails available')
-                  }
-
-                  this.sitestat_id = this.siteSystemDetailsData.sitestat_id;
-                  this.codeword1 = this.siteSystemDetailsData.codeword1;
-                  this.codeword2 = this.siteSystemDetailsData.codeword2;
-                  this.site_name = this.siteSystemDetailsData.site_name;
-                  this.site_no = this.siteSystemDetailsData.site_no;
-                  this.site_addr1 = this.siteSystemDetailsData.site_addr1;
-                  this.site_addr2 = this.siteSystemDetailsData.site_addr2;
-                  this.city_name = this.siteSystemDetailsData.city_name;
-                  this.state_id = this.siteSystemDetailsData.state_id;
-                  this.zip_code = this.siteSystemDetailsData.zip_code;
-                  this.phone1 = this.siteSystemDetailsData.phone1;
-                  this.ext1 = this.siteSystemDetailsData.ext1;
-                  this.phone2 = this.siteSystemDetailsData.phone2;
-                  this.ext2 = this.siteSystemDetailsData.ext2;
-                }
-              })
-              this.cmsService.getContactList(this.site_no).subscribe(
-                res => {
-                  // console.log(res);
-                  this.contactListData = res;
-                }
-              )
-              this.cmsService.getEventHistoryDate().subscribe(
-                res => {
-                  console.log(res);
-                  this.eventHistoryDateData = res;
-                  this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
+          //         this.sitestat_id = this.siteSystemDetailsData.sitestat_id;
+          //         this.codeword1 = this.siteSystemDetailsData.codeword1;
+          //         this.codeword2 = this.siteSystemDetailsData.codeword2;
+          //         this.site_name = this.siteSystemDetailsData.site_name;
+          //         this.site_no = this.siteSystemDetailsData.site_no;
+          //         this.site_addr1 = this.siteSystemDetailsData.site_addr1;
+          //         this.site_addr2 = this.siteSystemDetailsData.site_addr2;
+          //         this.city_name = this.siteSystemDetailsData.city_name;
+          //         this.state_id = this.siteSystemDetailsData.state_id;
+          //         this.zip_code = this.siteSystemDetailsData.zip_code;
+          //         this.phone1 = this.siteSystemDetailsData.phone1;
+          //         this.ext1 = this.siteSystemDetailsData.ext1;
+          //         this.phone2 = this.siteSystemDetailsData.phone2;
+          //         this.ext2 = this.siteSystemDetailsData.ext2;
+          //       }
+          //     })
+          //     this.cmsService.getContactList(this.site_no).subscribe(
+          //       res => {
+          //         // console.log(res);
+          //         this.contactListData = res;
+          //         // order by sequence #
+          //         //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
+          //         //.filter(o => o.cs_seqno !== '')
                   
-                }
-              )
-              return this.cmsService.getZones(this.system_no).subscribe(
-                res => {
-                  //console.log(res);
-                  this.zonesData = res;
-                }
-              )
-            }
-          )
+          //         //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
+
+          //         this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
+        
+          //         this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
+                  
+          //         this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
+
+          //         let r = /^(0|[1-9]\d*)$/;
+          //         let result = [...this.contactListData];
+          //         const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
+          //         //let isnum = /^\d+$/.test(index.toString());
+          //         console.log(index)
+          //         result.unshift(result.splice(index)[0])
+          //         //console.log(result);
+          //         this.contactListData = result;
+          //         // this.contactListData.sort(function (a, b) {
+          //         //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
+          //         // });
+          //       }
+          //     )
+          //     this.cmsService.getEventHistoryDate().subscribe(
+          //       res => {
+          //         //console.log(res);
+          //         this.eventHistoryDateData = res;
+          //         this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
+                  
+          //       }
+          //     )
+          //     return this.cmsService.getZones(this.system_no).subscribe(
+          //       res => {
+          //         this.zonesData = res;
+          //       }
+          //     )
+          //   }
+          // )
+        } else if(this.centralStation === 'NMC') {
+          this.getAccountDetails();
+          // this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
+          //   res => {
+          //     //console.log(res)
+          //     for(let key in res) {
+          //       //console.log(res[key]);
+          //       this.loading = false;
+          //       this.accountInfoData = res[key];
+
+          //       if(!this.accountInfoData) {
+          //         console.log('There is no data from AccountInfo available')
+          //       }
+
+          //       this.codeword1 = this.accountInfoData.codeword1;
+          //       this.site_name = this.accountInfoData.site_name;
+          //       this.site_addr1 = this.accountInfoData.site_addr1;
+          //       this.city_name = this.accountInfoData.city_name;
+          //       this.sitestat_id = this.accountInfoData.sitestat_id;
+          //       this.state_id = this.accountInfoData.state_id;
+          //       this.zip_code = this.accountInfoData.zip_code;
+          //       this.phone1 = this.accountInfoData.phone1;
+          //       this.ext1 = this.accountInfoData.ext1;
+          //       this.ext2 = this.accountInfoData.ext2;
+          //     }
+          //   }
+          // )
+          // this.nmcService.getAccountContacts(this.alarmAccount).subscribe(
+          //   res => {
+          //     console.log(res)
+          //     this.contactListData = res;
+          //   }
+          // )
+          // this.nmcService.getAccountZones(this.alarmAccount).subscribe(
+          //   res => {
+          //     console.log(res)
+          //     this.zonesData = res;
+          //   }
+          // )
+        } else if (this.centralStation === 'COPS') {
+          console.log(`there's no alarm account available for ${this.centralStation}`);
+          this.loading = false;
+          this.hasNoCentralStationData = true;
         } else {
           console.log(`there's no alarm account available for ${this.centralStation}`);
           this.loading = false;
@@ -319,6 +395,244 @@ export class SysteminfodetailComponent implements OnInit {
   //     }
   //   )
   // }
+
+  getAccountDetails() {
+    if(this.centralStation === 'CMS') {
+      this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
+        res => {
+          // console.log(Object.values(res))
+          for(let key in res) {
+            // console.log(res[key])
+            this.siteSystemNumbersData = res[key]
+            this.site_no = this.siteSystemNumbersData.site_no;
+            this.system_no = this.siteSystemNumbersData.system_no;
+
+            if(this.site_no === "") {
+              console.log('there is no site no');
+              this.accountNotFoundText = 'Account not found at CMS';
+            }
+          }
+          this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
+            // console.log(res)
+            for(let key in res) {
+              // console.log((res[key]));
+              this.loading = false;
+              this.siteSystemDetailsData = res[key];
+
+              if(!this.siteSystemDetailsData) {
+                console.log('there is no data from SiteSystemDetails available')
+              }
+
+              this.sitestat_id = this.siteSystemDetailsData.sitestat_id;
+              this.codeword1 = this.siteSystemDetailsData.codeword1;
+              this.codeword2 = this.siteSystemDetailsData.codeword2;
+              this.site_name = this.siteSystemDetailsData.site_name;
+              this.site_no = this.siteSystemDetailsData.site_no;
+              this.site_addr1 = this.siteSystemDetailsData.site_addr1;
+              this.site_addr2 = this.siteSystemDetailsData.site_addr2;
+              this.city_name = this.siteSystemDetailsData.city_name;
+              this.state_id = this.siteSystemDetailsData.state_id;
+              this.zip_code = this.siteSystemDetailsData.zip_code;
+              this.phone1 = this.siteSystemDetailsData.phone1;
+              this.ext1 = this.siteSystemDetailsData.ext1;
+              this.phone2 = this.siteSystemDetailsData.phone2;
+              this.ext2 = this.siteSystemDetailsData.ext2;
+            }
+          })
+        }
+      )
+    } else if(this.centralStation === 'NMC') {
+      this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
+        res => {
+          //console.log(res)
+          for(let key in res) {
+            //console.log(res[key]);
+            this.loading = false;
+            this.accountInfoData = res[key];
+  
+            if(!this.accountInfoData) {
+              console.log('There is no data from AccountInfo available')
+            }
+  
+            this.codeword1 = this.accountInfoData.codeword1;
+            this.site_name = this.accountInfoData.site_name;
+            this.site_addr1 = this.accountInfoData.site_addr1;
+            this.city_name = this.accountInfoData.city_name;
+            this.sitestat_id = this.accountInfoData.sitestat_id;
+            this.state_id = this.accountInfoData.state_id;
+            this.zip_code = this.accountInfoData.zip_code;
+            this.phone1 = this.accountInfoData.phone1;
+            this.ext1 = this.accountInfoData.ext1;
+            this.ext2 = this.accountInfoData.ext2;
+          }
+        }
+      )
+    }
+  }
+
+  onClickGetContactList() {
+    if(this.centralStation === 'CMS') {
+      if(this.site_no === "") {
+        console.log('there is no site no');
+        this.accountNotFoundText = 'Account not found at CMS';
+      } else if(this.site_no) {
+        this.cmsService.getContactList(this.site_no).subscribe(
+          res => {
+            // console.log(res);
+            this.contactListData = res;
+            // order by sequence #
+            //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
+            //.filter(o => o.cs_seqno !== '')
+            
+            //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
+  
+            this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
+  
+            //this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
+            
+            this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
+  
+            // list by sequence no 1st, then those without sequence no
+            this.contactListData.sort(this.alphabetically(true))
+  
+            // let r = /^(0|[1-9]\d*)$/;
+            // let result = [...this.contactListData];
+            // const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
+            // //let isnum = /^\d+$/.test(index.toString());
+            // console.log(index)
+            // result.unshift(result.splice(index)[0])
+            // //console.log(result);
+            // this.contactListData = result;
+            // this.contactListData.sort(function (a, b) {
+            //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
+            // });
+          }
+        )
+      }
+      // this.cmsService.getContactList(this.site_no).subscribe(
+      //   res => {
+      //     // console.log(res);
+      //     this.contactListData = res;
+      //     // order by sequence #
+      //     //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
+      //     //.filter(o => o.cs_seqno !== '')
+          
+      //     //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
+
+      //     this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
+
+      //     //this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
+          
+      //     this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
+
+      //     // list by sequence no 1st, then those without sequence no
+      //     this.contactListData.sort(this.alphabetically(true))
+
+      //     // let r = /^(0|[1-9]\d*)$/;
+      //     // let result = [...this.contactListData];
+      //     // const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
+      //     // //let isnum = /^\d+$/.test(index.toString());
+      //     // console.log(index)
+      //     // result.unshift(result.splice(index)[0])
+      //     // //console.log(result);
+      //     // this.contactListData = result;
+      //     // this.contactListData.sort(function (a, b) {
+      //     //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
+      //     // });
+      //   }
+      // )
+    } else if (this.centralStation === 'NMC') {
+      this.nmcService.getAccountContacts(this.alarmAccount).subscribe(
+        res => {
+          console.log(res);
+          this.contactListData = res;
+        }
+      )
+    }
+  }
+
+  onClickGetZonesList() {
+    if(this.centralStation === 'CMS') {
+      if(this.site_no === "") {
+        this.accountNotFoundText = "Account not found at CMS"
+      } else if (this.site_no) {
+        this.cmsService.getZones(this.system_no).subscribe(
+          res => {
+            this.zonesData = res;
+            // console.log(Object.keys(this.zonesData))
+            // console.log(Object.values(this.zonesData))
+            //  this.zonesData.filter((val) => {
+            //   val.trouble_state_flag.toLowerCase().includes('N')
+            // })
+            let returnedZonesObj = Object.values(this.zonesData);
+            console.log(typeof returnedZonesObj);
+            
+            // for (let i = 0; i < returnedZonesObj.length; i++) {
+            //   let x = this.zonesData.filter(a => 
+            //     a.trouble_state_flag === "N"
+            //   )
+            //   console.log(x)
+            // }
+          }
+        )
+      }
+      // this.cmsService.getZones(this.system_no).subscribe(
+      //   res => {
+      //     this.zonesData = res;
+      //     // console.log(Object.keys(this.zonesData))
+      //     // console.log(Object.values(this.zonesData))
+      //     //  this.zonesData.filter((val) => {
+      //     //   val.trouble_state_flag.toLowerCase().includes('N')
+      //     // })
+      //     let returnedZonesObj = Object.values(this.zonesData);
+      //     console.log(typeof returnedZonesObj);
+          
+      //     // for (let i = 0; i < returnedZonesObj.length; i++) {
+      //     //   let x = this.zonesData.filter(a => 
+      //     //     a.trouble_state_flag === "N"
+      //     //   )
+      //     //   console.log(x)
+      //     // }
+      //   }
+      // )
+    } else if (this.centralStation === 'NMC') {
+      this.nmcService.getAccountZones(this.alarmAccount).subscribe(
+        res => {
+          console.log(res)
+          this.zonesData = res;
+        }
+      )
+    }
+  }
+
+  onClickGetSignals() {
+    if(this.centralStation === 'CMS') {
+      if(this.site_no === "") {
+        this.accountNotFoundText = "Account not found at CMS"
+      } else if (this.site_no) {
+        this.cmsService.getEventHistoryDate(this.site_no).subscribe(
+          res => {
+            //console.log(res);
+            this.eventHistoryDateData = res;
+            this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
+          }
+        )
+      }
+      // this.cmsService.getEventHistoryDate(this.site_no).subscribe(
+      //   res => {
+      //     //console.log(res);
+      //     this.eventHistoryDateData = res;
+      //     this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
+      //   }
+      // )
+    } else if (this.centralStation === 'NMC') {
+      console.log(`This isn't working yet`)
+    }
+  }
+
+  onClickGetMiscellaneous() {
+    console.log(`This isn't working yet`)
+  }
 
   showLastServiceTicketModal() {
     console.log('showLastServiceTicketModal')
@@ -403,11 +717,37 @@ export class SysteminfodetailComponent implements OnInit {
     if(this.pascom.length === 0) {
       this.pascom = 'N/A';
     }
+
+    // if(this.scheduled_Date === 'N/A') {
+    //   console.log(this.scheduled_Date)
+    //   this.scheduled_Date === 'N/A'
+    // } else {
+    //   this.scheduled_Date = new DatePipe('en-US').transform(this.scheduled_Date, 'MM/dd/yyyy hh:mm:ss a');
+    // }
   }
 
   open3GModal() {
     $("#threeGModal").modal("show");
     //console.log(this.basicUpgradeInfo);
+  }
+
+  alphabetically(ascending) {
+    return function(a,b) {
+      if(a.cs_seqno === b.cs_seqno) {
+        return 0;
+      }
+
+      else if (a.cs_seqno === '') {
+        return 1;
+      } else if (b.cs_seqno === '') {
+        return -1;
+      }
+      else if (ascending) {
+        return a.cs_seqno < b.cs_seqno ? -1 : 1;
+      } else {
+        return a.cs_seqno < b.cs_seqno ? 1 : -1;
+      }
+    }
   }
 
 }

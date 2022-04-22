@@ -1,61 +1,55 @@
 .ratingValueText0 {
-    color: #000;
-    font-weight: 600 !important;
+  color: #000;
+  font-weight: 600 !important;
 }
 .ratingValueBg0 {
-    background-color: #AFF1EE;
+  background-color: #aff1ee;
 }
 
 .ratingValueText1 {
-    color: #D8D1D2;
-    font-weight: 600 !important;
+  color: #d8d1d2;
+  font-weight: 600 !important;
 }
 .ratingValueBg1 {
-    background-color: #D8354B;
+  background-color: #d8354b;
 }
 
 .ratingValueText2 {
-    color: #E6E991 !important;
-    font-weight: 600 !important;
+  color: #e6e991 !important;
+  font-weight: 600 !important;
 }
 .ratingValueBg2 {
-    background-color: #3580D8;
+  background-color: #3580d8;
 }
 
 .ratingValueText3 {
-    color: #FE0E3F;
-    font-weight: 600 !important;
+  color: #fe0e3f;
+  font-weight: 600 !important;
 }
 .ratingValueBg3 {
-    background-color: #40D835;
+  background-color: #40d835;
 }
 .customer-rating {
-    padding: 0;
+  padding: 0;
+  border-radius: 0.875rem;
 }
 .list-group-item {
-    border: 1px solid #e9ecef00;
-    padding: 2rem 1rem;
+  border: 1px solid #e9ecef00;
+  padding: 2rem 1rem;
 }
 
 /*-- Laptop Non-Retina Screens --*/
-@media screen 
-    and (min-device-width: 1200px)
-    and (max-device-width: 1600px)
-    and (-webkit-min-device-pixel-ratio: 1) {
-        .col-md-9 .list-group-item {
-            border: 1px solid #e9ecef00;
-            padding: 2.25rem 1rem;
-        }
-    }
+@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
+  .col-md-9 .list-group-item {
+    border: 1px solid #e9ecef00;
+    padding: 2.25rem 1rem;
+  }
+}
 
 /*-- Laptop Retina Screens --*/
-@media screen 
-  and (min-device-width: 1200px) 
-  and (max-device-width: 1600px) 
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (min-resolution: 192dpi) { 
-    .col-md-9 .list-group-item {
-        border: 1px solid #e9ecef00;
-        padding: 2.25rem 1rem;
-    }
+@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi) {
+  .col-md-9 .list-group-item {
+    border: 1px solid #e9ecef00;
+    padding: 2.25rem 1rem;
+  }
 }

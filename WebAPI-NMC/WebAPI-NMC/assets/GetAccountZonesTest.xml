@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument xmlns="http://www.nmccentral.com/webservices/nmcmapi">
+  <GetAccountZones>
+    <GetAccountZones_Response>
+      <zone_id>1     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>GARAGE DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>10    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>OFFICE SCREENS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>11    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>NOOK SCREENS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>12    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>KIDS BATHROOM WINDOWS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>13    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>LAUNDRY WINDOW</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>14    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>MASTER BEDROOM WINDOW</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>2     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>FRONT DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>3     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>LIVING ROOM DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>4     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>LIVING ROOM WINDOWS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>15    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>MASTER BEDROOM SCREENS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>16    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>MASTER BATHROOM WINDOWS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>17    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>EMILYS BEDROOM DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>18    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>CHARLIES BEDROOM WINDOWS</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>19    </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>DOWNSTAIRS MOTION</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>5     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>DINING ROOM WINDOW</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>6     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>DINING ROOM DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>7     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>KITCHEN SINK WINDOW</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>8     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>SMOKE DETECTOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>120   </event_id>
+    </GetAccountZones_Response>
+    <GetAccountZones_Response>
+      <zone_id>9     </zone_id>
+      <restore_reqd_flag>N</restore_reqd_flag>
+      <trouble_state_flag>N</trouble_state_flag>
+      <bypass_state_flag>N</bypass_state_flag>
+      <trip_count>0</trip_count>
+      <comment>KITCHEN DOOR</comment>
+      <default_flag>N</default_flag>
+      <disable_flag>N</disable_flag>
+      <zonestate_id>A   </zonestate_id>
+      <event_id>481   </event_id>
+    </GetAccountZones_Response>
+  </GetAccountZones>
+</NMCNexusDocument>

@@ -75,23 +75,6 @@
                 </div>
                 <div class="col-sm-3">
                     <h3 id="guaranteeStatus" class="guarantee-status-text">{{ item.guaranteeStatus }}</h3>
-                    <!-- <h3 id="guaranteeStatus" class="guarantee-status-text" [ngbTooltip]="htmlContent">{{ item.guaranteeStatus }}</h3>
-                    <ng-template #htmlContent>
-                        <h4 [style.color]="'#fd5338'" >
-                            {{ view.columnA }}
-                        </h4>
-                        <span [style.display]="'block'">Lowest Cost Upgrade with Basic Interactive-Alula BAT Connect​ ​</span>
-                        <span [style.display]="'block'">(like for like) Existing manufacturer cell upgrade to LTE </span>
-                        <span [style.display]="'block'">Alula BAT Connect  with Slim-Line Touchpad</span>
-                        <span [style.display]="'block'">Qolsys Interactive​ complete system upgrade</span>
-                        <h4 [style.color]="'#fd5338'">
-                            {{ view.columnB }}
-                        </h4>
-                        <span [style.display]="'block'">$99 customer payment and/or an RMR increase of a minimum of $5.00 a month RMR. </span>
-                        <span [style.display]="'block'">$99 customer payment and/or an RMR increase of a minimum of $5.00 a month RMR. </span>
-                        <span [style.display]="'block'">$199-to-$399 customer payment and an RMR increase of $10.00 to $15.00 a month RMR.</span>
-                        <span [style.display]="'block'">This option will justify a substantial upfront payment and increase in RMR to cover installation costs & new services.</span>
-                      </ng-template> -->
                 </div>
                 <div class="col-sm-3">
                     <!-- <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
@@ -111,35 +94,16 @@
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (!item.emailAddress)">Invoices are sent via mail. <mark>No email address on file!</mark></span>
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 1) && (item.emailAddress)">Invoices are sent via email to {{item.emailAddress}}</span>
                             <span *ngIf="(item.invoicesArePrinted === 0) && (item.invoicesAreEmailed == 0) && (item.emailAddress)">No invoice delivery method chosen. Email address on file is {{item.emailAddress}}</span>
-
-                            <!-- <span *ngIf="item.invoicesArePrinted === 1;"> are printed. No email address on file. </span>
-                            <span *ngIf="item.invoicesArePrinted === 0;"> are not printed</span>
-                        
-                            <span *ngIf="item.invoicesAreEmailed === 1;"> received via email {{ item.invoicesAreEmailed }}</span> 
-                            <span *ngIf="item.invoicesAreEmailed === 0;"></span>
-                            <span id="emailAddress">- {{ item.emailAddress }}</span> 
-                            <span *ngIf="item.noEmail === 1">No email on file</span> -->
                         </li>
-
-                        <!-- notActive is a reference to else -->
-                        <!-- <p *ngIf="displayElement; else showThis">Magic element!</p>
-                        <ng-template #showThis>      
-                            Another magic element!
-                        </ng-template> -->
-
                         <li class="list-group-item list-no-border" style="padding-top:8px;padding-bottom:8px;"> <span id="autoPaymentMessage">{{ item.autoPaymentMessage }}</span> </li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <!-- <div *ngIf="expression">
-                        <span id="hasSeparateSiteAddress" class="float-right" [ngClass]="'bill-to-address-btn'">{{ item.hasSeparateSiteAddress }}</span>
-                    </div> -->
                     <div *ngIf="item.hasSeparateSiteAddress === 'Separate Bill-to and Site Address';">
                         <div class="customer-rating" id="customerRatingBg" [ngClass]="'bill-to-address-btn'">
                             {{ item.hasSeparateSiteAddress }}
                         </div>
                     </div>
-                    <!-- <span id="hasSeparateSiteAddress" class="float-right" [ngClass]="'bill-to-address-btn'">{{ item.hasSeparateSiteAddress }}</span> -->
                 </div>
             </div>
         </div>
@@ -151,7 +115,6 @@
                     <span *ngIf="item.alternateServiceCompanyActive === 1">
                         <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span>
                     </span>
-                    <!-- <span id="alternateServiceCompanyActive">{{ item.alternateServiceCompanyActive }}</span> -->
                 </li>
                 <!-- Service Ticket - Last Service Visit -->
                 <li class="list-group-item padding-left0" style="padding-top:8px;padding-bottom:8px;">

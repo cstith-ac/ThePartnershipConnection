@@ -31,7 +31,7 @@ export class CurrentuserComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('destroyed')
+    //console.log('destroyed')
     //when the dashboard is removed, change the navlist
     // if(localStorage.getItem('token') === null) {
     //   console.log('remove navlist')

@@ -1232,12 +1232,17 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         console.log('the line items and tax don\'t equal the total');
         
         this.invoiceTotalValidated = true;
+        this.formIsValidText = false;
+        
+        //set the InvoiceTotal reactive form control to invalid
+       
       }
 
       if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
         console.log('the line items and tax equal the total');
 
         this.invoiceTotalValidated = false;
+        this.formIsValidText = true;
       }
     
       // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {

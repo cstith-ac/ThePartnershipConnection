@@ -125,7 +125,7 @@ export class SidenavComponent implements OnInit {
     this.authService.logout();
 
     const user: any = JSON.parse(localStorage.getItem('user'));
-    console.log(user.afaRole);
+    //console.log(user.afaRole);
     if(user.afaRole == 5) {
       // if live
       if(location.hostname === 'www.thepartnershipconnection.com') {

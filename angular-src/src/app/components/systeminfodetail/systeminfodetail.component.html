@@ -139,89 +139,130 @@
                                 <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="true">Information from <span id="centralStationMonitoredBy">{{systemInfo.monitoredBy}}</span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#contactlist" role="tab" aria-controls="contactlist" aria-selected="true">Contact List<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#contactlist" role="tab" aria-controls="contactlist" aria-selected="true" (click)="onClickGetContactList()">Contact List<span id="centralStationMonitoredBy"></span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#zonelist" role="tab" aria-controls="zonelist" aria-selected="true">Zone List<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#zonelist" role="tab" aria-controls="zonelist" aria-selected="true" (click)="onClickGetZonesList()">Zone List<span id="centralStationMonitoredBy"></span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#signals" role="tab" aria-controls="signals" aria-selected="true">Signals<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#signals" role="tab" aria-controls="signals" aria-selected="true" (click)="onClickGetSignals()">Signals<span id="centralStationMonitoredBy"></span></a>
                             </li>
                             <li class="nav-item info-tab info-tab-bg">
-                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="true">Miscellaneous<span id="centralStationMonitoredBy"></span></a>
+                                <a class="nav-link body-2" id="home-tab" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="true" (click)="onClickGetMiscellaneous()">Miscellaneous<span id="centralStationMonitoredBy"></span></a>
                             </li>
                         </ul>
                         <div class="tab-content info-tab-bg" id="myTabContent">
                             <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                                 <div class="card bg-transparent mb-3 shadow-none border-0">
-                                    <div class="row align-items-center mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Site Name</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
-                                            <p class="mb-1" *ngIf="!loading">{{site_name}}</p>
-                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
-                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+
+                                    <!-- <div class="row pt-3 pb-3 divider-horizontal">
+                                        <div class="col-md-12">
+                                            <span class="subtitle-2 medium-emphasis">Site Name: </span>
+                                            <span class="high-emphasis body-2">{{site_name}}</span>
                                         </div>
                                     </div>
-                                    <div class="row align-items-center mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Site Status</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
-                                            <p class="mb-1" *ngIf="!loading">{{sitestat_id}} <span *ngIf="sitestat_id">= Active</span></p>
-                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
-                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                    <div class="row pt-3 pb-3 divider-horizontal">
+                                        <div class="col-md-12">
+                                            <span class="subtitle-2 medium-emphasis">Site Status: </span>
+                                            <span class="high-emphasis body-2">{{sitestat_id}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Code Words</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
-                                            <p class="mb-1" *ngIf="!loading">{{codeword1}}</p>
-                                            <p class="mb-1" *ngIf="!loading">{{codeword2}}</p>
-                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
-                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                    <div class="row pt-3 pb-3 divider-horizontal">
+                                        <div class="col-md-12">
+                                            <span class="subtitle-2 medium-emphasis">Code Words: </span>
+                                            <span class="high-emphasis body-2">{{codeword1}}</span>
+                                            <span class="high-emphasis body-2">{{codeword2}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Address</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
-                                            <p class="mb-1" *ngIf="!loading">{{site_addr1}}</p>
-                                            <p class="mb-1" *ngIf="!loading">{{site_addr2}}</p>
-                                            <p class="mb-1" *ngIf="!loading">{{city_name}} {{state_id}} {{zip_code}}</p>
-                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
-                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                    <div class="row pt-3 pb-3 divider-horizontal">
+                                        <div class="col-md-12">
+                                            <span class="subtitle-2 medium-emphasis">Address: </span>
+                                            <span class="high-emphasis body-2">{{site_addr1}}</span>
+                                            <span class="high-emphasis body-2">{{site_addr2}}</span>
+                                            <span class="high-emphasis body-2">{{city_name}} {{state_id}} {{zip_code}}</span>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Phone</p>
+                                    <div class="row pt-3 pb-3 divider-horizontal">
+                                        <div class="col-md-12">
+                                            <span class="subtitle-2 medium-emphasis">Phone: </span>
+                                            <span class="high-emphasis body-2">{{phone1 | phone}}<span *ngIf="ext1">ext. {{ext1}}</span></span>
+                                            <span class="high-emphasis body-2">{{phone2 | phone}}<span *ngIf="ext2">ext. {{ext2}}</span></span>
                                         </div>
-                                        <div class="col divider">
+                                    </div> -->
+
+                                    <div class="row align-items-center mt-1 mb-1 divider-horizontal">
+                                        <div class="col-1">
+                                            <p class="mb-1 subtitle-2 medium-emphasis">Site Name</p>
+                                        </div>
+                                        <div class="col">
                                             <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
                                             <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
-                                            <p class="mb-1" *ngIf="!loading">{{phone1 | phone}} <span *ngIf="ext1">ext. {{ext1}}</span></p>
-                                            <p class="mb-1" *ngIf="!loading">{{phone2 | phone}} <span *ngIf="ext2">ext. {{ext2}}</span></p>
-                                            <p class="mb-1 text-error">{{accountInactiveText}}</p>
-                                            <p class="mb-1 text-error">{{accountNotFoundText}}</p>
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_name}}</p>
+                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
+                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-1 divider-horizontal">
+                                        <div class="col-1">
+                                            <p class="mb-1 subtitle-2 medium-emphasis">Site Status</p>
+                                        </div>
+                                        <div class="col">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{sitestat_id}} <span *ngIf="sitestat_id">= Active</span></p>
+                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
+                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 divider-horizontal">
+                                        <div class="col-1">
+                                            <p class="mb-1 subtitle-2 medium-emphasis">Code Words</p>
+                                        </div>
+                                        <div class="col">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{codeword1}}</p>
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{codeword2}}</p>
+                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
+                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 divider-horizontal">
+                                        <div class="col-1">
+                                            <p class="mb-1 subtitle-2 medium-emphasis">Address</p>
+                                        </div>
+                                        <div class="col">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_addr1}}</p>
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_addr2}}</p>
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{city_name}} {{state_id}} {{zip_code}}</p>
+                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
+                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 divider-horizontal">
+                                        <div class="col-1">
+                                            <p class="mb-1 subtitle-2 medium-emphasis">Phone</p>
+                                        </div>
+                                        <div class="col">
+                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
+                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{phone1 | phone}} <span *ngIf="ext1">ext. {{ext1}}</span></p>
+                                            <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{phone2 | phone}} <span *ngIf="ext2">ext. {{ext2}}</span></p>
+                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
+                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                 </div>
                                 <div style="position: absolute; top: 35%; left:35%; right: 0;">
+                                    <ngb-toast *ngIf="accountInactiveText"  [autohide]="false">
+                                        <h5 class="headline-5 text-center">This account is INACTIVE</h5>
+                                    </ngb-toast>
+                                </div>
+                                <div style="position: absolute; top: 35%; left:35%; right: 0;">
                                     <ngb-toast *ngIf="hasNoCentralStationData" [autohide]="false">
-                                        {{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant
+                                        <h5 class="headline-4 text-center">{{systemInfo.monitoredBy}} is not currently supported by the Customer Care Assistant</h5>
                                     </ngb-toast>
                                 </div>
                                 <div style="position: absolute; top: 35%; left:35%; right: 0;">
@@ -251,17 +292,25 @@
                                         <tbody>
                                             <tr *ngFor="let item of contactListData">
                                                 <td class="text-center">{{item.cs_seqno}}</td>
-                                                <td class="text-center">{{item.name}}</td>
+                                                <td class="text-center">{{item.name}} 
+                                                    <span *ngIf="item.first_name">{{item.first_name}}</span> 
+                                                    <span *ngIf="item.last_name"> {{item.last_name}}</span>
+                                                </td>
                                                 <td class="text-center">{{item.pin}}</td>
-                                                <td class="text-center">{{item.contact_type_desc}}</td>
+                                                <td class="text-center">{{item.contact_type_desc}}
+                                                    <span *ngIf="item.ctactype_id">{{item.ctactype_id}}</span>
+                                                </td>
                                                 <td class="text-center">{{item.relation_id}}</td>
                                                 <td class="text-center">{{item.auth_id}}</td>
-                                                <td class="text-center">{{item.phone_type_list}}</td>
+                                                <td class="text-center">{{item.phone_type_list}}
+                                                    <span *ngIf="item.phonetype1">{{item.phonetype1}}</span>
+                                                </td>
                                                 <td class="text-center">
                                                     {{item.phn1}}
                                                     {{item.phn2}}
                                                     {{item.phn3}}
                                                     {{item.phn4}}
+                                                    <span *ngIf="item.phone1">{{item.phone1}}</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -277,8 +326,8 @@
                                                 <th scope="col" class="text-center">Location</th>
                                                 <th scope="col" class="text-center">State</th>
                                                 <th scope="col" class="text-center">Service Type</th>
-                                                <th scope="col" class="text-center">Restore Required (1)</th>
-                                                <th scope="col" class="text-center">Restore Required (2)</th>
+                                                <th scope="col" class="text-center">Restore Required</th>
+                                                <!-- <th scope="col" class="text-center">Restore Required (2)</th> -->
                                                 <th scope="col" class="text-center">Trouble State Flag</th>
                                                 <th scope="col" class="text-center">Trip Count</th>
                                                 <th scope="col" class="text-center">Event Description</th>
@@ -287,11 +336,20 @@
                                         <tbody>
                                             <tr *ngFor="let item of zonesData">
                                                 <td class="text-center">{{item.zone_id}}</td>
-                                                <td class="text-center">{{item.comment50s}}</td>
-                                                <td class="text-center">{{item.zonestate_descr}}</td>
+                                                <td class="text-center">{{item.comment50s}}
+                                                    <span *ngIf="item.comment">{{item.comment}}</span>
+                                                </td>
+                                                <td class="text-center">{{item.zonestate_descr}}
+                                                    <span *ngIf="item.zonestate_id">{{item.zonestate_id}}</span>
+                                                </td>
                                                 <td class="text-center">{{item.servtype_id}}</td>
-                                                <td class="text-center">{{item.restore_reqd_flag2}}</td>
-                                                <td class="text-center">{{item.restore_reqd_flag21}}</td>
+                                                <td class="text-center">{{item.restore_reqd_flag2}}
+                                                    <span *ngIf="item.restore_reqd_flag">{{item.restore_reqd_flag}}</span>
+                                                </td>
+
+                                                <!-- <td class="text-center">{{item.restore_reqd_flag21}}</td> -->
+
+                                                <!-- <td class="text-center">{{item.trouble_state_flag | date : 'MM/dd/yyyy hh:mm:ss a'}}</td> -->
                                                 <td class="text-center">{{item.trouble_state_flag}}</td>
                                                 <td class="text-center">{{item.trip_count}}</td>
                                                 <td class="text-center">{{item.event_descr}}</td>
@@ -299,83 +357,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- <div class="card bg-transparent mb-3 shadow-none border-0">
-                                    <div class="row align-items-center mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Zone</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{zone_id}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Location</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{comment50s}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">State</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{zonestate_descr}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Service Type</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{servtype_id}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Restore Required</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{restore_reqd_flag2}}</p>
-                                            <p class="mb-1" *ngIf="!loading">{{restore_reqd_flag21}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Trouble State Flag<span class="text-error">*</span></p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{trouble_state_flag}}</p>
-                                            <p class="mb-1 text-error">*These values are not verified by central station and are provided only as a reference.</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Trip Count<span class="text-error">*</span></p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{trip_count}}</p>
-                                            <p class="mb-1 text-error">*These values are not verified by central station and are provided only as a reference.</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col-1">
-                                            <p class="mb-1">Event Description</p>
-                                        </div>
-                                        <div class="col divider">
-                                            <p class="mb-1 loading" *ngIf="loading">Loading</p>
-                                            <p class="mb-1" *ngIf="!loading">{{event_descr}}</p>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class="tab-pane fade" id="signals" role="tabpanel" aria-labelledby="signals-tab">
                                 <div class="table-responsive">
@@ -623,29 +604,31 @@
 <div class="modal fade" id="eventHistoryDateDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">
-            <div class="modal-header pb-3 pl-2 divider-horizontal">
-                <div class="col-md-4">
-                    <!-- <p class="" id="exampleModalLabel">CS #: {{cS_Number}}</p> -->
-                    <span class="subtitle-2 medium-emphasis">CS #: </span>
-                    <span class="high-emphasis body-2">{{cS_Number}}</span>
-                </div>
-                <div class="col-md-5">
-                    <!-- <p class="">Site Name: {{site_name}}</p> -->
-                    <span class="subtitle-2 medium-emphasis">Site Name: </span>
-                    <span class="high-emphasis body-2">{{site_name}}</span>
-                </div>
-                <div class="col-md-3">
-                    <!-- <p class="">Scheduled Date: {{scheduled_Date}}</p> -->
-                    <span class="subtitle-2 medium-emphasis">Scheduled Date: </span>
-                    <span class="high-emphasis body-2">{{scheduled_Date | date : 'MM/dd/yyyy hh:mm:ss a'}}</span>
-                </div>
+            <div class="modal-header pb-0 pt-3">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body pt-0">
+            <div class="modal-body p-0">
                 <div class="card border-0">
-                    <div class="card-body p-0">
+                    <div class="card-body">
+                        <div class="row pt-3 pb-3 divider-horizontal">
+                            <div class="col-md-4">
+                                <!-- <p class="" id="exampleModalLabel">CS #: {{cS_Number}}</p> -->
+                                <span class="subtitle-2 medium-emphasis">CS #: </span>
+                                <span class="high-emphasis body-2">{{cS_Number}}</span>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <p class="">Site Name: {{site_name}}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Site Name: </span>
+                                <span class="high-emphasis body-2">{{site_name}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <!-- <p class="">Scheduled Date: {{scheduled_Date}}</p> -->
+                                <span class="subtitle-2 medium-emphasis">Scheduled Date: </span>
+                                <span class="high-emphasis body-2">{{(scheduled_Date | date : 'MM/dd/yyyy hh:mm:ss a')|| 'N/A' || ''}}</span>
+                            </div>
+                        </div>
                         <div class="row pt-3 pb-3 divider-horizontal">
                             <div class="col-md-4">
                                 <!-- <p>Event: {{ event }}</p> -->
@@ -721,7 +704,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer pt-0">
                 <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

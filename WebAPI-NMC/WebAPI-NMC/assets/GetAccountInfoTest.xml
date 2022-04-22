@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument xmlns="http://www.nmccentral.com/webservices/nmcmapi">
+  <GetAccountInfo>
+    <GetAccountInfo_Response>
+      <site_name>Kastner, Ken &amp; Jennifer</site_name>
+      <site_addr1>12015 Coyne St</site_addr1>
+      <street_no>12015</street_no>
+      <street_name>COYNE ST</street_name>
+      <sitestat_id>A     </sitestat_id>
+      <country_name>USA</country_name>
+      <timezone_no>1</timezone_no>
+      <city_name>LOS ANGELES</city_name>
+      <state_id>CA</state_id>
+      <zip_code>90049</zip_code>
+      <county_name>LOS ANGELES</county_name>
+      <phone1>3104400714</phone1>
+      <ext1>
+      </ext1>
+      <ext2>
+      </ext2>
+      <codeword1>MOLLY</codeword1>
+      <orig_install_date>1991-08-29T00:00:00</orig_install_date>
+      <cs_no>C780070</cs_no>
+      <systype_id>UNKN  </systype_id>
+      <sitetype_id>R     </sitetype_id>
+      <panel_phone>3104400714</panel_phone>
+      <timezone_descr>PACIFIC</timezone_descr>
+      <opt_2>No</opt_2>
+      <opt_3>No</opt_3>
+      <opt_4>No</opt_4>
+      <opt_5>No</opt_5>
+      <opt_6>No</opt_6>
+      <opt_7>No</opt_7>
+    </GetAccountInfo_Response>
+  </GetAccountInfo>
+</NMCNexusDocument>

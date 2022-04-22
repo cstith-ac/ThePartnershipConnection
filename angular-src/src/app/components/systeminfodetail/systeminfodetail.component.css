@@ -1,12 +1,34 @@
 .card {
   margin-bottom: 10px;
 }
+/* .card {
+  margin-bottom: 10px;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  filter: drop-shadow(3px 0px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 0 2px rgba(0, 0, 0, 0.12))
+    drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
+} */
 .card .table td {
   padding-left: 0;
   padding-right: 0;
 }
+.table thead th {
+  border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+}
+.table-bordered th,
+.tabl td {
+  border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+}
+.table-hover tbody tr:hover {
+  background-color: #e3f1fa;
+}
 .hyperlink {
   color: #2981d0;
+}
+.modal-body,
+.card-body {
+  background-color: #fbfbfb;
 }
 .ratingValueText0 {
   color: #000;
@@ -80,6 +102,15 @@ pre {
   letter-spacing: 1.15px;
   margin-right: 1rem;
 }
+.no-support:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f12a";
+  display: inline-block;
+  padding-right: 3px;
+  vertical-align: middle;
+  font-weight: 900;
+  color: #ca5856;
+}
 .text-error {
   color: #ca5856;
 }
@@ -88,6 +119,22 @@ pre {
 }
 .medium-emphasis {
   color: rgba(0, 0, 0, 0.6);
+}
+.headline-4 {
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.875rem;
+  line-height: 24px;
+  letter-spacing: 0.011rem;
+}
+.headline-5 {
+  font-family: "SourceSansPro", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 24px;
+  letter-spacing: 0.011rem;
 }
 .subtitle-2 {
   font-family: "SourceSansPro-SemiBold", sans-serif !important;
@@ -111,9 +158,22 @@ pre {
   border-bottom: 1px solid rgba(33, 33, 33, 0.08);
 }
 .nav-tabs .nav-link.active {
-  color: #4e4e4e;
+  color: #1b5eac;
   border-color: #dee2e600 #dee2e600 #f8f9fe00;
   background-color: #ecc76100;
+}
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  border-color: #e9ecef00 #e9ecef00 #dee2e600;
+}
+.toast {
+  border-radius: 0.875rem;
+  max-width: 450px;
+  font-size: 1.175rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  filter: drop-shadow(3px 0 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 0 2px rgba(0, 0, 0, 0.12))
+    drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 /*****Animated Ellipsis*****/
 .loading {

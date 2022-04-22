@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument xmlns="http://www.nmccentral.com/webservices/nmcmapi">
+  <GetAccountNotes>
+    <GetAccountNotes_Response>
+      <err_msg>No notes found for this account</err_msg>
+    </GetAccountNotes_Response>
+  </GetAccountNotes>
+</NMCNexusDocument>

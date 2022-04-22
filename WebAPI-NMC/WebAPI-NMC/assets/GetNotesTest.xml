@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument>
+  <APIException>
+    <APIException_Response>
+      <system_name>NMCNexus Data Portal</system_name>
+      <request_object>XML Validation Error</request_object>
+      <method_name>ProcessData</method_name>
+      <error_msg>The element 'GetNotes_Request' in namespace 'http://www.nmccentral.com/webservices/nmcmapi' has incomplete content. List of possible elements expected: 'site_no' in namespace 'http://www.nmccentral.com/webservices/nmcmapi'.</error_msg>
+      <cs_no>c780070</cs_no>
+    </APIException_Response>
+  </APIException>
+</NMCNexusDocument>

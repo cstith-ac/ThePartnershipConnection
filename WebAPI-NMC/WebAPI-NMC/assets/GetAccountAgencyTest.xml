@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument xmlns="http://www.nmccentral.com/webservices/nmcmapi">
+  <GetAccountAgency>
+    <GetAccountAgency_Response>
+      <agency_no>240</agency_no>
+      <agencytype_id>F </agencytype_id>
+      <agency_name>LOS ANGELES CITY FIRE</agency_name>
+      <phone1>2134856185</phone1>
+    </GetAccountAgency_Response>
+    <GetAccountAgency_Response>
+      <agency_no>602</agency_no>
+      <agencytype_id>M </agencytype_id>
+      <agency_name>LOS ANGELES/LACFD-  MEDICAL</agency_name>
+      <phone1>2134856185</phone1>
+    </GetAccountAgency_Response>
+    <GetAccountAgency_Response>
+      <agency_no>823</agency_no>
+      <agencytype_id>G </agencytype_id>
+      <agency_name>SECURITY SERVICE SYSTEMS-  GUA</agency_name>
+      <phone1>3104772095</phone1>
+    </GetAccountAgency_Response>
+    <GetAccountAgency_Response>
+      <agency_no>1042</agency_no>
+      <agencytype_id>P </agencytype_id>
+      <agency_name>LOS ANGELES- LAPD</agency_name>
+      <phone1>2136175980</phone1>
+    </GetAccountAgency_Response>
+  </GetAccountAgency>
+</NMCNexusDocument>

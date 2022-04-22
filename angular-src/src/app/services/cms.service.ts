@@ -25,8 +25,8 @@ export class CmsService {
       }),
       observe: 'response' as 'body'
     };
+    // return this.http.get<any>(`https://thepartnershipconnectionapi-cms.azurewebsites.net/api/CentralStationDataCMS`, httpOptions);
     return this.http.get<any>(`http://localhost:5000/api/CentralStationDataCMS`, httpOptions);
-    //return this.http.get<any>(`https://thepartnershipconnectionapi-cms.azurewebsites.net/api/CentralStationDataCMS`, httpOptions);
   }
 
   getSiteSystemNumbers(id:number): Observable<HttpResponse<any>> {
@@ -101,7 +101,7 @@ export class CmsService {
     )
   }
 
-  getEventHistoryDate(): Observable<HttpResponse<EventHistoryDate[]>> {
+  getEventHistoryDate(id:number): Observable<HttpResponse<EventHistoryDate[]>> {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'text/xml',
@@ -109,11 +109,11 @@ export class CmsService {
       }),
       observe: 'response' as 'body'
     };
-    // return this.http.post<any>(`https://thepartnershipconnectionapi-cms.azurewebsites.net/api/EventHistoryDate`, httpOptions)
+    // return this.http.post<any>(`https://thepartnershipconnectionapi-cms.azurewebsites.net/api/EventHistoryDate/${id}`, httpOptions)
     //   .pipe(
     //     catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/EventHistoryDate`, httpOptions)
+    return this.http.post<any>(`http://localhost:5000/api/EventHistoryDate/${id}`, httpOptions)
       .pipe(
         catchError(this.errorHandler)
     )

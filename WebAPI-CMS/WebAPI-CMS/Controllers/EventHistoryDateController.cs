@@ -31,8 +31,8 @@ namespace WebAPI_CMS.Controllers
             return Req;
         }
 
-        [HttpPost]
-        public IActionResult GetEventHistoryDate()
+        [HttpPost("{id1}")]
+        public IActionResult GetEventHistoryDate(string id1)
         {
             HttpWebRequest request = CreateSOAPRequest();
 
@@ -47,7 +47,8 @@ namespace WebAPI_CMS.Controllers
             string StartDate = DateTime.Now.AddMonths(-6).ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff"); //go back 6 months
             string EndDate = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff");
             //var site_no = "900919881";
-            var site_no = "301381308";
+            //var site_no = "300895702"; //this needs to use the site_no from 
+            var site_no = id1;
 
             //SOAP Body Request
             SOAPReqBody.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\"?> \n" +
