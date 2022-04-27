@@ -521,8 +521,10 @@
                                     <label class="col-form-label pl-0">Invoice #</label>
                                     <div class="input-group d-flex">
                                         <input 
-                                            type="text" class="form-control col-sm-10" 
-                                            [(ngModel)]="invoiceNumber" formControlName="PartnerInvoiceNumber">
+                                            type="text" 
+                                            class="form-control col-sm-10" 
+                                            [(ngModel)]="invoiceNumber" 
+                                            formControlName="PartnerInvoiceNumber">
                                     </div>
                                 </div>
                             </div>
@@ -540,7 +542,6 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <!-- <label class="col-form-label">Total</label> -->
                                     <div class="">
                                         <label class="col-form-label">Total</label>
                                         <input 
@@ -550,17 +551,6 @@
                                             formControlName="InvoiceTotal"
                                             (change)="onChangeInvoiceTotal($event)"
                                         >
-                                        <!-- <kendo-numerictextbox
-                                            format="c2"
-                                            [value]="invoiceTotal"
-                                            formControlName="InvoiceTotal"
-                                            [spinners]="false"
-                                            placeholder="$0.00"
-                                            [style.height]="'calc(1.5em + 1.3rem)'"
-                                            [style.width]="'80%'"
-                                            (keyup)="onChangeInvoiceTotal($event)"
-                                            title="Total"
-                                        ></kendo-numerictextbox> -->
                                     </div>
                                 </div>
                             </div>
@@ -573,24 +563,10 @@
                                             class="invoiceTotalInput"
                                             [(ngModel)]="partnerTaxAmount"
                                             formControlName="PartnerTaxAmount"
-                                            
                                             (change)="onChangePartnerTaxAmount($event)"
                                             [min]="0"
                                             [(ngbTooltip)]="taxToolTip"
                                         >
-                                        <!-- <kendo-numerictextbox
-                                            format="c2"
-                                            [value]="partnerTaxAmount"
-                                            [spinners]="false"
-                                            placeholder="$0.00"
-                                            formControlName="PartnerTaxAmount"
-                                            (keyup)="onKeyupGetPartnerTaxAmount($event)"
-                                            (change)="onChangePartnerTaxAmount($event)"
-                                            [min]="0"
-                                            [(ngbTooltip)]="taxToolTip"
-                                            [style.height]="'calc(1.5em + 1.3rem)'"
-                                            [style.width]="'80%'"
-                                        ></kendo-numerictextbox> -->
                                     </div>
                                 </div>
                             </div>
@@ -731,13 +707,15 @@
                                 <button 
                                     type="reset" 
                                     class="btn btn-error float-right" 
-                                    (click)="reset()">
+                                    (click)="reset()"
+                                    [(ngbTooltip)]="showResetInvoice">
                                     <i class="fas fa-redo pr-2"></i>Reset
                                 </button>
                                 <button 
                                     type="button" 
                                     class="btn btn-light-blue float-right" 
-                                    (click)="openAddViewCommentsModal(comments)">
+                                    (click)="openAddViewCommentsModal(comments)"
+                                    [(ngbTooltip)]="showAddViewComments">
                                     <i class="far fa-eye pr-2"></i>Add/View Comments
                                 </button>
 
@@ -747,6 +725,7 @@
                                         type="submit" 
                                         class="btn btn-validate float-right mr-2"
                                         (click)="openValidateItemsModal(required, $event)"
+                                        [(ngbTooltip)]="showValidateInvoice"
                                     ><i class="fas fa-exclamation-triangle pr-2"></i>Validate Invoice</button>
                                     <!-- <button 
                                         type="submit" 
@@ -800,6 +779,11 @@
 </ngx-spinner>
 
 <ng-template #content let-modal>
+    <!-- <div class="incentive-items-modal">
+        <div class="incentive-items-content">
+            
+        </div>
+    </div> -->
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Search By Customer</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -921,7 +905,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let customer of customerSearchListDec14 | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id, customer.customer_Name, customer.customer_Number, customer.customerStatus, customer.pendingCancel, customer.collectionsStatus)" click>
+                <tr *ngFor="let customer of customerSearchListDec14 | filter:searchValue | paginate: { itemsPerPage: 10, currentPage: p }" (click)="selectCustomer(customer.customer_id, customer.customer_Name, customer.customer_Number, customer.customerStatus, customer.pendingCancel, customer.collectionsStatus,$event)" click>
                     <td>{{ customer.customer_Number }}</td>
                     <td>{{ customer.customer_Name }}</td>
                     <td>{{ customer.customerStatus }}</td>
@@ -1486,6 +1470,168 @@
                 </div>
 
                 <section>
+                    <!-- <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 my-2">
+                        <div class="main">
+                        <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onRecurringSubmit(incentiveRecurringEntryForm)">
+                            <div formArrayName="entryRowsRecurring">
+                                <div class="row-entry-padding" *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRowsRecurring['controls']; let i=index" [formGroupName]="i">
+                                    <div class="table-header-wrapper">
+                                        <div class="table-header">
+                                          <table class="table table-bordered ">
+                                            <thead class="bg-secondary">
+                                              <tr>
+                                                <th class="table-header-column border-bottom-0 text-center">Service Provided</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Description</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Bill Cycle</th>
+                                                <th class="table-header-column border-bottom-0 text-center">RMR</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Pass Through</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Billing Starts</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Add to an Existing RMR Item</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Multiple</th>
+                                                <th class="table-header-column border-bottom-0 text-center">Total</th>
+                                                <th class="table-header-column border-bottom-0 text-center">
+            
+                                                </th>
+                                                <th class="table-header-column border-bottom-0 text-center">
+            
+                                                </th>
+                                              </tr>
+                                            </thead>
+                                          </table>
+                                        </div>
+                                    </div>
+                                      <div class="tables-wrapper" >
+                                        <table class="table table-dark table-bordered table-hover" >
+                                            <tr>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <div class="dropdown">
+                                                            <select 
+                                                              formControlName="ItemID" 
+                                                              class="form-control" 
+                                                              (change)="getItemName($event,i)"
+                                                              name="something_{{i}}"
+                                                            >
+                                                                <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id" >{{ item.itemCode }}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <input 
+                                                        type="text"
+                                                        maxlength="50"
+                                                        class="form-control" 
+                                                        formControlName="Description"
+                                                        name="something_{{i}}"
+                                                    >
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <div class="dropdown">
+                                                            <select formControlName="BillCycle" class="form-control">
+                                                                <option value="m">Monthly</option>
+                                                                <option value="q">Quarterly</option>
+                                                                <option value="s">Semi-Annual</option>
+                                                                <option value="a">Annual</option>
+                                                            </select>
+                                                        </div>
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <kendo-numerictextbox
+                                                          format="c2"
+                                                          placeholder="$0.00"
+                                                          formControlName="RMR"
+                                                          [spinners]="false"
+                                                          [style.height]="'calc(1.5em + 1.3rem)'"
+                                                          [style.width]="'80%'"
+                                                        ></kendo-numerictextbox>
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <kendo-numerictextbox
+                                                          format="c2"
+                                                          placeholder="$0.00"
+                                                          formControlName="PassThrough"
+                                                          [spinners]="false"
+                                                          [style.height]="'calc(1.5em + 1.3rem)'"
+                                                          [style.width]="'80%'"
+                                                        ></kendo-numerictextbox>
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <input 
+                                                          type="date"
+                                                          class="form-control"
+                                                          formControlName="BillingStartDate"
+                                                        >
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <input
+                                                          class="center-block"
+                                                          type="checkbox"
+                                                          formControlName="Add2Item"
+                                                          (change)="checkboxChanged($event)"
+                                                          >
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col text-center">
+                                                        <div class="dropdown">
+                                                            <select 
+                                                              formControlName="Multiple"  
+                                                              class="form-control"
+                                                              >
+                                                                <option
+                                                                    *ngFor="let m of listMultiples" 
+                                                                    value="{{m.multiple}}" 
+                                                                    [ngValue]="m.multiple"
+                                                                >{{ m.multiple }}</option>
+                                                            </select>
+                                                        </div>
+                                                      </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="col">
+                                                        <kendo-numerictextbox
+                                                            #fooRef
+                                                            format="c2"
+                                                            placeholder="$0.00"
+                                                            formControlName="Total"
+                                                            [spinners]="false"
+                                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                                            [style.width]="'80%'"
+                                                            [attr.disabled]="true"
+                                                        ></kendo-numerictextbox>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-add" type="button" (click)="addNewItem()">
+                                                        <i class="fas fa-plus pr-1"></i>Add
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                                        <i class="fas fa-minus pr-1"></i>Remove
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                      </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                      </div> -->
+
                     <header class="recurring-header-bg">
                         <div class="col">
                             <span class="align-middle">Service Provided</span>

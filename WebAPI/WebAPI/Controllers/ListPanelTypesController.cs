@@ -33,16 +33,16 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpGet]
+        [HttpGet("{id1}")]
         [Authorize]
-        public async Task<Object> GetListPanelTypes()
+        public async Task<Object> GetListPanelTypes(string id1)
         {
             var panels = new List<ListPanelTypes>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var result = await db.GetListPanelTypes.FromSqlRaw("EXECUTE [dbo].[ListPanelTypes]").ToListAsync();
+                var result = await db.GetListPanelTypes.FromSqlRaw("EXECUTE [dbo].[ListPanelTypes] @CustomerSystemID = {0}", id1).ToListAsync();
                 List<ListPanelTypes> Lst = result.Select(s => new ListPanelTypes
                 {
                     Panel_Type_Id = s.Panel_Type_Id,
@@ -53,5 +53,26 @@ namespace WebAPI.Controllers
                 return Lst;
             }
         }
+
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<Object> GetListPanelTypes()
+        //{
+        //    var panels = new List<ListPanelTypes>();
+
+        //    await using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        var result = await db.GetListPanelTypes.FromSqlRaw("EXECUTE [dbo].[ListPanelTypes]").ToListAsync();
+        //        List<ListPanelTypes> Lst = result.Select(s => new ListPanelTypes
+        //        {
+        //            Panel_Type_Id = s.Panel_Type_Id,
+        //            PanelName = s.PanelName,
+        //            Inactive = s.Inactive
+        //        }).ToList();
+
+        //        return Lst;
+        //    }
+        //}
     }
 }

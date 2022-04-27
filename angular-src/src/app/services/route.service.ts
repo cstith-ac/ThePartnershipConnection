@@ -622,20 +622,20 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/ListSystemTypes`, httpOptions);
   }
 
-  getListPanelTypes(): Observable<any> {
+  getListPanelTypes(id:number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
     };
-    return this.http.get<any>(`${this.baseUrl}/api/ListPanelTypes`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}/api/ListPanelTypes/`+ id, httpOptions);
   }
 
-  getListCentralStations(): Observable<any> {
+  getListCentralStations(id:number): Observable<any> {
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
     };
-    return this.http.get<any>(`${this.baseUrl}/api/ListCentralStations`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}/api/ListCentralStations/`+ id, httpOptions);
   }
 
   getListSitesForCustomer(id: number): Observable<any> {
@@ -707,10 +707,14 @@ export class RouteService {
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchList/`, httpOptions);
   }
 
-  getCustomerSearchListSite(): Observable<any> {
+  getCustomerSearchListSite(): Observable<HttpResponse<any>> {
     this.loadToken();
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.authToken 
+      }),
+      observe: 'response' as 'body' 
     };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerSearchListSite/`, httpOptions);
   }

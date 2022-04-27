@@ -33,9 +33,9 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpGet]
+        [HttpGet("{id1}")]
         [Authorize]
-        public async Task<Object> GetListPanelTypesXs()
+        public async Task<Object> GetListPanelTypesXs(string id1)
         {
             var list = new List<ListPanelTypesX>();
 
@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
 
                 var email = c;
 
-                var result = await db.GetListPanelTypesXs.FromSqlRaw("EXECUTE [dbo].[ListPanelTypesX] @CustomerSystemID = 1, @UserEmailAddress = '" + email + "', @IncentiveStatus = 1, @InstallCompanyID = 1").ToListAsync();
+                var result = await db.GetListPanelTypesXs.FromSqlRaw("EXECUTE [dbo].[ListPanelTypesX] @CustomerSystemID = {0}, @UserEmailAddress = '" + email + "', @IncentiveStatus = 1, @InstallCompanyID = 1", id1).ToListAsync();
                 List<ListPanelTypesX> Lst = result.Select(s => new ListPanelTypesX
                 {
                     Panel_Type_Id = s.Panel_Type_Id,
@@ -59,5 +59,32 @@ namespace WebAPI.Controllers
                 return Lst;
             }
         }
+
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<Object> GetListPanelTypesXs()
+        //{
+        //    var list = new List<ListPanelTypesX>();
+
+        //    await using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string userId = User.Claims.First(c => c.Type == "UserID").Value;
+        //        var user = await _userManager.FindByIdAsync(userId);
+        //        var c = user.UserName;
+
+        //        var email = c;
+
+        //        var result = await db.GetListPanelTypesXs.FromSqlRaw("EXECUTE [dbo].[ListPanelTypesX] @CustomerSystemID = 1, @UserEmailAddress = '" + email + "', @IncentiveStatus = 1, @InstallCompanyID = 1").ToListAsync();
+        //        List<ListPanelTypesX> Lst = result.Select(s => new ListPanelTypesX
+        //        {
+        //            Panel_Type_Id = s.Panel_Type_Id,
+        //            PanelName = s.PanelName,
+        //            Inactive = s.Inactive
+        //        }).ToList();
+
+        //        return Lst;
+        //    }
+        //}
     }
 }

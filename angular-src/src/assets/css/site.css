@@ -829,6 +829,34 @@ h6 {
     opacity: 0;
   }
 }
+.modal-xl,
+.modal-lg {
+  max-width: 90%;
+  /* overflow-y: initial !important; */
+}
+/* .incentive-items-modal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding-top: 2%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+}
+.incentive-items-content {
+  width: 95vw;
+  height: 90vh;
+  max-height: 700px;
+  max-width: 600px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  margin: 0 auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+} */
 
 .my-class .modal-dialog {
   /* max-width: 1450px !important; */

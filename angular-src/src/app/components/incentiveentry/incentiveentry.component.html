@@ -70,7 +70,7 @@
 
         <form [formGroup]="incentiveEntryForm">
             <div class="row form-inline mt-5 mb-5">
-                <div class="invoice-col ml-15">
+                <div class="col">
                     <div class="form-group">
                         <label class="mr-2">Invoice #</label>
                         <input 
@@ -79,7 +79,7 @@
                             formControlName="InvoiceNumber">
                     </div>
                 </div>
-                <div class="invoice-col">
+                <div class="col">
                     <div class="form-group">
                         <label class="mr-2">Invoice Date</label>
                         <input
@@ -89,7 +89,7 @@
                         >
                     </div>
                 </div>
-                <div class="invoice-col">
+                <div class="col">
                     <div class="form-group">
                         <label class="mr-2">Invoice Total</label>
                         <!-- <input 
@@ -117,10 +117,10 @@
 
             <ng-container>
                 <div class="">
-                    <div class="flexp" >
+                    <div class="flexp">
                         <div class="form-group flexc" *ngFor="let box of checkBoxIndex; let i=index">
                             <div *ngIf="box.id&gt;0 && box.id&lt;=2">
-                                <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
+                                <label [ngStyle]="{'min-width': '60%'}">{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
                                     name="{{box.id}}" 
@@ -133,7 +133,7 @@
                                 >
                             </div>
                             <div *ngIf="box.id&gt;2 && box.id&lt;=6">
-                                <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
+                                <label [ngStyle]="{'min-width': '60%'}">{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
                                     name="{{box.id}}" 
@@ -143,7 +143,7 @@
                                 >
                             </div>
                             <div *ngIf="box.id&gt;6 && box.id&lt;11">
-                                <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
+                                <label [ngStyle]="{'min-width': '60%'}">{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox" 
                                     name="{{box.id}}" 
@@ -154,7 +154,7 @@
                                 >
                             </div>
                             <div *ngIf="box.id&gt;10 ">
-                                <label [ngStyle]="{'min-width': '200px'}">{{box.checkBoxName}}</label>
+                                <label [ngStyle]="{'min-width': '60%'}">{{box.checkBoxName}}</label>
                                 <input 
                                     type="checkbox"
                                     class="form-check-input"
@@ -166,7 +166,7 @@
                                 >
                             </div>
                         </div>
-                        <div class="mt-5">
+                        <div class="mt-5 ticknumber-container">
                             <p class="mb-0">If Service Assigned by Alarm Connections</p>
                             <form class="form-group">
                                 <label class="mr-2">Alarm Connections Ticket #</label>
@@ -179,7 +179,7 @@
                                 >
                                     <i class="pl-3 fas fa-search text-success search mr-3" (click)="onOpenTicketNumberListModal(acTicketNumberListContent)"></i>
                                     <i 
-                                    class="pl-3 far fa-trash-alt text-error" 
+                                    class="far fa-trash-alt text-error" 
                                     (click)="removeTicketNumber()"
                                 ></i>
                             </form>
@@ -580,7 +580,7 @@
                                 </div>
                             </ng-template>
                         </div>
-                        <div class="mt-5">
+                        <div class="mt-5 ticknumber-container">
                             <div class="form-group">
                                 <label class="mr-2">Was service performed as part of this invoice?</label>
                                 Yes

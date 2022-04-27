@@ -24,6 +24,7 @@ export class SysteminfodetailComponent implements OnInit {
   loading:boolean = true;
   //isValueNotPresent:boolean = false;
   accountInactiveText:boolean = false;
+  showScheduled_Date: boolean = false;
 
   accountNotFoundText;
   id;
@@ -612,9 +613,19 @@ export class SysteminfodetailComponent implements OnInit {
       } else if (this.site_no) {
         this.cmsService.getEventHistoryDate(this.site_no).subscribe(
           res => {
-            //console.log(res);
             this.eventHistoryDateData = res;
+            console.log(this.eventHistoryDateData);
             this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
+
+            //get scheduled_Date
+            // const asArray = Object.entries(this.eventHistoryDateData) as unknown as Array<[]>;
+
+            // console.log(asArray)
+
+            // let foo = this.eventHistoryDateData.filter((x, index) => {
+            //   x.scheduled_Date == this.eventHistoryDateData[index]
+            // })
+            // console.log(foo);
           }
         )
       }
@@ -718,12 +729,10 @@ export class SysteminfodetailComponent implements OnInit {
       this.pascom = 'N/A';
     }
 
-    // if(this.scheduled_Date === 'N/A') {
-    //   console.log(this.scheduled_Date)
-    //   this.scheduled_Date === 'N/A'
-    // } else {
-    //   this.scheduled_Date = new DatePipe('en-US').transform(this.scheduled_Date, 'MM/dd/yyyy hh:mm:ss a');
-    // }
+    if(this.scheduled_Date === 'N/A') {
+      console.log(this.scheduled_Date)
+      this.showScheduled_Date = true;
+    }
   }
 
   open3GModal() {

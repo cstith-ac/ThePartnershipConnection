@@ -626,7 +626,8 @@
                             <div class="col-md-3">
                                 <!-- <p class="">Scheduled Date: {{scheduled_Date}}</p> -->
                                 <span class="subtitle-2 medium-emphasis">Scheduled Date: </span>
-                                <span class="high-emphasis body-2">{{(scheduled_Date | date : 'MM/dd/yyyy hh:mm:ss a')|| 'N/A' || ''}}</span>
+                                <span class="high-emphasis body-2" *ngIf="!showScheduled_Date">{{(scheduled_Date | date : 'MM/dd/yyyy hh:mm:ss a')}}</span>
+                                <span class="high-emphasis body-2" *ngIf="showScheduled_Date">{{scheduled_Date | replaceNullWithText}}</span>
                             </div>
                         </div>
                         <div class="row pt-3 pb-3 divider-horizontal">

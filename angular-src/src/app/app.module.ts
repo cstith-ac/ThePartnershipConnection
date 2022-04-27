@@ -103,6 +103,7 @@ import { PartnerviewlistComponent } from './components/partnerviewlist/partnervi
 import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
 import { FilterPartnerviewlistPipe } from './_helpers/filter-partnerviewlist.pipe';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { ReplaceNullWithTextPipe } from './_helpers/replace-null-with-text.pipe';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -185,6 +186,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PartnerviewlistComponent,
     AdminedituserComponent,
     FilterPartnerviewlistPipe,
+    ReplaceNullWithTextPipe,
     //NgbTypeahead
     //CustomerTestComponent
   ],

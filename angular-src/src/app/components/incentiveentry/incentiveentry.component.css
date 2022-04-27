@@ -48,7 +48,7 @@
 .form-check-populate {
   position: absolute;
   margin-top: 0.3rem;
-  margin-left: 5%;
+  /* margin-left: 5%; */
 }
 .incentive-header {
   color: #1b5eac;
@@ -92,6 +92,12 @@
   height: 66px;
   flex-grow: 1;
   display: inline-block;
+  border: 1px solid rgba(33, 33, 33, 0.05);
+  border-bottom: 1px solid rgba(33, 33, 33, 0.05);
+  padding: 3px 0 3px 3px;
+}
+.flexc:hover {
+  background-color: rgba(33, 33, 33, 0.08);
 }
 @media all and (max-width: 480px) {
   .flexc {
@@ -337,4 +343,7 @@ header,
   text-overflow: ellipsis;
   -webkit-appearance: none;
   border-radius: 0.25rem;
+}
+.ticknumber-container {
+  padding: 3px 0 3px 3px;
 }

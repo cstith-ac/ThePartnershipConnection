@@ -33,16 +33,16 @@ namespace WebAPI.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpGet]
+        [HttpGet("{id1}")]
         [Authorize]
-        public async Task<Object> GetListCentralStations()
+        public async Task<Object> GetListCentralStations(string id1)
         {
             var list = new List<ListCentralStations>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var result = await db.GetListCentralStations.FromSqlRaw("EXECUTE [dbo].[ListCentralStations]").ToListAsync();
+                var result = await db.GetListCentralStations.FromSqlRaw("EXECUTE [dbo].[ListCentralStations] @CustomerSystemID = {0}", id1).ToListAsync();
                 List<ListCentralStations> Lst = result.Select(s => new ListCentralStations
                 {
                     CentralStationID = s.CentralStationID,
@@ -52,5 +52,25 @@ namespace WebAPI.Controllers
                 return Lst;
             }
         }
+
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<Object> GetListCentralStations()
+        //{
+        //    var list = new List<ListCentralStations>();
+
+        //    await using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        var result = await db.GetListCentralStations.FromSqlRaw("EXECUTE [dbo].[ListCentralStations]").ToListAsync();
+        //        List<ListCentralStations> Lst = result.Select(s => new ListCentralStations
+        //        {
+        //            CentralStationID = s.CentralStationID,
+        //            CSName = s.CSName
+        //        }).ToList();
+
+        //        return Lst;
+        //    }
+        //}
     }
 }
