@@ -110,6 +110,7 @@ namespace WebAPI
             services.AddScoped<ICallSummaryAddRepository, CallSummaryAddRepository>();
             services.AddScoped<ICallSummaryUpdateRepository, CallSummaryUpdateRepository>();
             services.AddScoped<IIncentive_ADD_StartRepository, Incentive_ADD_StartRepository>();
+            services.AddScoped<IIncentive_ADD_StartERepository, Incentive_ADD_StartERepository>();
             services.AddScoped<IIncentive_Add_RecurringRepository, Incentive_Add_RecurringRepository>();
             services.AddScoped<IIncentive_Add_EquipmentRepository, Incentive_Add_EquipmentRepository>();
             services.AddScoped<IIncentive_Add_LaborRepository, Incentive_Add_LaborRepository>();

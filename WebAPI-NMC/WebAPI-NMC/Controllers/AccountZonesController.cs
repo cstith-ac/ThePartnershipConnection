@@ -20,7 +20,8 @@ namespace WebAPI_NMC.Controllers
             NMCServiceReference.NMCLinkPortalSoapClient accountZones = new NMCServiceReference.NMCLinkPortalSoapClient(NMCServiceReference.NMCLinkPortalSoapClient.EndpointConfiguration.NMCLinkPortalSoap);
 
             string reqType = "G";
-            string secUser = "afatestapiuser";
+            //string secUser = "afatestapiuser";//temp development
+            string secUser = "afacapiuser";//production
             string passWord = "qwert!4rfs";
             string csNo = id1;
             string xmldata = "<NMCNexusDocument xmlns=\"http://www.nmccentral.com/webservices/nmcmapi\">" +

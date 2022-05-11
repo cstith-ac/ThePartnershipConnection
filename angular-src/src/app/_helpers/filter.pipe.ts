@@ -29,7 +29,8 @@ export class FilterPipe implements PipeTransform {
     return CustomerSearchListDec14s.filter(x => 
       x.customer_Name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
       x.customer_Number.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-      x.customerStatus.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+      x.customerStatus.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+      x.address_1.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
     );
   }
 }

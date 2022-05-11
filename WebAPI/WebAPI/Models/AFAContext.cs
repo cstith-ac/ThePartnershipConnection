@@ -17,6 +17,7 @@ namespace WebAPI.Models
         }
 
         public virtual DbSet<Incentive_ADD_Start> GetIncentive_ADD_StartResults { get; set; }
+        public virtual DbSet<Incentive_ADD_StartE> GetIncentive_ADD_StartEResults { get; set; }
         public virtual DbSet<Incentive_Add_Recurring> GetIncentive_Add_RecurringResults { get; set; }
         public virtual DbSet<Incentive_Add_Equipment> GetIncentive_Add_EquipmentResults { get; set; }
         public virtual DbSet<Incentive_Add_Labor> GetIncentive_Add_LaborResults { get; set; }
@@ -28,12 +29,18 @@ namespace WebAPI.Models
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=D1CH49N2,1433;Database=AFA;User ID=cstith;Password=TPC$123tpc");
+                //optionsBuilder.UseSqlServer("Server=10.0.81.29;Database=AFA;User ID=cstith;Password=TPC$123tpc");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Incentive_ADD_Start>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Incentive_ADD_StartE>(entity =>
             {
                 entity.HasNoKey();
             });

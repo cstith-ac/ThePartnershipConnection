@@ -33,6 +33,7 @@ import { Incentive_Add_Recurring } from 'src/app/models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../../models/incentiveaddlabor';
 import { Incentive_ADD_Finish } from 'src/app/models/incentiveaddfinish';
+import {Environments} from 'src/app/models/environments';
 import { fromEvent, Observable, of, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, mergeAll, filter, switchMap, catchError, map, tap, concatMap } from 'rxjs/operators';
 import { element } from 'protractor';
@@ -46,6 +47,8 @@ const moment = require('moment');
 })
 export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() incentiveEntryOutput:[];
+  //@Input() environment: string;
+  environment: number;
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
 
   @ViewChild('filter') filter: ElementRef;
@@ -478,7 +481,41 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   
 
   ngOnInit() {
-    
+    console.log(this.router.url);
+    console.log(this.baseUrl);
+    //Other
+    // if(this.baseUrl === 'http://localhost:63052') {
+    //   this.environment = 4;
+    // }
+    // //Beta
+    // if(this.baseUrl === 'https://thepartnershipconnectionapi-beta.azurewebsites.net') {
+    //   this.environment = 3;
+    // }
+    // //Testing
+    // if(this.baseUrl === 'https://thepartnershipconnectionapi-staging.azurewebsites.net') {
+    //   this.environment = 2;
+    // }
+    // //Production
+    // if(this.baseUrl === 'https://thepartnershipconnectionapi.azurewebsites.net') {
+    //   this.environment = 1;
+    // }
+    // //Unknown
+    // if(this.baseUrl !== 'http://localhost:63052' && this.baseUrl !== 'https://thepartnershipconnectionapi-beta.azurewebsites.net' && this.baseUrl !== 'https://thepartnershipconnectionapi-staging.azurewebsites.net' && this.baseUrl !== 'https://thepartnershipconnectionapi.azurewebsites.net') {
+    //   this.environment = 0;
+    // }
+
+    if(this.baseUrl === 'http://localhost:63052') {
+      this.environment = 4;
+    } else if (this.baseUrl === 'https://thepartnershipconnectionapi-beta.azurewebsites.net') {
+      this.environment = 3;
+    } else if (this.baseUrl === 'https://thepartnershipconnectionapi-staging.azurewebsites.net') {
+      this.environment = 2;
+    } else if (this.baseUrl === 'https://thepartnershipconnectionapi.azurewebsites.net') {
+      this.environment = 1;
+    } else {
+      this.environment = 0;
+    }
+
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -916,6 +953,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       ServiceIncluded: localStorage.getItem('serviceIncluded'), //@ServiceInclude
       SignalsTested: ["", Validators.required],
       PartnerComments: [""], //@PartnerComments
+      //SourceApp: this.environment,
+      Environment: this.environment,
       EnrollInEmailInvoices: [""]
     });
 
@@ -2013,8 +2052,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(value === '0') {
       console.log('filter the table by active customers: ', value)
       //filter the table by active customers
-      let cancel = this.customerSearchListDec14.filter(x => x.customerStatus === 'Cancel');
-      console.group(cancel);
+      let cancel = this.customerSearchListCentralStation.filter(x => x.customerStatus === 'Cancel');
+      console.log(cancel);
     }
   }
 
@@ -2025,7 +2064,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //this.searchValue = "Active"
       console.log('filter the table by cancelled customers: ', value)
       //filter the table by cancelled customers
-      let active = this.customerSearchListDec14.filter(x => x.customerStatus === 'Active');
+      let active = this.customerSearchListCentralStation.filter(x => x.customerStatus === 'Active');
       console.log(active);
     }
   }
@@ -2037,6 +2076,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log("Customer value is : ", value);
     if(value === 'on') {
       console.log('this value is on')
+
       //let the customer filter by customer_Name or customer_Number
     }
   }
@@ -2447,6 +2487,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     this.submitted = true;
 
+    // get environment from app component
+    // app this.environment to Incentive_ADD_Start
+
     //Incentive_ADD_Start
     console.log('@UserEmailAddress:' + form.value.UserEmailAddress) // @UserEmailAddress NVarChar(50),
     if(localStorage.getItem('customer_Id')) {
@@ -2805,7 +2848,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //this.frmData6.append('@file_data', this.myFiles[i]);
     this.frmData6.append('document_id', '1');
 
-    this.routeService.postIncentiveADDStart(this.incentiveDashboardForm.value).pipe(
+    this.routeService.postIncentiveADDStartE(this.incentiveDashboardForm.value).pipe(
       tap(
         (res) => {
           this.job_id = res

@@ -20,7 +20,8 @@ namespace WebAPI_NMC.Controllers
             NMCServiceReference.NMCLinkPortalSoapClient dispatchAgencies = new NMCServiceReference.NMCLinkPortalSoapClient(NMCServiceReference.NMCLinkPortalSoapClient.EndpointConfiguration.NMCLinkPortalSoap);
 
             string reqType = "G";
-            string secUser = "afatestapiuser";
+            //string secUser = "afatestapiuser";//temp development
+            string secUser = "afacapiuser";//production
             string passWord = "qwert!4rfs";
             string csNo = id1;
             //string csNo = "C780070";

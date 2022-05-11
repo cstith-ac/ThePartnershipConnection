@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NMCNexusDocument>
+  <APIException>
+    <APIException_Response>
+      <system_name>NMCNexus Data Portal</system_name>
+      <request_object>XML Validation Error</request_object>
+      <method_name>ProcessData</method_name>
+      <error_msg>The element 'NMCNexusDocument' in namespace 'http://www.nmccentral.com/webservices/nmcmapi' has invalid child element 'GetEventHistory' in namespace 'http://www.nmccentral.com/webservices/nmcmapi'. List of possible elements expected: 'Unknown, APIException, AccountComplete, AgencyPermit, BackupCS, ChgCSNo, Contact, CSTwoWay, GetAccountInfo, GetAccountAgency, GetAccountContacts, GetAccountNotes, GetAccountZones, GetDispatchAgencies, GetEventCode, GetNotes, GetZipDefaultAgency, GetZipDefault, GetAllAccounts, GetAllAccountChanges, GetAllAccountsDetails, GetAllSitePanels, GetAllSystemTests, OOS, SignalHistory, SiteDispatch, SiteGeneralDispatch, SiteNote, SiteOption, SiteSystemOption, SiteSystem, Test, ExtendTest, ZoneRule, CompareAgency, Agency, SiteGeneralInfo' in namespace 'http://www.nmccentral.com/webservices/nmcmapi'.</error_msg>
+      <cs_no>C780070</cs_no>
+    </APIException_Response>
+  </APIException>
+</NMCNexusDocument>

@@ -72,3 +72,4 @@ C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Debug\netcoreapp3.1\WebAPI-NMC.csproj.CoreCompileInputs.cache
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Debug\netcoreapp3.1\WebAPI-NMC.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-nmc-staging - Web Deploy\profile.arm.json

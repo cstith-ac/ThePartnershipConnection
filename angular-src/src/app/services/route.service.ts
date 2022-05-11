@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { SystemInfo } from '../models/systeminfo';
 import { SummaryAdd } from '../models/summaryadd';
 import { Incentive_ADD_Start } from '../models/incentiveaddstart';
+import { Incentive_ADD_StartE } from '../models/incentiveaddstarte';
 import { Incentive_Add_Recurring } from '../models/incentiveaddrecurring';
 import { Incentive_Add_Equipment } from '../models/incentiveaddequipment';
 import { Incentive_Add_Labor } from '../models/incentiveaddlabor';
@@ -31,6 +32,7 @@ export class RouteService {
 
   data: SummaryAdd[] = [];
   incentiveAddStart: Incentive_ADD_Start[] = [];
+  incentiveAddStartE: Incentive_ADD_StartE[] = [];
   incentiveAddRecurring: Incentive_Add_Recurring[] = [];
   incentiveAddEquipment: Incentive_Add_Equipment[] = [];
   incentiveAddLabor: Incentive_Add_Labor[] = [];
@@ -757,6 +759,14 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
     };
     return this.http.post<Incentive_ADD_Start>(`${this.baseUrl}/api/Incentive_Add_Start`, incentiveStart, httpOptions)
+  }
+
+  postIncentiveADDStartE(incentiveStartE: Incentive_ADD_StartE): Observable<any>{
+    this.loadToken();
+    let httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+ this.authToken })
+    };
+    return this.http.post<Incentive_ADD_StartE>(`${this.baseUrl}/api/Incentive_Add_StartE`, incentiveStartE, httpOptions)
   }
 
   postIncentive_Add_Recurring(params:any): Observable<any>{

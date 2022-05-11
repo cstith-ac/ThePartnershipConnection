@@ -26,7 +26,9 @@ export class SysteminfodetailComponent implements OnInit {
   accountInactiveText:boolean = false;
   showScheduled_Date: boolean = false;
 
-  accountNotFoundText;
+  accountNotFoundText: boolean = false;
+  //accountNotFoundText;
+  err_msg;
   id;
   siteSystemNumbersData; // data returned from SiteSystemNumbers
   siteSystemDetailsData;
@@ -410,7 +412,8 @@ export class SysteminfodetailComponent implements OnInit {
 
             if(this.site_no === "") {
               console.log('there is no site no');
-              this.accountNotFoundText = 'Account not found at CMS';
+              //this.accountNotFoundText = 'Account not found at CMS';
+              this.accountNotFoundText = true;
             }
           }
           this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
@@ -445,7 +448,16 @@ export class SysteminfodetailComponent implements OnInit {
     } else if(this.centralStation === 'NMC') {
       this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
         res => {
-          //console.log(res)
+          console.log(res);//object
+          let emptyObj = Object.keys(res).length;
+          console.log(emptyObj)
+          if(emptyObj === 0) {
+            this.loading = false;
+            //this.accountNotFoundText = 'Account not found at NMC';
+            this.accountNotFoundText = true;
+            console.log('There is no data from AccountInfo available');
+          }
+          
           for(let key in res) {
             //console.log(res[key]);
             this.loading = false;
@@ -475,7 +487,8 @@ export class SysteminfodetailComponent implements OnInit {
     if(this.centralStation === 'CMS') {
       if(this.site_no === "") {
         console.log('there is no site no');
-        this.accountNotFoundText = 'Account not found at CMS';
+        //this.accountNotFoundText = 'Account not found at CMS';
+        this.accountNotFoundText = true;
       } else if(this.site_no) {
         this.cmsService.getContactList(this.site_no).subscribe(
           res => {
@@ -555,7 +568,8 @@ export class SysteminfodetailComponent implements OnInit {
   onClickGetZonesList() {
     if(this.centralStation === 'CMS') {
       if(this.site_no === "") {
-        this.accountNotFoundText = "Account not found at CMS"
+        //this.accountNotFoundText = "Account not found at CMS"
+        this.accountNotFoundText = true;
       } else if (this.site_no) {
         this.cmsService.getZones(this.system_no).subscribe(
           res => {
@@ -609,7 +623,8 @@ export class SysteminfodetailComponent implements OnInit {
   onClickGetSignals() {
     if(this.centralStation === 'CMS') {
       if(this.site_no === "") {
-        this.accountNotFoundText = "Account not found at CMS"
+        //this.accountNotFoundText = "Account not found at CMS"
+        this.accountNotFoundText = true;
       } else if (this.site_no) {
         this.cmsService.getEventHistoryDate(this.site_no).subscribe(
           res => {
@@ -638,6 +653,17 @@ export class SysteminfodetailComponent implements OnInit {
       // )
     } else if (this.centralStation === 'NMC') {
       console.log(`This isn't working yet`)
+      this.nmcService.getSignalHistory(this.alarmAccount).subscribe(
+        res => {
+          console.log(res);
+          let returnedSignalHistoryObj = Object.values(res);
+          console.log(returnedSignalHistoryObj.entries());
+          returnedSignalHistoryObj.forEach(element => {
+            console.log(element.err_msg);
+            this.err_msg = element.err_msg;
+          })
+        }
+      )
     }
   }
 

@@ -60,6 +60,21 @@ export class NmcService {
     );
   }
 
+  getSignalHistory(id: number): Observable<HttpResponse<any>> {
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      observe: 'response' as 'body'
+    };
+    // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/SignalHistory/${id}`,httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`http://localhost:5001/api/SignalHistory/${id}`,httpOptions).pipe(
+      catchError(this.errorHandler)
+    );
+  }
+
   errorHandler(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
