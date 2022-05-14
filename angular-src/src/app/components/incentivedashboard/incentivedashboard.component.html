@@ -30,6 +30,7 @@
                                     [resultFormatter]="resultFormatCustomerListValue" 
                                     [inputFormatter]="inputFormatCustomerListValue"
                                     (change)="onChangeFocus($event)"
+                                    (keydown)="delete($event)"
                                 >
                                 <div class="mt-1">
                                     <small class="text-error d-none" *ngIf="this.incentiveDashboardForm.get('CustomerID').errors && this.incentiveDashboardForm.get('CustomerID').hasError('required') && this.customerIDValidated">* Please enter or select the customer.</small>
@@ -48,7 +49,11 @@
                                 <i class="fas fa-search"></i>
                             </span>
 
-                            <span class="pl-4" (click)="routeToNewCustomer()" *ngIf="!customerPreselected">
+                            <button class="btn btn-error" *ngIf="customerSearch && !isCustomerSearchResetButton" (click)="onResetCustomer()">
+                                <i class="fas fa-redo"></i>Reset
+                            </button>
+                         
+                            <span class="pl-4" (click)="routeToNewCustomer()" *ngIf="!customerPreselected || !customerSearch">
                                 <i class="fas fa-plus-circle"></i>
                                 New Customer
                             </span>

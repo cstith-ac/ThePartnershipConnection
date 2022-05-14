@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpEventType } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Model } from '../models/model';
 import { catchError } from 'rxjs/operators';
@@ -10,7 +11,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class NmcService {
   authToken: any;
-  baseUrl: '';
+  //baseUrl: '';
+  baseUrl = environment.nmcUrl;
 
   constructor(
     private http: HttpClient, 
@@ -25,7 +27,10 @@ export class NmcService {
       observe: 'response' as 'body'
     };
     // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/AccountInfo/${id}`, httpOptions);
-    return this.http.post<any>(`http://localhost:5001/api/AccountInfo/${id}`,httpOptions).pipe(
+    // return this.http.post<any>(`http://localhost:5001/api/AccountInfo/${id}`,httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/AccountInfo/${id}`,httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
@@ -40,7 +45,10 @@ export class NmcService {
     // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/AccountContacts/${id}`,httpOptions).pipe(
     //   catchError(this.errorHandler)
     // );
-    return this.http.post<any>(`http://localhost:5001/api/AccountContacts/${id}`,httpOptions).pipe(
+    // return this.http.post<any>(`http://localhost:5001/api/AccountContacts/${id}`,httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/AccountContacts/${id}`,httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
@@ -55,7 +63,10 @@ export class NmcService {
     // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/AccountZones/${id}`,httpOptions).pipe(
     //   catchError(this.errorHandler)
     // );
-    return this.http.post<any>(`http://localhost:5001/api/AccountZones/${id}`,httpOptions).pipe(
+    // return this.http.post<any>(`http://localhost:5001/api/AccountZones/${id}`,httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/AccountZones/${id}`,httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
@@ -70,7 +81,10 @@ export class NmcService {
     // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/SignalHistory/${id}`,httpOptions).pipe(
     //   catchError(this.errorHandler)
     // );
-    return this.http.post<any>(`http://localhost:5001/api/SignalHistory/${id}`,httpOptions).pipe(
+    // return this.http.post<any>(`http://localhost:5001/api/SignalHistory/${id}`,httpOptions).pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/SignalHistory/${id}`,httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }

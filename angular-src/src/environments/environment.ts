@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:63052',
+  cmsUrl: 'http://localhost:5000',
+  nmcUrl: 'http://localhost:5001',
   appInsights: {
     instrumentationKey: '9e5cf497-b794-4e72-a1c6-603856eeda3b'
   },

@@ -448,9 +448,9 @@ export class SysteminfodetailComponent implements OnInit {
     } else if(this.centralStation === 'NMC') {
       this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
         res => {
-          console.log(res);//object
+          //console.log(res);//object
           let emptyObj = Object.keys(res).length;
-          console.log(emptyObj)
+          //console.log(emptyObj)
           if(emptyObj === 0) {
             this.loading = false;
             //this.accountNotFoundText = 'Account not found at NMC';
@@ -580,7 +580,7 @@ export class SysteminfodetailComponent implements OnInit {
             //   val.trouble_state_flag.toLowerCase().includes('N')
             // })
             let returnedZonesObj = Object.values(this.zonesData);
-            console.log(typeof returnedZonesObj);
+            //console.log(typeof returnedZonesObj);
             
             // for (let i = 0; i < returnedZonesObj.length; i++) {
             //   let x = this.zonesData.filter(a => 
@@ -629,7 +629,7 @@ export class SysteminfodetailComponent implements OnInit {
         this.cmsService.getEventHistoryDate(this.site_no).subscribe(
           res => {
             this.eventHistoryDateData = res;
-            console.log(this.eventHistoryDateData);
+            //console.log(this.eventHistoryDateData);
             this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
 
             //get scheduled_Date
@@ -756,7 +756,7 @@ export class SysteminfodetailComponent implements OnInit {
     }
 
     if(this.scheduled_Date === 'N/A') {
-      console.log(this.scheduled_Date)
+      //console.log(this.scheduled_Date)
       this.showScheduled_Date = true;
     }
   }

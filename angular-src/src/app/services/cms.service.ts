@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpEventType } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Model } from '../models/model';
 import { catchError } from 'rxjs/operators';
@@ -11,7 +12,8 @@ import { EventHistoryDate } from '../models/eventhistorydate';
 })
 export class CmsService {
   authToken: any;
-  baseUrl: '';
+  //baseUrl: '';
+  baseUrl = environment.cmsUrl;
 
   constructor(
     private http: HttpClient, 
@@ -26,7 +28,8 @@ export class CmsService {
       observe: 'response' as 'body'
     };
     // return this.http.get<any>(`https://thepartnershipconnectionapi-cms.azurewebsites.net/api/CentralStationDataCMS`, httpOptions);
-    return this.http.get<any>(`http://localhost:5000/api/CentralStationDataCMS`, httpOptions);
+    //return this.http.get<any>(`http://localhost:5000/api/CentralStationDataCMS`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}/api/CentralStationDataCMS`, httpOptions);
   }
 
   getSiteSystemNumbers(id:number): Observable<HttpResponse<any>> {
@@ -41,10 +44,14 @@ export class CmsService {
     // .pipe(
     //   catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/SiteSystemNumbers/${id}`, httpOptions)
-    .pipe(
-      catchError(this.errorHandler)
-    )
+    // return this.http.post<any>(`http://localhost:5000/api/SiteSystemNumbers/${id}`, httpOptions)
+    // .pipe(
+    //   catchError(this.errorHandler)
+    // )
+    return this.http.post<any>(`${this.baseUrl}/api/SiteSystemNumbers/${id}`, httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+    );
   }
 
   getSiteSystemDetails(id:number): Observable<HttpResponse<any>> {
@@ -59,10 +66,14 @@ export class CmsService {
     // .pipe(
     //   catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/SiteSystemDetails/${id}`, httpOptions)
-    .pipe(
-      catchError(this.errorHandler)
-    )
+    // return this.http.post<any>(`http://localhost:5000/api/SiteSystemDetails/${id}`, httpOptions)
+    // .pipe(
+    //   catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/SiteSystemDetails/${id}`, httpOptions)
+      .pipe(
+        catchError(this.errorHandler)
+    );
   }
 
   getContactList(id:number): Observable<HttpResponse<any>> {
@@ -77,10 +88,14 @@ export class CmsService {
     //   .pipe(
     //     catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/ContactList/${id}`, httpOptions)
+    // return this.http.post<any>(`http://localhost:5000/api/ContactList/${id}`, httpOptions)
+    //   .pipe(
+    //     catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/ContactList/${id}`, httpOptions)
       .pipe(
         catchError(this.errorHandler)
-    )
+    );
   }
 
   getZones(id:number): Observable<HttpResponse<any>> {
@@ -95,10 +110,14 @@ export class CmsService {
     //   .pipe(
     //     catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/Zones/${id}`, httpOptions)
+    // return this.http.post<any>(`http://localhost:5000/api/Zones/${id}`, httpOptions)
+    //   .pipe(
+    //     catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/Zones/${id}`, httpOptions)
       .pipe(
         catchError(this.errorHandler)
-    )
+    );
   }
 
   getEventHistoryDate(id:number): Observable<HttpResponse<EventHistoryDate[]>> {
@@ -113,10 +132,14 @@ export class CmsService {
     //   .pipe(
     //     catchError(this.errorHandler)
     // )
-    return this.http.post<any>(`http://localhost:5000/api/EventHistoryDate/${id}`, httpOptions)
+    // return this.http.post<any>(`http://localhost:5000/api/EventHistoryDate/${id}`, httpOptions)
+    //   .pipe(
+    //     catchError(this.errorHandler)
+    // );
+    return this.http.post<any>(`${this.baseUrl}/api/EventHistoryDate/${id}`, httpOptions)
       .pipe(
-        catchError(this.errorHandler)
-    )
+      catchError(this.errorHandler)
+    );
   }
 
   errorHandler(error) {

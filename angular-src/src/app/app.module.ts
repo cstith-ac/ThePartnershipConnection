@@ -60,7 +60,6 @@ import { CallsummaryproblemsComponent } from './components/callsummaryproblems/c
 import { CallsummaryresolutionsComponent } from './components/callsummaryresolutions/callsummaryresolutions.component';
 import { CallsummarynextstepsComponent } from './components/callsummarynextsteps/callsummarynextsteps.component';
 import { CallsummaryaddComponent } from './components/callsummaryadd/callsummaryadd.component';
-import { RouteService } from './services/route.service';
 import { CallsummaryComponent } from './components/callsummary/callsummary.component';
 import { SuggestedtopicsComponent } from './components/suggestedtopics/suggestedtopics.component';
 import { CriticalmessageComponent } from './components/criticalmessage/criticalmessage.component';
@@ -104,6 +103,9 @@ import { AdminedituserComponent } from './components/adminedituser/adminedituser
 import { FilterPartnerviewlistPipe } from './_helpers/filter-partnerviewlist.pipe';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { ReplaceNullWithTextPipe } from './_helpers/replace-null-with-text.pipe';
+import { RouteService } from './services/route.service';
+import { CmsService } from './services/cms.service';
+import { NmcService } from './services/nmc.service';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -222,7 +224,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AvatarModule,
     CurrencyMaskModule
   ],
-  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}, ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, CurrencyPipe],
+  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}, ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, NmcService, CmsService, CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

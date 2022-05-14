@@ -75,14 +75,11 @@ export class LoginComponent implements OnInit {
     }
 
     if(localStorage.getItem('user')) {
-      //this.router.navigate(['/dashboard']);
-      console.log('this is a Super Admin')
-      //this.onNavigateToCustomerCareDashboard()
+      //console.log('this is a Super Admin')
     } 
 
     if(localStorage.getItem('user')) {
-      console.log('this is a Partner')
-      //this.onNavigateToPartnerDashboard()
+      //console.log('this is a Partner')
     }
   }
 

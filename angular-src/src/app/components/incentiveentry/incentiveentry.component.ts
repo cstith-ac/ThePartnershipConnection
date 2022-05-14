@@ -76,7 +76,7 @@ export class IncentiveentryComponent implements OnInit {
   checkBoxIncompatibleSelection;
   thisBox;
   notThisBox;
-  // selectedForCheckBoxAutoInsert = ['Y','N','N','Y','N','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N'];
+
   selectedForCheckBoxAutoInsert = [];
   selectedAutopay;
   selected=-1;
@@ -157,12 +157,6 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.setItem("serviceIncluded","n");
 
     this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID'));
-    // console.log(this.installCompanyID)
-    // console.log(this.selectedForCheckBoxAutoInsert)
-
-    // if(this.selectedForCheckBoxAutoInsert.length === 0) {
-    //   console.log('Array is empty!')
-    // }
 
     $("#wrapper").addClass("toggled");
 
@@ -184,9 +178,7 @@ export class IncentiveentryComponent implements OnInit {
         const n = 'n';
         const times = 30;
         for(let i = 13;i <= times; i++){
-          //console.log(i);
           n.split(',')
-          //this.selectedForCheckBoxAutoInsert.push(i)
           this.selectedForCheckBoxAutoInsert.push(n.repeat(1))
         }
         //this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
@@ -225,12 +217,10 @@ export class IncentiveentryComponent implements OnInit {
         const n = 'n';
         const times = 30;
         for(let i=13;i<=times;i++){
-          console.log(i);
+          //console.log(i);
           n.split(',');
           this.selectedForCheckBoxAutoInsert.push(n.repeat(1))
         }
-        //this.selectedForCheckBoxAutoInsert.push(this.installCompanyID);
-        //this.selectedForCheckBoxAutoInsert.push(JSON.parse(localStorage.getItem('installCompanyID')))
   
         let myTag = this.el.nativeElement.querySelector('.entryColumn2');
         $('.entryColumn2').eq(0).remove();
@@ -358,20 +348,8 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   getInvoiceTotal(e) {
-    console.log(e.target.value) //string
+    //console.log(e.target.value) //string
     this.invoiceTotalIE = Number(this.invoiceTotalIE).toFixed(2)
-    // const total = parseFloat(e.target.value);
-    // console.log(total)
-
-    // let dollarUSLocale = Intl.NumberFormat('en-US');
-    // let x = dollarUSLocale.format(parseFloat(total));
-    // let value = Number(x.replace(/[^0-9.-]+/g,""));
-    // console.log(value.toFixed(2))
-    // this.invoiceTotalIE = value.toFixed(2);
-    // this.invoiceTotalIE = parseFloat(total);
-
-    // this.incentiveEntryForm.controls["InvoiceTotal"].setValue(parseFloat(valueCurrency))
-    // this.invoiceTotal=(e.target.value).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
 
   get f() { 
@@ -425,14 +403,14 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   onChangeServiceIncluded(e) {
-    console.log(e.target.value)
+    //console.log(e.target.value)
     this.serviceIncluded = e.target.value;
     localStorage.setItem("serviceIncluded",e.target.value);
   }
 
   onChangeCC(e) {
     this.incentiveEntryForm.valueChanges.subscribe(x => {
-      console.log(x)
+      //console.log(x)
     })
 
     //console.log(e.target.value)
@@ -450,7 +428,7 @@ export class IncentiveentryComponent implements OnInit {
 
   onChangeACH(e) {
     this.incentiveEntryForm.valueChanges.subscribe(x => {
-      console.log(x)
+      //console.log(x)
     })
     
     //console.log(e.target.value)
@@ -582,14 +560,14 @@ export class IncentiveentryComponent implements OnInit {
       windowClass: 'my-class1250',
       ariaLabelledBy: 'modal-basic-title'
     }).result.then((result) => {
-      console.log(result)
+      //console.log(result)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
   onChangeGetPartnerServiceListingExt(e) {
-    console.log(e.target.value)
+    //console.log(e.target.value)
 
     // if the alarm connections ticket # is cleared, reset the service included
     if(e.target.value === '') {
@@ -659,7 +637,7 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   searchCleared(){
-    console.log('searchCleared');
+    //console.log('searchCleared');
     this.results = [];
 
     this.partnerServiceListingExtended = [];
@@ -868,7 +846,7 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   onSubmitIncentiveEntryMessage(form: FormGroup) {
-    console.log('message')
+    //console.log('message')
     this.routeService.postPartnerAddNote(this.incentiveEntryMessageForm.value).subscribe(
       res => {
         //console.log(res)

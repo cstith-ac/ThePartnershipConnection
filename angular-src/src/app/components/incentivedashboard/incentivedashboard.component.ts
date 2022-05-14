@@ -74,6 +74,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   public value;
 
   systemPopUp: boolean = false;
+  isCustomerSearchResetButton: boolean = false;
 
   updateRecurringWithJobID;
   updateEquipMatWithJobID;
@@ -134,6 +135,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   p: number = 1;
   searchValue:string;
   searchByCustomer:boolean;
+  customerSearch:boolean = false;
   searchByBillingAddress:boolean;
   isSiteSelectionFirst: boolean = false;
   isSystemSelectionFirst: boolean = false;
@@ -296,6 +298,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   selectedOtherDocument1File;
   selectedOtherDocument2File;
 
+  getCustomerSearchMatch$;
+
   billingStartDate;
   recurringValueChanges$;
   equipMatValueChanges$;
@@ -328,6 +332,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   taxToolTip = "Enter dollars and cents"
   viewAvailableDocuments = "View available documents"
+  // resetCustomerToolTip = "Reset using Reset button at bottom right of screen"
 
   submitted = false;
   showValidateInvoiceButton = true;
@@ -1694,6 +1699,31 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.authToken = token;
   }
 
+  onResetCustomer() {
+    this.incentiveDashboardForm.get('CustomerID').reset();
+    this.incentiveDashboardForm.get('CustomerSiteID').reset();
+    this.incentiveDashboardForm.get('CustomerSystemID').reset();
+    this.incentiveDashboardForm.get('AlarmAccount').reset();
+    this.incentiveDashboardForm.get('SystemTypeID').reset();
+    this.incentiveDashboardForm.get('PanelTypeID').reset();
+    this.panelTypeID = '';
+    this.incentiveDashboardForm.get('PanelLocation').reset();
+    this.incentiveDashboardForm.get('CentralStationID').reset();
+    this.centralStationID = '';
+
+    this.customerIDValidated = true;
+    this.customerSiteIDValidated = true;
+    this.customerSystemIDValidated = true;
+
+    this.isCustomerSearchResetButton = true;
+  }
+
+  delete(e) { 
+    if(e && e.code === 'Backspace' || e.code === 'Delete') {
+      e.preventDefault();
+    }
+  }
+
   public placeholderq: string = 'Type a customer number...';
   public keyword = 'customerNumber';
   public historyHeading: string = 'Recently selected';
@@ -1701,26 +1731,19 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   search = (text$: Observable<any>) => text$.pipe(
     debounceTime(1000), //changed from debounceTime(200) on 03/18/2022
     distinctUntilChanged(),
-    // switchMap( 
-    //   (searchText) => this.routeService.getCustomerSearchMatch(searchText).forEach(
-    //     x => {
-    //       console.log(x)
-    //       x.map(val => {
-    //         return this.id= val.customerID
-    //       })
-    //     }) ),
-    switchMap( 
-      (searchText) => this.routeService.getCustomerSearchMatch(searchText)),
-      tap(res=>{
+    switchMap(
+      (searchText) => this.getCustomerSearchMatch$ = this.routeService.getCustomerSearchMatch(searchText)),
+      tap(res => {
+        this.customerSearch = !this.customerSearch;
         let x = res.forEach(x =>{
-          // console.log(x.customerID)
+          //console.log(x.customerID)
           this.id = x.customerID;
         });
       }),
-      tap(()=>{
+      // tap(()=>{
         // this.routeService.getCustomerSearchMatch(searchText).subscribe
         //this.doGetCustomerID()
-      }),
+      // }),
       tap(() => this.routeService.getListSitesForCustomer(this.id).subscribe(res => {
         // console.log(res)
         this.listsitesforcustomer = res;
@@ -1876,7 +1899,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeFocus(e) {
-    // console.log(e);
+    //console.log(e);
     this.siteElement.nativeElement.focus();
   }
 
