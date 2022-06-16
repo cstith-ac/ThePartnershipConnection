@@ -511,7 +511,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(this.baseUrl === 'http://localhost:63052') {
       this.environment = 4;
-    } else if (this.baseUrl === 'https://thepartnershipconnectionapi-beta.azurewebsites.net') {
+    } else if (this.baseUrl === 'https://thepartnershipconnectionbeta-api.azurewebsites.net') {
       this.environment = 3;
     } else if (this.baseUrl === 'https://thepartnershipconnectionapi-staging.azurewebsites.net') {
       this.environment = 2;

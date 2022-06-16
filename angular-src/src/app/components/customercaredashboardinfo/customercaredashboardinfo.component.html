@@ -1,4 +1,4 @@
-<div *ngFor="let item of dashboardinfo">
+<div *ngFor="let item of dashboardinfoS">
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-11">
@@ -26,8 +26,6 @@
                 <ng-template #non3GBlock>
                     <h2 class="special-flag-text" id="specialFlag">{{ item.specialFlag }}</h2>
                 </ng-template>
-                
-
             </div>
             <div class="col-sm-5">
                 <p id="partnerKeyWords" class="afa-text-red">{{ item.partnerKeyWords }}</p>
@@ -77,9 +75,9 @@
                     <h3 id="guaranteeStatus" class="guarantee-status-text">{{ item.guaranteeStatus }}</h3>
                 </div>
                 <div class="col-sm-3">
-                    <!-- <button class="btn btn-primary boc-btn float-right" id="showBOCModal" (click)="showBOCModal()">
-                        BOC?
-                    </button> -->
+                    <button class="btn btn-primary boc-btn float-right" id="regionRelationshipContactModal" (click)="openRegionRelationshipContactModal(regionRelationshipContactContent)">
+                        Relationship Manager
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -188,9 +186,6 @@
                 <div class="col-md-3">
                     <h2 class="modal-title" id="exampleModalLabel">Ticket #{{ item.ticket_Number }}</h2>
                 </div>
-                <!-- <div class="col-md-3">
-                    <h2 class="modal-title">Created On: {{ item.creationDate }}</h2>
-                </div> -->
                 <div class="col-md-5">
                     <p class="modal-title">Created On: {{ item.creationDate }}</p>
                     <p class="modal-title">By: {{ item.entered_By }}</p>
@@ -215,19 +210,6 @@
                             <div class="col-md-4">
                                 <p>System Status: {{ item.systemStatus }}</p>
                             </div>
-                            <!-- <p>Service performed by {{ item.service_Company_Code }}</p>     -->        
-                            <!-- <div class="col-md-3">
-                                <p>{{ item.system_Code }}</p>
-                            </div>
-                            <div class="col-md-3">
-                                <p>{{ item.ticket_Number }}</p>
-                            </div>
-                            <div class="col-md-3">
-                                <p>{{ item.system_Code }}</p>
-                            </div>
-                            <div class="col-md-3">
-                                <p>{{ item.systemStatus }}</p>
-                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -251,7 +233,6 @@
                                 <h3>Customer Comments</h3>
                                 <div class="afa-bg-tan note-padding">
                                     <p>{{ item.customerComments }}</p>
-                                    <!-- <p *ngIf="item.customerComments = null">There's nothing to display</p> -->
                                 </div>
                             </div>
                         </div>
@@ -267,7 +248,6 @@
                                 <h3>Last Service Note</h3>
                                 <div class="afa-bg-tan note-padding">
                                     <p>{{ item.lastTicketNote }}</p>
-                                    <!-- <p *ngIf="item.lastTicketNote = null">There's nothing to display</p> -->
                                 </div>
                             </div>
                         </div>
@@ -322,7 +302,6 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
-
                         <div class="table-responsive">
                             <table class="table align-items-center table-borderless">
                                 <thead>
@@ -333,25 +312,210 @@
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of serviceTicketNotes">
-                                    
                                     <td>{{ item.enterDate }}</td>
                                     <td>{{ item.enteredBy }}</td>
-                                    <td>{{ item.notes }}</td>
-                                    
+                                    <td>{{ item.notes }}</td>   
                                 </tbody>
                             </table>
                         </div>
-
-                        <!-- <div class="row" *ngFor="let item of serviceTicketNotes">
-                            <p>{{ item.enterDate }}</p>
-                            <p>{{ item.enteredBy }}</p>
-                            <p>{{ item.notes }}</p>
-                        </div> -->
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button id="hideServiceTicketNotesModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #regionRelationshipContactContent>
+    <div class="modal-header"></div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-header border-0 paddingBottom-14px">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h5 class="mb-1 mt-1  headline-5">Region Relationship Contacts</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                    <div class="table-responsive">
+                        <div *ngIf="rmid === 17">
+                            <table class="table align-items-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            East Region (Ext 410)
+                                        </th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>RM</th>
+                                        <!-- <th>{{item.rm}}</th> -->
+                                        <th>{{currentRM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>RSM</th>
+                                        <!-- <th>{{item.rsm}}</th> -->
+                                        <th>{{currentRSM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PSS</th>
+                                        <!-- <th>{{item.pss}}</th> -->
+                                        <th>{{currentPSS}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Ph# for Partners</th>
+                                        <!-- <th>{{item.phone}}</th> -->
+                                        <th>{{currentPhone}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="rmid === 371">
+                            <table class="table align-items-center" *ngFor="let item of southEastRegionRelationshipContact">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            SouthEast Region (Ext 411)
+                                        </th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>RM</th>
+                                        <!-- <th>{{item.rm}}</th> -->
+                                        <th>{{currentRM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>RSM</th>
+                                        <!-- <th>{{item.rsm}}</th> -->
+                                        <th>{{currentRSM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PSS</th>
+                                        <!-- <th>{{item.pss}}</th> -->
+                                        <th>{{currentPSS}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Ph# for Partners</th>
+                                        <!-- <th>{{item.phone}}</th> -->
+                                        <th>{{currentPhone}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="rmid === 448">
+                            <table class="table align-items-center" *ngFor="let item of centralRegionRelationshipContact">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            West Region (Ext 412)
+                                        </th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>RM</th>
+                                        <!-- <th>{{item.rm}}</th> -->
+                                        <th>{{currentRM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>RSM</th>
+                                        <!-- <th>{{item.rsm}}</th> -->
+                                        <th>{{currentRSM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PSS</th>
+                                        <!-- <th>{{item.pss}}</th> -->
+                                        <th>{{currentPSS}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Ph# for Partners</th>
+                                        <!-- <th>{{item.phone}}</th> -->
+                                        <th>{{currentPhone}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="rmid === 436">
+                            <table class="table align-items-center" *ngFor="let item of westRegionRelationshipContact">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            West Region (Ext 413)
+                                        </th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>RM</th>
+                                        <!-- <th>{{item.rm}}</th> -->
+                                        <th>{{currentRM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>RSM</th>
+                                        <!-- <th>{{item.rsm}}</th> -->
+                                        <th>{{currentRSM}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PSS</th>
+                                        <!-- <th>{{item.pss}}</th> -->
+                                        <th>{{currentPSS}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Ph# for Partners</th>
+                                        <!-- <th>{{item.phone}}</th> -->
+                                        <th>{{currentPhone}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                      <!-- <div class="col-md-12 pt-2 pb-4">
+                        <h4>East Region Relationship Contacts (Ext 410)</h4>
+                        <h2>{{ this.rmName }}</h2>
+
+                        <p>RM - Cara Davidson</p>
+                        <p>RSM - Debbie DeAngelis</p>
+                        <p>PSS - Karen Benner</p>
+                        <p>Ph# for Partners: 855-839-9277</p>
+                      </div>-->
+                  </div>
+              </div>
+        </div>
+    </div>
+</ng-template>
+<!-- Region Relationship Contact Modal -->
+<div class="modal fade" id="regionRelationshipContactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="maxWidth-900">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-12">
+                    <p>Header TBD</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <p>Coming Soon -> show regionRelationshipContactModal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="hideTicketInfoModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

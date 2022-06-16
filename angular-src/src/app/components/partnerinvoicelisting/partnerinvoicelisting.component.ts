@@ -117,9 +117,46 @@ export class PartnerinvoicelistingComponent implements OnInit {
           if(data.status === 200) {
             this.spinnerService.hide();
           }
-          this.partnerInvoiceListing = data.body
+          this.partnerInvoiceListing = data.body;
+
+          this.partnerInvoiceListing.some((item, idx) => 
+          item.determination !== "Paid" && 
+          this.partnerInvoiceListing.unshift( 
+            // remove the found item, in-place (by index with splice), 
+            // returns an array of a single item removed
+            this.partnerInvoiceListing.splice(idx,1)[0] 
+          ) );
+
+          // if()
+          this.partnerInvoiceListing.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
+
+          // for(let i = 0; i < this.partnerInvoiceListing.length; i++) {
+          //   //console.log(this.partnerInvoiceListing[i].determination);
+          //   let paid = this.partnerInvoiceListing.filter(x => x.determination == 'Paid');
+          //   let others = this.partnerInvoiceListing.filter(x => x.determination !== 'Paid');
+          //   console.log(others);
+
+          //   if(paid) {
+          //     this.partnerInvoiceListing.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
+
+          //     if(others) {
+          //       console.log('there are others of')
+          //     }
+          //   }
+
+          //   if(others) {
+          //     this.notPaid(true);
+          //     this.partnerInvoiceListing.sort((a,b) => b.determination.localeCompare(a.determination));
+          //   }
+          // }
+
+          // First filiter the status by 'PAID'
+          // then sort by date => newest to oldest for 'PAID' ONLY
+          // let paid = this.partnerInvoiceListing.filter(x => x.determination == 'Paid');
+          // this.partnerInvoiceListing = paid.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
+          
         },(err:HttpErrorResponse) => {
-          this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
+          this.flashMessage.show('There was a problem with your requested data. Please contact an administrator'+err, {
             cssClass: 'text-center alert-danger',
             timeout: 5000
           });
@@ -297,6 +334,10 @@ export class PartnerinvoicelistingComponent implements OnInit {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class'
     });
+  }
+
+  notPaid(ascending) {
+    console.log('not paid')
   }
 
 }

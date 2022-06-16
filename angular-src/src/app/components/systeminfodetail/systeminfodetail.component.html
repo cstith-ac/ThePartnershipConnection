@@ -154,52 +154,12 @@
                         <div class="tab-content info-tab-bg" id="myTabContent">
                             <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                                 <div class="card bg-transparent mb-3 shadow-none border-0">
-
-                                    <!-- <div class="row pt-3 pb-3 divider-horizontal">
-                                        <div class="col-md-12">
-                                            <span class="subtitle-2 medium-emphasis">Site Name: </span>
-                                            <span class="high-emphasis body-2">{{site_name}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-3 pb-3 divider-horizontal">
-                                        <div class="col-md-12">
-                                            <span class="subtitle-2 medium-emphasis">Site Status: </span>
-                                            <span class="high-emphasis body-2">{{sitestat_id}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-3 pb-3 divider-horizontal">
-                                        <div class="col-md-12">
-                                            <span class="subtitle-2 medium-emphasis">Code Words: </span>
-                                            <span class="high-emphasis body-2">{{codeword1}}</span>
-                                            <span class="high-emphasis body-2">{{codeword2}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-3 pb-3 divider-horizontal">
-                                        <div class="col-md-12">
-                                            <span class="subtitle-2 medium-emphasis">Address: </span>
-                                            <span class="high-emphasis body-2">{{site_addr1}}</span>
-                                            <span class="high-emphasis body-2">{{site_addr2}}</span>
-                                            <span class="high-emphasis body-2">{{city_name}} {{state_id}} {{zip_code}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="row pt-3 pb-3 divider-horizontal">
-                                        <div class="col-md-12">
-                                            <span class="subtitle-2 medium-emphasis">Phone: </span>
-                                            <span class="high-emphasis body-2">{{phone1 | phone}}<span *ngIf="ext1">ext. {{ext1}}</span></span>
-                                            <span class="high-emphasis body-2">{{phone2 | phone}}<span *ngIf="ext2">ext. {{ext2}}</span></span>
-                                        </div>
-                                    </div> -->
-
                                     <div class="row align-items-center mt-1 mb-1 divider-horizontal">
                                         <div class="col-1">
                                             <p class="mb-1 subtitle-2 medium-emphasis">Site Name</p>
                                         </div>
                                         <div class="col">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_name}}</p>
-                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
-                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                     <div class="row align-items-center mb-1 divider-horizontal">
@@ -207,11 +167,7 @@
                                             <p class="mb-1 subtitle-2 medium-emphasis">Site Status</p>
                                         </div>
                                         <div class="col">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{sitestat_id}} <span *ngIf="sitestat_id">= Active</span></p>
-                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
-                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                     <div class="row mb-1 divider-horizontal">
@@ -219,12 +175,8 @@
                                             <p class="mb-1 subtitle-2 medium-emphasis">Code Words</p>
                                         </div>
                                         <div class="col">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{codeword1}}</p>
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{codeword2}}</p>
-                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
-                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                     <div class="row mb-1 divider-horizontal">
@@ -232,13 +184,9 @@
                                             <p class="mb-1 subtitle-2 medium-emphasis">Address</p>
                                         </div>
                                         <div class="col">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_addr1}}</p>
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{site_addr2}}</p>
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{city_name}} {{state_id}} {{zip_code}}</p>
-                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
-                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                     <div class="row mb-1 divider-horizontal">
@@ -246,12 +194,8 @@
                                             <p class="mb-1 subtitle-2 medium-emphasis">Phone</p>
                                         </div>
                                         <div class="col">
-                                            <!-- <p class="mb-1 loading" *ngIf="loading">Loading Central Station Information</p> -->
-                                            <!-- <p class="mb-1 text-error" *ngIf="hasNoCentralStationData">{{systemInfo.monitoredBy}} not currently supported by the Customer Care Assistant</p> -->
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{phone1 | phone}} <span *ngIf="ext1">ext. {{ext1}}</span></p>
                                             <p class="mb-1 high-emphasis body-2" *ngIf="!loading">{{phone2 | phone}} <span *ngIf="ext2">ext. {{ext2}}</span></p>
-                                            <!-- <p class="mb-1 text-error">{{accountInactiveText}}</p> -->
-                                            <!-- <p class="mb-1 text-error">{{accountNotFoundText}}</p> -->
                                         </div>
                                     </div>
                                 </div>
@@ -273,6 +217,11 @@
                                 <div style="position: absolute; top: 35%; left:35%; right: 0;">
                                     <ngb-toast *ngIf="loading" [autohide]="false">
                                         <p class="loading">Loading Central Station Information</p>
+                                    </ngb-toast>
+                                </div>
+                                <div style="position: absolute; top: 35%; left:35%; right: 0;">
+                                    <ngb-toast *ngIf="err_msg" [autohide]="false">
+                                        <h5 class="headline-5 text-center">{{err_msg}}</h5>
                                     </ngb-toast>
                                 </div>
                                 <!-- <ng-template #noCentralStationContent let-modal>

@@ -1452,7 +1452,8 @@ namespace NMCServiceReference
         {
             if ((endpointConfiguration == EndpointConfiguration.NMCLinkPortalSoap))
             {
-                return new System.ServiceModel.EndpointAddress("https://www.alarmaccount.com/NMCTestPortal/NMCLinkPortal.asmx");
+                //return new System.ServiceModel.EndpointAddress("https://www.alarmaccount.com/NMCTestPortal/NMCLinkPortal.asmx");//Development
+                return new System.ServiceModel.EndpointAddress("https://www.alarmaccount.com/NMCLinkPortal/NMCLinkPortal.asmx");//Production
             }
             if ((endpointConfiguration == EndpointConfiguration.NMCLinkPortalSoap12))
             {

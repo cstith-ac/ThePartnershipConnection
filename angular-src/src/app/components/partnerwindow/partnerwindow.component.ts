@@ -64,7 +64,7 @@ export class PartnerwindowComponent implements OnInit {
   ngOnInit() {
     //get the customer care dashboard only if user is Super Admin (19), Admin (14) or Employee (9)
     if(this.authService.isEmployee()) {
-      this.routeService.getCustomerCareDashboardInfo().subscribe(
+      this.routeService.getCustomerCareDashboardInfoS().subscribe(
         res => {
           this.dashboardinfo = res;
         }

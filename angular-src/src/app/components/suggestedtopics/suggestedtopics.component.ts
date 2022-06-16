@@ -25,7 +25,7 @@ export class SuggestedtopicsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.routeService.getCustomerCareDashboardInfo().subscribe(
+    this.routeService.getCustomerCareDashboardInfoS().subscribe(
       res => {
         this.suggestedtopics = res;
 

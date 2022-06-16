@@ -111,6 +111,10 @@ export class AdminComponent implements OnInit {
     })
   }
 
+  onClickEditRMList() {
+    this.router.navigate(['rmlist'])
+  }
+
   editCurrentUser(id:number) {
     // console.log('edit the user ', id);
     this.router.navigate(['admin-edit-user/'+ id]);

@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2022-06-14T13:37:35.2339563Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2022-06-14T13:37:44.3907937Z"
+    }
+  },
+  "parameters": {
+    "appInsights1.subscriptionId": {
+      "Type": "subscription",
+      "Value": "542388a6-e6c9-4b44-9a68-99578f7fae5b"
+    },
+    "appInsights1.resourceGroupName": {
+      "Type": "resourceGroup",
+      "Value": "WebApp_Test"
+    }
+  }
+}

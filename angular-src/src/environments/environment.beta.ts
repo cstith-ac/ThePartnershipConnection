@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
-    baseUrl: 'https://thepartnershipconnectionapi-beta.azurewebsites.net',
     //baseUrl: 'https://thepartnershipconnectionapi-beta.azurewebsites.net',
+    baseUrl: 'https://thepartnershipconnectionbeta-api.azurewebsites.net',
     cmsUrl: 'https://thepartnershipconnectionapi-cms.azurewebsites.net',
     nmcUrl: 'https://thepartnershipconnectionapi-nmc.azurewebsites.net',
     appInsights: {

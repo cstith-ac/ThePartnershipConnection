@@ -81,3 +81,4 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.pdb
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.genruntimeconfig.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.csprojAssemblyReference.cache
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionBeta-API - Web Deploy\profile.arm.json

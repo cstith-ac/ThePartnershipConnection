@@ -56,6 +56,8 @@ import { TpcpartneragingreportComponent } from './components/tpcpartneragingrepo
 import { PartnerservicelistingComponent } from './components/partnerservicelisting/partnerservicelisting.component';
 import { PartnerviewlistComponent } from './components/partnerviewlist/partnerviewlist.component';
 import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
+import { RmlistComponent } from './components/rmlist/rmlist.component';
+import { RmlisteditComponent } from './components/rmlistedit/rmlistedit.component';
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
@@ -302,6 +304,16 @@ const routes: Routes = [
     path: 'admin-edit-user/:id',
     component: AdminedituserComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'rmlist',
+    component: RmlistComponent,
+    canActivate: [AuthGuard, AdminGuard]
+  },
+  {
+    path: 'rmlist-edit/:id',
+    component: RmlisteditComponent,
+    canActivate: [AuthGuard, AdminGuard]
   },
   {
     path: '**',

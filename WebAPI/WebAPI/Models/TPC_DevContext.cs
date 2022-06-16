@@ -29,6 +29,7 @@ namespace WebAPI.Models
         public virtual DbSet<UserAccessLookup> UserAccessLookup { get; set; }
 
         public virtual DbSet<CustomerCareDashboardInfo> GetCustomerCareDashboardInfos { get; set; }
+        public virtual DbSet<CustomerCareDashboardInfoS> GetCustomerCareDashboardInfoS { get; set; }
         public virtual DbSet<SiteToSystemList> GetSiteToSystemLists { get; set; }
         public virtual DbSet<CustomerToSiteList> GetCustomerToSiteLists { get; set; }
         public DbSet<CustomerSystemInfo> GetCustomerSystemInfos { get; set; }
@@ -104,6 +105,7 @@ namespace WebAPI.Models
         public virtual DbSet<PartnerCriticalMessage> GetPartnerCriticalMessages { get; set; }
         public virtual DbSet<PartnerCustCareNote> GetPartnerCustCareNotes { get; set; }
         public virtual DbSet<PartnerServiceNote> GetPartnerServiceNotes { get; set; }
+        public virtual DbSet<RegionRelationshipContacts> GetRegionRelationshipContacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -293,6 +295,11 @@ namespace WebAPI.Models
             });
 
             modelBuilder.Entity<CustomerCareDashboardInfo>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<CustomerCareDashboardInfoS>(entity =>
             {
                 entity.HasNoKey();
             });
@@ -675,6 +682,12 @@ namespace WebAPI.Models
             modelBuilder.Entity<PartnerServiceNote>(entity =>
             {
                 entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<RegionRelationshipContacts>(entity =>
+            {
+                entity.HasIndex(e => e.Id);
+                entity.ToTable("RegionRelationshipContacts");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -21,7 +21,7 @@ export class AdminedituserComponent implements OnInit {
   id: number;
   aspnetuser: AspNetUsers[];
   updateAspNetUserProfileForm: FormGroup;
-  user:any=Object;
+  user: any = Object;
 
   constructor(
     public authService: AuthService,

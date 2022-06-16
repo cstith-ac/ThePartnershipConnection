@@ -117,7 +117,7 @@ export class CallsummaryComponent implements OnInit {
       }
     )
 
-    this.routeService.getCustomerCareDashboardInfo().subscribe(
+    this.routeService.getCustomerCareDashboardInfoS().subscribe(
       res => {
         this.custNameNumb = res;
       }

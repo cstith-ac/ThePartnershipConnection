@@ -176,6 +176,8 @@ export class SysteminfodetailComponent implements OnInit {
         this.centralStation = data.monitoredBy;
 
         //***********This needs it's own method
+        // if the alarm account contains any whitespace, remove it
+        this.alarmAccount = this.alarmAccount.replace(/ /g,'');
         // if the alarm account contains a hyphen, remove the hyphen
         // if the alarm account contains the string '(inactive)', display the inactive text
         let hyphenatedAlarmAccount = this.alarmAccount.split('-').join('');
@@ -450,7 +452,7 @@ export class SysteminfodetailComponent implements OnInit {
         res => {
           //console.log(res);//object
           let emptyObj = Object.keys(res).length;
-          //console.log(emptyObj)
+          console.log(emptyObj)
           if(emptyObj === 0) {
             this.loading = false;
             //this.accountNotFoundText = 'Account not found at NMC';
@@ -466,6 +468,14 @@ export class SysteminfodetailComponent implements OnInit {
             if(!this.accountInfoData) {
               console.log('There is no data from AccountInfo available')
             }
+
+            // let returnedAccountInfoObj = Object.values(res);
+            // console.log(returnedAccountInfoObj.entries());
+            // returnedAccountInfoObj.forEach(element => {
+            //   console.log(element.err_msg);
+            //   this.err_msg = element.err_msg;
+            // })
+            this.err_msg = this.accountInfoData.err_msg;
   
             this.codeword1 = this.accountInfoData.codeword1;
             this.site_name = this.accountInfoData.site_name;

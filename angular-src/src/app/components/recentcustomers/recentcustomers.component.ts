@@ -59,14 +59,6 @@ export class RecentcustomersComponent implements OnInit {
 
         //map through array and get customerId from each object
         console.log(customerIdArray);
-
-        // for(const id of customerIdArray) {
-        //   apiCalls.push(this.routeService.getCustomerCareDashboardInfoById(id).subscribe(
-        //     res => {
-        //       console.log(res);
-        //     }
-        //   )); 
-        // }
         
         //assign each customerId in customerIdArray to a variable
         let previousCustomer0 = customerIdArray[0];
@@ -80,61 +72,61 @@ export class RecentcustomersComponent implements OnInit {
         let previousCustomer8 = customerIdArray[8];
         let previousCustomer9 = customerIdArray[9];
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer0).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer0).subscribe(
           res0 => {
             this.dashboardInfo = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer1).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer1).subscribe(
           res0 => {
             this.dashboardInfo1 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer2).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer2).subscribe(
           res0 => {
             this.dashboardInfo2 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer3).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer3).subscribe(
           res0 => {
             this.dashboardInfo3 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer4).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer4).subscribe(
           res0 => {
             this.dashboardInfo4 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer5).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer5).subscribe(
           res0 => {
             this.dashboardInfo5 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer6).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer6).subscribe(
           res0 => {
             this.dashboardInfo6 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer7).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer7).subscribe(
           res0 => {
             this.dashboardInfo7 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer8).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer8).subscribe(
           res0 => {
             this.dashboardInfo8 = [].concat(res0);
           }
         )
 
-        this.routeService.getCustomerCareDashboardInfoById(previousCustomer9).subscribe(
+        this.routeService.getCustomerCareDashboardInfoSById(previousCustomer9).subscribe(
           res0 => {
             this.dashboardInfo9 = [].concat(res0);
           }

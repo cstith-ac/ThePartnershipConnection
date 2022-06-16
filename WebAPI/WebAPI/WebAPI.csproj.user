@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Controller</Controller_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>thepartnershipconnectionapi-beta - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>ThePartnershipConnectionBeta-API - Web Deploy</NameOfLastUsedPublishProfile>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>

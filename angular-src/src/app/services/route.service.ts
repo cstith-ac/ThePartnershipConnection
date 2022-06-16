@@ -142,6 +142,16 @@ export class RouteService {
     )
   }
 
+  getCustomerCareDashboardInfoS(): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(this.baseUrl + '/api/CustomerCareDashboardInfoS', httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   getCustomer3GListing(): Observable<any> {
     this.loadToken();
     let httpOptions = { 
@@ -170,6 +180,16 @@ export class RouteService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
     };
     return this.http.get<any>(`${this.baseUrl}/api/CustomerCareDashboardInfo/` + id, httpOptions).pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  getCustomerCareDashboardInfoSById(id: number): Observable<any> {
+    this.loadToken();
+    let httpOptions = { 
+      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    };
+    return this.http.get<any>(`${this.baseUrl}/api/CustomerCareDashboardInfoS/` + id, httpOptions).pipe(
       catchError(this.errorHandler)
     )
   }

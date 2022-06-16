@@ -1,42 +1,53 @@
 .ratingValueText0 {
-    color: #000;
-    font-weight: 700 !important;
-    font-size: 1.25rem;
+  color: #000;
+  font-weight: 700 !important;
+  font-size: 1.25rem;
 }
 .ratingValueBg0 {
-    background-color: #AFF1EE;
+  background-color: #aff1ee;
 }
 
 .ratingValueText1 {
-    color: #D8D1D2;
-    font-weight: 700 !important;
-    font-size: 1.25rem;
+  color: #d8d1d2;
+  font-weight: 700 !important;
+  font-size: 1.25rem;
 }
 .ratingValueBg1 {
-    background-color: #D8354B;
+  background-color: #d8354b;
 }
 
 .ratingValueText2 {
-    color: #E6E991 !important;
-    font-weight: 700 !important;
-    font-size: 1.25rem;
+  color: #e6e991 !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem;
 }
 .ratingValueBg2 {
-    background-color: #3580D8;
+  background-color: #3580d8;
 }
 
 .ratingValueText3 {
-    color: #FE0E3F;
-    font-weight: 700 !important;
-    font-size: 1.25rem;
+  color: #fe0e3f;
+  font-weight: 700 !important;
+  font-size: 1.25rem;
 }
 .ratingValueBg3 {
-    background-color: #40D835;
+  background-color: #40d835;
 }
 .underlineDashed {
-    text-decoration: underline;
-    text-decoration-style:dashed;
+  text-decoration: underline;
+  text-decoration-style: dashed;
 }
 .btn {
-    font-weight: 500;
+  font-weight: 500;
+}
+.headline-5 {
+  font-family: "SourceSansPro", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 24px;
+  letter-spacing: 0.011rem;
+}
+.table thead th {
+  font-size: 1rem;
 }

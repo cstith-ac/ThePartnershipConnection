@@ -97,6 +97,7 @@ namespace WebAPI.Controllers
                     AlternateServiceCompanyActive = s.AlternateServiceCompanyActive,
                     AutoPaymentMessage = s.AutoPaymentMessage
                 }).ToList();
+
                 return Lst;
             }
         }

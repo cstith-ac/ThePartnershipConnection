@@ -267,6 +267,7 @@ export class PartnerdashboardComponent implements OnInit {
               cssClass: 'text-center alert-danger',
               timeout: 5000
             });
+            console.log(err);
             this.spinnerService.hide();
             localStorage.clear();
             this.router.navigate(['/login'])

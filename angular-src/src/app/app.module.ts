@@ -106,6 +106,8 @@ import { ReplaceNullWithTextPipe } from './_helpers/replace-null-with-text.pipe'
 import { RouteService } from './services/route.service';
 import { CmsService } from './services/cms.service';
 import { NmcService } from './services/nmc.service';
+import { RmlistComponent } from './components/rmlist/rmlist.component';
+import { RmlisteditComponent } from './components/rmlistedit/rmlistedit.component';
 
 // import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 // import {AutocompleteLibModule} from 'angular-ng-autocomplete';
@@ -189,6 +191,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AdminedituserComponent,
     FilterPartnerviewlistPipe,
     ReplaceNullWithTextPipe,
+    RmlistComponent,
+    RmlisteditComponent,
     //NgbTypeahead
     //CustomerTestComponent
   ],

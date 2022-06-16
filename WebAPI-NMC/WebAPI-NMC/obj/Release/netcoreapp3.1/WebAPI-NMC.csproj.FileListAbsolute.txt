@@ -73,3 +73,20 @@ C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-nmc-staging - Web Deploy\profile.arm.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\serviceDependencies.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\serviceDependencies.local.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\serviceDependencies.ThePartnershipConnectionAPI-NMC - Web Deploy.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\local\appInsights1.arm.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionAPI-NMC - Web Deploy\appInsights1.arm.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.ApplicationInsights.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.ApplicationInsights.AspNetCore.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.AI.DependencyCollector.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.AI.EventCounterCollector.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.AI.WindowsServer.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.Extensions.DiagnosticAdapter.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.Extensions.Logging.ApplicationInsights.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll

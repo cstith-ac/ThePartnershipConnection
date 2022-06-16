@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-header bg-white border-0">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <h3 class="mb-0">Edit and Update Region Relationship Contact</h3>
+                </div>
+            </div>
+        </div>
+        <a routerlink="/admin" ng-reflect-router-link="/admin" href="/admin">
+            <button class="btn btn-primary mt-5 ml-4">Return to Admin</button>
+        </a>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form [formGroup]="regionRelationshipContactsForm" (ngSubmit)="onSubmit(regionRelationshipContactsForm, id)">
+                        <!-- <input type="hidden" name="token" [value]="token" /> -->
+                        <input type="hidden" name="id" [value]="regionRelationshipContactsUser.id" />
+                        <input type="hidden" name="rm" [value]="regionRelationshipContactsUser.rm" />
+                        <input type="hidden" name="rsm" [value]="regionRelationshipContactsUser.rsm" />
+                        <input type="hidden" name="pss" [value]="regionRelationshipContactsUser.pss" />
+                        <input type="hidden" name="phone" [value]="regionRelationshipContactsUser.phone" />
+                        <input type="hidden" name="region" [value]="regionRelationshipContactsUser.region" />
+
+                        <div class="form-group">
+                            <label>RM</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" 
+                                formControlName="rm"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>RSM</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" formControlName="rsm" 
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>PSS</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" formControlName="pss" 
+                            />
+                        </div>
+                        <!-- <div class="form-group">
+                            <label>PSS</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" formControlName="pss" 
+                            />
+                        </div> -->
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" formControlName="phone" 
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Region</label>
+                            <input 
+                                type="text" 
+                                class="form-control form-control-alternative" formControlName="region" 
+                            />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary boc-btn ml-0"><i class="fa fa-save pr-2"></i>Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

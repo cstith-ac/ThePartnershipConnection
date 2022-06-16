@@ -1,0 +1,13 @@
+.headline-6 {
+  font-family: "SourceSansPro", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.009rem;
+}
+.btn-error {
+  background-color: #ca5856;
+  color: rgba(227, 241, 250, 1);
+  border-color: #ca5856;
+}

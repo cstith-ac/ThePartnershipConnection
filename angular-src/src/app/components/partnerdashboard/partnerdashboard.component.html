@@ -177,9 +177,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="card mb-3" *ngIf="hidePendingCancellations == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
       <div class="card" *ngIf="hideAging == true">
         <div class="card-header bg-transparent border-bottom-0">
           <div class="row align-items-center pt-3">
@@ -188,9 +185,6 @@
             </div>
             <div class="col">
               <button type="submit" class="btn btn-secondary btn-block ml-3 float-right btn-cta" (click)="routeToCallToActionListing()" *ngIf="hideAgingCTA == true"><i class="far fa-eye pr-2"></i>View Call To Action Report</button>
-              <!-- <span *ngIf="hideAgingCTA == false">
-                <p>You don't have permission to view this feature.</p>
-              </span> -->
             </div>
             <div class="col text-right">
               <i class="fas fa-arrow-right arrow" (click)="routeToTPCPartnerAgingReport()" [(ngbTooltip)]="showTPCPartnerAgingReport"></i>
@@ -230,9 +224,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="card" *ngIf="hideAging == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
     </div>
   </div>
   <div class="row mt-3">
@@ -246,12 +237,6 @@
             <div class="col-2 text-right">
               <i class="fas fa-arrow-right arrow" (click)="routeToPartnerInvoiceListing()" [(ngbTooltip)]="showPartnerInvoiceListing"></i>
             </div>
-            <!-- <div class="col">
-              <h5 class="mb-1 mt-1 headline-5" (click)="openPartnerInvoiceListingModal(content)" [(ngbTooltip)]="showPartnerInvoiceListing">Incentives</h5>
-            </div>
-            <div class="col text-right">
-              <i class="fas fa-arrow-right arrow" (click)="openPartnerInvoiceListingModal(content)" [(ngbTooltip)]="showPartnerInvoiceListing"></i>
-            </div> -->
           </div>
         </div>
         <div class="card-body paddingTop-14px">
@@ -306,16 +291,9 @@
           </div>
           <div class="row float-right pt-4 pb-1">
             <button class="btn btn-secondary" (click)="routeToIncentiveEntry()" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button>
-            <!-- <button class="btn btn-secondary" (click)="openComingSoonModal(comingSoon)" *ngIf="hideCreateInvoice == true"><i class="fas fa-plus pr-2"></i>Create</button> -->
-            <!-- <span *ngIf="hideCreateInvoice == false">
-              <p>You don't have permission to create an invoice</p>
-            </span> -->
           </div>
         </div>
       </div>
-      <!-- <div class="card" *ngIf="hideInvoices == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
     </div>
     <div class="col-xl-3 mb-5">
       <div class="card" *ngIf="hideService == true">
@@ -323,11 +301,9 @@
           <div class="row align-items-center">
             <div class="col">
               <h5 class="mb-1 mt-1 headline-5" (click)="routeToPartnerServiceListing()" [(ngbTooltip)]="showPartnerServiceListing">Service</h5>
-              <!-- <h5 class="mb-1 mt-1 headline-5" (click)="openComingSoonModal(comingSoon)" [(ngbTooltip)]="showPartnerServiceListing">Service</h5> -->
             </div>
             <div class="col text-right">
               <i class="fas fa-arrow-right arrow" (click)="routeToPartnerServiceListing()" [(ngbTooltip)]="showPartnerServiceListing"></i>
-              <!-- <i class="fas fa-arrow-right arrow" (click)="openComingSoonModal(comingSoon)" [(ngbTooltip)]="showPartnerServiceListing"></i> -->
             </div>
           </div>
         </div>
@@ -344,9 +320,6 @@
           </div>        
         </div>
       </div>
-      <!-- <div class="card" *ngIf="hideService == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
     </div>
     <div class="col-xl-3 mb-5">
       <div class="card" *ngIf="hideSales == true">
@@ -415,9 +388,6 @@
           <p>Coming Soon</p>
         </div>
       </div>
-      <!-- <div class="card" *ngIf="hideSales == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
     </div>
     <div class="col-xl-3 mb-5">
       <div class="card" *ngIf="hideAttrition == true">
@@ -426,16 +396,12 @@
             <div class="col">
               <h5 class="mb-1 mt-1 headline-5">Attrition</h5>
             </div>
-            <!-- <div class="col text-right">
-              <i class="fas fa-arrow-right arrow"></i>
-            </div> -->
           </div>
         </div>
         <div class="card-body paddingTop-14px">
           <div class="row">
             <div class="col-md-12">
               <span class="subtitle-2 medium-emphasis text-uppercase">Last Month</span>
-              <!-- <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth | number: '1.0-0' }}%</span> -->
               <span class="body-2 medium-emphasis float-right">{{ item.attritionLastMonth.toFixed(1) }}%</span>
             </div>
           </div>
@@ -453,16 +419,6 @@
                   tooltipClass="transparent-tooltip"
                 ></ngb-progressbar>
               </p>
-              <!-- <p  *ngIf="(item.attritionLastMonth === 10) || (item.attritionLastMonth === 11.4984) || (item.attritionLastMonth === 12) || (item.progressPercent === 13) || (item.attritionLastMonth === 14) || (item.attritionLastMonth === 15)">
-                <ngb-progressbar 
-                  type="warning"
-                  [showValue]="false"
-                  [(value)]="attritionValue"
-                  [striped]="false"
-                  [(ngbTooltip)]="attritionProgress"
-                  tooltipClass="transparent-tooltip"
-                ></ngb-progressbar>
-              </p> -->
               <p *ngIf="(item.attritionLastMonth &gt; 10) && (item.attritionLastMonth &lt; 15)">
                 <ngb-progressbar 
                   type="warning"
@@ -495,7 +451,6 @@
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <!-- <span class="caption high-emphasis float-right">{{ item.attritionLast6Months }}</span> -->
             </div>
           </div>
 
@@ -507,19 +462,15 @@
           </div>
           <div class="row divider-horizontal">
             <div class="col-md-12 pt-2 pb-1">
-              <!-- <span class="body-2 high-emphasis">XX</span>
-              <span class="caption high-emphasis float-right">{{ item.attritionLast12Months }}</span> -->
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card" *ngIf="hideAttrition == false">
-        <p>You don't have permission to view this area.</p>
-      </div> -->
     </div>
   </div>
 </div>
 <!--NEFF-END NEW LAYOUT---->
+
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
   <p style="color: white">Please Wait...</p>  
 </ngx-spinner>

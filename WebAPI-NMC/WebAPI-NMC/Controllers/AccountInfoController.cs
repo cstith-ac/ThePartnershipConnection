@@ -38,7 +38,21 @@ namespace WebAPI_NMC.Controllers
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(textResult);
-            xDoc.Save("assets/GetAccountInfoTest.xml");
+
+            var callingUrl = Request.Headers["Referer"].ToString();
+            var isLocal = Url.IsLocalUrl(callingUrl);
+            if (callingUrl == "http://localhost:4200/")
+            {
+                xDoc.Save("assets/GetAccountInfoTest.xml");
+            }
+
+            //string endpoint = HttpContext.GetEndpoint().ToString();
+            //if (endpoint == "http://localhost:4200")
+            //{
+            //    Console.WriteLine(endpoint);
+            //    xDoc.Save("assets/GetAccountInfoTest2.xml");
+            //}
+            //xDoc.Save("assets/GetAccountInfoTest.xml");
 
             XDocument xml = XDocument.Parse(textResult);
             var soapResponse = xml.Descendants().Where(x => x.Name.LocalName == "GetAccountInfo_Response").Select(x
