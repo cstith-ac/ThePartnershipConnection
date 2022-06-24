@@ -1,16 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { mergeMap } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
-import { PartnerServiceListing } from 'src/app/models/partnerservicelisting';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { mergeMap } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { PartnerServiceListing } from 'src/app/models/partnerservicelisting';
+
+import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
+import { process, State } from '@progress/kendo-data-query';
+import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
+import { saveAs } from "@progress/kendo-file-saver";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 declare var $: any;
 
 @Component({
@@ -25,7 +32,7 @@ export class PartnerservicelistingComponent implements OnInit {
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
-  pageSize=10;
+  // pageSize=10;
   emailAddress;
   service_Ticket_Id;
   ticket_Number;
@@ -50,6 +57,7 @@ export class PartnerservicelistingComponent implements OnInit {
   city;
   state;
   zipCode;
+  cityStateZipCode:string;
   status3G;
   csAccount;
   systemType;
@@ -63,6 +71,13 @@ export class PartnerservicelistingComponent implements OnInit {
   userName: any;
 
   clicked = false;//disables button after click
+  public gridData: any[];
+  public pageSize: number = 5;
+  public fileName: string;
+  public today = new Date().toDateString();
+  public selectedKeys = [];
+
+  @ViewChild("dateTime") dateTimeView: ElementRef;
 
   constructor(
     public fb: FormBuilder,
@@ -73,8 +88,12 @@ export class PartnerservicelistingComponent implements OnInit {
     private userService: UserService,
     private flashMessage: FlashMessagesService,
     public jwtHelper: JwtHelperService,
-    private modalService: NgbModal
-  ) { }
+    private modalService: NgbModal,
+    public datePipe: DatePipe
+  ) { 
+    this.gridData = this.partnerServiceListing;
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     if(this.jwtHelper.isTokenExpired()) {
@@ -106,6 +125,16 @@ export class PartnerservicelistingComponent implements OnInit {
           console.log(data.statusText)
         }
         this.partnerServiceListing = data.body;
+        this.gridData = data.body;
+
+        for(let i = 0; i < this.gridData.length; i++) {
+          console.log(this.gridData[i].customerComments);
+          // count the character length of the string
+          // let customerCommentsLength = this.gridData[i].customerComments.length;
+
+          this.gridData[i].creation_Date = this.datePipe.transform(this.gridData[i].creation_Date,'MMM dd, yyyy');
+        }
+
       },(err:HttpErrorResponse) => {
         this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
           cssClass: 'text-center alert-danger',
@@ -127,6 +156,7 @@ export class PartnerservicelistingComponent implements OnInit {
         }
 
         this.partnerServiceListing = [].concat(res);
+        this.gridData = [].concat(res);
       }
     )
     }
@@ -154,41 +184,93 @@ export class PartnerservicelistingComponent implements OnInit {
     })
   }
 
-  onOpenPartnerServiceListingModal(service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
+  public foo: State = {
+    skip: 0,
+    take: 5
+  };
+
+  public mySelection: number[] = [];
+
+  public allData(): ExcelExportData {
+    const result: ExcelExportData = {
+      data: process(this.gridData, {
+      }).data
+    };
+
+    return result;
+  };
+
+  onOpenPartnerServiceListingModal(e, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
     $("#detailsModal").modal("show");
+    console.log('show')
 
-    this.service_Ticket_Id = service_Ticket_Id;
-    this.ticket_Number = ticket_Number;
-    this.creation_Date = creation_Date;
-    this.problem_Code = problem_Code;
-    this.contactName = contactName;
-    this.contactPhone = contactPhone;
-    this.acContact = acContact;
-    this.sitePhone = sitePhone;
-    this.acContactEmail = acContactEmail;
-    this.customer_Number = customer_Number;
-    this.customer_Name = customer_Name;
-    this.customerRMR = customerRMR;
-    this.customer_Since = customer_Since;
-    this.collectionQueue = collectionQueue;
-    this.cancelStatus = cancelStatus;
-    this.business_Name = business_Name;
-    this.comResStatus = comResStatus;
-    this.address_1 = address_1;
-    this.address_2 = address_2;
-    this.address_3 = address_3;
-    this.city = city;
-    this.state = state;
-    this.zipCode = zipCode;
-    this.status3G = status3G;
-    this.csAccount = csAccount;
-    this.systemType = systemType;
-    this.panelType = panelType;
-    this.centralStation = centralStation;
-    this.panel_Location = panel_Location;
-    this.customerComments = customerComments;
+    e.selectedRows.forEach((x) => {
+      this.service_Ticket_Id = x.dataItem.service_Ticket_Id;
+      this.ticket_Number = x.dataItem.ticket_Number;
+      this.creation_Date = x.dataItem.creation_Date;
+      this.problem_Code = x.dataItem.problem_Code;
+      this.contactName = x.dataItem.contactName;
+      this.contactPhone = x.dataItem.contactPhone;
+      this.acContact = x.dataItem.acContact;
+      this.sitePhone = x.dataItem.sitePhone;
+      this.acContactEmail = x.dataItem.acContactEmail;
+      this.customer_Number = x.dataItem.customer_Number;
+      this.customer_Name = x.dataItem.customer_Name;
+      this.customerRMR = x.dataItem.customerRMR;
+      this.customer_Since = x.dataItem.customer_Since;
+      this.collectionQueue = x.dataItem.collectionQueue;
+      this.cancelStatus = x.dataItem.cancelStatus;
+      this.business_Name = x.dataItem.business_Name;
+      this.comResStatus = x.dataItem.comResStatus;
+      this.address_1 = x.dataItem.address_1;
+      this.address_2 = x.dataItem.address_2;
+      this.address_3 = x.dataItem.address_3;
+      this.city = x.dataItem.city;
+      this.state = x.dataItem.state;
+      this.zipCode = x.dataItem.zipCode;
+      this.status3G = x.dataItem.status3G;
+      this.csAccount = x.dataItem.csAccount;
+      this.systemType = x.dataItem.systemType;
+      this.panelType = x.dataItem.panelType;
+      this.centralStation = x.dataItem.centralStation;
+      this.panel_Location = x.dataItem.panel_Location;
+      this.customerComments = x.dataItem.customerComments;
 
-    this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
+      this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
+    })
+
+    // this.service_Ticket_Id = service_Ticket_Id;
+    // this.ticket_Number = ticket_Number;
+    // this.creation_Date = creation_Date;
+    // this.problem_Code = problem_Code;
+    // this.contactName = contactName;
+    // this.contactPhone = contactPhone;
+    // this.acContact = acContact;
+    // this.sitePhone = sitePhone;
+    // this.acContactEmail = acContactEmail;
+    // this.customer_Number = customer_Number;
+    // this.customer_Name = customer_Name;
+    // this.customerRMR = customerRMR;
+    // this.customer_Since = customer_Since;
+    // this.collectionQueue = collectionQueue;
+    // this.cancelStatus = cancelStatus;
+    // this.business_Name = business_Name;
+    // this.comResStatus = comResStatus;
+    // this.address_1 = address_1;
+    // this.address_2 = address_2;
+    // this.address_3 = address_3;
+    // this.city = city;
+    // this.state = state;
+    // this.zipCode = zipCode;
+    // this.status3G = status3G;
+    // this.csAccount = csAccount;
+    // this.systemType = systemType;
+    // this.panelType = panelType;
+    // this.centralStation = centralStation;
+    // this.panel_Location = panel_Location;
+    // this.customerComments = customerComments;
+
+    // this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
    
   }
 

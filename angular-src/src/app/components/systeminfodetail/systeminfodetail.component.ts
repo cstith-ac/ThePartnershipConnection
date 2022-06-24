@@ -36,6 +36,7 @@ export class SysteminfodetailComponent implements OnInit {
   zonesData;
   eventHistoryDateData;
   accountInfoData;
+  signalHistoryData;
   sitestat_id;
   codeword1;
   codeword2;
@@ -90,6 +91,7 @@ export class SysteminfodetailComponent implements OnInit {
   comment;
   additional_Info;
   pascom;
+  sig_date;
 
   systemInfoArray: SystemInfo[];
   systemInfo: any = {};
@@ -386,21 +388,6 @@ export class SysteminfodetailComponent implements OnInit {
     // )
   }
 
-  // firstPOSTCallGetCustomerSystemInfo() {
-  //   this.routeService.getCustomerSystemInfo(this.id).subscribe(
-  //     //res => this.systemInfo = [].concat(res)
-  //     res => {
-  //       console.log(res)
-  //       if(res) {
-  //         this.spinnerService.hide();
-  //         this.systemInfo = res;
-  //       }
-  //       this.lastServiceTicketId = res.lastServiceTicketID;
-  //       this.alarmAccount = res.alarmAccount;
-  //     }
-  //   )
-  // }
-
   getAccountDetails() {
     if(this.centralStation === 'CMS') {
       this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
@@ -494,6 +481,8 @@ export class SysteminfodetailComponent implements OnInit {
   }
 
   onClickGetContactList() {
+    this.loading = true;
+    //return
     if(this.centralStation === 'CMS') {
       if(this.site_no === "") {
         console.log('there is no site no');
@@ -568,7 +557,17 @@ export class SysteminfodetailComponent implements OnInit {
     } else if (this.centralStation === 'NMC') {
       this.nmcService.getAccountContacts(this.alarmAccount).subscribe(
         res => {
+          this.loading = false;
           console.log(res);
+          console.log(res.status);
+          console.log(typeof res);
+          // if(res.status === 200) {
+          //   this.spinnerService.hide();
+          //   this.flashMessage.show('Your requested data is displayed below', {
+          //     cssClass: 'text-center alert-success',
+          //     timeout: 2000
+          //   });
+          // }
           this.contactListData = res;
         }
       )
@@ -662,15 +661,54 @@ export class SysteminfodetailComponent implements OnInit {
       //   }
       // )
     } else if (this.centralStation === 'NMC') {
-      console.log(`This isn't working yet`)
+      //console.log(`This isn't working yet`)
       this.nmcService.getSignalHistory(this.alarmAccount).subscribe(
         res => {
-          console.log(res);
+          //console.log(res);
+
+          this.signalHistoryData = res;
+
+          for(let key in res) {
+            console.log(res[key]);
+          }
+          // for(let key in res) {
+          //   console.log(res[key]);
+          //   //this.loading = false;
+          //   this.signalHistoryData = res[key];
+  
+          //   // if(!this.accountInfoData) {
+          //   //   console.log('There is no data from AccountInfo available')
+          //   // }
+
+          //   // let returnedAccountInfoObj = Object.values(res);
+          //   // console.log(returnedAccountInfoObj.entries());
+          //   // returnedAccountInfoObj.forEach(element => {
+          //   //   console.log(element.err_msg);
+          //   //   this.err_msg = element.err_msg;
+          //   // })
+
+  
+          //   // this.codeword1 = this.accountInfoData.codeword1;
+          //   // this.site_name = this.accountInfoData.site_name;
+          //   // this.site_addr1 = this.accountInfoData.site_addr1;
+          //   // this.city_name = this.accountInfoData.city_name;
+          //   // this.sitestat_id = this.accountInfoData.sitestat_id;
+          //   // this.state_id = this.accountInfoData.state_id;
+          //   // this.zip_code = this.accountInfoData.zip_code;
+          //   // this.phone1 = this.accountInfoData.phone1;
+          //   // this.ext1 = this.accountInfoData.ext1;
+          //   // this.ext2 = this.accountInfoData.ext2;
+          // }
+
+
+          // if only the err_msg is returned
           let returnedSignalHistoryObj = Object.values(res);
-          console.log(returnedSignalHistoryObj.entries());
+          //console.log(returnedSignalHistoryObj.entries());
           returnedSignalHistoryObj.forEach(element => {
-            console.log(element.err_msg);
-            this.err_msg = element.err_msg;
+            if(element.err_msg) {
+              console.log(element.err_msg);
+              this.err_msg = element.err_msg;
+            }
           })
         }
       )
@@ -769,6 +807,16 @@ export class SysteminfodetailComponent implements OnInit {
       //console.log(this.scheduled_Date)
       this.showScheduled_Date = true;
     }
+  }
+
+  openSignalHistoryDetails(sig_date:Date, event:string, sig_zone:string, sig_acct: string, sig_code:string) {
+    this.sig_date = sig_date;
+
+    console.log(sig_date);
+    console.log(event);
+    console.log(sig_zone);
+    console.log(sig_acct);
+    console.log(sig_code);
   }
 
   open3GModal() {

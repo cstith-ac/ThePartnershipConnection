@@ -90,3 +90,5 @@ C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Debug\netcoreapp3.1\WebAPI-NMC.csproj.CoreCompileInputs.cache
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\obj\Debug\netcoreapp3.1\WebAPI-NMC.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.thepartnershipconnectionapi-nmc-staging - Web Deploy.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-nmc-staging - Web Deploy\appInsights1.arm.json

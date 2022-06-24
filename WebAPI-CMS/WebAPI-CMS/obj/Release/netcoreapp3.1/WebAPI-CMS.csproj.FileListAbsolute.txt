@@ -68,3 +68,4 @@ C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Release\netcoreapp
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Release\netcoreapp3.1\WebAPI-CMS.dll
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Release\netcoreapp3.1\WebAPI-CMS.pdb
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Release\netcoreapp3.1\WebAPI-CMS.genruntimeconfig.cache
+C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-cms-staging - Web Deploy\profile.arm.json

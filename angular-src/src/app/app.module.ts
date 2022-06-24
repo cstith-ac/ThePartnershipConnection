@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -228,7 +229,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AvatarModule,
     CurrencyMaskModule
   ],
-  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}, ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, NmcService, CmsService, CurrencyPipe],
+  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}, ValidateService, AuthService, IncentiveEntryService, AuthGuard, AdminGuard, EmployeeGuard, UnsavedchangesGuard, RouteService, NmcService, CmsService, CurrencyPipe, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <div class="row mt-5">
         <div class="col-md-12">
             <h5 class="headline-5 high-emphasis">Partner Service List</h5>
@@ -16,9 +16,6 @@
                         <th scope="col">Alarm Account</th>
                         <th scope="col">Customer Number</th>
                         <th scope="col">Customer Name</th>
-                        <!-- <th scope="col">Customer Contact</th>
-                        <th scope="col">Phone #</th>
-                        <th scope="col">Customer Contact #</th> -->
                         <th scope="col">Address 1</th>
                         <th scope="col">City, State, Zip</th>
                         <th scope="col">Cancel Status</th>
@@ -35,9 +32,6 @@
                         <td>{{ item.csAccount }}</td>
                         <td>{{ item.customer_Number }}</td>
                         <td>{{ item.customer_Name }}</td>
-                        <!-- <td>{{ item.contactName }}</td>
-                        <td>{{ item.sitePhone | phone }}</td>
-                        <td>{{ item.contactPhone | phone }}</td> -->
                         <td>{{ item.address_1 }}</td>
                         <td>{{ item.city }}, {{ item.state }} {{ item.zipCode }}</td>
                         <td>{{ item.cancelStatus }}</td>
@@ -56,6 +50,74 @@
                 class="d-flex justify-content-center mt-5">
             </ngb-pagination>
         </div>
+    </div>
+</div> -->
+
+<div class="card">
+    <div class="card-body">
+        <kendo-grid
+            [kendoGridBinding]="gridData"
+            [pageSize]="$any(foo).take"
+            [skip]="$any(foo).skip"
+            [sort]="$any(foo).sort"
+            [filter]="$any(foo).filter"
+            [sortable]="{
+                allowUnsort: true,
+                mode: 'multiple'
+            }"
+            [pageable]="{
+                pageSizes: [5,10,15,25,50,100,150,200]
+            }"
+            [filterable]="true"
+            [resizable]="true"
+            [pageSize]="pageSize"
+            [groupable]="true"
+            [columnMenu]="true"
+            [selectable]="true"
+            (selectionChange)="onOpenPartnerServiceListingModal($event, service_Ticket_Id, ticket_Number, creation_Date, problem_Code, contactName, contactPhone, acContact, sitePhone, acContactEmail, customer_Number, customer_Name, customerRMR, customer_Since, collectionQueue, cancelStatus, business_Name, comResStatus, address_1, address_2, address_3, city, state, zipCode, status3G, csAccount, systemType, panelType, centralStation, panel_Location, customerComments)"
+            kendoGridSelectBy="service_Ticket_Id"
+            [selectedKeys]="mySelection"
+            #dateTime
+            class="cursorPointer"
+        >
+            <ng-template kendoGridToolbarTemplate>
+                <button
+                    type="button"
+                    kendoGridExcelCommand
+                    icon="file-excel"
+                >Export to Excel</button>
+            </ng-template>
+            <kendo-grid-column-group
+                [title]="today"
+                [autoSize]="false"
+                #dateTime>
+                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                    <p [innerHTML]="today" class="mb-0"></p>
+                </ng-template>
+                <kendo-grid-column field="service_Ticket_Id" title="Service Ticket Id" [hidden]="true"></kendo-grid-column>
+                <kendo-grid-column 
+                    field="ticket_Number" 
+                    title="Ticket Number" 
+                    [style]="{color: '#ca5856'}"
+                >
+                </kendo-grid-column>
+                <kendo-grid-column field="creation_Date" title="Created On"></kendo-grid-column>
+                <kendo-grid-column field="problem_Code" title="Problem Code"></kendo-grid-column>
+                <kendo-grid-column field="status3G" title="3G Status"></kendo-grid-column>
+                <kendo-grid-column field="csAccount" title="Alarm Account"></kendo-grid-column>
+                <kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
+                <kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
+                <kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
+                <kendo-grid-column field="city" title="City"></kendo-grid-column>
+                <kendo-grid-column field="state" title="State"></kendo-grid-column>
+                <kendo-grid-column field="zipCode" title="Zip"></kendo-grid-column>
+                <kendo-grid-column field="cancelStatus" title="Cancel Status"></kendo-grid-column>
+                <kendo-grid-column field="collectionQueue" title="Collection Status"></kendo-grid-column>
+                <kendo-grid-column field="customerComments" title="Comments" [width]="90" [hidden]="true"></kendo-grid-column>
+            </kendo-grid-column-group>
+            <kendo-grid-excel fileName="partnerServiceListing" [fetchData]="allData">
+            </kendo-grid-excel>
+        </kendo-grid>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="IIS Web Application Name" description="" value="ThePartnershipConnectionAPI-CMS" tags="IisApp">
+  <parameter name="IIS Web Application Name" description="" value="thepartnershipconnectionapi-cms__staging" tags="IisApp">
     <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\CStith\\source\\code\\project\\WebAPI-CMS\\WebAPI-CMS\\obj\\Release\\netcoreapp3\.1\\PubTmp\\Out\\$" />
   </parameter>
 </parameters>

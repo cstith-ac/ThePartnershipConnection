@@ -90,3 +90,5 @@ C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
 C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\serviceDependencies.thepartnershipconnectionapi-nmc-staging - Web Deploy.json
+C:\Users\CStith\source\code\project\WebAPI-NMC\WebAPI-NMC\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-nmc-staging - Web Deploy\appInsights1.arm.json

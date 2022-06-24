@@ -1,15 +1,24 @@
 import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { mergeMap } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
-import { TPCPartnerAgingReport } from 'src/app/models/tpcpartneragingreport';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { mergeMap } from 'rxjs/operators';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { TPCPartnerAgingReport } from 'src/app/models/tpcpartneragingreport';
+
+import * as XLSX from 'xlsx';
+
+import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
+import { process, State } from '@progress/kendo-data-query';
+import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
+import { saveAs } from "@progress/kendo-file-saver";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 declare var $: any;
 const moment = require('moment');
 
@@ -27,6 +36,7 @@ export class TpcpartneragingreportComponent implements OnInit {
   @ViewChild('onClick30DayElement') onClick30DayElement: ElementRef;
   @ViewChild('onClickRMTElement') onClickRMTElement: ElementRef;
   @ViewChild('onClickAllCustomersElement') onClickAllCustomersElement: ElementRef;
+  @ViewChild("dateTime") dateTimeView: ElementRef;
 
   tpcPartnerAgingReport: TPCPartnerAgingReport[];
   public displayArr:any[] = [];
@@ -36,7 +46,7 @@ export class TpcpartneragingreportComponent implements OnInit {
   count = 0;
   tableSize = 5;
   tableSizes = [5,10,15,25,50,100,150,200];
-  pageSize=10;
+  //pageSize=10;
 
   userEmailAddress;
 
@@ -75,13 +85,20 @@ export class TpcpartneragingreportComponent implements OnInit {
   public toggleRMT : boolean = false;
   public toggleAll : boolean = false;
 
-  public value=5;
+  public value = 5;
 
   agingListForm: FormGroup;
   clicked = false;//disables button after click
   sedonaContactEmail;
   partnerName;
   userName: any;
+
+  public gridData: any[];
+  public pageSize: number = 10;
+  public fileName: string;
+  public today = new Date().toDateString();
+  public selectedKeys = [];
+  //fileName='customer_aging_list.xlsx';
 
   constructor(
     public fb: FormBuilder,
@@ -93,8 +110,12 @@ export class TpcpartneragingreportComponent implements OnInit {
     private modalService: NgbModal,
     public jwtHelper: JwtHelperService,
     private flashMessage: FlashMessagesService,
-    private renderer: Renderer2
-  ) { }
+    private renderer: Renderer2,
+    public datePipe: DatePipe
+  ) { 
+    this.gridData = this.tpcPartnerAgingReport;
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     if(this.jwtHelper.isTokenExpired()) {
@@ -117,41 +138,14 @@ export class TpcpartneragingreportComponent implements OnInit {
 
     $("#wrapper").addClass("toggled");
 
-    setTimeout(() => {
+    // setTimeout(() => {
 
-      let element120Day = this.onClick120DayElement.nativeElement;
-      element120Day.classList.add('active');
+    //   let element120Day = this.onClick120DayElement.nativeElement;
+    //   element120Day.classList.add('active');
 
-      let element90Day = this.onClick90DayElement.nativeElement;
-      element90Day.classList.add('active');
-
-      // let elementHighRMR = this.onClickHighRMRElement.nativeElement;
-      // elementHighRMR.classList.add('active');
-
-      // let elementPendingCancel = this.onClickPendingCancelElement.nativeElement;
-      // elementPendingCancel.classList.add('active');
-
-      // let element60Day = this.onClick60DayElement.nativeElement;
-      // element60Day.classList.add('active');
-
-      // let element30Day = this.onClick30DayElement.nativeElement;
-      // element30Day.classList.add('active');
-
-      // let elementRMT = this.onClickRMTElement.nativeElement;
-      // elementRMT.classList.add('active');
-
-      // let elementAllCustomers = this.onClickAllCustomersElement.nativeElement;
-      // elementAllCustomers.classList.add('active');
-
-      // console.log(this.onClick120DayElement.nativeElement);
-      // console.log(this.onClick90DayElement.nativeElement);
-      // console.log(this.onClickHighRMRElement.nativeElement);
-      // console.log(this.onClickPendingCancelElement.nativeElement);
-      // console.log(this.onClick60DayElement.nativeElement);
-      // console.log(this.onClick30DayElement.nativeElement);
-      // console.log(this.onClickRMTElement.nativeElement);
-      // console.log(this.onClickAllCustomersElement.nativeElement);
-    }, 8);
+    //   let element90Day = this.onClick90DayElement.nativeElement;
+    //   element90Day.classList.add('active');
+    // }, 8);
 
     this.spinnerService.show();
 
@@ -167,6 +161,20 @@ export class TpcpartneragingreportComponent implements OnInit {
           console.log(data.statusText)
         }
         this.tpcPartnerAgingReport = data.body;
+        this.gridData = data.body;
+
+        for(let i = 0; i < this.gridData.length; i++) {
+          this.gridData[i].customer_Since = this.datePipe.transform(this.gridData[i].customer_Since, 'MMM dd, yyyy');
+
+          var formatter = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2
+          });
+          this.gridData[i].pastDue = formatter.format(this.gridData[i].pastDue);
+          this.gridData[i].totalDue = formatter.format(this.gridData[i].totalDue);
+        }
+
         this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
           val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
           val.filterCategory.toLowerCase().includes('over 120') || 
@@ -178,25 +186,25 @@ export class TpcpartneragingreportComponent implements OnInit {
       console.log('use the regular stored procedure')
     }
 
-    this.routeService.getTPCPartnerAgingReport().subscribe(
-      res => {
-        if(res) {
-          this.spinnerService.hide()
-        }
+    // this.routeService.getTPCPartnerAgingReport().subscribe(
+    //   res => {
+    //     if(res) {
+    //       this.spinnerService.hide()
+    //     }
 
-        this.tpcPartnerAgingReport = res;
+    //     this.tpcPartnerAgingReport = res;
 
-        this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-          // val.filterCategory.toLowerCase().includes('120' || '90' || 'high'))
+    //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+    //       // val.filterCategory.toLowerCase().includes('120' || '90' || 'high'))
           
-          // val.filterCategory.toLowerCase().includes('120') || val.filterCategory.toLowerCase().includes('high'))
+    //       // val.filterCategory.toLowerCase().includes('120') || val.filterCategory.toLowerCase().includes('high'))
 
-          val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
-          val.filterCategory.toLowerCase().includes('over 120') || 
-          val.filterCategory.toLowerCase().includes('over 90'))
-          this.collectionSize = this.tpcPartnerAgingReport.length;
-      }
-    )
+    //       val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
+    //       val.filterCategory.toLowerCase().includes('over 120') || 
+    //       val.filterCategory.toLowerCase().includes('over 90'))
+    //       this.collectionSize = this.tpcPartnerAgingReport.length;
+    //   }
+    // )
 
     this.tpcPartnerAgingReportForm = this.fb.group({
       EmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email,
@@ -209,35 +217,77 @@ export class TpcpartneragingreportComponent implements OnInit {
       ProspectID: 1,
       CustomerSystemID: 1
     })
-
   }
 
-  onOpenPartnerAgingReportModal(customer_Id: number, customer_Number: string, customer_Name: string, activeRMR: number, filterCategory: string, customerSince: string, lastPay: string, lastPaymentAmount: number, pastDue: number, bal_Current: number, totalDue: number, collectionQueue: string, pendingCancellation: string, commercialAccount: string, guaranteeStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, emailAddress: string, primaryPhone: string, alternatePhone: string) {
+  public foo: State = {
+    skip: 0,
+    take: 5
+  };
+
+  public mySelection: number[] = [];
+
+  public allData(): ExcelExportData {
+    const result: ExcelExportData = {
+      data: process(this.gridData, {
+      }).data
+    };
+
+    return result;
+  };
+
+  onOpenPartnerAgingReportModal(e, customer_Id: number, customer_Number: string, customer_Name: string, activeRMR: number, filterCategory: string, customerSince: string, lastPay: string, lastPaymentAmount: number, pastDue: number, bal_Current: number, totalDue: number, collectionQueue: string, pendingCancellation: string, commercialAccount: string, guaranteeStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, emailAddress: string, primaryPhone: string, alternatePhone: string) {
     $("#detailsModal").modal("show");
-    this.customer_Id = customer_Id;
-    this.customer_Number = customer_Number;
-    this.customer_Name = customer_Name;
-    this.activeRMR = activeRMR;
-    this.filterCategory = filterCategory;
-    this.customerSince = customerSince;
-    this.lastPay = lastPay;
-    this.lastPayAmount = lastPaymentAmount;
-    this.pastDue = pastDue;
-    this.bal_Current = bal_Current;
-    this.totalDue = totalDue;
-    this.collectionQueue = collectionQueue;
-    this.pendingCancellation = pendingCancellation;
-    this.commercialAccount = commercialAccount;
-    this.guaranteeStatus = guaranteeStatus;
-    this.address_1 = address_1;
-    this.address_2 = address_2;
-    this.address_3 = address_3;
-    this.city = city;
-    this.state = state;
-    this.zipCode = zipCode;
-    this.emailAddress = emailAddress;
-    this.primaryPhone = primaryPhone;
-    this.alternatePhone = alternatePhone;
+
+    e.selectedRows.forEach((x) => {
+      this.customer_Id = x.dataItem.customer_Id;
+      this.customer_Number = x.dataItem.customer_Number;
+      this.customer_Name = x.dataItem.customer_Name;
+      this.activeRMR = x.dataItem.activeRMR;
+      this.filterCategory = x.dataItem.filterCategory;
+      this.customerSince = x.dataItem.customerSince;
+      this.lastPay = x.dataItem.lastPay;
+      this.lastPayAmount = x.dataItem.lastPaymentAmount;
+      this.pastDue = x.dataItem.pastDue;
+      this.bal_Current = x.dataItem.bal_Current;
+      this.totalDue = x.dataItem.totalDue;
+      this.collectionQueue = x.dataItem.collectionQueue;
+      this.pendingCancellation = x.dataItem.pendingCancellation;
+      this.commercialAccount = x.dataItem.commercialAccount;
+      this.guaranteeStatus = x.dataItem.guaranteeStatus;
+      this.address_1 = x.dataItem.address_1;
+      this.address_2 = x.dataItem.address_2;
+      this.address_3 = x.dataItem.address_3;
+      this.city = x.dataItem.city;
+      this.state = x.dataItem.state;
+      this.zipCode = x.dataItem.zipCode;
+      this.emailAddress = x.dataItem.emailAddress;
+      this.primaryPhone = x.dataItem.primaryPhone;
+      this.alternatePhone = x.dataItem.alternatePhone;
+    })
+    // this.customer_Id = customer_Id;
+    // this.customer_Number = customer_Number;
+    // this.customer_Name = customer_Name;
+    // this.activeRMR = activeRMR;
+    // this.filterCategory = filterCategory;
+    // this.customerSince = customerSince;
+    // this.lastPay = lastPay;
+    // this.lastPayAmount = lastPaymentAmount;
+    // this.pastDue = pastDue;
+    // this.bal_Current = bal_Current;
+    // this.totalDue = totalDue;
+    // this.collectionQueue = collectionQueue;
+    // this.pendingCancellation = pendingCancellation;
+    // this.commercialAccount = commercialAccount;
+    // this.guaranteeStatus = guaranteeStatus;
+    // this.address_1 = address_1;
+    // this.address_2 = address_2;
+    // this.address_3 = address_3;
+    // this.city = city;
+    // this.state = state;
+    // this.zipCode = zipCode;
+    // this.emailAddress = emailAddress;
+    // this.primaryPhone = primaryPhone;
+    // this.alternatePhone = alternatePhone;
 
     if(this.commercialAccount == 'Y') {
       this.commercialAccount = 'Commercial'
@@ -826,5 +876,29 @@ export class TpcpartneragingreportComponent implements OnInit {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'my-class'
       });
+  }
+
+  exportexcel() {
+    this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
+    val.filterCategory.toLowerCase().includes('over 120'));
+    
+    this.collectionSize = this.tpcPartnerAgingReport.length;
+
+    //return
+    let element = document.getElementById('excel-table');
+    // let foo = this.partnerInvoiceListing.forEach((x) => {
+    //   x.vendorInvoiceNumber;
+    // });
+    // console.log(foo);
+    // return
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.tpcPartnerAgingReport);
+    //const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+ 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ 
+    /* save to file */  
+    XLSX.writeFile(wb, this.fileName);
   }
 }

@@ -42,12 +42,23 @@ namespace WebAPI_NMC.Controllers
 
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(textResult);
-            //xDoc.Save("assets/GetSignalHistoryTest.xml");
+
+            var callingUrl = Request.Headers["Referer"].ToString();
+            var isLocal = Url.IsLocalUrl(callingUrl);
+            if (callingUrl == "http://localhost:4200/")
+            {
+                xDoc.Save("assets/GetSignalHistoryTest.xml");
+            }
 
             XDocument xml = XDocument.Parse(textResult);
             var soapResponse = xml.Descendants().Where(x => x.Name.LocalName == "SignalHistory_Response").Select(x
                 => new SignalHistory()
                 {
+                    sig_acct = (string)x.Element(x.Name.Namespace + "sig_acct"),
+                    sig_date = (DateTime)x.Element(x.Name.Namespace + "sig_date"),
+                    sig_code = (string)x.Element(x.Name.Namespace + "sig_code"),
+                    sig_zone = (string)x.Element(x.Name.Namespace + "sig_zone"),
+                    @event = (string)x.Element(x.Name.Namespace + "event"),
                     err_msg = (string)x.Element(x.Name.Namespace + "err_msg")
                 }).ToList();
 

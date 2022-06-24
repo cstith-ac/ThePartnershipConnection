@@ -132,9 +132,9 @@ export class SidenavComponent implements OnInit {
         window.location.href = 'https://www.alarmconnections.com/current-partners/'
       }
       // if test from alarm connections beta
-      if(location.hostname === 'partnercon-test-beta.azurewebsites.net') {
+      if(location.hostname === 'thepartnershipconnectionbeta-api.azurewebsites.net') {
         // window.location.href = 'https://dev-alarm-connections.pantheonsite.io/'
-        window.location.href = 'https://partnercon-test-beta.azurewebsites.net' 
+        window.location.href = 'https://beta.thepartnershipconnection.com/login' 
       }
       // if test from alarm connections staging
       if(location.hostname === 'partnercon-test-staging.azurewebsites.net') {

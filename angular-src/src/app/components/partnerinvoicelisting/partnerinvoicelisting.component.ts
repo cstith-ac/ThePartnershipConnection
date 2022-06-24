@@ -1,18 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { RouteService } from '../../services/route.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
 import { PartnerInvoiceListing } from 'src/app/models/partnerinvoicelisting';
-declare var $: any;
-import { filter, mergeMap, switchMap, pairwise } from 'rxjs/operators';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
-import { HttpErrorResponse } from '@angular/common/http';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import * as XLSX from 'xlsx';
+
+import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
+import { process, State } from '@progress/kendo-data-query';
+import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
+import { saveAs } from "@progress/kendo-file-saver";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+declare var $: any;
 
 @Component({
   selector: 'app-partnerinvoicelisting',
@@ -61,12 +68,21 @@ export class PartnerinvoicelistingComponent implements OnInit {
   activeTab: string = "tab-1"
 
   id:string;
-  pageSize=10;
+  //pageSize=10;
 
   clicked = false;//disables button after click
   sedonaContactEmail;
   partnerName;
   userName: any;
+  //fileName='testExcelSheet.xlsx';
+
+  public gridData: any[];
+  public pageSize: number = 5;
+  public fileName: string;
+  public today = new Date().toDateString();
+  public selectedKeys = [];
+
+  @ViewChild("dateTime") dateTimeView: ElementRef;
 
   constructor(
     public fb: FormBuilder,
@@ -78,7 +94,10 @@ export class PartnerinvoicelistingComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router,
     private modalService: NgbModal
-  ) { }
+  ) { 
+    this.gridData = this.partnerInvoiceListing;
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     if(this.jwtHelper.isTokenExpired()) {
@@ -118,6 +137,21 @@ export class PartnerinvoicelistingComponent implements OnInit {
             this.spinnerService.hide();
           }
           this.partnerInvoiceListing = data.body;
+          this.gridData = data.body;
+
+          for(let i = 0; i < this.gridData.length; i++) {
+            // console.log(this.gridData[i].invoiceAmount);
+            var formatter = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 2
+            });
+            this.gridData[i].invoiceAmount = formatter.format(this.gridData[i].invoiceAmount);
+
+            if((this.gridData[i].approvedAmount !== 'Pending') && (this.gridData[i].approvedAmount !== 'On Hold')) {
+              this.gridData[i].approvedAmount = formatter.format(this.gridData[i].approvedAmount);
+            }
+          }
 
           this.partnerInvoiceListing.some((item, idx) => 
           item.determination !== "Paid" && 
@@ -145,7 +179,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
           //   }
 
           //   if(others) {
-          //     this.notPaid(true);
           //     this.partnerInvoiceListing.sort((a,b) => b.determination.localeCompare(a.determination));
           //   }
           // }
@@ -198,9 +231,8 @@ export class PartnerinvoicelistingComponent implements OnInit {
           if(res) {
             this.spinnerService.hide()
           }
-          
           this.partnerInvoiceListing = [].concat(res);
-          
+          this.gridData = [].concat(res);
         })
     }
 
@@ -269,43 +301,92 @@ export class PartnerinvoicelistingComponent implements OnInit {
     })
   }
 
+  public foo: State = {
+    skip: 0,
+    take: 5
+  };
+
+  public mySelection: number[] = [];
+
+  public allData(): ExcelExportData {
+    const result: ExcelExportData = {
+      data: process(this.gridData, {
+      }).data
+    };
+
+    return result;
+  };
+
   toggleShow(newTab: string): void {
     this.activeTab = newTab;
   }
 
-  onOpenPartnerInvoiceListingModal(ticketID: number, incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string, csAccount: string) {
+  onOpenPartnerInvoiceListingModal(e, ticketID: number, incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string, csAccount: string) {
     $("#detailsModal").modal("show");
+
+    e.selectedRows.forEach((x) => {
+      this.ticketID = x.dataItem.ticketID;
+      this.incentiveID = x.dataItem.incentiveID;
+      this.vendorInvoiceNumber = x.dataItem.vendorInvoiceNumber;
+      this.invoiceAmount = x.dataItem.invoiceAmount;
+      this.invoiceDate = x.dataItem.invoiceDate;
+      this.approvedAmount = x.dataItem.approvedAmount;
+      this.dateEntered = x.dataItem.dateEntered;
+      this.heldReason = x.dataItem.heldReason;
+      this.checkNumber = x.dataItem.checkNumber;
+      this.checkDate = x.dataItem.checkDate;
+      this.amountPaid = x.dataItem.amountPaid;
+      this.creditAmount = x.dataItem.creditAmount;
+      this.creditDate = x.dataItem.creditDate;
+      this.determination = x.dataItem.determination;
+      this.customer_Number = x.dataItem.customer_Number;
+      this.customer_Name = x.dataItem.customer_Name;
+      //this.relevantMemo = relevantMemo.replace(/^\s+|\s+$/g, '');
+      this.relevantMemo = x.dataItem.relevantMemo;
+      this.relevantComment = x.dataItem.relevantComment;
+      this.address_1 = x.dataItem.address_1;
+      this.address_2 = x.dataItem.address_2;
+      this.address_3 = x.dataItem.address_3;
+      this.city = x.dataItem.city;
+      this.state = x.dataItem.state;
+      this.zipCode = x.dataItem.zipCode;
+      this.ticketNumber = x.dataItem.ticketNumber;
+      this.csAccount = x.dataItem.csAccount;
+
+      this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
+      this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
+    })
     
-    this.ticketID = ticketID;
-    this.incentiveID = incentiveID;
-    this.vendorInvoiceNumber = vendorInvoiceNumber;
-    this.invoiceAmount = invoiceAmount;
-    this.invoiceDate = invoiceDate;
-    this.approvedAmount = approvedAmount;
-    this.dateEntered = dateEntered;
-    this.heldReason = heldReason;
-    this.checkNumber = checkNumber;
-    this.checkDate = checkDate;
-    this.amountPaid = amountPaid;
-    this.creditAmount = creditAmount;
-    this.creditDate = creditDate;
-    this.determination = determination;
-    this.customer_Number = customer_Number;
-    this.customer_Name = customer_Name;
-    //this.relevantMemo = relevantMemo.replace(/^\s+|\s+$/g, '');
-    this.relevantMemo = relevantMemo;
-    this.relevantComment = relevantComment;
-    this.address_1 = address_1;
-    this.address_2 = address_2;
-    this.address_3 = address_3;
-    this.city = city;
-    this.state = state;
-    this.zipCode = zipCode;
-    this.ticketNumber = ticketNumber;
-    this.csAccount = csAccount;
+    // this.ticketID = ticketID;
+    // this.incentiveID = incentiveID;
+    // this.vendorInvoiceNumber = vendorInvoiceNumber;
+    // this.invoiceAmount = invoiceAmount;
+    // this.invoiceDate = invoiceDate;
+    // this.approvedAmount = approvedAmount;
+    // this.dateEntered = dateEntered;
+    // this.heldReason = heldReason;
+    // this.checkNumber = checkNumber;
+    // this.checkDate = checkDate;
+    // this.amountPaid = amountPaid;
+    // this.creditAmount = creditAmount;
+    // this.creditDate = creditDate;
+    // this.determination = determination;
+    // this.customer_Number = customer_Number;
+    // this.customer_Name = customer_Name;
+    // //this.relevantMemo = relevantMemo.replace(/^\s+|\s+$/g, '');
+    // this.relevantMemo = relevantMemo;
+    // this.relevantComment = relevantComment;
+    // this.address_1 = address_1;
+    // this.address_2 = address_2;
+    // this.address_3 = address_3;
+    // this.city = city;
+    // this.state = state;
+    // this.zipCode = zipCode;
+    // this.ticketNumber = ticketNumber;
+    // this.csAccount = csAccount;
     
-    this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
-    this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
+    // this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
+    // this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
 
   }
 
@@ -336,8 +417,22 @@ export class PartnerinvoicelistingComponent implements OnInit {
     });
   }
 
-  notPaid(ascending) {
-    console.log('not paid')
+  exportexcel() {
+    let element = document.getElementById('excel-table');
+    // let foo = this.partnerInvoiceListing.forEach((x) => {
+    //   x.vendorInvoiceNumber;
+    // });
+    // console.log(foo);
+    // return
+    //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(element);
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+ 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ 
+    /* save to file */  
+    XLSX.writeFile(wb, this.fileName);
   }
 
 }

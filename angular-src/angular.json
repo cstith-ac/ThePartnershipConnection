@@ -45,9 +45,7 @@
               "src/assets/img/message.png"
             ],
             "styles": [
-              {
-                "input": "node_modules/@progress/kendo-theme-bootstrap/dist/all.css"
-              },
+              "node_modules/@progress/kendo-theme-bootstrap/dist/all.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bs-stepper/dist/css/bs-stepper.min.css",
               "src/styles.css",
