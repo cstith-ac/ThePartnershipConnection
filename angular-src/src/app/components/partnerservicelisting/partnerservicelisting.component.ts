@@ -133,6 +133,7 @@ export class PartnerservicelistingComponent implements OnInit {
           // let customerCommentsLength = this.gridData[i].customerComments.length;
 
           this.gridData[i].creation_Date = this.datePipe.transform(this.gridData[i].creation_Date,'MMM dd, yyyy');
+          // this.gridData[i].customerComments = this.gridData[i].customerComments.substr(0,3) + '\u2026';
         }
 
       },(err:HttpErrorResponse) => {

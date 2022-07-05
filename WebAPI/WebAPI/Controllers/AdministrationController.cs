@@ -47,15 +47,6 @@ namespace WebAPI.Controllers
             return user;
         }
 
-        //[HttpPut("{id}")]
-        //[Authorize]
-        //public IActionResult Put(int id, [FromBody] ApplicationUser applicationUser)
-        //{
-        //    var data = _context.Users.Update(applicationUser);
-        //    _context.SaveChanges();
-        //    return Ok();
-        //}
-
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateUserFromAdmin([FromBody] ApplicationUser model)
@@ -78,7 +69,6 @@ namespace WebAPI.Controllers
             _context.Users.Update(user);
             _context.SaveChanges();
 
-            //return Ok(result);
             return Ok(new
             {
                 user.UserName,

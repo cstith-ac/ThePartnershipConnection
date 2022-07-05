@@ -154,6 +154,9 @@ export class PartnerdashboardComponent implements OnInit {
       console.log(this.sedonaContactEmail + ' is the alias user')
       this.userName = this.sedonaContactEmail;
 
+      // Remove text after @ sign in email address
+      //this.removeDomainFromEmail();
+
       // use SwitchMap to get profile then permissions user map
       this.authService.getProfile().pipe(
         mergeMap((res:any) => this.permissionService.getPermissionsUserMap(this.sedonaContactEmail))
@@ -359,6 +362,16 @@ export class PartnerdashboardComponent implements OnInit {
         }
       )
     }
+  }
+
+  removeDomainFromEmail() {
+    // console.log('removed');
+
+    this.firstName = '';
+    let remove_after = this.sedonaContactEmail.indexOf('@');
+    let result = this.sedonaContactEmail.substring(0, remove_after);
+    // console.log(result);
+    this.firstName = result;
   }
 
   openAppSettingsModal(e) {
