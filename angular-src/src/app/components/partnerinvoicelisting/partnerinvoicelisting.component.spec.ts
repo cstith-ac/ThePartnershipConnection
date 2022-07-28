@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerinvoicelistingComponent } from './partnerinvoicelisting.component';
 
 describe('PartnerinvoicelistingComponent', () => {
@@ -8,6 +8,7 @@ describe('PartnerinvoicelistingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [FormBuilder, ReactiveFormsModule],
       declarations: [ PartnerinvoicelistingComponent ]
     })
     .compileComponents();
@@ -22,4 +23,8 @@ describe('PartnerinvoicelistingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should create a form using formbuilder', () => {
+    expect(component.partnerInvoiceListingForm instanceof FormGroup).toBeTruthy();
+  })
 });

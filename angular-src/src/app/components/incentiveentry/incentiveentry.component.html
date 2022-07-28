@@ -166,7 +166,19 @@
                                 >
                             </div>
                         </div>
-                        <div class="mt-5 ticknumber-container">
+                        <div class="ticketnumber-container">
+                            <form class="form-group">
+                                <label class="mr-2" [ngStyle]="{'min-width': '27%'}">Service only</label>
+                                
+                                <input 
+                                    type="checkbox" 
+                                    class="ml-11" 
+                                   
+                                    (change)="onChangeServiceOnly($event)"
+                                    value=""
+                                >
+                                
+                            </form>
                             <p class="mb-0">If Service Assigned by Alarm Connections</p>
                             <form class="form-group">
                                 <label class="mr-2">Alarm Connections Ticket #</label>
@@ -202,7 +214,66 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="table-responsive" *ngIf="partnerServiceListingExtended">
+                                            <kendo-grid
+                                                [kendoGridBinding]="gridData"
+                                                [pageSize]="$any(foo).take"
+                                                [skip]="$any(foo).skip"
+                                                [sort]="$any(foo).sort"
+                                                [filter]="$any(foo).filter"
+                                                [sortable]="{
+                                                    allowUnsort: true,
+                                                    mode: 'multiple'
+                                                }"
+                                                [pageable]="{
+                                                    pageSizes: [5,10,15,25,50,100,150,200]
+                                                }"
+                                                [filterable]="true"
+                                                [resizable]="true"
+                                                [pageSize]="pageSize"
+                                                [groupable]="true"
+                                                [columnMenu]="true"
+                                                [selectable]="true"
+                                                (selectionChange)="onGetCustomerInvoiceInfo($event, customer_Id, customer_Site_Id, customer_System_Id, ticket_Number, customer_Number, customer_Name, business_Name, address_1, systemType, csAccount, panelType, panel_Location, centralStation, panel_Type_Id, central_Station_ID, system_Id)"
+                                                kendoGridSelectBy="customer_Id"
+                                                [selectedKeys]="mySelection"
+                                                #dateTime
+                                                class="cursorPointer">
+                                                <ng-template kendoGridToolbarTemplate>
+                                                    <button 
+                                                      type="button" 
+                                                      kendoGridExcelCommand 
+                                                      icon="file-excel"
+                                                    >Export to Excel
+                                                    </button>
+                                                  </ng-template>
+                                                  <kendo-grid-column-group
+                                                    [title]="today"
+                                                    
+                                                    #dateTime>
+                                                    <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                                        <p [innerHTML]="today" class="mb-0"></p>
+                                                    </ng-template>
+                                                    <kendo-grid-column field="customer_Id" title="Customer Id" [hidden]="true"></kendo-grid-column>
+                                                    <kendo-grid-column 
+                                                        field="service_Ticket_Id" 
+                                                        title="Ticket Number" 
+                                                        [style]="{color: '#ca5856'}"
+                                                        [width]="160"
+                                                    ></kendo-grid-column>
+                                                    <kendo-grid-column field="creation_Date" title="Created On"></kendo-grid-column>
+                                                    <kendo-grid-column field="problem_Code" title="Problem Code"></kendo-grid-column>
+                                                    <kendo-grid-column field="customer_Number" title="Customer Number"></kendo-grid-column>
+                                                    <kendo-grid-column field="customer_Name" title="Customer Name"></kendo-grid-column>
+                                                    <kendo-grid-column field="csAccount" title="Alarm Account"></kendo-grid-column>
+                                                    <kendo-grid-column field="address_1" title="Address 1"></kendo-grid-column>
+                                                    <kendo-grid-column field="address_2" title="Address 2"></kendo-grid-column>
+                                                    <kendo-grid-column field="address_3" title="Address 3"></kendo-grid-column>
+                                                    <kendo-grid-column field="city" title="City"></kendo-grid-column>
+                                                    <kendo-grid-column field="state" title="State"></kendo-grid-column>
+                                                    <kendo-grid-column field="zipCode" title="Zip"></kendo-grid-column>
+                                                </kendo-grid-column-group>
+                                            </kendo-grid>
+                                            <!-- <div class="table-responsive" *ngIf="partnerServiceListingExtended">
                                                 <table class="table align-items-center">
                                                     <thead>
                                                         <th scope="col">Ticket Number</th>
@@ -239,9 +310,9 @@
                                                     [pageSize]="pageSize" 
                                                     class="d-flex justify-content-center mt-5">
                                                 </ngb-pagination> 
-                                            </div>
+                                            </div> -->
 
-                                            <div class="table-responsive" *ngIf="partnerServiceListingExtendedAC">
+                                            <!-- <div class="table-responsive" *ngIf="partnerServiceListingExtendedAC">
                                                 <table class="table align-items-center">
                                                     <thead>
                                                         <th scope="col">Ticket Number</th>
@@ -278,7 +349,7 @@
                                                     [pageSize]="pageSize" 
                                                     class="d-flex justify-content-center mt-5">
                                                 </ngb-pagination> 
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -580,7 +651,7 @@
                                 </div>
                             </ng-template>
                         </div>
-                        <div class="mt-5 ticknumber-container">
+                        <div class="mt-5 ticketnumber-container">
                             <div class="form-group">
                                 <label class="mr-2">Was service performed as part of this invoice?</label>
                                 Yes

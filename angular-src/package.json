@@ -1,10 +1,10 @@
 {
   "name": "angular-src",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "prebuild": "npm --no-git-tag-version version minor",
+    "prebuild": "npm --no-git-tag-version version patch",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -76,6 +76,7 @@
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "jasmine-auto-spies": "^6.9.9",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.1.0",

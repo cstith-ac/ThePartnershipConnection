@@ -35,50 +35,29 @@ namespace WebAPI_Affiliated.Controllers
 
             IRestResponse response = client.Execute(request);
 
-            //return Ok(response.Content);
+            var result = JsonConvert.DeserializeObject<Authentication>(response.Content);
+
+            Authentication authentication = new Authentication
+            {
+                access_token = result.access_token,
+                expires_in = result.expires_in,
+                token_type = result.token_type,
+                scope = result.scope,
+                refresh_token = result.refresh_token
+            };
+
+            Global.access_token = result.access_token;
+            //var access_token = result.access_token;
+
+            var expires_in = result.expires_in;
+
+            var token_type = result.token_type;
+
+            var scope = result.scope;
+
+            var refresh_token = result.refresh_token;
+
             return Ok(JsonConvert.DeserializeObject<Authentication>(response.Content));
-
-            //var url = "https://sb.alertmessage.com/token";
-
-            //var client = new RestClient(url);
-
-            //var request = new RestRequest();
-
-            //var body = new Login { grant_type = "password", username = "AlarmConnectionsAPI", password = "qWW%!t#WQxo7", client_id = "affiliated-report" };
-
-            //request.AddHeader("Content-Type","multipart/form-data");
-
-            //request.AddJsonBody(body);
-
-            //var response = client.Post(request);
-
-            //return Ok(response.StatusCode);
-
-            //var httpRequest  = (HttpWebRequest)WebRequest.Create(url);
-            //httpRequest.Method = "POST";
-
-            //httpRequest.ContentType = "multipart/form-data";
-            ////Req.ContentType = "application/x-www-form-urlencoded";
-
-            //var user = new Login()
-            //{
-            //    grant_type = "password",
-            //    username = "AlarmConnectionsAPI",
-            //    password = "qWW%!t#WQxo7",
-            //    client_id = "affiliated-report"
-            //};
-
-            //using (var streamWriter = new StreamWriter(httpRequest.GetRequestStream()))
-            //{
-            //    streamWriter.Write(user);
-            //}
-            //var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            //{
-            //    var result = streamReader.ReadToEnd();
-            //}
-
-            //return Ok(new Authentication());
         }
     }
 }

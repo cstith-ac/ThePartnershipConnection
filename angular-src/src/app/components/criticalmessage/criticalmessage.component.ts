@@ -23,9 +23,7 @@ export class CriticalmessageComponent implements OnInit {
   ngOnInit() {
     this.routeService.getCustomerCareDashboardInfoS().subscribe(
       res => {
-        //console.log(res);
         this.dashboardinfo = res;
-        
       },
       err => {
         console.log(err);

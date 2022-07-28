@@ -158,6 +158,10 @@ export class PartnerservicelistingComponent implements OnInit {
 
         this.partnerServiceListing = [].concat(res);
         this.gridData = [].concat(res);
+
+        for(let i = 0; i < this.gridData.length; i++) {
+          this.gridData[i].creation_Date = this.datePipe.transform(this.gridData[i].creation_Date,'MMM dd, yyyy');
+        }
       }
     )
     }

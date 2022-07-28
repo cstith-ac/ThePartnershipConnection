@@ -673,26 +673,42 @@
                                     <div class="row">
                                         <div class="col border-right ml-2 pl-3 pr-2">
                                             <div class="form-group form">
-                                                <label class="mr-2 text-success font-weight-bold">Signals Tested!</label>
-                                                <input 
-                                                    type="radio" 
+                                                <label class="mr-2 text-success font-weight-bold">Signals Tested!
+                                                    <input 
+                                                    type="radio"
+                                                    class="marginLeft10px" 
                                                     formControlName="SignalsTested" 
                                                     value="1"
                                                     (change)="onSignalsTested($event)"
                                                 >
+                                                </label>
+                                                <!-- <input 
+                                                    type="radio" 
+                                                    formControlName="SignalsTested" 
+                                                    value="1"
+                                                    (change)="onSignalsTested($event)"
+                                                > -->
                                                 <br>
                                                 <small>I certify that at least 20% of zones were tested with signals sent & received by Central Station.</small>
                                             </div>
                                         </div>
                                         <div class="col pr-3 pl-2 mr-1">
                                             <div class="form-group form">
-                                                <label class="mr-2 text-danger font-weight-bold">Less than 20% of Signals Tested!</label>
-                                                <input 
-                                                    type="radio" 
+                                                <label class="mr-2 text-danger font-weight-bold">Less than 20% of Signals Tested!
+                                                    <input 
+                                                    type="radio"
+                                                    class="marginLeft10px" 
                                                     formControlName="SignalsTested" 
                                                     value="2"
                                                     (change)="onSignalsTested($event)"
                                                 >
+                                                </label>
+                                                <!-- <input 
+                                                    type="radio" 
+                                                    formControlName="SignalsTested" 
+                                                    value="2"
+                                                    (change)="onSignalsTested($event)"
+                                                > -->
                                                 <br>
                                                 <small>Please use the comment section to describe the level of signal testing completed.</small>
                                             </div>
@@ -1039,80 +1055,6 @@
                     </div>
                 </form>
             </div>
-
-            <!-- <div class="col-md-4">
-                <h2>Search By:</h2>
-                <form>
-                    <div class="form-group">
-                        <input 
-                            [(ngModel)]="searchByCustomer"
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCustomer($event.target.value)"
-                        >
-                        <label>Customer</label>
-                    </div>
-                    <div class="form-group">
-                        <input
-                            [checked]="true"
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToBilling($event.target.value)"
-                        >
-                        <label>Billing Address</label>
-                    </div>
-                    <div class="form-group">
-                        <input
-                            [checked]="true" 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToSite($event.target.value)"
-                        >
-                        <label>Site Address</label>
-                    </div>
-                    <div class="form-group">
-                        <input 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCentralStation($event.target.value)"
-                        >
-                        <label>Central Station #</label>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <h2>Options:</h2>
-                <form>
-                    <div class="row">
-                        <h3>Cancelled Customers</h3>
-                        <div class="radio-label-vertical-wrapper">
-                            <div class="form-group">
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="0" 
-                                    required
-                                    (change)="onItemChangeToInclude($event.target.value)"
-                                >Include</label>
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="1" 
-                                    required
-                                    [checked]="true"
-                                    (change)="onItemChangeToExclude($event.target.value)"
-                                >Exclude</label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div> -->
         </div>
         <table class="table table-responsive">
             <thead>
@@ -1261,80 +1203,6 @@
                     </div>
                 </form>
             </div>
-
-
-            <!-- <div class="col-md-4">
-                <h2>Search By:</h2>
-                <form>
-                    <div class="form-group">
-                        <input 
-                            [(ngModel)]="searchByCustomer"
-                            [checked]="true"
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCustomer($event.target.value)"
-                        >
-                        <label>Customer</label>
-                    </div>
-                    <div class="form-group">
-                        <input
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToBilling($event.target.value)"
-                        >
-                        <label>Billing Address</label>
-                    </div>
-                    <div class="form-group">
-                        <input 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToSite($event.target.value)"
-                        >
-                        <label>Site Address</label>
-                    </div>
-                    <div class="form-group">
-                        <input 
-                            type="radio" 
-                            name="searchBy" 
-                            class="mr-3"
-                            (change)="onItemChangeToCentralStation($event.target.value)"
-                        >
-                        <label>Central Station #</label>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <h2>Options:</h2>
-                <form>
-                    <div class="row">
-                        <h3>Cancelled Customers</h3>
-                        <div class="radio-label-vertical-wrapper">
-                            <div class="form-group">
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="0" 
-                                    required
-                                    (change)="onItemChangeToInclude($event.target.value)"
-                                >Include</label>
-                            <label class="radio-label-vertical">
-                                <input 
-                                    type="radio" 
-                                    name="cancelledCustomers" 
-                                    [value]="1" 
-                                    required
-                                    [checked]="true"
-                                    (change)="onItemChangeToExclude($event.target.value)"
-                                >Exclude</label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div> -->
         </div>
         <table class="table table-responsive">
             <thead>
@@ -1442,16 +1310,16 @@
                                 </h1>
                             </div>
                             <div class="col-md-6">
-                                <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                                <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger medium-emphasis body-2">{{ invoiceNumber }}</span>
                                 </span>
-                                <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                                <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger medium-emphasis body-2">{{ customer }}</span></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 offset-md-6">
                                 <span class="font-weight-bold">Customer Site Information: 
-                                    <span class="text-danger">{{ customerSiteName }}</span>
-                                    <span *ngIf="customerPreselected" class="text-danger">
+                                    <span class="text-danger medium-emphasis body-2">{{ customerSiteName }}</span>
+                                    <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                         {{ bus_Name_Add1 }}
                                     </span>
                                 </span>
@@ -1460,8 +1328,8 @@
                         <div class="row">
                             <div class="col-md-6 offset-md-6">
                                 <span class="font-weight-bold">Customer System Information: 
-                                    <span class="text-danger">{{ systemName }}</span>
-                                    <span *ngIf="customerPreselected" class="text-danger">
+                                    <span class="text-danger medium-emphasis body-2">{{ systemName }}</span>
+                                    <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                         {{ sysType_csAccount }}
                                     </span>
                                 </span>
@@ -1476,204 +1344,184 @@
                 </div>
 
                 <section>
-                    <!-- <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 my-2">
-                        <div class="main">
-                        <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onRecurringSubmit(incentiveRecurringEntryForm)">
-                            <div formArrayName="entryRowsRecurring">
-                                <div class="row-entry-padding" *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRowsRecurring['controls']; let i=index" [formGroupName]="i">
-                                    <div class="table-header-wrapper">
-                                        <div class="table-header">
-                                          <table class="table table-bordered ">
-                                            <thead class="bg-secondary">
-                                              <tr>
-                                                <th class="table-header-column border-bottom-0 text-center">Service Provided</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Description</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Bill Cycle</th>
-                                                <th class="table-header-column border-bottom-0 text-center">RMR</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Pass Through</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Billing Starts</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Add to an Existing RMR Item</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Multiple</th>
-                                                <th class="table-header-column border-bottom-0 text-center">Total</th>
-                                                <th class="table-header-column border-bottom-0 text-center">
-            
-                                                </th>
-                                                <th class="table-header-column border-bottom-0 text-center">
-            
-                                                </th>
-                                              </tr>
-                                            </thead>
-                                          </table>
+                    <!-- <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onRecurringSubmit(incentiveRecurringEntryForm)">
+                        <div formArrayName="entryRowsRecurring">
+                            <div *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRowsRecurring['controls']; let i=index" [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="name">Service Provided:</label>
+                                          <div class="dropdown">
+                                            <select 
+                                              formControlName="ItemID" 
+                                              class="form-control" 
+                                              (change)="getItemName($event,i)"
+                                              name="something_{{i}}"
+                                            >
+                                                <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id" >{{ item.itemCode }}</option>
+                                            </select>
                                         </div>
-                                    </div>
-                                      <div class="tables-wrapper" >
-                                        <table class="table table-dark table-bordered table-hover" >
-                                            <tr>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <div class="dropdown">
-                                                            <select 
-                                                              formControlName="ItemID" 
-                                                              class="form-control" 
-                                                              (change)="getItemName($event,i)"
-                                                              name="something_{{i}}"
-                                                            >
-                                                                <option *ngFor="let item of listRecurringItems" value="{{item.item_id}}" [ngValue]="item.item_id" >{{ item.itemCode }}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <input 
-                                                        type="text"
-                                                        maxlength="50"
-                                                        class="form-control" 
-                                                        formControlName="Description"
-                                                        name="something_{{i}}"
-                                                    >
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <div class="dropdown">
-                                                            <select formControlName="BillCycle" class="form-control">
-                                                                <option value="m">Monthly</option>
-                                                                <option value="q">Quarterly</option>
-                                                                <option value="s">Semi-Annual</option>
-                                                                <option value="a">Annual</option>
-                                                            </select>
-                                                        </div>
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <kendo-numerictextbox
-                                                          format="c2"
-                                                          placeholder="$0.00"
-                                                          formControlName="RMR"
-                                                          [spinners]="false"
-                                                          [style.height]="'calc(1.5em + 1.3rem)'"
-                                                          [style.width]="'80%'"
-                                                        ></kendo-numerictextbox>
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <kendo-numerictextbox
-                                                          format="c2"
-                                                          placeholder="$0.00"
-                                                          formControlName="PassThrough"
-                                                          [spinners]="false"
-                                                          [style.height]="'calc(1.5em + 1.3rem)'"
-                                                          [style.width]="'80%'"
-                                                        ></kendo-numerictextbox>
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <input 
-                                                          type="date"
-                                                          class="form-control"
-                                                          formControlName="BillingStartDate"
-                                                        >
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <input
-                                                          class="center-block"
-                                                          type="checkbox"
-                                                          formControlName="Add2Item"
-                                                          (change)="checkboxChanged($event)"
-                                                          >
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col text-center">
-                                                        <div class="dropdown">
-                                                            <select 
-                                                              formControlName="Multiple"  
-                                                              class="form-control"
-                                                              >
-                                                                <option
-                                                                    *ngFor="let m of listMultiples" 
-                                                                    value="{{m.multiple}}" 
-                                                                    [ngValue]="m.multiple"
-                                                                >{{ m.multiple }}</option>
-                                                            </select>
-                                                        </div>
-                                                      </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="col">
-                                                        <kendo-numerictextbox
-                                                            #fooRef
-                                                            format="c2"
-                                                            placeholder="$0.00"
-                                                            formControlName="Total"
-                                                            [spinners]="false"
-                                                            [style.height]="'calc(1.5em + 1.3rem)'"
-                                                            [style.width]="'80%'"
-                                                            [attr.disabled]="true"
-                                                        ></kendo-numerictextbox>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-add" type="button" (click)="addNewItem()">
-                                                        <i class="fas fa-plus pr-1"></i>Add
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
-                                                        <i class="fas fa-minus pr-1"></i>Remove
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="email">Description:</label>
+                                          <input 
+                                            type="text"
+                                            maxlength="50"
+                                            class="form-control" 
+                                            formControlName="Description"
+                                            name="something_{{i}}"
+                                          >
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="mobile">Bill Cycle:</label>
+                                          <div class="dropdown">
+                                            <select formControlName="BillCycle" class="form-control">
+                                                <option value="m">Monthly</option>
+                                                <option value="q">Quarterly</option>
+                                                <option value="s">Semi-Annual</option>
+                                                <option value="a">Annual</option>
+                                            </select>
+                                          </div>
+                                        </div>
                                       </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="name">RMR:</label>
+                                          <kendo-numerictextbox
+                                            format="c2"
+                                            placeholder="$0.00"
+                                            formControlName="RMR"
+                                            [spinners]="false"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
+                                          ></kendo-numerictextbox>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="email">Pass Through:</label>
+                                          <kendo-numerictextbox
+                                            format="c2"
+                                            placeholder="$0.00"
+                                            formControlName="PassThrough"
+                                            [spinners]="false"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
+                                          ></kendo-numerictextbox>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="mobile">Billing Starts:</label>
+                                          <input 
+                                            type="date"
+                                            class="form-control"
+                                            formControlName="BillingStartDate"
+                                          >
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="name">Add to an Existing RMR Item:</label>
+                                          <input
+                                            class="center-block"
+                                            type="checkbox"
+                                            formControlName="Add2Item"
+                                            (change)="checkboxChanged($event)"
+                                          >
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="email">Multiple:</label>
+                                          <div class="dropdown">
+                                            <select 
+                                              formControlName="Multiple"  
+                                              class="form-control"
+                                              >
+                                                <option
+                                                    *ngFor="let m of listMultiples" 
+                                                    value="{{m.multiple}}" 
+                                                    [ngValue]="m.multiple"
+                                                >{{ m.multiple }}</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                          <label for="mobile">Total:</label>
+                                          <kendo-numerictextbox
+                                            #fooRef
+                                            format="c2"
+                                            placeholder="$0.00"
+                                            formControlName="Total"
+                                            [spinners]="false"
+                                            [style.height]="'calc(1.5em + 1.3rem)'"
+                                            [style.width]="'80%'"
+                                            [attr.disabled]="true"
+                                          ></kendo-numerictextbox>
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="row">
+                                    <button class="btn btn-add" type="button" (click)="addNewItem()">
+                                        <i class="fas fa-plus pr-1"></i>Add
+                                    </button>
+                                    <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
+                                        <i class="fas fa-minus pr-1"></i>Remove
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <input type="submit" value="Submit/Save" class="btn btn-submit" [disabled]="incentiveRecurringEntryForm.invalid">
+                                </div>
                             </div>
-                        </form>
                         </div>
-                      </div> -->
-
+                    </form> -->
                     <header class="recurring-header-bg">
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                             <span class="align-middle">Service Provided</span>
                         </div>
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                           <span class="align-middle">Description</span>  
                         </div>
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                           <span class="align-middle">Bill Cycle</span>
                         </div>
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                           <span class="align-middle">RMR</span>
                         </div>
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                           <span class="align-middle">Pass Through</span>
                         </div>
-                        <div class="col">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                           <span class="align-middle">Billing Starts</span>
                         </div>
-                        <div class="col text-center">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center">
                           <span class="align-middle">Add to an Existing RMR Item</span>
                         </div>
-                        <div class="col text-center">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center">
                           <span class="align-middle">Multiple</span>
                         </div>
-                        <div class="col text-center">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center">
                           <span class="align-middle">Total</span>
                         </div>
-                        <div class="col"></div>
-                        <div class="col"></div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                     </header>
                     <form [formGroup]="incentiveRecurringEntryForm" (ngSubmit)="onRecurringSubmit(incentiveRecurringEntryForm)">
                         <div formArrayName="entryRowsRecurring">
                             <div class="row-entry-padding" *ngFor="let entryRow of incentiveRecurringEntryForm.controls.entryRowsRecurring['controls']; let i=index" [formGroupName]="i">
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <div class="dropdown">
                                           <select 
                                             formControlName="ItemID" 
@@ -1685,7 +1533,7 @@
                                           </select>
                                       </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <input 
                                         type="text"
                                         maxlength="50"
@@ -1694,7 +1542,7 @@
                                         name="something_{{i}}"
                                       >
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <div class="dropdown">
                                           <select formControlName="BillCycle" class="form-control">
                                               <option value="m">Monthly</option>
@@ -1704,7 +1552,7 @@
                                           </select>
                                       </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
@@ -1714,7 +1562,7 @@
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
@@ -1724,14 +1572,14 @@
                                         [style.width]="'80%'"
                                       ></kendo-numerictextbox>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <input 
                                         type="date"
                                         class="form-control"
                                         formControlName="BillingStartDate"
                                       >
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                       <input
                                         class="center-block"
                                         type="checkbox"
@@ -1739,7 +1587,7 @@
                                         (change)="checkboxChanged($event)"
                                         >
                                     </div>
-                                    <div class="col text-center">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center">
                                       <div class="dropdown">
                                           <select 
                                             formControlName="Multiple"  
@@ -1753,7 +1601,7 @@
                                           </select>
                                       </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                         <kendo-numerictextbox
                                             #fooRef
                                             format="c2"
@@ -1765,12 +1613,12 @@
                                             [attr.disabled]="true"
                                         ></kendo-numerictextbox>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                         <button class="btn btn-add" type="button" (click)="addNewItem()">
                                             <i class="fas fa-plus pr-1"></i>Add
                                         </button>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                         <button class="btn btn-add" type="button" (click)="removeNewItem(i)">
                                             <i class="fas fa-minus pr-1"></i>Remove
                                         </button>
@@ -1810,17 +1658,17 @@
                             </h1>
                         </div>
                         <div class="col-md-6">
-                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger medium-emphasis body-2">{{ invoiceNumber }}</span>
                             </span>
-                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger medium-emphasis body-2">{{ customer }}</span></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
                             <span class="font-weight-bold">Customer Site Information: 
-                                <span class="text-danger">{{ customerSiteName }}</span>
+                                <span class="text-danger medium-emphasis body-2">{{ customerSiteName }}</span>
                                 <!--if-->
-                                <span *ngIf="customerPreselected" class="text-danger">
+                                <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                     {{ bus_Name_Add1 }}
                                 </span>
                             </span>
@@ -1829,8 +1677,8 @@
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
                             <span class="font-weight-bold">Customer System Information: 
-                                <span class="text-danger">{{ systemName }}</span>
-                                <span *ngIf="customerPreselected" class="text-danger">
+                                <span class="text-danger medium-emphasis body-2">{{ systemName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                     {{ sysType_csAccount }}
                                 </span>
                             </span>
@@ -1846,33 +1694,33 @@
     
             <section>
                 <header class="equipmat-header-bg">
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Item
                         </span>
                     </div>
-                    <div class="col-sm-3 pl-25">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Description/Part #
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Quantity
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Cost
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Total
                         </span>
                     </div>
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 </header>
                 <form 
                 *ngIf="incentiveEquipMatEntryForm"
@@ -1881,7 +1729,7 @@
                     <div formArrayName="entryRowsEquipMat">
                         <div class="row-entry-padding" *ngFor="let entryRow of incentiveEquipMatEntryForm.controls.entryRowsEquipMat['controls']; let i=index" [formGroupName]="i">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <div class="dropdown">
                                         <select 
                                             formControlName="ItemID" class="form-control" 
@@ -1892,16 +1740,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <input 
                                         type="text"
                                         maxlength="50"
-                                        class="form-control description"
+                                        class="form-control"
                                         formControlName="Description" 
                                         name="something_{{i}}"
                                     >
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <input 
                                         type="number" 
                                         formControlName="Quantity"
@@ -1909,7 +1757,7 @@
                                         min="0"
                                     >
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
@@ -1919,7 +1767,7 @@
                                         [style.width]="'80%'"
                                     ></kendo-numerictextbox>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <kendo-numerictextbox
                                         format="c2"
                                         placeholder="$0.00"
@@ -1930,13 +1778,13 @@
                                         [attr.disabled]="true"
                                     ></kendo-numerictextbox>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                     <button class="btn btn-add" type="button"(click)="addNewEquipMatItem()">
                                         <i class="fas fa-plus pr-1"></i>Add
                                     </button>
                                 </div>
                                 
-                                <div class="col">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                     <button class="btn btn-add" type="button" (click)="removeNewEquipMatItem(i)">
                                         <i class="fas fa-minus pr-1"></i>Remove
                                     </button>
@@ -1975,16 +1823,16 @@
                             </h1>
                         </div>
                         <div class="col-md-6">
-                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger">{{ invoiceNumber }}</span>
+                            <span class="mr-5 font-weight-bold">Invoice #:  <span class="text-danger medium-emphasis body-2">{{ invoiceNumber }}</span>
                             </span>
-                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger">{{ customer }}</span></span>
+                            <span class="ml-5 font-weight-bold">Customer Name: <span class="text-danger medium-emphasis body-2">{{ customer }}</span></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
                             <span class="font-weight-bold">Customer Site Information: 
-                                <span class="text-danger">{{ customerSiteName }}</span>
-                                <span *ngIf="customerPreselected" class="text-danger">
+                                <span class="text-danger medium-emphasis body-2">{{ customerSiteName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                     {{ bus_Name_Add1 }}
                                 </span>
                             </span>
@@ -1993,8 +1841,8 @@
                     <div class="row">
                         <div class="col-md-6 offset-md-6">
                             <span class="font-weight-bold">Customer System Information: 
-                                <span class="text-danger">{{ systemName }}</span>
-                                <span *ngIf="customerPreselected" class="text-danger">
+                                <span class="text-danger medium-emphasis body-2">{{ systemName }}</span>
+                                <span *ngIf="customerPreselected" class="text-danger medium-emphasis body-2">
                                     {{ sysType_csAccount }}
                                 </span>
                             </span>
@@ -2010,39 +1858,39 @@
     
             <section>
                 <header class="equipmat-header-bg">
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Item
                         </span>
                     </div>
-                    <div class="col-sm-3 pl-25">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Description
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Hours
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                            Cost per Hour
                         </span>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                         <span class="align-middle">
                             Total
                         </span>
                     </div>
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 </header>
                 <form [formGroup]="incentiveLaborChargesEntryForm" (ngSubmit)="onLaborChargesSubmit(incentiveLaborChargesEntryForm)">
                     <div formArrayName="entryRowsLaborCharges">
                         <div class="row-entry-padding" *ngFor="let entryRow of incentiveLaborChargesEntryForm.controls.entryRowsLaborCharges['controls']; let i=index;" [formGroupName]="i">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <div class="dropdown">
                                         <select 
                                             formControlName="ItemID" class="form-control" 
@@ -2053,16 +1901,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <input 
                                         type="text"
                                         maxlength="50" 
-                                        class="form-control description"
+                                        class="form-control"
                                         formControlName="Description"
                                         name="something_{{i}}"
                                     >
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <input 
                                         type="number" 
                                         formControlName="Quantity"
@@ -2070,7 +1918,7 @@
                                         min="0"
                                     >
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <!-- <input 
                                         type="text"
                                         class="form-control"
@@ -2091,7 +1939,7 @@
                                         (change)="calculateCost($event,i)"
                                     ></kendo-numerictextbox>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                     <!-- <input 
                                         type="text"
                                         class="form-control"
@@ -2111,12 +1959,12 @@
                                         [attr.disabled]="true"
                                     ></kendo-numerictextbox>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                     <button class="btn btn-add" type="button" (click)="addNewLaborChargesItem()">
                                         <i class="fas fa-plus pr-1"></i>Add
                                     </button>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                     <!-- <button class="btn btn-submit" (click)="onSubmit(incentiveLaborChargesEntryForm)">
                                         <i class="fas fa-upload pr-1"></i>Submit
                                     </button> -->
@@ -2364,9 +2212,9 @@
                 <form >
                     <div class="row">
                         <div class="col">
-                            <p class="body-2 high-emphasis" *ngIf="formIsValidText">
+                            <!-- <p class="body-2 high-emphasis" *ngIf="formIsValidText">
                                 <i class="fas fa-check text-success pr-2"></i>The form is valid.
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </form>

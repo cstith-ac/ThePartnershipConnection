@@ -66,11 +66,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
+
             string endpoint = HttpContext.GetEndpoint().ToString();
             if (endpoint == "https://dev-alarm-connections.pantheonsite.io")
             {
                 Console.WriteLine(endpoint);
             }
+
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var tokenDescriptor = new SecurityTokenDescriptor

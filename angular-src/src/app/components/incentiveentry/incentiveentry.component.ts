@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -19,6 +19,8 @@ import { CheckBoxAutoInsertList } from 'src/app/models/checkboxautoinsertlist';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { process, State } from '@progress/kendo-data-query';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 declare var $: any;
 
 @Component({
@@ -27,6 +29,7 @@ declare var $: any;
   styleUrls: ['./incentiveentry.component.css']
 })
 export class IncentiveentryComponent implements OnInit {
+  @ViewChild("dateTime") dateTimeView: ElementRef;
   @Output() incentiveEntryOutput: EventEmitter<any> = new EventEmitter<any>();
   public value;
   public percentage = 0.7;
@@ -136,6 +139,12 @@ export class IncentiveentryComponent implements OnInit {
   currentACUserEmail;
   currentUserRole;
   partnerName;
+
+  public gridData: any[];
+  // public pageSize: number = 10;
+  public fileName: string;
+  public today = new Date().toDateString();
+  public selectedKeys = [];
 
   constructor(
     public authService: AuthService,
@@ -402,6 +411,20 @@ export class IncentiveentryComponent implements OnInit {
     }
   }
 
+  onChangeServiceOnly(e) {
+    console.log(e.target.checked)
+    if(e.target.checked === true) {
+      //console.log('this is true')
+      this.serviceIncluded = 'y';
+      localStorage.setItem("serviceIncluded",'y');
+    } 
+    if (e.target.checked === false) {
+      //console.log('this is false')
+      this.serviceIncluded = 'n';
+      localStorage.setItem("serviceIncluded",'n');
+    }
+  }
+
   onChangeServiceIncluded(e) {
     //console.log(e.target.value)
     this.serviceIncluded = e.target.value;
@@ -605,6 +628,23 @@ export class IncentiveentryComponent implements OnInit {
   removeTicketNumber() {
     this.ticket_Number = '';
 
+    this.customer_Id = '';
+    this.customer_Site_Id = '';
+    this.customer_System_Id = '';
+    this.ticket_Number = '';
+    this.customer_Number = '';
+    this.customer_Name = '';
+    this.business_Name = '';
+    this.address_1 = '';
+    this.systemType = '';
+    this.csAccount = '';
+    this.panelType = '';
+    this.panel_Location = '';
+    this.centralStation = '';
+    this.panel_Type_Id = '';
+    this.central_Station_ID = '';
+    this.system_Id = '';
+
     this.serviceIncluded = "n";
     localStorage.setItem("serviceIncluded", "n");
     this.incentiveEntryForm.controls["ServiceIncluded"].setValue("n");
@@ -624,6 +664,8 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.removeItem("centralStation");
     localStorage.removeItem("panel_Type_Id");
     localStorage.removeItem("central_Station_ID");
+
+    this.mySelection = [];
   }
 
   selectEvent(item) {
@@ -637,15 +679,27 @@ export class IncentiveentryComponent implements OnInit {
   }
 
   searchCleared(){
-    //console.log('searchCleared');
     this.results = [];
-
     this.partnerServiceListingExtended = [];
-    
     this.ticket_Number = "";
-
     this.incentiveEntryForm.controls["TicketNumber"].reset();
   }
+
+  public foo: State = {
+    skip: 0,
+    take: 5
+  };
+
+  public mySelection: number[] = [];
+
+  public allData(): ExcelExportData {
+    const result: ExcelExportData = {
+      data: process(this.gridData, {
+      }).data
+    };
+
+    return result;
+  };
 
   // Opens the Alarm Connections Ticket # modal
   onOpenTicketNumberListModal(acTicketNumberListContent) {
@@ -688,6 +742,8 @@ export class IncentiveentryComponent implements OnInit {
                 this.spinnerService.hide()
               }
               this.partnerServiceListingExtended = [].concat(res); //object
+
+              this.gridData = [].concat(res);
             }
           )
         }
@@ -741,49 +797,92 @@ export class IncentiveentryComponent implements OnInit {
     //this.spinnerService.show();
   }
 
-  onGetCustomerInvoiceInfo(customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string, panelType: string, panel_Location: string, centralStation: string, panel_Type_Id: number, central_Station_ID: number, system_Id: number) {
-    this.customer_Id = customer_Id;
-    this.customer_Site_Id = customer_Site_Id;
-    this.customer_System_Id = customer_System_Id;
-    this.ticket_Number = ticket_Number;
-    this.customer_Number = customer_Number;
-    this.customer_Name = customer_Name;
-    this.business_Name = business_Name;
-    this.address_1 = address_1;
-    this.systemType = systemType;
-    this.csAccount = csAccount;
-    this.panelType = panelType;
-    this.panel_Location = panel_Location;
-    this.centralStation = centralStation;
-    this.panel_Type_Id = panel_Type_Id;
-    this.central_Station_ID = central_Station_ID;
-    this.system_Id = system_Id;
+  onGetCustomerInvoiceInfo(e, customer_Id: number, customer_Site_Id: number, customer_System_Id: number, ticket_Number: number, customer_Number: string, customer_Name: string, business_Name: string, address_1: string, systemType: string, csAccount: string, panelType: string, panel_Location: string, centralStation: string, panel_Type_Id: number, central_Station_ID: number, system_Id: number) {
+    console.log(e);
 
-    localStorage.setItem("customer_Id", this.customer_Id);
-    localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
-    localStorage.setItem("customer_System_Id", this.customer_System_Id);
-    localStorage.setItem("ticket_Number", this.ticket_Number);
-    localStorage.setItem("customer_Number", this.customer_Number);
-    localStorage.setItem("customer_Name", this.customer_Name);
-    localStorage.setItem("business_Name", this.business_Name);
-    localStorage.setItem("address_1", this.address_1);
-    localStorage.setItem("systemType", this.systemType);
-    localStorage.setItem("csAccount", this.csAccount);
-    localStorage.setItem("panelType", this.panelType);
-    localStorage.setItem("panel_Location", this.panel_Location);
-    localStorage.setItem("centralStation", this.centralStation);
-    localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
-    localStorage.setItem("central_Station_ID", this.central_Station_ID);
-    localStorage.setItem("system_Id", this.system_Id);
+    e.selectedRows.forEach((x) => {
+      this.customer_Id = x.dataItem.customer_Id;
+      this.customer_Site_Id = x.dataItem.customer_Site_Id;
+      this.customer_System_Id = x.dataItem.customer_System_Id;
+      this.ticket_Number = x.dataItem.ticket_Number;
+      this.customer_Number = x.dataItem.customer_Number;
+      this.customer_Name = x.dataItem.customer_Name;
+      this.business_Name = x.dataItem.business_Name;
+      this.address_1 = x.dataItem.address_1;
+      this.systemType = x.dataItem.systemType;
+      this.csAccount = x.dataItem.csAccount;
+      this.panelType = x.dataItem.panelType;
+      this.panel_Location = x.dataItem.panel_Location;
+      this.centralStation = x.dataItem.centralStation;
+      this.panel_Type_Id = x.dataItem.panel_Type_Id;
+      this.central_Station_ID = x.dataItem.central_Station_ID;
+      this.system_Id = x.dataItem.system_Id;
 
-    this.serviceIncluded = "y";
-    localStorage.setItem("serviceIncluded", "y");
-    this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
+      localStorage.setItem("customer_Id", this.customer_Id);
+      localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
+      localStorage.setItem("customer_System_Id", this.customer_System_Id);
+      localStorage.setItem("ticket_Number", this.ticket_Number);
+      localStorage.setItem("customer_Number", this.customer_Number);
+      localStorage.setItem("customer_Name", this.customer_Name);
+      localStorage.setItem("business_Name", this.business_Name);
+      localStorage.setItem("address_1", this.address_1);
+      localStorage.setItem("systemType", this.systemType);
+      localStorage.setItem("csAccount", this.csAccount);
+      localStorage.setItem("panelType", this.panelType);
+      localStorage.setItem("panel_Location", this.panel_Location);
+      localStorage.setItem("centralStation", this.centralStation);
+      localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
+      localStorage.setItem("central_Station_ID", this.central_Station_ID);
+      localStorage.setItem("system_Id", this.system_Id);
 
-    this.modalService.dismissAll();
+      this.serviceIncluded = "y";
+      localStorage.setItem("serviceIncluded", "y");
+      this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
+
+      this.modalService.dismissAll();
+    });
+    // this.customer_Id = customer_Id;
+    // this.customer_Site_Id = customer_Site_Id;
+    // this.customer_System_Id = customer_System_Id;
+    // this.ticket_Number = ticket_Number;
+    // this.customer_Number = customer_Number;
+    // this.customer_Name = customer_Name;
+    // this.business_Name = business_Name;
+    // this.address_1 = address_1;
+    // this.systemType = systemType;
+    // this.csAccount = csAccount;
+    // this.panelType = panelType;
+    // this.panel_Location = panel_Location;
+    // this.centralStation = centralStation;
+    // this.panel_Type_Id = panel_Type_Id;
+    // this.central_Station_ID = central_Station_ID;
+    // this.system_Id = system_Id;
+
+    // localStorage.setItem("customer_Id", this.customer_Id);
+    // localStorage.setItem("customer_Site_Id", this.customer_Site_Id);
+    // localStorage.setItem("customer_System_Id", this.customer_System_Id);
+    // localStorage.setItem("ticket_Number", this.ticket_Number);
+    // localStorage.setItem("customer_Number", this.customer_Number);
+    // localStorage.setItem("customer_Name", this.customer_Name);
+    // localStorage.setItem("business_Name", this.business_Name);
+    // localStorage.setItem("address_1", this.address_1);
+    // localStorage.setItem("systemType", this.systemType);
+    // localStorage.setItem("csAccount", this.csAccount);
+    // localStorage.setItem("panelType", this.panelType);
+    // localStorage.setItem("panel_Location", this.panel_Location);
+    // localStorage.setItem("centralStation", this.centralStation);
+    // localStorage.setItem("panel_Type_Id", this.panel_Type_Id);
+    // localStorage.setItem("central_Station_ID", this.central_Station_ID);
+    // localStorage.setItem("system_Id", this.system_Id);
+
+    // this.serviceIncluded = "y";
+    // localStorage.setItem("serviceIncluded", "y");
+    // this.incentiveEntryForm.controls["ServiceIncluded"].setValue("y")
+
+    // this.modalService.dismissAll();
   }
 
-  onClickNewDefaultSelection(installCompanyID:number,companyName: string, partnerCode: string) {
+  onClickNewDefaultSelection(installCompanyID: number,companyName: string, partnerCode: string) {
     this.clickedID = installCompanyID;
     this.clickedCompanyName = companyName;
     this.clickedPartnerCode = partnerCode;
@@ -842,11 +941,9 @@ export class IncentiveentryComponent implements OnInit {
       windowClass: 'my-class1250',
       ariaLabelledBy: 'modal-basic-title'
     });
-    //$("#messageModal").modal("show");
   }
 
   onSubmitIncentiveEntryMessage(form: FormGroup) {
-    //console.log('message')
     this.routeService.postPartnerAddNote(this.incentiveEntryMessageForm.value).subscribe(
       res => {
         //console.log(res)

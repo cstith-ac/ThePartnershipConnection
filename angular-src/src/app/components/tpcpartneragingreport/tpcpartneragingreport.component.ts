@@ -183,7 +183,15 @@ export class TpcpartneragingreportComponent implements OnInit {
       })
     }
     if(!this.sedonaContactEmail) {
-      console.log('use the regular stored procedure')
+      //console.log('use the regular stored procedure');
+      this.routeService.getTPCPartnerAgingReport().subscribe(
+        res => {
+          this.spinnerService.hide();
+          this.tpcPartnerAgingReport = res;
+          //this.tpcPartnerAgingReport = res.body;
+          this.gridData = res;
+        }
+      )
     }
 
     // this.routeService.getTPCPartnerAgingReport().subscribe(

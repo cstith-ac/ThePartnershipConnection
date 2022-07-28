@@ -17,16 +17,16 @@ namespace WebAPI_Affiliated.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetRecentHistory(string id)
         {
-            //var url = "https://sb.alertmessage.com/report/recent/" + id;
             var url = "https://sb.alertmessage.com/";
 
-            var access_token = "c807dbfcef99ab6ff486eecb2ffd7a07d864cfd6";
+            //var access_token = "c807dbfcef99ab6ff486eecb2ffd7a07d864cfd6";
 
             var client = new RestClient(url);
 
             var request = new RestRequest("report/recent/" + id, Method.GET);
 
-            request.AddHeader("Authorization", "Bearer " + access_token);
+            //request.AddHeader("Authorization", "Bearer " + access_token);
+            request.AddHeader("Authorization", "Bearer " + Global.access_token);
 
             request.AddHeader("Content-Type", "application/json");
 

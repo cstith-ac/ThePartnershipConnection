@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CancelquelistComponent } from './cancelqueuelist.component';
+import { CancelqueuelistComponent } from './cancelqueuelist.component';
 
 describe('CancelqueuelistComponent', () => {
   let component: CancelqueuelistComponent;

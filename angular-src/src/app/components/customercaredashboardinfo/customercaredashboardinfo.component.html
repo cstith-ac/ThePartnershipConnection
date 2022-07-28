@@ -116,7 +116,9 @@
                 </li>
                 <!-- Service Ticket - Last Service Visit -->
                 <li class="list-group-item padding-left0" style="padding-top:8px;padding-bottom:8px;">
-                    <a class="text-blue mx-auto mb-0" id="showTicketInfoModal" (click)="showTicketInfoModal()"> <i class="ni ni-fat-add" id="add-icon-blue"></i> </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>
+                    <a class="text-blue mx-auto mb-0" id="showTicketInfoModal" (click)="showTicketInfoModal()"> 
+                        <i class="ni ni-fat-add" id="add-icon-blue"></i> 
+                    </a> <span id="lastVisitInfo">{{ item.lastVisitInfo }}</span>
                 </li>
                 <li class="list-group-item" style="padding-top:8px;padding-bottom:8px;">The customer has had <span id="ticketsLastSixMonths">{{ item.ticketsLastSixMonths }}</span> service tickets in the last 6 months</li>
             </ul>

@@ -129,14 +129,26 @@ export class CancelqueuelistComponent implements OnInit {
           this.cancelQueueList = res;
           this.gridData = res;
   
-          for(var i = 0; i < this.cancelQueueList.length; i++) {
-            //console.log(this.cancelQueueList[i].full_Cancel)
-            if(this.cancelQueueList[i].full_Cancel === 'Y') {
-              this.cancelQueueList[i].full_Cancel = 'Full'
+          for(var i = 0; i < this.gridData.length; i++) {
+            //console.log(this.gridData[i].full_Cancel)
+            var formatter = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 2
+            });
+
+            this.gridData[i].cancelledRMR = formatter.format(this.gridData[i].cancelledRMR);
+            this.gridData[i].balance_Of_Contract = formatter.format(this.gridData[i].balance_Of_Contract);
+
+            if(this.gridData[i].full_Cancel === 'Y') {
+              this.gridData[i].full_Cancel = 'Full'
             }
-            if(this.cancelQueueList[i].full_Cancel === 'N') {
-              this.cancelQueueList[i].full_Cancel = 'Partial'
+            if(this.gridData[i].full_Cancel === 'N') {
+              this.gridData[i].full_Cancel = 'Partial'
             }
+
+            this.gridData[i].effective_Date = this.datePipe.transform(this.gridData[i].effective_Date,'MMM dd, yyyy');
+            this.gridData[i].notice_Date = this.datePipe.transform(this.gridData[i].notice_Date,'MMM dd, yyyy');
           }
         }
       )

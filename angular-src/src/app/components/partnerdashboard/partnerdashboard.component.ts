@@ -247,10 +247,7 @@ export class PartnerdashboardComponent implements OnInit {
             console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
             console.log(this.partnerLandingPage[i].attritionLastMonth)
             console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
-            // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
-            // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
-            // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
-            // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
+
             this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
             this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
             this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);

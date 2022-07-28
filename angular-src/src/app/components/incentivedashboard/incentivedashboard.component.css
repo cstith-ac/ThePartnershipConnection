@@ -119,6 +119,9 @@
 /*max-width: 1250px !important;*/
 /* width: 1450px;
 } */
+.marginLeft10px {
+  margin-left: 0.625rem;
+}
 .radio-label-vertical-wrapper {
   padding-bottom: 13px;
   position: relative;

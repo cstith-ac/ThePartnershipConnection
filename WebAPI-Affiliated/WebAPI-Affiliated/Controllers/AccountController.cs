@@ -20,13 +20,14 @@ namespace WebAPI_Affiliated.Controllers
         {
             var url = "https://sb.alertmessage.com/acct/" + id;
 
-            var access_token = "0b1f099c94a6dd285735ac97c9d841a54cedb916";
+            //var access_token = "0b1f099c94a6dd285735ac97c9d841a54cedb916";
 
             var client = new RestClient(url);
 
             var request = new RestRequest("acct/"+ id, Method.GET);
 
-            request.AddHeader("Authorization", "Bearer " + access_token);
+            //request.AddHeader("Authorization", "Bearer " + access_token);
+            request.AddHeader("Authorization", "Bearer " + Global.access_token);
 
             request.AddHeader("Content-Type", "application/json");
 

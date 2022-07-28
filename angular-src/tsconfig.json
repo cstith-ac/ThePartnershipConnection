@@ -23,6 +23,7 @@
       "dom"
     ],
     "types": [
+      //"jest",
       "node"
     ]
   },

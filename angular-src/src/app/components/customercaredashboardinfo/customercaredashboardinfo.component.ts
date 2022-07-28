@@ -122,9 +122,7 @@ export class CustomercaredashboardinfoComponent implements OnInit {
         this.rmName = this.rmName[0];
         this.rmid = this.rmid[0];
 
-        // console.log(this.rmName[0]);
-        // console.log(this.rmid[0]);
-        //this.spinnerService.hide();
+        //console.log(this.lastServiceTicketId); //object
       },
       err => {
         console.log(err);
