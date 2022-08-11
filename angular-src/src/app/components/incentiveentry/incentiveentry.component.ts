@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -157,7 +158,8 @@ export class IncentiveentryComponent implements OnInit {
     private router: Router,
     public fb: FormBuilder,
     private el: ElementRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public datePipe: DatePipe
   ) {
     this.installCompanyID = JSON.parse(localStorage.getItem('installCompanyID'));
    }
@@ -367,8 +369,12 @@ export class IncentiveentryComponent implements OnInit {
 
   onSubmit(form: FormGroup) {
 
-    if(this.incentiveEntryForm.get('InvoiceTotal').value === 0) {
+    //console.log(typeof this.incentiveEntryForm.get('InvoiceTotal').value); // this is a string, if 0.00 entered
 
+    if(this.incentiveEntryForm.get('InvoiceTotal').value === 0 || this.incentiveEntryForm.get('InvoiceTotal').value === '0.00') {
+
+      //console.log(this.incentiveEntryForm.get('InvoiceTotal').value);
+      
       if(confirm('You are about to create a $0 invoice. Are you sure?') === true) {
         this.submitted = true;
 
@@ -664,6 +670,7 @@ export class IncentiveentryComponent implements OnInit {
     localStorage.removeItem("centralStation");
     localStorage.removeItem("panel_Type_Id");
     localStorage.removeItem("central_Station_ID");
+    localStorage.removeItem("system_Id");
 
     this.mySelection = [];
   }
@@ -718,24 +725,33 @@ export class IncentiveentryComponent implements OnInit {
         this.currentUserRole = res.afaRole;
 
         if(this.currentUserRole !== 5) {
-          // console.log('dbo.PartnerServiceListingExtendedAC')
           // use this.currentACUserEmail and this.installCompanyID as params for the GET request
           this.routeService.getPartnerServiceListingExtendedAC(this.currentACUserEmail,this.installCompanyID).subscribe(
             res => {
               if(res) {
                 this.spinnerService.hide();
               }
-              // console.log(res.body)
-              this.partnerServiceListingExtendedAC = res.body;
+
+              this.partnerServiceListingExtended = [].concat(res); //object
+
+              this.gridData = [].concat(res.body);
+
+              for(let i = 0; i < this.gridData.length; i++) {
+                this.gridData[i].creation_Date = this.datePipe.transform(this.gridData[i].creation_Date, 'MMM dd, yyyy');
+              }
+
+              //this.partnerServiceListingExtendedAC = res.body;
               // for(let i = 0; i < this.partnerServiceListingExtendedAC.length; i++) {
               //   console.log(this.partnerServiceListingExtendedAC[i].ticket_Number)
               // }
+            },
+            err => {
+              console.log(err);
             }
           )
         }
     
         if(this.currentUserRole == 5) {
-          // console.log('dbo.PartnerServiceListingExtended')
           this.routeService.getPartnerServiceListingExtended().subscribe(
             res => {
               if(res) {
@@ -744,6 +760,10 @@ export class IncentiveentryComponent implements OnInit {
               this.partnerServiceListingExtended = [].concat(res); //object
 
               this.gridData = [].concat(res);
+
+              for(let i = 0; i < this.gridData.length; i++) {
+                this.gridData[i].creation_Date = this.datePipe.transform(this.gridData[i].creation_Date, 'MMM dd, yyyy');
+              }
             }
           )
         }
@@ -766,7 +786,7 @@ export class IncentiveentryComponent implements OnInit {
     this.customer_Id = customer_Id;
     this.service_Ticket_Id = service_Ticket_Id;
     this.ticket_NumberDetails = ticket_Number;
-    this.creation_Date = creation_Date;
+    this.creation_Date = creation_Date; // datePipe
     this.problem_Code = problem_Code;
     this.contactName = contactName;
     this.contactPhone = contactPhone;

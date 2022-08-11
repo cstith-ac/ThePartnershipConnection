@@ -115,7 +115,7 @@
             <div class="modal-body pt-0">
                 <div class="card" id="afa-card">
                     <div class="card-body" id="partnerWindow">
-                        <div class="row" *ngFor="let item of partnerInformation">
+                        <div class="row" *ngFor="let item of partnerInformationNew">
                             <div class="col-md-5">
                                 <div>
                                     <h2 class="lead font-weight900 mt-0" id="partnerCode">{{ item.partnerCode }}</h2>
@@ -146,7 +146,7 @@
                           <h2 class="dark-blue-text mb-0">Primary Contacts</h2>
                         </div>
                         <div class="row table-responsive">
-                          <table class="table table-borderless" *ngIf="partnerInformation">
+                          <table class="table table-borderless" *ngIf="partnerInformationNew">
                               <thead>
                                   <tr></tr>
                               </thead>

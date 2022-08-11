@@ -46,6 +46,15 @@ namespace WebAPI.Controllers
                 string userId = User.Claims.First(c => c.Type == "UserID").Value;
                 var user = await _userManager.FindByIdAsync(userId);
                 var c = user.UserName;
+
+                using var cmd = db.Database.GetDbConnection().CreateCommand();
+                //cmd.CommandText = "dbo.PartnerLandingPage";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandTimeout = 3600;
+                //if (cmd.Connection.State != System.Data.ConnectionState.Open) cmd.Connection.Open();
+                //cmd.Parameters.Add(new SqlParameter("@UserEmail", System.Data.SqlDbType.VarChar) { Value = c });
+                //return await cmd.ExecuteNonQueryAsync();
+
                 var result = await db.GetPartnerLandingPages.FromSqlRaw("EXECUTE dbo.PartnerLandingPage @UserEmail = '" + c + "'").ToListAsync();
 
                 List<PartnerLandingPage> Lst = result.Select(s => new PartnerLandingPage

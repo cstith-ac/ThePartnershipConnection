@@ -37,6 +37,11 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<Object> GetListPanelTypes(string id1)
         {
+            if (id1 == "undefined")
+            {
+                id1 = "1";
+            }
+
             var panels = new List<ListPanelTypes>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))

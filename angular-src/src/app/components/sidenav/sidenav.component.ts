@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router, UrlSegment } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { RouteService } from '../../services/route.service';
-import { PInformation } from 'src/app/models/pinformation';
+//import { PInformation } from 'src/app/models/pinformation';
 import { PInformationNew } from 'src/app/models/pinformationnew';
 import { ContactList } from 'src/app/models/contactlist';
 import { ContactListAdditional } from 'src/app/models/contactlistadditional';
@@ -28,7 +28,7 @@ export class SidenavComponent implements OnInit {
   currentApplicationVersion = environment.appVersion;
 
   user:any=Object;
-  partnerInformation: PInformation[];
+  //partnerInformation: PInformation[];
   partnerInformationNew: PInformationNew[];
   contactList: ContactList[];
   contactListAdditional: ContactListAdditional[];
@@ -185,12 +185,12 @@ export class SidenavComponent implements OnInit {
       }
     )
 
-    this.routeService.getPartnerInformation().subscribe(
-      res => {
-        //console.log(res);
-        this.partnerInformation = res;
-      }
-    )
+    // this.routeService.getPartnerInformation().subscribe(
+    //   res => {
+    //     //console.log(res);
+    //     this.partnerInformation = res;
+    //   }
+    // )
 
     this.routeService.getPartnerInformationNew().subscribe(
       res => {

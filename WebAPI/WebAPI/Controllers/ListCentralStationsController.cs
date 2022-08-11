@@ -37,6 +37,11 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<Object> GetListCentralStations(string id1)
         {
+            if (id1 == "undefined")
+            {
+                id1 = "1";
+            }
+
             var list = new List<ListCentralStations>();
 
             await using (SqlConnection connection = new SqlConnection(connectionString))

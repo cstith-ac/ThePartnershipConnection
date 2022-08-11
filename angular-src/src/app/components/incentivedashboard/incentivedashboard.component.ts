@@ -1004,11 +1004,25 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.systemType = localStorage.getItem('systemType');
     this.system_Id = localStorage.getItem('system_Id');
     this.panelTypeID = localStorage.getItem('panelType');
+    if(this.panelTypeID) {
+      this.routeService.getListPanelTypes(parseInt(localStorage.getItem('panel_Type_Id'))).subscribe(
+        res => {
+          this.listpaneltypes = res;
+        }
+      )
+    }
     this.panel_Location = localStorage.getItem('panel_Location');
     if(this.panel_Location) {
       this.panelLocationPreSelected = true;
     }
     this.centralStationID = localStorage.getItem('centralStation');
+    if(this.centralStationID) {
+      this.routeService.getListCentralStations(parseInt(localStorage.getItem('central_Station_ID'))).subscribe(
+        res => {
+          this.listcentralstations = res;
+        }
+      )
+    }
 
     // if the user is an employee, set the formcontrol fields InvoiceUpload and SiteVisitUpload valid
     setTimeout(() => {
@@ -1716,7 +1730,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       tap(res => {
         this.customerSearch = !this.customerSearch;
         let x = res.forEach(x =>{
-          //console.log(x.customerID)
+          console.log(x.customerID)
           this.id = x.customerID;
         });
       }),
