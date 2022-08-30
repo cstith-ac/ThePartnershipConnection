@@ -34,6 +34,15 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertIncentive_Add_FinishResult([FromBody] Incentive_Add_Finish incentive_Add_Finish)
         {
+            //try
+            //{
+            //    return Ok(await _repository.InsertIncentive_Add_FinishResult(incentive_Add_Finish));
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, $"Something went wrong in the {nameof(InsertIncentive_Add_FinishResult)}");
+            //    return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            //}
             return Ok(await _repository.InsertIncentive_Add_FinishResult(incentive_Add_Finish));
         }
     }

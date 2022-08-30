@@ -7,6 +7,7 @@ import { MustMatch } from 'src/app/_helpers/must-match.validators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ValidateService } from '../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
 
@@ -30,6 +31,7 @@ export class AdmineditComponent implements OnInit {
     private fb: FormBuilder,
     private validateService: ValidateService,
     private flashMessage: FlashMessagesService,
+    private spinnerService: NgxSpinnerService,
     public jwtHelper: JwtHelperService,
     private router: Router
   ) { }
@@ -81,34 +83,49 @@ export class AdmineditComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    this.submitted = true;
+    this.spinnerService.show();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
 
-    // console.log('First Name: ', form.value.firstName);
-    // console.log('Last Name: ', form.value.lastName);
-    // console.log('Password: ', form.value.password);
-    // console.log('Password: ', form.value.confirmPassword);
+    this.submitted = true;
 
     if(this.updateAspNetUserForm.invalid) {
       return;
     }
     
     this.routeService.updatePassword(this.updateAspNetUserForm.value).subscribe(data => {
-      //console.log(data);
-      for(let key in data) {
-        // console.log(data[key])
-        if(data[key]===true) {
-          this.flashMessage.show('Password updated successfully', {cssClass:'alert-success', timeout: 6000});
-          this.onReset();
-        } else if (data[key]===false) {
-          this.flashMessage.show('There was an error', {
-            cssClass:'alert-danger', timeout: 6000
-          });
-        }
+      console.log(data.status);
+      console.log(data.statusText);
+      // return;
+      if(data.status === 200) {
+        console.log('success');
+        this.flashMessage.show('Information updated successfully', { cssClass: 'alert-success', timeout: 6000 });
+        this.onReset();
+        setTimeout(() => {
+          this.spinnerService.hide();
+          this.router.navigate(['admin'])
+        }, 6000);
+      } else if (data.status !== 200) {
+        console.log('error');
+        this.flashMessage.show('There was an error with your submission', { cssClass: 'alert-danger', timeout: 6000 });
+        this.spinnerService.hide();
+        this.onReset();
       }
       //console.log(data);
-      // get the response. if the response is 200 OK, show notification
-      // this.flashMessage.show('Password updated successfully', {cssClass:'alert-success', timeout: 3000});
+      // for(let key in data) {
+      //   // console.log(data[key])
+      //   if(data[key] === true) {
+      //     this.flashMessage.show('Password updated successfully', {cssClass:'alert-success', timeout: 6000});
       //     this.onReset();
+      //     this.router.navigate(['admin']);
+      //   } else if (data[key]===false) {
+      //     this.flashMessage.show('There was an error', {
+      //       cssClass:'alert-danger', timeout: 6000
+      //     });
+      //   }
+      // }
     });
 
     // this.routeService.updateUser(this.updateAspNetUserForm.value).subscribe(data => {

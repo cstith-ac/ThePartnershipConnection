@@ -155,8 +155,11 @@ export class CalltoactionlistingComponent implements OnInit {
     console.log(this.callToActionListingMemoForm.value)
     this.routeService.postPartnerAddNote(this.callToActionListingMemoForm.value).subscribe(
       res => {
-        console.log(res)
+        //console.log(res);
+      
         $("#memoModal").modal("hide");
+
+        this.callToActionListingMemoForm.get('Memo').setValue('');
         //$("#messageModal").modal("hide");
       },
       error => console.log('error: ', error)

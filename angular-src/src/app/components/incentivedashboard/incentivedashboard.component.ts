@@ -1228,7 +1228,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
 
-      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+      // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+      this.lineItemSubtotal = +(this.recurring + this.equipmentAndMaterials + this.laborCharges).toFixed(12);
 
       if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
         //console.log('the line items and tax don\'t equal the total');
@@ -1253,7 +1254,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(this.user.afaRole === 5) {
 
-      this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+      // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
+      this.lineItemSubtotal = +(this.recurring + this.equipmentAndMaterials + this.laborCharges).toFixed(12);
+
+      console.log(this.lineItemSubtotal + this.partnerTaxAmount);
 
       if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
         //console.log('the line items and tax don\'t equal the total');

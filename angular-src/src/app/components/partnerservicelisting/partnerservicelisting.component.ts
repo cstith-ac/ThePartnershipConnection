@@ -290,6 +290,8 @@ export class PartnerservicelistingComponent implements OnInit {
         //console.log(res)
         $("#detailsModal").modal("hide");
         $("#memoModal").modal("hide");
+
+        this.partnerServiceListingForm.get('Memo').setValue('');
       },
       error => console.log('error: ', error)
     )

@@ -26,6 +26,7 @@ namespace WebAPI.Controllers
         TPC_DevContext db = new TPC_DevContext();
 
         public PartnerLandingPageXController(
+            //ILoggerFactory
             ILogger<PartnerLandingPageXController> logger,
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
@@ -41,7 +42,21 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<Object> GetPartnerLandingPageXResult(string id1, string id2)
         {
-            return await db.GetPartnerLandingPageXResult.FromSqlRaw("EXECUTE dbo.PartnerLandingPageX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
+            //using var cmd = db.Database.GetDbConnection().CreateCommand();
+            //cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            //cmd.CommandTimeout = 3600;
+
+            //try
+            //{
+            //    return await db.GetPartnerLandingPageXResult.FromSqlRaw("EXECUTE dbo.PartnerLandingPageX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, $"Something went wrong in the {nameof(GetPartnerLandingPageXResult)}");
+            //    return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            //}
+
+            return await db.GetPartnerLandingPageXResult.FromSqlRaw("EXECUTE dbo.ooPartnerLandingPageX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
         }
     }
 }

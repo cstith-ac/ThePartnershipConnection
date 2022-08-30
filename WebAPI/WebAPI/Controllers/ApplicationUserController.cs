@@ -54,7 +54,6 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

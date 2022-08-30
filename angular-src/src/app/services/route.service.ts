@@ -87,7 +87,7 @@ export class RouteService {
   }
 
   // Admin and Super Admin Only - Currently used to update a password ONLY
-  updatePassword(resetPassord: ResetPassword):  Observable<ResetPassword>{
+  updatePassword(resetPassord: ResetPassword):  Observable<HttpResponse<any>>{
     this.loadToken();
     let httpOptions = { 
       headers: new HttpHeaders({ 
@@ -96,7 +96,9 @@ export class RouteService {
         'Authorization':'Bearer ' + this.authToken 
       }) 
     };
-    return this.http.post<ResetPassword>(this.baseUrl + '/api/Administration/ResetPassword', resetPassord, httpOptions);
+    return this.http.post<any>(this.baseUrl + '/api/Administration/ResetPassword', resetPassord, httpOptions).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   //This will be used in the future by an admin or super admin to update an entire profile of a user

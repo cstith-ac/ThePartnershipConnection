@@ -161,6 +161,10 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ILogger<Startup> logger)
         {
+            //ILoggerFactory loggerFactory
+            //loggerFactory.AddFile("Logs/webAPILog--{Date}.txt");
+            //loggerFactory.addAzureWebAppDiagnostics();
+
             logger.LogInformation("Current Environment is {environmentName}", env.EnvironmentName);
             if (env.IsDevelopment())
             {
@@ -168,14 +172,6 @@ namespace WebAPI
             }
 
             app.UseCors("AllowCors");
-
-            //app.UseCors(builder =>
-            //    builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
-            //    .AllowAnyHeader()
-            //    .AllowAnyMethod()
-            //);
-
-            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

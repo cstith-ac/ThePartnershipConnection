@@ -84,11 +84,17 @@ export class AuthService {
     return this.http.get<any>(this.baseUrl + '/api/UserProfile', httpOptions);
   }
 
-  updateUserProfile(user: UserProfile): Observable<UserProfile> {
+  updateUserProfile(user: UserProfile): Observable<HttpResponse<any>> {
     let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization':'Bearer '+this.authToken }) 
+      headers: new HttpHeaders({ 
+        'Content-Type': 'application/json', 
+        'Authorization':'Bearer '+this.authToken 
+      }),
+      observe: 'response' as 'body'
     };
-    return this.http.put<UserProfile>(`${this.baseUrl}/api/UserProfile/${user.id}`, user, httpOptions);
+    return this.http.put<any>(`${this.baseUrl}/api/UserProfile/${user.id}`, user, httpOptions).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   //not working. token and user are set from login component

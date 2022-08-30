@@ -321,7 +321,8 @@ export class PartnerinvoicelistingComponent implements OnInit {
     this.activeTab = newTab;
   }
 
-  onOpenPartnerInvoiceListingModal(e, ticketID: number, incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string, csAccount: string) {
+  public onOpenPartnerInvoiceListingModal(e, ticketID: number, incentiveID: number, vendorInvoiceNumber: string, invoiceAmount: string, invoiceDate: string, approvedAmount: string, dateEntered: string, heldReason: string, checkNumber: string, checkDate: string, amountPaid: string, creditAmount: string, creditDate: string, determination: string, customer_Number: string, customer_Name: string, relevantMemo: string, relevantComment: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, ticketNumber: string, csAccount: string) {
+    console.log(e.deselectedRows)
     $("#detailsModal").modal("show");
 
     e.selectedRows.forEach((x) => {
@@ -395,11 +396,15 @@ export class PartnerinvoicelistingComponent implements OnInit {
   }
 
   onSubmitMessage(form: FormGroup) {
+    // this.partnerInvoiceListingForm.get('Memo').setValue('');
+    // return;
 
     this.routeService.postPartnerAddNote(this.partnerInvoiceListingForm.value).subscribe(
       res => {
         $("#detailsModal").modal("hide");
         $("#memoModal").modal("hide");
+
+        this.partnerInvoiceListingForm.get('Memo').setValue('');
       },
       error => console.log('error: ', error)
     )

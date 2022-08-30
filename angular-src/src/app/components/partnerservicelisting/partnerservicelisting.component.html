@@ -76,7 +76,7 @@
             [selectable]="true"
             (selectionChange)="onOpenPartnerServiceListingModal($event, service_Ticket_Id, ticket_Number, creation_Date, problem_Code, contactName, contactPhone, acContact, sitePhone, acContactEmail, customer_Number, customer_Name, customerRMR, customer_Since, collectionQueue, cancelStatus, business_Name, comResStatus, address_1, address_2, address_3, city, state, zipCode, status3G, csAccount, systemType, panelType, centralStation, panel_Location, customerComments)"
             kendoGridSelectBy="service_Ticket_Id"
-            [selectedKeys]="mySelection"
+            [(selectedKeys)]="mySelection"
             #dateTime
             class="cursorPointer"
         >

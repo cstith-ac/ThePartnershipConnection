@@ -7,6 +7,7 @@ import { MustMatch } from 'src/app/_helpers/must-match.validators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ValidateService } from '../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { JwtHelperService } from '@auth0/angular-jwt';
 declare var $: any;
 
@@ -30,6 +31,7 @@ export class AdminedituserComponent implements OnInit {
     private fb: FormBuilder,
     private validateService: ValidateService,
     private flashMessage: FlashMessagesService,
+    private spinnerService: NgxSpinnerService,
     public jwtHelper: JwtHelperService,
     private router: Router
   ) { }
@@ -77,27 +79,49 @@ export class AdminedituserComponent implements OnInit {
   }
 
   onSubmit(form:FormGroup) {
+    this.spinnerService.show();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
     this.submitted = true;
-    
-    // console.log('ID: ', form.value.id);
-    // console.log('UserName: ', form.value.userName);
-    // console.log('Email: ', form.value.email);
-    // console.log('First Name: ', form.value.firstName);
-    // console.log('Last Name: ', form.value.lastName);
-    // console.log('Primary Phone Number: ', form.value.phoneNumber);
-    // console.log('Cell Phone: ', form.value.cellPhoneNumber1);
-    // console.log('Alternate Email: ', form.value.altEmail);
-    // console.log('Alarm Connections Employee: ', form.value.afaEmployee);
-    // console.log('Alarm Connections Role: ', form.value.afaRole);
-    // console.log('Remove Splash: ', form.value.removeSplash)
 
     if(this.updateAspNetUserProfileForm.invalid) {
       return;
     }
 
     this.authService.updateUserProfile(this.updateAspNetUserProfileForm.value).subscribe(result => {
-      console.log(result)
+      if(result.status === 200) {
+        console.log('success');
+        this.flashMessage.show('Information updated successfully', { cssClass: 'alert-success', timeout: 6000 });
+          this.onReset();
+          setTimeout(() => {
+            this.spinnerService.hide();
+            this.router.navigate(['admin']);
+          }, 6000);
+      } else if (result.status !== 200) {
+        console.log('error');
+        this.flashMessage.show('There was an error in your submission', { cssClass: 'alert-danger', timeout: 6000 });
+        this.spinnerService.hide();
+        this.onReset();
+      }
+      // for(let key in result) {
+      //   if(result[key] === true) {
+      //     this.flashMessage.show('Information updated successfully', { cssClass: 'alert-success', timeout: 6000 });
+      //     this.onReset();
+      //     this.router.navigate(['admin']);
+      //   } else if (result[key] === false) {
+      //     this.flashMessage.show('There was an error in your submission', { cssClass: 'alert-danger', timeout: 6000 });
+      //   }
+      // }
+      console.log(result.body)
     })
+  }
+
+  onReset() {
+    this.submitted = false;
+    this.updateAspNetUserProfileForm.reset();
   }
 
 }

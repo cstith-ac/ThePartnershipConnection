@@ -1,0 +1,103 @@
+2022-08-19T11:33:17.2754179-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T11:33:17.2828979-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T11:33:17.2851597-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T12:53:05.0634944-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T12:53:05.0700564-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T12:53:05.0723612-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T12:53:45.8744638-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T12:53:45.8815858-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T12:53:45.8839911-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T12:53:48.5034440-04:00 8000001e-0004-ff00-b63f-84710c7967bb [ERR] Something went wrong in the GetPartnerLandingPages (4cde4f2c)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.pppPartnerLandingPage'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at WebAPI.Controllers.PartnerLandingPageController.GetPartnerLandingPages() in C:\Users\CStith\source\code\project\WebAPI\WebAPI\Controllers\PartnerLandingPageController.cs:line 64
+ClientConnectionId:021ff2bf-b788-49bb-a64e-4303fe9b2ad8
+Error Number:2812,State:62,Class:16
+2022-08-19T13:16:17.3163153-04:00 80000020-0004-ff00-b63f-84710c7967bb [ERR] Something went wrong in the GetPartnerLandingPages (4cde4f2c)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.pppPartnerLandingPage'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at WebAPI.Controllers.PartnerLandingPageController.GetPartnerLandingPages() in C:\Users\CStith\source\code\project\WebAPI\WebAPI\Controllers\PartnerLandingPageController.cs:line 64
+ClientConnectionId:17b68133-3604-417d-acd7-c18079fada88
+Error Number:2812,State:62,Class:16
+2022-08-19T13:27:10.2179077-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T13:27:10.2254063-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T13:27:10.2296522-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T13:30:49.3211253-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T13:30:49.3273582-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T13:30:49.3295459-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T13:31:06.4719787-04:00 80000007-0002-ff00-b63f-84710c7967bb [ERR] Something went wrong in the GetPartnerLandingPageXResult (b618d914)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.ooPartnerLandingPageX'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at WebAPI.Controllers.PartnerLandingPageXController.GetPartnerLandingPageXResult(String id1, String id2) in C:\Users\CStith\source\code\project\WebAPI\WebAPI\Controllers\PartnerLandingPageXController.cs:line 51
+ClientConnectionId:2f4736c6-ba98-4ec5-8970-9d25c6730803
+Error Number:2812,State:62,Class:16
+2022-08-19T13:32:40.9381658-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T13:32:40.9475380-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T13:32:40.9502951-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)
+2022-08-19T13:32:56.7320800-04:00 8000000f-000a-fd00-b63f-84710c7967bb [ERR] Something went wrong in the GetPartnerLandingPages (4cde4f2c)
+Microsoft.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.oppPartnerLandingPage'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(DbContext _, Boolean result, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at WebAPI.Controllers.PartnerLandingPageController.GetPartnerLandingPages() in C:\Users\CStith\source\code\project\WebAPI\WebAPI\Controllers\PartnerLandingPageController.cs:line 64
+ClientConnectionId:3bddc739-f035-4650-969d-c40094f1fae5
+Error Number:2812,State:62,Class:16
+2022-08-19T14:55:13.0616224-04:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2022-08-19T14:55:13.0775949-04:00  [INF] Hosting environment: "Development" (c3307c92)
+2022-08-19T14:55:13.0843589-04:00  [INF] Content root path: "C:\Users\CStith\source\code\project\WebAPI\WebAPI" (b5d60022)

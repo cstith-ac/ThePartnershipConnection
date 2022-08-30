@@ -75,7 +75,7 @@
             [selectable]="true"
             (selectionChange)="onOpenPartnerInvoiceListingModal($event, ticketID, incentiveID, vendorInvoiceNumber, invoiceAmount, invoiceDate, approvedAmount, dateEntered, heldReason, checkNumber, checkDate, amountPaid, creditAmount, creditDate, determination, customer_Number, customer_Name, relevantMemo, relevantComment, address_1, address_2, address_3, city, state, zipCode, ticketNumber, csAccount)"
             kendoGridSelectBy="incentiveID"
-            [selectedKeys]="mySelection"
+            [(selectedKeys)]="mySelection"
             #dateTime
             class="cursorPointer"
         >
@@ -111,6 +111,7 @@
             <kendo-grid-column field="dateEntered" title="Date Entered"></kendo-grid-column>
             <kendo-grid-column field="determination" title="Status"></kendo-grid-column>
             <kendo-grid-column field="approvedAmount" title="Approved Amount"></kendo-grid-column>
+            <kendo-grid-column field="checkNumber" title="Check Number"></kendo-grid-column>
         </kendo-grid-column-group>
         <kendo-grid-excel fileName="partnerinvoicelisting" [fetchData]="allData">
         </kendo-grid-excel>

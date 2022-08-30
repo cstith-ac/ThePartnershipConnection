@@ -356,18 +356,17 @@ export class PartnerdashboardComponent implements OnInit {
         }, (err: HttpErrorResponse) => {
           alert('There was an error retrieving your requested data.');
           this.spinnerService.hide();
+          localStorage.clear();
+          this.router.navigate(['/login']);
         }
       )
     }
   }
 
   removeDomainFromEmail() {
-    // console.log('removed');
-
     this.firstName = '';
     let remove_after = this.sedonaContactEmail.indexOf('@');
     let result = this.sedonaContactEmail.substring(0, remove_after);
-    // console.log(result);
     this.firstName = result;
   }
 
@@ -394,7 +393,7 @@ export class PartnerdashboardComponent implements OnInit {
 
   getBackgroundColor(progressPercent) {
     let backgroundColor = 'brown'
-    if(this.threegConversionprogress<10){
+    if(this.threegConversionprogress < 10){
       return 'success'
     }
   }

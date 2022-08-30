@@ -319,6 +319,8 @@ export class TpcpartneragingreportComponent implements OnInit {
         //console.log(res)
         $("#detailsModal").modal("hide");
         $("#memoModal").modal("hide");
+
+        this.tpcPartnerAgingReportForm.get('Memo').setValue('');
       },
       error => console.log('error: ', error)
     )

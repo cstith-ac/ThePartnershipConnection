@@ -264,9 +264,11 @@ export class CancelqueuelistComponent implements OnInit {
     //console.log(this.cancelQueueListForm.value)
     this.routeService.postPartnerAddNote(this.cancelQueueListForm.value).subscribe(
       res => {
-        //console.log(res)
+
         $("#detailsModal").modal("hide");
         $("#memoModal").modal("hide");
+
+        this.cancelQueueListForm.get('Memo').setValue('');
       },
       error => console.log('error: ', error)
     )
