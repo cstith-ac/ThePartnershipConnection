@@ -112,8 +112,8 @@ namespace WebAPI.Models
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                //optionsBuilder.UseSqlServer("Server=D1CH49N2,1433;Database=TPC_Dev;User ID=cstith;Password=TPC$123tpc");
-                optionsBuilder.UseSqlServer("Server=10.0.81.29;Database=TPC_Dev;User ID=cstith;Password=TPC$123tpc");
+                optionsBuilder.UseSqlServer("Server=D1CH49N2,1433;Database=TPC_Dev;User ID=cstith;Password=TPC$123tpc");
+                //optionsBuilder.UseSqlServer("Server=10.0.81.29;Database=TPC_Dev;User ID=cstith;Password=TPC$123tpc");
             }
         }
 

@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
             //    return StatusCode(500, "Internal Server Error. Please Try Again Later.");
             //}
 
-            return await db.GetPartnerLandingPageXResult.FromSqlRaw("EXECUTE dbo.ooPartnerLandingPageX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
+            return await db.GetPartnerLandingPageXResult.FromSqlRaw("EXECUTE dbo.PartnerLandingPageX @UserEmail = {0}, @AliasEmail = {1}", id1, id2).ToListAsync();
         }
     }
 }

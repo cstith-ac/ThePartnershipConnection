@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpEventType } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { share, shareReplay } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 //import 'rxjs/add/operator/map';
-import { throwError } from 'rxjs';
+//import { throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Router, UrlSegment } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -21,6 +22,7 @@ import { Incentive_ADD_Finish } from '../models/incentiveaddfinish';
 import { CustomerSearchMatch } from '../models/customersearchmatch';
 import { PartnerAddNote } from '../models/partneraddnote';
 import { PartnerInvoiceListingX } from '../models/partnerinvoicelistingx';
+import { DashboardInfoS } from '../models/dashboardinfos';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +41,8 @@ export class RouteService {
   //customerDocumentADD: Customer_Document_ADD[] = [];
   incentiveAddFinish: Incentive_ADD_Finish[] = [];
   partnerInvoiceListingX: PartnerInvoiceListingX[] = [];
+
+  someCustomerCareDashboardInfoSObservable: Observable<DashboardInfoS> | undefined;
 
   baseUrl = environment.baseUrl;
 
@@ -146,13 +150,30 @@ export class RouteService {
 
   getCustomerCareDashboardInfoS(): Observable<any> {
     this.loadToken();
-    let httpOptions = { 
-      headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authToken
+      })
     };
-    return this.http.get<any>(this.baseUrl + '/api/CustomerCareDashboardInfoS', httpOptions).pipe(
-      catchError(this.errorHandler)
-    )
+    if(this.someCustomerCareDashboardInfoSObservable) {
+      return this.someCustomerCareDashboardInfoSObservable;
+    } else {
+      this.someCustomerCareDashboardInfoSObservable = this.http.get<any>(this.baseUrl + '/api/CustomerCareDashboardInfoS', httpOptions).pipe(share());
+
+      return this.someCustomerCareDashboardInfoSObservable;
+    }
   }
+
+  // getCustomerCareDashboardInfoS(): Observable<any> {
+  //   this.loadToken();
+  //   let httpOptions = { 
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json','Authorization':'Bearer '+this.authToken }) 
+  //   };
+  //   return this.http.get<any>(this.baseUrl + '/api/CustomerCareDashboardInfoS', httpOptions).pipe(
+  //     catchError(this.errorHandler)
+  //   )
+  // }
 
   getCustomer3GListing(): Observable<any> {
     this.loadToken();

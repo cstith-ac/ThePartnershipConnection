@@ -19,7 +19,7 @@
                 <span id="customerName" style="font-size:1.3rem;font-weight:700">{{ item.customerName }}</span>
             </div>
             <div class="col-sm-1">
-                <span *ngIf="item.specialFlag === '3G'" else non3GBlock>
+                <span *ngIf="item.specialFlag" else non3GBlock>
                     <!-- Open Special Flag 3G Modal -->
                     <h2 class="special-flag-text" id="specialFlag" (click)="open3GModal()" [ngClass]="'underlineDashed'">{{ item.specialFlag }}</h2>
                 </span>

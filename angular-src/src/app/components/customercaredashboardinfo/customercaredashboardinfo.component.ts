@@ -109,6 +109,7 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     // setTimeout(() => {
     //   this.spinnerService.hide();
     // }, 2000)
+    
     this.routeService.getCustomerCareDashboardInfoS().subscribe(
       res => {
         if(res) {
@@ -128,6 +129,12 @@ export class CustomercaredashboardinfoComponent implements OnInit {
         console.log(err);
       }
     )
+
+    // const ob1$ = this.routeService.getCustomerCareDashboardInfoS();
+
+    // ob1$.subscribe((d) => {
+    //   this.dashboardinfoS = d;
+    // })
   }
 
   refreshDashboard() {

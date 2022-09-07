@@ -492,6 +492,7 @@ export class SysteminfodetailComponent implements OnInit {
         this.cmsService.getContactList(this.site_no).subscribe(
           res => {
             // console.log(res);
+            this.loading = false;
             this.contactListData = res;
             // order by sequence #
             //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
@@ -571,6 +572,9 @@ export class SysteminfodetailComponent implements OnInit {
           this.contactListData = res;
         }
       )
+    }
+    else {
+      this.loading = false;
     }
   }
 

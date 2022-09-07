@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,6 +10,11 @@ export class AppComponent implements OnInit {
   title = 'angular-src';
 
   ngOnInit() {
-    console.log(environment.baseUrl)
+    if(isDevMode()) {
+      console.log('Development!');
+    } else {
+      console.log('Production!');
+    }
+    console.log(environment.baseUrl);
   }
 }
