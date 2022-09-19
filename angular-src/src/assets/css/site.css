@@ -28,6 +28,7 @@ for details on configuring this project to bundle and minify static web assets. 
 #afa-card-header {
   background-color: transparent;
   padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
 }
 
 #afa-bg {
@@ -127,10 +128,19 @@ a.navbar-brand {
   color: #2116bf;
 }
 
+.ml-25 {
+  margin-left: 25px;
+}
+
 .currentCustomerInvoiceRating-bg {
   background-color: #e8f8f4;
-  border: 1px solid #707070;
+  /* border: 1px solid #707070; */
   margin-bottom: 1rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  filter: drop-shadow(3px 0px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 0 2px rgba(0, 0, 0, 0.12))
+    drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 
 .currentCustomerInvoiceRating-bg .list-group-item {
@@ -550,7 +560,12 @@ h6 {
 .serviceInfo-bg {
   background-color: #edefd0;
   /*margin-top: 1rem;*/
-  border: 1px solid #707070;
+  /*border: 1px solid #707070;*/
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  filter: drop-shadow(3px 0px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 0 2px rgba(0, 0, 0, 0.12))
+    drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 
 .serviceInfo-bg .list-group-item {
@@ -575,9 +590,20 @@ h6 {
   background-color: #ebac40;
 }
 
+.systemInfo {
+  padding-right: 24px;
+  padding-left: 10px;
+  width: 97%;
+}
+
 .system-info-border {
-  border: 1px solid #707070;
-  border-radius: 0;
+  /* border: 1px solid #707070;
+  border-radius: 0; */
+  border-radius: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  filter: drop-shadow(3px 0px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(1px 0 2px rgba(0, 0, 0, 0.12))
+    drop-shadow(1px 0 1px rgba(0, 0, 0, 0.14));
 }
 
 #findAlternateModal {

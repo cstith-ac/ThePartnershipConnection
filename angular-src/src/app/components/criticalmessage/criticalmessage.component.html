@@ -1,6 +1,26 @@
-<div class="critical-message-container">
+<div class="card mt-5 ml-25">
+  <div class="card-header">
+    <ul id="tab-button">
+      <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Critical Message</a></li>
+      <li class="menu" (click)="toggleShow('tab-2')"><a href="#tab02">Last Note</a></li>
+  </ul>
+  </div>
+  <div class="card-body">
+    <div class="tabs-stage" [ngSwitch]="activeTab" *ngFor="let item of dashboardinfo">
+      <div id="tab-1" *ngSwitchCase="'tab-1'" [style.background-color]="'#f9f9a7'" [style.padding]="'.5em 1em 1em'">
+        <pre id="criticalMessage">
+          {{ item.criticalMessage }}
+          </pre>
+      </div>
+      <div id="tab-2" *ngSwitchCase="'tab-2'" [style.background-color]="'#f9f9a7'" [style.padding]="'.5em 1em 1em'">
+        <pre id="lastNote">
+          {{ item.lastNote }}
+      </pre>
+      </div>
+    </div>
+  </div>
 
-    <div class="tabs margin-top3" id="padding0">
+    <!-- <div class="tabs margin-top3" id="padding0">
         <div class="tab-button-outer">
             <ul id="tab-button">
                 <li class="menu" (click)="toggleShow('tab-1')"><a href="#tab01">Critical Message</a></li>
@@ -20,6 +40,6 @@
             </pre>
             </div>
           </div>
-    </div>
+    </div> -->
 
 </div>

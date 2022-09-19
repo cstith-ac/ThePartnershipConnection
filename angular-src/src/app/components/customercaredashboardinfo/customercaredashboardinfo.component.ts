@@ -160,7 +160,8 @@ export class CustomercaredashboardinfoComponent implements OnInit {
   }
 
   open3GModal() {
-    $("#threeGModal").modal("show");
+    //Removed per Glenn and Chris 09/09/2022
+    //$("#threeGModal").modal("show");
     console.log(this.basicUpgradeInfo);
   }
 

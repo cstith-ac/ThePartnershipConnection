@@ -1,4 +1,4 @@
-<div class="card shadow suggestedTopics-bg padding-bottom10">
+<div class="card shadow suggestedTopics-bg padding-bottom10 ml-25">
     <div class="card-header bg-transparent">
         <div class="row align-items-center">
             <div class="col">
@@ -6,13 +6,7 @@
             </div>
         </div>
     </div>
-    <!-- <div>
-        <ul id="suggestedTopics" class="list-group list-unstyled"></ul>
-    </div> -->
     <div class="inbox" *ngFor="let topic of suggestedtopics">
-        <!-- <span *ngIf="topic.prompt0 !== ''">
-            <div class="item">{{ suggestedtopic0 }}</div>
-        </span> -->
         <div class="item" *ngIf="topic.prompt0 !== ''">
             <input type="checkbox">
             <p class="p-0 ls-1">{{ suggestedtopic0 }}</p>

@@ -21,7 +21,7 @@
             <div class="col-sm-1">
                 <span *ngIf="item.specialFlag" else non3GBlock>
                     <!-- Open Special Flag 3G Modal -->
-                    <h2 class="special-flag-text" id="specialFlag" (click)="open3GModal()" [ngClass]="'underlineDashed'">{{ item.specialFlag }}</h2>
+                    <h2 class="special-flag-text" id="specialFlag">{{ item.specialFlag }}</h2>
                 </span>
                 <ng-template #non3GBlock>
                     <h2 class="special-flag-text" id="specialFlag">{{ item.specialFlag }}</h2>
@@ -32,9 +32,9 @@
             </div>
         </div>
     </div>
-    <div class="card-body padding-left15 padding-right0 padding-top0 padding-bottom0">
+    <div class="card-body padding-left15 padding-top0 padding-bottom0">
         <div class="currentCustomerInvoiceRating-bg note-padding">
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-sm-3">
                     <!--conditionally render customer rating-->
                     <div *ngIf="item.customerRatingValue === 0; else elseBlock">
@@ -125,7 +125,7 @@
         </div>
     </div>
 </div>
-<!-- Special Flag 3G Modal -->
+<!-- Special Flag 3G Modal --> <!--Removed per Glenn and Chris 09/09/2022 -->
 <div class="modal fade" id="threeGModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="maxWidth-900">
         <div class="modal-content">

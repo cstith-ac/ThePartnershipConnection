@@ -135,10 +135,10 @@
                                 <span id="city">{{ item.city }}</span>, <span id="state">{{ item.state }}</span>&nbsp;<span id="zipCode">{{ item.zipCode }}</span>
                             </div>
                             <div class="marginTopBottom-1rem text-right mr-2">
-                                <span id="phone1">{{ item.phone1 }}</span>
+                                <span id="phone1">{{ item.phone1 | phone }}</span>
                             </div>
                             <div class="marginTopBottom-1rem text-right mr-2">
-                                <span id="phone2">{{ item.phone2 }}</span>
+                                <span id="phone2">{{ item.phone2 | phone  }}</span>
                             </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                                   <tr id="contacts" *ngFor="let item of contactList">
                                     <td [style.padding-left]="'15px'">{{ item.title }}</td>
                                     <td>{{ item.contact_Name }}</td>
-                                    <td>{{ item.phone }}</td>
+                                    <td>{{ item.phone | phone }}</td>
                                     <td class="text-right pr-0"> <a href="mailto:{{ item.e_Mail }}">{{ item.e_Mail }}</a></td>
                                   </tr>
                               </tbody>
