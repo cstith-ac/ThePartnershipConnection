@@ -17,18 +17,19 @@ declare var $: any;
 @Component({
   selector: 'app-systeminfodetail',
   templateUrl: './systeminfodetail.component.html',
-  styleUrls: ['./systeminfodetail.component.css'],
-  //providers: [DatePipe]
+  styleUrls: ['./systeminfodetail.component.css']
 })
 export class SysteminfodetailComponent implements OnInit {
   loading:boolean = true;
-  //isValueNotPresent:boolean = false;
   accountInactiveText:boolean = false;
   showScheduled_Date: boolean = false;
+  //isActive: boolean = false;
 
   accountNotFoundText: boolean = false;
-  //accountNotFoundText;
   err_msg;
+  err_msgContactList;
+  err_msgZoneList;
+  err_msgSignals;
   id;
   siteSystemNumbersData; // data returned from SiteSystemNumbers
   siteSystemDetailsData;
@@ -101,7 +102,6 @@ export class SysteminfodetailComponent implements OnInit {
   serviceTicketNotes: ServiceTicketNotes[];
   centralStationDataCMS: CentralStationDataCMS[];
   siteSystemNumbers: SiteSystemNumbers[];
-  //foo: EventHistoryDate[];
   centralStation;
 
   page = 1;
@@ -136,18 +136,10 @@ export class SysteminfodetailComponent implements OnInit {
     private routeService: RouteService,
     private cmsService: CmsService,
     private nmcService: NmcService,
-    private router: Router,
-    //private datePipe: DatePipe
+    private router: Router
   ) { 
     this.route.params.subscribe(res => {
       this.id = res['id'];
-      // this.routeService.getCustomerSystemInfo(this.id).subscribe(
-      //   //res => this.systemInfo = [].concat(res)
-      //   res => {
-      //     console.log(res)
-      //     this.systemInfo = res
-      //   }
-      // )
     })
   }
 
@@ -185,14 +177,11 @@ export class SysteminfodetailComponent implements OnInit {
         let hyphenatedAlarmAccount = this.alarmAccount.split('-').join('');
         if(hyphenatedAlarmAccount) {
           this.alarmAccount = this.alarmAccount.split('-').join('');
-          //console.log(hyphenatedAlarmAccount)
         }
 
         //let inactiveAlarmAccount = this.alarmAccount.slice(0,-10);
         let inactiveAlarmAccount = this.alarmAccount.includes("(inactive)");
         if(inactiveAlarmAccount) {
-          // console.log('this account is inactive');
-          // console.log(inactiveAlarmAccount);
           // display the text Account not found at CMS
           this.accountInactiveText = true;
 
@@ -205,130 +194,8 @@ export class SysteminfodetailComponent implements OnInit {
         // if the variable equals NMC, perform requests using NMC API
         if(this.centralStation === 'CMS') {
           this.getAccountDetails();
-          // this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
-          //   res => {
-          //     // console.log(Object.values(res))
-          //     for(let key in res) {
-          //       // console.log(res[key])
-          //       this.siteSystemNumbersData = res[key]
-          //       this.site_no = this.siteSystemNumbersData.site_no;
-          //       this.system_no = this.siteSystemNumbersData.system_no;
-
-          //       if(this.site_no === "") {
-          //         console.log('there is no site no');
-          //         this.accountNotFoundText = 'Account not found at CMS';
-          //       }
-          //     }
-          //     this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
-          //       // console.log(res)
-          //       for(let key in res) {
-          //         // console.log((res[key]));
-          //         this.loading = false;
-          //         this.siteSystemDetailsData = res[key];
-
-          //         if(!this.siteSystemDetailsData) {
-          //           console.log('there is no data from SiteSystemDetails available')
-          //         }
-
-          //         this.sitestat_id = this.siteSystemDetailsData.sitestat_id;
-          //         this.codeword1 = this.siteSystemDetailsData.codeword1;
-          //         this.codeword2 = this.siteSystemDetailsData.codeword2;
-          //         this.site_name = this.siteSystemDetailsData.site_name;
-          //         this.site_no = this.siteSystemDetailsData.site_no;
-          //         this.site_addr1 = this.siteSystemDetailsData.site_addr1;
-          //         this.site_addr2 = this.siteSystemDetailsData.site_addr2;
-          //         this.city_name = this.siteSystemDetailsData.city_name;
-          //         this.state_id = this.siteSystemDetailsData.state_id;
-          //         this.zip_code = this.siteSystemDetailsData.zip_code;
-          //         this.phone1 = this.siteSystemDetailsData.phone1;
-          //         this.ext1 = this.siteSystemDetailsData.ext1;
-          //         this.phone2 = this.siteSystemDetailsData.phone2;
-          //         this.ext2 = this.siteSystemDetailsData.ext2;
-          //       }
-          //     })
-          //     this.cmsService.getContactList(this.site_no).subscribe(
-          //       res => {
-          //         // console.log(res);
-          //         this.contactListData = res;
-          //         // order by sequence #
-          //         //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
-          //         //.filter(o => o.cs_seqno !== '')
-                  
-          //         //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
-
-          //         this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
-        
-          //         this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
-                  
-          //         this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
-
-          //         let r = /^(0|[1-9]\d*)$/;
-          //         let result = [...this.contactListData];
-          //         const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
-          //         //let isnum = /^\d+$/.test(index.toString());
-          //         console.log(index)
-          //         result.unshift(result.splice(index)[0])
-          //         //console.log(result);
-          //         this.contactListData = result;
-          //         // this.contactListData.sort(function (a, b) {
-          //         //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
-          //         // });
-          //       }
-          //     )
-          //     this.cmsService.getEventHistoryDate().subscribe(
-          //       res => {
-          //         //console.log(res);
-          //         this.eventHistoryDateData = res;
-          //         this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
-                  
-          //       }
-          //     )
-          //     return this.cmsService.getZones(this.system_no).subscribe(
-          //       res => {
-          //         this.zonesData = res;
-          //       }
-          //     )
-          //   }
-          // )
         } else if(this.centralStation === 'NMC') {
           this.getAccountDetails();
-          // this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
-          //   res => {
-          //     //console.log(res)
-          //     for(let key in res) {
-          //       //console.log(res[key]);
-          //       this.loading = false;
-          //       this.accountInfoData = res[key];
-
-          //       if(!this.accountInfoData) {
-          //         console.log('There is no data from AccountInfo available')
-          //       }
-
-          //       this.codeword1 = this.accountInfoData.codeword1;
-          //       this.site_name = this.accountInfoData.site_name;
-          //       this.site_addr1 = this.accountInfoData.site_addr1;
-          //       this.city_name = this.accountInfoData.city_name;
-          //       this.sitestat_id = this.accountInfoData.sitestat_id;
-          //       this.state_id = this.accountInfoData.state_id;
-          //       this.zip_code = this.accountInfoData.zip_code;
-          //       this.phone1 = this.accountInfoData.phone1;
-          //       this.ext1 = this.accountInfoData.ext1;
-          //       this.ext2 = this.accountInfoData.ext2;
-          //     }
-          //   }
-          // )
-          // this.nmcService.getAccountContacts(this.alarmAccount).subscribe(
-          //   res => {
-          //     console.log(res)
-          //     this.contactListData = res;
-          //   }
-          // )
-          // this.nmcService.getAccountZones(this.alarmAccount).subscribe(
-          //   res => {
-          //     console.log(res)
-          //     this.zonesData = res;
-          //   }
-          // )
         } else if (this.centralStation === 'COPS') {
           console.log(`there's no alarm account available for ${this.centralStation}`);
           this.loading = false;
@@ -341,60 +208,13 @@ export class SysteminfodetailComponent implements OnInit {
         
       }
     )
-     // END temp call
-
-    // this.routeService.getCustomerSystemInfo(this.id).subscribe(
-    //   data => {
-    //     if(data) {
-    //       this.spinnerService.hide();
-    //     }
-    //     this.systemInfo = data;
-    //     this.lastServiceTicketId = data.lastServiceTicketID;
-    //     this.alarmAccount = data.alarmAccount;
-    //   }
-    // )
-
-
-    // this.spinnerService.show();
-    // this.cmsService.getCentralStationDataCMS().subscribe(
-    //   res => {
-    //     if(res.status === 200) {
-    //       //console.log(res.body)
-    //       this.spinnerService.hide();
-
-    //       this.loading = false;
-
-    //       this.centralStationDataCMS = res.body;
-
-    //       this.cs_no = this.centralStationDataCMS.filter((val) => val.cs_no.includes(this.alarmAccount))
-    //       for(var i = 0; i < this.cs_no.length; i++) {
-    //         //console.log(this.cs_no[i].codeword1)
-    //         this.sitestat_id = this.cs_no[i].sitestat_id;
-    //         this.codeword1 = this.cs_no[i].codeword1;
-    //         this.codeword2 = this.cs_no[i].codeword2;
-    //         this.site_no = this.cs_no[i].site_no;
-    //         this.site_addr1 = this.cs_no[i].site_addr1;
-    //         this.site_addr2 = this.cs_no[i].site_addr2;
-    //         this.city_name = this.cs_no[i].city_name;
-    //         this.state_id = this.cs_no[i].state_id;
-    //         this.zip_code = this.cs_no[i].zip_code;
-    //         this.phone1 = this.cs_no[i].phone1;
-    //         this.ext1 = this.cs_no[i].ext1;
-    //         this.phone2 = this.cs_no[i].phone2;
-    //         this.ext2 = this.cs_no[i].ext2;
-    //       }
-    //     }
-    //   }
-    // )
   }
 
   getAccountDetails() {
     if(this.centralStation === 'CMS') {
       this.cmsService.getSiteSystemNumbers(this.alarmAccount).subscribe(
         res => {
-          // console.log(Object.values(res))
           for(let key in res) {
-            // console.log(res[key])
             this.siteSystemNumbersData = res[key]
             this.site_no = this.siteSystemNumbersData.site_no;
             this.system_no = this.siteSystemNumbersData.system_no;
@@ -406,9 +226,7 @@ export class SysteminfodetailComponent implements OnInit {
             }
           }
           this.cmsService.getSiteSystemDetails(this.site_no).subscribe(res => {
-            // console.log(res)
             for(let key in res) {
-              // console.log((res[key]));
               this.loading = false;
               this.siteSystemDetailsData = res[key];
 
@@ -437,14 +255,12 @@ export class SysteminfodetailComponent implements OnInit {
     } else if(this.centralStation === 'NMC') {
       this.nmcService.getAccountInfo(this.alarmAccount).subscribe(
         res => {
-          //console.log(res);//object
           let emptyObj = Object.keys(res).length;
           console.log(emptyObj)
           if(emptyObj === 0) {
             this.loading = false;
             //this.accountNotFoundText = 'Account not found at NMC';
             this.accountNotFoundText = true;
-            console.log('There is no data from AccountInfo available');
           }
           
           for(let key in res) {
@@ -456,12 +272,6 @@ export class SysteminfodetailComponent implements OnInit {
               console.log('There is no data from AccountInfo available')
             }
 
-            // let returnedAccountInfoObj = Object.values(res);
-            // console.log(returnedAccountInfoObj.entries());
-            // returnedAccountInfoObj.forEach(element => {
-            //   console.log(element.err_msg);
-            //   this.err_msg = element.err_msg;
-            // })
             this.err_msg = this.accountInfoData.err_msg;
   
             this.codeword1 = this.accountInfoData.codeword1;
@@ -481,6 +291,7 @@ export class SysteminfodetailComponent implements OnInit {
   }
 
   onClickGetContactList() {
+    // this.isActive = true;
     this.loading = true;
     //return
     if(this.centralStation === 'CMS') {
@@ -494,82 +305,34 @@ export class SysteminfodetailComponent implements OnInit {
             // console.log(res);
             this.loading = false;
             this.contactListData = res;
-            // order by sequence #
-            //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
-            //.filter(o => o.cs_seqno !== '')
             
+            // order by sequence #
             //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
   
             this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
-  
-            //this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
             
             this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
   
             // list by sequence no 1st, then those without sequence no
             this.contactListData.sort(this.alphabetically(true))
-  
-            // let r = /^(0|[1-9]\d*)$/;
-            // let result = [...this.contactListData];
-            // const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
-            // //let isnum = /^\d+$/.test(index.toString());
-            // console.log(index)
-            // result.unshift(result.splice(index)[0])
-            // //console.log(result);
-            // this.contactListData = result;
-            // this.contactListData.sort(function (a, b) {
-            //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
-            // });
           }
         )
       }
-      // this.cmsService.getContactList(this.site_no).subscribe(
-      //   res => {
-      //     // console.log(res);
-      //     this.contactListData = res;
-      //     // order by sequence #
-      //     //this.contactListData = this.contactListData.sort((a, b) => a.cs_seqno.localeCompare(b.cs_seqno))
-      //     //.filter(o => o.cs_seqno !== '')
-          
-      //     //if the cs_seqno is an empty string, it should be after the cs_seqno without an empty string
-
-      //     this.contactListData = this.contactListData.sort((a, b) => a ? b ? a ? b: b.cs_seqno.localeCompare(b) : -1 : 1); //this sorts by number correctly but places numbers at top but not in numerical order
-
-      //     //this.contactListData.sort(function(a, b) { return a.cs_seqno - b.cs_seqno }); //returns numbers sorted in ascending order, but at the bottom and not at the top
-          
-      //     this.contactListData.sort((a,b) => a.name.localeCompare(a.name));
-
-      //     // list by sequence no 1st, then those without sequence no
-      //     this.contactListData.sort(this.alphabetically(true))
-
-      //     // let r = /^(0|[1-9]\d*)$/;
-      //     // let result = [...this.contactListData];
-      //     // const index = result.findIndex(e => e.cs_seqno === e.cs_seqno.match(r));
-      //     // //let isnum = /^\d+$/.test(index.toString());
-      //     // console.log(index)
-      //     // result.unshift(result.splice(index)[0])
-      //     // //console.log(result);
-      //     // this.contactListData = result;
-      //     // this.contactListData.sort(function (a, b) {
-      //     //   return (a.cs_seqno || "|||").toUpperCase().localeCompare((b.cs_seqno || "|||").toUpperCase())
-      //     // });
-      //   }
-      // )
     } else if (this.centralStation === 'NMC') {
       this.nmcService.getAccountContacts(this.alarmAccount).subscribe(
         res => {
           this.loading = false;
-          console.log(res);
-          console.log(res.status);
-          console.log(typeof res);
-          // if(res.status === 200) {
-          //   this.spinnerService.hide();
-          //   this.flashMessage.show('Your requested data is displayed below', {
-          //     cssClass: 'text-center alert-success',
-          //     timeout: 2000
-          //   });
-          // }
           this.contactListData = res;
+          // for(let i = 0; i < this.contactListData.length; i++) {
+          //   this.err_msg = JSON.stringify(this.contactListData[i].err_msg);
+          // }
+          let returnedContactListDataObj = Object.values(res);
+          returnedContactListDataObj.forEach(element => {
+            if(element.err_msg) {
+              //this.err_msg = element.err_msg;
+              this.err_msgContactList = element.err_msg;
+            }
+          })
         }
       )
     }
@@ -587,42 +350,12 @@ export class SysteminfodetailComponent implements OnInit {
         this.cmsService.getZones(this.system_no).subscribe(
           res => {
             this.zonesData = res;
-            // console.log(Object.keys(this.zonesData))
-            // console.log(Object.values(this.zonesData))
-            //  this.zonesData.filter((val) => {
-            //   val.trouble_state_flag.toLowerCase().includes('N')
-            // })
-            let returnedZonesObj = Object.values(this.zonesData);
-            //console.log(typeof returnedZonesObj);
             
-            // for (let i = 0; i < returnedZonesObj.length; i++) {
-            //   let x = this.zonesData.filter(a => 
-            //     a.trouble_state_flag === "N"
-            //   )
-            //   console.log(x)
-            // }
+            let returnedZonesObj = Object.values(this.zonesData);
+            
           }
         )
       }
-      // this.cmsService.getZones(this.system_no).subscribe(
-      //   res => {
-      //     this.zonesData = res;
-      //     // console.log(Object.keys(this.zonesData))
-      //     // console.log(Object.values(this.zonesData))
-      //     //  this.zonesData.filter((val) => {
-      //     //   val.trouble_state_flag.toLowerCase().includes('N')
-      //     // })
-      //     let returnedZonesObj = Object.values(this.zonesData);
-      //     console.log(typeof returnedZonesObj);
-          
-      //     // for (let i = 0; i < returnedZonesObj.length; i++) {
-      //     //   let x = this.zonesData.filter(a => 
-      //     //     a.trouble_state_flag === "N"
-      //     //   )
-      //     //   console.log(x)
-      //     // }
-      //   }
-      // )
     } else if (this.centralStation === 'NMC') {
       this.nmcService.getAccountZones(this.alarmAccount).subscribe(
         res => {
@@ -642,76 +375,26 @@ export class SysteminfodetailComponent implements OnInit {
         this.cmsService.getEventHistoryDate(this.site_no).subscribe(
           res => {
             this.eventHistoryDateData = res;
-            //console.log(this.eventHistoryDateData);
             this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
-
-            //get scheduled_Date
-            // const asArray = Object.entries(this.eventHistoryDateData) as unknown as Array<[]>;
-
-            // console.log(asArray)
-
-            // let foo = this.eventHistoryDateData.filter((x, index) => {
-            //   x.scheduled_Date == this.eventHistoryDateData[index]
-            // })
-            // console.log(foo);
           }
         )
       }
-      // this.cmsService.getEventHistoryDate(this.site_no).subscribe(
-      //   res => {
-      //     //console.log(res);
-      //     this.eventHistoryDateData = res;
-      //     this.eventHistoryDateData = this.eventHistoryDateData.sort((a, b) => b.event_Date.localeCompare(a.event_Date))
-      //   }
-      // )
     } else if (this.centralStation === 'NMC') {
-      //console.log(`This isn't working yet`)
       this.nmcService.getSignalHistory(this.alarmAccount).subscribe(
         res => {
-          //console.log(res);
 
           this.signalHistoryData = res;
 
           for(let key in res) {
-            console.log(res[key]);
+            //console.log(res[key]);
           }
-          // for(let key in res) {
-          //   console.log(res[key]);
-          //   //this.loading = false;
-          //   this.signalHistoryData = res[key];
-  
-          //   // if(!this.accountInfoData) {
-          //   //   console.log('There is no data from AccountInfo available')
-          //   // }
-
-          //   // let returnedAccountInfoObj = Object.values(res);
-          //   // console.log(returnedAccountInfoObj.entries());
-          //   // returnedAccountInfoObj.forEach(element => {
-          //   //   console.log(element.err_msg);
-          //   //   this.err_msg = element.err_msg;
-          //   // })
-
-  
-          //   // this.codeword1 = this.accountInfoData.codeword1;
-          //   // this.site_name = this.accountInfoData.site_name;
-          //   // this.site_addr1 = this.accountInfoData.site_addr1;
-          //   // this.city_name = this.accountInfoData.city_name;
-          //   // this.sitestat_id = this.accountInfoData.sitestat_id;
-          //   // this.state_id = this.accountInfoData.state_id;
-          //   // this.zip_code = this.accountInfoData.zip_code;
-          //   // this.phone1 = this.accountInfoData.phone1;
-          //   // this.ext1 = this.accountInfoData.ext1;
-          //   // this.ext2 = this.accountInfoData.ext2;
-          // }
-
 
           // if only the err_msg is returned
           let returnedSignalHistoryObj = Object.values(res);
-          //console.log(returnedSignalHistoryObj.entries());
           returnedSignalHistoryObj.forEach(element => {
             if(element.err_msg) {
-              console.log(element.err_msg);
-              this.err_msg = element.err_msg;
+              // this.err_msg = element.err_msg;
+              this.err_msgSignals = element.err_msg;
             }
           })
         }
@@ -724,23 +407,19 @@ export class SysteminfodetailComponent implements OnInit {
   }
 
   showLastServiceTicketModal() {
-    console.log('showLastServiceTicketModal')
     $("#lastServiceTicketModal").modal("show");
     //get the service ticket using LastServiceTicketID
     this.routeService.getServiceTicketInfo2ById(this.lastServiceTicketId).subscribe(
       res => {
-        //console.log(res);
         this.serviceTicketInfo2 = [].concat(res);
       }
     )
   }
 
   openServiceTicketNotesModal() {
-    //console.log("open service ticket notes")
     $("#lastServiceTicketNotesModal").modal("show");
     this.routeService.getServiceTicketNoteById(this.lastServiceTicketId).subscribe(
       res => {
-        console.log(res);
         this.serviceTicketNotes = [].concat(res);
       }
     )
@@ -825,7 +504,6 @@ export class SysteminfodetailComponent implements OnInit {
 
   open3GModal() {
     $("#threeGModal").modal("show");
-    //console.log(this.basicUpgradeInfo);
   }
 
   alphabetically(ascending) {

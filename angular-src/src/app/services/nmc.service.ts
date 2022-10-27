@@ -42,12 +42,7 @@ export class NmcService {
       }),
       observe: 'response' as 'body'
     };
-    // return this.http.post<any>(`https://thepartnershipconnectionapi-nmc.azurewebsites.net/api/AccountContacts/${id}`,httpOptions).pipe(
-    //   catchError(this.errorHandler)
-    // );
-    // return this.http.post<any>(`http://localhost:5001/api/AccountContacts/${id}`,httpOptions).pipe(
-    //   catchError(this.errorHandler)
-    // );
+    
     return this.http.post<any>(`${this.baseUrl}/api/AccountContacts/${id}`,httpOptions).pipe(
       catchError(this.errorHandler)
     );

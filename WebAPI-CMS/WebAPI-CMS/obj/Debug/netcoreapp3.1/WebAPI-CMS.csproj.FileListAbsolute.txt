@@ -1,8 +1,6 @@
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\WebAPI-CMS.exe
-C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.csprojAssemblyReference.cache
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.AssemblyInfoInputs.cache
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.AssemblyInfo.cs
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.RazorTargetAssemblyInfo.cache
@@ -67,5 +65,6 @@ C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.dll
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.pdb
 C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.genruntimeconfig.cache
-C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionAPI-CMS - Web Deploy\profile.arm.json
-C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-cms-staging - Web Deploy\profile.arm.json
+C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.csproj.AssemblyReference.cache
+C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\WebAPI-CMS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CStith\source\code\project\WebAPI-CMS\WebAPI-CMS\obj\Debug\netcoreapp3.1\scopedcss\bundle\WebAPI-CMS.styles.css

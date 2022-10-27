@@ -15,13 +15,12 @@
                             <h5 class="ls-1 high-emphasis headline-5">
                               <span class="mr-4">{{ partnerCallToActionButton.customer_Number }}</span>
                               <span>{{ partnerCallToActionButton.customer_Name }}</span></h5>
-                            <!-- <span> {{ partnerCallToActionButton.customer_Id}}</span> -->
                         </div>
                         <div class="col-md-4 text-right">
                             <!-- <span [(ngbTooltip)]="memo" (click)="onOpenMemoModal()">
                                 <i class="fas fa-plus pr-2"></i>Memo
                             </span> -->
-                            <button type="submit" id="{{ partnerCallToActionButton.customer_Id }}" class="btn btn-secondary btn-block ml-3 float-right btn-cta" [(ngbTooltip)]="memo" (click)="onOpenMemoModal(partnerCallToActionButton.customer_Id)">
+                            <button type="submit" id="{{ partnerCallToActionButton.customer_Id }}" class="btn btn-secondary btn-block ml-3 btn-cta" [(ngbTooltip)]="memo" (click)="onOpenMemoModal(partnerCallToActionButton.customer_Id)">
                               <i class="fas fa-plus pr-2"></i>Message
                             </button>
                         </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { mergeMap, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { RouteService } from '../../services/route.service';
@@ -8,7 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, process, State, SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -95,10 +96,12 @@ export class Customer3glistingComponent implements OnInit {
   public selectedKeys = [];
 
   clicked = false;//disables button after click
+  hideShowBackButtonEl:boolean=false;
 
   @ViewChild("dateTime") dateTimeView: ElementRef;
 
   constructor(
+    private router: Router,
     public fb: FormBuilder,
     private routeService: RouteService,
     private spinnerService: NgxSpinnerService,
@@ -117,11 +120,9 @@ export class Customer3glistingComponent implements OnInit {
 
     $("#wrapper").addClass("toggled");
 
-    // document.getElementById('dateTime').innerText = new Date().toDateString()
     const workbook = new Workbook({
       sheets:[
         {
-          //name: new Date().toDateString()
           columns: [   
             
           ],
@@ -221,7 +222,9 @@ export class Customer3glistingComponent implements OnInit {
     take: 5
   };
 
-  // public gridData: GridDataResult = process(this.customer3glisting, this.state);
+  public filter: CompositeFilterDescriptor;
+  public sort: SortDescriptor[];
+
   public columnsConfig:[{
     title: 'date'
   }] 
@@ -231,12 +234,6 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   public workbook() {
-    // const workbookOptions = new WorkbookOptions({
-    //   options: <WorkbookSheet[]>[
-
-    //   ]
-    // });
-    //this.dateTime = new Date().toDateString();
     const workbook = new Workbook({
 
       sheets: <WorkbookSheet[]>[
@@ -285,26 +282,17 @@ export class Customer3glistingComponent implements OnInit {
                 { value: "customer_Name" },
                 { value: "customerType" },
                 { value: "siteName" },
-                // { value: "site_Number" },
                 { value: "address_1" },
-                // { value: "address_2" },
                 { value: "city" },
                 { value: "state" },
                 { value: "zipCode" },
                 { value: "panel_Type_Code" },
-                // { value: "panel_Location" },
                 { value: "system_Code" },
                 { value: "cellType" },
                 { value: "cellGeneration" },
                 { value: "cellModel" },
                 { value: "carrier" },
-                // { value: "offer1" },
-                // { value: "offer2" },
-                // { value: "offer3" },
-                // { value: "offer4" },
                 { value: "rMRAtCustomer" },
-                // { value: "rMRAtSite" },
-                // { value: "rMRAtSystem" }
               ]
             },
           ],
@@ -367,9 +355,7 @@ export class Customer3glistingComponent implements OnInit {
   }
 
   saveDateTime() {
-    //this.dateTime = new Date().toDateString();
     this.fileName = 'customer3glisting.xlsx';
-    //console.log(this.dateTimeView);
     const workbook = new Workbook({
       sheets:[
         {
@@ -396,10 +382,22 @@ export class Customer3glistingComponent implements OnInit {
   public allData(): ExcelExportData {
     const result: ExcelExportData = {
       data: process(this.gridData, {
+        filter: this.filter,
+        sort: this.sort 
       }).data
     };
 
     return result;
+  }
+
+  public filterChange(filter: CompositeFilterDescriptor):void {  
+    this.filter = filter;
+    this.gridData = filterBy(this.customer3gListing, filter);
+  }
+
+  public sortChange(sort: SortDescriptor[]):void {
+    this.sort = sort;
+    this.gridData = orderBy(this.customer3gListing, sort);
   }
 
   onOpenDetails3gModal(e, customer_System_Id: number) {
@@ -440,36 +438,9 @@ export class Customer3glistingComponent implements OnInit {
       this.state_3g = x.dataItem.state;
       this.system_Code = x.dataItem.system_Code;
       this.zipCode = x.dataItem.zipCode;
-    })
-    // for(var i = 0; i < e.selectedRows.length; i++) {
-    //   console.log(e.selectedRows[i].dataItem)
-    // }
-    // for(var i = 0; i < e.selectedRows.length; i++) {
-    //   console.log(e.selectedRows[i].dataItem.customer_System_Id)
-
-    //   this.customer_System_Id = e.selectedRows[i].dataItem.customer_System_Id;
-    //   this.customer_Number = e.selectedRows[i].dataItem.customer_Number;
-    //   this.customer_Name = e.selectedRows[i].dataItem.customer_Name;
-    //   this.customerType = e.selectedRows[i].dataItem.customerType;
-    //   this.rmrAtCustomer = e.selectedRows[i].dataItem.rmrAtCustomer;
-    //   this.siteName = e.selectedRows[i].dataItem.siteName;
-    //   this.address_1 = e.selectedRows[i].dataItem.address_1;
-    //   this.address_2 = e.selectedRows[i].dataItem.address_2;
-    //   this.city = e.selectedRows[i].dataItem.city;
-    //   this.state = e.selectedRows[i].dataItem.state;
-    //   this.zipCode = e.selectedRows[i].dataItem.zipCode;
-    // }
+    });
 
     this.customer3gListingForm.controls["CustomerSystemID"].setValue(this.customer_System_Id);
-
-    // for(var i = 0; i < this.mySelection.length; i++) {
-    //   console.log(this.mySelection[i])
-    //   let id=this.mySelection[i]
-    // }
-
-    // for(var i = 0; i < this.selectedKeys.length; i++) {
-    //   console.log(this.selectedKeys[i])
-    // }
     
   }
 
@@ -484,6 +455,22 @@ export class Customer3glistingComponent implements OnInit {
         $("#messageModal").modal("hide");
       }
     )
+  }
+
+  hideShowBackButton(e) {
+    if(e.clientY === 50) {
+      //show
+      console.log(e); 
+    }
+    if(e.clientY >= 50) {
+      //hide
+      console.log(e)
+      this.hideShowBackButtonEl = true;
+    }
+  }
+
+  onClickToDashboard() {
+    this.router.navigate(["partner-dashboard"]);
   }
   
 }

@@ -577,30 +577,7 @@ export class CallsummaryComponent implements OnInit {
         alert("Ticket updated successfully");
       }
     )
-    // this.routeService.putCallSummaryUpdate(this.returnedTicketNumber, this.callSummaryAddForm.value).subscribe(
-    //   res => {
-    //     console.log(res);
-    //   }
-    // )
   }
-
-  // this.routeService.postCallSummaryAdd(this.callSummaryAddForm.value)
-  //   .subscribe(
-  //     result => {
-  //       confirm('Click ok to confirm form submission')
-
-  //       this.divText.nativeElement.innerHTML = "Update";
-        
-  //       this.divView.nativeElement.innerHTML = result;
-  //       this.submitted = false;
-  //       this.clicked = true;
-  //       this.enableReset = false;
-  //       //this.callSummaryAddForm.reset(); //this resets the form fields but is creating another HTTP Get request
-  //       //this.resetForm(form);
-  //     },
-  //     error => console.log('error: ', error)
-  //   );
-  // }
 
   // Clear the UI 
   ticketFieldResetButton() {
@@ -610,14 +587,6 @@ export class CallsummaryComponent implements OnInit {
     this.callSummaryAddForm.reset()
   }
 
-  // resetForm() {
-  //   console.log('reset')
-  //   this.submitted = false;
-  //   this.callSummaryAddForm.reset()
-  //   this.callSummaryAddForm.markAsPristine();
-  //   this.callSummaryAddForm.markAsUntouched();
-  // }
-
   resetForm(form: FormGroup) {
     this.submitted = false;
     //form.markAllAsTouched();
@@ -626,5 +595,4 @@ export class CallsummaryComponent implements OnInit {
     form.clearValidators();
     this.callSummaryAddForm.reset(this.callSummaryAddForm.value);
   }
-
 }

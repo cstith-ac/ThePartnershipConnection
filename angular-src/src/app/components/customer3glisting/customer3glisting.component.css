@@ -1,3 +1,10 @@
+.back-to-dashboard {
+  margin: 1.25rem 1.875rem;
+}
+.export-to-excel {
+  background-color: #23036a;
+  color: #e3f1fa;
+}
 /* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -105,6 +112,9 @@ input:checked + .slider:before {
   letter-spacing: 1.25px;
   line-height: 16px;
   font-size: 15px;
+}
+.btn:hover {
+  transform: translateY(0);
 }
 .high-emphasis {
   color: rgba(0, 0, 0, 0.87);

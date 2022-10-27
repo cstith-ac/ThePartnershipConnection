@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div id="snackbar-container"></div>
-                            <h2 class="modal-title" id="exampleModalLabel" style="padding-left: 1.5rem;color:#1220EF;font-weight:700;">Call Summary</h2>
+                            <h2 class="modal-title" id="exampleModalLabel" style="padding-left: 0.938rem;color:#1220EF;font-weight:700;">Call Summary</h2>
                         </div>
                     </div>
                     
@@ -22,7 +22,7 @@
                     <div class="card">
                         <div class="card-body" id="callSummary">
                             <div class="row mt-2 mb-2">
-                                <div class="col-md-12" *ngFor="let item of custNameNumb">
+                                <div class="col-md-12 pl-0" *ngFor="let item of custNameNumb">
                                    #<span id="callSummaryCustomerNumber">{{ item.customerNumber }}</span>
                                    &nbsp;&nbsp;&nbsp;
                                     <span id="callSummaryCustomerName">{{ item.customerName }}</span>

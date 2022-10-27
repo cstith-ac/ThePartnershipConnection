@@ -9,11 +9,11 @@
 }
 .footer-logo {
   color: #1b5eac;
+  text-align: right;
 }
 .mt-25 {
   margin-top: 25px;
 }
-
 .bg-gradient-partner-dashboard {
   background: #23036a;
 }

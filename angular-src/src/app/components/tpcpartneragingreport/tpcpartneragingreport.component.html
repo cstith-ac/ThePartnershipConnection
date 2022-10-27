@@ -35,7 +35,7 @@
                 [groupable]="true"
                 [columnMenu]="true"
                 [selectable]="true"
-                (selectionChange)="onOpenPartnerAgingReportModal($event, customer_Id, customer_Number, customer_Name, activeRMR, filterCategory, customerSince, lastPay, lastPayAmount, pastDue, bal_Current, totalDue, collectionQueue, pendingCancellation, commercialAccount, guaranteeStatus, address_1, address_2, address_3, city, state, zipCode, emailAddress, primaryPhone, alternatePhone)"
+                (selectionChange)="onOpenPartnerAgingReportModal($event, customer_Id, customer_Number, customer_Name, activeRMR, filterCategory, customerSince, lastPay, lastPayAmount, pastDue, bal_Current, availableCredit, availableCash, totalDue, collectionQueue, pendingCancellation, commercialAccount, bucket_1, bucket_2, bucket_3, bucket_4, bucket_5, guaranteeStatus, address_1, address_2, address_3, city, state, zipCode, emailAddress, primaryPhone, alternatePhone)"
                 kendoGridSelectBy="customer_Id"
                 [selectedKeys]="mySelection"
                 #dateTime
@@ -69,8 +69,8 @@
                 <kendo-grid-column field="activeRMR" title="Active RMR" format="{0:c}"></kendo-grid-column>
                 <kendo-grid-column field="customerSince" title="Customer Since"></kendo-grid-column>
                 <kendo-grid-column field="lastPay" title="Last Payment On"></kendo-grid-column>
-                <kendo-grid-column field="pastDue" title="Past Due"></kendo-grid-column>
-                <kendo-grid-column field="totalDue" title="Total Due"></kendo-grid-column>
+                <kendo-grid-column field="pastDue" title="Past Due" format="{0:c}"></kendo-grid-column>
+                <kendo-grid-column field="totalDue" title="Total Due" format="{0:c}"></kendo-grid-column>
                 <kendo-grid-column field="collectionQueue" title="Collection Status"></kendo-grid-column>
                 <kendo-grid-column field="pendingCancellation" title="Pending Cancellation"></kendo-grid-column>
                 <kendo-grid-column field="commercialAccount" title="Commercial Account"></kendo-grid-column>
@@ -240,6 +240,212 @@
             <div class="modal-body pt-0">
                 <div class="card p-3">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                        Customer Number
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">#{{ customer_Number }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                        Customer Name
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">{{ customer_Name }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                        Monthly RMR
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">{{ activeRMR | currency }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                       Customer Since
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">{{ customerSince }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                       Last Payment
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">{{ lastPayAmount | currency }} on {{ lastPay }}</span>
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <p class="mb-0">
+                                    <span class="subtitle-2 high-emphasis">
+                                        {{ commercialAccount }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="body-2 medium-emphasis">{{ guaranteeStatus }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Past Due Balance</span>
+                                    <span class="body-2 text-error medium-emphasis">{{ pastDue | currency }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Collection Status</span>
+                                    <span class="body-2 medium-emphasis">{{ collectionQueue }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>
+                                    <span class="subtitle-2 mr-2 high-emphasis">Total Balance</span>
+                                    <span class="body-2 medium-emphasis">{{ bal_Current | currency }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_1 }}</span>
+                                                </p>
+                                                
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_2 }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ address_3 }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ city }}, {{ state }} {{ zipCode }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">
+                                                        <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+                                                    </span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ primaryPhone | phone }}</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{ alternatePhone | phone }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-10 mb-2">
+                                                <button type="submit" class="btn btn-secondary text-uppercase" (click)="onOpenMessageModal()"><i class="fas fa-plus pr-2"></i>Message</button>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Current</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bal_Current  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">1-30 Days</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bucket_1  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">31-60 Days</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bucket_2  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">61-90 Days</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bucket_3  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">91-120 Days</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bucket_4  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Over 120</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{bucket_5  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Avail Credit</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{availableCredit  | currency}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    <span class="subtitle-2 high-emphasis">Avail Cash</span>
+                                                </p>
+                                                <p>
+                                                    <span class="body-2 medium-emphasis">{{availableCash  | currency}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="card-body">
                         <div class="row">
                             <div class="col-1">
                                 <p class="mb-0">
@@ -417,7 +623,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="modal-footer">

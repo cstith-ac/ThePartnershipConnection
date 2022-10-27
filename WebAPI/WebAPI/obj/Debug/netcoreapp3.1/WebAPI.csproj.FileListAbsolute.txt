@@ -1,9 +1,5 @@
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionAPI - Web Deploy\profile.arm.json
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-beta - Web Deploy\profile.arm.json
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\thepartnershipconnectionapi-staging - Web Deploy\profile.arm.json
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.exe
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.deps.json
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.runtimeconfig.json
@@ -78,8 +74,6 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\static
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.dll
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.pdb
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.genruntimeconfig.cache
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.csprojAssemblyReference.cache
-C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\ThePartnershipConnectionBeta-API - Web Deploy\profile.arm.json
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Serilog.dll
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Serilog.Extensions.Logging.dll
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Serilog.Extensions.Logging.File.dll
@@ -89,3 +83,6 @@ C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Serilo
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\bin\Debug\netcoreapp3.1\Serilog.Sinks.RollingFile.dll
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.csproj.CoreCompileInputs.cache
 C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.csproj.AssemblyReference.cache
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CStith\source\code\project\WebAPI\WebAPI\obj\Debug\netcoreapp3.1\scopedcss\bundle\WebAPI.styles.css

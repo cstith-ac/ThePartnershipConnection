@@ -60,10 +60,17 @@ export class TpcpartneragingreportComponent implements OnInit {
   lastPayAmount;
   pastDue;
   bal_Current;
+  availableCredit;
+  availableCash;
   totalDue;
   collectionQueue;
   pendingCancellation;
   commercialAccount;
+  bucket_1;
+  bucket_2;
+  bucket_3;
+  bucket_4;
+  bucket_5;
   guaranteeStatus;
   address_1;
   address_2;
@@ -243,7 +250,7 @@ export class TpcpartneragingreportComponent implements OnInit {
     return result;
   };
 
-  onOpenPartnerAgingReportModal(e, customer_Id: number, customer_Number: string, customer_Name: string, activeRMR: number, filterCategory: string, customerSince: string, lastPay: string, lastPaymentAmount: number, pastDue: number, bal_Current: number, totalDue: number, collectionQueue: string, pendingCancellation: string, commercialAccount: string, guaranteeStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, emailAddress: string, primaryPhone: string, alternatePhone: string) {
+  onOpenPartnerAgingReportModal(e, customer_Id: number, customer_Number: string, customer_Name: string, activeRMR: number, filterCategory: string, customerSince: string, lastPay: string, lastPaymentAmount: number, pastDue: number, bal_Current: number, availableCredit: string, availableCash: string, totalDue: number, collectionQueue: string, pendingCancellation: string, commercialAccount: string, bucket_1: string, bucket_2: string, bucket_3: string, bucket_4: string, bucket_5: string, guaranteeStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, emailAddress: string, primaryPhone: string, alternatePhone: string) {
     $("#detailsModal").modal("show");
 
     e.selectedRows.forEach((x) => {
@@ -257,10 +264,17 @@ export class TpcpartneragingreportComponent implements OnInit {
       this.lastPayAmount = x.dataItem.lastPaymentAmount;
       this.pastDue = x.dataItem.pastDue;
       this.bal_Current = x.dataItem.bal_Current;
+      this.availableCredit = x.dataItem.availableCredit;
+      this.availableCash = x.dataItem.availableCash;
       this.totalDue = x.dataItem.totalDue;
       this.collectionQueue = x.dataItem.collectionQueue;
       this.pendingCancellation = x.dataItem.pendingCancellation;
       this.commercialAccount = x.dataItem.commercialAccount;
+      this.bucket_1 = x.dataItem.bucket_1;
+      this.bucket_2 = x.dataItem.bucket_2;
+      this.bucket_3 = x.dataItem.bucket_3;
+      this.bucket_4 = x.dataItem.bucket_4;
+      this.bucket_5 = x.dataItem.bucket_5;
       this.guaranteeStatus = x.dataItem.guaranteeStatus;
       this.address_1 = x.dataItem.address_1;
       this.address_2 = x.dataItem.address_2;

@@ -1,4 +1,5 @@
-<div class="card">
+<button class="btn btn-secondary back-to-dashboard" (click)="onClickToDashboard()">Back to Dashboard</button>
+<div class="card" (mouseleave)="hideShowBackButton($event)">
   <div class="card-body">
     <kendo-grid
       [kendoGridBinding]="gridData"
@@ -6,10 +7,7 @@
       [skip]="$any(state).skip"
       [sort]="$any(state).sort"
       [filter]="$any(state).filter"
-      [sortable]="{
-        allowUnsort: true,
-        mode: 'multiple'
-      }"
+      [sortable]="true"
       [pageable]="{
         pageSizes: [5,10,15,25,50,100,150,200]
       }"
@@ -19,6 +17,8 @@
       [groupable]="true"
       [columnMenu]="true"
       [selectable]="true"
+      (sortChange)="sortChange($event)"
+      (filterChange)="filterChange($event)"
       (selectionChange)="onOpenDetails3gModal($event, customer_System_Id)"
       kendoGridSelectBy="customer_System_Id"
       [selectedKeys]="mySelection"
@@ -27,15 +27,13 @@
     >
     <ng-template kendoGridToolbarTemplate *ngIf="hide3GExcelExport == true">
       <button 
+        class="export-to-excel"
         type="button" 
         kendoGridExcelCommand 
         icon="file-excel"
       >Export to Excel
       </button>
     </ng-template>
-    <!-- <ng-template kendoGridToolbarTemplate *ngIf="hide3GExcelExport == false">
-        <p>You don't have permission to view this feature</p>
-    </ng-template> -->
     <kendo-grid-column-group 
       [title]="today"
       [autoSize]="true"

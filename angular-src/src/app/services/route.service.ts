@@ -69,7 +69,6 @@ export class RouteService {
     return this.http.get<any>(this.baseUrl + '/api/Administration', httpOptions);
   }
 
-  //Similar to getCustomerCareDashboardInfoById()
   getUser(id: number): Observable<any>{
     this.loadToken();
     let httpOptions = { 

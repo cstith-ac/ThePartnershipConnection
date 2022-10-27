@@ -10,11 +10,11 @@ export class AppComponent implements OnInit {
   title = 'angular-src';
 
   ngOnInit() {
-    if(isDevMode()) {
-      console.log('Development!');
-    } else {
-      console.log('Production!');
-    }
-    console.log(environment.baseUrl);
+    // if(isDevMode()) {
+    //   console.log('Development!');
+    // } else {
+    //   console.log('Production!');
+    // }
+    // console.log(environment.baseUrl);
   }
 }

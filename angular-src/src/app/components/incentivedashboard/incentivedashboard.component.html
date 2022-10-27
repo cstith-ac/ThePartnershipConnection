@@ -619,7 +619,8 @@
                                 <div class="form-group form-inline">
                                     <label class="col-sm-6 col-form-label pl-0 display-contents">Line Items Subtotal</label>
                                     <div class="input-group col-sm-5 ml-auto">
-                                        <p class="lineItemSubtotal">{{ lineItemSubtotal | currency: 'USD' : true : '1.2-2' }}</p>
+                                        <!-- <p class="lineItemSubtotal">{{ lineItemSubtotal | currency: 'USD' : true : '1.2-2' }}</p> -->
+                                        <p class="lineItemSubtotal">{{ lineItemSubtotal | currency: 'USD' : 'symbol' }}</p>
                                         <kendo-numerictextbox
                                             class="d-none"
                                             format="c2"
@@ -786,7 +787,7 @@
                 <h2 class="font-weight-bolder footer-logo">The Partnership Connection</h2>
             </div>
             <div class="col-md-1">
-                <p class="font-weight-bold footer-logo mb-0 mt-25">powered by </p>
+                <p class="font-weight-bold footer-logo mb-0 mt-25">Powered By: </p>
             </div>
             <div class="col-md-8">
                 <img src="../../../assets/img/AlarmConnections_Logo_Primary(With_Tag)_RGB.svg" id="afa-brand-logo">

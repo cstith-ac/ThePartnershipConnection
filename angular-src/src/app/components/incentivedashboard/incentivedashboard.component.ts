@@ -473,9 +473,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       .pipe(filter((rs): rs is NavigationEnd => rs instanceof NavigationEnd))
       .subscribe(event => {
         if (event.id === 1 && event.url === event.urlAfterRedirects) {
-          console.log('the page was refreshed')
-          //alert('using the back button will reset all of your currently entered information')
-
+          // console.log('the page was refreshed');
           setTimeout(() => {
             this.removeDocumentsFromUIOnPageRefresh()
           }, 8);
@@ -689,19 +687,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       //"InstallCompanyID": this.installCompanyID
     }).subscribe(
       (data: any[]) => {
-
-        // console.log(data) 
-
         if(data === undefined || data.length === 0) {
-
-          console.log('the data is empty')
-
           let fakeEquipMat = [{
-            // ItemID: ["", Validators.required],
-            // Description: ["", Validators.required],
-            // Quantity: ["", Validators.required],
-            // Cost: ["", Validators.required],
-            // Total: [0, Validators.required]
             ItemID: [0, Validators.required],
             Description: ["", Validators.required],
             Quantity: [1, Validators.required],
@@ -712,13 +699,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.incentiveEquipMatEntryForm = this.fb.group({
             //if there is no data entered from the incentive entry, populate fake data
             entryRowsEquipMat: this.fb.array(fakeEquipMat.map(datum => this.generateFakeDatumFormGroup(datum)))
-            // entryRowsEquipMat: this.fb.array(data.map(datum => this.generateDatumFormGroup(datum)))
           });
 
         } else if(data.length > 0) {
-
-          // console.log('there is data present')
-
           this.incentiveEquipMatEntryForm = this.fb.group({
 
             //if there is data present from the incentive entry, populate real data
@@ -736,11 +719,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         let sumMappedDefaultAmounts = mappedDefaultAmounts.reduce(function(a,b) {
           return a + b
         },0)
-        // console.log(sumMappedDefaultAmounts); // number
-        // localStorage.setItem("totalEquipMatCalc", JSON.stringify(sumMappedDefaultAmounts));
-        
-        // this.totalSumRecurring = sumMappedDefaultAmounts;
-        // this.totalSumLaborCharges = sumMappedDefaultAmounts;
 
         this.totalSumEquipMat = sumMappedDefaultAmounts;
         this.equipmentAndMaterials = sumMappedDefaultAmounts;
@@ -775,7 +753,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           Description: ["", Validators.required],
           BillCycle: ["", Validators.required],
           RMR: ["", Validators.required],
-          // PassThrough: ["", Validators.required],
           PassThrough: [this.passThrough, Validators.required],
           BillingStartDate: ["", Validators.required],
           Add2Item: [0],
@@ -1189,7 +1166,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   ngOnDestroy():void {
-    console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
+    //console.log('ngOnDestroy was called from: ' + this.activatedRoute.url)
     this.recurringValueChanges$.unsubscribe();
     this.laborChargesValueChanges$.unsubscribe();
     this.equipMatValueChanges$.unsubscribe();
@@ -1199,25 +1176,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(e.code === 'Backspace' || e.code === 'Delete') {
       this.invoiceTotal = '';
     }
-    // if(e.code === 'Backspace' || e.code === 'Delete') {
-    //   this.partnerTaxAmount = null;
-    // }
   }
 
   onChangeInvoiceTotal(e) {
     console.log(e)
-    // this.invoiceTotal = parseInt(e.target.value)
-    // if(this.incentiveDashboardForm.get('LineItemSubtotal').value === this.invoiceTotal) {
-    //   console.log('match')
-    //   //this.invoiceTotalValidated = false;
-    //   this.invoiceTotal = parseInt(e.target.value)
-    //   //
-    // } else {
-    //   console.log('no match')
-    //   //this.invoiceTotalValidated = true;
-    //   this.calculateInvoiceTotal()
-    // }
-    // this.removeNaN(e)
   }
 
   calculateCost(e,i) {
@@ -1228,67 +1190,36 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
 
-      // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
       this.lineItemSubtotal = +(this.recurring + this.equipmentAndMaterials + this.laborCharges).toFixed(12);
 
       if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
-        //console.log('the line items and tax don\'t equal the total');
-        
         this.invoiceTotalValidatedNonPartner = true;
       }
 
       if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
-        //console.log('the line items and tax equal the total');
-
         this.invoiceTotalValidatedNonPartner = false;
       }
     
-      // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
-      //   this.invoiceTotalValidatedNonPartner = true;
-      // }
-      // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-      //   this.invoiceTotalValidatedNonPartner = false;
-      //   this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
-      // }
     }
 
     if(this.user.afaRole === 5) {
 
-      // this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
       this.lineItemSubtotal = +(this.recurring + this.equipmentAndMaterials + this.laborCharges).toFixed(12);
 
       console.log(this.lineItemSubtotal + this.partnerTaxAmount);
 
       if(this.lineItemSubtotal + this.partnerTaxAmount !== this.invoiceTotal) {
-        //console.log('the line items and tax don\'t equal the total');
         
         this.invoiceTotalValidated = true;
         this.formIsValidText = false;
         
         //set the InvoiceTotal reactive form control to invalid
-       
       }
 
       if(this.lineItemSubtotal + this.partnerTaxAmount === this.invoiceTotal) {
-        //console.log('the line items and tax equal the total');
-
         this.invoiceTotalValidated = false;
         this.formIsValidText = true;
       }
-    
-      // if(this.invoiceTotal + this.partnerTaxAmount !== this.lineItemSubtotal) {
-      //   this.invoiceTotalValidated = true;
-      //   // set InvoiceTotal invalid if InvoiceTotal plus PartnerTaxAmount doesn't match LineItemSubtotal
-      //   this.incentiveDashboardForm.controls['InvoiceTotal'].setErrors({});
-      // }
-      // if(this.invoiceTotal + this.partnerTaxAmount === this.lineItemSubtotal) {
-      //   console.log(this.lineItemSubtotal)
-
-      //   // this is possibly changing the total
-      //   // this.incentiveDashboardForm.get('InvoiceTotal').setValue(this.lineItemSubtotal);
-        
-      //   this.invoiceTotalValidated = false;
-      // }
     }
   }
 
@@ -1296,8 +1227,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     localStorage.removeItem('system_Id');
     localStorage.removeItem('systemType');
     this.systemTypeID = parseInt(e.target.value.substring(3));
-
-    //console.log(this.systemTypeID);
   }
 
   onChangeGetPanelType(e) {
@@ -1319,12 +1248,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   onChangeNewSystem(e) {
 
     if(e.target.checked) {
-      //console.log('the input is checked')
       // the CustomerSystemID should get a value of 1
       this.incentiveDashboardForm.controls["CustomerSystemID"].setValue(1)
       // validate this field
       this.incentiveDashboardForm.get("CustomerSystemID").setValidators(null);
-      //this.incentiveDashboardForm.controls['CustomerSystemID'].clearValidators()
       this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
 
       // List Panel Types
@@ -1340,16 +1267,9 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.listcentralstations = res;
         }
       )
-      
-      //this.incentiveDashboardForm.controls['CustomerSystemID'].disable();
-
-      // this.systemInformationSectionValidated = true;
-      // this.customerSystemIDValidated = true;
-
-      //console.log('display error message')
     }
+
     if(!e.target.checked) {
-      //console.log('the input is unchecked')
       // the SystemID should not get a value
       this.incentiveDashboardForm.controls["CustomerSystemID"].setValue('')
       // if there is a value present, then remove the value and invalidate the field
@@ -1357,28 +1277,20 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.incentiveDashboardForm.get("CustomerSystemID").updateValueAndValidity();
 
       this.incentiveDashboardForm.controls['CustomerSystemID'].enable();
-
-      // this.systemInformationSectionValidated = false;
-
     }
   }
 
   //Recurring
   private generateRecurringDatumFormGroup(datumRecurring) {
     return this.fb.group({
-      // ItemID: this.fb.control(datumRecurring.itemID),
       ItemID: this.fb.control(0),
       Description: this.fb.control(datumRecurring.itemDescription),
       BillCycle: this.fb.control(datumRecurring.billCycle),
-      // RMR: this.fb.control(datumRecurring.rmr),
       RMR: this.fb.control(0),
-      // PassThrough: this.fb.control(datumRecurring.passThrough),
       PassThrough: this.fb.control(0),
       BillingStartDate: this.fb.control(datumRecurring.billStartDate),
       Add2Item: this.fb.control(0),
-      // Multiple: this.fb.control(datumRecurring.multiple),
       Multiple: this.fb.control(25),
-      // Total: this.fb.control((datumRecurring.rmr - datumRecurring.passThrough)*datumRecurring.multiple)
       Total: this.fb.control(0)
     })
   }
@@ -1386,11 +1298,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   //Equip & Mat
   private generateFakeDatumFormGroup(datum) {
     return this.fb.group({
-      // ItemID: this.fb.control(datum.itemID),
-      // Description: this.fb.control(datum.itemDescription),
-      // Quantity: this.fb.control(1),
-      // Cost: this.fb.control(datum.defaultAmount ),
-      // Total: this.fb.control(0)
       ItemID: this.fb.control(0),
       Description: this.fb.control(datum.itemDescription),
       Quantity: this.fb.control(1),
@@ -1406,20 +1313,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Quantity: this.fb.control(1),
       Cost: this.fb.control(datum.defaultAmount ),
       Total: this.fb.control(this.quantity * datum.defaultAmount)
-      //Total: this.fb.control(0)
     })
   }
 
   //Labor
   private generateLaborChargesDatumFormGroup(datumLabor) {
     return this.fb.group({
-      // ItemID: this.fb.control(datumLabor.itemID),
       ItemID: this.fb.control(0),
       Description: this.fb.control(datumLabor.itemDescription),
       Quantity: this.fb.control(1),
-      // Cost: this.fb.control(datumLabor.defaultAmount ),
       Cost: this.fb.control(0),
-      // Total: this.fb.control(this.quantity * datumLabor.defaultAmount)
       Total: this.fb.control(0)
     })
   }
@@ -1445,7 +1348,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   } 
 
   updateTotalEquipMat(entryRowsEquipMat:any) {
-    //console.log('updateTotalEquipMat was called')
     const control = <FormArray>this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'];
     this.totalSumEquipMat=0;
 
@@ -1466,7 +1368,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   updateTotalLaborCharges(entryRowsLaborCharges:any) {
-    //console.log('updateTotalLaborCharges was called')
     const control = <FormArray>this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'];
     this.totalSumLaborCharges=0;
 
@@ -1561,9 +1462,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangePartnerTaxAmount(e) {
-    // console.log(e)
-    // console.log(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value)
-
     if(this.incentiveDashboardForm.controls["PartnerTaxAmount"].value == null) {
       this.partnerTaxAmount = 0;
       this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0.00)
@@ -1572,20 +1470,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.partnerTaxAmount = 0;
       this.incentiveDashboardForm.controls["PartnerTaxAmount"].setValue(0.00)
     }
-    //this.removeNaN(e);
     this.calculateInvoiceTotal();
   }
 
   onKeyupGetPartnerTaxAmount(e) {
-    // console.log(this.incentiveDashboardForm.get('PartnerTaxAmount').value)
-    // console.log(typeof e.target.value)
-    //get period(.) on keyboad
-    // if . is pressed, this.partnerTaxAmount = 0.00
-    // console.log(e)
-    // console.log(e.target.value)
-    // console.log(parseFloat(e.target.value))
+
     this.partnerTaxAmount = parseFloat(e.target.value)
-    //console.log(typeof this.partnerTaxAmount)
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
       if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
@@ -1607,14 +1497,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       }
     }
 
-    // if(this.lineItemSubtotal === this.invoiceTotal + this.partnerTaxAmount){
-    //   this.invoiceTotalValidated = true;
-    // }
-
-    // if(this.lineItemSubtotal !== this.invoiceTotal + this.partnerTaxAmount){
-    //   this.invoiceTotalValidated = false;
-    // }
-
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(parseInt(this.recurring) + parseInt(this.equipmentAndMaterials) + parseInt(this.laborCharges) + this.partnerTaxAmount);
 
   }
@@ -1631,8 +1513,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeVerifyContractDate(e) {
-    console.log(e);
-    console.log(e.target.value); //this is the contract date format in the form
    
     let todaysDate = new Date();
     let todaysDateString = e.target.value;
@@ -1640,21 +1520,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     todaysDateString = todaysDate.getFullYear() + '-' + ('0' + (todaysDate.getMonth()+1)).slice(-2) + '-' + ('0' + todaysDate.getDate()).slice(-2);
 
     if(e.target.value === todaysDateString) {
-      console.log('you selected today\'s date')
-      // this.contractInPresentOrFutureValidated = true;
       this.contractInPresentOrFutureValidated = false;
     }
 
     if(e.target.value > todaysDateString) {
-      console.log('the selected date is in the future')
       this.contractInPresentOrFutureValidated = true;
     }
 
     if(e.target.value < todaysDateString) {
-      console.log('the selected date is in the past')
-      console.log(todaysDateString)
       this.contractInPresentOrFutureValidated = false;
-      // this.contractInPastValidated = true;
       // if the entered contract start date is greater than 3 months in the past
     }
 
@@ -1674,15 +1548,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       // console.log('date selected is more than 3 months ago');
       this.contractInPastValidated = false;
     }
-
-    // console.log(threeMonthsAgo.format()); // 2015-10-13T09:37:35+02:00
-    // console.log(threeMonthsAgoFormatted);
-
   }
 
   getContractTerm(e) {
     let newContractTerm = e.target.value;
-    //console.log(newContractTerm);
     localStorage.setItem("contractTerm", newContractTerm);
   }
 
@@ -1715,8 +1584,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.isCustomerSearchResetButton = true;
   }
 
-  delete(e) { 
-    //console.log(e.keyCode)
+  delete(e) {
     if(e && e.code === 'Backspace' || e.code === 'Delete') {
       e.preventDefault();
     }
@@ -1734,16 +1602,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       tap(res => {
         this.customerSearch = !this.customerSearch;
         let x = res.forEach(x =>{
-          console.log(x.customerID)
           this.id = x.customerID;
         });
       }),
-      // tap(()=>{
-        // this.routeService.getCustomerSearchMatch(searchText).subscribe
-        //this.doGetCustomerID()
-      // }),
       tap(() => this.routeService.getListSitesForCustomer(this.id).subscribe(res => {
-        // console.log(res)
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
           this.listsitesforcustomer[i].customer_Site_id;
@@ -1758,21 +1620,16 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               for(var i = 0; i < this.listSystemsForSite.length; i ++) {
                 
                 if(this.listSystemsForSite.length > 1) {
-                  //console.log('there are more than 1 system')
                   this.systemPopUp = true;
 
                   return this.getAndDisplayCentralStationInfo();
                 }
 
                 if(this.listSystemsForSite.length == 1) {
-                  // console.log('there is only 1 system')
-                  // console.log(this.listSystemsForSite[i].systemType)
-                  // console.log(this.listSystemsForSite[i].alarmAccount)
                   this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
                   this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
                   this.selectedValue = this.listSystemsForSite[i].customer_System_id
 
-                  //console.log(this.listSystemsForSite[i].customer_System_id)
                   //added to fix autopopulate fields
                   this.incentiveDashboardForm.get("CustomerSystemID").setValue(this.customer_System_id);
 
@@ -1782,21 +1639,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
                   this.routeService.getListCentralStations(this.customer_System_id).subscribe(
                     res => {
-                      //console.log(res);
                       this.listcentralstations = res;
                     }
                   )
 
                   this.routeService.getListPanelTypes(this.customer_System_id).subscribe(
                     res => {
-                      //console.log(res);
                       this.listpaneltypes = res;
                     }
                   )
                   
                   this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
                     res => {
-                      //console.log(res)
                       this.alarmAccount = res.accountNumber;
                       this.systemTypeID = res.systemType;
                       this.panelTypeID = res.panelType;
@@ -1807,7 +1661,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                   )
                 }
               }
-              //this.getAndDisplayCentralStationInfo();
             }
           )
         }
@@ -1823,9 +1676,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       )
     .subscribe(
       res => {
-        //console.log(res)
         this.routeService.getListCentralStations(this.customer_System_id).subscribe(res => {
-          //console.log(res);
           this.listcentralstations = res;
         });
 
@@ -1839,9 +1690,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   removeCustomerValidationIfSelected() {
     if(this.id && this.customer_Site_id && this.customer_System_id) {
       this.customerIDValidated = false;
-      // console.log(this.id);
-      // console.log(this.customer_Site_id);
-      // console.log(this.customer_System_id);
     }
   }
 
@@ -1856,14 +1704,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   onChangeFocus(e) {
-    //console.log(e);
     this.siteElement.nativeElement.focus();
   }
 
   doSetCustomerIDSystemID(){
     this.incentiveDashboardForm.controls['CustomerID'].setValue(this.id);
     this.incentiveDashboardForm.controls['CustomerSystemID'].setValue(this.customer_System_id);
-    // console.log('get customerID');
    }
 
   getServerResponse(event){
@@ -1872,7 +1718,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   searchCleared(){
-    //console.log('searchCleared');
     this.results = [];
 
     this.listsitesforcustomer = [];
@@ -1896,11 +1741,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   selectEvent(item) {
-    //console.log(item.customerID)
-    //console.log(this.customerElement.nativeElement) //undefined
-    //this.customerElement.nativeElement.innerHTML = this.customerSiteName
-    // here we can write code for doing something with selected item
-    // this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customer+ " - " +this.customerNumber)
     this.incentiveDashboardForm.controls["CustomerID"].setValue(this.customerNumber + " - " + this.customer)
     this.siteElement.nativeElement.focus()
   }
@@ -1943,7 +1783,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   //filter cancelled customers or by customerStatus (active or cancel)
   onItemChangeToInclude(value) {
-    //console.log("Include cancelled customers: ", value)
     if(value === '0') {
       console.log('filter the table by active customers: ', value)
       //filter the table by active customers
@@ -1954,7 +1793,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   onItemChangeToExclude(value) {
     //this is the default selected radio value
-    //console.log("Exclude cancelled customers: ", value)
     if(value === '1') {
       //this.searchValue = "Active"
       console.log('filter the table by cancelled customers: ', value)
@@ -2007,7 +1845,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       windowClass: 'modal-xl',
       centered: true,
       scrollable: true, 
-      //windowClass: 'my-class',
       ariaLabelledBy: 'modal-basic-title'
     });
 
@@ -2024,15 +1861,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.spinnerService.hide();
         }
         this.customerSearchListDec14 = res.body;
-
-        // let full = this.customerSearchListDec14.filter(x => x.pendingCancel === 'Full');
-        // console.log(full);
       }
     )
   }
 
-  selectCustomer(customer_id:number, customer_Name:string, customer_Number:string, customerStatus:string, pendingCancel:string, collectionsStatus:string,e) {
-    // console.log(this.divSiteSearchIcon.nativeElement);
+  selectCustomer(customer_id:number, customer_Name:string, customer_Number:string, customerStatus:string, pendingCancel:string, collectionsStatus:string, e) {
     this.divSiteSearchIcon.nativeElement.style.display = 'none';
     this.divSystemSearchIcon.nativeElement.style.display = 'none';
 
@@ -2057,9 +1890,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       res => {
         this.listsitesforcustomer = res;
         for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-          // console.log(this.listsitesforcustomer[i].siteName);
-          // console.log(this.listsitesforcustomer[i].address_1);
-          // console.log(this.listsitesforcustomer[i].customer_Site_id);
           // if there is only 1 site
           // if there is more than 1 site
           this.customer_Site_id = this.listsitesforcustomer[i].customer_Site_id;
@@ -2078,12 +1908,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
               }
 
               for(var i = 0; i < this.listSystemsForSite.length; i ++) {
-                // if(this.listSystemsForSite.length === 0) {
-                //   console.log('there are no systems')
-                // }
-                console.log(this.listSystemsForSite[i].customer_System_id)
                 //Get Customer_system_id for dbo.CustomerSystemInfoGet
-                //this.customer_System_id = e.target.value;
                 this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
                 this.systemTypeID = this.listSystemsForSite[i].systemType;
                 this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
@@ -2092,7 +1917,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
                 
                 this.routeService.getCustomerSystemInfoGetByID(this.customer_System_id).subscribe(
                   res => {
-                    console.log(res)
                     this.alarmAccount = '';
                     this.systemTypeID = '';
                     this.panelTypeID = '';
@@ -2126,9 +1950,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     console.log(e.target.value)
 
     for(var i = 0; i < this.listsitesforcustomer.length; i++) {
-      // console.log(this.listsitesforcustomer[i].customer_Site_id)
-      // console.log(e.target.value)
-      // this.customer_Site_id = 182015;
       this.alarmAccount = '';
       this.systemTypeID = '';
       this.panelTypeID = '';
@@ -2139,7 +1960,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       this.customer_Site_id = parseInt(e.target.value);
       this.incentiveDashboardForm.get("CustomerSiteID").setValue(this.customer_Site_id);
 
-      console.log(e.target.options[e.target.options.selectedIndex].text)
       this.customerSiteName = e.target.options[e.target.options.selectedIndex].text
 
       this.routeService.getListSystemsForSite(this.customer_Site_id).subscribe(
@@ -2150,7 +1970,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           for(var i = 0; i < this.listSystemsForSite.length; i ++) {
             console.log(this.listSystemsForSite[i].customer_System_id)
             //Get Customer_system_id for dbo.CustomerSystemInfoGet
-            //this.customer_System_id = e.target.value;
             this.alarmAccount = this.listSystemsForSite[i].alarmAccount;
             this.systemTypeID = this.listSystemsForSite[i].systemType;
             this.customer_System_id = this.listSystemsForSite[i].customer_System_id;
@@ -3840,11 +3659,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     setTimeout(() => {
 
       const getItemID = this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-        console.log(element,i)
         
         const result = this.listRecurringItems.filter(x => x.item_id == element.ItemID);
-        console.log(result)
-        // console.log(element.ItemID);
 
         var string;
         result.forEach(function(e) {
@@ -3886,7 +3702,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       Description: ["", Validators.required],
       BillCycle: ["", Validators.required],
       RMR: [0, Validators.required],
-      // PassThrough: ["", Validators.required],
       PassThrough: [this.passThrough, Validators.required],
       BillingStartDate: [this.billingStartDate, Validators.required],
       Add2Item: [0],
@@ -3926,13 +3741,10 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   checkboxChanged(e) {
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring')
     let currentVal = controlArray.controls[0].get('Add2Item').value;
-    console.log(currentVal)
     if(currentVal === true) {
-      console.log('change to 1')
       controlArray.controls[0].get('Add2Item').setValue(1);
     }
     else if(currentVal === false) {
-      console.log('change to 0')
       controlArray.controls[0].get('Add2Item').setValue(0);
     } 
     
@@ -3948,7 +3760,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         windowClass: 'modal-xl',
         centered: true,
         scrollable: true,
-        // windowClass: 'my-class'
       }).result.then((result) => {
       console.log(result)
     }, (reason) => {
@@ -3960,7 +3771,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     setTimeout(() => {
 
       const getItemID = this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
-        console.log(element, i);
 
         const result = this.listMatItems.filter(x => x.item_id == element.ItemID);
 
@@ -3981,16 +3791,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     this.incentiveDashboardForm.get('LineItemSubtotal').setValue(this.totalSumEquipMat);
 
     this.equipmentAndMaterials = this.totalSumEquipMat;
-    console.log(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value)
+
     localStorage.setItem('equipmatentry', JSON.stringify(this.incentiveEquipMatEntryForm.get('entryRowsEquipMat').value));
 
     this.lineItemSubtotal = this.recurring + this.equipmentAndMaterials + this.laborCharges;
-    // console.log(Math.round(this.lineItemSubtotal).toFixed(2));
-    // console.log(this.lineItemSubtotal.toFixed(2));
-    // console.log(typeof this.lineItemSubtotal);
-    console.log(this.equipmentAndMaterials.toFixed(2))
-    //this.lineItemSubtotal = Number(this.lineItemSubtotal.toFixed(2));
-    console.log(this.lineItemSubtotal)
+
     this.incentiveDashboardForm.controls["LineItemSubtotal"].setValue(this.lineItemSubtotal);
 
     this.modalService.dismissAll();
@@ -4043,7 +3848,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         windowClass: 'modal-xl',
         centered: true,
         scrollable: true,
-        // windowClass: 'my-class'
       }).result.then((result) => {
       console.log(result)
     }, (reason) => {
@@ -4053,8 +3857,7 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   getLaborChargesItemName(e:any,i:number) {
     //get the description from listrecurringitems based on the selected ItemID
-    //console.log(e.target.value)//returns 'index: item_id', as a string
-    //let currentID = e.target.value;
+
     setTimeout(() => {
         const getItemID = this.incentiveLaborChargesEntryForm.controls['entryRowsLaborCharges'].value.forEach(element => {
           const result = this.listLaborItems.filter(x => x.item_id == element.ItemID);
@@ -4063,7 +3866,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           result.forEach(function(e) {
             string = e.itemName.toString();//extract string from returned array
           });
-          // console.log(string);
           const controlArray = <FormArray>this.incentiveLaborChargesEntryForm.get('entryRowsLaborCharges');
           controlArray.at(i).get('Description').setValue(string);
         })
@@ -4150,7 +3952,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   openValidateItemsModal(required,e) {
-    //this.doSetCustomerIDSystemID();
     this.removeCustomerValidationIfSelected();
     this.verifyCustomerSiteSystem();
     this.verifySystemInformationSection();
@@ -4198,34 +3999,21 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   verifyCustomerSiteSystem(){
     if(this.incentiveDashboardForm.controls['CustomerID'].valid) {
-      // this.customerIDValidated = true;
       this.customerIDValidated = false;
-      //this.systemInformationSectionValidated = true;
     }
     if(this.incentiveDashboardForm.controls['CustomerSiteID'].valid) {
-      // this.customerSiteIDValidated = true;
       this.customerSiteIDValidated = false;
-      //this.systemInformationSectionValidated = true;
     }
     if(this.incentiveDashboardForm.controls['CustomerSystemID'].valid) {
-      // this.customerSystemIDValidated = true;
       this.customerSystemIDValidated = false;
-      //this.systemInformationSectionValidated = true;
     }
-
-    // If This is a new system checkbox is uncheck, display customerSystemIDValidated text
-    // if(this.incentiveDashboardForm.controls['CustomerSystemID'].invalid) {
-    //   // this.customerSystemIDValidated = true;
-    //   this.customerSystemIDValidated = false;
-    //   this.systemInformationSectionValidated = true;
-    // }
   }
 
   verifySystemInformationSection() {
     let newSystemCheckbox = this.incentiveDashboardForm.controls['NewSystem'].value; 
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
-      console.log(newSystemCheckbox);
+      
       if(newSystemCheckbox === true) {
         this.systemInformationSectionValidatedNonPartner = true;
       }
@@ -4242,8 +4030,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       let panelTypeValue = this.incentiveDashboardForm.controls['PanelTypeID'].invalid;
       let centralStationValue = this.incentiveDashboardForm.controls['CentralStationID'].invalid;
 
-      
-      console.log(newSystemCheckbox)
       if(newSystemCheckbox === true) {
 
         if(alarmAccountValue && systemTypeIDValue && panelTypeValue && centralStationValue) {
@@ -4253,7 +4039,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
           this.systemInformationSectionValidated = false;
         }
 
-        //this.systemInformationSectionValidated = true;
       }
       if(newSystemCheckbox === false) {
         this.systemInformationSectionValidated = false;
@@ -4274,13 +4059,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
       if(!this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
         this.invoiceDocValidatedNonPartner = true;
       }
-      // if(!this.invoiceUpload) {
-      //   this.invoiceDocValidatedNonPartner = true; 
-      // }
-
-      // if(this.invoiceUpload) {
-      //   this.invoiceDocValidatedNonPartner = false; 
-      // }
     }
 
     if(this.user.afaRole === 5) {
@@ -4291,13 +4069,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.invoiceDocValidated = true;
       }
     }
-
-    // if(this.incentiveDashboardForm.controls['InvoiceUpload'].valid) {
-    //   this.invoiceDocValidated = false;
-    // }
-    // if(this.incentiveDashboardForm.controls['InvoiceUpload'].value === null) {
-    //   this.invoiceDocValidated = true;
-    // }
   }
 
   verifyCustomerVisitDoc() {
@@ -4305,8 +4076,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
       // the reactive form value SiteVisitUpload should be valid to allow submission. 
       // the only requirement for anyone other than a Partner is the InvoiceUpload
-      //this.incentiveDashboardForm.get('SiteVisitUpload').setErrors(null);
-
 
       this.incentiveEquipMatEntryForm.controls['entryRowsEquipMat'].value.forEach(element => {
         if(element.ItemID === 610 || element.ItemID === 635) {
@@ -4330,8 +4099,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
     if(this.user.afaRole === 5) {
       // the reactive form value SiteVisitUpload should get a valid state . 
-      // this.incentiveDashboardForm.get('SiteVisitUpload').clearValidators();
-      // this.incentiveDashboardForm.get('SiteVisitUpload').updateValueAndValidity();
 
       // if there is a recurring item, require a customer visit form
       // if there isn't a recurring item, do not require a customer visit form
@@ -4362,18 +4129,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   }
 
   checkForContractUploadNonPartner() {
-    // if(this.contractUpload) {
-    //   this.contractDocValidatedNonPartner = false;
-    // }
     if(!!this.incentiveDashboardForm.get('ContractUpload').value) {
       this.contractDocValidated = false;
     }
   }
 
   checkForContractUpload() {
-    // if(this.contractUpload) {
-    //   this.contractDocValidated = false;
-    // }
     if(!!this.incentiveDashboardForm.get('ContractUpload').value) {
       this.contractDocValidated = false;
     }
@@ -4439,25 +4200,15 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     if(this.user.afaRole === 5) {
       if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
         this.workOrderDocValidated = true;
-     }
+      }
  
      //if the work order upload exists, remove the validation text
-     if(this.subscriberFormUpload || this.incentiveDashboardForm.get('SubscriberFormUpload').value) {
-      this.workOrderDocValidated = false;
-    }
-     //  if(this.subscriberFormUpload || this.incentiveDashboardForm.controls['SubscriberFormUpload'].valid) {
-    //    this.workOrderDocValidated = false;
-    //  }
+      if(this.subscriberFormUpload || this.incentiveDashboardForm.get('SubscriberFormUpload').value) {
+        this.workOrderDocValidated = false;
+      }
+
     }
 
-    // if(this.ticket_Number || this.incentiveDashboardForm.controls['ServiceIncluded'].value === 'y') {
-    //    this.workOrderDocValidated = true;
-    // }
-
-    // //if the work order upload exists, remove the validation text
-    // if(this.subscriberFormUpload) {
-    //   this.workOrderDocValidated = false;
-    // }
   }
 
   disableBackSpaceAndDelete(e) {
@@ -4471,15 +4222,11 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     switch(keyID)
     {
       case 8:
-        // alert("backspace");
-        // console.log(this.incentiveDashboardForm.get('ContractDate').value);
         // if the value of ContractDate is false, do something
         // the validation text cannot appear
         this.contractTermsValidatedNonPartner = true;
         break;
       case 46:
-        // alert("delete");
-        // console.log(this.incentiveDashboardForm.get('ContractDate').value);
         // if the value of ContractDate is empty or null, show the contractTermsValidatedNonPartner text
         if(this.incentiveDashboardForm.get('ContractDate').value === null || this.incentiveDashboardForm.get('ContractDate').value === "") {
           this.contractTermsValidated = true;
@@ -4548,32 +4295,8 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         if(element.ItemID !== 0 && this.incentiveDashboardForm.controls["ContractDate"].valid) {
           this.contractTermsValidated = false;
         }
-        // if(element.ItemID !== 0 && this.incentiveDashboardForm.controls["ContractDate"].valid) {
-        //   this.contractTermsValidated = true;
-        // }
       })
-
-      // if(controlArray.length > 1) {
-      //   this.contractTermsValidated = true;
-      //   this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
-      //   this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
-      // }
-  
-      // if(this.incentiveDashboardForm.controls["ContractDate"].valid) {
-      //   this.contractTermsValidated = false;
-      // }
     }
-
-    // if(controlArray.length > 1) {
-    //   this.contractTermsValidated = true;
-    //   // console.log('RMR items require a contract start date');
-    //   this.incentiveDashboardForm.get("ContractDate").setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls["ContractDate"].updateValueAndValidity();
-    // }
-
-    // if(this.incentiveDashboardForm.controls["ContractDate"].valid) {
-    //   this.contractTermsValidated = false;
-    // }
   }
 
   verifyAddViewCommentsSignals() {
@@ -4602,7 +4325,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.partnerCommentsEntryForm.get('PartnerComments').setValidators(Validators.required);
         this.partnerCommentsEntryForm.controls['PartnerComments'].updateValueAndValidity();
 
-        //console.log(this.incentiveDashboardForm.controls['PartnerComments'].status)
         this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
         this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
         
@@ -4653,19 +4375,14 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
 
   verifyAddViewCommentsPanel() {
     // You selected the Panel Type "Other". Please provide details in the Comments section.
-    // console.log('You selected the Panel Type "Other". Please provide details in the Comments section.');
 
     if(this.user.afaRole === 19 || this.user.afaRole === 14 || this.user.afaRole === 9) {
       
       if(this.incentiveDashboardForm.controls['PanelTypeID'].value === 675) {
-        // this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
-        // this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
-        
         this.addViewCommentsPanelValidatedNonPartner = true;
       }
 
       if(this.incentiveDashboardForm.controls['PanelTypeID'].value !== 675) {
-        
         this.addViewCommentsPanelValidatedNonPartner = false;
       }
 
@@ -4689,16 +4406,6 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
         this.incentiveDashboardForm.get('PartnerComments').setErrors(null);
       }
     }
-
-    // if(this.incentiveDashboardForm.controls['PanelTypeID'].value === '675') {
-    //   this.incentiveDashboardForm.get('PartnerComments').setValidators(Validators.required);
-    //   this.incentiveDashboardForm.controls['PartnerComments'].updateValueAndValidity();
-    //   this.addViewCommentsPanelValidated = true;
-    // }
-
-    // if(this.incentiveDashboardForm.controls['PartnerComments'].value) {
-    //   this.addViewCommentsPanelValidated = false;
-    // }
   }
 
   verifyAddNewRMRServiceBoxChecked() {
@@ -4707,41 +4414,18 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
     const controlArray = <FormArray>this.incentiveRecurringEntryForm.get('entryRowsRecurring');
 
     this.incentiveRecurringEntryForm.controls['entryRowsRecurring'].value.forEach(element => {
-      // console.log(element)
-      if(element.ItemID === 0 && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
-        // console.log('Display the validation text. The partner has not manually entered a recurring item');
+      if(element.ItemID === 0 && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
         this.addNewRMRServiceBoxCheckedValidated = true;
 
-        // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length === 1) {
-
-        //   this.addNewRMRServiceBoxCheckedValidated = true;
-        // }
       }
       if(element.ItemID !== 0 || element.ItemID === '' && this.selectedForCheckBoxAutoInsert[6] === 'y') {
 
-        // console.log('Remove the validation text. The partner has manually entered a recurring item');
-
         this.addNewRMRServiceBoxCheckedValidated = false;
-        // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
 
-        //   this.addNewRMRServiceBoxCheckedValidated = false;
-    
-        // }
       }
     });
-
-    // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length === 1) {
-
-    //   this.addNewRMRServiceBoxCheckedValidated = true;
-    // }
-
-    // if(this.selectedForCheckBoxAutoInsert[6] === 'y' && controlArray.length > 1) {
-
-    //   this.addNewRMRServiceBoxCheckedValidated = false;
-
-    // }
   }
 
   verifyLaborCharges() {
@@ -4771,15 +4455,12 @@ export class IncentivedashboardComponent implements OnInit, OnChanges, OnDestroy
   verifyPendingCancelCollectionsStatus() {
     if(this.pendingCancel === 'Full') {
       this.fullTextValidated = true;
-      // console.log(this.pendingCancel);
     }
     if(this.pendingCancel === 'Partial') {
       this.partialTextValidated = true;
-      // console.log(this.pendingCancel);
     }
 
     if(this.collectionsStatus) {
-      // console.log('collections');
       this.collectionsStatusValidated = true;
     }
   }

@@ -2,39 +2,42 @@
 <NMCNexusDocument xmlns="http://www.nmccentral.com/webservices/nmcmapi">
   <GetAccountInfo>
     <GetAccountInfo_Response>
-      <site_name>Ferreira, Andrea</site_name>
-      <site_addr1>83934 Wolf Creek Road</site_addr1>
-      <street_no>83934</street_no>
-      <street_name>WOLF CREEK ROAD</street_name>
+      <site_name>Morgan, Enid M.</site_name>
+      <site_addr1>36695 Jasmine Lane</site_addr1>
+      <street_no>36695</street_no>
+      <street_name>JASMINE LANE</street_name>
       <sitestat_id>A     </sitestat_id>
       <country_name>USA</country_name>
       <timezone_no>1</timezone_no>
-      <city_name>INDIO</city_name>
+      <city_name>RANCHO MIRAGE</city_name>
       <state_id>CA</state_id>
-      <zip_code>92201</zip_code>
+      <zip_code>92270</zip_code>
       <county_name>RIVERSIDE</county_name>
-      <phone1>8582430468</phone1>
+      <phone1>7603246993</phone1>
       <ext1>
       </ext1>
-      <phone2>7603478588</phone2>
       <ext2>
       </ext2>
-      <cross_street>Golf Center Pkwy</cross_street>
-      <codeword1>VEPPA</codeword1>
-      <map_page>5410</map_page>
-      <map_coord>H5</map_coord>
-      <orig_install_date>2005-12-01T00:00:00</orig_install_date>
-      <cs_no>2213802</cs_no>
+      <cross_street>Cypress</cross_street>
+      <codeword1>FROGGY</codeword1>
+      <mapbook_id>1     </mapbook_id>
+      <map_page>787</map_page>
+      <map_coord>J7</map_coord>
+      <orig_install_date>2006-05-04T00:00:00</orig_install_date>
+      <cs_no>L910987</cs_no>
       <systype_id>1006AR</systype_id>
       <sitetype_id>R     </sitetype_id>
-      <panel_location>Entry Closet</panel_location>
+      <panel_location>hallway closet</panel_location>
       <timezone_descr>PACIFIC</timezone_descr>
+      <mapbook_descr>Thomas Brothers</mapbook_descr>
       <opt_2>No</opt_2>
       <opt_3>No</opt_3>
       <opt_4>No</opt_4>
       <opt_5>No</opt_5>
       <opt_6>No</opt_6>
       <opt_7>No</opt_7>
+      <last_ani>7603246993</last_ani>
+      <last_ani_date>Sep  7 2022  3:21PM</last_ani_date>
     </GetAccountInfo_Response>
   </GetAccountInfo>
 </NMCNexusDocument>

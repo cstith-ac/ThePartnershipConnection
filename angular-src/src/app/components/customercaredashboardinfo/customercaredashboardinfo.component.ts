@@ -122,8 +122,6 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
         this.rmName = this.rmName[0];
         this.rmid = this.rmid[0];
-
-        //console.log(this.lastServiceTicketId); //object
       },
       err => {
         console.log(err);
@@ -167,7 +165,6 @@ export class CustomercaredashboardinfoComponent implements OnInit {
 
   showRegionRelationshipContact() {
     $("#regionRelationshipContactModal").modal("show");
-    console.log('open showRegionRelationshipContact modal')
   }
 
   openRegionRelationshipContactModal(regionRelationshipContactContent) {
@@ -177,10 +174,8 @@ export class CustomercaredashboardinfoComponent implements OnInit {
         windowClass: 'my-class950',
       });
 
-      //console.log(this.rmid)
       this.rmlistService.getAllRegionRelationshipContacts().subscribe(
         res => {
-          //console.log(res)
           this.allRegionRelationshipContacts = res;
           let currentRegionRelationshipContact = this.allRegionRelationshipContacts.filter(x => x.rmid === this.rmid);
           this.currentRMID = currentRegionRelationshipContact.map(x => x.rmid);
@@ -190,23 +185,8 @@ export class CustomercaredashboardinfoComponent implements OnInit {
           this.currentPSS = currentRegionRelationshipContact.map(x => x.pss);
           this.currentPhone = currentRegionRelationshipContact.map(x => x.phone);
           this.currentRegion = currentRegionRelationshipContact.map(x => x.region);
-          console.log(currentRegionRelationshipContact);
-          console.log(this.currentRMID[0]);
-          console.log(this.currentId[0]);
-          console.log(this.currentRM[0]);
-          console.log(this.currentRSM[0]);
-          console.log(this.currentPSS[0]);
-          console.log(this.currentPhone[0]);
-          console.log(this.currentRegion[0]);
-
-          // for(let i = 0; i < this.allRegionRelationshipContacts.length; i++) {
-          //   console.log(this.allRegionRelationshipContacts[i])
-          // }
         }
       )
-      // this.rmlistService.getRegionRelationshipContactsById(this.id).subscribe(res => {
-      //   console.log(res);
-      // })
   }
 
 }
