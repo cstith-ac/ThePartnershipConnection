@@ -151,7 +151,6 @@ export class PartnerdashboardComponent implements OnInit {
 
     // if the previous route equals partner-view-list, get PartnerLandingPageX 
     if(this.sedonaContactEmail) {
-      console.log(this.sedonaContactEmail + ' is the alias user')
       this.userName = this.sedonaContactEmail;
 
       // Remove text after @ sign in email address
@@ -161,7 +160,6 @@ export class PartnerdashboardComponent implements OnInit {
       this.authService.getProfile().pipe(
         mergeMap((res:any) => this.permissionService.getPermissionsUserMap(this.sedonaContactEmail))
       ).subscribe(data => {
-        console.log(data)
         this.permissionsUserMap = data;
 
         //show/hide card or card and button base on hasPermission value of Y or N
@@ -237,22 +235,14 @@ export class PartnerdashboardComponent implements OnInit {
         ).subscribe(res => {
           if(res.status === 200) {
             this.spinnerService.hide()
-            console.log(res.statusText)
           }
-          // this.partnerLandingPageX = res.body
           this.partnerLandingPage = res.body
           this.firstName = this.sedonaContactEmail 
 
           for(var i = 0; i < this.partnerLandingPage.length; i++) {
-            console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
-            console.log(this.partnerLandingPage[i].attritionLastMonth)
-            console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
-
             this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
             this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
             this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
-            console.log(typeof this.attritionValue)//number
-            console.log('alias')
   
             this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
             this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
@@ -279,14 +269,10 @@ export class PartnerdashboardComponent implements OnInit {
       this.authService.getProfile().pipe(
         mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
       ).subscribe(data => {
-        //console.log(data)
         this.permissionsUserMap = data;
 
         //show/hide card or card and button base on hasPermission value of Y or N
         for(let i = 0; i < this.permissionsUserMap.length; i++) {
-          // console.log(this.permissionsUserMap[i])
-          // console.log(this.permissionsUserMap[i].permissionName)
-          // console.log(this.permissionsUserMap[i].hasPermission)
           if(this.permissionsUserMap[i].permissionName === '3G Conversion' && this.permissionsUserMap[i].hasPermission === 'Y'){
             this.hide3GConversion = true;
           }
@@ -332,19 +318,9 @@ export class PartnerdashboardComponent implements OnInit {
           }
           this.partnerLandingPage = res.body;
           for(var i = 0; i < this.partnerLandingPage.length; i++) {
-            // console.log(Math.trunc(this.partnerLandingPage[i].attritionLastMonth))
-            // console.log(this.partnerLandingPage[i].attritionLastMonth)
-            // console.log(this.partnerLandingPage[i].attritionLastMonth.toFixed(2))
-
-            // console.log(this.partnerLandingPage[i].highRMRCancelPerson);
-            // console.log(this.partnerLandingPage[i].attritionLast6Months.toFixed(1))
-            // console.log(this.partnerLandingPage[i].progressPercent); //3G Conversion
-            // console.log(this.partnerLandingPage[i].attritionLastMonth); //Attrition
             this.threegConversionValue = this.partnerLandingPage[i].progressPercent;
             this.attritionLastMonth = this.partnerLandingPage[i].attritionLastMonth;
             this.attritionValue = Math.trunc(this.partnerLandingPage[i].attritionLastMonth);
-            // console.log(typeof this.attritionValue) //number
-            // console.log('partner')
   
             this.threegConversionprogress = this.partnerLandingPage[i].progressPercent.toString() + "%";
             this.attritionProgress = this.partnerLandingPage[i].attritionLastMonth.toString() + "%";
@@ -387,8 +363,6 @@ export class PartnerdashboardComponent implements OnInit {
 
     this.monthDiffAtt = this.attSunsetDate.diff(this.todaysDate, 'months');
     this.monthDiffVerizon = this.verizonSunsetDate.diff(this.todaysDate, 'months');
-    // console.log('Month: ' + this.monthDiffAtt);
-    // console.log('Month: ' + this.monthDiffVerizon);
   }
 
   getBackgroundColor(progressPercent) {
@@ -399,7 +373,6 @@ export class PartnerdashboardComponent implements OnInit {
   }
 
   routeToCustomer3GList() {
-    console.log('route')
     this.router.navigate(["/customer-3g-listing/"]);
   }
 
@@ -418,13 +391,6 @@ export class PartnerdashboardComponent implements OnInit {
             this.spinnerService.hide()
           }
           this.partnerInvoiceListing = [].concat(res);
-          // for(var i = 0; i < this.partnerInvoiceListing.length; i++) {
-          //   this.incentiveID = this.partnerInvoiceListing[i].incentiveID
-          // }
-          // this.partnerInvoiceListing.forEach((x) => {
-          //   this.incentiveID = x.incentiveID
-          // })
-          
         }
       )
   }
@@ -442,10 +408,7 @@ export class PartnerdashboardComponent implements OnInit {
   }
 
   onOpenNoteModal(incentiveID:number) {
-    //$("#memoModal").modal("show");
     console.log(incentiveID)
-    // this.customer_Id = customer_Id;
-    // this.callToActionListingMemoForm.controls["CustomerID"].setValue(this.customer_Id);
   }
 
   private getDismissReason(reason: any): string {
@@ -477,18 +440,4 @@ export class PartnerdashboardComponent implements OnInit {
   routeToPartnerServiceListing() {
     this.router.navigate(["/partner-service-list"]);
   }
-
-  // onTableDataChange(event) {
-  //   this.page = event;
-  //   this.load3GList();
-  //   this.spinnerService.hide();
-  // }
-
-  // onTableSizeChange(event) {
-  //   this.tableSize = event.target.value;
-  //   this.page = 1;
-  //   this.load3GList();
-  //   this.spinnerService.hide();
-  // }
-
 }

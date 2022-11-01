@@ -12,9 +12,8 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { CancelQueueList } from 'src/app/models/cancelqueuelist';
 import { CancelQueueSiteList } from 'src/app/models/cancelqueuesitelist';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
-
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, process, State, SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -154,25 +153,6 @@ export class CancelqueuelistComponent implements OnInit {
       )
     }
 
-    // this.routeService.getCancelQueueList().subscribe(
-    //   res => {
-    //     if(res) {
-    //       this.spinnerService.hide();
-    //     }
-    //     this.cancelQueueList = res;
-
-    //     for(var i = 0; i < this.cancelQueueList.length; i++) {
-    //       //console.log(this.cancelQueueList[i].full_Cancel)
-    //       if(this.cancelQueueList[i].full_Cancel === 'Y') {
-    //         this.cancelQueueList[i].full_Cancel = 'Full'
-    //       }
-    //       if(this.cancelQueueList[i].full_Cancel === 'N') {
-    //         this.cancelQueueList[i].full_Cancel = 'Partial'
-    //       }
-    //     }
-    //   }
-    // )
-
     if(this.jwtHelper.isTokenExpired()) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -199,16 +179,31 @@ export class CancelqueuelistComponent implements OnInit {
     take: 5
   };
 
+  public filter: CompositeFilterDescriptor;
+  public sort: SortDescriptor[]; 
+
   public mySelection: number[] = [];
 
   public allData(): ExcelExportData {
     const result: ExcelExportData = {
       data: process(this.gridData, {
-      }).data
+        filter: this.filter,
+        sort: this.sort,
+      }).data,
     };
 
     return result;
-  };
+  }
+
+  public filterChange(filter: CompositeFilterDescriptor): void {
+    this.filter = filter;
+    this.gridData = filterBy(this.cancelQueueList, filter);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.gridData = orderBy(this.cancelQueueList, sort);
+  }
 
   openCancelQueueListDetailsModal(e, cancel_Queue_Id: number, customer_Number: string, customer_Name: string, rmR_Reason_Code: string, cancelledRMR: number, memo: string, notice_Date: Date, effective_Date: Date, e_Mail: string, full_Cancel: string) {
     $("#detailsModal").modal("show");

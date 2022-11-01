@@ -22,10 +22,7 @@
                 [skip]="$any(foo).skip"
                 [sort]="$any(foo).sort"
                 [filter]="$any(foo).filter"
-                [sortable]="{
-                    allowUnsort: true,
-                    mode: 'multiple'
-                }"
+                [sortable]="true"
                 [pageable]="{
                     pageSizes: [5,10,15,25,50,100,150,200]
                 }"
@@ -35,6 +32,8 @@
                 [groupable]="true"
                 [columnMenu]="true"
                 [selectable]="true"
+                (sortChange)="sortChange($event)"
+                (filterChange)="filterChange($event)"
                 (selectionChange)="onOpenPartnerAgingReportModal($event, customer_Id, customer_Number, customer_Name, activeRMR, filterCategory, customerSince, lastPay, lastPayAmount, pastDue, bal_Current, availableCredit, availableCash, totalDue, collectionQueue, pendingCancellation, commercialAccount, bucket_1, bucket_2, bucket_3, bucket_4, bucket_5, guaranteeStatus, address_1, address_2, address_3, city, state, zipCode, emailAddress, primaryPhone, alternatePhone)"
                 kendoGridSelectBy="customer_Id"
                 [selectedKeys]="mySelection"
@@ -43,6 +42,7 @@
             >
             <ng-template kendoGridToolbarTemplate>
                 <button 
+                  class="export-to-excel"
                   type="button" 
                   kendoGridExcelCommand 
                   icon="file-excel"

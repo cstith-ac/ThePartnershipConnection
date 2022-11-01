@@ -1,57 +1,3 @@
-<!-- <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h5 class="headline-5 high-emphasis">Partner Invoice List</h5>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <button (click)="exportexcel()">Export to Excel</button>
-
-            <table class="table table-striped" id="excel-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Your Invoice #</th>
-                        <th scope="col">Invoice Date</th>
-                        <th scope="col">Invoice Amount</th>
-                        <th scope="col">Customer #</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Alarm Connections #</th>
-                        <th scope="col">Date Entered</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Approved Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of partnerInvoiceListing | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-                      <td id="{{ item.incentiveID }}" class="hyperlink" (click)="onOpenPartnerInvoiceListingModal(item.ticketID, item.incentiveID, item.vendorInvoiceNumber, item.invoiceAmount, item.invoiceDate, item.approvedAmount, item.dateEntered, item.heldReason, item.checkNumber, item.checkDate, item.amountPaid, item.creditAmount, item.creditDate, item.determination, item.customer_Number, item.customer_Name, item.relevantMemo, item.relevantComment, item.address_1, item.address_2, item.address_3, item.city, item.state, item.zipCode, item.ticketNumber, item.csAccount)">{{ item.vendorInvoiceNumber }}</td>
-                      <td>{{ item.invoiceDate }}</td>
-                      <td>{{ item.invoiceAmount | currency }}</td>
-                      <td>{{ item.customer_Number }}</td>
-                      <td>{{ item.customer_Name }}</td>
-                      <td>{{ item.ticketNumber }}</td>
-                      <td>{{ item.dateEntered }}</td>
-                      <td>{{ item.determination }}</td>
-                      <td *ngIf="item.approvedAmount === 'On Hold' || item.approvedAmount === 'Pending' || item.approvedAmount === 'Denied'; else dollarAmountAvailBlock">{{ item.approvedAmount }}</td>
-                      <ng-template #dollarAmountAvailBlock>
-                        <td>${{ item.approvedAmount }}</td>
-                      </ng-template>
-                    </tr>
-                  </tbody>
-            </table>
-            <ngb-pagination
-                [collectionSize]="partnerInvoiceListing?.length"
-                [(page)]="page" 
-                [maxSize]="5" 
-                [rotate]="true" 
-                [ellipses]="false" 
-                [boundaryLinks]="true"
-                class="d-flex justify-content-center mt-5">
-            </ngb-pagination>
-        </div>
-    </div>
-</div> -->
-
 <div class="card">
     <div class="card-body">
         <kendo-grid
@@ -60,10 +6,7 @@
             [skip]="$any(foo).skip"
             [sort]="$any(foo).sort"
             [filter]="$any(foo).filter"
-            [sortable]="{
-                allowUnsort: true,
-                mode: 'multiple'
-            }"
+            [sortable]="true"
             [pageable]="{
                 pageSizes: [5,10,15,25,50,100,150,200]
             }"
@@ -73,6 +16,8 @@
             [groupable]="true"
             [columnMenu]="true"
             [selectable]="true"
+            (sortChange)="sortChange($event)"
+            (filterChange)="filterChange($event)"
             (selectionChange)="onOpenPartnerInvoiceListingModal($event, ticketID, incentiveID, vendorInvoiceNumber, invoiceAmount, invoiceDate, approvedAmount, dateEntered, heldReason, checkNumber, checkDate, amountPaid, creditAmount, creditDate, determination, customer_Number, customer_Name, relevantMemo, relevantComment, address_1, address_2, address_3, city, state, zipCode, ticketNumber, csAccount)"
             kendoGridSelectBy="incentiveID"
             [(selectedKeys)]="mySelection"
@@ -81,6 +26,7 @@
         >
         <ng-template kendoGridToolbarTemplate>
             <button 
+              class="export-to-excel"
               type="button" 
               kendoGridExcelCommand 
               icon="file-excel"

@@ -8,23 +8,43 @@ import { PermissionsService } from 'src/app/services/permissions.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Customer3GListing } from 'src/app/models/customer3glisting';
 import { PermissionsUserMap } from 'src/app/models/permissionsusermap';
-import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { CompositeFilterDescriptor, filterBy, process, State, SortDescriptor, orderBy } from '@progress/kendo-data-query';
-import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
-import { saveAs } from "@progress/kendo-file-saver";
-import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import {
+  DataStateChangeEvent,
+  ExcelCommandDirective,
+  GridDataResult,
+} from '@progress/kendo-angular-grid';
+import {
+  CompositeFilterDescriptor,
+  filterBy,
+  process,
+  State,
+  SortDescriptor,
+  orderBy,
+} from '@progress/kendo-data-query';
+import {
+  Workbook,
+  WorkbookSheetColumn,
+  WorkbookSheet,
+  WorkbookSheetRow,
+  WorkbookSheetRowCell,
+  WorkbookSheetFilter,
+  WorkbookOptions,
+  workbookOptions,
+} from '@progress/kendo-angular-excel-export';
+import { saveAs } from '@progress/kendo-file-saver';
+import { ExcelExportData } from '@progress/kendo-angular-excel-export';
 declare var $: any;
 
 @Component({
   selector: 'app-customer3glisting',
   templateUrl: './customer3glisting.component.html',
-  styleUrls: ['./customer3glisting.component.css']
+  styleUrls: ['./customer3glisting.component.css'],
 })
 export class Customer3glistingComponent implements OnInit {
   customer3gListing: Customer3GListing[];
   customer3gListingForm: FormGroup;
   emailAddress;
-  
+
   address_1;
   address_2;
   address_3;
@@ -63,31 +83,31 @@ export class Customer3glistingComponent implements OnInit {
   partnerName;
 
   public columns: any[] = [
-    {field: "Alarm Account"}, 
-    {field: "CustomerNumber"}, 
-    {field: "CustomerName"},
-    {field: "CustomerType"},
-    {field: "CustomerType"},
-    {field: "SiteName"},
-    {field: "SiteNumber"},
-    {field: "Address1"},
-    {field: "Address2"},
-    {field: "City"},
-    {field: "State"},
-    {field: "ZipCode"},
-    {field: "PanelTypeCode"},
-    {field: "PanelLocation"},
-    {field: "SystemCode"},
-    {field: "CellType"},
-    {field: "CellGeneration"},
-    {field: "CellModel"},
-    {field: "Offer1"},
-    {field: "Offer2"},
-    {field: "Offer3"},
-    {field: "Offer4"},
-    {field: "RMRatCustomer"},
-    {field: "RMRatSite"},
-    {field: "RMRatSystem"}
+    { field: 'Alarm Account' },
+    { field: 'CustomerNumber' },
+    { field: 'CustomerName' },
+    { field: 'CustomerType' },
+    { field: 'CustomerType' },
+    { field: 'SiteName' },
+    { field: 'SiteNumber' },
+    { field: 'Address1' },
+    { field: 'Address2' },
+    { field: 'City' },
+    { field: 'State' },
+    { field: 'ZipCode' },
+    { field: 'PanelTypeCode' },
+    { field: 'PanelLocation' },
+    { field: 'SystemCode' },
+    { field: 'CellType' },
+    { field: 'CellGeneration' },
+    { field: 'CellModel' },
+    { field: 'Offer1' },
+    { field: 'Offer2' },
+    { field: 'Offer3' },
+    { field: 'Offer4' },
+    { field: 'RMRatCustomer' },
+    { field: 'RMRatSite' },
+    { field: 'RMRatSystem' },
   ];
   public gridData: any[];
   public pageSize: number = 5;
@@ -95,10 +115,10 @@ export class Customer3glistingComponent implements OnInit {
   public today = new Date().toDateString();
   public selectedKeys = [];
 
-  clicked = false;//disables button after click
-  hideShowBackButtonEl:boolean=false;
+  clicked = false; //disables button after click
+  hideShowBackButtonEl: boolean = false;
 
-  @ViewChild("dateTime") dateTimeView: ElementRef;
+  @ViewChild('dateTime') dateTimeView: ElementRef;
 
   constructor(
     private router: Router,
@@ -107,201 +127,226 @@ export class Customer3glistingComponent implements OnInit {
     private spinnerService: NgxSpinnerService,
     private authService: AuthService,
     public permissionService: PermissionsService
-  ) { 
+  ) {
     this.gridData = this.customer3gListing;
     this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
-    if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
-      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
-      this.partnerName = localStorage.getItem('partnerName')
+    if (
+      localStorage.getItem('sedonaContactEmail') &&
+      localStorage.getItem('partnerName')
+    ) {
+      this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail');
+      this.partnerName = localStorage.getItem('partnerName');
     }
 
-    $("#wrapper").addClass("toggled");
+    $('#wrapper').addClass('toggled');
 
     const workbook = new Workbook({
-      sheets:[
+      sheets: [
         {
-          columns: [   
-            
-          ],
+          columns: [],
           name: 'RBLX',
           rows: [
             {
-              cells: [{
-                value: "My Company", fontSize: 32, textAlign: "center"
-            }]
-            }
-          ]
-        }
-      ]
-    })
+              cells: [
+                {
+                  value: 'My Company',
+                  fontSize: 32,
+                  textAlign: 'center',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
     var foo = workbook.options;
-    var item = foo.sheets.find(x => x.name)
+    var item = foo.sheets.find((x) => x.name);
     var today = item.name;
-    console.log(today)
+    
     this.spinnerService.show();
 
-    if(this.sedonaContactEmail) {
-      console.log(this.sedonaContactEmail + ' is the alias user')
-      
+    if (this.sedonaContactEmail) { 
+
       // use SwitchMap to get profile then permissions user map
-      this.authService.getProfile().pipe(
-        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(this.sedonaContactEmail))
-      ).subscribe(data => {
-        console.log(data)
-        this.permissionsUserMap = data;
+      this.authService
+        .getProfile()
+        .pipe(
+          mergeMap((res: any) =>
+            this.permissionService.getPermissionsUserMap(
+              this.sedonaContactEmail
+            )
+          )
+        )
+        .subscribe((data) => {
+          this.permissionsUserMap = data;
 
-        //show/hide card or card and button base on hasPermission value of Y or N
-        for(let i = 0; i < this.permissionsUserMap.length; i++) {
-          
-          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-            this.hide3GExcelExport = true;
+          //show/hide card or card and button base on hasPermission value of Y or N
+          for (let i = 0; i < this.permissionsUserMap.length; i++) {
+            if (
+              this.permissionsUserMap[i].permissionName === '3G Excel Export' &&
+              this.permissionsUserMap[i].hasPermission === 'Y'
+            ) {
+              this.hide3GExcelExport = true;
+            }
           }
-        }
-      })
-      this.authService.getProfile().pipe(
-        mergeMap((res:any) => this.routeService.getCustomer3GListingX(res.userName, this.sedonaContactEmail))
-      ).subscribe(data => {
-        if(data.status === 200) {
-          this.spinnerService.hide();
-          console.log(data.statusText)
-        }
-        this.customer3gListing = data.body
-        this.gridData = data.body
-      })
+        });
+      this.authService
+        .getProfile()
+        .pipe(
+          mergeMap((res: any) =>
+            this.routeService.getCustomer3GListingX(
+              res.userName,
+              this.sedonaContactEmail
+            )
+          )
+        )
+        .subscribe((data) => {
+          if (data.status === 200) {
+            this.spinnerService.hide();
+          }
+          this.customer3gListing = data.body;
+          this.gridData = data.body;
+        });
     }
-    if(!this.sedonaContactEmail) {
-      this.authService.getProfile().pipe(
-        mergeMap((res:any) => this.permissionService.getPermissionsUserMap(res.userName))
-      ).subscribe(data => {
-        this.permissionsUserMap = data;
+    if (!this.sedonaContactEmail) {
+      this.authService
+        .getProfile()
+        .pipe(
+          mergeMap((res: any) =>
+            this.permissionService.getPermissionsUserMap(res.userName)
+          )
+        )
+        .subscribe((data) => {
+          this.permissionsUserMap = data;
 
-        for(let i = 0; i < this.permissionsUserMap.length; i++) {
-          if(this.permissionsUserMap[i].permissionName === '3G Excel Export' && this.permissionsUserMap[i].hasPermission === 'Y'){
-            console.log('this works')
-            this.hide3GExcelExport = true;
+          for (let i = 0; i < this.permissionsUserMap.length; i++) {
+            if (
+              this.permissionsUserMap[i].permissionName === '3G Excel Export' &&
+              this.permissionsUserMap[i].hasPermission === 'Y'
+            ) {
+              console.log('this works');
+              this.hide3GExcelExport = true;
+            }
           }
+        });
+      this.routeService.getCustomer3GListing().subscribe((res) => {
+        if (res) {
+          this.spinnerService.hide();
         }
-      })
-      this.routeService.getCustomer3GListing().subscribe(
-        res => {
-          if(res) {
-            this.spinnerService.hide()
-          }
-          this.gridData = res;
-          
-        }
-      )
+        this.gridData = res;
+      });
     }
 
     this.customer3gListingForm = this.fb.group({
-      EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
-      NoteType: "3G",
-      Memo: "",
+      EmailAddress: (this.emailAddress = JSON.parse(
+        localStorage.getItem('user')
+      ).email),
+      NoteType: '3G',
+      Memo: '',
       ServiceTicketID: 1,
       CustomerID: 1,
       IncentiveID: 1,
       CancelQueueID: 1,
       ProspectID: 1,
-      CustomerSystemID: ""
+      CustomerSystemID: '',
     });
   }
 
   load3GList() {
-    this.routeService.getCustomer3GListing().subscribe(
-      res => {
-        this.gridData = res;
-      }
-    )
+    this.routeService.getCustomer3GListing().subscribe((res) => {
+      this.gridData = res;
+    });
   }
 
   public state: State = {
     skip: 0,
-    take: 5
+    take: 5,
   };
 
   public filter: CompositeFilterDescriptor;
   public sort: SortDescriptor[];
 
-  public columnsConfig:[{
-    title: 'date'
-  }] 
+  public columnsConfig: [
+    {
+      title: 'date';
+    }
+  ];
 
   public dataStateChange(state: DataStateChangeEvent) {
-    console.log('change')
+    console.log('change');
   }
 
   public workbook() {
     const workbook = new Workbook({
-
       sheets: <WorkbookSheet[]>[
         {
           columns: <WorkbookSheetColumn[]>[
             { autoWidth: true },
-            { autoWidth: true }
+            { autoWidth: true },
           ],
           name: new Date().toDateString(),
           rows: <WorkbookSheetRow[]>[
             // First row (header)
             {
               cells: <WorkbookSheetRowCell[]>[
-                { value: new Date().toDateString()},
-                { value: "Alarm Account" },
-                { value: "Customer Number" },
-                { value: "Customer Name" },
-                { value: "Customer Type" },
-                { value: "Site Name" },
-                { value: "Site Number" },
-                { value: "Address 1" },
-                { value: "Address 2" },
-                { value: "City" },
-                { value: "State" },
-                { value: "Zip Code" },
-                { value: "Panel Type Code" },
-                { value: "Panel Location" },
-                { value: "System Code" },
-                { value: "Cell Type" },
-                { value: "Cell Generation" },
-                { value: "Cell Model" },
-                { value: "Carrier" },
-                { value: "Offer 1" },
-                { value: "Offer 2" },
-                { value: "Offer 3" },
-                { value: "Offer 4" },
-                { value: "RMR At Customer" },
-                { value: "RMR At Site" },
-                { value: "RMR At System" }
-              ]
+                { value: new Date().toDateString() },
+                { value: 'Alarm Account' },
+                { value: 'Customer Number' },
+                { value: 'Customer Name' },
+                { value: 'Customer Type' },
+                { value: 'Site Name' },
+                { value: 'Site Number' },
+                { value: 'Address 1' },
+                { value: 'Address 2' },
+                { value: 'City' },
+                { value: 'State' },
+                { value: 'Zip Code' },
+                { value: 'Panel Type Code' },
+                { value: 'Panel Location' },
+                { value: 'System Code' },
+                { value: 'Cell Type' },
+                { value: 'Cell Generation' },
+                { value: 'Cell Model' },
+                { value: 'Carrier' },
+                { value: 'Offer 1' },
+                { value: 'Offer 2' },
+                { value: 'Offer 3' },
+                { value: 'Offer 4' },
+                { value: 'RMR At Customer' },
+                { value: 'RMR At Site' },
+                { value: 'RMR At System' },
+              ],
             },
             // Second row (data)
             {
               cells: <WorkbookSheetRowCell[]>[
-                { value: "alarm_Account", fontSize:'14px', color: 'red' },
-                { value: "customer_Name" },
-                { value: "customerType" },
-                { value: "siteName" },
-                { value: "address_1" },
-                { value: "city" },
-                { value: "state" },
-                { value: "zipCode" },
-                { value: "panel_Type_Code" },
-                { value: "system_Code" },
-                { value: "cellType" },
-                { value: "cellGeneration" },
-                { value: "cellModel" },
-                { value: "carrier" },
-                { value: "rMRAtCustomer" },
-              ]
+                { value: 'alarm_Account', fontSize: '14px', color: 'red' },
+                { value: 'customer_Name' },
+                { value: 'customerType' },
+                { value: 'siteName' },
+                { value: 'address_1' },
+                { value: 'city' },
+                { value: 'state' },
+                { value: 'zipCode' },
+                { value: 'panel_Type_Code' },
+                { value: 'system_Code' },
+                { value: 'cellType' },
+                { value: 'cellGeneration' },
+                { value: 'cellModel' },
+                { value: 'carrier' },
+                { value: 'rMRAtCustomer' },
+              ],
             },
           ],
-        }
-      ]
+        },
+      ],
     });
-    workbook.toDataURL().then(dataUrl => {
-      saveAs(dataUrl, "customer3glisting.xlsx");
-    })
+    workbook.toDataURL().then((dataUrl) => {
+      saveAs(dataUrl, 'customer3glisting.xlsx');
+    });
   }
 
   public exportNewWorkbook() {
@@ -311,7 +356,7 @@ export class Customer3glistingComponent implements OnInit {
           // Column settings (width)
           columns: <WorkbookSheetColumn[]>[
             { autoWidth: true },
-            { autoWidth: true }
+            { autoWidth: true },
           ],
           // Title of the sheet
           name: new Date().toDateString(), // edit: non trivial filename
@@ -321,60 +366,60 @@ export class Customer3glistingComponent implements OnInit {
             {
               cells: <WorkbookSheetRowCell[]>[
                 // First cell
-                { value: "Alarm Account" },
+                { value: 'Alarm Account' },
                 // Second cell
-                { value: "Customer Number" }
-              ]
+                { value: 'Customer Number' },
+              ],
             },
             // Second row (data)
             {
               cells: <WorkbookSheetRowCell[]>[
-                { value: "Around the Horn" },
-                { value: "Thomas Hardy" }
-              ]
+                { value: 'Around the Horn' },
+                { value: 'Thomas Hardy' },
+              ],
             },
             // Third row (data)
             {
               cells: <WorkbookSheetRowCell[]>[
-                { value: "B Beverages" },
-                { value: "Victoria Ashworth" }
-              ]
-            }
+                { value: 'B Beverages' },
+                { value: 'Victoria Ashworth' },
+              ],
+            },
           ],
           filter: <WorkbookSheetFilter>{
             // edit: added auto filter
             from: 0,
-            to: 1
-          }
-        }
-      ]
+            to: 1,
+          },
+        },
+      ],
     });
-    workbook.toDataURL().then(dataUrl => {
-      saveAs(dataUrl, "customer3glisting.xlsx");
+    workbook.toDataURL().then((dataUrl) => {
+      saveAs(dataUrl, 'customer3glisting.xlsx');
     });
   }
 
   saveDateTime() {
     this.fileName = 'customer3glisting.xlsx';
     const workbook = new Workbook({
-      sheets:[
+      sheets: [
         {
-          name: new Date().toDateString()
-        }
-      ]
-    })
+          name: new Date().toDateString(),
+        },
+      ],
+    });
 
-    const worksheet = workbook.options
+    const worksheet = workbook.options;
 
-    console.log(workbook.options)
+    console.log(workbook.options);
     var foo = workbook.options;
-    var item = foo.sheets.find(x => x.name)
+    var item = foo.sheets.find((x) => x.name);
     var today = item.name;
-    console.log(today)
+    console.log(today);
 
-    workbook.toDataURL().then(dataUrl => {
-      saveAs(dataUrl, "customer3glisting.xlsx");
-    })
+    workbook.toDataURL().then((dataUrl) => {
+      saveAs(dataUrl, 'customer3glisting.xlsx');
+    });
   }
 
   public mySelection: number[] = [];
@@ -383,30 +428,30 @@ export class Customer3glistingComponent implements OnInit {
     const result: ExcelExportData = {
       data: process(this.gridData, {
         filter: this.filter,
-        sort: this.sort 
-      }).data
+        sort: this.sort,
+      }).data,
     };
 
     return result;
   }
 
-  public filterChange(filter: CompositeFilterDescriptor):void {  
+  public filterChange(filter: CompositeFilterDescriptor): void {
     this.filter = filter;
     this.gridData = filterBy(this.customer3gListing, filter);
   }
 
-  public sortChange(sort: SortDescriptor[]):void {
+  public sortChange(sort: SortDescriptor[]): void {
     this.sort = sort;
     this.gridData = orderBy(this.customer3gListing, sort);
   }
 
   onOpenDetails3gModal(e, customer_System_Id: number) {
-    $("#details3gModal").modal("show");
+    $('#details3gModal').modal('show');
 
     this.customer_System_Id = customer_System_Id;
 
     e.selectedRows.forEach((x) => {
-      console.log(x.dataItem.customer_System_Id)
+      console.log(x.dataItem.customer_System_Id);
 
       this.address_1 = x.dataItem.address_1;
       this.address_2 = x.dataItem.address_2;
@@ -415,7 +460,7 @@ export class Customer3glistingComponent implements OnInit {
       this.carrier = x.dataItem.carrier;
       this.cellGeneration = x.dataItem.cellGeneration;
       this.cellModel = x.dataItem.cellModel;
-      this.cellType = x.dataItem.cellType; 
+      this.cellType = x.dataItem.cellType;
       this.city = x.dataItem.city;
       this.customerEmail = x.dataItem.customerEmail;
       this.customerPhone = x.dataItem.customerPhone;
@@ -440,37 +485,21 @@ export class Customer3glistingComponent implements OnInit {
       this.zipCode = x.dataItem.zipCode;
     });
 
-    this.customer3gListingForm.controls["CustomerSystemID"].setValue(this.customer_System_Id);
-    
+    this.customer3gListingForm.controls['CustomerSystemID'].setValue(
+      this.customer_System_Id
+    );
   }
 
   onOpenMessageModal() {
-    $("#messageModal").modal("show");
+    $('#messageModal').modal('show');
   }
 
   onSubmit3gListingMessage(form: FormGroup) {
-    this.routeService.postPartnerAddNote(this.customer3gListingForm.value).subscribe(
-      res => {
-        $("#details3gModal").modal("hide");
-        $("#messageModal").modal("hide");
-      }
-    )
+    this.routeService
+      .postPartnerAddNote(this.customer3gListingForm.value)
+      .subscribe((res) => {
+        $('#details3gModal').modal('hide');
+        $('#messageModal').modal('hide');
+      });
   }
-
-  hideShowBackButton(e) {
-    if(e.clientY === 50) {
-      //show
-      console.log(e); 
-    }
-    if(e.clientY >= 50) {
-      //hide
-      console.log(e)
-      this.hideShowBackButtonEl = true;
-    }
-  }
-
-  onClickToDashboard() {
-    this.router.navigate(["partner-dashboard"]);
-  }
-  
 }

@@ -1,39 +1,3 @@
-<!-- <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h5 class="headline-5 high-emphasis">Pending Cancellation List</h5>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Customer #</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">RMR</th>
-                        <th scope="col">Reason for Cancel</th>
-                        <th scope="col">Effective Date</th>
-                        <th scope="col">Cancellation Type</th>
-                        <th scope="col">Balance of Contract</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let list of cancelQueueList; index as i">
-                        <td id="{{ list.cancel_Queue_Id }}" class="hyperlink" (click)="openCancelQueueListDetailsModal(list.cancel_Queue_Id, list.customer_Number, list.customer_Name, list.rmR_Reason_Code, list.cancelledRMR, list.memo, list.notice_Date, list.effective_Date, list.e_Mail, list.full_Cancel)">{{ list.customer_Number }}</td>
-                        <td>{{ list.customer_Name }}</td>
-                        <td>{{ list.cancelledRMR | currency }}</td>
-                        <td>{{ list.rmR_Reason_Code }}</td>
-                        <td>{{ list.effective_Date | date }}</td>
-                        <td>{{ list.full_Cancel }}</td>
-                        <td>{{ list.balance_Of_Contract | currency }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div> -->
-
 <div class="card">
     <div class="card-body">
         <kendo-grid
@@ -42,10 +6,7 @@
             [skip]="$any(foo).skip"
             [sort]="$any(foo).sort"
             [filter]="$any(foo).filter"
-            [sortable]="{
-                allowUnsort: true,
-                mode: 'multiple'
-            }"
+            [sortable]="true"
             [pageable]="{
                 pageSizes: [5,10,15,25,50,100,150,200]
             }"
@@ -55,6 +16,8 @@
             [groupable]="true"
             [columnMenu]="true"
             [selectable]="true"
+            (sortChange)="sortChange($event)"
+            (filterChange)="filterChange($event)"
             (selectionChange)="openCancelQueueListDetailsModal($event, cancel_Queue_Id, customer_Number, customer_Name, rmR_Reason_Code, cancelledRMR, memo, notice_Date, effective_Date, e_Mail, full_Cancel)"
             kendoGridSelectBy="service_Ticket_Id"
             [(selectedKeys)]="mySelection"
@@ -63,6 +26,7 @@
         >
             <ng-template kendoGridToolbarTemplate>
                 <button
+                    class="export-to-excel"
                     type="button"
                     kendoGridExcelCommand
                     icon="file-excel"

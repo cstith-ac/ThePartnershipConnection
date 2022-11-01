@@ -15,7 +15,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, orderBy, process, SortDescriptor, State } from '@progress/kendo-data-query';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -163,30 +163,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
 
           // if()
           this.partnerInvoiceListing.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
-
-          // for(let i = 0; i < this.partnerInvoiceListing.length; i++) {
-          //   //console.log(this.partnerInvoiceListing[i].determination);
-          //   let paid = this.partnerInvoiceListing.filter(x => x.determination == 'Paid');
-          //   let others = this.partnerInvoiceListing.filter(x => x.determination !== 'Paid');
-          //   console.log(others);
-
-          //   if(paid) {
-          //     this.partnerInvoiceListing.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
-
-          //     if(others) {
-          //       console.log('there are others of')
-          //     }
-          //   }
-
-          //   if(others) {
-          //     this.partnerInvoiceListing.sort((a,b) => b.determination.localeCompare(a.determination));
-          //   }
-          // }
-
-          // First filiter the status by 'PAID'
-          // then sort by date => newest to oldest for 'PAID' ONLY
-          // let paid = this.partnerInvoiceListing.filter(x => x.determination == 'Paid');
-          // this.partnerInvoiceListing = paid.sort((a,b) => b.invoiceDate.localeCompare(a.invoiceDate));
           
         },(err:HttpErrorResponse) => {
           this.flashMessage.show('There was a problem with your requested data. Please contact an administrator'+err, {
@@ -198,33 +174,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
       }
     }, 4);
 
-    // if(this.sedonaContactEmail) {
-    //   this.userName = this.sedonaContactEmail;
-
-    //   let params = {
-    //     "EmailAddress": this.emailAddress,
-    //     "Filter": 1,
-    //     "StartDate": null,
-    //     "EndDate": null,
-    //     "AliasEmail": this.sedonaContactEmail
-    //   }
-
-    //   this.authService.getProfile().pipe(
-    //     mergeMap((res:any) => this.routeService.postPartnerInvoiceListingX(params))
-    //   ).subscribe(data => {
-    //     if(data.status === 200) {
-    //       this.spinnerService.hide();
-    //       console.log(data.statusText)
-    //     }
-    //     this.partnerInvoiceListing = data.body
-    //   },(err:HttpErrorResponse) => {
-    //     this.flashMessage.show('There was a problem with your requested data. Please contact an administrator', {
-    //       cssClass: 'text-center alert-danger',
-    //       timeout: 5000
-    //     });
-    //     this.spinnerService.hide();
-    //   })
-    // }
     if(!this.sedonaContactEmail) {
       this.routeService.getPartnerInvoiceListing().subscribe(
         res => {
@@ -235,16 +184,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
           this.gridData = [].concat(res);
         })
     }
-
-    // this.routeService.getPartnerInvoiceListing().subscribe(
-    // res => {
-    //   if(res) {
-    //     this.spinnerService.hide()
-    //   }
-      
-    //   this.partnerInvoiceListing = [].concat(res);
-      
-    // })
     
     this.authService.getProfile().subscribe(
       res => {
@@ -306,16 +245,21 @@ export class PartnerinvoicelistingComponent implements OnInit {
     take: 5
   };
 
+  public filter: CompositeFilterDescriptor;
+  public sort: SortDescriptor[];
+
   public mySelection: number[] = [];
 
   public allData(): ExcelExportData {
     const result: ExcelExportData = {
       data: process(this.gridData, {
-      }).data
+        filter: this.filter,
+        sort: this.sort,
+      }).data,
     };
 
     return result;
-  };
+  }
 
   toggleShow(newTab: string): void {
     this.activeTab = newTab;
@@ -357,38 +301,16 @@ export class PartnerinvoicelistingComponent implements OnInit {
       this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
       this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
     })
-    
-    // this.ticketID = ticketID;
-    // this.incentiveID = incentiveID;
-    // this.vendorInvoiceNumber = vendorInvoiceNumber;
-    // this.invoiceAmount = invoiceAmount;
-    // this.invoiceDate = invoiceDate;
-    // this.approvedAmount = approvedAmount;
-    // this.dateEntered = dateEntered;
-    // this.heldReason = heldReason;
-    // this.checkNumber = checkNumber;
-    // this.checkDate = checkDate;
-    // this.amountPaid = amountPaid;
-    // this.creditAmount = creditAmount;
-    // this.creditDate = creditDate;
-    // this.determination = determination;
-    // this.customer_Number = customer_Number;
-    // this.customer_Name = customer_Name;
-    // //this.relevantMemo = relevantMemo.replace(/^\s+|\s+$/g, '');
-    // this.relevantMemo = relevantMemo;
-    // this.relevantComment = relevantComment;
-    // this.address_1 = address_1;
-    // this.address_2 = address_2;
-    // this.address_3 = address_3;
-    // this.city = city;
-    // this.state = state;
-    // this.zipCode = zipCode;
-    // this.ticketNumber = ticketNumber;
-    // this.csAccount = csAccount;
-    
-    // this.partnerInvoiceListingForm.controls["IncentiveID"].setValue(this.incentiveID);
-    // this.partnerInvoiceListingForm.controls["ServiceTicketID"].setValue(this.ticketID);
+  }
 
+  public filterChange(filter: CompositeFilterDescriptor): void {
+    this.filter = filter;
+    this.gridData = filterBy(this.partnerInvoiceListing, filter);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.gridData = orderBy(this.partnerInvoiceListing, sort);
   }
 
   onOpenMessageModal() {
@@ -396,9 +318,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
   }
 
   onSubmitMessage(form: FormGroup) {
-    // this.partnerInvoiceListingForm.get('Memo').setValue('');
-    // return;
-
     this.routeService.postPartnerAddNote(this.partnerInvoiceListingForm.value).subscribe(
       res => {
         $("#detailsModal").modal("hide");
@@ -424,12 +343,6 @@ export class PartnerinvoicelistingComponent implements OnInit {
 
   exportexcel() {
     let element = document.getElementById('excel-table');
-    // let foo = this.partnerInvoiceListing.forEach((x) => {
-    //   x.vendorInvoiceNumber;
-    // });
-    // console.log(foo);
-    // return
-    //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(element);
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
  
     /* generate workbook and add the worksheet */

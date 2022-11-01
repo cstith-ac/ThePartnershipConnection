@@ -14,7 +14,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { PartnerServiceListing } from 'src/app/models/partnerservicelisting';
 
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, orderBy, process, SortDescriptor, State } from '@progress/kendo-data-query';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -143,13 +143,8 @@ export class PartnerservicelistingComponent implements OnInit {
         });
         this.spinnerService.hide();
       })
-
-      // this.routeService.getPartnerServiceListingX(this.emailAddress,this.sedonaContactEmail).subscribe(res => {
-      //   console.log(res)
-      // })
     }
     if(!this.sedonaContactEmail) {
-      // console.log('get regular stored proc')
       this.routeService.getPartnerServiceListingExtended().subscribe(
       res => {
         if(res) {
@@ -165,16 +160,6 @@ export class PartnerservicelistingComponent implements OnInit {
       }
     )
     }
-
-    // this.routeService.getPartnerServiceListingExtended().subscribe(
-    //   res => {
-    //     if(res) {
-    //       this.spinnerService.hide()
-    //     }
-
-    //     this.partnerServiceListing = [].concat(res);
-    //   }
-    // )
 
     this.partnerServiceListingForm = this.fb.group({
       EmailAddress: this.emailAddress = JSON.parse(localStorage.getItem('user')).email,
@@ -194,16 +179,21 @@ export class PartnerservicelistingComponent implements OnInit {
     take: 5
   };
 
+  public filter: CompositeFilterDescriptor;
+  public sort: SortDescriptor[];
+
   public mySelection: number[] = [];
 
   public allData(): ExcelExportData {
     const result: ExcelExportData = {
       data: process(this.gridData, {
-      }).data
+        filter: this.filter,
+        sort: this.sort,
+      }).data,
     };
 
     return result;
-  };
+  }
 
   onOpenPartnerServiceListingModal(e, service_Ticket_Id: number, ticket_Number: number, creation_Date: Date, problem_Code: string, contactName: string, contactPhone: string, acContact: string, sitePhone: string, acContactEmail: string, customer_Number: string, customer_Name: string, customerRMR: number,  customer_Since: Date, collectionQueue: string, cancelStatus: string, business_Name: string, comResStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, status3G: string, csAccount: string, systemType: string, panelType: string, centralStation: string, panel_Location: string,  customerComments:string) {
     $("#detailsModal").modal("show");
@@ -243,40 +233,17 @@ export class PartnerservicelistingComponent implements OnInit {
 
       this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
     })
-
-    // this.service_Ticket_Id = service_Ticket_Id;
-    // this.ticket_Number = ticket_Number;
-    // this.creation_Date = creation_Date;
-    // this.problem_Code = problem_Code;
-    // this.contactName = contactName;
-    // this.contactPhone = contactPhone;
-    // this.acContact = acContact;
-    // this.sitePhone = sitePhone;
-    // this.acContactEmail = acContactEmail;
-    // this.customer_Number = customer_Number;
-    // this.customer_Name = customer_Name;
-    // this.customerRMR = customerRMR;
-    // this.customer_Since = customer_Since;
-    // this.collectionQueue = collectionQueue;
-    // this.cancelStatus = cancelStatus;
-    // this.business_Name = business_Name;
-    // this.comResStatus = comResStatus;
-    // this.address_1 = address_1;
-    // this.address_2 = address_2;
-    // this.address_3 = address_3;
-    // this.city = city;
-    // this.state = state;
-    // this.zipCode = zipCode;
-    // this.status3G = status3G;
-    // this.csAccount = csAccount;
-    // this.systemType = systemType;
-    // this.panelType = panelType;
-    // this.centralStation = centralStation;
-    // this.panel_Location = panel_Location;
-    // this.customerComments = customerComments;
-
-    // this.partnerServiceListingForm.controls["ServiceTicketID"].setValue(this.service_Ticket_Id);
    
+  }
+
+  public filterChange(filter: CompositeFilterDescriptor): void {
+    this.filter = filter;
+    this.gridData = filterBy(this.partnerServiceListing, filter);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.gridData = orderBy(this.partnerServiceListing, sort);
   }
 
   onOpenMessageModal() {

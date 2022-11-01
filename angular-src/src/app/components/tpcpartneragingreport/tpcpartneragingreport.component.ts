@@ -11,11 +11,9 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { TPCPartnerAgingReport } from 'src/app/models/tpcpartneragingreport';
-
 import * as XLSX from 'xlsx';
-
 import { DataStateChangeEvent, ExcelCommandDirective, GridDataResult } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, filterBy, orderBy, process, SortDescriptor, State } from '@progress/kendo-data-query';
 import { Workbook, WorkbookSheetColumn, WorkbookSheet, WorkbookSheetRow, WorkbookSheetRowCell, WorkbookSheetFilter, WorkbookOptions, workbookOptions } from '@progress/kendo-angular-excel-export';
 import { saveAs } from "@progress/kendo-file-saver";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -105,7 +103,6 @@ export class TpcpartneragingreportComponent implements OnInit {
   public fileName: string;
   public today = new Date().toDateString();
   public selectedKeys = [];
-  //fileName='customer_aging_list.xlsx';
 
   constructor(
     public fb: FormBuilder,
@@ -134,7 +131,6 @@ export class TpcpartneragingreportComponent implements OnInit {
     }
 
     if(localStorage.getItem('sedonaContactEmail') && localStorage.getItem('partnerName')) {
-      // console.log('this works')
       this.sedonaContactEmail = localStorage.getItem('sedonaContactEmail')
       this.partnerName = localStorage.getItem('partnerName')
     }
@@ -145,19 +141,9 @@ export class TpcpartneragingreportComponent implements OnInit {
 
     $("#wrapper").addClass("toggled");
 
-    // setTimeout(() => {
-
-    //   let element120Day = this.onClick120DayElement.nativeElement;
-    //   element120Day.classList.add('active');
-
-    //   let element90Day = this.onClick90DayElement.nativeElement;
-    //   element90Day.classList.add('active');
-    // }, 8);
-
     this.spinnerService.show();
 
     if(this.sedonaContactEmail) {
-      // console.log('use the X stored procedure')
       this.userName = this.sedonaContactEmail;
 
       this.authService.getProfile().pipe(
@@ -201,26 +187,6 @@ export class TpcpartneragingreportComponent implements OnInit {
       )
     }
 
-    // this.routeService.getTPCPartnerAgingReport().subscribe(
-    //   res => {
-    //     if(res) {
-    //       this.spinnerService.hide()
-    //     }
-
-    //     this.tpcPartnerAgingReport = res;
-
-    //     this.tpcPartnerAgingReport = this.tpcPartnerAgingReport.filter((val) => 
-    //       // val.filterCategory.toLowerCase().includes('120' || '90' || 'high'))
-          
-    //       // val.filterCategory.toLowerCase().includes('120') || val.filterCategory.toLowerCase().includes('high'))
-
-    //       val.filterCategory.toLowerCase().includes('over 120, high rmr') || 
-    //       val.filterCategory.toLowerCase().includes('over 120') || 
-    //       val.filterCategory.toLowerCase().includes('over 90'))
-    //       this.collectionSize = this.tpcPartnerAgingReport.length;
-    //   }
-    // )
-
     this.tpcPartnerAgingReportForm = this.fb.group({
       EmailAddress: this.userEmailAddress = JSON.parse(localStorage.getItem('user')).email,
       NoteType: "Collections",
@@ -239,16 +205,21 @@ export class TpcpartneragingreportComponent implements OnInit {
     take: 5
   };
 
+  public filter: CompositeFilterDescriptor;
+  public sort: SortDescriptor[];
+
   public mySelection: number[] = [];
 
   public allData(): ExcelExportData {
     const result: ExcelExportData = {
       data: process(this.gridData, {
-      }).data
+        filter: this.filter,
+        sort: this.sort,
+      }).data,
     };
 
     return result;
-  };
+  }
 
   onOpenPartnerAgingReportModal(e, customer_Id: number, customer_Number: string, customer_Name: string, activeRMR: number, filterCategory: string, customerSince: string, lastPay: string, lastPaymentAmount: number, pastDue: number, bal_Current: number, availableCredit: string, availableCash: string, totalDue: number, collectionQueue: string, pendingCancellation: string, commercialAccount: string, bucket_1: string, bucket_2: string, bucket_3: string, bucket_4: string, bucket_5: string, guaranteeStatus: string, address_1: string, address_2: string, address_3: string, city: string, state: string, zipCode: string, emailAddress: string, primaryPhone: string, alternatePhone: string) {
     $("#detailsModal").modal("show");
@@ -319,6 +290,16 @@ export class TpcpartneragingreportComponent implements OnInit {
     }
 
     this.tpcPartnerAgingReportForm.controls["CustomerID"].setValue(this.customer_Id);
+  }
+
+  public filterChange(filter: CompositeFilterDescriptor): void {
+    this.filter = filter;
+    this.gridData = filterBy(this.tpcPartnerAgingReport, filter);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.gridData = orderBy(this.tpcPartnerAgingReport, sort);
   }
 
   onOpenMessageModal() {
