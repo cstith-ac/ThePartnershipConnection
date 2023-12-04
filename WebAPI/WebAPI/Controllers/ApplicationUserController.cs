@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI.Models;
@@ -22,12 +23,14 @@ namespace WebAPI.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationSettings _appSettings;
+        private readonly ILogger<ApplicationUserController> _logger;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings)
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings, ILogger<ApplicationUserController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -64,6 +67,9 @@ namespace WebAPI.Controllers
         //POST : /api/ApplicationUser/Login
         public async Task<IActionResult> Login(LoginModel model)
         {
+            // enable logging
+
+            //_logger.LogError();
             var user = await _userManager.FindByNameAsync(model.UserName);
 
             string endpoint = HttpContext.GetEndpoint().ToString();

@@ -21,7 +21,6 @@ export class CurrentuserComponent implements OnInit {
     this.authService.getProfile().subscribe(
       res => {
         this.user = res;
-        //console.log(this.user.userName.charAt(0).toUpperCase())
         this.firstInitial = this.user.userName.charAt(0).toUpperCase();
       },
       err => {

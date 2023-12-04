@@ -169,7 +169,6 @@ export class Customer3glistingComponent implements OnInit {
     this.spinnerService.show();
 
     if (this.sedonaContactEmail) { 
-
       // use SwitchMap to get profile then permissions user map
       this.authService
         .getProfile()
@@ -182,7 +181,12 @@ export class Customer3glistingComponent implements OnInit {
         )
         .subscribe((data) => {
           this.permissionsUserMap = data;
-
+          // if the partner does not have Export to Excel in the AC view, grant permission
+          this.permissionsUserMap.forEach((x) => {
+            if(x.hasPermission === 'N') {
+              x.hasPermission = 'Y'
+            }
+          })
           //show/hide card or card and button base on hasPermission value of Y or N
           for (let i = 0; i < this.permissionsUserMap.length; i++) {
             if (

@@ -58,7 +58,6 @@ import { PartnerviewlistComponent } from './components/partnerviewlist/partnervi
 import { AdminedituserComponent } from './components/adminedituser/adminedituser.component';
 import { RmlistComponent } from './components/rmlist/rmlist.component';
 import { RmlisteditComponent } from './components/rmlistedit/rmlistedit.component';
-// import { CustomerTestComponent } from './components/customer-test/customer-test.component';
 
 const routes: Routes = [
   {

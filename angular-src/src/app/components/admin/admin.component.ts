@@ -18,13 +18,12 @@ declare var $: any;
 })
 export class AdminComponent implements OnInit {
   @ViewChild("permissionToggle") permissionToggle: ElementRef;
-  // @ViewChild("inputs") inputs:ElementRef;
   @ViewChild("inputs") inputs:ElementRef;
 
   allUsers: AspNetUsers[];
   aspNetPermissions: ASPNetPermissions[];
   aspNetPermissionsMap: AspnetPermissionsMap[];
-  //permissionsUserMap: PermissionsUserMap[];
+
   deleteCurrentUserForm: FormGroup;
   permissionForm: FormGroup;
   adminUserSearchForm: FormGroup;
@@ -47,7 +46,6 @@ export class AdminComponent implements OnInit {
   isChecked:boolean;
   permissionsUserMap=[];
   clicked = false;//disables button after click
-  // selected1: boolean = false;
   selected1: number = 0;
   selected2: number = 0;
   selected3: number = 0;
@@ -87,14 +85,7 @@ export class AdminComponent implements OnInit {
       res => {
         this.allUsers = res;
 
-        //ES6 version
         this.allUsers.sort((a, b) => a.firstName.localeCompare(b.firstName))
-
-        // this.allUsers.sort(function(a,b) {
-        //   if(a.firstName < b.firstName) { return -1; }
-        //   if(a.firstName > b.firstName) { return 1; }
-        //   return 0;
-        // })
       }
     ) 
 
@@ -116,7 +107,6 @@ export class AdminComponent implements OnInit {
   }
 
   editCurrentUser(id:number) {
-    // console.log('edit the user ', id);
     this.router.navigate(['admin-edit-user/'+ id]);
   }
 
@@ -124,25 +114,20 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['admin-edit/'+ id]);
   }
 
-  editCurrentUserPermissions(e, id:number, userName:string) {
-    // console.log(id)
-    // console.log(userName)
-   
+  editCurrentUserPermissions(e, id:number, userName:string) {   
     this.id = id;
     this.userName = userName;
-    // console.log(e)
+
     $("#settingsModal").modal("show");
 
     this.permissionService.getASPNetPermissions().subscribe(
       res => {
-        // console.log(res);
         this.aspNetPermissions = res;
       }
     )
 
     this.permissionService.getASPNetPermissionsMap().subscribe(
       res => {
-        // console.log(res);
         this.aspNetPermissionsMap = res;
       }
     )
@@ -244,12 +229,10 @@ export class AdminComponent implements OnInit {
 
   onChangePermission(e,i) {
     e.target.innerHTML = e;
-    // console.log(e.currentTarget.checked)
-    // console.log(e.currentTarget.value)
-    console.log(e.currentTarget.value, i)
+
     if(e.currentTarget.value === 'N') {
       let permissionIDVal = i+1;
-      //console.log(permissionNameVal + ' value is true')
+
       let permissionObj = {
         userName : this.userName,
         permissionID: permissionIDVal,
@@ -257,17 +240,9 @@ export class AdminComponent implements OnInit {
       }
       this.inputs.nativeElement.classList.remove('noPermission')
       this.inputs.nativeElement.classList.add('slider')
-      // console.log(permissionObj)
-      // document.getElementById("myElement").classList.add('slider')
-      // document.getElementById("myElement").classList.remove('noPermission')
+      
       this.permissionForm.controls['HasPermission'].setValue('Y')
-      //remove noPermission class, add slider class
-      // let myTag = this.el.nativeElement.querySelector('span');
-      // console.log(myTag)
-      // myTag.classList.remove('noPermission')
-      // myTag.classList.add('slider');
-      // $(".foo").addClass("slider");
-      // $(".foo").removeClass("noPermission");
+     
 
       return
       //parameters are UserName, PermissionID, and PermissionName
@@ -297,23 +272,16 @@ export class AdminComponent implements OnInit {
   }
 
   onChangeAccessFor3GConv(e) {
-    //console.log(e.currentTarget.checked)
-    // if(this.selected1 === 1) {
-    //   console.log('delete')
-    // }
-    // if(this.selected1 === 0) {
-    //   console.log('add')
-    // }
     if(e.currentTarget.checked === true) {
-      console.log('add')
-      console.log(e.target.value)
+      // console.log('add')
+      // console.log(e.target.value)
       let id=e.target.value;
       let permissionObj = {
         userName : this.userName,
         permissionID: parseInt(id),
         permissionName: ''
       }
-      console.log(permissionObj)
+      //console.log(permissionObj)
       this.permissionService.postPermissionAdd(permissionObj).subscribe(
         res => {
           console.log(res)
@@ -321,15 +289,15 @@ export class AdminComponent implements OnInit {
       )
     }
     if(e.currentTarget.checked === false) {
-      console.log('delete')
-      console.log(e.target.value)
+      // console.log('delete')
+      // console.log(e.target.value)
       let id=e.target.value;
       let permissionObj = {
         userName : this.userName,
         permissionID: parseInt(id),
         permissionName: ''
       }
-      console.log(permissionObj)
+      //console.log(permissionObj)
       this.permissionService.postPermissionDelete(permissionObj).subscribe(
         res => {
           console.log(res)

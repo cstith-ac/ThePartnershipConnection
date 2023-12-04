@@ -3,6 +3,7 @@ import { RouteService } from '../../services/route.service';
 import { AuthService } from '../../services/auth.service';
 import { RmlistService } from 'src/app/services/rmlist.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { DashboardInfo } from 'src/app/models/dashboardinfo';
@@ -100,6 +101,7 @@ export class CustomercaredashboardinfoComponent implements OnInit {
     private authService: AuthService,
     public rmlistService: RmlistService,
     private spinnerService: NgxSpinnerService,
+    private flashMessage: FlashMessagesService,
     private modalService: NgbModal,
     private router: Router
   ) { }
@@ -125,6 +127,15 @@ export class CustomercaredashboardinfoComponent implements OnInit {
       },
       err => {
         console.log(err);
+        localStorage.clear();
+        // this.spinnerService.hide();
+        // setTimeout(() => {
+        //   this.flashMessage.show('There was a problem with your login, please contact an administrator', {
+        //     cssClass: 'text-center alert-danger',
+        //     timeout: 5000
+        //   });
+        // }, 1000);
+        // this.router.navigate(['login'])
       }
     )
 

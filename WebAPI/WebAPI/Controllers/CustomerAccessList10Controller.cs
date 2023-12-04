@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebAPI.Models;
 
@@ -21,15 +22,18 @@ namespace WebAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         string connectionString = "";
         private readonly ApplicationSettings _appSettings;
+        private readonly ILogger<CustomerAccessList10Controller> _logger;
 
         public CustomerAccessList10Controller(
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
-            IOptions<ApplicationSettings> appSettings)
+            IOptions<ApplicationSettings> appSettings,
+            ILogger<CustomerAccessList10Controller> logger)
         {
             _userManager = userManager;
             connectionString = configuration.GetConnectionString("TPC_DevDatabase");
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -38,36 +42,76 @@ namespace WebAPI.Controllers
         {
             var customers = new List<CustomerAccessList>();
 
-            await using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;//retrieve user details...username, email, firstname, etc.
-                var user = await _userManager.FindByIdAsync(userId);
-                var c = user.AfauserLink;
-
-                string commandText = "select top 10 * from dbo.CustomerAccessList where usercode = '" + c + "'"; // Last 10
-
-                SqlCommand cmd = new SqlCommand(commandText, connection);
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                await using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    var customerAccessList = new CustomerAccessList
+                    connection.Open();
+
+                    string userId = User.Claims.First(c => c.Type == "UserID").Value;//retrieve user details...username, email, firstname, etc.
+                    var user = await _userManager.FindByIdAsync(userId);
+                    var c = user.AfauserLink;
+
+                    string commandText = "select top 10 * from dbo.CustomerAccessList where usercode = '" + c + "'"; // Last 10
+
+                    SqlCommand cmd = new SqlCommand(commandText, connection);
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        UserCode = reader["UserCode"].ToString(),
-                        SlotNumber = Convert.ToInt32(reader["SlotNumber"]),
-                        CustomerId = Convert.ToInt32(reader["CustomerId"]),
-                        CustomerNumber = reader["CustomerNumber"].ToString(),
-                        CustomerName = reader["CustomerName"].ToString(),
-                        TimeStamp = Convert.ToDateTime(reader["TimeStamp"])
-                    };
+                        var customerAccessList = new CustomerAccessList
+                        {
+                            UserCode = reader["UserCode"].ToString(),
+                            SlotNumber = Convert.ToInt32(reader["SlotNumber"]),
+                            CustomerId = Convert.ToInt32(reader["CustomerId"]),
+                            CustomerNumber = reader["CustomerNumber"].ToString(),
+                            CustomerName = reader["CustomerName"].ToString(),
+                            TimeStamp = Convert.ToDateTime(reader["TimeStamp"])
+                        };
 
-                    customers.Add(customerAccessList);
+                        customers.Add(customerAccessList);
+                    }
+
                 }
-
+                return customers;
             }
-            return customers;
+            catch (SqlException ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetCustomerAccessList)} controller");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later");
+                
+            }
+
+            //await using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+            //    connection.Open();
+
+            //    string userId = User.Claims.First(c => c.Type == "UserID").Value;//retrieve user details...username, email, firstname, etc.
+            //    var user = await _userManager.FindByIdAsync(userId);
+            //    var c = user.AfauserLink;
+
+            //    string commandText = "select top 10 * from dbo.CustomerAccessListRED where usercode = '" + c + "'"; // Last 10
+
+            //    SqlCommand cmd = new SqlCommand(commandText, connection);
+            //    var reader = cmd.ExecuteReader();
+
+            //    while (reader.Read())
+            //    {
+            //        var customerAccessList = new CustomerAccessList
+            //        {
+            //            UserCode = reader["UserCode"].ToString(),
+            //            SlotNumber = Convert.ToInt32(reader["SlotNumber"]),
+            //            CustomerId = Convert.ToInt32(reader["CustomerId"]),
+            //            CustomerNumber = reader["CustomerNumber"].ToString(),
+            //            CustomerName = reader["CustomerName"].ToString(),
+            //            TimeStamp = Convert.ToDateTime(reader["TimeStamp"])
+            //        };
+
+            //        customers.Add(customerAccessList);
+            //    }
+
+            //}
+            //return customers;
         }
     }
 }
